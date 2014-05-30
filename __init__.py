@@ -1,5 +1,6 @@
 
-__all__ = ['Enterprise', 'User']
+__all__ = ['NUEnterprise', 'NUGroup', 'NURESTUser']
 
-from enterprise import Enterprise
-from user import User
+from nuenterprise import NUEnterprise
+from nugroup import NUGroup
+from nurestuser import NURESTUser
