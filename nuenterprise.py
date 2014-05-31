@@ -45,6 +45,7 @@ class NUEnterprise(NURESTObject):
         self.expose_attribute(local_name=u'allow_trusted_forwarding_class', remote_name=u'allowTrustedForwardingClass')
         self.expose_attribute(local_name=u'avatar_data', remote_name=u'avatarData')
         self.expose_attribute(local_name=u'avatar_type', remote_name=u'avatarType')
+        self.expose_attribute(local_name=u'associated_enterprise_profile_id', remote_name=u'enterpriseProfileID')
         self.expose_attribute(local_name=u'floating_ips_used', remote_name=u'floatingIPsUsed')
 
         # Read-only attributes
