@@ -19,10 +19,10 @@ class NUGroup(NURESTObject):
 
         self.users = []
 
-        self.expose_attribute(local_name=u'name')
-        self.expose_attribute(local_name=u'description')
-        self.expose_attribute(local_name=u'is_private', remote_name=u'private')
-        self.expose_attribute(local_name=u'role')
+        self.expose_attribute(local_name=u'name', attribute_type=str)
+        self.expose_attribute(local_name=u'description', attribute_type=str)
+        self.expose_attribute(local_name=u'is_private', remote_name=u'private', attribute_type=str)
+        self.expose_attribute(local_name=u'role', attribute_type=str)
 
     @classmethod
     def get_remote_name(cls):

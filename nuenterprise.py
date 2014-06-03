@@ -40,18 +40,18 @@ class NUEnterprise(NURESTObject):
         self.users = []
         self.virtual_machines = []
 
-        self.expose_attribute(local_name=u'name')
-        self.expose_attribute(local_name=u'description')
-        self.expose_attribute(local_name=u'allow_trusted_forwarding_class', remote_name=u'allowTrustedForwardingClass')
-        self.expose_attribute(local_name=u'avatar_data', remote_name=u'avatarData')
-        self.expose_attribute(local_name=u'avatar_type', remote_name=u'avatarType')
-        self.expose_attribute(local_name=u'associated_enterprise_profile_id', remote_name=u'enterpriseProfileID')
-        self.expose_attribute(local_name=u'floating_ips_used', remote_name=u'floatingIPsUsed')
+        self.expose_attribute(local_name=u'name', attribute_type=str, is_required=True)
+        self.expose_attribute(local_name=u'description', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_trusted_forwarding_class', remote_name=u'allowTrustedForwardingClass', attribute_type=str)
+        self.expose_attribute(local_name=u'avatar_data', remote_name=u'avatarData', attribute_type=str)
+        self.expose_attribute(local_name=u'avatar_type', remote_name=u'avatarType', attribute_type=str)
+        self.expose_attribute(local_name=u'associated_enterprise_profile_id', remote_name=u'enterpriseProfileID', attribute_type=str)
+        self.expose_attribute(local_name=u'floating_ips_used', remote_name=u'floatingIPsUsed', attribute_type=str)
 
         # Read-only attributes
         self.customer_id = None
 
-        self.expose_attribute(local_name=u'customer_id', remote_name=u'customerID')
+        self.expose_attribute(local_name=u'customer_id', remote_name=u'customerID', attribute_type=str)
 
         # Read-only Attributes
         self.floating_ips_quota = None
@@ -66,21 +66,20 @@ class NUEnterprise(NURESTObject):
         self.allow_forwarding_class_g = bool()
         self.allow_forwarding_class_h = bool()
 
-        self.expose_attribute(local_name=u'floating_ips_quota', remote_name=u'floatingIPsQuota')
-        self.expose_attribute(local_name=u'allow_advanced_quos_configuration', remote_name=u'allowAdvancedQOSConfiguration')
-        self.expose_attribute(local_name=u'allow_gateway_management', remote_name=u'allowGatewayManagement')
-        self.expose_attribute(local_name=u'allow_forwarding_class_a', remote_name=u'allowForwardingClassA')
-        self.expose_attribute(local_name=u'allow_forwarding_class_b', remote_name=u'allowForwardingClassB')
-        self.expose_attribute(local_name=u'allow_forwarding_class_c', remote_name=u'allowForwardingClassC')
-        self.expose_attribute(local_name=u'allow_forwarding_class_d', remote_name=u'allowForwardingClassD')
-        self.expose_attribute(local_name=u'allow_forwarding_class_e', remote_name=u'allowForwardingClassE')
-        self.expose_attribute(local_name=u'allow_forwarding_class_f', remote_name=u'allowForwardingClassF')
-        self.expose_attribute(local_name=u'allow_forwarding_class_g', remote_name=u'allowForwardingClassG')
-        self.expose_attribute(local_name=u'allow_forwarding_class_h', remote_name=u'allowForwardingClassH')
+        self.expose_attribute(local_name=u'floating_ips_quota', remote_name=u'floatingIPsQuota', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_advanced_quos_configuration', remote_name=u'allowAdvancedQOSConfiguration', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_gateway_management', remote_name=u'allowGatewayManagement', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_a', remote_name=u'allowForwardingClassA', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_b', remote_name=u'allowForwardingClassB', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_c', remote_name=u'allowForwardingClassC', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_d', remote_name=u'allowForwardingClassD', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_e', remote_name=u'allowForwardingClassE', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_f', remote_name=u'allowForwardingClassF', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_g', remote_name=u'allowForwardingClassG', attribute_type=str)
+        self.expose_attribute(local_name=u'allow_forwarding_class_h', remote_name=u'allowForwardingClassH', attribute_type=str)
 
         # Fetchers
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u'groups')
-
 
     @classmethod
     def get_remote_name(cls):

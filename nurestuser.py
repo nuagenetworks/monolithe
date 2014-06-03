@@ -34,14 +34,14 @@ class NURESTUser(NURESTBasicUser):
         self.system_configs = []
         self.vsps = []
 
-        self.expose_attribute(local_name='email')
-        self.expose_attribute(local_name='firstname', remote_name='firstName')
-        self.expose_attribute(local_name='lastname', remote_name='lastName')
-        self.expose_attribute(local_name='enterprise_id', remote_name='enterpriseID')
-        self.expose_attribute(local_name='enterprise_name', remote_name='enterpriseName')
-        self.expose_attribute(local_name='role')
-        self.expose_attribute(local_name='avatar_type', remote_name='avatarType')
-        self.expose_attribute(local_name='avatar_data', remote_name='avatarData')
+        self.expose_attribute(local_name='email', attribute_type=str)
+        self.expose_attribute(local_name='firstname', remote_name='firstName', attribute_type=str)
+        self.expose_attribute(local_name='lastname', remote_name='lastName', attribute_type=str)
+        self.expose_attribute(local_name='enterprise_id', remote_name='enterpriseID', attribute_type=str)
+        self.expose_attribute(local_name='enterprise_name', remote_name='enterpriseName', attribute_type=str)
+        self.expose_attribute(local_name='role', attribute_type=str)
+        self.expose_attribute(local_name='avatar_type', remote_name='avatarType', attribute_type=str)
+        self.expose_attribute(local_name='avatar_data', remote_name='avatarData', attribute_type=str)
 
         # Fetchers
         self._enterprises_fetcher = NUEnterprisesFetcher.fetcher_with_entity(entity=self, local_name=u'enterprises')
