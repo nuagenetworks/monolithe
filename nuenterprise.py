@@ -40,7 +40,7 @@ class NUEnterprise(NURESTObject):
         self.users = []
         self.virtual_machines = []
 
-        self.expose_attribute(local_name=u'name', attribute_type=str, is_required=True)
+        self.expose_attribute(local_name=u'name', attribute_type=str, is_required=True, max_length=255)
         self.expose_attribute(local_name=u'description', attribute_type=str)
         self.expose_attribute(local_name=u'allow_trusted_forwarding_class', remote_name=u'allowTrustedForwardingClass', attribute_type=str)
         self.expose_attribute(local_name=u'avatar_data', remote_name=u'avatarData', attribute_type=str)
@@ -51,7 +51,7 @@ class NUEnterprise(NURESTObject):
         # Read-only attributes
         self.customer_id = None
 
-        self.expose_attribute(local_name=u'customer_id', remote_name=u'customerID', attribute_type=str)
+        self.expose_attribute(local_name=u'customer_id', remote_name=u'customerID', attribute_type=str, is_readonly=True)
 
         # Read-only Attributes
         self.floating_ips_quota = None

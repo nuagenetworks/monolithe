@@ -2,6 +2,8 @@
 
 from restnuage.nurest_object import NURESTObject
 
+from .fetchers import NUUsersFetcher
+
 
 class NUGroup(NURESTObject):
     """ Defines a group """
@@ -23,6 +25,9 @@ class NUGroup(NURESTObject):
         self.expose_attribute(local_name=u'description', attribute_type=str)
         self.expose_attribute(local_name=u'is_private', remote_name=u'private', attribute_type=str)
         self.expose_attribute(local_name=u'role', attribute_type=str)
+
+        # Fetchers
+        self._users_fetcher = NUUsersFetcher.fetcher_with_entity(entity=self, local_name=u'users')
 
     @classmethod
     def get_remote_name(cls):
