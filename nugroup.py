@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from restnuage.nurest_object import NURESTObject
+from restnuage import NURESTObject
 
 from .fetchers import NUUsersFetcher
 
@@ -34,3 +34,16 @@ class NUGroup(NURESTObject):
         """ Provides restname """
 
         return u"group"
+
+    # REST methods
+
+    def assign_user(self, users, async=False, callback=None):
+        """ Assign a user to this group """
+
+        from pymodeltests.models import NUUser
+        return self.set_entities(entities=users, entity_type=NUUser, async=async, callback=callback)
+
+    def fetch_users(self):
+        """ Fetch users """
+
+        return self._users_fetcher.fetch_entities()

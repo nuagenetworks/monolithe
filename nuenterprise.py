@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from .fetchers import NUGroupsFetcher
+from .fetchers import NUGroupsFetcher, NUUsersFetcher
 from restnuage import NURESTObject
 
 
@@ -80,6 +80,7 @@ class NUEnterprise(NURESTObject):
 
         # Fetchers
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u'groups')
+        self._users_fetcher = NUUsersFetcher.fetcher_with_entity(entity=self, local_name=u'users')
 
     @classmethod
     def get_remote_name(cls):
@@ -98,7 +99,7 @@ class NUEnterprise(NURESTObject):
 
         (group, connection) = self.add_child_entity(entity=group, async=async, callback=callback)
 
-    def remove_group(self, group, async=False, callback=None, response_choice=1):
+    def delete_group(self, group, async=False, callback=None):
         """ Removes a group
             :param enterprise: object to remove
             :param async: Make an sync or async HTTP request
@@ -106,33 +107,33 @@ class NUEnterprise(NURESTObject):
             :param response_choice: additionnal information to set user choice when removing
         """
 
-        self.remove_child_entity(entity=group, response_choice=response_choice)
+        self.remove_child_entity(entity=group)
 
     def fetch_groups(self):
         """ Fetch groups """
 
         self._groups_fetcher.fetch_entities()
 
-    # def create_user(self, user, async=False, callback=None):
-    #     """ Create a user
-    #         :param user: object to add
-    #         :param async: Make an sync or async HTTP request
-    #         :param callback: Callback method called when async is set to true
-    #     """
-    #
-    #     (user, connection) = self.add_child_entity(entity=user, async=async, callback=callback)
-    #
-    # def remove_user(self, user, async=False, callback=None, response_choice=1):
-    #     """ Removes a user
-    #         :param user: object to remove
-    #         :param async: Make an sync or async HTTP request
-    #         :param callback: Callback method called when async is set to true
-    #         :param response_choice: additionnal information to set user choice when removing
-    #     """
-    #
-    #     self.remove_child_entity(entity=user, response_choice=response_choice)
-    #
-    # def fetch_users(self):
-    #     """ Fetch users """
-    #
-    #     self._users_fetcher.fetch_entities()
+    def create_user(self, user, async=False, callback=None):
+        """ Create a user
+            :param user: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=user, async=async, callback=callback)
+
+    def delete_user(self, user, async=False, callback=None):
+        """ Removes a user
+            :param user: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+            :param response_choice: additionnal information to set user choice when removing
+        """
+
+        return self.remove_child_entity(entity=user)
+
+    def fetch_users(self):
+        """ Fetch users """
+
+        return self._users_fetcher.fetch_entities()
