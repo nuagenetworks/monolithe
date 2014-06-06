@@ -37,7 +37,7 @@ class NUGroup(NURESTObject):
 
     # REST methods
 
-    def assign_user(self, users, async=False, callback=None):
+    def assign_users(self, users, async=False, callback=None):
         """ Assign a user to this group """
 
         from pymodeltests.models import NUUser
