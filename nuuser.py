@@ -24,11 +24,11 @@ class NUUser(NURESTObject):
         # TODO: Check if username is a required field and set min/max length according to issues:
         # http://mvjira.mv.usa.alcatel.com/browse/VSD-2866
         # http://mvjira.mv.usa.alcatel.com/browse/VSD-2865
-        self.expose_attribute(local_name=u'username', remote_name=u'userName', attribute_type=str, is_required=False, is_editable=False, is_login=True, is_unique=True)
+        self.expose_attribute(local_name=u'username', remote_name=u'userName', attribute_type=str, is_required=True, is_editable=False, is_login=True, is_unique=True)
         self.expose_attribute(local_name=u'firstname', remote_name=u'firstName', attribute_type=str, is_required=True, min_length=1, max_length=255)
         self.expose_attribute(local_name=u'lastname', remote_name=u'lastName', attribute_type=str, is_required=True, min_length=1, max_length=255)
         self.expose_attribute(local_name=u'email', attribute_type=str, is_required=True)
-        self.expose_attribute(local_name=u'password', attribute_type=str, is_required=False)  # TODO: Put /users/id with password set to None returns 'No changes to modify the entity'
+        self.expose_attribute(local_name=u'password', attribute_type=str, is_required=True, is_password=True)  # TODO: Put /users/id with password set to None returns 'No changes to modify the entity'
         self.expose_attribute(local_name=u'avatar_data', remote_name=u'avatarData', attribute_type=str)
         self.expose_attribute(local_name=u'avatar_type', remote_name=u'avatarType', attribute_type=str, choices=['BASE64', 'URL'])
 
