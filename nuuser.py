@@ -27,7 +27,7 @@ class NUUser(NURESTObject):
         self.expose_attribute(local_name=u'username', remote_name=u'userName', attribute_type=str, is_required=True, is_editable=False, is_login=True, is_unique=True)
         self.expose_attribute(local_name=u'firstname', remote_name=u'firstName', attribute_type=str, is_required=True, min_length=1, max_length=255)
         self.expose_attribute(local_name=u'lastname', remote_name=u'lastName', attribute_type=str, is_required=True, min_length=1, max_length=255)
-        self.expose_attribute(local_name=u'email', attribute_type=str, is_required=True)
+        self.expose_attribute(local_name=u'email', attribute_type=str, is_required=True, is_email=True)
         self.expose_attribute(local_name=u'password', attribute_type=str, is_required=True, is_password=True)  # TODO: Put /users/id with password set to None returns 'No changes to modify the entity'
         self.expose_attribute(local_name=u'avatar_data', remote_name=u'avatarData', attribute_type=str)
         self.expose_attribute(local_name=u'avatar_type', remote_name=u'avatarType', attribute_type=str, choices=['BASE64', 'URL'])
