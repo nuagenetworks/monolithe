@@ -24,7 +24,7 @@ class NUUser(NURESTObject):
         # TODO: Check if username is a required field and set min/max length according to issues:
         # http://mvjira.mv.usa.alcatel.com/browse/VSD-2866
         # http://mvjira.mv.usa.alcatel.com/browse/VSD-2865
-        self.expose_attribute(local_name=u'username', remote_name=u'userName', attribute_type=str, is_required=True, is_editable=False, is_login=True, is_unique=True)
+        self.expose_attribute(local_name=u'username', remote_name=u'userName', display_name=u'user name', attribute_type=str, is_required=True, is_editable=False, is_login=True, is_unique=True)
         self.expose_attribute(local_name=u'firstname', remote_name=u'firstName', attribute_type=str, is_required=True, min_length=1, max_length=255)
         self.expose_attribute(local_name=u'lastname', remote_name=u'lastName', attribute_type=str, is_required=True, min_length=1, max_length=255)
         self.expose_attribute(local_name=u'email', attribute_type=str, is_required=True, is_email=True)
