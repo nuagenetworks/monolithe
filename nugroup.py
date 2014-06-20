@@ -40,7 +40,7 @@ class NUGroup(NURESTObject):
     def assign_users(self, users, async=False, callback=None):
         """ Assign a user to this group """
 
-        from pymodeltests.models import NUUser
+        from courgette.models import NUUser
         return self.set_entities(entities=users, entity_type=NUUser, async=async, callback=callback)
 
     def fetch_users(self):

@@ -10,5 +10,5 @@ class NUUsersFetcher(NURESTFetcher):
     def managed_class(cls):
         """ Managed class """
 
-        from pymodeltests.models import NUUser
+        from courgette.models import NUUser
         return NUUser

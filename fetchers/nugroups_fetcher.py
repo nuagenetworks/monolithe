@@ -10,5 +10,5 @@ class NUGroupsFetcher(NURESTFetcher):
     def managed_class(cls):
         """ Managed class """
 
-        from pymodeltests.models import NUGroup
+        from courgette.models import NUGroup
         return NUGroup
