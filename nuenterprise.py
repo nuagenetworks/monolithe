@@ -133,7 +133,10 @@ class NUEnterprise(NURESTObject):
 
         return self.remove_child_entity(entity=user)
 
-    def fetch_users(self):
+    def fetch_users(self, filter=None, page=None, order_by=None):
         """ Fetch users """
 
-        return self._users_fetcher.fetch_entities()
+        if order_by:
+            self._users_fetcher.order_by = order_by
+
+        return self._users_fetcher.fetch_matching_entities(filter=filter, page=page)
