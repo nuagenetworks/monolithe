@@ -21,10 +21,10 @@ class NUGroup(NURESTObject):
 
         self.users = []
 
-        self.expose_attribute(local_name=u'name', attribute_type=str)
-        self.expose_attribute(local_name=u'description', attribute_type=str)
-        self.expose_attribute(local_name=u'is_private', remote_name=u'private', attribute_type=str)
-        self.expose_attribute(local_name=u'role', attribute_type=str)
+        self.expose_attribute(local_name=u'name', attribute_type=str, is_required=True, min_length=1, max_length=255, is_unique=True, can_order=True, can_search=True)
+        self.expose_attribute(local_name=u'description', attribute_type=str, can_order=True, can_search=True)
+        self.expose_attribute(local_name=u'is_private', remote_name=u'private', attribute_type=bool, can_order=True, can_search=True)
+        self.expose_attribute(local_name=u'role', attribute_type=str, choices=['CSPROOT', 'CSPOPERATOR', 'ORGADMIN', 'ORGNETWORKDESIGNER', 'ORGUSER', 'USER'])
 
         # Fetchers
         self._users_fetcher = NUUsersFetcher.fetcher_with_entity(entity=self, local_name=u'users')
