@@ -97,17 +97,16 @@ class NUEnterprise(NURESTObject):
             :param callback: Callback method called when async is set to true
         """
 
-        (group, connection) = self.add_child_entity(entity=group, async=async, callback=callback)
+        return self.add_child_entity(entity=group, async=async, callback=callback)
 
     def delete_group(self, group, async=False, callback=None):
         """ Removes a group
             :param enterprise: object to remove
             :param async: Make an sync or async HTTP request
             :param callback: Callback method called when async is set to true
-            :param response_choice: additionnal information to set user choice when removing
         """
 
-        self.remove_child_entity(entity=group)
+        return self.remove_child_entity(entity=group, async=async, callback=callback)
 
     def fetch_groups(self):
         """ Fetch groups """
@@ -128,10 +127,9 @@ class NUEnterprise(NURESTObject):
             :param user: object to remove
             :param async: Make an sync or async HTTP request
             :param callback: Callback method called when async is set to true
-            :param response_choice: additionnal information to set user choice when removing
         """
 
-        return self.remove_child_entity(entity=user)
+        return self.remove_child_entity(entity=user, async=async, callback=callback)
 
     def fetch_users(self, filter=None, page=None, order_by=None):
         """ Fetch users """

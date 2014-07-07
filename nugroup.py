@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
 from restnuage import NURESTObject
-
 from .fetchers import NUUsersFetcher
 
 
@@ -18,7 +17,6 @@ class NUGroup(NURESTObject):
         self.description = None
         self.is_private = bool()
         self.role = None
-
         self.users = []
 
         self.expose_attribute(local_name=u'name', attribute_type=str, is_required=True, min_length=1, max_length=255, is_unique=True, can_order=True, can_search=True)
