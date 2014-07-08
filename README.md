@@ -3,11 +3,42 @@ pymodel
 
 Nuage Network Python Model according to RESTNuage library
 
+Dependancies
+------------
+
+Python dependencies:
+* logging
+* restnuage
+
+
+Installation
+------------
+
+Install your virtualenv
+
+    $ virtualenv --no-site-packages pymodel-env
+
+Activate your environment
+    
+    $ cd pymodel-env
+    $ source bin/activate
+    (pymodel-env) $ 
+
+Get the sources
+
+    (pymodel-env) $ git clone http://github.mv.usa.alcatel.com/cserafin/pymodel.git
+    (pymodel-env) $ cd pymodel
+
+Install dependencies
+
+    (pymodel-env) $ pip install -r requirements.txt
+
+
 Example
 =======
 
      from restnuage import NURESTLoginController
-     from courgette.models import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain,NUGatewayTemplate, NUGateway
+     from pymodel.models import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain,NUGatewayTemplate, NUGateway
      
      # Setting a log level to see what happens (Optionnal)
      
