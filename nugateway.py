@@ -31,12 +31,12 @@ class NUGateway(NUGatewayBase):
         self.ports = []
         self.wan_services = []
 
-        self.expose_attribute(local_name=u'system_id', remote_name=u'systemID')
-        self.expose_attribute(local_name=u'template_id', remote_name=u'templateID')
-        self.expose_attribute(local_name=u'pending', remote_name=u'pending')
-        self.expose_attribute(local_name=u'redundancy_group_id', remote_name=u'redundancyGroupID')
-        self.expose_attribute(local_name=u'permitted_action', remote_name=u'permittedAction')
-        self.expose_attribute(local_name=u'auto_discovered_gateway_id', remote_name=u'autoDiscGatewayID')
+        self.expose_attribute(local_name=u'system_id', remote_name=u'systemID', attribute_type=str)
+        self.expose_attribute(local_name=u'template_id', remote_name=u'templateID', attribute_type=str)
+        self.expose_attribute(local_name=u'pending', remote_name=u'pending', attribute_type=bool)
+        self.expose_attribute(local_name=u'redundancy_group_id', remote_name=u'redundancyGroupID', attribute_type=str)
+        self.expose_attribute(local_name=u'permitted_action', remote_name=u'permittedAction', attribute_type=str)
+        self.expose_attribute(local_name=u'auto_discovered_gateway_id', remote_name=u'autoDiscGatewayID', attribute_type=str)
 
         # Fetchers
         # TODO : Write fetchers here

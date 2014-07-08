@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from .fetchers import NUGroupsFetcher, NUUsersFetcher
+from .fetchers import NUGroupsFetcher, NUUsersFetcher, NUDomainsFetcher, NUDomainTemplatesFetcher, NUGatewaysFetcher, NUGatewayTemplatesFetcher
 from restnuage import NURESTObject
 
 
@@ -81,6 +81,10 @@ class NUEnterprise(NURESTObject):
         # Fetchers
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u'groups')
         self._users_fetcher = NUUsersFetcher.fetcher_with_entity(entity=self, local_name=u'users')
+        self._domains_fetcher = NUDomainsFetcher.fetcher_with_entity(entity=self, local_name=u'domains')
+        self._domain_templates_fetcher = NUDomainTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u'domain_templates')
+        self._gateways_fetcher = NUGatewaysFetcher.fetcher_with_entity(entity=self, local_name=u'gateways')
+        self._gateway_templates_fetcher = NUGatewayTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u'gateway_templates')
 
     @classmethod
     def get_remote_name(cls):
@@ -138,3 +142,61 @@ class NUEnterprise(NURESTObject):
             self._users_fetcher.order_by = order_by
 
         return self._users_fetcher.fetch_matching_entities(filter=filter, page=page)
+
+    def create_domain_template(self, domain_template, async=False, callback=None):
+        """ Create a domain template
+            :param domain: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=domain_template, async=async, callback=callback)
+
+    def delete_domain_template(self, domain_template, async=False, callback=None):
+        """ Removes a domain template
+            :param user: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=domain_template, async=async, callback=callback)
+
+    def instanciate_domain(self, domain, domain_template, async=False, callback=None):
+        """ Instanciate a domain
+            :param domain: object to instanciate
+            :param domain_template: template to intanciate from
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        domain.template_id = domain_template.id
+        return self.add_child_entity(entity=domain, async=async, callback=callback)
+
+    def create_gateway_template(self, gateway_template, async=False, callback=None):
+        """ Create a gateway template
+            :param gateway: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=gateway_template, async=async, callback=callback)
+
+    def delete_gateway_template(self, gateway_template, async=False, callback=None):
+        """ Removes a gateway template
+            :param user: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=gateway_template, async=async, callback=callback)
+
+    def instanciate_gateway(self, gateway, gateway_template, async=False, callback=None):
+        """ Instanciate a gateway
+            :param gateway: object to instanciate
+            :param gateway_template: template to intanciate from
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        gateway.template_id = gateway_template.id
+        return self.add_child_entity(entity=gateway, async=async, callback=callback)

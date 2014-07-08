@@ -43,15 +43,15 @@ class NUDomain(NUDomainBase):
         self.vport_tags = []
         self.zones = []
 
-        self.expose_attribute(local_name=u'application_deployment_policy', remote_name=u'applicationDeploymentPolicy')
-        self.expose_attribute(local_name=u'customer_id', remote_name=u'customerID')
-        self.expose_attribute(local_name=u'domaine_of_selected_template', remote_name=u'domainOfSelectedTemplate')
-        self.expose_attribute(local_name=u'maintenance_mode', remote_name=u'maintenanceMode')
-        self.expose_attribute(local_name=u'route_distinguisher', remote_name=u'routeDistinguisher')
-        self.expose_attribute(local_name=u'route_target', remote_name=u'routeTarget')
-        self.expose_attribute(local_name=u'service_id', remote_name=u'serviceID')
-        self.expose_attribute(local_name=u'template_id', remote_name=u'templateID')
-        self.expose_attribute(local_name=u'tunnel_type', remote_name=u'tunnelType')
+        self.expose_attribute(local_name=u'application_deployment_policy', remote_name=u'applicationDeploymentPolicy', attribute_type=str)
+        self.expose_attribute(local_name=u'customer_id', remote_name=u'customerID', attribute_type=str)
+        self.expose_attribute(local_name=u'domaine_of_selected_template', remote_name=u'domainOfSelectedTemplate', attribute_type=str)
+        self.expose_attribute(local_name=u'maintenance_mode', remote_name=u'maintenanceMode', attribute_type=str)
+        self.expose_attribute(local_name=u'route_distinguisher', remote_name=u'routeDistinguisher', attribute_type=str)
+        self.expose_attribute(local_name=u'route_target', remote_name=u'routeTarget', attribute_type=str)
+        self.expose_attribute(local_name=u'service_id', remote_name=u'serviceID', attribute_type=str)
+        self.expose_attribute(local_name=u'template_id', remote_name=u'templateID', attribute_type=str)
+        self.expose_attribute(local_name=u'tunnel_type', remote_name=u'tunnelType', attribute_type=str)
 
         # Fetchers
         # TODO : Write fetchers here

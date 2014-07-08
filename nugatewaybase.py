@@ -23,6 +23,6 @@ class NUGatewayBase(NURESTObject):
         self.name = None
         self.personality = None
 
-        self.expose_attribute(local_name=u'descritpion')
-        self.expose_attribute(local_name=u'name')
-        self.expose_attribute(local_name=u'personality')
+        self.expose_attribute(local_name=u'descritpion', attribute_type=str)
+        self.expose_attribute(local_name=u'name', attribute_type=str)
+        self.expose_attribute(local_name=u'personality', attribute_type=str)

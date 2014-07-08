@@ -16,7 +16,7 @@ class NUGatewayTemplate(NUDomainBase):
 
         self.port_templates = []
 
-        self.expose_attribute(local_name=u'template_of_selected_gateway', remote_name=u'templateOfSelectedGateway')
+        self.expose_attribute(local_name=u'template_of_selected_gateway', remote_name=u'templateOfSelectedGateway', attribute_type=str)
 
         # Fetchers
         # TODO: Write fetcher here

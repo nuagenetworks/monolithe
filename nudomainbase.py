@@ -24,10 +24,10 @@ class NUDomainBase(NURESTObject):
         self.permissions = []
         self.quoss = []
 
-        self.expose_attribute(local_name=u'associated_multicast_channel_map_id', remote_name=u'associatedMulticastChannelMapID')
-        self.expose_attribute(local_name=u'descritpion')
-        self.expose_attribute(local_name=u'is_multicast', remote_name=u'multicast')
-        self.expose_attribute(local_name=u'name')
+        self.expose_attribute(local_name=u'associated_multicast_channel_map_id', remote_name=u'associatedMulticastChannelMapID', attribute_type=str)
+        self.expose_attribute(local_name=u'descritpion', attribute_type=str)
+        self.expose_attribute(local_name=u'is_multicast', remote_name=u'multicast', attribute_type=bool)
+        self.expose_attribute(local_name=u'name', attribute_type=str)
 
         # Fetchers
         # TODO : Write fetchers
