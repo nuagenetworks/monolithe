@@ -19,7 +19,7 @@ class NUDomain(NUDomainBase):
         self.application_deployment_policy = None
         self.customer_id = None
         self.domaine_of_selected_template = bool()
-        self.maintenance_mode = None  # NUMaintenanceModeDisabled
+        self.maintenance_mode = None  # TODO: NUMaintenanceModeDisabled
         self.route_distinguisher = None
         self.route_target = None
         self.service_id = None
@@ -63,3 +63,21 @@ class NUDomain(NUDomainBase):
         return u"domain"
 
     # REST methods
+
+    def create_zone(self, zone, async=False, callback=None):
+        """ Create a zone
+            :param zone: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=zone, async=async, callback=callback)
+
+    def delete_zone(self, zone, async=False, callback=None):
+        """ Removes a zone
+            :param zone: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=zone, async=async, callback=callback)

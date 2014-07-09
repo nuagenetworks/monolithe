@@ -4,7 +4,7 @@ from restnuage.nurest_object import NURESTObject
 
 
 class NUUser(NURESTObject):
-    """ Defines a group """
+    """ Defines a user """
 
     def __init__(self):
         """ Initialize a new object """

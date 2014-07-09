@@ -29,3 +29,21 @@ class NUDomainTemplate(NUDomainBase):
         return u"domaintemplate"
 
     # REST methods
+
+    def create_zone_template(self, zone_template, async=False, callback=None):
+        """ Create a zone template
+            :param zone_template: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=zone_template, async=async, callback=callback)
+
+    def delete_zone_template(self, zone_template, async=False, callback=None):
+        """ Removes a zone template
+            :param zone_template: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=zone_template, async=async, callback=callback)

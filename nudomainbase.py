@@ -15,7 +15,7 @@ class NUDomainBase(NURESTObject):
         # Read/Write Attributes
         self.associated_multicast_channel_map_id = None
         self.description = None
-        self.is_multicast = bool()
+        self.is_multicast = u"DISABLED"  # TODO: set NUMulticast default value
         self.name = None
 
         self.egress_security_policies = []
@@ -26,7 +26,7 @@ class NUDomainBase(NURESTObject):
 
         self.expose_attribute(local_name=u'associated_multicast_channel_map_id', remote_name=u'associatedMulticastChannelMapID', attribute_type=str)
         self.expose_attribute(local_name=u'descritpion', attribute_type=str)
-        self.expose_attribute(local_name=u'is_multicast', remote_name=u'multicast', attribute_type=bool)
+        self.expose_attribute(local_name=u'is_multicast', remote_name=u'multicast', attribute_type=str)
         self.expose_attribute(local_name=u'name', attribute_type=str)
 
         # Fetchers

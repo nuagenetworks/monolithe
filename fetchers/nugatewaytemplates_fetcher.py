@@ -10,5 +10,5 @@ class NUGatewayTemplatesFetcher(NURESTFetcher):
     def managed_class(cls):
         """ Managed class """
 
-        from courgette.models import NUGatewayTemplate
+        from .. import NUGatewayTemplate
         return NUGatewayTemplate

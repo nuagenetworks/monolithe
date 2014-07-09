@@ -42,6 +42,7 @@ Example
      
      # Setting a log level to see what happens (Optionnal)
      
+     # import logging
      # restnuage_log = logging.getLogger('restnuage')
      # restnuage_log.setLevel(logging.DEBUG)
      # restnuage_log.addHandler(logging.StreamHandler())

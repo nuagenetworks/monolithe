@@ -10,5 +10,5 @@ class NUDomainTemplatesFetcher(NURESTFetcher):
     def managed_class(cls):
         """ Managed class """
 
-        from courgette.models import NUDomainTemplate
+        from .. import NUDomainTemplate
         return NUDomainTemplate

@@ -3,12 +3,12 @@
 from restnuage import NURESTFetcher
 
 
-class NUDomainsFetcher(NURESTFetcher):
-    """ Domain fetcher """
+class NUVPortsFetcher(NURESTFetcher):
+    """ NUVPort fetcher """
 
     @classmethod
     def managed_class(cls):
         """ Managed class """
 
-        from .. import NUDomain
-        return NUDomain
+        from .. import NUVPort
+        return NUVPort

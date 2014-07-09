@@ -105,7 +105,7 @@ class NUEnterprise(NURESTObject):
 
     def delete_group(self, group, async=False, callback=None):
         """ Removes a group
-            :param enterprise: object to remove
+            :param group: object to remove
             :param async: Make an sync or async HTTP request
             :param callback: Callback method called when async is set to true
         """
