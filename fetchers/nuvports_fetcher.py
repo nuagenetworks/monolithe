@@ -4,7 +4,7 @@ from restnuage import NURESTFetcher
 
 
 class NUVPortsFetcher(NURESTFetcher):
-    """ NUVPort fetcher """
+    """ VPort fetcher """
 
     @classmethod
     def managed_class(cls):

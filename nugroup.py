@@ -1,47 +1,33 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
+from .autogenerates import NUGroup as AutoGenerate
+from constants import UserRole
 
-from restnuage import NURESTObject
-from .fetchers import NUUsersFetcher
 
-
-class NUGroup(NURESTObject):
-    """ Defines a group """
+class NUGroup(AutoGenerate):
+    """ Represents a Group object """
 
     def __init__(self):
-        """ Initialize a new object """
+        """ Initializing object """
 
         super(NUGroup, self).__init__()
 
-        # Read/Write Attributes
-        self.name = None
-        self.description = None
-        self.is_private = bool()
-        self.role = None
-        self.users = []
+        self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str, can_order=True, can_search=True)
+        self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str, is_required=True, min_length=1, max_length=255, is_unique=True, can_order=True, can_search=True)
+        self.expose_attribute(local_name=u"private", remote_name=u"private", attribute_type=bool, can_order=True, can_search=True)
+        self.expose_attribute(local_name=u"role", remote_name=u"role", attribute_type=str, choices=[UserRole.CSPROOT, UserRole.CSPOPERATOR, UserRole.ORGADMIN, UserRole.ORGNETWORKDESIGNER, UserRole.ORGUSER, UserRole.USER])
 
-        self.expose_attribute(local_name=u'name', attribute_type=str, is_required=True, min_length=1, max_length=255, is_unique=True, can_order=True, can_search=True)
-        self.expose_attribute(local_name=u'description', attribute_type=str, can_order=True, can_search=True)
-        self.expose_attribute(local_name=u'is_private', remote_name=u'private', attribute_type=bool, can_order=True, can_search=True)
-        self.expose_attribute(local_name=u'role', attribute_type=str, choices=['CSPROOT', 'CSPOPERATOR', 'ORGADMIN', 'ORGNETWORKDESIGNER', 'ORGUSER', 'USER'])
+    def create_user(self, user, async=False, callback=None):
+        """ DO NOT USE """
 
-        # Fetchers
-        self._users_fetcher = NUUsersFetcher.fetcher_with_entity(entity=self, local_name=u'users')
+        pass  # NOTE: Should do nothing because we use assign_users instead
 
-    @classmethod
-    def get_remote_name(cls):
-        """ Provides restname """
+    def delete_user(self, user, async=False, callback=None):
+        """ DO NOT USE """
 
-        return u"group"
-
-    # REST methods
+        pass  # NOTE: Should do nothing because we use assign_users instead
 
     def assign_users(self, users, async=False, callback=None):
         """ Assign a user to this group """
 
         from courgette.models import NUUser
         return self.set_entities(entities=users, entity_type=NUUser, async=async, callback=callback)
-
-    def fetch_users(self):
-        """ Fetch users """
-
-        return self._users_fetcher.fetch_entities()

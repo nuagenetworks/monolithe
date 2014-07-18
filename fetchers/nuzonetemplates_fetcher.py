@@ -4,7 +4,7 @@ from restnuage import NURESTFetcher
 
 
 class NUZoneTemplatesFetcher(NURESTFetcher):
-    """ NUZoneTemplate fetcher """
+    """ ZoneTemplate fetcher """
 
     @classmethod
     def managed_class(cls):

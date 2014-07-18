@@ -4,7 +4,7 @@ from restnuage import NURESTFetcher
 
 
 class NUEnterprisesFetcher(NURESTFetcher):
-    """ Group fetcher """
+    """ Enterprise fetcher """
 
     @classmethod
     def managed_class(cls):
