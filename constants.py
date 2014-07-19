@@ -24,6 +24,14 @@ class DomainTunnelType(object):
     GRE = u"GRE"
 
 
+class NUFlowSecurityPolicyAction(object):
+    """ NUFlowSecurityPolicyAction """
+
+    DROP = u"DROP"
+    FORWARD = u"FORWARD"
+    REDIRECT = u"REDIRECT"
+
+
 class GatewayChildrenStatus(object):
     """ GatewayChildrenStatus """
 
