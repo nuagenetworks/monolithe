@@ -15,8 +15,8 @@ class NULicense(NURESTObject):
 
         # Read/Write Attributes
         
-        self.allowed_ni_cs_count = None
-        self.allowed_v_ms_count = None
+        self.allowed_nics_count = None
+        self.allowed_vms_count = None
         self.city = None
         self.company = None
         self.country = None
@@ -34,8 +34,8 @@ class NULicense(NURESTObject):
         self.user_name = None
         self.zip = None
         
-        self.expose_attribute(local_name=u"allowed_ni_cs_count", remote_name=u"allowedNICsCount", attribute_type=str)
-        self.expose_attribute(local_name=u"allowed_v_ms_count", remote_name=u"allowedVMsCount", attribute_type=str)
+        self.expose_attribute(local_name=u"allowed_nics_count", remote_name=u"allowedNICsCount", attribute_type=str)
+        self.expose_attribute(local_name=u"allowed_vms_count", remote_name=u"allowedVMsCount", attribute_type=str)
         self.expose_attribute(local_name=u"city", remote_name=u"city", attribute_type=str)
         self.expose_attribute(local_name=u"company", remote_name=u"company", attribute_type=str)
         self.expose_attribute(local_name=u"country", remote_name=u"country", attribute_type=str)

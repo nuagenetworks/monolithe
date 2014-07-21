@@ -22,7 +22,7 @@ class NUEnterpriseProfile(NURESTObject):
         self.allow_gateway_management = None
         self.allow_trusted_forwarding_class = None
         self.description = None
-        self.floating_i_ps_quota = None
+        self.floating_ips_quota = None
         self.name = None
         
         self.expose_attribute(local_name=u"allow_advanced_qos_configuration", remote_name=u"allowAdvancedQOSConfiguration", attribute_type=bool)
@@ -30,7 +30,7 @@ class NUEnterpriseProfile(NURESTObject):
         self.expose_attribute(local_name=u"allow_gateway_management", remote_name=u"allowGatewayManagement", attribute_type=bool)
         self.expose_attribute(local_name=u"allow_trusted_forwarding_class", remote_name=u"allowTrustedForwardingClass", attribute_type=bool)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
-        self.expose_attribute(local_name=u"floating_i_ps_quota", remote_name=u"floatingIPsQuota", attribute_type=int)
+        self.expose_attribute(local_name=u"floating_ips_quota", remote_name=u"floatingIPsQuota", attribute_type=int)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers

@@ -43,8 +43,8 @@ class NUEnterprise(NURESTObject):
         self.customer_id = None
         self.description = None
         self.enterprise_profile_id = None
-        self.floating_i_ps_quota = None
-        self.floating_i_ps_used = None
+        self.floating_ips_quota = None
+        self.floating_ips_used = None
         self.name = None
         
         self.expose_attribute(local_name=u"allow_advanced_qos_configuration", remote_name=u"allowAdvancedQOSConfiguration", attribute_type=bool)
@@ -56,8 +56,8 @@ class NUEnterprise(NURESTObject):
         self.expose_attribute(local_name=u"customer_id", remote_name=u"customerID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"enterprise_profile_id", remote_name=u"enterpriseProfileID", attribute_type=str)
-        self.expose_attribute(local_name=u"floating_i_ps_quota", remote_name=u"floatingIPsQuota", attribute_type=int)
-        self.expose_attribute(local_name=u"floating_i_ps_used", remote_name=u"floatingIPsUsed", attribute_type=int)
+        self.expose_attribute(local_name=u"floating_ips_quota", remote_name=u"floatingIPsQuota", attribute_type=int)
+        self.expose_attribute(local_name=u"floating_ips_used", remote_name=u"floatingIPsUsed", attribute_type=int)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
