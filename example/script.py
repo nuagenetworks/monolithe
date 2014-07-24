@@ -15,7 +15,7 @@ restnuage_log.addHandler(logging.StreamHandler())
 
 # 'Log in on the application with csproot user'
 
-controller = NURESTLoginController()
+controller = NURESTLoginController.get_default_instance()
 controller.user = u"csproot"
 controller.password = u"csproot"
 controller.enterprise = u"csp"
