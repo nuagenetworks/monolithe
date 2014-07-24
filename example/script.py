@@ -4,7 +4,7 @@ import sys
 sys.path.append("../")
 
 from restnuage import NURESTLoginController
-from pymodel import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubnet, NUSubnetTemplate, NUVPort
+from pymodel import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort
 
 # 'Setting a log level to see what happens (Optionnal)'
 
@@ -32,7 +32,7 @@ csproot.create_enterprise(enterprise)
 # 'Create a domain template and an instance'
 domain_template = NUDomainTemplate()
 domain_template.name = u'Domain Template example'
-enterprise.create_gateway_template(domain_template)
+enterprise.create_gatewaytemplate(domain_template)
 domain = NUDomain()
 domain.name = u'Instance Domain example'
 enterprise.instanciate_domain(domain, domain_template)
@@ -45,24 +45,29 @@ domain.create_zone(zone)
 # 'Create a zone template'
 zone_template = NUZoneTemplate()
 zone_template.name = u'Zone Template'
-domain_template.create_zone_template(zone_template)
+domain_template.create_zonetemplate(zone_template)
 
 # 'Create subnet'
-subnet = NUSubnet()
+subnet = NUSubNetwork()
 subnet.name = u'subnet name'
 subnet.address = u'10.0.0.0'
 subnet.netmask = u'255.255.255.0'
 zone.create_subnet(subnet)
 
 # 'Create subnet template'
-subnet_template = NUSubnetTemplate()
+subnet_template = NUSubNetworkTemplate()
 subnet_template.name = u'subnet template name'
 subnet_template.address = u'20.0.0.0'
 subnet_template.netmask = u'255.255.255.0'
-zone_template.create_subnet_template(subnet_template)
+zone_template.create_subnettemplate(subnet_template)
 
 # 'Create a VPort'
 vport = NUVPort()
 vport.name = u'VPort example'
 
 subnet.create_vport(vport)
+
+
+enterprise.delete()
+# Or...
+# csproot.delete_enterprise(enterprise)

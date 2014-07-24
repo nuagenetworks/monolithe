@@ -5,6 +5,11 @@ from .autogenerates import NUEnterprise as AutoGenerate
 class NUEnterprise(AutoGenerate):
     """ Represents a Enterprise object """
 
+    def delete(self, callback=None, async=False, response_choice=1):
+        """ Override to automatically accept deletion """
+
+        super(AutoGenerate, self).delete(callback=callback, async=async, response_choice=response_choice)
+
     def instanciate_domain(self, domain, domain_template, async=False, callback=None):
         """ Instanciate a domain
             :param domain: object to instanciate
