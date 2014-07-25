@@ -10,7 +10,7 @@ class NUGroup(AutoGenerate):
         """ Initializing object """
 
         super(NUGroup, self).__init__()
-        self.removes_children_autmatically = True
+        self.can_delete_children = True
 
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str, can_order=True, can_search=True)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str, is_required=True, min_length=1, max_length=255, is_unique=True, can_order=True, can_search=True)
