@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ..fetchers import NUEventLogsFetcher
 from ..fetchers import NUEgressACLTemplateEntriesFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 
@@ -31,9 +30,6 @@ class NUEgressACLTemplate(NURESTObject):
 
         # Fetchers
         
-        self.eventlogs = []
-        self._eventlogs_fetcher = NUEventLogsFetcher.fetcher_with_entity(entity=self, local_name=u"eventlogs")
-        
         self.egressaclentrytemplates = []
         self._egressaclentrytemplates_fetcher = NUEgressACLTemplateEntriesFetcher.fetcher_with_entity(entity=self, local_name=u"egressaclentrytemplates")
         
@@ -48,32 +44,6 @@ class NUEgressACLTemplate(NURESTObject):
         return u"egressacltemplate"
 
     # REST methods
-    
-    def create_eventlog(self, eventlog, async=False, callback=None):
-        """ Create a eventlog
-            :param eventlog: object to add
-            :param async: Make an sync or async HTTP request
-            :param callback: Callback method called when async is set to true
-        """
-
-        return self.add_child_entity(entity=eventlog, async=async, callback=callback)
-
-    def delete_eventlog(self, eventlog, async=False, callback=None):
-        """ Removes a eventlog
-            :param eventlog: object to remove
-            :param async: Make an sync or async HTTP request
-            :param callback: Callback method called when async is set to true
-        """
-
-        return self.remove_child_entity(entity=eventlog, async=async, callback=callback)
-
-    def fetch_eventlogs(self, filter=None, page=None, order_by=None):
-        """ Fetch EventLogs """
-
-        if order_by:
-            self._eventlogs_fetcher.order_by = order_by
-
-        return self._eventlogs_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_egressaclentrytemplate(self, egressaclentrytemplate, async=False, callback=None):
         """ Create a egressaclentrytemplate

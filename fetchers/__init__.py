@@ -74,7 +74,6 @@ __all__ = [
     'NUNetworkLayoutsFetcher', \
     'NUPolicyDecisionsFetcher', \
     'NUVSCsFetcher', \
-    'NUEventLogsFetcher', \
     'NUJobsFetcher', \
     'NUEnterpriseProfilesFetcher', \
     'NUServicesFetcher', \
@@ -168,7 +167,6 @@ from nuvporttags_fetcher import NUVPortTagsFetcher
 from nunetworklayouts_fetcher import NUNetworkLayoutsFetcher
 from nupolicydecisions_fetcher import NUPolicyDecisionsFetcher
 from nuvscs_fetcher import NUVSCsFetcher
-from nueventlogs_fetcher import NUEventLogsFetcher
 from nujobs_fetcher import NUJobsFetcher
 from nuenterpriseprofiles_fetcher import NUEnterpriseProfilesFetcher
 from nuservices_fetcher import NUServicesFetcher

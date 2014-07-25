@@ -87,7 +87,6 @@ __all__ = [
     'NUIngressAdvancedForwardingEntry', \
     'NUDSCPForwardingClassTable', \
     'NUVMResync', \
-    'NUEventLog', \
     'NUDHCPOption', \
     'NUIngressACLTemplateEntry', \
     'NUBridgeInterface', \
@@ -182,7 +181,6 @@ from nuvirtualip import NUVirtualIP
 from nuingressadvancedforwardingentry import NUIngressAdvancedForwardingEntry
 from nudscpforwardingclasstable import NUDSCPForwardingClassTable
 from nuvmresync import NUVMResync
-from nueventlog import NUEventLog
 from nudhcpoption import NUDHCPOption
 from nuingressacltemplateentry import NUIngressACLTemplateEntry
 from nubridgeinterface import NUBridgeInterface

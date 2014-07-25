@@ -10,6 +10,7 @@ class NUGroup(AutoGenerate):
         """ Initializing object """
 
         super(NUGroup, self).__init__()
+        self.removes_children_autmatically = True
 
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str, can_order=True, can_search=True)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str, is_required=True, min_length=1, max_length=255, is_unique=True, can_order=True, can_search=True)
@@ -19,14 +20,14 @@ class NUGroup(AutoGenerate):
     def create_user(self, user, async=False, callback=None):
         """ DO NOT USE """
 
-        pass  # NOTE: Should do nothing because we use assign_users instead
+        pass  # NOTE: Should do nothing because we use set_users instead
 
     def delete_user(self, user, async=False, callback=None):
         """ DO NOT USE """
 
-        pass  # NOTE: Should do nothing because we use assign_users instead
+        pass  # NOTE: Should do nothing because we use set_users instead
 
-    def assign_users(self, users, async=False, callback=None):
+    def set_users(self, users, async=False, callback=None):
         """ Assign a user to this group """
 
         from courgette.models import NUUser

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ..fetchers import NUEventLogsFetcher
 from ..fetchers import NUDHCPOptionsFetcher
 from ..fetchers import NUFloatingIpsFetcher
 from ..fetchers import NUStaticRoutesFetcher
@@ -66,9 +65,6 @@ class NUDomain(NURESTObject):
         self.expose_attribute(local_name=u"service_id", remote_name=u"serviceID", attribute_type=str)
 
         # Fetchers
-        
-        self.eventlogs = []
-        self._eventlogs_fetcher = NUEventLogsFetcher.fetcher_with_entity(entity=self, local_name=u"eventlogs")
         
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
@@ -144,32 +140,6 @@ class NUDomain(NURESTObject):
         return u"domain"
 
     # REST methods
-    
-    def create_eventlog(self, eventlog, async=False, callback=None):
-        """ Create a eventlog
-            :param eventlog: object to add
-            :param async: Make an sync or async HTTP request
-            :param callback: Callback method called when async is set to true
-        """
-
-        return self.add_child_entity(entity=eventlog, async=async, callback=callback)
-
-    def delete_eventlog(self, eventlog, async=False, callback=None):
-        """ Removes a eventlog
-            :param eventlog: object to remove
-            :param async: Make an sync or async HTTP request
-            :param callback: Callback method called when async is set to true
-        """
-
-        return self.remove_child_entity(entity=eventlog, async=async, callback=callback)
-
-    def fetch_eventlogs(self, filter=None, page=None, order_by=None):
-        """ Fetch EventLogs """
-
-        if order_by:
-            self._eventlogs_fetcher.order_by = order_by
-
-        return self._eventlogs_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_dhcpoption(self, dhcpoption, async=False, callback=None):
         """ Create a dhcpoption
