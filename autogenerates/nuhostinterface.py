@@ -8,7 +8,7 @@ from ..fetchers import NUQosPrimitivesFetcher
 from ..fetchers import NUStatisticssFetcher
 from ..fetchers import NUTCAsFetcher
 from ..fetchers import NUPolicyGroupsFetcher
-from ..fetchers import NUVPortTagsFetcher
+from ..fetchers import NURedirectionTargetsFetcher
 
 from restnuage import NURESTObject
 
@@ -35,6 +35,7 @@ class NUHostInterface(NURESTObject):
         self.netmask = None
         self.network_name = None
         self.policy_decision_id = None
+        self.tier_id = None
         self.v_port_id = None
         self.v_port_name = None
         self.zone_id = None
@@ -52,6 +53,7 @@ class NUHostInterface(NURESTObject):
         self.expose_attribute(local_name=u"netmask", remote_name=u"netmask", attribute_type=str)
         self.expose_attribute(local_name=u"network_name", remote_name=u"networkName", attribute_type=str)
         self.expose_attribute(local_name=u"policy_decision_id", remote_name=u"policyDecisionID", attribute_type=str)
+        self.expose_attribute(local_name=u"tier_id", remote_name=u"tierID", attribute_type=str)
         self.expose_attribute(local_name=u"v_port_id", remote_name=u"VPortID", attribute_type=str)
         self.expose_attribute(local_name=u"v_port_name", remote_name=u"VPortName", attribute_type=str)
         self.expose_attribute(local_name=u"zone_id", remote_name=u"zoneID", attribute_type=str)
@@ -84,7 +86,7 @@ class NUHostInterface(NURESTObject):
         self._policygroups_fetcher = NUPolicyGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"policygroups")
         
         self.redirectiontargets = []
-        self._redirectiontargets_fetcher = NUVPortTagsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
+        self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
         
 
     @classmethod
@@ -322,7 +324,7 @@ class NUHostInterface(NURESTObject):
         return self.remove_child_entity(entity=redirectiontarget, async=async, callback=callback)
 
     def fetch_redirectiontargets(self, filter=None, page=None, order_by=None):
-        """ Fetch VPortTags """
+        """ Fetch RedirectionTargets """
 
         if order_by:
             self._redirectiontargets_fetcher.order_by = order_by

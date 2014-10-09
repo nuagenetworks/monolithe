@@ -22,6 +22,7 @@ class NUUser(NURESTObject):
         self.email = None
         self.first_name = None
         self.last_name = None
+        self.mobile_number = None
         self.password = None
         self.user_name = None
         
@@ -30,6 +31,7 @@ class NUUser(NURESTObject):
         self.expose_attribute(local_name=u"email", remote_name=u"email", attribute_type=str)
         self.expose_attribute(local_name=u"first_name", remote_name=u"firstName", attribute_type=str)
         self.expose_attribute(local_name=u"last_name", remote_name=u"lastName", attribute_type=str)
+        self.expose_attribute(local_name=u"mobile_number", remote_name=u"mobileNumber", attribute_type=str)
         self.expose_attribute(local_name=u"password", remote_name=u"password", attribute_type=str)
         self.expose_attribute(local_name=u"user_name", remote_name=u"userName", attribute_type=str)
 

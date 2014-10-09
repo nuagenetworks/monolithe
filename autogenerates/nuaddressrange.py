@@ -14,9 +14,11 @@ class NUAddressRange(NURESTObject):
 
         # Read/Write Attributes
         
+        self.dhcp_pool_manager = None
         self.max_address = None
         self.min_address = None
         
+        self.expose_attribute(local_name=u"dhcp_pool_manager", remote_name=u"DHCPPoolManager", attribute_type=str)
         self.expose_attribute(local_name=u"max_address", remote_name=u"maxAddress", attribute_type=str)
         self.expose_attribute(local_name=u"min_address", remote_name=u"minAddress", attribute_type=str)
 

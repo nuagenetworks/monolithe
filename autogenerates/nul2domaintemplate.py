@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from ..fetchers import NUJobsFetcher
 from ..fetchers import NUAddressRangesFetcher
 from ..fetchers import NUL2DomainsFetcher
 from ..fetchers import NUEgressACLTemplatesFetcher
@@ -9,7 +10,7 @@ from ..fetchers import NUQosPrimitivesFetcher
 from ..fetchers import NUGroupsFetcher
 from ..fetchers import NUPermittedActionsFetcher
 from ..fetchers import NUPolicyGroupTemplatesFetcher
-from ..fetchers import NUVPortTagTemplatesFetcher
+from ..fetchers import NURedirectionTargetTemplatesFetcher
 
 from restnuage import NURESTObject
 
@@ -31,6 +32,8 @@ class NUL2DomainTemplate(NURESTObject):
         self.ip_type = None
         self.name = None
         self.netmask = None
+        self.multicast = None
+        self.associated_multicast_channel_map_id = None
         
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
@@ -39,8 +42,13 @@ class NUL2DomainTemplate(NURESTObject):
         self.expose_attribute(local_name=u"ip_type", remote_name=u"IPType", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"netmask", remote_name=u"netmask", attribute_type=str)
+        self.expose_attribute(local_name=u"multicast", remote_name=u"multicast", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str)
 
         # Fetchers
+        
+        self.jobs = []
+        self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
         
         self.addressranges = []
         self._addressranges_fetcher = NUAddressRangesFetcher.fetcher_with_entity(entity=self, local_name=u"addressranges")
@@ -70,7 +78,7 @@ class NUL2DomainTemplate(NURESTObject):
         self._policygrouptemplates_fetcher = NUPolicyGroupTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"policygrouptemplates")
         
         self.redirectiontargettemplates = []
-        self._redirectiontargettemplates_fetcher = NUVPortTagTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargettemplates")
+        self._redirectiontargettemplates_fetcher = NURedirectionTargetTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargettemplates")
         
 
     @classmethod
@@ -80,6 +88,32 @@ class NUL2DomainTemplate(NURESTObject):
         return u"l2domaintemplate"
 
     # REST methods
+    
+    def create_job(self, job, async=False, callback=None):
+        """ Create a job
+            :param job: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=job, async=async, callback=callback)
+
+    def delete_job(self, job, async=False, callback=None):
+        """ Removes a job
+            :param job: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=job, async=async, callback=callback)
+
+    def fetch_jobs(self, filter=None, page=None, order_by=None):
+        """ Fetch Jobs """
+
+        if order_by:
+            self._jobs_fetcher.order_by = order_by
+
+        return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_addressrange(self, addressrange, async=False, callback=None):
         """ Create a addressrange
@@ -334,7 +368,7 @@ class NUL2DomainTemplate(NURESTObject):
         return self.remove_child_entity(entity=redirectiontargettemplate, async=async, callback=callback)
 
     def fetch_redirectiontargettemplates(self, filter=None, page=None, order_by=None):
-        """ Fetch VPortTagTemplates """
+        """ Fetch RedirectionTargetTemplates """
 
         if order_by:
             self._redirectiontargettemplates_fetcher.order_by = order_by

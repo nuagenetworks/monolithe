@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from ..fetchers import NUJobsFetcher
 from ..fetchers import NUDomainsFetcher
 from ..fetchers import NUSubNetworkTemplatesFetcher
 from ..fetchers import NUZoneTemplatesFetcher
@@ -10,7 +11,7 @@ from ..fetchers import NUQosPrimitivesFetcher
 from ..fetchers import NUGroupsFetcher
 from ..fetchers import NUPermittedActionsFetcher
 from ..fetchers import NUPolicyGroupTemplatesFetcher
-from ..fetchers import NUVPortTagTemplatesFetcher
+from ..fetchers import NURedirectionTargetTemplatesFetcher
 
 from restnuage import NURESTObject
 
@@ -36,6 +37,9 @@ class NUDomainTemplate(NURESTObject):
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
+        
+        self.jobs = []
+        self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
         
         self.domains = []
         self._domains_fetcher = NUDomainsFetcher.fetcher_with_entity(entity=self, local_name=u"domains")
@@ -68,7 +72,7 @@ class NUDomainTemplate(NURESTObject):
         self._policygrouptemplates_fetcher = NUPolicyGroupTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"policygrouptemplates")
         
         self.redirectiontargettemplates = []
-        self._redirectiontargettemplates_fetcher = NUVPortTagTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargettemplates")
+        self._redirectiontargettemplates_fetcher = NURedirectionTargetTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargettemplates")
         
 
     @classmethod
@@ -78,6 +82,32 @@ class NUDomainTemplate(NURESTObject):
         return u"domaintemplate"
 
     # REST methods
+    
+    def create_job(self, job, async=False, callback=None):
+        """ Create a job
+            :param job: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=job, async=async, callback=callback)
+
+    def delete_job(self, job, async=False, callback=None):
+        """ Removes a job
+            :param job: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=job, async=async, callback=callback)
+
+    def fetch_jobs(self, filter=None, page=None, order_by=None):
+        """ Fetch Jobs """
+
+        if order_by:
+            self._jobs_fetcher.order_by = order_by
+
+        return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_domain(self, domain, async=False, callback=None):
         """ Create a domain
@@ -358,7 +388,7 @@ class NUDomainTemplate(NURESTObject):
         return self.remove_child_entity(entity=redirectiontargettemplate, async=async, callback=callback)
 
     def fetch_redirectiontargettemplates(self, filter=None, page=None, order_by=None):
-        """ Fetch VPortTagTemplates """
+        """ Fetch RedirectionTargetTemplates """
 
         if order_by:
             self._redirectiontargettemplates_fetcher.order_by = order_by

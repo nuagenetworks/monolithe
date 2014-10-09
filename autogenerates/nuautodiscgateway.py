@@ -21,6 +21,7 @@ class NUAutoDiscGateway(NURESTObject):
         self.related_ports = None
         self.system_id = None
         self.description = None
+        self.infrastructure_profile_id = None
         self.name = None
         self.personality = None
         
@@ -29,6 +30,7 @@ class NUAutoDiscGateway(NURESTObject):
         self.expose_attribute(local_name=u"related_ports", remote_name=u"relatedPorts", attribute_type=str)
         self.expose_attribute(local_name=u"system_id", remote_name=u"systemID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
+        self.expose_attribute(local_name=u"infrastructure_profile_id", remote_name=u"infrastructureProfileID", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"personality", remote_name=u"personality", attribute_type=str)
 

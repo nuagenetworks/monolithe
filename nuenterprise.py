@@ -10,9 +10,9 @@ class NUEnterprise(AutoGenerate):
 
         super(AutoGenerate, self).delete(callback=callback, async=async, response_choice=response_choice)
 
-    def instanciate_domain(self, domain, domain_template, async=False, callback=None):
-        """ Instanciate a domain
-            :param domain: object to instanciate
+    def instantiate_domain(self, domain, domain_template, async=False, callback=None):
+        """ instantiate a domain
+            :param domain: object to instantiate
             :param domain_template: template to intanciate from
             :param async: Make an sync or async HTTP request
             :param callback: Callback method called when async is set to true
@@ -21,9 +21,9 @@ class NUEnterprise(AutoGenerate):
         domain.template_id = domain_template.id
         return self.add_child_entity(entity=domain, async=async, callback=callback)
 
-    def instanciate_gateway(self, gateway, gateway_template, async=False, callback=None):
-        """ Instanciate a gateway
-            :param gateway: object to instanciate
+    def instantiate_gateway(self, gateway, gateway_template, async=False, callback=None):
+        """ instantiate a gateway
+            :param gateway: object to instantiate
             :param gateway_template: template to intanciate from
             :param async: Make an sync or async HTTP request
             :param callback: Callback method called when async is set to true

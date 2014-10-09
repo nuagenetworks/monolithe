@@ -5,11 +5,13 @@ __all__ = [
     'NUAlarmsFetcher', \
     'NUVlanTemplatesFetcher', \
     'NUMultiCastChannelMapsFetcher', \
+    'NUInfrastructureGatewayProfilesFetcher', \
     'NUEgressACLsFetcher', \
     'NUUsersFetcher', \
     'NUMetadatasFetcher', \
     'NUVRSsFetcher', \
     'NUFlowSecurityPoliciesFetcher', \
+    'NUBootstrapsFetcher', \
     'NUBridgeInterfacesFetcher', \
     'NUTiersFetcher', \
     'NUTCAsFetcher', \
@@ -20,7 +22,11 @@ __all__ = [
     'NUStatisticsPoliciesFetcher', \
     'NUGroupsFetcher', \
     'NUVSDsFetcher', \
+    'NUInfrastructureConfigsFetcher', \
+    'NUInfrastructureVlanProfilesFetcher', \
+    'NUBootstrapActivationsFetcher', \
     'NUGatewaysFetcher', \
+    'NURedirectionTargetTemplatesFetcher', \
     'NUAutoDiscGatewaysFetcher', \
     'NUMultiCastRangesFetcher', \
     'NUStaticRoutesFetcher', \
@@ -29,6 +35,7 @@ __all__ = [
     'NUL2DomainTemplatesFetcher', \
     'NUFloatingIpsFetcher', \
     'NUVirtualIPsFetcher', \
+    'NUInfrastructurePortProfilesFetcher', \
     'NULicensesFetcher', \
     'NUIngressACLsFetcher', \
     'NUL2DomainsFetcher', \
@@ -36,6 +43,7 @@ __all__ = [
     'NUMirrorDestinationsFetcher', \
     'NUPermittedActionsFetcher', \
     'NUMultiNICVPortsFetcher', \
+    'NULocationsFetcher', \
     'NUEgressACLTemplatesFetcher', \
     'NUVMResyncsFetcher', \
     'NUAppsFetcher', \
@@ -52,10 +60,10 @@ __all__ = [
     'NUZonesFetcher', \
     'NUHostInterfacesFetcher', \
     'NUBGPPeersFetcher', \
-    'NUVPortTagTemplatesFetcher', \
     'NUGatewayTemplatesFetcher', \
     'NUVPortMirrorsFetcher', \
     'NUIngressACLTemplatesFetcher', \
+    'NUIPBindingsFetcher', \
     'NUDSCPForwardingClassTablesFetcher', \
     'NUDiskStatssFetcher', \
     'NUVirtualMachinesFetcher', \
@@ -70,11 +78,11 @@ __all__ = [
     'NUVlansFetcher', \
     'NUDSCPForwardingClassMappingsFetcher', \
     'NUZoneTemplatesFetcher', \
-    'NUVPortTagsFetcher', \
     'NUNetworkLayoutsFetcher', \
     'NUPolicyDecisionsFetcher', \
     'NUVSCsFetcher', \
     'NUJobsFetcher', \
+    'NURedirectionTargetsFetcher', \
     'NUEnterpriseProfilesFetcher', \
     'NUServicesFetcher', \
     'NUIngressAdvancedForwardingsFetcher', \
@@ -98,11 +106,13 @@ from nuwanservices_fetcher import NUWANServicesFetcher
 from nualarms_fetcher import NUAlarmsFetcher
 from nuvlantemplates_fetcher import NUVlanTemplatesFetcher
 from numulticastchannelmaps_fetcher import NUMultiCastChannelMapsFetcher
+from nuinfrastructuregatewayprofiles_fetcher import NUInfrastructureGatewayProfilesFetcher
 from nuegressacls_fetcher import NUEgressACLsFetcher
 from nuusers_fetcher import NUUsersFetcher
 from numetadatas_fetcher import NUMetadatasFetcher
 from nuvrss_fetcher import NUVRSsFetcher
 from nuflowsecuritypolicies_fetcher import NUFlowSecurityPoliciesFetcher
+from nubootstraps_fetcher import NUBootstrapsFetcher
 from nubridgeinterfaces_fetcher import NUBridgeInterfacesFetcher
 from nutiers_fetcher import NUTiersFetcher
 from nutcas_fetcher import NUTCAsFetcher
@@ -113,7 +123,11 @@ from nuingressaclentries_fetcher import NUIngressACLEntriesFetcher
 from nustatisticspolicies_fetcher import NUStatisticsPoliciesFetcher
 from nugroups_fetcher import NUGroupsFetcher
 from nuvsds_fetcher import NUVSDsFetcher
+from nuinfrastructureconfigs_fetcher import NUInfrastructureConfigsFetcher
+from nuinfrastructurevlanprofiles_fetcher import NUInfrastructureVlanProfilesFetcher
+from nubootstrapactivations_fetcher import NUBootstrapActivationsFetcher
 from nugateways_fetcher import NUGatewaysFetcher
+from nuredirectiontargettemplates_fetcher import NURedirectionTargetTemplatesFetcher
 from nuautodiscgateways_fetcher import NUAutoDiscGatewaysFetcher
 from numulticastranges_fetcher import NUMultiCastRangesFetcher
 from nustaticroutes_fetcher import NUStaticRoutesFetcher
@@ -122,6 +136,7 @@ from nuvports_fetcher import NUVPortsFetcher
 from nul2domaintemplates_fetcher import NUL2DomainTemplatesFetcher
 from nufloatingips_fetcher import NUFloatingIpsFetcher
 from nuvirtualips_fetcher import NUVirtualIPsFetcher
+from nuinfrastructureportprofiles_fetcher import NUInfrastructurePortProfilesFetcher
 from nulicenses_fetcher import NULicensesFetcher
 from nuingressacls_fetcher import NUIngressACLsFetcher
 from nul2domains_fetcher import NUL2DomainsFetcher
@@ -129,6 +144,7 @@ from nuportstatuss_fetcher import NUPortStatussFetcher
 from numirrordestinations_fetcher import NUMirrorDestinationsFetcher
 from nupermittedactions_fetcher import NUPermittedActionsFetcher
 from numultinicvports_fetcher import NUMultiNICVPortsFetcher
+from nulocations_fetcher import NULocationsFetcher
 from nuegressacltemplates_fetcher import NUEgressACLTemplatesFetcher
 from nuvmresyncs_fetcher import NUVMResyncsFetcher
 from nuapps_fetcher import NUAppsFetcher
@@ -145,10 +161,10 @@ from nusharednetworkresources_fetcher import NUSharedNetworkResourcesFetcher
 from nuzones_fetcher import NUZonesFetcher
 from nuhostinterfaces_fetcher import NUHostInterfacesFetcher
 from nubgppeers_fetcher import NUBGPPeersFetcher
-from nuvporttagtemplates_fetcher import NUVPortTagTemplatesFetcher
 from nugatewaytemplates_fetcher import NUGatewayTemplatesFetcher
 from nuvportmirrors_fetcher import NUVPortMirrorsFetcher
 from nuingressacltemplates_fetcher import NUIngressACLTemplatesFetcher
+from nuipbindings_fetcher import NUIPBindingsFetcher
 from nudscpforwardingclasstables_fetcher import NUDSCPForwardingClassTablesFetcher
 from nudiskstatss_fetcher import NUDiskStatssFetcher
 from nuvirtualmachines_fetcher import NUVirtualMachinesFetcher
@@ -163,11 +179,11 @@ from nuingressacltemplateentries_fetcher import NUIngressACLTemplateEntriesFetch
 from nuvlans_fetcher import NUVlansFetcher
 from nudscpforwardingclassmappings_fetcher import NUDSCPForwardingClassMappingsFetcher
 from nuzonetemplates_fetcher import NUZoneTemplatesFetcher
-from nuvporttags_fetcher import NUVPortTagsFetcher
 from nunetworklayouts_fetcher import NUNetworkLayoutsFetcher
 from nupolicydecisions_fetcher import NUPolicyDecisionsFetcher
 from nuvscs_fetcher import NUVSCsFetcher
 from nujobs_fetcher import NUJobsFetcher
+from nuredirectiontargets_fetcher import NURedirectionTargetsFetcher
 from nuenterpriseprofiles_fetcher import NUEnterpriseProfilesFetcher
 from nuservices_fetcher import NUServicesFetcher
 from nuingressadvancedforwardings_fetcher import NUIngressAdvancedForwardingsFetcher

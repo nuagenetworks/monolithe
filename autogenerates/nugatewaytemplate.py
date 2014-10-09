@@ -17,11 +17,13 @@ class NUGatewayTemplate(NURESTObject):
         
         self.enterprise_id = None
         self.description = None
+        self.infrastructure_profile_id = None
         self.name = None
         self.personality = None
         
         self.expose_attribute(local_name=u"enterprise_id", remote_name=u"enterpriseID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
+        self.expose_attribute(local_name=u"infrastructure_profile_id", remote_name=u"infrastructureProfileID", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"personality", remote_name=u"personality", attribute_type=str)
 

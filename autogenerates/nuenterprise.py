@@ -7,6 +7,10 @@ from ..fetchers import NUServicesFetcher
 from ..fetchers import NUGatewaysFetcher
 from ..fetchers import NUGatewayTemplatesFetcher
 from ..fetchers import NURedundantGWGrpsFetcher
+from ..fetchers import NUInfrastructureGatewayProfilesFetcher
+from ..fetchers import NUInfrastructurePortProfilesFetcher
+from ..fetchers import NUInfrastructureVlanProfilesFetcher
+from ..fetchers import NUJobsFetcher
 from ..fetchers import NUDomainsFetcher
 from ..fetchers import NUDomainTemplatesFetcher
 from ..fetchers import NUEnterpriseNetworkMacrosFetcher
@@ -41,6 +45,8 @@ class NUEnterprise(NURESTObject):
         self.avatar_type = None
         self.customer_id = None
         self.description = None
+        self.dhcp_lease_interval = None
+        self.dhcp_mapping_retention_timer = None
         self.enterprise_profile_id = None
         self.floating_ips_quota = None
         self.floating_ips_used = None
@@ -54,6 +60,8 @@ class NUEnterprise(NURESTObject):
         self.expose_attribute(local_name=u"avatar_type", remote_name=u"avatarType", attribute_type=str)
         self.expose_attribute(local_name=u"customer_id", remote_name=u"customerID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
+        self.expose_attribute(local_name=u"dhcp_lease_interval", remote_name=u"DHCPLeaseInterval", attribute_type=int)
+        self.expose_attribute(local_name=u"dhcp_mapping_retention_timer", remote_name=u"DHCPMappingRetentionTimer", attribute_type=int)
         self.expose_attribute(local_name=u"enterprise_profile_id", remote_name=u"enterpriseProfileID", attribute_type=str)
         self.expose_attribute(local_name=u"floating_ips_quota", remote_name=u"floatingIPsQuota", attribute_type=int)
         self.expose_attribute(local_name=u"floating_ips_used", remote_name=u"floatingIPsUsed", attribute_type=int)
@@ -81,6 +89,18 @@ class NUEnterprise(NURESTObject):
         
         self.redundancygroups = []
         self._redundancygroups_fetcher = NURedundantGWGrpsFetcher.fetcher_with_entity(entity=self, local_name=u"redundancygroups")
+        
+        self.infrastructuregatewayprofiles = []
+        self._infrastructuregatewayprofiles_fetcher = NUInfrastructureGatewayProfilesFetcher.fetcher_with_entity(entity=self, local_name=u"infrastructuregatewayprofiles")
+        
+        self.infrastructureportprofiles = []
+        self._infrastructureportprofiles_fetcher = NUInfrastructurePortProfilesFetcher.fetcher_with_entity(entity=self, local_name=u"infrastructureportprofiles")
+        
+        self.infrastructurevlanprofiles = []
+        self._infrastructurevlanprofiles_fetcher = NUInfrastructureVlanProfilesFetcher.fetcher_with_entity(entity=self, local_name=u"infrastructurevlanprofiles")
+        
+        self.jobs = []
+        self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
         
         self.domains = []
         self._domains_fetcher = NUDomainsFetcher.fetcher_with_entity(entity=self, local_name=u"domains")
@@ -308,6 +328,110 @@ class NUEnterprise(NURESTObject):
             self._redundancygroups_fetcher.order_by = order_by
 
         return self._redundancygroups_fetcher.fetch_matching_entities(filter=filter, page=page)
+    
+    def create_infrastructuregatewayprofile(self, infrastructuregatewayprofile, async=False, callback=None):
+        """ Create a infrastructuregatewayprofile
+            :param infrastructuregatewayprofile: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=infrastructuregatewayprofile, async=async, callback=callback)
+
+    def delete_infrastructuregatewayprofile(self, infrastructuregatewayprofile, async=False, callback=None):
+        """ Removes a infrastructuregatewayprofile
+            :param infrastructuregatewayprofile: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=infrastructuregatewayprofile, async=async, callback=callback)
+
+    def fetch_infrastructuregatewayprofiles(self, filter=None, page=None, order_by=None):
+        """ Fetch InfrastructureGatewayProfiles """
+
+        if order_by:
+            self._infrastructuregatewayprofiles_fetcher.order_by = order_by
+
+        return self._infrastructuregatewayprofiles_fetcher.fetch_matching_entities(filter=filter, page=page)
+    
+    def create_infrastructureportprofile(self, infrastructureportprofile, async=False, callback=None):
+        """ Create a infrastructureportprofile
+            :param infrastructureportprofile: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=infrastructureportprofile, async=async, callback=callback)
+
+    def delete_infrastructureportprofile(self, infrastructureportprofile, async=False, callback=None):
+        """ Removes a infrastructureportprofile
+            :param infrastructureportprofile: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=infrastructureportprofile, async=async, callback=callback)
+
+    def fetch_infrastructureportprofiles(self, filter=None, page=None, order_by=None):
+        """ Fetch InfrastructurePortProfiles """
+
+        if order_by:
+            self._infrastructureportprofiles_fetcher.order_by = order_by
+
+        return self._infrastructureportprofiles_fetcher.fetch_matching_entities(filter=filter, page=page)
+    
+    def create_infrastructurevlanprofile(self, infrastructurevlanprofile, async=False, callback=None):
+        """ Create a infrastructurevlanprofile
+            :param infrastructurevlanprofile: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=infrastructurevlanprofile, async=async, callback=callback)
+
+    def delete_infrastructurevlanprofile(self, infrastructurevlanprofile, async=False, callback=None):
+        """ Removes a infrastructurevlanprofile
+            :param infrastructurevlanprofile: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=infrastructurevlanprofile, async=async, callback=callback)
+
+    def fetch_infrastructurevlanprofiles(self, filter=None, page=None, order_by=None):
+        """ Fetch InfrastructureVlanProfiles """
+
+        if order_by:
+            self._infrastructurevlanprofiles_fetcher.order_by = order_by
+
+        return self._infrastructurevlanprofiles_fetcher.fetch_matching_entities(filter=filter, page=page)
+    
+    def create_job(self, job, async=False, callback=None):
+        """ Create a job
+            :param job: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=job, async=async, callback=callback)
+
+    def delete_job(self, job, async=False, callback=None):
+        """ Removes a job
+            :param job: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=job, async=async, callback=callback)
+
+    def fetch_jobs(self, filter=None, page=None, order_by=None):
+        """ Fetch Jobs """
+
+        if order_by:
+            self._jobs_fetcher.order_by = order_by
+
+        return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_domain(self, domain, async=False, callback=None):
         """ Create a domain

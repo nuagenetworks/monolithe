@@ -18,11 +18,13 @@ class NUFlow(NURESTObject):
         
         self.description = None
         self.destination_tier_id = None
+        self.metadata = None
         self.name = None
         self.origin_tier_id = None
         
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"destination_tier_id", remote_name=u"destinationTierID", attribute_type=str)
+        self.expose_attribute(local_name=u"metadata", remote_name=u"metadata", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"origin_tier_id", remote_name=u"originTierID", attribute_type=str)
 

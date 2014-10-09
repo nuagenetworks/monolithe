@@ -3,6 +3,7 @@
 from ..fetchers import NUAlarmsFetcher
 from ..fetchers import NUJobsFetcher
 from ..fetchers import NUHSCsFetcher
+from ..fetchers import NUMultiNICVPortsFetcher
 from ..fetchers import NUPortStatussFetcher
 from ..fetchers import NUVSCsFetcher
 from ..fetchers import NUVirtualMachinesFetcher
@@ -30,11 +31,12 @@ class NUVRS(NURESTObject):
         self.hypervisor_name = None
         self.hypervisor_type = None
         self.address = None
-        self.jsonconnection = None
+        self.jsonrpc_connection_state = None
         self.last_event_name = None
         self.last_event_object = None
         self.last_event_timestamp = None
         self.management_ip = None
+        self.multi_nic_vport_mode = None
         self.number_of_bridge_interfaces = None
         self.number_of_host_interfaces = None
         self.number_of_virtual_machines = None
@@ -65,11 +67,12 @@ class NUVRS(NURESTObject):
         self.expose_attribute(local_name=u"hypervisor_name", remote_name=u"hypervisorName", attribute_type=str)
         self.expose_attribute(local_name=u"hypervisor_type", remote_name=u"hypervisorType", attribute_type=str)
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
-        self.expose_attribute(local_name=u"jsonconnection", remote_name=u"jsonconnection", attribute_type=str)
+        self.expose_attribute(local_name=u"jsonrpc_connection_state", remote_name=u"JSONRPCConnectionState", attribute_type=str)
         self.expose_attribute(local_name=u"last_event_name", remote_name=u"lastEventName", attribute_type=str)
         self.expose_attribute(local_name=u"last_event_object", remote_name=u"lastEventObject", attribute_type=str)
         self.expose_attribute(local_name=u"last_event_timestamp", remote_name=u"lastEventTimestamp", attribute_type=str)
         self.expose_attribute(local_name=u"management_ip", remote_name=u"managementIP", attribute_type=str)
+        self.expose_attribute(local_name=u"multi_nic_vport_mode", remote_name=u"multiNICVportMode", attribute_type=bool)
         self.expose_attribute(local_name=u"number_of_bridge_interfaces", remote_name=u"numberOfBridgeInterfaces", attribute_type=int)
         self.expose_attribute(local_name=u"number_of_host_interfaces", remote_name=u"numberOfHostInterfaces", attribute_type=int)
         self.expose_attribute(local_name=u"number_of_virtual_machines", remote_name=u"numberOfVirtualMachines", attribute_type=int)
@@ -101,6 +104,9 @@ class NUVRS(NURESTObject):
         
         self.hscs = []
         self._hscs_fetcher = NUHSCsFetcher.fetcher_with_entity(entity=self, local_name=u"hscs")
+        
+        self.multinicvports = []
+        self._multinicvports_fetcher = NUMultiNICVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"multinicvports")
         
         self.monitoringports = []
         self._monitoringports_fetcher = NUPortStatussFetcher.fetcher_with_entity(entity=self, local_name=u"monitoringports")
@@ -200,6 +206,32 @@ class NUVRS(NURESTObject):
             self._hscs_fetcher.order_by = order_by
 
         return self._hscs_fetcher.fetch_matching_entities(filter=filter, page=page)
+    
+    def create_multinicvport(self, multinicvport, async=False, callback=None):
+        """ Create a multinicvport
+            :param multinicvport: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=multinicvport, async=async, callback=callback)
+
+    def delete_multinicvport(self, multinicvport, async=False, callback=None):
+        """ Removes a multinicvport
+            :param multinicvport: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=multinicvport, async=async, callback=callback)
+
+    def fetch_multinicvports(self, filter=None, page=None, order_by=None):
+        """ Fetch MultiNICVPorts """
+
+        if order_by:
+            self._multinicvports_fetcher.order_by = order_by
+
+        return self._multinicvports_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_monitoringport(self, monitoringport, async=False, callback=None):
         """ Create a monitoringport

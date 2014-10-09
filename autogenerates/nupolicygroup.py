@@ -19,11 +19,13 @@ class NUPolicyGroup(NURESTObject):
         self.evpn_community_tag = None
         self.name = None
         self.template_id = None
+        self.type = None
         
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"evpn_community_tag", remote_name=u"EVPNCommunityTag", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
+        self.expose_attribute(local_name=u"type", remote_name=u"type", attribute_type=str)
 
         # Fetchers
         

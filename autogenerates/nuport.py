@@ -27,6 +27,7 @@ class NUPort(NURESTObject):
         self.user_mnemonic = None
         self.use_user_mnemonic = None
         self.description = None
+        self.infrastructure_profile_id = None
         self.vlan_range = None
         
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
@@ -38,6 +39,7 @@ class NUPort(NURESTObject):
         self.expose_attribute(local_name=u"user_mnemonic", remote_name=u"userMnemonic", attribute_type=str)
         self.expose_attribute(local_name=u"use_user_mnemonic", remote_name=u"useUserMnemonic", attribute_type=bool)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
+        self.expose_attribute(local_name=u"infrastructure_profile_id", remote_name=u"infrastructureProfileID", attribute_type=str)
         self.expose_attribute(local_name=u"vlan_range", remote_name=u"VLANRange", attribute_type=str)
 
         # Fetchers

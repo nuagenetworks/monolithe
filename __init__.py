@@ -6,32 +6,39 @@ __all__ = [
     'NUIngressACLTemplate', \
     'NUAlarm', \
     'NUPermittedAction', \
-    'NUMirrorDestination', \
+    'NUSharedNetworkResource', \
     'NUBGPPeer', \
+    'NUInfrastructureVlanProfile', \
     'NUFlowForwardingPolicy', \
     'NUIngressACLEntry', \
     'NUGatewayTemplate', \
+    'NUInfrastructureGatewayProfile', \
     'NUDomain', \
     'NUPort', \
     'NUVirtualMachine', \
-    'NUVPortTag', \
+    'NUIPBinding', \
     'NUJob', \
+    'NUBootstrapActivation', \
+    'NULocation', \
     'NUMultiNICVPort', \
+    'NURedirectionTarget', \
     'NULicense', \
     'NUDSCPForwardingClassMapping', \
     'NUMultiCastRange', \
     'NUIngressAdvancedForwardingTemplate', \
     'NUVPort', \
+    'NUMirrorDestination', \
     'NUFloatingIp', \
     'NUVRS', \
     'NUZoneTemplate', \
-    'NUSharedNetworkResource', \
+    'NUVSDComponent', \
     'NUApp', \
     'NURedundantGWGrp', \
     'NUZone', \
     'NUEnterpriseProfile', \
     'NUHSC', \
     'NUVSP', \
+    'NURedirectionTargetTemplate', \
     'NUHostInterface', \
     'NUPortTemplate', \
     'NUVSC', \
@@ -39,13 +46,14 @@ __all__ = [
     'NUVlanTemplate', \
     'NUVSD', \
     'NUEnterprisePermission', \
-    'NUStaticRoute', \
+    'NUInfrastructurePortProfile', \
     'NUTier', \
     'NUPolicyGroupTemplate', \
     'NUVlan', \
     'NUApplication', \
     'NUSubNetwork', \
     'NUDomainTemplate', \
+    'NUBootstrap', \
     'NUMetadata', \
     'NUEnterprise', \
     'NUGroup', \
@@ -53,6 +61,7 @@ __all__ = [
     'NUPublicNetworkMacro', \
     'NUEgressACL', \
     'NUStatistics', \
+    'NUStaticRoute', \
     'NUIngressACL', \
     'NUSubNetworkTemplate', \
     'NURESTUser', \
@@ -60,6 +69,7 @@ __all__ = [
     'NUAutoDiscGateway', \
     'NUTCA', \
     'NUGateway', \
+    'NUInfrastructureConfig', \
     'NUPolicyDecision', \
     'NUStatisticsPolicy', \
     'NUStatsCollectorInfo', \
@@ -74,7 +84,6 @@ __all__ = [
     'NUVPortMirror', \
     'NUEnterpriseNetworkMacro', \
     'NUIngressAdvancedForwarding', \
-    'NUVSDComponent', \
     'NUDiskStats', \
     'NUSystemConfig', \
     'NUWANService', \
@@ -90,7 +99,6 @@ __all__ = [
     'NUDHCPOption', \
     'NUIngressACLTemplateEntry', \
     'NUBridgeInterface', \
-    'NUVPortTagTemplate', \
     'NUQosPrimitive', \
     'NUIngressAdvancedForwardingTemplateEntry', \
 ]
@@ -100,32 +108,39 @@ from nuegressacltemplateentry import NUEgressACLTemplateEntry
 from nuingressacltemplate import NUIngressACLTemplate
 from nualarm import NUAlarm
 from nupermittedaction import NUPermittedAction
-from numirrordestination import NUMirrorDestination
+from nusharednetworkresource import NUSharedNetworkResource
 from nubgppeer import NUBGPPeer
+from nuinfrastructurevlanprofile import NUInfrastructureVlanProfile
 from nuflowforwardingpolicy import NUFlowForwardingPolicy
 from nuingressaclentry import NUIngressACLEntry
 from nugatewaytemplate import NUGatewayTemplate
+from nuinfrastructuregatewayprofile import NUInfrastructureGatewayProfile
 from nudomain import NUDomain
 from nuport import NUPort
 from nuvirtualmachine import NUVirtualMachine
-from nuvporttag import NUVPortTag
+from nuipbinding import NUIPBinding
 from nujob import NUJob
+from nubootstrapactivation import NUBootstrapActivation
+from nulocation import NULocation
 from numultinicvport import NUMultiNICVPort
+from nuredirectiontarget import NURedirectionTarget
 from nulicense import NULicense
 from nudscpforwardingclassmapping import NUDSCPForwardingClassMapping
 from numulticastrange import NUMultiCastRange
 from nuingressadvancedforwardingtemplate import NUIngressAdvancedForwardingTemplate
 from nuvport import NUVPort
+from numirrordestination import NUMirrorDestination
 from nufloatingip import NUFloatingIp
 from nuvrs import NUVRS
 from nuzonetemplate import NUZoneTemplate
-from nusharednetworkresource import NUSharedNetworkResource
+from nuvsdcomponent import NUVSDComponent
 from nuapp import NUApp
 from nuredundantgwgrp import NURedundantGWGrp
 from nuzone import NUZone
 from nuenterpriseprofile import NUEnterpriseProfile
 from nuhsc import NUHSC
 from nuvsp import NUVSP
+from nuredirectiontargettemplate import NURedirectionTargetTemplate
 from nuhostinterface import NUHostInterface
 from nuporttemplate import NUPortTemplate
 from nuvsc import NUVSC
@@ -133,13 +148,14 @@ from nunetworklayout import NUNetworkLayout
 from nuvlantemplate import NUVlanTemplate
 from nuvsd import NUVSD
 from nuenterprisepermission import NUEnterprisePermission
-from nustaticroute import NUStaticRoute
+from nuinfrastructureportprofile import NUInfrastructurePortProfile
 from nutier import NUTier
 from nupolicygrouptemplate import NUPolicyGroupTemplate
 from nuvlan import NUVlan
 from nuapplication import NUApplication
 from nusubnetwork import NUSubNetwork
 from nudomaintemplate import NUDomainTemplate
+from nubootstrap import NUBootstrap
 from numetadata import NUMetadata
 from nuenterprise import NUEnterprise
 from nugroup import NUGroup
@@ -147,6 +163,7 @@ from nuportstatus import NUPortStatus
 from nupublicnetworkmacro import NUPublicNetworkMacro
 from nuegressacl import NUEgressACL
 from nustatistics import NUStatistics
+from nustaticroute import NUStaticRoute
 from nuingressacl import NUIngressACL
 from nusubnetworktemplate import NUSubNetworkTemplate
 from nurestuser import NURESTUser
@@ -154,6 +171,7 @@ from nuvportgatewayresponse import NUVPortGatewayResponse
 from nuautodiscgateway import NUAutoDiscGateway
 from nutca import NUTCA
 from nugateway import NUGateway
+from nuinfrastructureconfig import NUInfrastructureConfig
 from nupolicydecision import NUPolicyDecision
 from nustatisticspolicy import NUStatisticsPolicy
 from nustatscollectorinfo import NUStatsCollectorInfo
@@ -168,7 +186,6 @@ from nuvminterface import NUVMInterface
 from nuvportmirror import NUVPortMirror
 from nuenterprisenetworkmacro import NUEnterpriseNetworkMacro
 from nuingressadvancedforwarding import NUIngressAdvancedForwarding
-from nuvsdcomponent import NUVSDComponent
 from nudiskstats import NUDiskStats
 from nusystemconfig import NUSystemConfig
 from nuwanservice import NUWANService
@@ -184,6 +201,5 @@ from nuvmresync import NUVMResync
 from nudhcpoption import NUDHCPOption
 from nuingressacltemplateentry import NUIngressACLTemplateEntry
 from nubridgeinterface import NUBridgeInterface
-from nuvporttagtemplate import NUVPortTagTemplate
 from nuqosprimitive import NUQosPrimitive
 from nuingressadvancedforwardingtemplateentry import NUIngressAdvancedForwardingTemplateEntry

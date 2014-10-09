@@ -17,6 +17,9 @@ class NUEgressACLTemplateEntry(NURESTObject):
         self.reflexive = None
         self.action = None
         self.address_override = None
+        self.associated_application_id = None
+        self.associated_application_object_id = None
+        self.associated_application_object_type = None
         self.description = None
         self.destination_port = None
         self.dscp = None
@@ -32,6 +35,9 @@ class NUEgressACLTemplateEntry(NURESTObject):
         self.expose_attribute(local_name=u"reflexive", remote_name=u"reflexive", attribute_type=bool)
         self.expose_attribute(local_name=u"action", remote_name=u"action", attribute_type=str)
         self.expose_attribute(local_name=u"address_override", remote_name=u"addressOverride", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_id", remote_name=u"associatedApplicationID", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_object_id", remote_name=u"associatedApplicationObjectID", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_object_type", remote_name=u"associatedApplicationObjectType", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"destination_port", remote_name=u"destinationPort", attribute_type=str)
         self.expose_attribute(local_name=u"dscp", remote_name=u"DSCP", attribute_type=str)

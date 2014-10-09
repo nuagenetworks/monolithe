@@ -25,6 +25,7 @@ class NUSubNetworkTemplate(NURESTObject):
         self.netmask = None
         self.multicast = None
         self.associated_multicast_channel_map_id = None
+        self.nsg_managed = None
         self.proxy_arp = None
         self.split_subnet = None
         
@@ -36,6 +37,7 @@ class NUSubNetworkTemplate(NURESTObject):
         self.expose_attribute(local_name=u"netmask", remote_name=u"netmask", attribute_type=str)
         self.expose_attribute(local_name=u"multicast", remote_name=u"multicast", attribute_type=str)
         self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str)
+        self.expose_attribute(local_name=u"nsg_managed", remote_name=u"NSGManaged", attribute_type=bool)
         self.expose_attribute(local_name=u"proxy_arp", remote_name=u"proxyARP", attribute_type=bool)
         self.expose_attribute(local_name=u"split_subnet", remote_name=u"splitSubnet", attribute_type=bool)
 

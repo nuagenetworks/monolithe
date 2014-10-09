@@ -124,3 +124,9 @@ class UserRole(object):
     ORGNETWORKDESIGNER = u'ORGNETWORKDESIGNER'
     ORGUSER = u'ORGUSER'
     USER = u'USER'
+
+class RedirectionTargetEndPointType(object):
+    """ RedirectionTargetEndPointType """
+
+    L3 = u"L3";
+    VIRTUAL_WIRE = u"VIRTUAL_WIRE";

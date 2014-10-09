@@ -25,6 +25,9 @@ class NUZone(NURESTObject):
         # Read/Write Attributes
         
         self.address = None
+        self.associated_application_id = None
+        self.associated_application_object_id = None
+        self.associated_application_object_type = None
         self.template_id = None
         self.description = None
         self.ip_type = None
@@ -37,6 +40,9 @@ class NUZone(NURESTObject):
         self.associated_multicast_channel_map_id = None
         
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_id", remote_name=u"associatedApplicationID", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_object_id", remote_name=u"associatedApplicationObjectID", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_object_type", remote_name=u"associatedApplicationObjectType", attribute_type=str)
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"ip_type", remote_name=u"IPType", attribute_type=str)

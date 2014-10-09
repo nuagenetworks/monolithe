@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ..fetchers import NUMetadatasFetcher
+from ..fetchers import NUJobsFetcher
 from ..fetchers import NUAddressRangesFetcher
 from ..fetchers import NUDHCPOptionsFetcher
 from ..fetchers import NUStaticRoutesFetcher
@@ -19,7 +20,7 @@ from ..fetchers import NUBridgeInterfacesFetcher
 from ..fetchers import NUHostInterfacesFetcher
 from ..fetchers import NUPolicyGroupsFetcher
 from ..fetchers import NUVPortsFetcher
-from ..fetchers import NUVPortTagsFetcher
+from ..fetchers import NURedirectionTargetsFetcher
 
 from restnuage import NURESTObject
 
@@ -40,6 +41,7 @@ class NUL2Domain(NURESTObject):
         self.description = None
         self.dhcp_managed = None
         self.gateway = None
+        self.gateway_mac_address = None
         self.ip_type = None
         self.maintenance_mode = None
         self.name = None
@@ -48,6 +50,8 @@ class NUL2Domain(NURESTObject):
         self.route_target = None
         self.service_id = None
         self.vn_id = None
+        self.multicast = None
+        self.associated_multicast_channel_map_id = None
         
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"associated_shared_network_resource_id", remote_name=u"associatedSharedNetworkResourceID", attribute_type=str)
@@ -55,6 +59,7 @@ class NUL2Domain(NURESTObject):
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"dhcp_managed", remote_name=u"DHCPManaged", attribute_type=bool)
         self.expose_attribute(local_name=u"gateway", remote_name=u"gateway", attribute_type=str)
+        self.expose_attribute(local_name=u"gateway_mac_address", remote_name=u"gatewayMACAddress", attribute_type=str)
         self.expose_attribute(local_name=u"ip_type", remote_name=u"IPType", attribute_type=str)
         self.expose_attribute(local_name=u"maintenance_mode", remote_name=u"maintenanceMode", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
@@ -63,11 +68,16 @@ class NUL2Domain(NURESTObject):
         self.expose_attribute(local_name=u"route_target", remote_name=u"routeTarget", attribute_type=str)
         self.expose_attribute(local_name=u"service_id", remote_name=u"serviceID", attribute_type=str)
         self.expose_attribute(local_name=u"vn_id", remote_name=u"vnId", attribute_type=str)
+        self.expose_attribute(local_name=u"multicast", remote_name=u"multicast", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str)
 
         # Fetchers
         
         self.metadata = []
         self._metadata_fetcher = NUMetadatasFetcher.fetcher_with_entity(entity=self, local_name=u"metadata")
+        
+        self.jobs = []
+        self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
         
         self.addressranges = []
         self._addressranges_fetcher = NUAddressRangesFetcher.fetcher_with_entity(entity=self, local_name=u"addressranges")
@@ -124,7 +134,7 @@ class NUL2Domain(NURESTObject):
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
         
         self.redirectiontargets = []
-        self._redirectiontargets_fetcher = NUVPortTagsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
+        self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
         
 
     @classmethod
@@ -160,6 +170,32 @@ class NUL2Domain(NURESTObject):
             self._metadata_fetcher.order_by = order_by
 
         return self._metadata_fetcher.fetch_matching_entities(filter=filter, page=page)
+    
+    def create_job(self, job, async=False, callback=None):
+        """ Create a job
+            :param job: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=job, async=async, callback=callback)
+
+    def delete_job(self, job, async=False, callback=None):
+        """ Removes a job
+            :param job: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=job, async=async, callback=callback)
+
+    def fetch_jobs(self, filter=None, page=None, order_by=None):
+        """ Fetch Jobs """
+
+        if order_by:
+            self._jobs_fetcher.order_by = order_by
+
+        return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_addressrange(self, addressrange, async=False, callback=None):
         """ Create a addressrange
@@ -648,7 +684,7 @@ class NUL2Domain(NURESTObject):
         return self.remove_child_entity(entity=redirectiontarget, async=async, callback=callback)
 
     def fetch_redirectiontargets(self, filter=None, page=None, order_by=None):
-        """ Fetch VPortTags """
+        """ Fetch RedirectionTargets """
 
         if order_by:
             self._redirectiontargets_fetcher.order_by = order_by

@@ -12,7 +12,7 @@ from ..fetchers import NUBridgeInterfacesFetcher
 from ..fetchers import NUHostInterfacesFetcher
 from ..fetchers import NUPolicyGroupsFetcher
 from ..fetchers import NUVPortMirrorsFetcher
-from ..fetchers import NUVPortTagsFetcher
+from ..fetchers import NURedirectionTargetsFetcher
 
 from restnuage import NURESTObject
 
@@ -39,6 +39,7 @@ class NUVPort(NURESTObject):
         self.multi_nicv_port_id = None
         self.name = None
         self.operational_state = None
+        self.system_type = None
         self.type = None
         self.zone_id = None
         
@@ -54,6 +55,7 @@ class NUVPort(NURESTObject):
         self.expose_attribute(local_name=u"multi_nicv_port_id", remote_name=u"multiNICVPortID", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"operational_state", remote_name=u"operationalState", attribute_type=str)
+        self.expose_attribute(local_name=u"system_type", remote_name=u"systemType", attribute_type=str)
         self.expose_attribute(local_name=u"type", remote_name=u"type", attribute_type=str)
         self.expose_attribute(local_name=u"zone_id", remote_name=u"zoneID", attribute_type=str)
 
@@ -96,7 +98,7 @@ class NUVPort(NURESTObject):
         self._vportmirrors_fetcher = NUVPortMirrorsFetcher.fetcher_with_entity(entity=self, local_name=u"vportmirrors")
         
         self.redirectiontargets = []
-        self._redirectiontargets_fetcher = NUVPortTagsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
+        self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
         
 
     @classmethod
@@ -438,7 +440,7 @@ class NUVPort(NURESTObject):
         return self.remove_child_entity(entity=redirectiontarget, async=async, callback=callback)
 
     def fetch_redirectiontargets(self, filter=None, page=None, order_by=None):
-        """ Fetch VPortTags """
+        """ Fetch RedirectionTargets """
 
         if order_by:
             self._redirectiontargets_fetcher.order_by = order_by

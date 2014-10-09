@@ -16,12 +16,14 @@ class NUEgressACLTemplate(NURESTObject):
 
         # Read/Write Attributes
         
+        self.default_install_acl_implicit_rules = None
         self.default_allow_ip = None
         self.default_allow_non_ip = None
         self.description = None
         self.name = None
         self.active = None
         
+        self.expose_attribute(local_name=u"default_install_acl_implicit_rules", remote_name=u"defaultInstallACLImplicitRules", attribute_type=bool)
         self.expose_attribute(local_name=u"default_allow_ip", remote_name=u"defaultAllowIP", attribute_type=bool)
         self.expose_attribute(local_name=u"default_allow_non_ip", remote_name=u"defaultAllowNonIP", attribute_type=bool)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)

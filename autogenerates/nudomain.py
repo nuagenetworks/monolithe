@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from ..fetchers import NUJobsFetcher
 from ..fetchers import NUDHCPOptionsFetcher
 from ..fetchers import NUFloatingIpsFetcher
 from ..fetchers import NUStaticRoutesFetcher
@@ -21,7 +22,7 @@ from ..fetchers import NUBridgeInterfacesFetcher
 from ..fetchers import NUHostInterfacesFetcher
 from ..fetchers import NUPolicyGroupsFetcher
 from ..fetchers import NUVPortsFetcher
-from ..fetchers import NUVPortTagsFetcher
+from ..fetchers import NURedirectionTargetsFetcher
 
 from restnuage import NURESTObject
 
@@ -38,8 +39,13 @@ class NUDomain(NURESTObject):
         
         self.application_deployment_policy = None
         self.template_id = None
+        self.back_haul_route_distinguisher = None
+        self.back_haul_route_target = None
+        self.back_haul_vnid = None
         self.customer_id = None
         self.description = None
+        self.dhcp_behavior = None
+        self.dhcp_server_address = None
         self.tunnel_type = None
         self.multicast = None
         self.label_id = None
@@ -52,8 +58,13 @@ class NUDomain(NURESTObject):
         
         self.expose_attribute(local_name=u"application_deployment_policy", remote_name=u"applicationDeploymentPolicy", attribute_type=str)
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
+        self.expose_attribute(local_name=u"back_haul_route_distinguisher", remote_name=u"backHaulRouteDistinguisher", attribute_type=str)
+        self.expose_attribute(local_name=u"back_haul_route_target", remote_name=u"backHaulRouteTarget", attribute_type=str)
+        self.expose_attribute(local_name=u"back_haul_vnid", remote_name=u"backHaulVNID", attribute_type=str)
         self.expose_attribute(local_name=u"customer_id", remote_name=u"customerID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
+        self.expose_attribute(local_name=u"dhcp_behavior", remote_name=u"DHCPBehavior", attribute_type=str)
+        self.expose_attribute(local_name=u"dhcp_server_address", remote_name=u"DHCPServerAddress", attribute_type=str)
         self.expose_attribute(local_name=u"tunnel_type", remote_name=u"tunnelType", attribute_type=str)
         self.expose_attribute(local_name=u"multicast", remote_name=u"multicast", attribute_type=str)
         self.expose_attribute(local_name=u"label_id", remote_name=u"labelID", attribute_type=str)
@@ -65,6 +76,9 @@ class NUDomain(NURESTObject):
         self.expose_attribute(local_name=u"service_id", remote_name=u"serviceID", attribute_type=str)
 
         # Fetchers
+        
+        self.jobs = []
+        self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
         
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
@@ -130,7 +144,7 @@ class NUDomain(NURESTObject):
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
         
         self.redirectiontargets = []
-        self._redirectiontargets_fetcher = NUVPortTagsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
+        self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
         
 
     @classmethod
@@ -140,6 +154,32 @@ class NUDomain(NURESTObject):
         return u"domain"
 
     # REST methods
+    
+    def create_job(self, job, async=False, callback=None):
+        """ Create a job
+            :param job: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=job, async=async, callback=callback)
+
+    def delete_job(self, job, async=False, callback=None):
+        """ Removes a job
+            :param job: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=job, async=async, callback=callback)
+
+    def fetch_jobs(self, filter=None, page=None, order_by=None):
+        """ Fetch Jobs """
+
+        if order_by:
+            self._jobs_fetcher.order_by = order_by
+
+        return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_dhcpoption(self, dhcpoption, async=False, callback=None):
         """ Create a dhcpoption
@@ -706,7 +746,7 @@ class NUDomain(NURESTObject):
         return self.remove_child_entity(entity=redirectiontarget, async=async, callback=callback)
 
     def fetch_redirectiontargets(self, filter=None, page=None, order_by=None):
-        """ Fetch VPortTags """
+        """ Fetch RedirectionTargets """
 
         if order_by:
             self._redirectiontargets_fetcher.order_by = order_by

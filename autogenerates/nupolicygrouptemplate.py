@@ -16,9 +16,11 @@ class NUPolicyGroupTemplate(NURESTObject):
         
         self.description = None
         self.name = None
+        self.type = None
         
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
+        self.expose_attribute(local_name=u"type", remote_name=u"type", attribute_type=str)
 
         # Fetchers
         

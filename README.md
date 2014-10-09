@@ -19,10 +19,10 @@ Install your virtualenv
     $ virtualenv --no-site-packages pymodel-env
 
 Activate your environment
-    
+
     $ cd pymodel-env
     $ source bin/activate
-    (pymodel-env) $ 
+    (pymodel-env) $
 
 Get the sources
 
@@ -37,18 +37,20 @@ Install dependencies
 Example
 =======
 
+Here is a quick example !
+
      from restnuage import NURESTLoginController
      from pymodel.models import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain,NUGatewayTemplate, NUGateway
-     
+
      # Setting a log level to see what happens (Optionnal)
-     
+
      # import logging
      # restnuage_log = logging.getLogger('restnuage')
      # restnuage_log.setLevel(logging.DEBUG)
      # restnuage_log.addHandler(logging.StreamHandler())
 
      # Log in on the application with csproot user
-     
+
      controller = NURESTLoginController()
      controller.user = u"csproot"
      controller.password = u"csproot"
@@ -69,4 +71,9 @@ Example
      enterprise.create_gateway_template(domain_template)
      domain = NUDomain()
      domain.name = u'Instance Domain example'
-     enterprise.instanciate_domain(domain, domain_template)
+     enterprise.instantiate_domain(domain, domain_template)
+
+
+Check a complete example in `examples/scripts.py`. You can launch the example using the following command line:
+
+    $ python example/script.py

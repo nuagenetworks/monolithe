@@ -3,6 +3,7 @@
 from ..fetchers import NUMetadatasFetcher
 from ..fetchers import NUAddressRangesFetcher
 from ..fetchers import NUDHCPOptionsFetcher
+from ..fetchers import NUIPBindingsFetcher
 from ..fetchers import NUQosPrimitivesFetcher
 from ..fetchers import NUStatisticssFetcher
 from ..fetchers import NUStatisticsPoliciesFetcher
@@ -26,10 +27,14 @@ class NUSubNetwork(NURESTObject):
         # Read/Write Attributes
         
         self.address = None
+        self.associated_application_id = None
+        self.associated_application_object_id = None
+        self.associated_application_object_type = None
         self.associated_shared_network_resource_id = None
         self.template_id = None
         self.description = None
         self.gateway = None
+        self.gateway_mac_address = None
         self.ip_type = None
         self.maintenance_mode = None
         self.name = None
@@ -40,14 +45,19 @@ class NUSubNetwork(NURESTObject):
         self.vn_id = None
         self.multicast = None
         self.associated_multicast_channel_map_id = None
+        self.nsg_managed = None
         self.proxy_arp = None
         self.split_subnet = None
         
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_id", remote_name=u"associatedApplicationID", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_object_id", remote_name=u"associatedApplicationObjectID", attribute_type=str)
+        self.expose_attribute(local_name=u"associated_application_object_type", remote_name=u"associatedApplicationObjectType", attribute_type=str)
         self.expose_attribute(local_name=u"associated_shared_network_resource_id", remote_name=u"associatedSharedNetworkResourceID", attribute_type=str)
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"gateway", remote_name=u"gateway", attribute_type=str)
+        self.expose_attribute(local_name=u"gateway_mac_address", remote_name=u"gatewayMACAddress", attribute_type=str)
         self.expose_attribute(local_name=u"ip_type", remote_name=u"IPType", attribute_type=str)
         self.expose_attribute(local_name=u"maintenance_mode", remote_name=u"maintenanceMode", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
@@ -58,6 +68,7 @@ class NUSubNetwork(NURESTObject):
         self.expose_attribute(local_name=u"vn_id", remote_name=u"vnId", attribute_type=str)
         self.expose_attribute(local_name=u"multicast", remote_name=u"multicast", attribute_type=str)
         self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str)
+        self.expose_attribute(local_name=u"nsg_managed", remote_name=u"NSGManaged", attribute_type=bool)
         self.expose_attribute(local_name=u"proxy_arp", remote_name=u"proxyARP", attribute_type=bool)
         self.expose_attribute(local_name=u"split_subnet", remote_name=u"splitSubnet", attribute_type=bool)
 
@@ -71,6 +82,9 @@ class NUSubNetwork(NURESTObject):
         
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
+        
+        self.ipreservations = []
+        self._ipreservations_fetcher = NUIPBindingsFetcher.fetcher_with_entity(entity=self, local_name=u"ipreservations")
         
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
@@ -182,6 +196,32 @@ class NUSubNetwork(NURESTObject):
             self._dhcpoptions_fetcher.order_by = order_by
 
         return self._dhcpoptions_fetcher.fetch_matching_entities(filter=filter, page=page)
+    
+    def create_ipreservation(self, ipreservation, async=False, callback=None):
+        """ Create a ipreservation
+            :param ipreservation: object to add
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.add_child_entity(entity=ipreservation, async=async, callback=callback)
+
+    def delete_ipreservation(self, ipreservation, async=False, callback=None):
+        """ Removes a ipreservation
+            :param ipreservation: object to remove
+            :param async: Make an sync or async HTTP request
+            :param callback: Callback method called when async is set to true
+        """
+
+        return self.remove_child_entity(entity=ipreservation, async=async, callback=callback)
+
+    def fetch_ipreservations(self, filter=None, page=None, order_by=None):
+        """ Fetch IPBindings """
+
+        if order_by:
+            self._ipreservations_fetcher.order_by = order_by
+
+        return self._ipreservations_fetcher.fetch_matching_entities(filter=filter, page=page)
     
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo

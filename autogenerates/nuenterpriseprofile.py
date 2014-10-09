@@ -21,6 +21,8 @@ class NUEnterpriseProfile(NURESTObject):
         self.allow_gateway_management = None
         self.allow_trusted_forwarding_class = None
         self.description = None
+        self.dhcp_lease_interval = None
+        self.dhcp_mapping_retention_timer = None
         self.floating_ips_quota = None
         self.name = None
         
@@ -29,6 +31,8 @@ class NUEnterpriseProfile(NURESTObject):
         self.expose_attribute(local_name=u"allow_gateway_management", remote_name=u"allowGatewayManagement", attribute_type=bool)
         self.expose_attribute(local_name=u"allow_trusted_forwarding_class", remote_name=u"allowTrustedForwardingClass", attribute_type=bool)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
+        self.expose_attribute(local_name=u"dhcp_lease_interval", remote_name=u"DHCPLeaseInterval", attribute_type=int)
+        self.expose_attribute(local_name=u"dhcp_mapping_retention_timer", remote_name=u"DHCPMappingRetentionTimer", attribute_type=int)
         self.expose_attribute(local_name=u"floating_ips_quota", remote_name=u"floatingIPsQuota", attribute_type=int)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 

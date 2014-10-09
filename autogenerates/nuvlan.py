@@ -26,6 +26,7 @@ class NUVlan(NURESTObject):
         self.value = None
         self.vport_id = None
         self.description = None
+        self.infrastructure_profile_id = None
         
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
         self.expose_attribute(local_name=u"gateway_id", remote_name=u"gatewayID", attribute_type=str)
@@ -36,6 +37,7 @@ class NUVlan(NURESTObject):
         self.expose_attribute(local_name=u"value", remote_name=u"value", attribute_type=int)
         self.expose_attribute(local_name=u"vport_id", remote_name=u"vportID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
+        self.expose_attribute(local_name=u"infrastructure_profile_id", remote_name=u"infrastructureProfileID", attribute_type=str)
 
         # Fetchers
         

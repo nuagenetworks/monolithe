@@ -4,7 +4,7 @@ import sys
 sys.path.append("../")
 
 from restnuage import NURESTLoginController
-from pymodel import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort
+from pymodel import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
 
 # 'Setting a log level to see what happens (Optionnal)'
 
@@ -35,7 +35,17 @@ domain_template.name = u'Domain Template example'
 enterprise.create_gatewaytemplate(domain_template)
 domain = NUDomain()
 domain.name = u'Instance Domain example'
-enterprise.instanciate_domain(domain, domain_template)
+enterprise.instantiate_domain(domain, domain_template)
+
+# Create a redirection target template
+redirection_target_template = NURedirectionTargetTemplate()
+redirection_target_template.name = "RT Template"
+domain_template.create_redirectiontargettemplate(redirection_target_template)
+
+# Create a redirection target
+redirection_target = NURedirectionTarget()
+redirection_target.name = "RT Instance"
+domain.create_redirectiontarget(redirection_target)
 
 # 'Create a zone'
 zone = NUZone()
@@ -68,6 +78,6 @@ vport.name = u'VPort example'
 subnet.create_vport(vport)
 
 
-enterprise.delete()
+# enterprise.delete()
 # Or...
 # csproot.delete_enterprise(enterprise)

@@ -7,7 +7,7 @@ from ..fetchers import NUPolicyDecisionsFetcher
 from ..fetchers import NUStatisticssFetcher
 from ..fetchers import NUTCAsFetcher
 from ..fetchers import NUPolicyGroupsFetcher
-from ..fetchers import NUVPortTagsFetcher
+from ..fetchers import NURedirectionTargetsFetcher
 
 from restnuage import NURESTObject
 
@@ -24,6 +24,7 @@ class NUVMInterface(NURESTObject):
         
         self.ip_address = None
         self.mac = None
+        self.multi_nicv_port_name = None
         self.name = None
         self.vmuuid = None
         self.associated_floating_ip_address = None
@@ -35,6 +36,7 @@ class NUVMInterface(NURESTObject):
         self.netmask = None
         self.network_name = None
         self.policy_decision_id = None
+        self.tier_id = None
         self.v_port_id = None
         self.v_port_name = None
         self.zone_id = None
@@ -42,6 +44,7 @@ class NUVMInterface(NURESTObject):
         
         self.expose_attribute(local_name=u"ip_address", remote_name=u"IPAddress", attribute_type=str)
         self.expose_attribute(local_name=u"mac", remote_name=u"MAC", attribute_type=str)
+        self.expose_attribute(local_name=u"multi_nicv_port_name", remote_name=u"multiNICVPortName", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"vmuuid", remote_name=u"VMUUID", attribute_type=str)
         self.expose_attribute(local_name=u"associated_floating_ip_address", remote_name=u"associatedFloatingIPAddress", attribute_type=str)
@@ -53,6 +56,7 @@ class NUVMInterface(NURESTObject):
         self.expose_attribute(local_name=u"netmask", remote_name=u"netmask", attribute_type=str)
         self.expose_attribute(local_name=u"network_name", remote_name=u"networkName", attribute_type=str)
         self.expose_attribute(local_name=u"policy_decision_id", remote_name=u"policyDecisionID", attribute_type=str)
+        self.expose_attribute(local_name=u"tier_id", remote_name=u"tierID", attribute_type=str)
         self.expose_attribute(local_name=u"v_port_id", remote_name=u"VPortID", attribute_type=str)
         self.expose_attribute(local_name=u"v_port_name", remote_name=u"VPortName", attribute_type=str)
         self.expose_attribute(local_name=u"zone_id", remote_name=u"zoneID", attribute_type=str)
@@ -82,7 +86,7 @@ class NUVMInterface(NURESTObject):
         self._policygroups_fetcher = NUPolicyGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"policygroups")
         
         self.redirectiontargets = []
-        self._redirectiontargets_fetcher = NUVPortTagsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
+        self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
         
 
     @classmethod
@@ -294,7 +298,7 @@ class NUVMInterface(NURESTObject):
         return self.remove_child_entity(entity=redirectiontarget, async=async, callback=callback)
 
     def fetch_redirectiontargets(self, filter=None, page=None, order_by=None):
-        """ Fetch VPortTags """
+        """ Fetch RedirectionTargets """
 
         if order_by:
             self._redirectiontargets_fetcher.order_by = order_by
