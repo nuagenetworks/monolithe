@@ -1,4 +1,2 @@
 logging
-
---find-links packages
-restnuage
+restnuage==0.0.1

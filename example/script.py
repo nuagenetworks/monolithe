@@ -1,7 +1,7 @@
 # # -*- coding: utf-8 -*-
 
 import sys
-sys.path.append("../")
+sys.path.append("./")
 
 from restnuage import NURESTLoginController
 from pymodel import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
@@ -78,6 +78,7 @@ vport.name = u'VPort example'
 subnet.create_vport(vport)
 
 
+# Comment this line to avoid removing everything that has been created within the script.
 # enterprise.delete()
 # Or...
 # csproot.delete_enterprise(enterprise)

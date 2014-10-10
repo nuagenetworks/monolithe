@@ -10,9 +10,18 @@ Python dependencies:
 * logging
 * restnuage
 
+Installation from package
+-------------------------
 
-Installation
-------------
+Download the `tar.gz` file that is distributed in `dist` directory and install it using pip:
+
+    $ pip install packages/restnuage-xxx.tar.gz
+    $ pip install pymodel-xxx.tar.gz
+
+WARNING: You will need to install `restnuage` library first.
+
+Installation from sources
+-------------------------
 
 Install your virtualenv
 
@@ -34,8 +43,27 @@ Install dependencies
     (pymodel-env) $ pip install -r requirements.txt
 
 
+Configuration
+-------------
+
+To configure your environment, just put a `settings.cfg` file including
+
+* the user you want to connect with
+* the password of your user
+* the enterprise name
+* the url to your VSD Server
+
+Here is a basic configuration file example:
+
+    [default]
+    user = csproot
+    password = csproot
+    enterprise = csp
+    url = https://135.227.220.152:8443/nuage/api/v3_0
+
+
 Example
-=======
+-------
 
 Here is a quick example !
 
@@ -77,3 +105,11 @@ Here is a quick example !
 Check a complete example in `examples/scripts.py`. You can launch the example using the following command line:
 
     $ python example/script.py
+
+Packaging
+---------
+
+Creating a tar.gz package is possible using the following command line :
+
+    $ python setup.py sdist
+
