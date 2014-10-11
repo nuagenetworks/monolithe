@@ -1,27 +1,22 @@
 pymodel
 =======
 
+IMPORTANT: This will be used as the Nuage Netowork Python SDK.
+It means the name will probably change within the next few weeks.
+
+
 Nuage Network Python Model according to RESTNuage library
 
 Dependancies
 ------------
 
 Python dependencies:
-* logging
-* restnuage
-
-Installation from package
--------------------------
-
-Download the `tar.gz` file that is distributed in `dist` directory and install it using pip:
-
-    $ pip install packages/restnuage-xxx.tar.gz
-    $ pip install pymodel-xxx.tar.gz
+* restnuage (http://github.mv.usa.alcatel.com/chserafi/restnuage)
 
 WARNING: You will need to install `restnuage` library first.
 
-Installation from sources
--------------------------
+Setup your Python Virtual Environment
+-------------------------------------
 
 Install your virtualenv
 
@@ -33,6 +28,30 @@ Activate your environment
     $ source bin/activate
     (pymodel-env) $
 
+Installation from package
+-------------------------
+
+Note: Before install, make sure you have activated your python environment
+
+Download the `tar.gz` file that is distributed in `dist` directory and install it using pip:
+
+    (pymodel-env) $ pip install http://github.mv.usa.alcatel.com/chserafi/restnuage/tree/master/dist/restnuage-xxxx.tar.gz
+    (pymodel-env) $ pip install http://github.mv.usa.alcatel.com/chserafi/pymodel/tree/master/dist/pymodel-xxx.tar.gz
+
+Installation from package in development
+----------------------------------------
+
+Note: Before install, make sure you have activated your python environment
+
+This enables you to install both packages and see sources in your python environment
+
+    (pymodel-env) $ pip install -e git+http://github.mv.usa.alcatel.com/chserafi/restnuage#egg=restnuage
+    (pymodel-env) $ pip install -e git+http://github.mv.usa.alcatel.com/chserafi/pymodel.git#egg=pymodel
+
+
+Installation from sources
+-------------------------
+
 Get the sources
 
     (pymodel-env) $ git clone http://github.mv.usa.alcatel.com/cserafin/pymodel.git
@@ -41,25 +60,6 @@ Get the sources
 Install dependencies
 
     (pymodel-env) $ pip install -r requirements.txt
-
-
-Configuration
--------------
-
-To configure your environment, just put a `settings.cfg` file including
-
-* the user you want to connect with
-* the password of your user
-* the enterprise name
-* the url to your VSD Server
-
-Here is a basic configuration file example:
-
-    [default]
-    user = csproot
-    password = csproot
-    enterprise = csp
-    url = https://135.227.220.152:8443/nuage/api/v3_0
 
 
 Example
