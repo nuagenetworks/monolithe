@@ -67,14 +67,14 @@ Example
 
 Here is a quick example !
 
+     import logging
+
+     from pymodel import set_log_level
      from pymodel import NUVSDSession
      from pymodel import NUEnterprise, NUUser, NUDomainTemplate, NUDomain
 
      # 'Setting a log level to see what happens (Optionnal)'
-     import logging
-     bambou_log = logging.getLogger('bambou')
-     bambou_log.setLevel(logging.DEBUG)
-     bambou_log.addHandler(logging.StreamHandler())
+     set_log_level(logging.INFO)
 
      # 'Create a session for CSPRoot'
      session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.220.152:8443/nuage/api/v3_0')

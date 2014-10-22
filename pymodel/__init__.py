@@ -101,6 +101,7 @@ __all__ = [
     'NUBridgeInterface', \
     'NUQosPrimitive', \
     'NUIngressAdvancedForwardingTemplateEntry', \
+    'NUVSDSession', \
 ]
 
 from nuegressaclentry import NUEgressACLEntry
@@ -204,3 +205,21 @@ from nubridgeinterface import NUBridgeInterface
 from nuqosprimitive import NUQosPrimitive
 from nuingressadvancedforwardingtemplateentry import NUIngressAdvancedForwardingTemplateEntry
 from nuvsdsession import NUVSDSession
+
+import logging
+pymodel_logger = logging.getLogger('pymodel')
+
+def set_log_level(level, handler=None):
+
+    from bambou import bambou_logger
+
+    if handler is None:
+        handler = logging.StreamHandler()
+
+    bambou_logger.setLevel(level)
+    bambou_logger.addHandler(handler)
+
+    pymodel_logger.setLevel(level)
+    pymodel_logger.addHandler(handler)
+
+

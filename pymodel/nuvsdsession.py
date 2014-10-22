@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-vsdk_log = logging.getLogger('pymodel')
+pymodel_log = logging.getLogger('pymodel')
 
 from bambou import NURESTLoginController
 from pymodel import NURESTUser
@@ -48,7 +48,7 @@ class NUVSDSession(object):
         controller = NURESTLoginController()
 
         if controller.api_key is not None:
-            vsdk_log.warn("[NUVSDSession] Previous session has not been terminated.\
+            pymodel_log.warn("[NUVSDSession] Previous session has not been terminated.\
                             Please call stop() on your previous VSD Session to stop it properly")
 
         if self._user is None:
@@ -65,7 +65,7 @@ class NUVSDSession(object):
             self._user.fetch()
 
         controller.api_key = self._user.api_key
-        vsdk_log.debug("[NUVSDSession] Started session with username %s in enterprise %s (key=%s)" % (self._username, self._password, self._user.api_key))
+        pymodel_log.debug("[NUVSDSession] Started session with username %s in enterprise %s (key=%s)" % (self._username, self._password, self._user.api_key))
 
     def stop(self):
         """ Stop the current VSD Session
@@ -75,4 +75,4 @@ class NUVSDSession(object):
 
         controller = NURESTLoginController()
         controller.api_key = None
-        vsdk_log.debug("[NUVSDSession] Session with username %s in enterprise %s terminated." % (self._username, self._password))
+        pymodel_log.debug("[NUVSDSession] Session with username %s in enterprise %s terminated." % (self._username, self._password))
