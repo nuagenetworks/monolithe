@@ -203,3 +203,4 @@ from nuingressacltemplateentry import NUIngressACLTemplateEntry
 from nubridgeinterface import NUBridgeInterface
 from nuqosprimitive import NUQosPrimitive
 from nuingressadvancedforwardingtemplateentry import NUIngressAdvancedForwardingTemplateEntry
+from nuvsdsession import NUVSDSession

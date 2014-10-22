@@ -67,39 +67,37 @@ Example
 
 Here is a quick example !
 
-     from bambou import NURESTLoginController
-     from pymodel.models import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain,NUGatewayTemplate, NUGateway
+     from pymodel import NUVSDSession
+     from pymodel import NUEnterprise, NUUser, NUDomainTemplate, NUDomain
 
-     # Setting a log level to see what happens (Optionnal)
+     # 'Setting a log level to see what happens (Optionnal)'
+     import logging
+     bambou_log = logging.getLogger('bambou')
+     bambou_log.setLevel(logging.DEBUG)
+     bambou_log.addHandler(logging.StreamHandler())
 
-     # import logging
-     # bambou_log = logging.getLogger('bambou')
-     # bambou_log.setLevel(logging.DEBUG)
-     # bambou_log.addHandler(logging.StreamHandler())
+     # 'Create a session for CSPRoot'
+     session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.220.152:8443/nuage/api/v3_0')
 
-     # Log in on the application with csproot user
+     # 'Start using the CSPRoot session
+     session.start()
+     csproot = session.user
 
-     controller = NURESTLoginController()
-     controller.user = u"csproot"
-     controller.password = u"csproot"
-     controller.enterprise = u"csp"
-     controller.url = u"https://135.227.220.152:8443/nuage/api/v3_0"
-     csproot = NURESTUser()
-     csproot.fetch()
-     controller.api_key = csproot.api_key
-
-     # Create an enterprise with csproot user
+     # 'Create an enterprise with csproot user'
      enterprise = NUEnterprise()
      enterprise.name = u'Enterprise example'
      csproot.create_enterprise(enterprise)
 
-     # Create a domain template and an instance
+     # 'Create a domain template and an instance'
      domain_template = NUDomainTemplate()
      domain_template.name = u'Domain Template example'
-     enterprise.create_gateway_template(domain_template)
+     enterprise.create_gatewaytemplate(domain_template)
      domain = NUDomain()
      domain.name = u'Instance Domain example'
      enterprise.instantiate_domain(domain, domain_template)
+
+     # Stop using the CSPRoot session
+     session.stop()
 
 
 Check a complete example in `examples/scripts.py`. You can launch the example using the following command line:

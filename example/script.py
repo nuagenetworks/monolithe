@@ -3,8 +3,8 @@
 import sys
 sys.path.append("./")
 
-from bambou import NURESTLoginController
-from pymodel import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
+from pymodel import NUVSDSession
+from pymodel import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
 
 # 'Setting a log level to see what happens (Optionnal)'
 
@@ -13,16 +13,12 @@ bambou_log = logging.getLogger('bambou')
 bambou_log.setLevel(logging.DEBUG)
 bambou_log.addHandler(logging.StreamHandler())
 
-# 'Log in on the application with csproot user'
+# 'Create a session for CSPRoot'
+session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.220.152:8443/nuage/api/v3_0')
 
-controller = NURESTLoginController()
-controller.user = u"csproot"
-controller.password = u"csproot"
-controller.enterprise = u"csp"
-controller.url = u"https://135.227.220.152:8443/nuage/api/v3_0"
-csproot = NURESTUser()
-csproot.fetch()
-controller.api_key = csproot.api_key
+# 'Start using the CSPRoot session
+session.start()
+csproot = session.user
 
 # 'Create an enterprise with csproot user'
 enterprise = NUEnterprise()
@@ -80,3 +76,6 @@ subnet.create_vport(vport)
 
 # Comment this line to avoid removing everything that has been created within the script.
 enterprise.delete()
+
+# Stop using the CSPRoot session
+session.stop()
