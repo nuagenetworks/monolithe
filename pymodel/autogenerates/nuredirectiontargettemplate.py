@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NURedirectionTargetTemplate(NURESTObject):

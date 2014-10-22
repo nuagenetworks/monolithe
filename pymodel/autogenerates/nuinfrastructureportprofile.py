@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUInfrastructurePortProfile(NURESTObject):
@@ -13,7 +13,7 @@ class NUInfrastructurePortProfile(NURESTObject):
         super(NUInfrastructurePortProfile, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.dhclient = None
         self.duplex = None
         self.vlans = None
@@ -24,7 +24,7 @@ class NUInfrastructurePortProfile(NURESTObject):
         self.description = None
         self.enterprise_id = None
         self.name = None
-        
+
         self.expose_attribute(local_name=u"dhclient", remote_name=u"dhclient", attribute_type=bool)
         self.expose_attribute(local_name=u"duplex", remote_name=u"duplex", attribute_type=str)
         self.expose_attribute(local_name=u"vlans", remote_name=u"vlans", attribute_type=str)
@@ -37,7 +37,7 @@ class NUInfrastructurePortProfile(NURESTObject):
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -46,4 +46,3 @@ class NUInfrastructurePortProfile(NURESTObject):
         return u"infrastructureportprofile"
 
     # REST methods
-    

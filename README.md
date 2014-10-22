@@ -5,15 +5,15 @@ IMPORTANT: This will be used as the Nuage Netowork Python SDK.
 It means the name will probably change within the next few weeks.
 
 
-Nuage Network Python Model according to RESTNuage library
+Nuage Network Python SDK is based on Bambou.
 
 Dependancies
 ------------
 
 Python dependencies:
-* restnuage (http://github.mv.usa.alcatel.com/chserafi/restnuage)
+* bambou (http://github.mv.usa.alcatel.com/chserafi/bambou)
 
-WARNING: You will need to install `restnuage` library first.
+WARNING: You will need to install `bambou` library first.
 
 Setup your Python Virtual Environment
 -------------------------------------
@@ -35,8 +35,8 @@ Note: Before install, make sure you have activated your python environment
 
 Download the `tar.gz` file that is distributed in `dist` directory and install it using pip:
 
-    (pymodel-env) $ pip install http://github.mv.usa.alcatel.com/chserafi/restnuage/tree/master/dist/restnuage-xxxx.tar.gz
-    (pymodel-env) $ pip install http://github.mv.usa.alcatel.com/chserafi/pymodel/tree/master/dist/pymodel-xxx.tar.gz
+    (pymodel-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
+    (pymodel-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/pymodel.git#egg=pymodel
 
 Installation from package in development
 ----------------------------------------
@@ -45,8 +45,8 @@ Note: Before install, make sure you have activated your python environment
 
 This enables you to install both packages and see sources in your python environment
 
-    (pymodel-env) $ pip install -e git+http://github.mv.usa.alcatel.com/chserafi/restnuage#egg=restnuage
-    (pymodel-env) $ pip install -e git+http://github.mv.usa.alcatel.com/chserafi/pymodel.git#egg=pymodel
+    (pymodel-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
+    (pymodel-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/pymodel.git#egg=pymodel
 
 
 Installation from sources
@@ -67,15 +67,15 @@ Example
 
 Here is a quick example !
 
-     from restnuage import NURESTLoginController
+     from bambou import NURESTLoginController
      from pymodel.models import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain,NUGatewayTemplate, NUGateway
 
      # Setting a log level to see what happens (Optionnal)
 
      # import logging
-     # restnuage_log = logging.getLogger('restnuage')
-     # restnuage_log.setLevel(logging.DEBUG)
-     # restnuage_log.addHandler(logging.StreamHandler())
+     # bambou_log = logging.getLogger('bambou')
+     # bambou_log.setLevel(logging.DEBUG)
+     # bambou_log.addHandler(logging.StreamHandler())
 
      # Log in on the application with csproot user
 

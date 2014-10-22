@@ -2,7 +2,7 @@
 
 from ..fetchers import NUVirtualMachinesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUQosPrimitive(NURESTObject):
@@ -14,7 +14,7 @@ class NUQosPrimitive(NURESTObject):
         super(NUQosPrimitive, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.associated_dscp_forwarding_class_table_id = None
         self.associated_dscp_forwarding_class_table_name = None
         self.assoc_qos_id = None
@@ -34,7 +34,7 @@ class NUQosPrimitive(NURESTObject):
         self.service_class = None
         self.trusted_forwarding_class = None
         self.active = None
-        
+
         self.expose_attribute(local_name=u"associated_dscp_forwarding_class_table_id", remote_name=u"associatedDSCPForwardingClassTableID", attribute_type=str)
         self.expose_attribute(local_name=u"associated_dscp_forwarding_class_table_name", remote_name=u"associatedDSCPForwardingClassTableName", attribute_type=str)
         self.expose_attribute(local_name=u"assoc_qos_id", remote_name=u"assocQosId", attribute_type=str)
@@ -56,10 +56,10 @@ class NUQosPrimitive(NURESTObject):
         self.expose_attribute(local_name=u"active", remote_name=u"active", attribute_type=bool)
 
         # Fetchers
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -68,7 +68,7 @@ class NUQosPrimitive(NURESTObject):
         return u"qo"
 
     # REST methods
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -94,4 +94,3 @@ class NUQosPrimitive(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

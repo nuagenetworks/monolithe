@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUJob(NURESTObject):
@@ -13,14 +13,14 @@ class NUJob(NURESTObject):
         super(NUJob, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.assoc_entity_type = None
         self.command = None
         self.parameter = None
         self.progress = None
         self.result = None
         self.status = None
-        
+
         self.expose_attribute(local_name=u"assoc_entity_type", remote_name=u"assocEntityType", attribute_type=str)
         self.expose_attribute(local_name=u"command", remote_name=u"command", attribute_type=str)
         self.expose_attribute(local_name=u"parameter", remote_name=u"parameter", attribute_type=str)
@@ -29,7 +29,7 @@ class NUJob(NURESTObject):
         self.expose_attribute(local_name=u"status", remote_name=u"status", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -38,4 +38,3 @@ class NUJob(NURESTObject):
         return u"job"
 
     # REST methods
-    

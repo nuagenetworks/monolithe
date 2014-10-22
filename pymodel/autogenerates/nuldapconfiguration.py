@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NULDAPConfiguration(NURESTObject):
@@ -13,7 +13,7 @@ class NULDAPConfiguration(NURESTObject):
         super(NULDAPConfiguration, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.accept_all_certificates = None
         self.certificate = None
         self.enabled = None
@@ -21,7 +21,7 @@ class NULDAPConfiguration(NURESTObject):
         self.server = None
         self.ssl_enabled = None
         self.user_dn_template = None
-        
+
         self.expose_attribute(local_name=u"accept_all_certificates", remote_name=u"acceptAllCertificates", attribute_type=bool)
         self.expose_attribute(local_name=u"certificate", remote_name=u"certificate", attribute_type=str)
         self.expose_attribute(local_name=u"enabled", remote_name=u"enabled", attribute_type=bool)
@@ -31,7 +31,7 @@ class NULDAPConfiguration(NURESTObject):
         self.expose_attribute(local_name=u"user_dn_template", remote_name=u"userDNTemplate", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -40,4 +40,3 @@ class NULDAPConfiguration(NURESTObject):
         return u"ldapconfiguration"
 
     # REST methods
-    

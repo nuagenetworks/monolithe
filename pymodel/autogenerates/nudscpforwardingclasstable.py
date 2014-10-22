@@ -2,7 +2,7 @@
 
 from ..fetchers import NUDSCPForwardingClassMappingsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUDSCPForwardingClassTable(NURESTObject):
@@ -14,18 +14,18 @@ class NUDSCPForwardingClassTable(NURESTObject):
         super(NUDSCPForwardingClassTable, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.name = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
         self.dscpforwardingclassmappings = []
         self._dscpforwardingclassmappings_fetcher = NUDSCPForwardingClassMappingsFetcher.fetcher_with_entity(entity=self, local_name=u"dscpforwardingclassmappings")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -34,7 +34,7 @@ class NUDSCPForwardingClassTable(NURESTObject):
         return u"dscpforwardingclasstable"
 
     # REST methods
-    
+
     def create_dscpforwardingclassmapping(self, dscpforwardingclassmapping, async=False, callback=None):
         """ Create a dscpforwardingclassmapping
             :param dscpforwardingclassmapping: object to add
@@ -60,4 +60,3 @@ class NUDSCPForwardingClassTable(NURESTObject):
             self._dscpforwardingclassmappings_fetcher.order_by = order_by
 
         return self._dscpforwardingclassmappings_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

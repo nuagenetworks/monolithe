@@ -5,7 +5,7 @@ from ..fetchers import NUDHCPOptionsFetcher
 from ..fetchers import NUStaticRoutesFetcher
 from ..fetchers import NUVPNConnectsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUSharedNetworkResource(NURESTObject):
@@ -17,7 +17,7 @@ class NUSharedNetworkResource(NURESTObject):
         super(NUSharedNetworkResource, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.description = None
         self.dhcp_managed = None
@@ -32,7 +32,7 @@ class NUSharedNetworkResource(NURESTObject):
         self.uplink_interface_mac = None
         self.uplink_v_port_name = None
         self.uplink_gw_vlan_attachment_id = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"dhcp_managed", remote_name=u"DHCPManaged", attribute_type=bool)
@@ -49,19 +49,19 @@ class NUSharedNetworkResource(NURESTObject):
         self.expose_attribute(local_name=u"uplink_gw_vlan_attachment_id", remote_name=u"uplinkGWVlanAttachmentID", attribute_type=str)
 
         # Fetchers
-        
+
         self.addressranges = []
         self._addressranges_fetcher = NUAddressRangesFetcher.fetcher_with_entity(entity=self, local_name=u"addressranges")
-        
+
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
-        
+
         self.staticroutes = []
         self._staticroutes_fetcher = NUStaticRoutesFetcher.fetcher_with_entity(entity=self, local_name=u"staticroutes")
-        
+
         self.vpnconnections = []
         self._vpnconnections_fetcher = NUVPNConnectsFetcher.fetcher_with_entity(entity=self, local_name=u"vpnconnections")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -70,7 +70,7 @@ class NUSharedNetworkResource(NURESTObject):
         return u"sharednetworkresource"
 
     # REST methods
-    
+
     def create_addressrange(self, addressrange, async=False, callback=None):
         """ Create a addressrange
             :param addressrange: object to add
@@ -96,7 +96,7 @@ class NUSharedNetworkResource(NURESTObject):
             self._addressranges_fetcher.order_by = order_by
 
         return self._addressranges_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_dhcpoption(self, dhcpoption, async=False, callback=None):
         """ Create a dhcpoption
             :param dhcpoption: object to add
@@ -122,7 +122,7 @@ class NUSharedNetworkResource(NURESTObject):
             self._dhcpoptions_fetcher.order_by = order_by
 
         return self._dhcpoptions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_staticroute(self, staticroute, async=False, callback=None):
         """ Create a staticroute
             :param staticroute: object to add
@@ -148,7 +148,7 @@ class NUSharedNetworkResource(NURESTObject):
             self._staticroutes_fetcher.order_by = order_by
 
         return self._staticroutes_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vpnconnection(self, vpnconnection, async=False, callback=None):
         """ Create a vpnconnection
             :param vpnconnection: object to add
@@ -174,4 +174,3 @@ class NUSharedNetworkResource(NURESTObject):
             self._vpnconnections_fetcher.order_by = order_by
 
         return self._vpnconnections_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

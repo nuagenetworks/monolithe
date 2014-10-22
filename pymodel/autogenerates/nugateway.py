@@ -11,7 +11,7 @@ from ..fetchers import NUWANServicesFetcher
 from ..fetchers import NUJobsFetcher
 from ..fetchers import NUPermittedActionsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUGateway(NURESTObject):
@@ -23,7 +23,7 @@ class NUGateway(NURESTObject):
         super(NUGateway, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.template_id = None
         self.auto_disc_gateway_id = None
         self.bootstrap_id = None
@@ -37,7 +37,7 @@ class NUGateway(NURESTObject):
         self.infrastructure_profile_id = None
         self.name = None
         self.personality = None
-        
+
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
         self.expose_attribute(local_name=u"auto_disc_gateway_id", remote_name=u"autoDiscGatewayID", attribute_type=str)
         self.expose_attribute(local_name=u"bootstrap_id", remote_name=u"bootstrapID", attribute_type=str)
@@ -53,37 +53,37 @@ class NUGateway(NURESTObject):
         self.expose_attribute(local_name=u"personality", remote_name=u"personality", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.bootstraps = []
         self._bootstraps_fetcher = NUBootstrapsFetcher.fetcher_with_entity(entity=self, local_name=u"bootstraps")
-        
+
         self.bootstrapactivations = []
         self._bootstrapactivations_fetcher = NUBootstrapActivationsFetcher.fetcher_with_entity(entity=self, local_name=u"bootstrapactivations")
-        
+
         self.enterprisepermissions = []
         self._enterprisepermissions_fetcher = NUEnterprisePermissionsFetcher.fetcher_with_entity(entity=self, local_name=u"enterprisepermissions")
-        
+
         self.infraconfig = []
         self._infraconfig_fetcher = NUInfrastructureConfigsFetcher.fetcher_with_entity(entity=self, local_name=u"infraconfig")
-        
+
         self.locations = []
         self._locations_fetcher = NULocationsFetcher.fetcher_with_entity(entity=self, local_name=u"locations")
-        
+
         self.ports = []
         self._ports_fetcher = NUPortsFetcher.fetcher_with_entity(entity=self, local_name=u"ports")
-        
+
         self.services = []
         self._services_fetcher = NUWANServicesFetcher.fetcher_with_entity(entity=self, local_name=u"services")
-        
+
         self.jobs = []
         self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
-        
+
         self.permissions = []
         self._permissions_fetcher = NUPermittedActionsFetcher.fetcher_with_entity(entity=self, local_name=u"permissions")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -92,7 +92,7 @@ class NUGateway(NURESTObject):
         return u"gateway"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -118,7 +118,7 @@ class NUGateway(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_bootstrap(self, bootstrap, async=False, callback=None):
         """ Create a bootstrap
             :param bootstrap: object to add
@@ -144,7 +144,7 @@ class NUGateway(NURESTObject):
             self._bootstraps_fetcher.order_by = order_by
 
         return self._bootstraps_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_bootstrapactivation(self, bootstrapactivation, async=False, callback=None):
         """ Create a bootstrapactivation
             :param bootstrapactivation: object to add
@@ -170,7 +170,7 @@ class NUGateway(NURESTObject):
             self._bootstrapactivations_fetcher.order_by = order_by
 
         return self._bootstrapactivations_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_enterprisepermission(self, enterprisepermission, async=False, callback=None):
         """ Create a enterprisepermission
             :param enterprisepermission: object to add
@@ -196,7 +196,7 @@ class NUGateway(NURESTObject):
             self._enterprisepermissions_fetcher.order_by = order_by
 
         return self._enterprisepermissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_infraconfi(self, infraconfi, async=False, callback=None):
         """ Create a infraconfi
             :param infraconfi: object to add
@@ -222,7 +222,7 @@ class NUGateway(NURESTObject):
             self._infraconfig_fetcher.order_by = order_by
 
         return self._infraconfig_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_location(self, location, async=False, callback=None):
         """ Create a location
             :param location: object to add
@@ -248,7 +248,7 @@ class NUGateway(NURESTObject):
             self._locations_fetcher.order_by = order_by
 
         return self._locations_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_port(self, port, async=False, callback=None):
         """ Create a port
             :param port: object to add
@@ -274,7 +274,7 @@ class NUGateway(NURESTObject):
             self._ports_fetcher.order_by = order_by
 
         return self._ports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_service(self, service, async=False, callback=None):
         """ Create a service
             :param service: object to add
@@ -300,7 +300,7 @@ class NUGateway(NURESTObject):
             self._services_fetcher.order_by = order_by
 
         return self._services_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_job(self, job, async=False, callback=None):
         """ Create a job
             :param job: object to add
@@ -326,7 +326,7 @@ class NUGateway(NURESTObject):
             self._jobs_fetcher.order_by = order_by
 
         return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_permission(self, permission, async=False, callback=None):
         """ Create a permission
             :param permission: object to add
@@ -352,4 +352,3 @@ class NUGateway(NURESTObject):
             self._permissions_fetcher.order_by = order_by
 
         return self._permissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

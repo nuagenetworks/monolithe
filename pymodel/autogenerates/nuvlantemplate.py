@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVlanTemplate(NURESTObject):
@@ -13,17 +13,17 @@ class NUVlanTemplate(NURESTObject):
         super(NUVlanTemplate, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.value = None
         self.description = None
         self.infrastructure_profile_id = None
-        
+
         self.expose_attribute(local_name=u"value", remote_name=u"value", attribute_type=int)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"infrastructure_profile_id", remote_name=u"infrastructureProfileID", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -32,4 +32,3 @@ class NUVlanTemplate(NURESTObject):
         return u"vlantemplate"
 
     # REST methods
-    

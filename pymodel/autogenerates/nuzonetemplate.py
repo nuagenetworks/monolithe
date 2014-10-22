@@ -3,7 +3,7 @@
 from ..fetchers import NUSubNetworkTemplatesFetcher
 from ..fetchers import NUQosPrimitivesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUZoneTemplate(NURESTObject):
@@ -15,7 +15,7 @@ class NUZoneTemplate(NURESTObject):
         super(NUZoneTemplate, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.description = None
         self.ip_type = None
@@ -25,7 +25,7 @@ class NUZoneTemplate(NURESTObject):
         self.public_zone = None
         self.multicast = None
         self.associated_multicast_channel_map_id = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"ip_type", remote_name=u"IPType", attribute_type=str)
@@ -37,13 +37,13 @@ class NUZoneTemplate(NURESTObject):
         self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str)
 
         # Fetchers
-        
+
         self.subnettemplates = []
         self._subnettemplates_fetcher = NUSubNetworkTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"subnettemplates")
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -52,7 +52,7 @@ class NUZoneTemplate(NURESTObject):
         return u"zonetemplate"
 
     # REST methods
-    
+
     def create_subnettemplate(self, subnettemplate, async=False, callback=None):
         """ Create a subnettemplate
             :param subnettemplate: object to add
@@ -78,7 +78,7 @@ class NUZoneTemplate(NURESTObject):
             self._subnettemplates_fetcher.order_by = order_by
 
         return self._subnettemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -104,4 +104,3 @@ class NUZoneTemplate(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

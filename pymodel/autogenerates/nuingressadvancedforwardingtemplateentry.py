@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUIngressAdvancedForwardingTemplateEntry(NURESTObject):
@@ -13,7 +13,7 @@ class NUIngressAdvancedForwardingTemplateEntry(NURESTObject):
         super(NUIngressAdvancedForwardingTemplateEntry, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.fc_override = None
         self.redirect_v_port_tag_id = None
         self.action = None
@@ -32,7 +32,7 @@ class NUIngressAdvancedForwardingTemplateEntry(NURESTObject):
         self.priority = None
         self.protocol = None
         self.source_port = None
-        
+
         self.expose_attribute(local_name=u"fc_override", remote_name=u"FCOverride", attribute_type=str)
         self.expose_attribute(local_name=u"redirect_v_port_tag_id", remote_name=u"redirectVPortTagID", attribute_type=str)
         self.expose_attribute(local_name=u"action", remote_name=u"action", attribute_type=str)
@@ -53,7 +53,7 @@ class NUIngressAdvancedForwardingTemplateEntry(NURESTObject):
         self.expose_attribute(local_name=u"source_port", remote_name=u"sourcePort", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -62,4 +62,3 @@ class NUIngressAdvancedForwardingTemplateEntry(NURESTObject):
         return u"ingressadvfwdentrytemplate"
 
     # REST methods
-    

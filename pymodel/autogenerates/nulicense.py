@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 from time import time
 
 class NULicense(NURESTObject):
@@ -13,7 +13,7 @@ class NULicense(NURESTObject):
         super(NULicense, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.allowed_cpes_count = None
         self.allowed_nics_count = None
         self.allowed_vms_count = None
@@ -38,7 +38,7 @@ class NULicense(NURESTObject):
         self.street = None
         self.user_name = None
         self.zip = None
-        
+
         self.expose_attribute(local_name=u"allowed_cpes_count", remote_name=u"allowedCPEsCount", attribute_type=str)
         self.expose_attribute(local_name=u"allowed_nics_count", remote_name=u"allowedNICsCount", attribute_type=str)
         self.expose_attribute(local_name=u"allowed_vms_count", remote_name=u"allowedVMsCount", attribute_type=str)
@@ -65,7 +65,7 @@ class NULicense(NURESTObject):
         self.expose_attribute(local_name=u"zip", remote_name=u"zip", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -74,4 +74,3 @@ class NULicense(NURESTObject):
         return u"license"
 
     # REST methods
-    

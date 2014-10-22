@@ -1,2 +1,2 @@
 logging
-restnuage==0.0.1
+bambou==0.0.1

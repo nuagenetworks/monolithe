@@ -10,7 +10,7 @@ from ..fetchers import NUTCAsFetcher
 from ..fetchers import NUPolicyGroupsFetcher
 from ..fetchers import NURedirectionTargetsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUHostInterface(NURESTObject):
@@ -22,7 +22,7 @@ class NUHostInterface(NURESTObject):
         super(NUHostInterface, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.ip_address = None
         self.mac = None
         self.name = None
@@ -40,7 +40,7 @@ class NUHostInterface(NURESTObject):
         self.v_port_name = None
         self.zone_id = None
         self.zone_name = None
-        
+
         self.expose_attribute(local_name=u"ip_address", remote_name=u"IPAddress", attribute_type=str)
         self.expose_attribute(local_name=u"mac", remote_name=u"MAC", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
@@ -60,34 +60,34 @@ class NUHostInterface(NURESTObject):
         self.expose_attribute(local_name=u"zone_name", remote_name=u"zoneName", attribute_type=str)
 
         # Fetchers
-        
+
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
-        
+
         self.multicastchannelmaps = []
         self._multicastchannelmaps_fetcher = NUMultiCastChannelMapsFetcher.fetcher_with_entity(entity=self, local_name=u"multicastchannelmaps")
-        
+
         self.staticroutes = []
         self._staticroutes_fetcher = NUStaticRoutesFetcher.fetcher_with_entity(entity=self, local_name=u"staticroutes")
-        
+
         self.policydecisions = []
         self._policydecisions_fetcher = NUPolicyDecisionsFetcher.fetcher_with_entity(entity=self, local_name=u"policydecisions")
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
         self.statistics = []
         self._statistics_fetcher = NUStatisticssFetcher.fetcher_with_entity(entity=self, local_name=u"statistics")
-        
+
         self.tcas = []
         self._tcas_fetcher = NUTCAsFetcher.fetcher_with_entity(entity=self, local_name=u"tcas")
-        
+
         self.policygroups = []
         self._policygroups_fetcher = NUPolicyGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"policygroups")
-        
+
         self.redirectiontargets = []
         self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -96,7 +96,7 @@ class NUHostInterface(NURESTObject):
         return u"hostinterface"
 
     # REST methods
-    
+
     def create_dhcpoption(self, dhcpoption, async=False, callback=None):
         """ Create a dhcpoption
             :param dhcpoption: object to add
@@ -122,7 +122,7 @@ class NUHostInterface(NURESTObject):
             self._dhcpoptions_fetcher.order_by = order_by
 
         return self._dhcpoptions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_multicastchannelmap(self, multicastchannelmap, async=False, callback=None):
         """ Create a multicastchannelmap
             :param multicastchannelmap: object to add
@@ -148,7 +148,7 @@ class NUHostInterface(NURESTObject):
             self._multicastchannelmaps_fetcher.order_by = order_by
 
         return self._multicastchannelmaps_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_staticroute(self, staticroute, async=False, callback=None):
         """ Create a staticroute
             :param staticroute: object to add
@@ -174,7 +174,7 @@ class NUHostInterface(NURESTObject):
             self._staticroutes_fetcher.order_by = order_by
 
         return self._staticroutes_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_policydecision(self, policydecision, async=False, callback=None):
         """ Create a policydecision
             :param policydecision: object to add
@@ -200,7 +200,7 @@ class NUHostInterface(NURESTObject):
             self._policydecisions_fetcher.order_by = order_by
 
         return self._policydecisions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -226,7 +226,7 @@ class NUHostInterface(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statistic(self, statistic, async=False, callback=None):
         """ Create a statistic
             :param statistic: object to add
@@ -252,7 +252,7 @@ class NUHostInterface(NURESTObject):
             self._statistics_fetcher.order_by = order_by
 
         return self._statistics_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_tca(self, tca, async=False, callback=None):
         """ Create a tca
             :param tca: object to add
@@ -278,7 +278,7 @@ class NUHostInterface(NURESTObject):
             self._tcas_fetcher.order_by = order_by
 
         return self._tcas_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_policygroup(self, policygroup, async=False, callback=None):
         """ Create a policygroup
             :param policygroup: object to add
@@ -304,7 +304,7 @@ class NUHostInterface(NURESTObject):
             self._policygroups_fetcher.order_by = order_by
 
         return self._policygroups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_redirectiontarget(self, redirectiontarget, async=False, callback=None):
         """ Create a redirectiontarget
             :param redirectiontarget: object to add
@@ -330,4 +330,3 @@ class NUHostInterface(NURESTObject):
             self._redirectiontargets_fetcher.order_by = order_by
 
         return self._redirectiontargets_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

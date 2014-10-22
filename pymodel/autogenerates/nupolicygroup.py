@@ -2,7 +2,7 @@
 
 from ..fetchers import NUVPortsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUPolicyGroup(NURESTObject):
@@ -14,13 +14,13 @@ class NUPolicyGroup(NURESTObject):
         super(NUPolicyGroup, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.evpn_community_tag = None
         self.name = None
         self.template_id = None
         self.type = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"evpn_community_tag", remote_name=u"EVPNCommunityTag", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
@@ -28,10 +28,10 @@ class NUPolicyGroup(NURESTObject):
         self.expose_attribute(local_name=u"type", remote_name=u"type", attribute_type=str)
 
         # Fetchers
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -40,7 +40,7 @@ class NUPolicyGroup(NURESTObject):
         return u"policygroup"
 
     # REST methods
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -66,4 +66,3 @@ class NUPolicyGroup(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

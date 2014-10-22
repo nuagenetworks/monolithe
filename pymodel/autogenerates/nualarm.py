@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUAlarm(NURESTObject):
@@ -13,7 +13,7 @@ class NUAlarm(NURESTObject):
         super(NUAlarm, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.acknowledged = None
         self.target_object = None
         self.timestamp = None
@@ -24,7 +24,7 @@ class NUAlarm(NURESTObject):
         self.number_of_occurances = None
         self.reason = None
         self.severity = None
-        
+
         self.expose_attribute(local_name=u"acknowledged", remote_name=u"acknowledged", attribute_type=bool)
         self.expose_attribute(local_name=u"target_object", remote_name=u"targetObject", attribute_type=str)
         self.expose_attribute(local_name=u"timestamp", remote_name=u"timestamp", attribute_type=str)
@@ -37,7 +37,7 @@ class NUAlarm(NURESTObject):
         self.expose_attribute(local_name=u"severity", remote_name=u"severity", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -46,4 +46,3 @@ class NUAlarm(NURESTObject):
         return u"alarm"
 
     # REST methods
-    

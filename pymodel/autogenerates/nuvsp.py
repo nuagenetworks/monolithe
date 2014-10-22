@@ -4,7 +4,7 @@ from ..fetchers import NUHSCsFetcher
 from ..fetchers import NUVSCsFetcher
 from ..fetchers import NUVSDsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVSP(NURESTObject):
@@ -16,28 +16,28 @@ class NUVSP(NURESTObject):
         super(NUVSP, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.location = None
         self.name = None
         self.product_version = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"location", remote_name=u"location", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"product_version", remote_name=u"productVersion", attribute_type=str)
 
         # Fetchers
-        
+
         self.hscs = []
         self._hscs_fetcher = NUHSCsFetcher.fetcher_with_entity(entity=self, local_name=u"hscs")
-        
+
         self.vscs = []
         self._vscs_fetcher = NUVSCsFetcher.fetcher_with_entity(entity=self, local_name=u"vscs")
-        
+
         self.vsds = []
         self._vsds_fetcher = NUVSDsFetcher.fetcher_with_entity(entity=self, local_name=u"vsds")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -46,7 +46,7 @@ class NUVSP(NURESTObject):
         return u"vsp"
 
     # REST methods
-    
+
     def create_hsc(self, hsc, async=False, callback=None):
         """ Create a hsc
             :param hsc: object to add
@@ -72,7 +72,7 @@ class NUVSP(NURESTObject):
             self._hscs_fetcher.order_by = order_by
 
         return self._hscs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vsc(self, vsc, async=False, callback=None):
         """ Create a vsc
             :param vsc: object to add
@@ -98,7 +98,7 @@ class NUVSP(NURESTObject):
             self._vscs_fetcher.order_by = order_by
 
         return self._vscs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vsd(self, vsd, async=False, callback=None):
         """ Create a vsd
             :param vsd: object to add
@@ -124,4 +124,3 @@ class NUVSP(NURESTObject):
             self._vsds_fetcher.order_by = order_by
 
         return self._vsds_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

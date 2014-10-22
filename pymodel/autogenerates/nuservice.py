@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUService(NURESTObject):
@@ -13,7 +13,7 @@ class NUService(NURESTObject):
         super(NUService, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.destination_port = None
         self.direction = None
@@ -22,7 +22,7 @@ class NUService(NURESTObject):
         self.name = None
         self.protocol = None
         self.source_port = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"destination_port", remote_name=u"destinationPort", attribute_type=str)
         self.expose_attribute(local_name=u"direction", remote_name=u"direction", attribute_type=str)
@@ -33,7 +33,7 @@ class NUService(NURESTObject):
         self.expose_attribute(local_name=u"source_port", remote_name=u"sourcePort", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -42,4 +42,3 @@ class NUService(NURESTObject):
         return u"applicationservice"
 
     # REST methods
-    

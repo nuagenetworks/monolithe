@@ -3,7 +3,7 @@
 from ..fetchers import NUMultiCastChannelMapsFetcher
 from ..fetchers import NUEnterprisesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUEnterpriseProfile(NURESTObject):
@@ -15,7 +15,7 @@ class NUEnterpriseProfile(NURESTObject):
         super(NUEnterpriseProfile, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.allow_advanced_qos_configuration = None
         self.allowed_forwarding_classes = None
         self.allow_gateway_management = None
@@ -25,7 +25,7 @@ class NUEnterpriseProfile(NURESTObject):
         self.dhcp_mapping_retention_timer = None
         self.floating_ips_quota = None
         self.name = None
-        
+
         self.expose_attribute(local_name=u"allow_advanced_qos_configuration", remote_name=u"allowAdvancedQOSConfiguration", attribute_type=bool)
         self.expose_attribute(local_name=u"allowed_forwarding_classes", remote_name=u"allowedForwardingClasses", attribute_type=str)
         self.expose_attribute(local_name=u"allow_gateway_management", remote_name=u"allowGatewayManagement", attribute_type=bool)
@@ -37,13 +37,13 @@ class NUEnterpriseProfile(NURESTObject):
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
         self.multicastchannelmaps = []
         self._multicastchannelmaps_fetcher = NUMultiCastChannelMapsFetcher.fetcher_with_entity(entity=self, local_name=u"multicastchannelmaps")
-        
+
         self.enterprises = []
         self._enterprises_fetcher = NUEnterprisesFetcher.fetcher_with_entity(entity=self, local_name=u"enterprises")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -52,7 +52,7 @@ class NUEnterpriseProfile(NURESTObject):
         return u"enterpriseprofile"
 
     # REST methods
-    
+
     def create_multicastchannelmap(self, multicastchannelmap, async=False, callback=None):
         """ Create a multicastchannelmap
             :param multicastchannelmap: object to add
@@ -78,7 +78,7 @@ class NUEnterpriseProfile(NURESTObject):
             self._multicastchannelmaps_fetcher.order_by = order_by
 
         return self._multicastchannelmaps_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_enterprise(self, enterprise, async=False, callback=None):
         """ Create a enterprise
             :param enterprise: object to add
@@ -104,4 +104,3 @@ class NUEnterpriseProfile(NURESTObject):
             self._enterprises_fetcher.order_by = order_by
 
         return self._enterprises_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

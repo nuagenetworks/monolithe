@@ -6,7 +6,7 @@ from ..fetchers import NUBGPPeersFetcher
 from ..fetchers import NUPortStatussFetcher
 from ..fetchers import NUVRSsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVSC(NURESTObject):
@@ -18,7 +18,7 @@ class NUVSC(NURESTObject):
         super(NUVSC, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.already_marked_for_unavailable = None
         self.address = None
         self.management_ip = None
@@ -38,7 +38,7 @@ class NUVSC(NURESTObject):
         self.peak_memory_usage = None
         self.product_version = None
         self.status = None
-        
+
         self.expose_attribute(local_name=u"already_marked_for_unavailable", remote_name=u"alreadyMarkedForUnavailable", attribute_type=bool)
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"management_ip", remote_name=u"managementIP", attribute_type=str)
@@ -60,22 +60,22 @@ class NUVSC(NURESTObject):
         self.expose_attribute(local_name=u"status", remote_name=u"status", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.jobs = []
         self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
-        
+
         self.bgppeers = []
         self._bgppeers_fetcher = NUBGPPeersFetcher.fetcher_with_entity(entity=self, local_name=u"bgppeers")
-        
+
         self.monitoringports = []
         self._monitoringports_fetcher = NUPortStatussFetcher.fetcher_with_entity(entity=self, local_name=u"monitoringports")
-        
+
         self.vrss = []
         self._vrss_fetcher = NUVRSsFetcher.fetcher_with_entity(entity=self, local_name=u"vrss")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -84,7 +84,7 @@ class NUVSC(NURESTObject):
         return u"vsc"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -110,7 +110,7 @@ class NUVSC(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_job(self, job, async=False, callback=None):
         """ Create a job
             :param job: object to add
@@ -136,7 +136,7 @@ class NUVSC(NURESTObject):
             self._jobs_fetcher.order_by = order_by
 
         return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_bgppeer(self, bgppeer, async=False, callback=None):
         """ Create a bgppeer
             :param bgppeer: object to add
@@ -162,7 +162,7 @@ class NUVSC(NURESTObject):
             self._bgppeers_fetcher.order_by = order_by
 
         return self._bgppeers_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_monitoringport(self, monitoringport, async=False, callback=None):
         """ Create a monitoringport
             :param monitoringport: object to add
@@ -188,7 +188,7 @@ class NUVSC(NURESTObject):
             self._monitoringports_fetcher.order_by = order_by
 
         return self._monitoringports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vrs(self, vrs, async=False, callback=None):
         """ Create a vrs
             :param vrs: object to add
@@ -214,4 +214,3 @@ class NUVSC(NURESTObject):
             self._vrss_fetcher.order_by = order_by
 
         return self._vrss_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

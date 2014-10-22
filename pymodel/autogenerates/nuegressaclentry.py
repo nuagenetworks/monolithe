@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUEgressACLEntry(NURESTObject):
@@ -13,11 +13,11 @@ class NUEgressACLEntry(NURESTObject):
         super(NUEgressACLEntry, self).__init__()
 
         # Read/Write Attributes
-        
-        
+
+
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -26,4 +26,3 @@ class NUEgressACLEntry(NURESTObject):
         return u""
 
     # REST methods
-    

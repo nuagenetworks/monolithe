@@ -2,7 +2,7 @@
 
 from ..fetchers import NUAlarmsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUTCA(NURESTObject):
@@ -14,7 +14,7 @@ class NUTCA(NURESTObject):
         super(NUTCA, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.metric = None
         self.name = None
@@ -23,7 +23,7 @@ class NUTCA(NURESTObject):
         self.threshold = None
         self.type = None
         self.url_end_point = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"metric", remote_name=u"metric", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
@@ -34,10 +34,10 @@ class NUTCA(NURESTObject):
         self.expose_attribute(local_name=u"url_end_point", remote_name=u"URLEndPoint", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -46,7 +46,7 @@ class NUTCA(NURESTObject):
         return u"tca"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -72,4 +72,3 @@ class NUTCA(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

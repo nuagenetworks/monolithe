@@ -24,7 +24,7 @@ from ..fetchers import NULDAPConfigurationsFetcher
 from ..fetchers import NUUsersFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUEnterprise(NURESTObject):
@@ -36,7 +36,7 @@ class NUEnterprise(NURESTObject):
         super(NUEnterprise, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.allow_advanced_qos_configuration = None
         self.allowed_forwarding_classes = None
         self.allow_gateway_management = None
@@ -51,7 +51,7 @@ class NUEnterprise(NURESTObject):
         self.floating_ips_quota = None
         self.floating_ips_used = None
         self.name = None
-        
+
         self.expose_attribute(local_name=u"allow_advanced_qos_configuration", remote_name=u"allowAdvancedQOSConfiguration", attribute_type=bool)
         self.expose_attribute(local_name=u"allowed_forwarding_classes", remote_name=u"allowedForwardingClasses", attribute_type=str)
         self.expose_attribute(local_name=u"allow_gateway_management", remote_name=u"allowGatewayManagement", attribute_type=bool)
@@ -68,76 +68,76 @@ class NUEnterprise(NURESTObject):
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.allalarms = []
         self._allalarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"allalarms")
-        
+
         self.applications = []
         self._applications_fetcher = NUAppsFetcher.fetcher_with_entity(entity=self, local_name=u"applications")
-        
+
         self.applicationservices = []
         self._applicationservices_fetcher = NUServicesFetcher.fetcher_with_entity(entity=self, local_name=u"applicationservices")
-        
+
         self.gateways = []
         self._gateways_fetcher = NUGatewaysFetcher.fetcher_with_entity(entity=self, local_name=u"gateways")
-        
+
         self.gatewaytemplates = []
         self._gatewaytemplates_fetcher = NUGatewayTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"gatewaytemplates")
-        
+
         self.redundancygroups = []
         self._redundancygroups_fetcher = NURedundantGWGrpsFetcher.fetcher_with_entity(entity=self, local_name=u"redundancygroups")
-        
+
         self.infrastructuregatewayprofiles = []
         self._infrastructuregatewayprofiles_fetcher = NUInfrastructureGatewayProfilesFetcher.fetcher_with_entity(entity=self, local_name=u"infrastructuregatewayprofiles")
-        
+
         self.infrastructureportprofiles = []
         self._infrastructureportprofiles_fetcher = NUInfrastructurePortProfilesFetcher.fetcher_with_entity(entity=self, local_name=u"infrastructureportprofiles")
-        
+
         self.infrastructurevlanprofiles = []
         self._infrastructurevlanprofiles_fetcher = NUInfrastructureVlanProfilesFetcher.fetcher_with_entity(entity=self, local_name=u"infrastructurevlanprofiles")
-        
+
         self.jobs = []
         self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
-        
+
         self.domains = []
         self._domains_fetcher = NUDomainsFetcher.fetcher_with_entity(entity=self, local_name=u"domains")
-        
+
         self.domaintemplates = []
         self._domaintemplates_fetcher = NUDomainTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"domaintemplates")
-        
+
         self.enterprisenetworks = []
         self._enterprisenetworks_fetcher = NUEnterpriseNetworkMacrosFetcher.fetcher_with_entity(entity=self, local_name=u"enterprisenetworks")
-        
+
         self.l2domains = []
         self._l2domains_fetcher = NUL2DomainsFetcher.fetcher_with_entity(entity=self, local_name=u"l2domains")
-        
+
         self.l2domaintemplates = []
         self._l2domaintemplates_fetcher = NUL2DomainTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"l2domaintemplates")
-        
+
         self.multicastchannelmaps = []
         self._multicastchannelmaps_fetcher = NUMultiCastChannelMapsFetcher.fetcher_with_entity(entity=self, local_name=u"multicastchannelmaps")
-        
+
         self.publicnetworks = []
         self._publicnetworks_fetcher = NUPublicNetworkMacrosFetcher.fetcher_with_entity(entity=self, local_name=u"publicnetworks")
-        
+
         self.dscpforwardingclasstables = []
         self._dscpforwardingclasstables_fetcher = NUDSCPForwardingClassTablesFetcher.fetcher_with_entity(entity=self, local_name=u"dscpforwardingclasstables")
-        
+
         self.groups = []
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"groups")
-        
+
         self.ldapconfigurations = []
         self._ldapconfigurations_fetcher = NULDAPConfigurationsFetcher.fetcher_with_entity(entity=self, local_name=u"ldapconfigurations")
-        
+
         self.users = []
         self._users_fetcher = NUUsersFetcher.fetcher_with_entity(entity=self, local_name=u"users")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -146,7 +146,7 @@ class NUEnterprise(NURESTObject):
         return u"enterprise"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -172,7 +172,7 @@ class NUEnterprise(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_allalarm(self, allalarm, async=False, callback=None):
         """ Create a allalarm
             :param allalarm: object to add
@@ -198,7 +198,7 @@ class NUEnterprise(NURESTObject):
             self._allalarms_fetcher.order_by = order_by
 
         return self._allalarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_application(self, application, async=False, callback=None):
         """ Create a application
             :param application: object to add
@@ -224,7 +224,7 @@ class NUEnterprise(NURESTObject):
             self._applications_fetcher.order_by = order_by
 
         return self._applications_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_applicationservice(self, applicationservice, async=False, callback=None):
         """ Create a applicationservice
             :param applicationservice: object to add
@@ -250,7 +250,7 @@ class NUEnterprise(NURESTObject):
             self._applicationservices_fetcher.order_by = order_by
 
         return self._applicationservices_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_gateway(self, gateway, async=False, callback=None):
         """ Create a gateway
             :param gateway: object to add
@@ -276,7 +276,7 @@ class NUEnterprise(NURESTObject):
             self._gateways_fetcher.order_by = order_by
 
         return self._gateways_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_gatewaytemplate(self, gatewaytemplate, async=False, callback=None):
         """ Create a gatewaytemplate
             :param gatewaytemplate: object to add
@@ -302,7 +302,7 @@ class NUEnterprise(NURESTObject):
             self._gatewaytemplates_fetcher.order_by = order_by
 
         return self._gatewaytemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_redundancygroup(self, redundancygroup, async=False, callback=None):
         """ Create a redundancygroup
             :param redundancygroup: object to add
@@ -328,7 +328,7 @@ class NUEnterprise(NURESTObject):
             self._redundancygroups_fetcher.order_by = order_by
 
         return self._redundancygroups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_infrastructuregatewayprofile(self, infrastructuregatewayprofile, async=False, callback=None):
         """ Create a infrastructuregatewayprofile
             :param infrastructuregatewayprofile: object to add
@@ -354,7 +354,7 @@ class NUEnterprise(NURESTObject):
             self._infrastructuregatewayprofiles_fetcher.order_by = order_by
 
         return self._infrastructuregatewayprofiles_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_infrastructureportprofile(self, infrastructureportprofile, async=False, callback=None):
         """ Create a infrastructureportprofile
             :param infrastructureportprofile: object to add
@@ -380,7 +380,7 @@ class NUEnterprise(NURESTObject):
             self._infrastructureportprofiles_fetcher.order_by = order_by
 
         return self._infrastructureportprofiles_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_infrastructurevlanprofile(self, infrastructurevlanprofile, async=False, callback=None):
         """ Create a infrastructurevlanprofile
             :param infrastructurevlanprofile: object to add
@@ -406,7 +406,7 @@ class NUEnterprise(NURESTObject):
             self._infrastructurevlanprofiles_fetcher.order_by = order_by
 
         return self._infrastructurevlanprofiles_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_job(self, job, async=False, callback=None):
         """ Create a job
             :param job: object to add
@@ -432,7 +432,7 @@ class NUEnterprise(NURESTObject):
             self._jobs_fetcher.order_by = order_by
 
         return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_domain(self, domain, async=False, callback=None):
         """ Create a domain
             :param domain: object to add
@@ -458,7 +458,7 @@ class NUEnterprise(NURESTObject):
             self._domains_fetcher.order_by = order_by
 
         return self._domains_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_domaintemplate(self, domaintemplate, async=False, callback=None):
         """ Create a domaintemplate
             :param domaintemplate: object to add
@@ -484,7 +484,7 @@ class NUEnterprise(NURESTObject):
             self._domaintemplates_fetcher.order_by = order_by
 
         return self._domaintemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_enterprisenetwork(self, enterprisenetwork, async=False, callback=None):
         """ Create a enterprisenetwork
             :param enterprisenetwork: object to add
@@ -510,7 +510,7 @@ class NUEnterprise(NURESTObject):
             self._enterprisenetworks_fetcher.order_by = order_by
 
         return self._enterprisenetworks_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_l2domain(self, l2domain, async=False, callback=None):
         """ Create a l2domain
             :param l2domain: object to add
@@ -536,7 +536,7 @@ class NUEnterprise(NURESTObject):
             self._l2domains_fetcher.order_by = order_by
 
         return self._l2domains_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_l2domaintemplate(self, l2domaintemplate, async=False, callback=None):
         """ Create a l2domaintemplate
             :param l2domaintemplate: object to add
@@ -562,7 +562,7 @@ class NUEnterprise(NURESTObject):
             self._l2domaintemplates_fetcher.order_by = order_by
 
         return self._l2domaintemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_multicastchannelmap(self, multicastchannelmap, async=False, callback=None):
         """ Create a multicastchannelmap
             :param multicastchannelmap: object to add
@@ -588,7 +588,7 @@ class NUEnterprise(NURESTObject):
             self._multicastchannelmaps_fetcher.order_by = order_by
 
         return self._multicastchannelmaps_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_publicnetwork(self, publicnetwork, async=False, callback=None):
         """ Create a publicnetwork
             :param publicnetwork: object to add
@@ -614,7 +614,7 @@ class NUEnterprise(NURESTObject):
             self._publicnetworks_fetcher.order_by = order_by
 
         return self._publicnetworks_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_dscpforwardingclasstable(self, dscpforwardingclasstable, async=False, callback=None):
         """ Create a dscpforwardingclasstable
             :param dscpforwardingclasstable: object to add
@@ -640,7 +640,7 @@ class NUEnterprise(NURESTObject):
             self._dscpforwardingclasstables_fetcher.order_by = order_by
 
         return self._dscpforwardingclasstables_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_group(self, group, async=False, callback=None):
         """ Create a group
             :param group: object to add
@@ -666,7 +666,7 @@ class NUEnterprise(NURESTObject):
             self._groups_fetcher.order_by = order_by
 
         return self._groups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_ldapconfiguration(self, ldapconfiguration, async=False, callback=None):
         """ Create a ldapconfiguration
             :param ldapconfiguration: object to add
@@ -692,7 +692,7 @@ class NUEnterprise(NURESTObject):
             self._ldapconfigurations_fetcher.order_by = order_by
 
         return self._ldapconfigurations_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_user(self, user, async=False, callback=None):
         """ Create a user
             :param user: object to add
@@ -718,7 +718,7 @@ class NUEnterprise(NURESTObject):
             self._users_fetcher.order_by = order_by
 
         return self._users_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -744,4 +744,3 @@ class NUEnterprise(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

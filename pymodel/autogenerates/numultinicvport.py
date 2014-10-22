@@ -2,7 +2,7 @@
 
 from ..fetchers import NUVPortsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUMultiNICVPort(NURESTObject):
@@ -14,16 +14,16 @@ class NUMultiNICVPort(NURESTObject):
         super(NUMultiNICVPort, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.name = None
-        
+
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -32,7 +32,7 @@ class NUMultiNICVPort(NURESTObject):
         return u"multinicvport"
 
     # REST methods
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -58,4 +58,3 @@ class NUMultiNICVPort(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

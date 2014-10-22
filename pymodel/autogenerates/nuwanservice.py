@@ -4,7 +4,7 @@ from ..fetchers import NUAlarmsFetcher
 from ..fetchers import NUEnterprisePermissionsFetcher
 from ..fetchers import NUPermittedActionsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUWANService(NURESTObject):
@@ -16,7 +16,7 @@ class NUWANService(NURESTObject):
         super(NUWANService, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.associated_domain_id = None
         self.domain_name = None
         self.enterprise_name = None
@@ -35,7 +35,7 @@ class NUWANService(NURESTObject):
         self.use_user_mnemonic = None
         self.vn_id = None
         self.wan_service_identifier = None
-        
+
         self.expose_attribute(local_name=u"associated_domain_id", remote_name=u"associatedDomainID", attribute_type=str)
         self.expose_attribute(local_name=u"domain_name", remote_name=u"domainName", attribute_type=str)
         self.expose_attribute(local_name=u"enterprise_name", remote_name=u"enterpriseName", attribute_type=str)
@@ -56,16 +56,16 @@ class NUWANService(NURESTObject):
         self.expose_attribute(local_name=u"wan_service_identifier", remote_name=u"WANServiceIdentifier", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.enterprisepermissions = []
         self._enterprisepermissions_fetcher = NUEnterprisePermissionsFetcher.fetcher_with_entity(entity=self, local_name=u"enterprisepermissions")
-        
+
         self.permissions = []
         self._permissions_fetcher = NUPermittedActionsFetcher.fetcher_with_entity(entity=self, local_name=u"permissions")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -74,7 +74,7 @@ class NUWANService(NURESTObject):
         return u"service"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -100,7 +100,7 @@ class NUWANService(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_enterprisepermission(self, enterprisepermission, async=False, callback=None):
         """ Create a enterprisepermission
             :param enterprisepermission: object to add
@@ -126,7 +126,7 @@ class NUWANService(NURESTObject):
             self._enterprisepermissions_fetcher.order_by = order_by
 
         return self._enterprisepermissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_permission(self, permission, async=False, callback=None):
         """ Create a permission
             :param permission: object to add
@@ -152,4 +152,3 @@ class NUWANService(NURESTObject):
             self._permissions_fetcher.order_by = order_by
 
         return self._permissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

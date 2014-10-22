@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 from time import time
 
 class NUEventLog(NURESTObject):
@@ -13,7 +13,7 @@ class NUEventLog(NURESTObject):
         super(NUEventLog, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.diff = None
         self.enterprise = None
         self.entities = None
@@ -24,7 +24,7 @@ class NUEventLog(NURESTObject):
         self.event_received_time = None
         self.type = None
         self.user = None
-        
+
         self.expose_attribute(local_name=u"diff", remote_name=u"diff", attribute_type=str)
         self.expose_attribute(local_name=u"enterprise", remote_name=u"enterprise", attribute_type=str)
         self.expose_attribute(local_name=u"entities", remote_name=u"entities", attribute_type=str)
@@ -37,7 +37,7 @@ class NUEventLog(NURESTObject):
         self.expose_attribute(local_name=u"user", remote_name=u"user", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -46,4 +46,3 @@ class NUEventLog(NURESTObject):
         return u"eventlog"
 
     # REST methods
-    

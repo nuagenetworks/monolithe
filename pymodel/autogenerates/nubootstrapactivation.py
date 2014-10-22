@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUBootstrapActivation(NURESTObject):
@@ -13,7 +13,7 @@ class NUBootstrapActivation(NURESTObject):
         super(NUBootstrapActivation, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.action = None
         self.status = None
         self.cacert = None
@@ -22,7 +22,7 @@ class NUBootstrapActivation(NURESTObject):
         self.csr = None
         self.hash = None
         self.seed = None
-        
+
         self.expose_attribute(local_name=u"action", remote_name=u"action", attribute_type=str)
         self.expose_attribute(local_name=u"status", remote_name=u"status", attribute_type=str)
         self.expose_attribute(local_name=u"cacert", remote_name=u"cacert", attribute_type=str)
@@ -33,7 +33,7 @@ class NUBootstrapActivation(NURESTObject):
         self.expose_attribute(local_name=u"seed", remote_name=u"seed", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -42,4 +42,3 @@ class NUBootstrapActivation(NURESTObject):
         return u"bootstrapactivation"
 
     # REST methods
-    

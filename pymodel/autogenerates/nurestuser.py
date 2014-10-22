@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from ..fetchers import NUEnterprisesFetcher
-from restnuage import NURESTBasicUser
+from bambou import NURESTBasicUser
 
 
 class NURESTUser(NURESTBasicUser):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUInfrastructureGatewayProfile(NURESTObject):
@@ -13,7 +13,7 @@ class NUInfrastructureGatewayProfile(NURESTObject):
         super(NUInfrastructureGatewayProfile, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.active_controller = None
         self.gateway = None
         self.haproxy_ip = None
@@ -23,7 +23,7 @@ class NUInfrastructureGatewayProfile(NURESTObject):
         self.description = None
         self.enterprise_id = None
         self.name = None
-        
+
         self.expose_attribute(local_name=u"active_controller", remote_name=u"activeController", attribute_type=str)
         self.expose_attribute(local_name=u"gateway", remote_name=u"gateway", attribute_type=str)
         self.expose_attribute(local_name=u"haproxy_ip", remote_name=u"haproxyIP", attribute_type=str)
@@ -35,7 +35,7 @@ class NUInfrastructureGatewayProfile(NURESTObject):
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -44,4 +44,3 @@ class NUInfrastructureGatewayProfile(NURESTObject):
         return u"infrastructuregatewayprofile"
 
     # REST methods
-    

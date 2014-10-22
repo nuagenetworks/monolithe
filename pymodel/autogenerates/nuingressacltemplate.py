@@ -3,7 +3,7 @@
 from ..fetchers import NUIngressACLTemplateEntriesFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUIngressACLTemplate(NURESTObject):
@@ -15,7 +15,7 @@ class NUIngressACLTemplate(NURESTObject):
         super(NUIngressACLTemplate, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.allow_l2_address_spoof = None
         self.assoc_acl_template_id = None
         self.default_allow_ip = None
@@ -23,7 +23,7 @@ class NUIngressACLTemplate(NURESTObject):
         self.description = None
         self.name = None
         self.active = None
-        
+
         self.expose_attribute(local_name=u"allow_l2_address_spoof", remote_name=u"allowL2AddressSpoof", attribute_type=bool)
         self.expose_attribute(local_name=u"assoc_acl_template_id", remote_name=u"assocAclTemplateId", attribute_type=str)
         self.expose_attribute(local_name=u"default_allow_ip", remote_name=u"defaultAllowIP", attribute_type=bool)
@@ -33,13 +33,13 @@ class NUIngressACLTemplate(NURESTObject):
         self.expose_attribute(local_name=u"active", remote_name=u"active", attribute_type=bool)
 
         # Fetchers
-        
+
         self.ingressaclentrytemplates = []
         self._ingressaclentrytemplates_fetcher = NUIngressACLTemplateEntriesFetcher.fetcher_with_entity(entity=self, local_name=u"ingressaclentrytemplates")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -48,7 +48,7 @@ class NUIngressACLTemplate(NURESTObject):
         return u"ingressacltemplate"
 
     # REST methods
-    
+
     def create_ingressaclentrytemplate(self, ingressaclentrytemplate, async=False, callback=None):
         """ Create a ingressaclentrytemplate
             :param ingressaclentrytemplate: object to add
@@ -74,7 +74,7 @@ class NUIngressACLTemplate(NURESTObject):
             self._ingressaclentrytemplates_fetcher.order_by = order_by
 
         return self._ingressaclentrytemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -100,4 +100,3 @@ class NUIngressACLTemplate(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

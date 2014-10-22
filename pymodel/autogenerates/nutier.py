@@ -6,7 +6,7 @@ from ..fetchers import NUTCAsFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 from ..fetchers import NUVPortsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUTier(NURESTObject):
@@ -18,7 +18,7 @@ class NUTier(NURESTObject):
         super(NUTier, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.associated_network_object_id = None
         self.associated_network_object_type = None
@@ -30,7 +30,7 @@ class NUTier(NURESTObject):
         self.netmask = None
         self.associated_network_macro_id = None
         self.type = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"associated_network_object_id", remote_name=u"associatedNetworkObjectID", attribute_type=str)
         self.expose_attribute(local_name=u"associated_network_object_type", remote_name=u"associatedNetworkObjectType", attribute_type=str)
@@ -44,22 +44,22 @@ class NUTier(NURESTObject):
         self.expose_attribute(local_name=u"type", remote_name=u"type", attribute_type=str)
 
         # Fetchers
-        
+
         self.statistics = []
         self._statistics_fetcher = NUStatisticssFetcher.fetcher_with_entity(entity=self, local_name=u"statistics")
-        
+
         self.statisticspolicies = []
         self._statisticspolicies_fetcher = NUStatisticsPoliciesFetcher.fetcher_with_entity(entity=self, local_name=u"statisticspolicies")
-        
+
         self.tcas = []
         self._tcas_fetcher = NUTCAsFetcher.fetcher_with_entity(entity=self, local_name=u"tcas")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -68,7 +68,7 @@ class NUTier(NURESTObject):
         return u"tier"
 
     # REST methods
-    
+
     def create_statistic(self, statistic, async=False, callback=None):
         """ Create a statistic
             :param statistic: object to add
@@ -94,7 +94,7 @@ class NUTier(NURESTObject):
             self._statistics_fetcher.order_by = order_by
 
         return self._statistics_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statisticspolicy(self, statisticspolicy, async=False, callback=None):
         """ Create a statisticspolicy
             :param statisticspolicy: object to add
@@ -120,7 +120,7 @@ class NUTier(NURESTObject):
             self._statisticspolicies_fetcher.order_by = order_by
 
         return self._statisticspolicies_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_tca(self, tca, async=False, callback=None):
         """ Create a tca
             :param tca: object to add
@@ -146,7 +146,7 @@ class NUTier(NURESTObject):
             self._tcas_fetcher.order_by = order_by
 
         return self._tcas_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -172,7 +172,7 @@ class NUTier(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -198,4 +198,3 @@ class NUTier(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

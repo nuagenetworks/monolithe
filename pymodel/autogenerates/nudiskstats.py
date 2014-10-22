@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUDiskStats(NURESTObject):
@@ -13,11 +13,11 @@ class NUDiskStats(NURESTObject):
         super(NUDiskStats, self).__init__()
 
         # Read/Write Attributes
-        
-        
+
+
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -26,4 +26,3 @@ class NUDiskStats(NURESTObject):
         return u""
 
     # REST methods
-    

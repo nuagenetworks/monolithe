@@ -12,7 +12,7 @@ from ..fetchers import NUPermittedActionsFetcher
 from ..fetchers import NUPolicyGroupTemplatesFetcher
 from ..fetchers import NURedirectionTargetTemplatesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUL2DomainTemplate(NURESTObject):
@@ -24,7 +24,7 @@ class NUL2DomainTemplate(NURESTObject):
         super(NUL2DomainTemplate, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.description = None
         self.dhcp_managed = None
@@ -34,7 +34,7 @@ class NUL2DomainTemplate(NURESTObject):
         self.netmask = None
         self.multicast = None
         self.associated_multicast_channel_map_id = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"dhcp_managed", remote_name=u"DHCPManaged", attribute_type=bool)
@@ -46,40 +46,40 @@ class NUL2DomainTemplate(NURESTObject):
         self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str)
 
         # Fetchers
-        
+
         self.jobs = []
         self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
-        
+
         self.addressranges = []
         self._addressranges_fetcher = NUAddressRangesFetcher.fetcher_with_entity(entity=self, local_name=u"addressranges")
-        
+
         self.l2domains = []
         self._l2domains_fetcher = NUL2DomainsFetcher.fetcher_with_entity(entity=self, local_name=u"l2domains")
-        
+
         self.egressacltemplates = []
         self._egressacltemplates_fetcher = NUEgressACLTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"egressacltemplates")
-        
+
         self.ingressacltemplates = []
         self._ingressacltemplates_fetcher = NUIngressACLTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"ingressacltemplates")
-        
+
         self.ingressadvfwdtemplates = []
         self._ingressadvfwdtemplates_fetcher = NUIngressAdvancedForwardingTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"ingressadvfwdtemplates")
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
         self.groups = []
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"groups")
-        
+
         self.permissions = []
         self._permissions_fetcher = NUPermittedActionsFetcher.fetcher_with_entity(entity=self, local_name=u"permissions")
-        
+
         self.policygrouptemplates = []
         self._policygrouptemplates_fetcher = NUPolicyGroupTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"policygrouptemplates")
-        
+
         self.redirectiontargettemplates = []
         self._redirectiontargettemplates_fetcher = NURedirectionTargetTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargettemplates")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -88,7 +88,7 @@ class NUL2DomainTemplate(NURESTObject):
         return u"l2domaintemplate"
 
     # REST methods
-    
+
     def create_job(self, job, async=False, callback=None):
         """ Create a job
             :param job: object to add
@@ -114,7 +114,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._jobs_fetcher.order_by = order_by
 
         return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_addressrange(self, addressrange, async=False, callback=None):
         """ Create a addressrange
             :param addressrange: object to add
@@ -140,7 +140,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._addressranges_fetcher.order_by = order_by
 
         return self._addressranges_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_l2domain(self, l2domain, async=False, callback=None):
         """ Create a l2domain
             :param l2domain: object to add
@@ -166,7 +166,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._l2domains_fetcher.order_by = order_by
 
         return self._l2domains_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_egressacltemplate(self, egressacltemplate, async=False, callback=None):
         """ Create a egressacltemplate
             :param egressacltemplate: object to add
@@ -192,7 +192,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._egressacltemplates_fetcher.order_by = order_by
 
         return self._egressacltemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_ingressacltemplate(self, ingressacltemplate, async=False, callback=None):
         """ Create a ingressacltemplate
             :param ingressacltemplate: object to add
@@ -218,7 +218,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._ingressacltemplates_fetcher.order_by = order_by
 
         return self._ingressacltemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_ingressadvfwdtemplate(self, ingressadvfwdtemplate, async=False, callback=None):
         """ Create a ingressadvfwdtemplate
             :param ingressadvfwdtemplate: object to add
@@ -244,7 +244,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._ingressadvfwdtemplates_fetcher.order_by = order_by
 
         return self._ingressadvfwdtemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -270,7 +270,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_group(self, group, async=False, callback=None):
         """ Create a group
             :param group: object to add
@@ -296,7 +296,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._groups_fetcher.order_by = order_by
 
         return self._groups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_permission(self, permission, async=False, callback=None):
         """ Create a permission
             :param permission: object to add
@@ -322,7 +322,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._permissions_fetcher.order_by = order_by
 
         return self._permissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_policygrouptemplate(self, policygrouptemplate, async=False, callback=None):
         """ Create a policygrouptemplate
             :param policygrouptemplate: object to add
@@ -348,7 +348,7 @@ class NUL2DomainTemplate(NURESTObject):
             self._policygrouptemplates_fetcher.order_by = order_by
 
         return self._policygrouptemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_redirectiontargettemplate(self, redirectiontargettemplate, async=False, callback=None):
         """ Create a redirectiontargettemplate
             :param redirectiontargettemplate: object to add
@@ -374,4 +374,3 @@ class NUL2DomainTemplate(NURESTObject):
             self._redirectiontargettemplates_fetcher.order_by = order_by
 
         return self._redirectiontargettemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

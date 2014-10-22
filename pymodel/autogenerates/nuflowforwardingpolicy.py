@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUFlowForwardingPolicy(NURESTObject):
@@ -13,7 +13,7 @@ class NUFlowForwardingPolicy(NURESTObject):
         super(NUFlowForwardingPolicy, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.redirect_target_id = None
         self.type = None
         self.associated_network_object_id = None
@@ -22,7 +22,7 @@ class NUFlowForwardingPolicy(NURESTObject):
         self.flow_id = None
         self.associated_application_service_id = None
         self.source_address_overwrite = None
-        
+
         self.expose_attribute(local_name=u"redirect_target_id", remote_name=u"redirectTargetID", attribute_type=str)
         self.expose_attribute(local_name=u"type", remote_name=u"type", attribute_type=str)
         self.expose_attribute(local_name=u"associated_network_object_id", remote_name=u"associatedNetworkObjectID", attribute_type=str)
@@ -33,7 +33,7 @@ class NUFlowForwardingPolicy(NURESTObject):
         self.expose_attribute(local_name=u"source_address_overwrite", remote_name=u"sourceAddressOverwrite", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -42,4 +42,3 @@ class NUFlowForwardingPolicy(NURESTObject):
         return u"flowforwardingpolicy"
 
     # REST methods
-    

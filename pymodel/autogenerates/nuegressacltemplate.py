@@ -3,7 +3,7 @@
 from ..fetchers import NUEgressACLTemplateEntriesFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUEgressACLTemplate(NURESTObject):
@@ -15,14 +15,14 @@ class NUEgressACLTemplate(NURESTObject):
         super(NUEgressACLTemplate, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.default_install_acl_implicit_rules = None
         self.default_allow_ip = None
         self.default_allow_non_ip = None
         self.description = None
         self.name = None
         self.active = None
-        
+
         self.expose_attribute(local_name=u"default_install_acl_implicit_rules", remote_name=u"defaultInstallACLImplicitRules", attribute_type=bool)
         self.expose_attribute(local_name=u"default_allow_ip", remote_name=u"defaultAllowIP", attribute_type=bool)
         self.expose_attribute(local_name=u"default_allow_non_ip", remote_name=u"defaultAllowNonIP", attribute_type=bool)
@@ -31,13 +31,13 @@ class NUEgressACLTemplate(NURESTObject):
         self.expose_attribute(local_name=u"active", remote_name=u"active", attribute_type=bool)
 
         # Fetchers
-        
+
         self.egressaclentrytemplates = []
         self._egressaclentrytemplates_fetcher = NUEgressACLTemplateEntriesFetcher.fetcher_with_entity(entity=self, local_name=u"egressaclentrytemplates")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -46,7 +46,7 @@ class NUEgressACLTemplate(NURESTObject):
         return u"egressacltemplate"
 
     # REST methods
-    
+
     def create_egressaclentrytemplate(self, egressaclentrytemplate, async=False, callback=None):
         """ Create a egressaclentrytemplate
             :param egressaclentrytemplate: object to add
@@ -72,7 +72,7 @@ class NUEgressACLTemplate(NURESTObject):
             self._egressaclentrytemplates_fetcher.order_by = order_by
 
         return self._egressaclentrytemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -98,4 +98,3 @@ class NUEgressACLTemplate(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVSDComponent(NURESTObject):
@@ -13,7 +13,7 @@ class NUVSDComponent(NURESTObject):
         super(NUVSDComponent, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.address = None
         self.location = None
@@ -22,7 +22,7 @@ class NUVSDComponent(NURESTObject):
         self.product_version = None
         self.status = None
         self.type = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"location", remote_name=u"location", attribute_type=str)
@@ -33,7 +33,7 @@ class NUVSDComponent(NURESTObject):
         self.expose_attribute(local_name=u"type", remote_name=u"type", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -42,4 +42,3 @@ class NUVSDComponent(NURESTObject):
         return u"component"
 
     # REST methods
-    

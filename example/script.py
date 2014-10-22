@@ -3,15 +3,15 @@
 import sys
 sys.path.append("./")
 
-from restnuage import NURESTLoginController
+from bambou import NURESTLoginController
 from pymodel import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
 
 # 'Setting a log level to see what happens (Optionnal)'
 
 import logging
-restnuage_log = logging.getLogger('restnuage')
-restnuage_log.setLevel(logging.DEBUG)
-restnuage_log.addHandler(logging.StreamHandler())
+bambou_log = logging.getLogger('bambou')
+bambou_log.setLevel(logging.DEBUG)
+bambou_log.addHandler(logging.StreamHandler())
 
 # 'Log in on the application with csproot user'
 
@@ -79,6 +79,4 @@ subnet.create_vport(vport)
 
 
 # Comment this line to avoid removing everything that has been created within the script.
-# enterprise.delete()
-# Or...
-# csproot.delete_enterprise(enterprise)
+enterprise.delete()

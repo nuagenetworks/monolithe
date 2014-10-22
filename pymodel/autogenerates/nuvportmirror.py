@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVPortMirror(NURESTObject):
@@ -13,7 +13,7 @@ class NUVPortMirror(NURESTObject):
         super(NUVPortMirror, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.attached_network_type = None
         self.domain_name = None
         self.enterpise_name = None
@@ -23,7 +23,7 @@ class NUVPortMirror(NURESTObject):
         self.network_name = None
         self.vport_id = None
         self.v_port_name = None
-        
+
         self.expose_attribute(local_name=u"attached_network_type", remote_name=u"attachedNetworkType", attribute_type=str)
         self.expose_attribute(local_name=u"domain_name", remote_name=u"domainName", attribute_type=str)
         self.expose_attribute(local_name=u"enterpise_name", remote_name=u"enterpiseName", attribute_type=str)
@@ -35,7 +35,7 @@ class NUVPortMirror(NURESTObject):
         self.expose_attribute(local_name=u"v_port_name", remote_name=u"VPortName", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -44,4 +44,3 @@ class NUVPortMirror(NURESTObject):
         return u"vportmirror"
 
     # REST methods
-    

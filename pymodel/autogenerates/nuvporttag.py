@@ -3,7 +3,7 @@
 from ..fetchers import NUVPortsFetcher
 from ..fetchers import NUVirtualIPsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVPortTag(NURESTObject):
@@ -15,7 +15,7 @@ class NUVPortTag(NURESTObject):
         super(NUVPortTag, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.end_point_type = None
         self.esi = None
@@ -24,7 +24,7 @@ class NUVPortTag(NURESTObject):
         self.template_id = None
         self.trigger_type = None
         self.virtual_network_id = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"end_point_type", remote_name=u"endPointType", attribute_type=str)
         self.expose_attribute(local_name=u"esi", remote_name=u"ESI", attribute_type=str)
@@ -35,13 +35,13 @@ class NUVPortTag(NURESTObject):
         self.expose_attribute(local_name=u"virtual_network_id", remote_name=u"virtualNetworkID", attribute_type=str)
 
         # Fetchers
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
         self.virtualips = []
         self._virtualips_fetcher = NUVirtualIPsFetcher.fetcher_with_entity(entity=self, local_name=u"virtualips")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -50,7 +50,7 @@ class NUVPortTag(NURESTObject):
         return u"redirectiontarget"
 
     # REST methods
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -76,7 +76,7 @@ class NUVPortTag(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_virtualip(self, virtualip, async=False, callback=None):
         """ Create a virtualip
             :param virtualip: object to add
@@ -102,4 +102,3 @@ class NUVPortTag(NURESTObject):
             self._virtualips_fetcher.order_by = order_by
 
         return self._virtualips_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

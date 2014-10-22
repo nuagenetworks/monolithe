@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUEgressACLTemplateEntry(NURESTObject):
@@ -13,7 +13,7 @@ class NUEgressACLTemplateEntry(NURESTObject):
         super(NUEgressACLTemplateEntry, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.reflexive = None
         self.action = None
         self.address_override = None
@@ -31,7 +31,7 @@ class NUEgressACLTemplateEntry(NURESTObject):
         self.priority = None
         self.protocol = None
         self.source_port = None
-        
+
         self.expose_attribute(local_name=u"reflexive", remote_name=u"reflexive", attribute_type=bool)
         self.expose_attribute(local_name=u"action", remote_name=u"action", attribute_type=str)
         self.expose_attribute(local_name=u"address_override", remote_name=u"addressOverride", attribute_type=str)
@@ -51,7 +51,7 @@ class NUEgressACLTemplateEntry(NURESTObject):
         self.expose_attribute(local_name=u"source_port", remote_name=u"sourcePort", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -60,4 +60,3 @@ class NUEgressACLTemplateEntry(NURESTObject):
         return u"egressaclentrytemplate"
 
     # REST methods
-    

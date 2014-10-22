@@ -3,7 +3,7 @@
 from ..fetchers import NUFlowForwardingPoliciesFetcher
 from ..fetchers import NUFlowSecurityPoliciesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUFlow(NURESTObject):
@@ -15,13 +15,13 @@ class NUFlow(NURESTObject):
         super(NUFlow, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.destination_tier_id = None
         self.metadata = None
         self.name = None
         self.origin_tier_id = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"destination_tier_id", remote_name=u"destinationTierID", attribute_type=str)
         self.expose_attribute(local_name=u"metadata", remote_name=u"metadata", attribute_type=str)
@@ -29,13 +29,13 @@ class NUFlow(NURESTObject):
         self.expose_attribute(local_name=u"origin_tier_id", remote_name=u"originTierID", attribute_type=str)
 
         # Fetchers
-        
+
         self.flowforwardingpolicies = []
         self._flowforwardingpolicies_fetcher = NUFlowForwardingPoliciesFetcher.fetcher_with_entity(entity=self, local_name=u"flowforwardingpolicies")
-        
+
         self.flowsecuritypolicies = []
         self._flowsecuritypolicies_fetcher = NUFlowSecurityPoliciesFetcher.fetcher_with_entity(entity=self, local_name=u"flowsecuritypolicies")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -44,7 +44,7 @@ class NUFlow(NURESTObject):
         return u"flow"
 
     # REST methods
-    
+
     def create_flowforwardingpolicy(self, flowforwardingpolicy, async=False, callback=None):
         """ Create a flowforwardingpolicy
             :param flowforwardingpolicy: object to add
@@ -70,7 +70,7 @@ class NUFlow(NURESTObject):
             self._flowforwardingpolicies_fetcher.order_by = order_by
 
         return self._flowforwardingpolicies_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_flowsecuritypolicy(self, flowsecuritypolicy, async=False, callback=None):
         """ Create a flowsecuritypolicy
             :param flowsecuritypolicy: object to add
@@ -96,4 +96,3 @@ class NUFlow(NURESTObject):
             self._flowsecuritypolicies_fetcher.order_by = order_by
 
         return self._flowsecuritypolicies_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

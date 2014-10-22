@@ -9,7 +9,7 @@ from ..fetchers import NUVSCsFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 from ..fetchers import NUVPortsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVRS(NURESTObject):
@@ -21,7 +21,7 @@ class NUVRS(NURESTObject):
         super(NUVRS, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.parent_i_ds = None
         self.cluster_node_role = None
         self.messages = None
@@ -57,7 +57,7 @@ class NUVRS(NURESTObject):
         self.peak_memory_usage = None
         self.product_version = None
         self.status = None
-        
+
         self.expose_attribute(local_name=u"parent_i_ds", remote_name=u"parentIDs", attribute_type=str)
         self.expose_attribute(local_name=u"cluster_node_role", remote_name=u"clusterNodeRole", attribute_type=str)
         self.expose_attribute(local_name=u"messages", remote_name=u"messages", attribute_type=str)
@@ -95,31 +95,31 @@ class NUVRS(NURESTObject):
         self.expose_attribute(local_name=u"status", remote_name=u"status", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.jobs = []
         self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
-        
+
         self.hscs = []
         self._hscs_fetcher = NUHSCsFetcher.fetcher_with_entity(entity=self, local_name=u"hscs")
-        
+
         self.multinicvports = []
         self._multinicvports_fetcher = NUMultiNICVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"multinicvports")
-        
+
         self.monitoringports = []
         self._monitoringports_fetcher = NUPortStatussFetcher.fetcher_with_entity(entity=self, local_name=u"monitoringports")
-        
+
         self.vscs = []
         self._vscs_fetcher = NUVSCsFetcher.fetcher_with_entity(entity=self, local_name=u"vscs")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -128,7 +128,7 @@ class NUVRS(NURESTObject):
         return u"vrs"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -154,7 +154,7 @@ class NUVRS(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_job(self, job, async=False, callback=None):
         """ Create a job
             :param job: object to add
@@ -180,7 +180,7 @@ class NUVRS(NURESTObject):
             self._jobs_fetcher.order_by = order_by
 
         return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_hsc(self, hsc, async=False, callback=None):
         """ Create a hsc
             :param hsc: object to add
@@ -206,7 +206,7 @@ class NUVRS(NURESTObject):
             self._hscs_fetcher.order_by = order_by
 
         return self._hscs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_multinicvport(self, multinicvport, async=False, callback=None):
         """ Create a multinicvport
             :param multinicvport: object to add
@@ -232,7 +232,7 @@ class NUVRS(NURESTObject):
             self._multinicvports_fetcher.order_by = order_by
 
         return self._multinicvports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_monitoringport(self, monitoringport, async=False, callback=None):
         """ Create a monitoringport
             :param monitoringport: object to add
@@ -258,7 +258,7 @@ class NUVRS(NURESTObject):
             self._monitoringports_fetcher.order_by = order_by
 
         return self._monitoringports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vsc(self, vsc, async=False, callback=None):
         """ Create a vsc
             :param vsc: object to add
@@ -284,7 +284,7 @@ class NUVRS(NURESTObject):
             self._vscs_fetcher.order_by = order_by
 
         return self._vscs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -310,7 +310,7 @@ class NUVRS(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -336,4 +336,3 @@ class NUVRS(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

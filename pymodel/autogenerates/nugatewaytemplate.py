@@ -2,7 +2,7 @@
 
 from ..fetchers import NUPortTemplatesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUGatewayTemplate(NURESTObject):
@@ -14,13 +14,13 @@ class NUGatewayTemplate(NURESTObject):
         super(NUGatewayTemplate, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.enterprise_id = None
         self.description = None
         self.infrastructure_profile_id = None
         self.name = None
         self.personality = None
-        
+
         self.expose_attribute(local_name=u"enterprise_id", remote_name=u"enterpriseID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"infrastructure_profile_id", remote_name=u"infrastructureProfileID", attribute_type=str)
@@ -28,10 +28,10 @@ class NUGatewayTemplate(NURESTObject):
         self.expose_attribute(local_name=u"personality", remote_name=u"personality", attribute_type=str)
 
         # Fetchers
-        
+
         self.porttemplates = []
         self._porttemplates_fetcher = NUPortTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"porttemplates")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -40,7 +40,7 @@ class NUGatewayTemplate(NURESTObject):
         return u"gatewaytemplate"
 
     # REST methods
-    
+
     def create_porttemplate(self, porttemplate, async=False, callback=None):
         """ Create a porttemplate
             :param porttemplate: object to add
@@ -66,4 +66,3 @@ class NUGatewayTemplate(NURESTObject):
             self._porttemplates_fetcher.order_by = order_by
 
         return self._porttemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

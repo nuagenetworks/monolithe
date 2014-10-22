@@ -4,7 +4,7 @@ from ..fetchers import NUAlarmsFetcher
 from ..fetchers import NUJobsFetcher
 from ..fetchers import NUVSDComponentsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVSD(NURESTObject):
@@ -16,7 +16,7 @@ class NUVSD(NURESTObject):
         super(NUVSD, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.already_marked_for_unavailable = None
         self.address = None
         self.management_ip = None
@@ -38,7 +38,7 @@ class NUVSD(NURESTObject):
         self.peak_memory_usage = None
         self.product_version = None
         self.status = None
-        
+
         self.expose_attribute(local_name=u"already_marked_for_unavailable", remote_name=u"alreadyMarkedForUnavailable", attribute_type=bool)
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"management_ip", remote_name=u"managementIP", attribute_type=str)
@@ -62,16 +62,16 @@ class NUVSD(NURESTObject):
         self.expose_attribute(local_name=u"status", remote_name=u"status", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.jobs = []
         self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
-        
+
         self.components = []
         self._components_fetcher = NUVSDComponentsFetcher.fetcher_with_entity(entity=self, local_name=u"components")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -80,7 +80,7 @@ class NUVSD(NURESTObject):
         return u"vsd"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -106,7 +106,7 @@ class NUVSD(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_job(self, job, async=False, callback=None):
         """ Create a job
             :param job: object to add
@@ -132,7 +132,7 @@ class NUVSD(NURESTObject):
             self._jobs_fetcher.order_by = order_by
 
         return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_component(self, component, async=False, callback=None):
         """ Create a component
             :param component: object to add
@@ -158,4 +158,3 @@ class NUVSD(NURESTObject):
             self._components_fetcher.order_by = order_by
 
         return self._components_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

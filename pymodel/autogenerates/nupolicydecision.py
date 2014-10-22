@@ -2,7 +2,7 @@
 
 from ..fetchers import NUQosPrimitivesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUPolicyDecision(NURESTObject):
@@ -14,13 +14,13 @@ class NUPolicyDecision(NURESTObject):
         super(NUPolicyDecision, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.egress_ac_ls = None
         self.ingress_ac_ls = None
         self.ingress_adv_fwd = None
         self.qos = None
         self.stats = None
-        
+
         self.expose_attribute(local_name=u"egress_ac_ls", remote_name=u"egressACLs", attribute_type=str)
         self.expose_attribute(local_name=u"ingress_ac_ls", remote_name=u"ingressACLs", attribute_type=str)
         self.expose_attribute(local_name=u"ingress_adv_fwd", remote_name=u"ingressAdvFwd", attribute_type=str)
@@ -28,10 +28,10 @@ class NUPolicyDecision(NURESTObject):
         self.expose_attribute(local_name=u"stats", remote_name=u"stats", attribute_type=str)
 
         # Fetchers
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -40,7 +40,7 @@ class NUPolicyDecision(NURESTObject):
         return u"policydecision"
 
     # REST methods
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -66,4 +66,3 @@ class NUPolicyDecision(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

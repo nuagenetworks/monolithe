@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUPermittedAction(NURESTObject):
@@ -13,14 +13,14 @@ class NUPermittedAction(NURESTObject):
         super(NUPermittedAction, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.permitted_entity_id = None
         self.name = None
         self.permitted_action = None
         self.permitted_entity_description = None
         self.permitted_entity_name = None
         self.permitted_entity_type = None
-        
+
         self.expose_attribute(local_name=u"permitted_entity_id", remote_name=u"permittedEntityID", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"permitted_action", remote_name=u"permittedAction", attribute_type=str)
@@ -29,7 +29,7 @@ class NUPermittedAction(NURESTObject):
         self.expose_attribute(local_name=u"permitted_entity_type", remote_name=u"permittedEntityType", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -38,4 +38,3 @@ class NUPermittedAction(NURESTObject):
         return u"permission"
 
     # REST methods
-    

@@ -13,7 +13,7 @@ from ..fetchers import NUVMResyncsFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 from ..fetchers import NUVPortsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUSubNetwork(NURESTObject):
@@ -25,7 +25,7 @@ class NUSubNetwork(NURESTObject):
         super(NUSubNetwork, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.associated_application_id = None
         self.associated_application_object_id = None
@@ -48,7 +48,7 @@ class NUSubNetwork(NURESTObject):
         self.nsg_managed = None
         self.proxy_arp = None
         self.split_subnet = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"associated_application_id", remote_name=u"associatedApplicationID", attribute_type=str)
         self.expose_attribute(local_name=u"associated_application_object_id", remote_name=u"associatedApplicationObjectID", attribute_type=str)
@@ -73,43 +73,43 @@ class NUSubNetwork(NURESTObject):
         self.expose_attribute(local_name=u"split_subnet", remote_name=u"splitSubnet", attribute_type=bool)
 
         # Fetchers
-        
+
         self.metadata = []
         self._metadata_fetcher = NUMetadatasFetcher.fetcher_with_entity(entity=self, local_name=u"metadata")
-        
+
         self.addressranges = []
         self._addressranges_fetcher = NUAddressRangesFetcher.fetcher_with_entity(entity=self, local_name=u"addressranges")
-        
+
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
-        
+
         self.ipreservations = []
         self._ipreservations_fetcher = NUIPBindingsFetcher.fetcher_with_entity(entity=self, local_name=u"ipreservations")
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
         self.statistics = []
         self._statistics_fetcher = NUStatisticssFetcher.fetcher_with_entity(entity=self, local_name=u"statistics")
-        
+
         self.statisticspolicies = []
         self._statisticspolicies_fetcher = NUStatisticsPoliciesFetcher.fetcher_with_entity(entity=self, local_name=u"statisticspolicies")
-        
+
         self.tcas = []
         self._tcas_fetcher = NUTCAsFetcher.fetcher_with_entity(entity=self, local_name=u"tcas")
-        
+
         self.vminterfaces = []
         self._vminterfaces_fetcher = NUVMInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"vminterfaces")
-        
+
         self.resync = []
         self._resync_fetcher = NUVMResyncsFetcher.fetcher_with_entity(entity=self, local_name=u"resync")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -118,7 +118,7 @@ class NUSubNetwork(NURESTObject):
         return u"subnet"
 
     # REST methods
-    
+
     def create_metadat(self, metadat, async=False, callback=None):
         """ Create a metadat
             :param metadat: object to add
@@ -144,7 +144,7 @@ class NUSubNetwork(NURESTObject):
             self._metadata_fetcher.order_by = order_by
 
         return self._metadata_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_addressrange(self, addressrange, async=False, callback=None):
         """ Create a addressrange
             :param addressrange: object to add
@@ -170,7 +170,7 @@ class NUSubNetwork(NURESTObject):
             self._addressranges_fetcher.order_by = order_by
 
         return self._addressranges_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_dhcpoption(self, dhcpoption, async=False, callback=None):
         """ Create a dhcpoption
             :param dhcpoption: object to add
@@ -196,7 +196,7 @@ class NUSubNetwork(NURESTObject):
             self._dhcpoptions_fetcher.order_by = order_by
 
         return self._dhcpoptions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_ipreservation(self, ipreservation, async=False, callback=None):
         """ Create a ipreservation
             :param ipreservation: object to add
@@ -222,7 +222,7 @@ class NUSubNetwork(NURESTObject):
             self._ipreservations_fetcher.order_by = order_by
 
         return self._ipreservations_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -248,7 +248,7 @@ class NUSubNetwork(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statistic(self, statistic, async=False, callback=None):
         """ Create a statistic
             :param statistic: object to add
@@ -274,7 +274,7 @@ class NUSubNetwork(NURESTObject):
             self._statistics_fetcher.order_by = order_by
 
         return self._statistics_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statisticspolicy(self, statisticspolicy, async=False, callback=None):
         """ Create a statisticspolicy
             :param statisticspolicy: object to add
@@ -300,7 +300,7 @@ class NUSubNetwork(NURESTObject):
             self._statisticspolicies_fetcher.order_by = order_by
 
         return self._statisticspolicies_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_tca(self, tca, async=False, callback=None):
         """ Create a tca
             :param tca: object to add
@@ -326,7 +326,7 @@ class NUSubNetwork(NURESTObject):
             self._tcas_fetcher.order_by = order_by
 
         return self._tcas_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vminterface(self, vminterface, async=False, callback=None):
         """ Create a vminterface
             :param vminterface: object to add
@@ -352,7 +352,7 @@ class NUSubNetwork(NURESTObject):
             self._vminterfaces_fetcher.order_by = order_by
 
         return self._vminterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_resyn(self, resyn, async=False, callback=None):
         """ Create a resyn
             :param resyn: object to add
@@ -378,7 +378,7 @@ class NUSubNetwork(NURESTObject):
             self._resync_fetcher.order_by = order_by
 
         return self._resync_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -404,7 +404,7 @@ class NUSubNetwork(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -430,4 +430,3 @@ class NUSubNetwork(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

@@ -11,7 +11,7 @@ from ..fetchers import NUPermittedActionsFetcher
 from ..fetchers import NUVMInterfacesFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUZone(NURESTObject):
@@ -23,7 +23,7 @@ class NUZone(NURESTObject):
         super(NUZone, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.associated_application_id = None
         self.associated_application_object_id = None
@@ -38,7 +38,7 @@ class NUZone(NURESTObject):
         self.public_zone = None
         self.multicast = None
         self.associated_multicast_channel_map_id = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"associated_application_id", remote_name=u"associatedApplicationID", attribute_type=str)
         self.expose_attribute(local_name=u"associated_application_object_id", remote_name=u"associatedApplicationObjectID", attribute_type=str)
@@ -55,37 +55,37 @@ class NUZone(NURESTObject):
         self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str)
 
         # Fetchers
-        
+
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
-        
+
         self.subnets = []
         self._subnets_fetcher = NUSubNetworksFetcher.fetcher_with_entity(entity=self, local_name=u"subnets")
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
         self.statistics = []
         self._statistics_fetcher = NUStatisticssFetcher.fetcher_with_entity(entity=self, local_name=u"statistics")
-        
+
         self.statisticspolicies = []
         self._statisticspolicies_fetcher = NUStatisticsPoliciesFetcher.fetcher_with_entity(entity=self, local_name=u"statisticspolicies")
-        
+
         self.tcas = []
         self._tcas_fetcher = NUTCAsFetcher.fetcher_with_entity(entity=self, local_name=u"tcas")
-        
+
         self.groups = []
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"groups")
-        
+
         self.permissions = []
         self._permissions_fetcher = NUPermittedActionsFetcher.fetcher_with_entity(entity=self, local_name=u"permissions")
-        
+
         self.vminterfaces = []
         self._vminterfaces_fetcher = NUVMInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"vminterfaces")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -94,7 +94,7 @@ class NUZone(NURESTObject):
         return u"zone"
 
     # REST methods
-    
+
     def create_dhcpoption(self, dhcpoption, async=False, callback=None):
         """ Create a dhcpoption
             :param dhcpoption: object to add
@@ -120,7 +120,7 @@ class NUZone(NURESTObject):
             self._dhcpoptions_fetcher.order_by = order_by
 
         return self._dhcpoptions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_subnet(self, subnet, async=False, callback=None):
         """ Create a subnet
             :param subnet: object to add
@@ -146,7 +146,7 @@ class NUZone(NURESTObject):
             self._subnets_fetcher.order_by = order_by
 
         return self._subnets_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -172,7 +172,7 @@ class NUZone(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statistic(self, statistic, async=False, callback=None):
         """ Create a statistic
             :param statistic: object to add
@@ -198,7 +198,7 @@ class NUZone(NURESTObject):
             self._statistics_fetcher.order_by = order_by
 
         return self._statistics_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statisticspolicy(self, statisticspolicy, async=False, callback=None):
         """ Create a statisticspolicy
             :param statisticspolicy: object to add
@@ -224,7 +224,7 @@ class NUZone(NURESTObject):
             self._statisticspolicies_fetcher.order_by = order_by
 
         return self._statisticspolicies_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_tca(self, tca, async=False, callback=None):
         """ Create a tca
             :param tca: object to add
@@ -250,7 +250,7 @@ class NUZone(NURESTObject):
             self._tcas_fetcher.order_by = order_by
 
         return self._tcas_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_group(self, group, async=False, callback=None):
         """ Create a group
             :param group: object to add
@@ -276,7 +276,7 @@ class NUZone(NURESTObject):
             self._groups_fetcher.order_by = order_by
 
         return self._groups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_permission(self, permission, async=False, callback=None):
         """ Create a permission
             :param permission: object to add
@@ -302,7 +302,7 @@ class NUZone(NURESTObject):
             self._permissions_fetcher.order_by = order_by
 
         return self._permissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vminterface(self, vminterface, async=False, callback=None):
         """ Create a vminterface
             :param vminterface: object to add
@@ -328,7 +328,7 @@ class NUZone(NURESTObject):
             self._vminterfaces_fetcher.order_by = order_by
 
         return self._vminterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -354,4 +354,3 @@ class NUZone(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

@@ -3,7 +3,7 @@
 from ..fetchers import NUPortsFetcher
 from ..fetchers import NUWANServicesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUAutoDiscGateway(NURESTObject):
@@ -15,7 +15,7 @@ class NUAutoDiscGateway(NURESTObject):
         super(NUAutoDiscGateway, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.controllers = None
         self.gateway_id = None
         self.related_ports = None
@@ -24,7 +24,7 @@ class NUAutoDiscGateway(NURESTObject):
         self.infrastructure_profile_id = None
         self.name = None
         self.personality = None
-        
+
         self.expose_attribute(local_name=u"controllers", remote_name=u"controllers", attribute_type=str)
         self.expose_attribute(local_name=u"gateway_id", remote_name=u"gatewayID", attribute_type=str)
         self.expose_attribute(local_name=u"related_ports", remote_name=u"relatedPorts", attribute_type=str)
@@ -35,13 +35,13 @@ class NUAutoDiscGateway(NURESTObject):
         self.expose_attribute(local_name=u"personality", remote_name=u"personality", attribute_type=str)
 
         # Fetchers
-        
+
         self.ports = []
         self._ports_fetcher = NUPortsFetcher.fetcher_with_entity(entity=self, local_name=u"ports")
-        
+
         self.services = []
         self._services_fetcher = NUWANServicesFetcher.fetcher_with_entity(entity=self, local_name=u"services")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -50,7 +50,7 @@ class NUAutoDiscGateway(NURESTObject):
         return u"autodiscoveredgateway"
 
     # REST methods
-    
+
     def create_port(self, port, async=False, callback=None):
         """ Create a port
             :param port: object to add
@@ -76,7 +76,7 @@ class NUAutoDiscGateway(NURESTObject):
             self._ports_fetcher.order_by = order_by
 
         return self._ports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_service(self, service, async=False, callback=None):
         """ Create a service
             :param service: object to add
@@ -102,4 +102,3 @@ class NUAutoDiscGateway(NURESTObject):
             self._services_fetcher.order_by = order_by
 
         return self._services_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

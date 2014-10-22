@@ -5,7 +5,7 @@ from ..fetchers import NUVRSsFetcher
 from ..fetchers import NUVMInterfacesFetcher
 from ..fetchers import NUVMResyncsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVirtualMachine(NURESTObject):
@@ -17,7 +17,7 @@ class NUVirtualMachine(NURESTObject):
         super(NUVirtualMachine, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.app_name = None
         self.domain_i_ds = None
         self.enterprise_id = None
@@ -35,7 +35,7 @@ class NUVirtualMachine(NURESTObject):
         self.reason_type = None
         self.vrsid = None
         self.zone_i_ds = None
-        
+
         self.expose_attribute(local_name=u"app_name", remote_name=u"appName", attribute_type=str)
         self.expose_attribute(local_name=u"domain_i_ds", remote_name=u"domainIDs", attribute_type=str)
         self.expose_attribute(local_name=u"enterprise_id", remote_name=u"enterpriseID", attribute_type=str)
@@ -55,19 +55,19 @@ class NUVirtualMachine(NURESTObject):
         self.expose_attribute(local_name=u"zone_i_ds", remote_name=u"zoneIDs", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.vrss = []
         self._vrss_fetcher = NUVRSsFetcher.fetcher_with_entity(entity=self, local_name=u"vrss")
-        
+
         self.vminterfaces = []
         self._vminterfaces_fetcher = NUVMInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"vminterfaces")
-        
+
         self.resync = []
         self._resync_fetcher = NUVMResyncsFetcher.fetcher_with_entity(entity=self, local_name=u"resync")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -76,7 +76,7 @@ class NUVirtualMachine(NURESTObject):
         return u"vm"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -102,7 +102,7 @@ class NUVirtualMachine(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vrs(self, vrs, async=False, callback=None):
         """ Create a vrs
             :param vrs: object to add
@@ -128,7 +128,7 @@ class NUVirtualMachine(NURESTObject):
             self._vrss_fetcher.order_by = order_by
 
         return self._vrss_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vminterface(self, vminterface, async=False, callback=None):
         """ Create a vminterface
             :param vminterface: object to add
@@ -154,7 +154,7 @@ class NUVirtualMachine(NURESTObject):
             self._vminterfaces_fetcher.order_by = order_by
 
         return self._vminterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_resyn(self, resyn, async=False, callback=None):
         """ Create a resyn
             :param resyn: object to add
@@ -180,4 +180,3 @@ class NUVirtualMachine(NURESTObject):
             self._resync_fetcher.order_by = order_by
 
         return self._resync_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

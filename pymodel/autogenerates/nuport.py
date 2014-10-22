@@ -5,7 +5,7 @@ from ..fetchers import NUEnterprisePermissionsFetcher
 from ..fetchers import NUVlansFetcher
 from ..fetchers import NUPermittedActionsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUPort(NURESTObject):
@@ -17,7 +17,7 @@ class NUPort(NURESTObject):
         super(NUPort, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.template_id = None
         self.name = None
         self.permitted_action = None
@@ -29,7 +29,7 @@ class NUPort(NURESTObject):
         self.description = None
         self.infrastructure_profile_id = None
         self.vlan_range = None
-        
+
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"permitted_action", remote_name=u"permittedAction", attribute_type=str)
@@ -43,19 +43,19 @@ class NUPort(NURESTObject):
         self.expose_attribute(local_name=u"vlan_range", remote_name=u"VLANRange", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.enterprisepermissions = []
         self._enterprisepermissions_fetcher = NUEnterprisePermissionsFetcher.fetcher_with_entity(entity=self, local_name=u"enterprisepermissions")
-        
+
         self.vlans = []
         self._vlans_fetcher = NUVlansFetcher.fetcher_with_entity(entity=self, local_name=u"vlans")
-        
+
         self.permissions = []
         self._permissions_fetcher = NUPermittedActionsFetcher.fetcher_with_entity(entity=self, local_name=u"permissions")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -64,7 +64,7 @@ class NUPort(NURESTObject):
         return u"port"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -90,7 +90,7 @@ class NUPort(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_enterprisepermission(self, enterprisepermission, async=False, callback=None):
         """ Create a enterprisepermission
             :param enterprisepermission: object to add
@@ -116,7 +116,7 @@ class NUPort(NURESTObject):
             self._enterprisepermissions_fetcher.order_by = order_by
 
         return self._enterprisepermissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vlan(self, vlan, async=False, callback=None):
         """ Create a vlan
             :param vlan: object to add
@@ -142,7 +142,7 @@ class NUPort(NURESTObject):
             self._vlans_fetcher.order_by = order_by
 
         return self._vlans_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_permission(self, permission, async=False, callback=None):
         """ Create a permission
             :param permission: object to add
@@ -168,4 +168,3 @@ class NUPort(NURESTObject):
             self._permissions_fetcher.order_by = order_by
 
         return self._permissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

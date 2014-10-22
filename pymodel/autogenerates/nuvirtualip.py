@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVirtualIP(NURESTObject):
@@ -13,13 +13,13 @@ class NUVirtualIP(NURESTObject):
         super(NUVirtualIP, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.virtual_ip = None
-        
+
         self.expose_attribute(local_name=u"virtual_ip", remote_name=u"virtualIP", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -28,4 +28,3 @@ class NUVirtualIP(NURESTObject):
         return u"virtualip"
 
     # REST methods
-    

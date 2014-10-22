@@ -2,7 +2,7 @@
 
 from ..fetchers import NUVPortMirrorsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUMirrorDestination(NURESTObject):
@@ -14,20 +14,20 @@ class NUMirrorDestination(NURESTObject):
         super(NUMirrorDestination, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.destination_ip = None
         self.name = None
         self.service_id = None
-        
+
         self.expose_attribute(local_name=u"destination_ip", remote_name=u"destinationIp", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
         self.expose_attribute(local_name=u"service_id", remote_name=u"serviceId", attribute_type=str)
 
         # Fetchers
-        
+
         self.vportmirrors = []
         self._vportmirrors_fetcher = NUVPortMirrorsFetcher.fetcher_with_entity(entity=self, local_name=u"vportmirrors")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -36,7 +36,7 @@ class NUMirrorDestination(NURESTObject):
         return u"mirrordestination"
 
     # REST methods
-    
+
     def create_vportmirror(self, vportmirror, async=False, callback=None):
         """ Create a vportmirror
             :param vportmirror: object to add
@@ -62,4 +62,3 @@ class NUMirrorDestination(NURESTObject):
             self._vportmirrors_fetcher.order_by = order_by
 
         return self._vportmirrors_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

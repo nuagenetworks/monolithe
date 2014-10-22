@@ -3,7 +3,7 @@
 from ..fetchers import NUSubNetworksFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUApplication(NURESTObject):
@@ -15,19 +15,19 @@ class NUApplication(NURESTObject):
         super(NUApplication, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.name = None
-        
+
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
         self.subnets = []
         self._subnets_fetcher = NUSubNetworksFetcher.fetcher_with_entity(entity=self, local_name=u"subnets")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -36,7 +36,7 @@ class NUApplication(NURESTObject):
         return u"app"
 
     # REST methods
-    
+
     def create_subnet(self, subnet, async=False, callback=None):
         """ Create a subnet
             :param subnet: object to add
@@ -62,7 +62,7 @@ class NUApplication(NURESTObject):
             self._subnets_fetcher.order_by = order_by
 
         return self._subnets_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -88,4 +88,3 @@ class NUApplication(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

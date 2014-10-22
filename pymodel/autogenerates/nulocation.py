@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NULocation(NURESTObject):
@@ -13,14 +13,14 @@ class NULocation(NURESTObject):
         super(NULocation, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.country = None
         self.latitude = None
         self.locality = None
         self.longitude = None
         self.state = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"country", remote_name=u"country", attribute_type=str)
         self.expose_attribute(local_name=u"latitude", remote_name=u"latitude", attribute_type=float)
@@ -29,7 +29,7 @@ class NULocation(NURESTObject):
         self.expose_attribute(local_name=u"state", remote_name=u"state", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -38,4 +38,3 @@ class NULocation(NURESTObject):
         return u"location"
 
     # REST methods
-    

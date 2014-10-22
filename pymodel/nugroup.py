@@ -27,8 +27,7 @@ class NUGroup(AutoGenerate):
 
         pass  # NOTE: Should do nothing because we use set_users instead
 
-    def set_users(self, users, async=False, callback=None):
+    def assign_users(self, users, async=False, callback=None):
         """ Assign a user to this group """
 
-        from courgette.models import NUUser
-        return self.set_entities(entities=users, entity_type=NUUser, async=async, callback=callback)
+        return self.assign_entities(entities=users, async=async, callback=callback)

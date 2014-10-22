@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from restnuage import NURESTFetcher
+from bambou import NURESTFetcher
 
 
 class NUIngressAdvancedForwardingsFetcher(NURESTFetcher):

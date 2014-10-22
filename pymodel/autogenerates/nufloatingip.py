@@ -2,7 +2,7 @@
 
 from ..fetchers import NUVPortsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUFloatingIp(NURESTObject):
@@ -14,20 +14,20 @@ class NUFloatingIp(NURESTObject):
         super(NUFloatingIp, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.address = None
         self.assigned = None
         self.associated_shared_network_resource_id = None
-        
+
         self.expose_attribute(local_name=u"address", remote_name=u"address", attribute_type=str)
         self.expose_attribute(local_name=u"assigned", remote_name=u"assigned", attribute_type=bool)
         self.expose_attribute(local_name=u"associated_shared_network_resource_id", remote_name=u"associatedSharedNetworkResourceID", attribute_type=str)
 
         # Fetchers
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -36,7 +36,7 @@ class NUFloatingIp(NURESTObject):
         return u"floatingip"
 
     # REST methods
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -62,4 +62,3 @@ class NUFloatingIp(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

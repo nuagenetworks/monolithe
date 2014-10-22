@@ -2,7 +2,7 @@
 
 from ..fetchers import NUMultiCastRangesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUMultiCastChannelMap(NURESTObject):
@@ -14,18 +14,18 @@ class NUMultiCastChannelMap(NURESTObject):
         super(NUMultiCastChannelMap, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.name = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
 
         # Fetchers
-        
+
         self.multicastranges = []
         self._multicastranges_fetcher = NUMultiCastRangesFetcher.fetcher_with_entity(entity=self, local_name=u"multicastranges")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -34,7 +34,7 @@ class NUMultiCastChannelMap(NURESTObject):
         return u"multicastchannelmap"
 
     # REST methods
-    
+
     def create_multicastrange(self, multicastrange, async=False, callback=None):
         """ Create a multicastrange
             :param multicastrange: object to add
@@ -60,4 +60,3 @@ class NUMultiCastChannelMap(NURESTObject):
             self._multicastranges_fetcher.order_by = order_by
 
         return self._multicastranges_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

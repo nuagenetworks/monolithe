@@ -4,7 +4,7 @@ from ..fetchers import NUApplicationsFetcher
 from ..fetchers import NUGroupsFetcher
 from ..fetchers import NUVirtualMachinesFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUUser(NURESTObject):
@@ -16,7 +16,7 @@ class NUUser(NURESTObject):
         super(NUUser, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.avatar_data = None
         self.avatar_type = None
         self.email = None
@@ -25,7 +25,7 @@ class NUUser(NURESTObject):
         self.mobile_number = None
         self.password = None
         self.user_name = None
-        
+
         self.expose_attribute(local_name=u"avatar_data", remote_name=u"avatarData", attribute_type=str)
         self.expose_attribute(local_name=u"avatar_type", remote_name=u"avatarType", attribute_type=str)
         self.expose_attribute(local_name=u"email", remote_name=u"email", attribute_type=str)
@@ -36,16 +36,16 @@ class NUUser(NURESTObject):
         self.expose_attribute(local_name=u"user_name", remote_name=u"userName", attribute_type=str)
 
         # Fetchers
-        
+
         self.apps = []
         self._apps_fetcher = NUApplicationsFetcher.fetcher_with_entity(entity=self, local_name=u"apps")
-        
+
         self.groups = []
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"groups")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -54,7 +54,7 @@ class NUUser(NURESTObject):
         return u"user"
 
     # REST methods
-    
+
     def create_app(self, app, async=False, callback=None):
         """ Create a app
             :param app: object to add
@@ -80,7 +80,7 @@ class NUUser(NURESTObject):
             self._apps_fetcher.order_by = order_by
 
         return self._apps_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_group(self, group, async=False, callback=None):
         """ Create a group
             :param group: object to add
@@ -106,7 +106,7 @@ class NUUser(NURESTObject):
             self._groups_fetcher.order_by = order_by
 
         return self._groups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -132,4 +132,3 @@ class NUUser(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

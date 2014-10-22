@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUInfrastructureConfig(NURESTObject):
@@ -13,13 +13,13 @@ class NUInfrastructureConfig(NURESTObject):
         super(NUInfrastructureConfig, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.gateway = None
-        
+
         self.expose_attribute(local_name=u"gateway", remote_name=u"gateway", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -28,4 +28,3 @@ class NUInfrastructureConfig(NURESTObject):
         return u"infraconfi"
 
     # REST methods
-    

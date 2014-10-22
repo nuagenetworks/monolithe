@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVPortTagTemplate(NURESTObject):
@@ -13,13 +13,13 @@ class NUVPortTagTemplate(NURESTObject):
         super(NUVPortTagTemplate, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.description = None
         self.end_point_type = None
         self.name = None
         self.redundancy_enabled = None
         self.trigger_type = None
-        
+
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"end_point_type", remote_name=u"endPointType", attribute_type=str)
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str)
@@ -27,7 +27,7 @@ class NUVPortTagTemplate(NURESTObject):
         self.expose_attribute(local_name=u"trigger_type", remote_name=u"triggerType", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -36,4 +36,3 @@ class NUVPortTagTemplate(NURESTObject):
         return u"redirectiontargettemplate"
 
     # REST methods
-    

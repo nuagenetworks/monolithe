@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUSystemConfig(NURESTObject):
@@ -13,7 +13,7 @@ class NUSystemConfig(NURESTObject):
         super(NUSystemConfig, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.acl_allow_origin = None
         self.api_key_renewal_interval = None
         self.api_key_validity = None
@@ -98,7 +98,7 @@ class NUSystemConfig(NURESTObject):
         self.vsc_on_same_version_as_vsd = None
         self.vsd_read_only_mode = None
         self.static_wan_service_purge_time = None
-        
+
         self.expose_attribute(local_name=u"acl_allow_origin", remote_name=u"ACLAllowOrigin", attribute_type=str)
         self.expose_attribute(local_name=u"api_key_renewal_interval", remote_name=u"APIKeyRenewalInterval", attribute_type=str)
         self.expose_attribute(local_name=u"api_key_validity", remote_name=u"APIKeyValidity", attribute_type=str)
@@ -185,7 +185,7 @@ class NUSystemConfig(NURESTObject):
         self.expose_attribute(local_name=u"static_wan_service_purge_time", remote_name=u"staticWANServicePurgeTime", attribute_type=int)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -194,4 +194,3 @@ class NUSystemConfig(NURESTObject):
         return u"systemconfig"
 
     # REST methods
-    

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUPortStatus(NURESTObject):
@@ -13,14 +13,14 @@ class NUPortStatus(NURESTObject):
         super(NUPortStatus, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.access = None
         self.description = None
         self.last_state_change = None
         self.name = None
         self.state = None
         self.uplink = None
-        
+
         self.expose_attribute(local_name=u"access", remote_name=u"access", attribute_type=bool)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
         self.expose_attribute(local_name=u"last_state_change", remote_name=u"lastStateChange", attribute_type=str)
@@ -29,7 +29,7 @@ class NUPortStatus(NURESTObject):
         self.expose_attribute(local_name=u"uplink", remote_name=u"uplink", attribute_type=bool)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -38,4 +38,3 @@ class NUPortStatus(NURESTObject):
         return u"monitoringport"
 
     # REST methods
-    

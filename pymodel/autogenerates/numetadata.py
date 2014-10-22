@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUMetadata(NURESTObject):
@@ -13,15 +13,15 @@ class NUMetadata(NURESTObject):
         super(NUMetadata, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.metadata = None
         self.resource_type = None
-        
+
         self.expose_attribute(local_name=u"metadata", remote_name=u"metadata", attribute_type=str)
         self.expose_attribute(local_name=u"resource_type", remote_name=u"resourceType", attribute_type=str)
 
         # Fetchers
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -30,4 +30,3 @@ class NUMetadata(NURESTObject):
         return u"metadat"
 
     # REST methods
-    

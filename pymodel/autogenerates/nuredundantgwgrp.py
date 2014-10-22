@@ -7,7 +7,7 @@ from ..fetchers import NUPortsFetcher
 from ..fetchers import NUWANServicesFetcher
 from ..fetchers import NUPermittedActionsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NURedundantGWGrp(NURESTObject):
@@ -19,7 +19,7 @@ class NURedundantGWGrp(NURESTObject):
         super(NURedundantGWGrp, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.gateway_peer1_autodiscovered_gateway_id = None
         self.gateway_peer2_autodiscovered_gateway_id = None
         self.description = None
@@ -32,7 +32,7 @@ class NURedundantGWGrp(NURESTObject):
         self.name = None
         self.permitted_action = None
         self.personality = None
-        
+
         self.expose_attribute(local_name=u"gateway_peer1_autodiscovered_gateway_id", remote_name=u"gatewayPeer1AutodiscoveredGatewayID", attribute_type=str)
         self.expose_attribute(local_name=u"gateway_peer2_autodiscovered_gateway_id", remote_name=u"gatewayPeer2AutodiscoveredGatewayID", attribute_type=str)
         self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str)
@@ -47,25 +47,25 @@ class NURedundantGWGrp(NURESTObject):
         self.expose_attribute(local_name=u"personality", remote_name=u"personality", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.enterprisepermissions = []
         self._enterprisepermissions_fetcher = NUEnterprisePermissionsFetcher.fetcher_with_entity(entity=self, local_name=u"enterprisepermissions")
-        
+
         self.gateways = []
         self._gateways_fetcher = NUGatewaysFetcher.fetcher_with_entity(entity=self, local_name=u"gateways")
-        
+
         self.ports = []
         self._ports_fetcher = NUPortsFetcher.fetcher_with_entity(entity=self, local_name=u"ports")
-        
+
         self.services = []
         self._services_fetcher = NUWANServicesFetcher.fetcher_with_entity(entity=self, local_name=u"services")
-        
+
         self.permissions = []
         self._permissions_fetcher = NUPermittedActionsFetcher.fetcher_with_entity(entity=self, local_name=u"permissions")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -74,7 +74,7 @@ class NURedundantGWGrp(NURESTObject):
         return u"redundancygroup"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -100,7 +100,7 @@ class NURedundantGWGrp(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_enterprisepermission(self, enterprisepermission, async=False, callback=None):
         """ Create a enterprisepermission
             :param enterprisepermission: object to add
@@ -126,7 +126,7 @@ class NURedundantGWGrp(NURESTObject):
             self._enterprisepermissions_fetcher.order_by = order_by
 
         return self._enterprisepermissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_gateway(self, gateway, async=False, callback=None):
         """ Create a gateway
             :param gateway: object to add
@@ -152,7 +152,7 @@ class NURedundantGWGrp(NURESTObject):
             self._gateways_fetcher.order_by = order_by
 
         return self._gateways_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_port(self, port, async=False, callback=None):
         """ Create a port
             :param port: object to add
@@ -178,7 +178,7 @@ class NURedundantGWGrp(NURESTObject):
             self._ports_fetcher.order_by = order_by
 
         return self._ports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_service(self, service, async=False, callback=None):
         """ Create a service
             :param service: object to add
@@ -204,7 +204,7 @@ class NURedundantGWGrp(NURESTObject):
             self._services_fetcher.order_by = order_by
 
         return self._services_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_permission(self, permission, async=False, callback=None):
         """ Create a permission
             :param permission: object to add
@@ -230,4 +230,3 @@ class NURedundantGWGrp(NURESTObject):
             self._permissions_fetcher.order_by = order_by
 
         return self._permissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

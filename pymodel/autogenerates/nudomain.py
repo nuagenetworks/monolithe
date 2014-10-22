@@ -24,7 +24,7 @@ from ..fetchers import NUPolicyGroupsFetcher
 from ..fetchers import NUVPortsFetcher
 from ..fetchers import NURedirectionTargetsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUDomain(NURESTObject):
@@ -36,7 +36,7 @@ class NUDomain(NURESTObject):
         super(NUDomain, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.application_deployment_policy = None
         self.template_id = None
         self.back_haul_route_distinguisher = None
@@ -55,7 +55,7 @@ class NUDomain(NURESTObject):
         self.route_distinguisher = None
         self.route_target = None
         self.service_id = None
-        
+
         self.expose_attribute(local_name=u"application_deployment_policy", remote_name=u"applicationDeploymentPolicy", attribute_type=str)
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str)
         self.expose_attribute(local_name=u"back_haul_route_distinguisher", remote_name=u"backHaulRouteDistinguisher", attribute_type=str)
@@ -76,76 +76,76 @@ class NUDomain(NURESTObject):
         self.expose_attribute(local_name=u"service_id", remote_name=u"serviceID", attribute_type=str)
 
         # Fetchers
-        
+
         self.jobs = []
         self._jobs_fetcher = NUJobsFetcher.fetcher_with_entity(entity=self, local_name=u"jobs")
-        
+
         self.dhcpoptions = []
         self._dhcpoptions_fetcher = NUDHCPOptionsFetcher.fetcher_with_entity(entity=self, local_name=u"dhcpoptions")
-        
+
         self.floatingips = []
         self._floatingips_fetcher = NUFloatingIpsFetcher.fetcher_with_entity(entity=self, local_name=u"floatingips")
-        
+
         self.staticroutes = []
         self._staticroutes_fetcher = NUStaticRoutesFetcher.fetcher_with_entity(entity=self, local_name=u"staticroutes")
-        
+
         self.subnets = []
         self._subnets_fetcher = NUSubNetworksFetcher.fetcher_with_entity(entity=self, local_name=u"subnets")
-        
+
         self.vpnconnections = []
         self._vpnconnections_fetcher = NUVPNConnectsFetcher.fetcher_with_entity(entity=self, local_name=u"vpnconnections")
-        
+
         self.zones = []
         self._zones_fetcher = NUZonesFetcher.fetcher_with_entity(entity=self, local_name=u"zones")
-        
+
         self.egressacltemplates = []
         self._egressacltemplates_fetcher = NUEgressACLTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"egressacltemplates")
-        
+
         self.ingressacltemplates = []
         self._ingressacltemplates_fetcher = NUIngressACLTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"ingressacltemplates")
-        
+
         self.ingressadvfwdtemplates = []
         self._ingressadvfwdtemplates_fetcher = NUIngressAdvancedForwardingTemplatesFetcher.fetcher_with_entity(entity=self, local_name=u"ingressadvfwdtemplates")
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
         self.statistics = []
         self._statistics_fetcher = NUStatisticssFetcher.fetcher_with_entity(entity=self, local_name=u"statistics")
-        
+
         self.statisticspolicies = []
         self._statisticspolicies_fetcher = NUStatisticsPoliciesFetcher.fetcher_with_entity(entity=self, local_name=u"statisticspolicies")
-        
+
         self.tcas = []
         self._tcas_fetcher = NUTCAsFetcher.fetcher_with_entity(entity=self, local_name=u"tcas")
-        
+
         self.groups = []
         self._groups_fetcher = NUGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"groups")
-        
+
         self.permissions = []
         self._permissions_fetcher = NUPermittedActionsFetcher.fetcher_with_entity(entity=self, local_name=u"permissions")
-        
+
         self.vminterfaces = []
         self._vminterfaces_fetcher = NUVMInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"vminterfaces")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
         self.bridgeinterfaces = []
         self._bridgeinterfaces_fetcher = NUBridgeInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"bridgeinterfaces")
-        
+
         self.hostinterfaces = []
         self._hostinterfaces_fetcher = NUHostInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"hostinterfaces")
-        
+
         self.policygroups = []
         self._policygroups_fetcher = NUPolicyGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"policygroups")
-        
+
         self.vports = []
         self._vports_fetcher = NUVPortsFetcher.fetcher_with_entity(entity=self, local_name=u"vports")
-        
+
         self.redirectiontargets = []
         self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -154,7 +154,7 @@ class NUDomain(NURESTObject):
         return u"domain"
 
     # REST methods
-    
+
     def create_job(self, job, async=False, callback=None):
         """ Create a job
             :param job: object to add
@@ -180,7 +180,7 @@ class NUDomain(NURESTObject):
             self._jobs_fetcher.order_by = order_by
 
         return self._jobs_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_dhcpoption(self, dhcpoption, async=False, callback=None):
         """ Create a dhcpoption
             :param dhcpoption: object to add
@@ -206,7 +206,7 @@ class NUDomain(NURESTObject):
             self._dhcpoptions_fetcher.order_by = order_by
 
         return self._dhcpoptions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_floatingip(self, floatingip, async=False, callback=None):
         """ Create a floatingip
             :param floatingip: object to add
@@ -232,7 +232,7 @@ class NUDomain(NURESTObject):
             self._floatingips_fetcher.order_by = order_by
 
         return self._floatingips_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_staticroute(self, staticroute, async=False, callback=None):
         """ Create a staticroute
             :param staticroute: object to add
@@ -258,7 +258,7 @@ class NUDomain(NURESTObject):
             self._staticroutes_fetcher.order_by = order_by
 
         return self._staticroutes_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_subnet(self, subnet, async=False, callback=None):
         """ Create a subnet
             :param subnet: object to add
@@ -284,7 +284,7 @@ class NUDomain(NURESTObject):
             self._subnets_fetcher.order_by = order_by
 
         return self._subnets_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vpnconnection(self, vpnconnection, async=False, callback=None):
         """ Create a vpnconnection
             :param vpnconnection: object to add
@@ -310,7 +310,7 @@ class NUDomain(NURESTObject):
             self._vpnconnections_fetcher.order_by = order_by
 
         return self._vpnconnections_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_zone(self, zone, async=False, callback=None):
         """ Create a zone
             :param zone: object to add
@@ -336,7 +336,7 @@ class NUDomain(NURESTObject):
             self._zones_fetcher.order_by = order_by
 
         return self._zones_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_egressacltemplate(self, egressacltemplate, async=False, callback=None):
         """ Create a egressacltemplate
             :param egressacltemplate: object to add
@@ -362,7 +362,7 @@ class NUDomain(NURESTObject):
             self._egressacltemplates_fetcher.order_by = order_by
 
         return self._egressacltemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_ingressacltemplate(self, ingressacltemplate, async=False, callback=None):
         """ Create a ingressacltemplate
             :param ingressacltemplate: object to add
@@ -388,7 +388,7 @@ class NUDomain(NURESTObject):
             self._ingressacltemplates_fetcher.order_by = order_by
 
         return self._ingressacltemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_ingressadvfwdtemplate(self, ingressadvfwdtemplate, async=False, callback=None):
         """ Create a ingressadvfwdtemplate
             :param ingressadvfwdtemplate: object to add
@@ -414,7 +414,7 @@ class NUDomain(NURESTObject):
             self._ingressadvfwdtemplates_fetcher.order_by = order_by
 
         return self._ingressadvfwdtemplates_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -440,7 +440,7 @@ class NUDomain(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statistic(self, statistic, async=False, callback=None):
         """ Create a statistic
             :param statistic: object to add
@@ -466,7 +466,7 @@ class NUDomain(NURESTObject):
             self._statistics_fetcher.order_by = order_by
 
         return self._statistics_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statisticspolicy(self, statisticspolicy, async=False, callback=None):
         """ Create a statisticspolicy
             :param statisticspolicy: object to add
@@ -492,7 +492,7 @@ class NUDomain(NURESTObject):
             self._statisticspolicies_fetcher.order_by = order_by
 
         return self._statisticspolicies_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_tca(self, tca, async=False, callback=None):
         """ Create a tca
             :param tca: object to add
@@ -518,7 +518,7 @@ class NUDomain(NURESTObject):
             self._tcas_fetcher.order_by = order_by
 
         return self._tcas_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_group(self, group, async=False, callback=None):
         """ Create a group
             :param group: object to add
@@ -544,7 +544,7 @@ class NUDomain(NURESTObject):
             self._groups_fetcher.order_by = order_by
 
         return self._groups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_permission(self, permission, async=False, callback=None):
         """ Create a permission
             :param permission: object to add
@@ -570,7 +570,7 @@ class NUDomain(NURESTObject):
             self._permissions_fetcher.order_by = order_by
 
         return self._permissions_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vminterface(self, vminterface, async=False, callback=None):
         """ Create a vminterface
             :param vminterface: object to add
@@ -596,7 +596,7 @@ class NUDomain(NURESTObject):
             self._vminterfaces_fetcher.order_by = order_by
 
         return self._vminterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -622,7 +622,7 @@ class NUDomain(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_bridgeinterface(self, bridgeinterface, async=False, callback=None):
         """ Create a bridgeinterface
             :param bridgeinterface: object to add
@@ -648,7 +648,7 @@ class NUDomain(NURESTObject):
             self._bridgeinterfaces_fetcher.order_by = order_by
 
         return self._bridgeinterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_hostinterface(self, hostinterface, async=False, callback=None):
         """ Create a hostinterface
             :param hostinterface: object to add
@@ -674,7 +674,7 @@ class NUDomain(NURESTObject):
             self._hostinterfaces_fetcher.order_by = order_by
 
         return self._hostinterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_policygroup(self, policygroup, async=False, callback=None):
         """ Create a policygroup
             :param policygroup: object to add
@@ -700,7 +700,7 @@ class NUDomain(NURESTObject):
             self._policygroups_fetcher.order_by = order_by
 
         return self._policygroups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vport(self, vport, async=False, callback=None):
         """ Create a vport
             :param vport: object to add
@@ -726,7 +726,7 @@ class NUDomain(NURESTObject):
             self._vports_fetcher.order_by = order_by
 
         return self._vports_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_redirectiontarget(self, redirectiontarget, async=False, callback=None):
         """ Create a redirectiontarget
             :param redirectiontarget: object to add
@@ -752,4 +752,3 @@ class NUDomain(NURESTObject):
             self._redirectiontargets_fetcher.order_by = order_by
 
         return self._redirectiontargets_fetcher.fetch_matching_entities(filter=filter, page=page)
-    

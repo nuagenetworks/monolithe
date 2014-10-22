@@ -14,7 +14,7 @@ from ..fetchers import NUPolicyGroupsFetcher
 from ..fetchers import NUVPortMirrorsFetcher
 from ..fetchers import NURedirectionTargetsFetcher
 
-from restnuage import NURESTObject
+from bambou import NURESTObject
 
 
 class NUVPort(NURESTObject):
@@ -26,7 +26,7 @@ class NUVPort(NURESTObject):
         super(NUVPort, self).__init__()
 
         # Read/Write Attributes
-        
+
         self.active = None
         self.address_spoofing = None
         self.vlanid = None
@@ -42,7 +42,7 @@ class NUVPort(NURESTObject):
         self.system_type = None
         self.type = None
         self.zone_id = None
-        
+
         self.expose_attribute(local_name=u"active", remote_name=u"active", attribute_type=bool)
         self.expose_attribute(local_name=u"address_spoofing", remote_name=u"addressSpoofing", attribute_type=str)
         self.expose_attribute(local_name=u"vlanid", remote_name=u"VLANID", attribute_type=str)
@@ -60,46 +60,46 @@ class NUVPort(NURESTObject):
         self.expose_attribute(local_name=u"zone_id", remote_name=u"zoneID", attribute_type=str)
 
         # Fetchers
-        
+
         self.alarms = []
         self._alarms_fetcher = NUAlarmsFetcher.fetcher_with_entity(entity=self, local_name=u"alarms")
-        
+
         self.qos = []
         self._qos_fetcher = NUQosPrimitivesFetcher.fetcher_with_entity(entity=self, local_name=u"qos")
-        
+
         self.statistics = []
         self._statistics_fetcher = NUStatisticssFetcher.fetcher_with_entity(entity=self, local_name=u"statistics")
-        
+
         self.statisticspolicies = []
         self._statisticspolicies_fetcher = NUStatisticsPoliciesFetcher.fetcher_with_entity(entity=self, local_name=u"statisticspolicies")
-        
+
         self.tcas = []
         self._tcas_fetcher = NUTCAsFetcher.fetcher_with_entity(entity=self, local_name=u"tcas")
-        
+
         self.vrss = []
         self._vrss_fetcher = NUVRSsFetcher.fetcher_with_entity(entity=self, local_name=u"vrss")
-        
+
         self.vminterfaces = []
         self._vminterfaces_fetcher = NUVMInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"vminterfaces")
-        
+
         self.vms = []
         self._vms_fetcher = NUVirtualMachinesFetcher.fetcher_with_entity(entity=self, local_name=u"vms")
-        
+
         self.bridgeinterfaces = []
         self._bridgeinterfaces_fetcher = NUBridgeInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"bridgeinterfaces")
-        
+
         self.hostinterfaces = []
         self._hostinterfaces_fetcher = NUHostInterfacesFetcher.fetcher_with_entity(entity=self, local_name=u"hostinterfaces")
-        
+
         self.policygroups = []
         self._policygroups_fetcher = NUPolicyGroupsFetcher.fetcher_with_entity(entity=self, local_name=u"policygroups")
-        
+
         self.vportmirrors = []
         self._vportmirrors_fetcher = NUVPortMirrorsFetcher.fetcher_with_entity(entity=self, local_name=u"vportmirrors")
-        
+
         self.redirectiontargets = []
         self._redirectiontargets_fetcher = NURedirectionTargetsFetcher.fetcher_with_entity(entity=self, local_name=u"redirectiontargets")
-        
+
 
     @classmethod
     def get_remote_name(cls):
@@ -108,7 +108,7 @@ class NUVPort(NURESTObject):
         return u"vport"
 
     # REST methods
-    
+
     def create_alarm(self, alarm, async=False, callback=None):
         """ Create a alarm
             :param alarm: object to add
@@ -134,7 +134,7 @@ class NUVPort(NURESTObject):
             self._alarms_fetcher.order_by = order_by
 
         return self._alarms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_qo(self, qo, async=False, callback=None):
         """ Create a qo
             :param qo: object to add
@@ -160,7 +160,7 @@ class NUVPort(NURESTObject):
             self._qos_fetcher.order_by = order_by
 
         return self._qos_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statistic(self, statistic, async=False, callback=None):
         """ Create a statistic
             :param statistic: object to add
@@ -186,7 +186,7 @@ class NUVPort(NURESTObject):
             self._statistics_fetcher.order_by = order_by
 
         return self._statistics_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_statisticspolicy(self, statisticspolicy, async=False, callback=None):
         """ Create a statisticspolicy
             :param statisticspolicy: object to add
@@ -212,7 +212,7 @@ class NUVPort(NURESTObject):
             self._statisticspolicies_fetcher.order_by = order_by
 
         return self._statisticspolicies_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_tca(self, tca, async=False, callback=None):
         """ Create a tca
             :param tca: object to add
@@ -238,7 +238,7 @@ class NUVPort(NURESTObject):
             self._tcas_fetcher.order_by = order_by
 
         return self._tcas_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vrs(self, vrs, async=False, callback=None):
         """ Create a vrs
             :param vrs: object to add
@@ -264,7 +264,7 @@ class NUVPort(NURESTObject):
             self._vrss_fetcher.order_by = order_by
 
         return self._vrss_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vminterface(self, vminterface, async=False, callback=None):
         """ Create a vminterface
             :param vminterface: object to add
@@ -290,7 +290,7 @@ class NUVPort(NURESTObject):
             self._vminterfaces_fetcher.order_by = order_by
 
         return self._vminterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vm(self, vm, async=False, callback=None):
         """ Create a vm
             :param vm: object to add
@@ -316,7 +316,7 @@ class NUVPort(NURESTObject):
             self._vms_fetcher.order_by = order_by
 
         return self._vms_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_bridgeinterface(self, bridgeinterface, async=False, callback=None):
         """ Create a bridgeinterface
             :param bridgeinterface: object to add
@@ -342,7 +342,7 @@ class NUVPort(NURESTObject):
             self._bridgeinterfaces_fetcher.order_by = order_by
 
         return self._bridgeinterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_hostinterface(self, hostinterface, async=False, callback=None):
         """ Create a hostinterface
             :param hostinterface: object to add
@@ -368,7 +368,7 @@ class NUVPort(NURESTObject):
             self._hostinterfaces_fetcher.order_by = order_by
 
         return self._hostinterfaces_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_policygroup(self, policygroup, async=False, callback=None):
         """ Create a policygroup
             :param policygroup: object to add
@@ -394,7 +394,7 @@ class NUVPort(NURESTObject):
             self._policygroups_fetcher.order_by = order_by
 
         return self._policygroups_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_vportmirror(self, vportmirror, async=False, callback=None):
         """ Create a vportmirror
             :param vportmirror: object to add
@@ -420,7 +420,7 @@ class NUVPort(NURESTObject):
             self._vportmirrors_fetcher.order_by = order_by
 
         return self._vportmirrors_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
+
     def create_redirectiontarget(self, redirectiontarget, async=False, callback=None):
         """ Create a redirectiontarget
             :param redirectiontarget: object to add
@@ -446,4 +446,3 @@ class NUVPort(NURESTObject):
             self._redirectiontargets_fetcher.order_by = order_by
 
         return self._redirectiontargets_fetcher.fetch_matching_entities(filter=filter, page=page)
-    
