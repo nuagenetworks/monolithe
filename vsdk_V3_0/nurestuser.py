@@ -98,42 +98,6 @@ class NURESTUser(NURESTBasicUser):
 
         return "%s/%s" % (self.__class__.base_url(), object_type.get_resource_name())
 
-    # REST methods
-
-    def create_enterprise(self, enterprise, async=False, callback=None):
-        """ Create an enterprise
-
-            Args:
-                enterprise: object to add
-                async: Make an sync or async HTTP request
-                callback: Callback method called when async is set to true
-
-            Returns:
-                Returns a tuple containing the deleted object and the connection (object, connection)
-        """
-
-        return self.add_child_object(nurest_object=enterprise, async=async, callback=callback)
-
-    def fetch_enterprises(self):
-        """ Fetch enterprises """
-
-        return self._enterprises_fetcher.fetch_objects()
-
-    def delete_enterprise(self, enterprise, async=False, callback=None, response_choice=1):
-        """ Removes an enteprise from the connected user
-
-            Args:
-                enterprise: object to remove
-                async: Make an sync or async HTTP request
-                callback: Callback method called when async is set to true
-                response_choice: additionnal information to set user choice when removing
-
-            Returns:
-                Returns a tuple containing the deleted object and the connection (object, connection)
-        """
-
-        return self.remove_child_object(nurest_object=enterprise, response_choice=response_choice)
-
     def to_NUUser(self):
         """ Convert to NUUser
 

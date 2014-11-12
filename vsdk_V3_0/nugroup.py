@@ -40,35 +40,3 @@ class NUGroup(AutoGenerate):
         self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str, is_required=True, min_length=1, max_length=255, is_unique=True, can_order=True, can_search=True)
         self.expose_attribute(local_name=u"private", remote_name=u"private", attribute_type=bool, can_order=True, can_search=True)
         self.expose_attribute(local_name=u"role", remote_name=u"role", attribute_type=str, choices=[UserRole.CSPROOT, UserRole.CSPOPERATOR, UserRole.ORGADMIN, UserRole.ORGNETWORKDESIGNER, UserRole.ORGUSER, UserRole.USER])
-
-    def create_user(self, user, async=False, callback=None):
-        """ Use assign_users method instead
-
-            Raise:
-                NotImplementedError
-        """
-
-        raise NotImplementedError("This method should not be used. Use assign_users method instead.")
-
-    def delete_user(self, user, async=False, callback=None):
-        """ Use assign_users method instead
-
-            Raise:
-                NotImplementedError
-        """
-
-        raise NotImplementedError("This method should not be used. Use assign_users method instead.")
-
-    def assign_users(self, users, async=False, callback=None):
-        """ Assign users to this group
-
-            Args:
-                users: (list) list of users to assign to the current group
-                async: (bool) Make a sync or async HTTP request
-                callback: (method) Callback method called when async is set to True
-
-            Returns:
-                Returns the current object and the connection (object, connection)
-        """
-
-        return self.assign_objects(objects=users, async=async, callback=callback)

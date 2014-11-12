@@ -36,8 +36,8 @@ Note: Before install, make sure you have activated your python environment
 
 Download the `tar.gz` file that is distributed in `dist` directory and install it using pip:
 
-    (vsdk-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
-    (vsdk-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/vsdk.git#egg=vsdk
+    (vsdk-env) $ pip install git+http://<user>@github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
+    (vsdk-env) $ pip install git+http://<user>@github.mv.usa.alcatel.com/chserafi/vsdk#egg=vsdk
 
 Installation from package in development
 ----------------------------------------
@@ -46,8 +46,8 @@ Note: Before install, make sure you have activated your python environment
 
 This enables you to install both packages and see sources in your python environment
 
-    (vsdk-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
-    (vsdk-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/vsdk.git#egg=vsdk
+    (vsdk-env) $ pip install -e git+http://<user>@github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
+    (vsdk-env) $ pip install -e git+http://<user>@github.mv.usa.alcatel.com/chserafi/vsdk#egg=vsdk
 
 
 Installation from sources
