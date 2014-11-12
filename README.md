@@ -1,11 +1,12 @@
-pymodel
-=======
+VSD SDK for API v3.0
+====================
 
-IMPORTANT: This will be used as the Nuage Netowork Python SDK.
-It means the name will probably change within the next few weeks.
+Python SDK for Nuage VSD solution.
 
-
-Nuage Network Python SDK is based on Bambou.
+Supported version:
+* Python 2.6
+* Python 2.7
+* Python 3
 
 Dependancies
 ------------
@@ -20,13 +21,13 @@ Setup your Python Virtual Environment
 
 Install your virtualenv
 
-    $ virtualenv --no-site-packages pymodel-env
+    $ virtualenv --no-site-packages vsdk-env
 
 Activate your environment
 
-    $ cd pymodel-env
+    $ cd vsdk-env
     $ source bin/activate
-    (pymodel-env) $
+    (vsdk-env) $
 
 Installation from package
 -------------------------
@@ -35,8 +36,8 @@ Note: Before install, make sure you have activated your python environment
 
 Download the `tar.gz` file that is distributed in `dist` directory and install it using pip:
 
-    (pymodel-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
-    (pymodel-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/pymodel.git#egg=pymodel
+    (vsdk-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
+    (vsdk-env) $ pip install git+ssh://github.mv.usa.alcatel.com/chserafi/vsdk.git#egg=vsdk
 
 Installation from package in development
 ----------------------------------------
@@ -45,8 +46,8 @@ Note: Before install, make sure you have activated your python environment
 
 This enables you to install both packages and see sources in your python environment
 
-    (pymodel-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
-    (pymodel-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/pymodel.git#egg=pymodel
+    (vsdk-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
+    (vsdk-env) $ pip install -e git+ssh://github.mv.usa.alcatel.com/chserafi/vsdk.git#egg=vsdk
 
 
 Installation from sources
@@ -54,12 +55,12 @@ Installation from sources
 
 Get the sources
 
-    (pymodel-env) $ git clone http://github.mv.usa.alcatel.com/cserafin/pymodel.git
-    (pymodel-env) $ cd pymodel
+    (vsdk-env) $ git clone http://github.mv.usa.alcatel.com/cserafin/vsdk.git
+    (vsdk-env) $ cd vsdk
 
 Install dependencies
 
-    (pymodel-env) $ pip install -r requirements.txt
+    (vsdk-env) $ pip install -r requirements.txt
 
 
 Example
@@ -67,37 +68,39 @@ Example
 
 Here is a quick example !
 
-     import logging
+     from restnuage import NURESTLoginController
+     from vsdk import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain,NUGatewayTemplate, NUGateway
 
-     from pymodel import set_log_level
-     from pymodel import NUVSDSession
-     from pymodel import NUEnterprise, NUUser, NUDomainTemplate, NUDomain
+     # Setting a log level to see what happens (Optionnal)
 
-     # 'Setting a log level to see what happens (Optionnal)'
-     set_log_level(logging.INFO)
+     # import logging
+     # restnuage_log = logging.getLogger('restnuage')
+     # restnuage_log.setLevel(logging.DEBUG)
+     # restnuage_log.addHandler(logging.StreamHandler())
 
-     # 'Create a session for CSPRoot'
-     session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.220.152:8443/nuage/api/v3_0')
+     # Log in on the application with csproot user
 
-     # 'Start using the CSPRoot session
-     session.start()
-     csproot = session.user
+     controller = NURESTLoginController()
+     controller.user = u"csproot"
+     controller.password = u"csproot"
+     controller.enterprise = u"csp"
+     controller.url = u"https://135.227.220.152:8443/nuage/api/v3_0"
+     csproot = NURESTUser()
+     csproot.fetch()
+     controller.api_key = csproot.api_key
 
-     # 'Create an enterprise with csproot user'
+     # Create an enterprise with csproot user
      enterprise = NUEnterprise()
      enterprise.name = u'Enterprise example'
      csproot.create_enterprise(enterprise)
 
-     # 'Create a domain template and an instance'
+     # Create a domain template and an instance
      domain_template = NUDomainTemplate()
      domain_template.name = u'Domain Template example'
-     enterprise.create_gatewaytemplate(domain_template)
+     enterprise.create_gateway_template(domain_template)
      domain = NUDomain()
      domain.name = u'Instance Domain example'
      enterprise.instantiate_domain(domain, domain_template)
-
-     # Stop using the CSPRoot session
-     session.stop()
 
 
 Check a complete example in `examples/scripts.py`. You can launch the example using the following command line:
