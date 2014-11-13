@@ -11,11 +11,14 @@ Python SDK for the Nuage VSD Solution API 3.0
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: vsdk_V3_0.constants
-    :members:
 
-.. automodule:: vsdk_V3_0.models
+Enterprise
+----------
+.. automodule:: vsdk_V3_0.nuenterprise
     :members:
+    :inherited-members:
+
+
 
 Indices and tables
 ==================

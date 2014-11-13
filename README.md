@@ -4,113 +4,69 @@ VSD SDK for API v3.0
 Python SDK for Nuage VSD solution.
 
 Supported version:
-* Python 2.6
-* Python 2.7
-* Python 3
+
+    * Python 2.6
+    * Python 2.7
+    * Python 3
 
 Dependancies
 ------------
 
 Python dependencies:
-* bambou (http://github.mv.usa.alcatel.com/chserafi/bambou)
 
-WARNING: You will need to install `bambou` library first.
+    * bambou
+    * logging
 
 Setup your Python Virtual Environment
 -------------------------------------
 
-Install your virtualenv
+Create your virtualenv
+::
 
-    $ virtualenv --no-site-packages vsdk-env
+    $ virtualenv vsdk-env
 
 Activate your environment
+::
 
     $ cd vsdk-env
     $ source bin/activate
     (vsdk-env) $
 
-Installation from package
--------------------------
 
-Note: Before install, make sure you have activated your python environment
-
-Download the `tar.gz` file that is distributed in `dist` directory and install it using pip:
-
-    (vsdk-env) $ pip install git+http://<user>@github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
-    (vsdk-env) $ pip install git+http://<user>@github.mv.usa.alcatel.com/chserafi/vsdk#egg=vsdk
-
-Installation from package in development
-----------------------------------------
-
-Note: Before install, make sure you have activated your python environment
-
-This enables you to install both packages and see sources in your python environment
-
-    (vsdk-env) $ pip install -e git+http://<user>@github.mv.usa.alcatel.com/chserafi/bambou#egg=bambou
-    (vsdk-env) $ pip install -e git+http://<user>@github.mv.usa.alcatel.com/chserafi/vsdk#egg=vsdk
-
-
-Installation from sources
--------------------------
-
-Get the sources
-
-    (vsdk-env) $ git clone http://github.mv.usa.alcatel.com/cserafin/vsdk.git
-    (vsdk-env) $ cd vsdk
-
-Install dependencies
-
-    (vsdk-env) $ pip install -r requirements.txt
-
-
-Example
--------
+How it works
+------------
 
 Here is a quick example !
+::
 
-     from restnuage import NURESTLoginController
-     from vsdk import NUEnterprise, NUUser, NURESTUser, NUDomainTemplate, NUDomain,NUGatewayTemplate, NUGateway
+    from vsdk_V3_0 import NUVSDSession
+    from vsdk_V3_0 import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
+    from vsdk_V3_0.utils import set_log_level
 
-     # Setting a log level to see what happens (Optionnal)
+    # Setting a log level to see what happens (Optionnal)
+    set_log_level(logging.INFO)
 
-     # import logging
-     # restnuage_log = logging.getLogger('restnuage')
-     # restnuage_log.setLevel(logging.DEBUG)
-     # restnuage_log.addHandler(logging.StreamHandler())
+    # Create a session for user
+    session = NUVSDSession(username=u'<YOUR_USERNAME>', password=u'<YOUR_PASSWORD>', enterprise=u'<YOUR_ENTERPRISE>', api_url=u'<YOUR_API_URL/V3_0>')
 
-     # Log in on the application with csproot user
+    # Start using the user session
+    session.start()
+    user = session.user
 
-     controller = NURESTLoginController()
-     controller.user = u"csproot"
-     controller.password = u"csproot"
-     controller.enterprise = u"csp"
-     controller.url = u"https://135.227.220.152:8443/nuage/api/v3_0"
-     csproot = NURESTUser()
-     csproot.fetch()
-     controller.api_key = csproot.api_key
+    # Create an enterprise with user user
+    enterprise = NUEnterprise()
+    enterprise.name = u'Enterprise example'
+    user.add_child_object(enterprise)
 
-     # Create an enterprise with csproot user
-     enterprise = NUEnterprise()
-     enterprise.name = u'Enterprise example'
-     csproot.create_enterprise(enterprise)
+    # Create a domain template and an instance
+    domain_template = NUDomainTemplate()
+    domain_template.name = u'Domain Template example'
+    enterprise.add_child_object(domain_template)
+    domain = NUDomain()
+    domain.name = u'Instance Domain example'
+    enterprise.instantiate_child_object(domain, domain_template)
 
-     # Create a domain template and an instance
-     domain_template = NUDomainTemplate()
-     domain_template.name = u'Domain Template example'
-     enterprise.create_gateway_template(domain_template)
-     domain = NUDomain()
-     domain.name = u'Instance Domain example'
-     enterprise.instantiate_domain(domain, domain_template)
-
-
-Check a complete example in `examples/scripts.py`. You can launch the example using the following command line:
-
-    $ python example/script.py
-
-Packaging
----------
-
-Creating a tar.gz package is possible using the following command line :
-
-    $ python setup.py sdist
-
+    # Create a redirection target template
+    redirection_target_template = NURedirectionTargetTemplate()
+    redirection_target_template.name = "RT Template"
+    domain_template.add_child_object(redirection_target_template)
