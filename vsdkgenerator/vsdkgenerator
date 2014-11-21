@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+import argparse
+import sys
+
+sys.path.append("../")
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="Python SDK Generator.")
+
+    # parser.add_argument('-f', "--filename",
+    #                     help="local JSON filename",
+    #                     action='store_true')
+
+    parser.add_argument('-u', "--from-url",
+                        help="URL of your VSD API where to get the get JSON information")
+
+    parser.add_argument('-g', "--to-git",
+                        help="Git repository URL")
+
+    args = parser.parse_args()
+
+    from lib import SwaggerParser
+    from lib import Printer
+    from lib import SDKWriter
+    from lib import ModelsProcessor
+    from lib import GitManager
+
+    OUTPUT_DIRECTORY = './tmp'
+
+    url = 'http://github.mv.usa.alcatel.com/chserafi/vsdk' # args.to_git
+    branch = 'master'
+
+
+
+    git_manager = GitManager(url=url, branch=branch, directory=OUTPUT_DIRECTORY)
+    git_manager.clone()
+
+    swagger_parser = SwaggerParser()
+    resources = swagger_parser.grab_all(args.from_url)
+
+    processed_resources = ModelsProcessor.process(resources=resources)
+
+    branch = 'V3_0'
+    directory = '%s/vsdk_%s' % (OUTPUT_DIRECTORY, branch)
+    SDKWriter.write(resources=processed_resources, directory=directory)
+
+    nb_diffs = git_manager.commit(message="Update")
+    # Printer.log("COMMIT %s modifications" % nb_diffs)
+
+    # git_manager.remove_directory()
