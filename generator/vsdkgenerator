@@ -50,9 +50,9 @@ if __name__ == '__main__':
     if os.path.exists(OUTPUT_DIRECTORY):
         shutil.rmtree(OUTPUT_DIRECTORY)
 
-    shutil.copytree('../vsdk/', OUTPUT_DIRECTORY)
+    shutil.copytree('../vanilla/', OUTPUT_DIRECTORY)
 
-    SDKWriter.write(resources=processed_resources, directory=OUTPUT_DIRECTORY)
+    SDKWriter.write(resources=processed_resources, directory="%s/vsdk" % OUTPUT_DIRECTORY)
 
     # nb_diffs = git_manager.commit(message="Update")
     # Printer.log("COMMIT %s modifications" % nb_diffs)
