@@ -39,18 +39,18 @@ class NU{{ model['name'] }}(NURESTObject):
         """ Initializes a {{ model['name'] }} instance
 
         """
-        super(NU{{ model['name'] }}, self).__init__()
+        super(NU{{ model['name'] }}, self).__init__(**kwargs)
 
         # Read/Write Attributes
         {% for name, attribute in model['properties'].iteritems() %}
-        self._{{ attribute['local_name']|lower }} = {{ attribute['local_type'] }}(){% endfor %}
+        self._{{ attribute['local_name']|lower }} = None{% endfor %}
         {% for name, attribute in model['properties'].iteritems() %}
         self.expose_attribute(local_name=u"{{ attribute['local_name']|lower }}", remote_name=u"{{ attribute['remote_name'] }}", attribute_type={{ attribute['local_type'] }}{% if attribute['type'] == 'enum' %}, choices={{ attribute['enum'] | trim}}{% endif %}){% endfor %}
         {% if model['relations']|length > 0 %}
         # Fetchers
         {% for relation in model['relations'] %}
         self.{{ relation['resource_name'] }} = []
-        self.{{ relation['resource_name'] }}_fetcher = NU{{ relation['plural_name'] }}Fetcher.fetcher_with_entity(entity=self, local_name=u"{{ relation['resource_name'] }}")
+        self.{{ relation['resource_name'] }}_fetcher = NU{{ relation['plural_name'] }}Fetcher.fetcher_with_object(nurest_object=self, local_name=u"{{ relation['resource_name'] }}")
         {% endfor %}{% endif %}
         for key, value in kwargs.iteritems():
             if hasattr(self, key):

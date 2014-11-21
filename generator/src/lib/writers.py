@@ -64,7 +64,7 @@ class FileWriter(object):
         """ Write model override
 
         """
-        template = self.env.get_template('nuobject_autogenerate.tpl')
+        template = self.env.get_template('nuobject_override.tpl')
         destination = '%s/' % self.directory
         filename = 'nu%s.py' % model['name'].lower()
 
