@@ -65,7 +65,10 @@ class SwaggerParser(object):
 
         resource_name = resource_path.split('/')[-1]
 
-        response = requests.get(resource_path, verify=False)
+        try:  # Ugly hack due to Java issue: http://mvjira.mv.usa.alcatel.com/browse/VSD-546
+            response = requests.get(resource_path, verify=False)
+        except requests.exceptions.SSLError:
+            response = requests.get(resource_path, verify=False)
 
         if response.status_code != 200:
             Printer.raiseError("[HTTP %s] An error occured while retrieving %s at %s" % (response.status_code, resource_name, resource_path))
