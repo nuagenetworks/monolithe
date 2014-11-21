@@ -14,7 +14,7 @@ SWAGGER_PATH = 'path'
 class SwaggerParser(object):
     """ Swagger Parser grabs all information from a JSON File """
 
-    def grab_all(self, url):
+    def grab_all(self, url, apiversion):
         """ Read a JSON file and returns a dictionnary
 
             Args:
@@ -28,8 +28,8 @@ class SwaggerParser(object):
                 described in http://host:port/V3_0/schema/api-docs according to swagger
                 specification
         """
-
-        schema_url = '%s%s%s' % (url, SCHEMA_FILEPATH, ENTRY_PONT)
+        base_url = '%s%s' % (url, apiversion)
+        schema_url = '%s%s%s' % (base_url, SCHEMA_FILEPATH, ENTRY_PONT)
 
         response = requests.get(schema_url, verify=False)
 
@@ -45,7 +45,7 @@ class SwaggerParser(object):
 
         models = dict()
         for api in data[SWAGGER_APIS]:
-            path = url + SCHEMA_FILEPATH + api[SWAGGER_PATH]
+            path = base_url + SCHEMA_FILEPATH + api[SWAGGER_PATH]
             task_manager.start_task(method=self._grab_resource, resource_path=path, results=models)
 
         task_manager.wait_until_exit()

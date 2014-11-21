@@ -13,8 +13,13 @@ if __name__ == '__main__':
     #                     help="local JSON filename",
     #                     action='store_true')
 
-    parser.add_argument('-u', "--from-url",
+    parser.add_argument('-u', "--vsdurl",
+                        dest="vsdurl",
                         help="URL of your VSD API where to get the get JSON information")
+
+    parser.add_argument('-V', "--apiversion",
+                        dest="apiversion",
+                        help="version of the SDK to generate")
 
     parser.add_argument('-g', "--to-git",
                         help="Git repository URL")
@@ -27,7 +32,7 @@ if __name__ == '__main__':
     from src.lib import ModelsProcessor
     from src.lib import GitManager
 
-    OUTPUT_DIRECTORY = './tmp'
+    OUTPUT_DIRECTORY = 'codegen/%s' % args.apiversion
 
     url = 'http://github.mv.usa.alcatel.com/chserafi/vsdk' # args.to_git
     branch = 'master'
@@ -38,15 +43,14 @@ if __name__ == '__main__':
     # git_manager.clone()
 
     swagger_parser = SwaggerParser()
-    resources = swagger_parser.grab_all(args.from_url)
+    resources = swagger_parser.grab_all(args.vsdurl, args.apiversion)
 
     processed_resources = ModelsProcessor.process(resources=resources)
 
-    branch = 'V3_0'
-    directory = '%s/vsdk_%s' % (OUTPUT_DIRECTORY, branch)
+    directory = '%s/vsdk' % (OUTPUT_DIRECTORY)
     SDKWriter.write(resources=processed_resources, directory=directory)
 
-    nb_diffs = git_manager.commit(message="Update")
+    # nb_diffs = git_manager.commit(message="Update")
     # Printer.log("COMMIT %s modifications" % nb_diffs)
 
     # git_manager.remove_directory()
