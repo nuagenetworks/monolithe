@@ -31,13 +31,12 @@ if __name__ == '__main__':
     from src.lib import SDKWriter
     from src.lib import ModelsProcessor
     from src.lib import GitManager
+    import shutil
+    import os
 
     OUTPUT_DIRECTORY = 'codegen/%s' % args.apiversion
 
     url = 'http://github.mv.usa.alcatel.com/chserafi/vsdk' # args.to_git
-    branch = 'master'
-
-
 
     # git_manager = GitManager(url=url, branch=branch, directory=OUTPUT_DIRECTORY)
     # git_manager.clone()
@@ -47,8 +46,13 @@ if __name__ == '__main__':
 
     processed_resources = ModelsProcessor.process(resources=resources)
 
-    directory = '%s/vsdk' % (OUTPUT_DIRECTORY)
-    SDKWriter.write(resources=processed_resources, directory=directory)
+    # directory = '%s/vsdk' % (OUTPUT_DIRECTORY)
+    if os.path.exists(OUTPUT_DIRECTORY):
+        shutil.rmtree(OUTPUT_DIRECTORY)
+
+    shutil.copytree('../vsdk/', OUTPUT_DIRECTORY)
+
+    SDKWriter.write(resources=processed_resources, directory=OUTPUT_DIRECTORY)
 
     # nb_diffs = git_manager.commit(message="Update")
     # Printer.log("COMMIT %s modifications" % nb_diffs)
