@@ -1,7 +1,7 @@
 *.py[cod]
 _build/*
 .tm_properties
-
+generator/codegen/*
 .DS_Store
 MANIFEST
 
