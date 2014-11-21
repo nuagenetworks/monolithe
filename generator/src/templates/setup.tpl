@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='vsdk',
-    version='1.0.0',
+    version='{{apiversion}}-{{revisionnumber}}',
     url='http://www.nuagenetworks.net/',
     author='Christophe Serafin, Aravind Ganesan',
     author_email='christophe.serafin@alcatel-lucent.com, aravind.ganesan@alcatel-lucent.com',

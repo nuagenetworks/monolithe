@@ -17,7 +17,7 @@ if __name__ == '__main__':
                         dest="vsdurl",
                         help="URL of your VSD API where to get the get JSON information")
 
-    parser.add_argument('-V', "--apiversion",
+    parser.add_argument('-a', "--apiversion",
                         dest="apiversion",
                         help="version of the SDK to generate")
 
