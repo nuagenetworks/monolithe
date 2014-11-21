@@ -18,7 +18,7 @@ class PythonFileWriter(object):
         """ Initializes a PythonFileWriter
 
         """
-        self.env = Environment(loader=PackageLoader('vsdkgenerator', 'templates'))
+        self.env = Environment(loader=PackageLoader('src', 'templates'))
         self.directory = directory
 
     def write_model(self, model):

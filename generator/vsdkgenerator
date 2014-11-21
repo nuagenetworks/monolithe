@@ -21,11 +21,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    from lib import SwaggerParser
-    from lib import Printer
-    from lib import SDKWriter
-    from lib import ModelsProcessor
-    from lib import GitManager
+    from src.lib import SwaggerParser
+    from src.lib import Printer
+    from src.lib import SDKWriter
+    from src.lib import ModelsProcessor
+    from src.lib import GitManager
 
     OUTPUT_DIRECTORY = './tmp'
 
@@ -34,8 +34,8 @@ if __name__ == '__main__':
 
 
 
-    git_manager = GitManager(url=url, branch=branch, directory=OUTPUT_DIRECTORY)
-    git_manager.clone()
+    # git_manager = GitManager(url=url, branch=branch, directory=OUTPUT_DIRECTORY)
+    # git_manager.clone()
 
     swagger_parser = SwaggerParser()
     resources = swagger_parser.grab_all(args.from_url)

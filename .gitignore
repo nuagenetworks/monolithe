@@ -1,5 +1,6 @@
 *.py[cod]
 _build/*
+.tm_properties
 
 .DS_Store
 MANIFEST
