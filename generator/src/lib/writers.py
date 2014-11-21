@@ -11,15 +11,30 @@ IGNORED_RESOURCES = ['EventLog']
 IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
 
 
-class PythonFileWriter(object):
-    """ Writer to write a Python file """
+class FileWriter(object):
+    """ Writer to write a file """
 
     def __init__(self, directory):
-        """ Initializes a PythonFileWriter
+        """ Initializes a FileWriter
 
         """
         self.env = Environment(loader=PackageLoader('src', 'templates'))
         self.directory = directory
+
+    def write_setup(self, apiversion, revisionnumber):
+        """ Write Setup
+
+        """
+        template = self.env.get_template('setup.tpl')
+        destination = '%s/../' % self.directory
+        filename = 'setup.py'
+
+        ## todo: dirty
+        filepath = '%s/%s' % (destination, filename)
+
+        f = open(filepath, 'w+')
+        f.write(template.render(apiversion=apiversion, revisionnumber=revisionnumber))
+        f.close()
 
     def write_model(self, model):
         """ Write model
@@ -112,7 +127,7 @@ class SDKWriter(object):
     """ Writer of the Python VSD SDK """
 
     @classmethod
-    def write(cls, resources, directory):
+    def write(cls, resources, directory, sdkversion):
         """ Update all files according to data
 
             Args:
@@ -122,7 +137,6 @@ class SDKWriter(object):
             Returns:
                 Writes models and fetchers files
         """
-
         filenames = dict()
 
         task_manager = TaskManager()
@@ -134,8 +148,9 @@ class SDKWriter(object):
 
         task_manager.wait_until_exit()
 
-        writer = PythonFileWriter(directory=directory)
+        writer = FileWriter(directory=directory)
         writer.clean_files(except_files=filenames)
+        writer.write_setup(apiversion=sdkversion["apiversion"], revisionnumber=sdkversion['revisionnumber'])
 
         Printer.success('Successfully generated files for %s objects' % len(resources))
 
@@ -149,7 +164,7 @@ class SDKWriter(object):
                 filenames: list of generates filenames
 
         """
-        writer = PythonFileWriter(directory=directory)
+        writer = FileWriter(directory=directory)
         (filename, classname) = writer.write_model(model=model)
 
         filenames[filename] = classname
@@ -163,7 +178,7 @@ class SDKWriter(object):
                 directory: the path to the destination
 
         """
-        writer = PythonFileWriter(directory=directory)
+        writer = FileWriter(directory=directory)
         writer.write_model_override(model=model)
 
     @classmethod
@@ -176,7 +191,7 @@ class SDKWriter(object):
                 filenames: list of generates filenames
 
         """
-        writer = PythonFileWriter(directory=directory)
+        writer = FileWriter(directory=directory)
         (filename, classname) = writer.write_fetcher(model=model)
 
         filenames[filename] = classname

@@ -52,7 +52,9 @@ if __name__ == '__main__':
 
     shutil.copytree('../vanilla/', OUTPUT_DIRECTORY)
 
-    SDKWriter.write(resources=processed_resources, directory="%s/vsdk" % OUTPUT_DIRECTORY)
+    sdkversion = {"apiversion": args.apiversion, "revisionnumber": 1}
+
+    SDKWriter.write(resources=processed_resources, directory="%s/vsdk" % OUTPUT_DIRECTORY, sdkversion=sdkversion)
 
     # nb_diffs = git_manager.commit(message="Update")
     # Printer.log("COMMIT %s modifications" % nb_diffs)

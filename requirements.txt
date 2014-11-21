@@ -1,5 +1,3 @@
-logging
-bambou==0.0.1
 jinja2
 colorama
 gitpython
