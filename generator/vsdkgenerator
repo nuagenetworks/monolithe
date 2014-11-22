@@ -31,30 +31,21 @@ if __name__ == '__main__':
     from src.lib import SDKWriter
     from src.lib import ModelsProcessor
     from src.lib import GitManager
-    import shutil
-    import os
 
-    OUTPUT_DIRECTORY = 'codegen/%s' % args.apiversion
+    CODEGEN_DIRECTORY = './codegen/%s' % args.apiversion
 
-    url = 'http://github.mv.usa.alcatel.com/chserafi/vsdk' # args.to_git
-
-    # git_manager = GitManager(url=url, branch=branch, directory=OUTPUT_DIRECTORY)
+    # url = 'http://github.mv.usa.alcatel.com/chserafi/vsdk' # args.to_git
+    # git_manager = GitManager(url=url, branch=branch, directory=CODEGEN_DIRECTORY)
     # git_manager.clone()
 
     swagger_parser = SwaggerParser()
     resources = swagger_parser.grab_all(args.vsdurl, args.apiversion)
-
     processed_resources = ModelsProcessor.process(resources=resources)
-
-    # directory = '%s/vsdk' % (OUTPUT_DIRECTORY)
-    if os.path.exists(OUTPUT_DIRECTORY):
-        shutil.rmtree(OUTPUT_DIRECTORY)
-
-    shutil.copytree('../vanilla/', OUTPUT_DIRECTORY)
 
     sdkversion = {"apiversion": args.apiversion, "revisionnumber": 1}
 
-    SDKWriter.write(resources=processed_resources, directory="%s/vsdk" % OUTPUT_DIRECTORY, sdkversion=sdkversion)
+    SDKWriter.copy_sources(directory=CODEGEN_DIRECTORY)
+    SDKWriter.write_sdk(resources=processed_resources, directory=CODEGEN_DIRECTORY, sdkversion=sdkversion)
 
     # nb_diffs = git_manager.commit(message="Update")
     # Printer.log("COMMIT %s modifications" % nb_diffs)
