@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 """
 from .fetchers import NUEnterprisesFetcher
+from .fetchers import NUSystemConfigsFetcher
 from bambou import NURESTBasicUser
 
 
@@ -65,6 +66,7 @@ class NURESTUser(NURESTBasicUser):
 
         # Fetchers
         self.enterprises_fetcher = NUEnterprisesFetcher.fetcher_with_object(nurest_object=self, local_name=u'enterprises')
+        self.system_configs_fetcher = NUSystemConfigsFetcher.fetcher_with_object(nurest_object=self, local_name=u'system_configs')
 
         for key, value in kwargs.iteritems():
             if hasattr(self, key):
