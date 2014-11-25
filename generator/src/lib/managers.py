@@ -56,7 +56,7 @@ class GitManager(object):
         self.directory = directory
         self.branch = branch
         self.repo = None
-        self._nb_diffs = 0
+        self._nb_changes = 0
 
         self.remove_directory()
         self.repo = Repo.clone_from(url=self.url, to_path=self.directory)
@@ -84,9 +84,10 @@ class GitManager(object):
 
         """
         diffs = self.repo.index.diff(None)
-        self._nb_diffs = len(diffs)
+        nb_diffs = len(diffs)
+        nb_untracked_files = len(self.repo.untracked_files)
 
-        if self._nb_diffs:
+        if nb_diffs:
 
             for diff in diffs:
                 if diff.b_mode == 0 and diff.b_blob is None:
@@ -94,18 +95,24 @@ class GitManager(object):
                 else:
                     self.repo.index.add(items=[diff.a_blob.path])
 
+        if nb_untracked_files > 0:
+            self.repo.index.add(items=self.repo.untracked_files)
+
+        self._nb_changes = nb_diffs + nb_untracked_files
+
+        if self._nb_changes > 0:
             self.repo.index.commit(message)
 
-        return self._nb_diffs
+        return self._nb_changes
 
     def push(self):
         """ Push all modififcation to the repository
 
         """
-        if self._nb_diffs > 0:
+        if self._nb_changes > 0:
             remote = self.repo.remote()
             remote.push(self.repo.head)
-            self._nb_diffs = 0
+            self._nb_changes = 0
 
     def remove_directory(self):
         """ Clean the clone repository

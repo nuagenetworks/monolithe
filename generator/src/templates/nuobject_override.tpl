@@ -37,4 +37,4 @@ class NU{{ model['name'] }}(AutoGenerate):
         """ Initializing a NU{{ model['name'] }} """
 
         super(NU{{ model['name'] }}, self).__init__(**kwargs)
-        pass
+

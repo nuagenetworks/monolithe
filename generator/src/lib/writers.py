@@ -79,7 +79,10 @@ class FileWriter(object):
         destination = self.directory
         filename = 'nu%s.py' % model['name'].lower()
 
-        if not os.path.isfile(destination + filename):
+        file_path = '%s/%s' % (destination, filename)
+
+        if not os.path.isfile(file_path):
+            print "Override %s" % file_path
             self._write(model=model, template=template, destination=destination, filename=filename)
             return (filename, model['name'])
 

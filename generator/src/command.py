@@ -55,4 +55,4 @@ class Command(object):
             nb_diffs = git_manager.commit(message="Update from API %s" % apiversion)
             Printer.log("Ready to push %s modification to branch %s of repistory %s" % (nb_diffs, apiversion, git_repository))
             git_manager.push()
-            git_manager.remove_directory()
+            #git_manager.remove_directory()

@@ -1,7 +1,7 @@
-VSD SDK for API v3.0
-====================
+VSDK Vanilla
+============
 
-Python SDK for Nuage VSD solution.
+SDK Generator for Nuage Network API
 
 Supported version:
 
@@ -14,8 +14,9 @@ Dependancies
 
 Python dependencies:
 
-    * bambou
-    * logging
+    * jinja2
+    * colorama
+    * gitpython
 
 Setup your Python Virtual Environment
 -------------------------------------
@@ -23,50 +24,71 @@ Setup your Python Virtual Environment
 Create your virtualenv
 ::
 
-    $ virtualenv vsdk-env
+    $ virtualenv vsdk-vanilla-env
 
 Activate your environment
 ::
 
-    $ cd vsdk-env
+    $ cd vsdk-vanilla-env
     $ source bin/activate
-    (vsdk-env) $
+    (vsdk-vanilla-env) $
 
 
 How it works
-------------
+============
 
-Here is a quick example !
-::
+    (vsdk-vanilla-env) $ cd vsdk-vanilla
+    (vsdk-vanilla-env) $ cd generator
+    (vsdk-vanilla-env) $ ./vsdkgenerator -h  # Display help command
 
-    from vsdk_V3_0 import NUVSDSession
-    from vsdk_V3_0 import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
-    from vsdk_V3_0.utils import set_log_level
+Generate a new API
+------------------
+This will take default sources and will create a new SDK in `codegen/{{version}}`
 
-    # Setting a log level to see what happens (Optionnal)
-    set_log_level(logging.INFO)
+    (vsdk-vanilla-env) $ ./vsdkgenerator -u https://135.227.220.152:8443/web/docs/api/ -v 3.0
 
-    # Create a session for user
-    session = NUVSDSession(username=u'<YOUR_USERNAME>', password=u'<YOUR_PASSWORD>', enterprise=u'<YOUR_ENTERPRISE>', api_url=u'<YOUR_API_URL/V3_0>')
+Work from an existing API version
+---------------------------------
+This will clone the branch of the given git repository and update the SDK sources according to the VSD API.
+_Note: If the branch does not exists, it will automatically create one_
 
-    # Start using the user session
-    session.start()
-    user = session.user
+    (vsdk-vanilla-env) $ ./vsdkgenerator -u https://135.227.220.152:8443/web/docs/api/ -v 3.0 -g http://github.mv.usa.alcatel.com/chserafi/vsdk.git
 
-    # Create an enterprise with user user
-    enterprise = NUEnterprise()
-    enterprise.name = u'Enterprise example'
-    user.add_child_object(enterprise)
 
-    # Create a domain template and an instance
-    domain_template = NUDomainTemplate()
-    domain_template.name = u'Domain Template example'
-    enterprise.add_child_object(domain_template)
-    domain = NUDomain()
-    domain.name = u'Instance Domain example'
-    enterprise.instantiate_child_object(domain, domain_template)
+Work from an existing API version and Push
+------------------------------------------
+This will clone the branch of the given git repository and will push generates sources to the repository
+_Note: If the branch does not exists, it will automatically create one_
 
-    # Create a redirection target template
-    redirection_target_template = NURedirectionTargetTemplate()
-    redirection_target_template.name = "RT Template"
-    domain_template.add_child_object(redirection_target_template)
+    (vsdk-vanilla-env) $ ./vsdkgenerator -u https://135.227.220.152:8443/web/docs/api/ -v 3.0 -g http://github.mv.usa.alcatel.com/chserafi/vsdk.git --push
+
+What to do when I have my Python SDK sources:
+=============================================
+
+You will have several options here:
+
+* Install your SDK in development mode
+It will be update everytime your SDK sources change:
+
+    (vsdk-vanilla-env) $ cd codegen/3.0/
+    (vsdk-vanilla-env) $ python setup.py develop
+
+* Create a package and install it wherever you want
+It will create a `dist` folder containing a `tar.gz` file that can be installed using `pip install vsdk.tar.gz` command:
+
+    (vsdk-vanilla-env) $ cd codegen/3.0/
+    (vsdk-vanilla-env) $ python setup.py sdist
+
+    (your-own-env) $ pip install dist/vsdk-3.0-1.tar.gz
+
+
+* Install the vsdk from your repository
+It will install the vsdk from the github repository
+
+    (your-own-env) $ pip install git+http://github.mv.usa.alcatel.com/chserafi/vsdk.git
+
+Any Trouble ?
+=============
+It can happen ! Do not hesitate to send a quick email to `christophe.serafin@alcatel-lucent.com`
+
+
