@@ -15,39 +15,34 @@ if __name__ == '__main__':
 
     parser.add_argument('-u', "--vsdurl",
                         dest="vsdurl",
-                        help="URL of your VSD API where to get the get JSON information")
+                        help="URL of your VSD API where to get the get JSON information without version (ex: https://host:port/web/docs/api/)",
+                        required=True,
+                        type=str)
 
-    parser.add_argument('-a', "--apiversion",
+    parser.add_argument('-v', "--apiversion",
                         dest="apiversion",
-                        help="version of the SDK to generate")
+                        help="version of the SDK to generate (examples: 1.0, 3.0, 3.1)",
+                        required=True,
+                        type=float)
 
-    parser.add_argument('-g', "--to-git",
-                        help="Git repository URL")
+    parser.add_argument('-r', "--revision",
+                        dest="revision",
+                        help="Revision number of the SDK",
+                        default=1,
+                        type=int)
+
+    parser.add_argument('-g', "--giturl",
+                        dest="giturl",
+                        help="GIT repository URL. If not specified, it will create an SDK from scratch.",
+                        # default='http://github.mv.usa.alcatel.com/chserafi/vsdk',
+                        type=str)
+
+    parser.add_argument('-p', "--push",
+                        dest='push',
+                        help="Push to the GIT repository when finished",
+                        action="store_true")
 
     args = parser.parse_args()
 
-    from src.lib import SwaggerParser
-    from src.lib import Printer
-    from src.lib import SDKWriter
-    from src.lib import ModelsProcessor
-    from src.lib import GitManager
-
-    CODEGEN_DIRECTORY = './codegen/%s' % args.apiversion
-
-    # url = 'http://github.mv.usa.alcatel.com/chserafi/vsdk' # args.to_git
-    # git_manager = GitManager(url=url, branch=branch, directory=CODEGEN_DIRECTORY)
-    # git_manager.clone()
-
-    swagger_parser = SwaggerParser()
-    resources = swagger_parser.grab_all(args.vsdurl, args.apiversion)
-    processed_resources = ModelsProcessor.process(resources=resources)
-
-    sdkversion = {"apiversion": args.apiversion, "revisionnumber": 1}
-
-    SDKWriter.copy_sources(directory=CODEGEN_DIRECTORY)
-    SDKWriter.write_sdk(resources=processed_resources, directory=CODEGEN_DIRECTORY, sdkversion=sdkversion)
-
-    # nb_diffs = git_manager.commit(message="Update")
-    # Printer.log("COMMIT %s modifications" % nb_diffs)
-
-    # git_manager.remove_directory()
+    from src import Command
+    Command.run(vsdurl=args.vsdurl, apiversion=args.apiversion, revision=args.revision, git_repository=args.giturl, push=args.push)

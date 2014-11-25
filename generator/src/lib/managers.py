@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import os
 import shutil
 import threading
 
-from git import Repo
+from git import Repo, GitCommandError
 from printer import Printer
 
+
 class TaskManager(object):
+    """ Multi threading manager """
 
     def __init__(self):
         """ Initializes a TaskManager
@@ -55,12 +58,19 @@ class GitManager(object):
         self.repo = None
         self._nb_diffs = 0
 
-    def clone(self):
-        """ Clone the branch of the repository
+        self.remove_directory()
+        self.repo = Repo.clone_from(url=self.url, to_path=self.directory)
 
-        """
-        # TODO-CS: If the branch does not exists, it will throw an exception!
-        self.repo = Repo.clone_from(url=self.url, branch=self.branch, to_path=self.directory)
+        try:
+            self.repo.git.checkout('3.0')
+            Printer.log('Switching to branch %s' % self.branch)
+
+        except GitCommandError:
+            Printer.log('Branch %s does not exist yet. Creating it...' % self.branch)
+            branch = self.repo.create_head(self.branch)
+            self.repo.head.reference = branch
+            # remote = self.repo.remote()
+            # remote.push(self.repo.head)
 
     def commit(self, message):
         """ Add all modification and add a commit message
@@ -77,7 +87,13 @@ class GitManager(object):
         self._nb_diffs = len(diffs)
 
         if self._nb_diffs:
-            self.repo.index.add([diff.a_blob.path for diff in diffs])
+
+            for diff in diffs:
+                if diff.b_mode == 0 and diff.b_blob is None:
+                    self.repo.index.remove(items=[diff.a_blob.path])
+                else:
+                    self.repo.index.add(items=[diff.a_blob.path])
+
             self.repo.index.commit(message)
 
         return self._nb_diffs
@@ -88,13 +104,12 @@ class GitManager(object):
         """
         if self._nb_diffs > 0:
             remote = self.repo.remote()
-            push_info = remote.push()
-
-            if not push_info.flags & PushInfo.ERROR:
-                self._nb_diffs = 0
+            remote.push(self.repo.head)
+            self._nb_diffs = 0
 
     def remove_directory(self):
         """ Clean the clone repository
 
         """
-        shutil.rmtree(self.directory)
+        if os.path.exists(self.directory):
+            shutil.rmtree(self.directory)

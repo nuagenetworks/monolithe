@@ -8,6 +8,11 @@ from printer import Printer
 IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
 IGNORED_RESOURCES = ['EventLog']
 
+RESOURCE_MAPPING = {
+    'SubNetwork': 'Subnet',
+    'SubNetworkTemplate': 'SubnetTemplate'
+}
+
 
 class ModelsProcessor(object):
     """ Process all models information that will be send to the writer """
@@ -60,7 +65,13 @@ class ModelsProcessor(object):
                 model: the model to process
 
         """
-        model['name'] = model['id']
+        current_name = model['id']
+
+        if current_name in RESOURCE_MAPPING:
+            model['name'] = RESOURCE_MAPPING[current_name]
+        else:
+            model['name'] = current_name
+
         model['plural_name'] = Utils.get_plural_name(model['name'])
 
     @classmethod
@@ -128,7 +139,6 @@ class ModelsProcessor(object):
 
             attribute['remote_name'] = name
             attribute['local_name'] = Utils.get_python_name(name)
-
 
             if 'type' in attribute:
                 attribute['local_type'] = Utils.get_python_type_name(type_name=attribute['type'], attribute_name=name, object_name=model['name'])

@@ -28,7 +28,7 @@ class SwaggerParser(object):
                 described in http://host:port/V3_0/schema/api-docs according to swagger
                 specification
         """
-        base_url = '%sV%s' % (url, apiversion.replace(".", "_"))
+        base_url = '%sV%s' % (url, str(apiversion).replace(".", "_"))
         schema_url = '%s%s%s' % (base_url, SCHEMA_FILEPATH, ENTRY_PONT)
 
         response = requests.get(schema_url, verify=False)

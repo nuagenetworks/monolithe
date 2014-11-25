@@ -5,9 +5,9 @@ import logging
 
 sys.path.append("./")
 
-from vsdk_V3_0 import NUVSDSession
-from vsdk_V3_0 import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
-from vsdk_V3_0.utils import set_log_level
+from vsdk import NUVSDSession
+from vsdk import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
+from vsdk.utils import set_log_level
 
 # 'Setting a log level to see what happens (Optionnal)'
 set_log_level(logging.INFO)

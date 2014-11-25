@@ -14,7 +14,7 @@ IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 
 AUTOGENERATE_PATH = '/autogenerates/'
 FETCHERS_PATH = '/fetchers/'
 VANILLA_SRC_PATH = '../vanilla/'
-VSDK_PATH = '/vsdk/'
+VSDK_PATH = '/vsdk'
 
 
 class FileWriter(object):
@@ -79,7 +79,7 @@ class FileWriter(object):
         destination = self.directory
         filename = 'nu%s.py' % model['name'].lower()
 
-        if not os.path.isfile(destination+filename):
+        if not os.path.isfile(destination + filename):
             self._write(model=model, template=template, destination=destination, filename=filename)
             return (filename, model['name'])
 
@@ -134,105 +134,101 @@ class FileWriter(object):
             except:
                 Printer.raiseError("An error has been raised on file %s with path %s" % (file, file_path))
 
-class SDKWriter(object):
-    """ Writer of the Python VSD SDK """
 
-    @classmethod
-    def copy_sources(self, directory):
-        """ Copy default sources
+class SDKWriter(object):
+    """ Writer of the Python VSD SDK
+
+    """
+
+    def __init__(self, directory):
+        """ Initializes a writer to the specific directory
 
             Args:
                 directory: directory where to copy sources
 
         """
-        if os.path.exists(directory):
-            shutil.rmtree(directory)
 
-        shutil.copytree(VANILLA_SRC_PATH, directory)
+        self.vsdk_directory = '%s%s' % (directory, VSDK_PATH)
 
-    @classmethod
-    def _clean_files(self, directory, except_files):
+        if not os.path.exists(self.vsdk_directory):
+            Printer.log("Copying default sources...")
+            shutil.copytree(VANILLA_SRC_PATH, directory)
+
+    def _clean_files(self, except_files):
         """ Removes unused files
 
             Args:
                 except_files: dictionary of filenames to avoid removing
 
         """
-        writer = FileWriter(directory=directory)
+        writer = FileWriter(directory=self.vsdk_directory)
 
         writer.clean_folder(folder=AUTOGENERATE_PATH, except_files=except_files)
         writer.clean_folder(folder=FETCHERS_PATH, except_files=except_files)
         writer.clean_folder(folder='', except_files=except_files)
 
-    @classmethod
-    def write_sdk(cls, resources, directory, sdkversion):
+    def write_sdk(self, resources, apiversion, revision):
         """ Update all files according to data
 
             Args:
                 resources: A list of all resources to manage
-                directory: the path where to write
+                apiversion: the version of the api
+                revision: the revision number of the api
 
             Returns:
                 Writes models and fetchers files
 
         """
 
-        directory = directory + VSDK_PATH
         filenames = dict()
 
         task_manager = TaskManager()
 
         for model_name, model in resources.iteritems():
-            task_manager.start_task(method=cls._write_autogenerate_file, model=model, directory=directory, filenames=filenames)
-            task_manager.start_task(method=cls._write_override_file, model=model, directory=directory)
-            task_manager.start_task(method=cls._write_fetcher_file, model=model, directory=directory, filenames=filenames)
+            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=filenames)
+            task_manager.start_task(method=self._write_override_file, model=model)
+            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=filenames)
 
         task_manager.wait_until_exit()
-        cls._clean_files(directory=directory, except_files=filenames)
+        self._clean_files(except_files=filenames)
 
-        writer = FileWriter(directory=directory)
-        writer.write_setup(version=sdkversion["apiversion"], revision=sdkversion['revisionnumber'])
+        writer = FileWriter(directory=self.vsdk_directory)
+        writer.write_setup(version=apiversion, revision=revision)
 
         Printer.success('Successfully generated files for %s objects' % len(resources))
 
-    @classmethod
-    def _write_autogenerate_file(cls, model, directory, filenames):
+    def _write_autogenerate_file(self, model, filenames):
         """ Write the autogenerate file for the model
 
             Args:
                 model: the model to write
-                directory: the path to the destination
                 filenames: list of generates filenames
 
         """
-        writer = FileWriter(directory=directory)
+        writer = FileWriter(directory=self.vsdk_directory)
         (filename, classname) = writer.write_model(model=model)
 
         filenames[filename] = classname
 
-    @classmethod
-    def _write_override_file(cls, model, directory):
+    def _write_override_file(self, model):
         """ Write the override file for the model
 
             Args:
                 model: the model to write
-                directory: the path to the destination
 
         """
-        writer = FileWriter(directory=directory)
+        writer = FileWriter(directory=self.vsdk_directory)
         writer.write_model_override(model=model)
 
-    @classmethod
-    def _write_fetcher_file(cls, model, directory, filenames):
+    def _write_fetcher_file(self, model, filenames):
         """ Write the fetcher file for the model
 
             Args:
                 model: the model to write
-                directory: the path to the destination
                 filenames: list of generates filenames
 
         """
-        writer = FileWriter(directory=directory)
+        writer = FileWriter(directory=self.vsdk_directory)
         (filename, classname) = writer.write_fetcher(model=model)
 
         filenames[filename] = classname
