@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-"""Add all of the modules in the current directory to __all__"""
+# -*- coding: utf-8 -*-
 
 import os
 import inspect
@@ -8,7 +7,7 @@ import sys
 classes = []
 
 for module in os.listdir(os.path.dirname(__file__)):
-    if module != '__init__.py' and module[-3:] == '.py':
+    if module.startswith('nu') and module.endswith('.py'):
 
         module_name = module[:-3]
         package_name = __name__
@@ -28,4 +27,3 @@ for module in os.listdir(os.path.dirname(__file__)):
         classes.extend(names)
 
 __all__ = classes
-
