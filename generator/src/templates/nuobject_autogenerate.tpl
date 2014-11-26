@@ -39,7 +39,7 @@ class NU{{ model['name'] }}(NURESTObject):
         """ Initializes a {{ model['name'] }} instance
 
         """
-        super(NU{{ model['name'] }}, self).__init__(**kwargs)
+        super(NU{{ model['name'] }}, self).__init__()
 
         # Read/Write Attributes
         {% for name, attribute in model['properties'].iteritems() %}
