@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 from bambou import NURESTLoginController
 from nurestuser import NURESTUser
-from .utils import *
+from .utils import vsdk_logger
 
 
 class NUVSDSession(object):
@@ -43,8 +43,8 @@ class NUVSDSession(object):
                 password: the password associated with the username
                 enterprise: the name of the enterprise
                 api_url: the API endpoint
-        """
 
+        """
         self._username = username
         self._password = password
         self._enterprise = enterprise
@@ -56,18 +56,39 @@ class NUVSDSession(object):
 
             Returns:
                 A user represented as a NURESTUser
+
         """
         return self._user
 
     user = property(_get_user, None)
+
+    def impersonate(self, user, enterprise):
+        """ Impersonate the user of the enterprise
+
+            To stop the impersonation, call stop_impersonate()
+
+            Args:
+                user: the username
+                enterprise: the name of the enterprise
+
+        """
+        controller = NURESTLoginController()
+        controller.impersonate(user=user, enterprise=enterprise)
+
+    def stop_impersonate(self):
+        """ Stop impersonating a user
+
+        """
+        controller = NURESTLoginController()
+        controller.stop_impersonate()
 
     def start(self):
         """ Start the current VSD Session
 
             Authenticate the user and set the API Key that will be
             used for HTTP/s requests
-        """
 
+        """
         controller = NURESTLoginController()
 
         if controller.api_key is not None:
@@ -94,8 +115,8 @@ class NUVSDSession(object):
         """ Stop the current VSD Session
 
             Release the API Key for the next session
-        """
 
+        """
         controller = NURESTLoginController()
         controller.api_key = None
         vsdk_logger.debug("[NUVSDSession] Session with username %s in enterprise %s terminated." % (self._username, self._password))
