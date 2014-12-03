@@ -9,7 +9,7 @@ from lib import ModelsProcessor
 from lib import GitManager
 
 CODEGEN_DIRECTORY = './codegen'
-DOCS_DIRECTORY = './html'
+DOCS_DIRECTORY = './docs'
 
 
 class Command(object):
@@ -50,13 +50,12 @@ class Command(object):
 
         # Write Python sources
         sdk_writer = SDKWriter(directory=directory)
-        sdk_writer.write_sdk(resources=processed_resources, apiversion=apiversion, revision=revision)
+        sdk_writer.write(resources=processed_resources, apiversion=apiversion, revision=revision)
 
         if git_manager and push:
             nb_diffs = git_manager.commit(message="Update from API %s" % apiversion)
             Printer.log("Ready to push %s modification to branch %s of repistory %s" % (nb_diffs, apiversion, git_repository))
             git_manager.push()
-            #git_manager.remove_directory()
 
     @classmethod
     def generate_doc(self, vsdurl, apiversion, output_path=None):

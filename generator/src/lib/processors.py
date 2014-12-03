@@ -115,7 +115,9 @@ class ModelsProcessor(object):
                     'name': model['name'],
                     'plural_name': model['plural_name'],
                     'resource_name': model['resource_name'],
-                    'remote_name': model['remote_name']}
+                    'remote_name': model['remote_name'],
+                    'api': api
+                }
 
                 relations[parent_remote_name].append(relation)
 
