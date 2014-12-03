@@ -45,4 +45,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     from src import Command
-    Command.run(vsdurl=args.vsdurl, apiversion=args.apiversion, revision=args.revision, git_repository=args.giturl, push=args.push)
+    Command.generate_sdk(vsdurl=args.vsdurl, apiversion=args.apiversion, revision=args.revision, git_repository=args.giturl, push=args.push)

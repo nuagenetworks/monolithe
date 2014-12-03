@@ -2,12 +2,12 @@
 _build/*
 .tm_properties
 generator/codegen
+generator/html
 .DS_Store
 MANIFEST
 
 # C extensions
 *.so
-
 # Packages
 *.egg
 *.egg-info

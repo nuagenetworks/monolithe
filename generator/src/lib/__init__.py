@@ -6,5 +6,5 @@ from parsers import SwaggerParser
 from printer import Printer
 from managers import GitManager, TaskManager
 from utils import Utils
-from writers import SDKWriter
+from writers import SDKWriter, DocWriter
 from processors import ModelsProcessor

@@ -4,11 +4,12 @@ __all__ = ['Command']
 
 from lib import SwaggerParser
 from lib import Printer
-from lib import SDKWriter
+from lib import SDKWriter, DocWriter
 from lib import ModelsProcessor
 from lib import GitManager
 
 CODEGEN_DIRECTORY = './codegen'
+DOCS_DIRECTORY = './html'
 
 
 class Command(object):
@@ -16,8 +17,8 @@ class Command(object):
 
     """
     @classmethod
-    def run(self, vsdurl, apiversion, revision, git_repository, output_path=None, push=False):
-        """ Run the command with following arguments
+    def generate_sdk(self, vsdurl, apiversion, revision, git_repository, output_path=None, push=False):
+        """ Generate the Python SDK according to given parameters
 
             It will generate a new SDK from vanilla/vsdk sources or update the targeted repository.
 
@@ -56,3 +57,31 @@ class Command(object):
             Printer.log("Ready to push %s modification to branch %s of repistory %s" % (nb_diffs, apiversion, git_repository))
             git_manager.push()
             #git_manager.remove_directory()
+
+    @classmethod
+    def generate_doc(self, vsdurl, apiversion, output_path=None):
+        """ Generate the Python SDK according to given parameters
+
+            It will generate a new SDK from vanilla/vsdk sources or update the targeted repository.
+
+            Args:
+                vsdurl: the url to the vsd api
+                apiversion: the version of the vsd api in a dotted notation (ex: 3.0)
+                output_path: the path to the output directory
+
+        """
+        if output_path:
+            directory = '%s/%s' % (output_path, apiversion)
+        else:
+            directory = '%s/%s' % (DOCS_DIRECTORY, apiversion)
+
+        # Read Swagger
+        swagger_parser = SwaggerParser()
+        resources = swagger_parser.grab_all(url=vsdurl, apiversion=apiversion)
+
+        # Processed Swagger models
+        processed_resources = ModelsProcessor.process(resources=resources)
+
+        # Write Python sources
+        doc_writer = DocWriter(directory=directory)
+        doc_writer.write(resources=processed_resources, apiversion=apiversion)

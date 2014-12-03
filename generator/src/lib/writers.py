@@ -55,7 +55,7 @@ class FileWriter(object):
         destination = '%s%s' % (self.directory, AUTOGENERATE_PATH)
         filename = 'nu%s.py' % model['name'].lower()
 
-        self._write(model=model, template=template, destination=destination, filename=filename)
+        self._write_model_file(model=model, template=template, destination=destination, filename=filename)
 
         return (filename, model['name'])
 
@@ -67,7 +67,7 @@ class FileWriter(object):
         destination = '%s%s' % (self.directory, FETCHERS_PATH)
         filename = 'nu%s_fetcher.py' % model['name'].lower()
 
-        self._write(model=model, template=template, destination=destination, filename=filename)
+        self._write_model_file(model=model, template=template, destination=destination, filename=filename)
 
         return (filename, model['name'])
 
@@ -82,13 +82,40 @@ class FileWriter(object):
         file_path = '%s/%s' % (destination, filename)
 
         if not os.path.isfile(file_path):
-            print "Override %s" % file_path
-            self._write(model=model, template=template, destination=destination, filename=filename)
+            self._write_model_file(model=model, template=template, destination=destination, filename=filename)
             return (filename, model['name'])
 
         return None
 
-    def _write(self, model, template, destination, filename):
+    def write_html_for_model(self, model):
+        """ Write the HTML file for the given model
+
+            Args:
+                model: the model to write
+
+        """
+        template = self.env.get_template('object.html.tpl')
+        destination = self.directory
+        filename = '%s.html' % model['plural_name'].lower()
+
+        self._write_model_file(model=model, template=template, destination=destination, filename=filename)
+        return (filename, model['name'])
+
+    def write_index_html(self, filenames):
+        """ Write HTML index to link all filenames
+
+            Args:
+                filenames: dict of filename -> object
+
+        """
+        template = self.env.get_template('index.html.tpl')
+        destination = self.directory
+        filename = 'index.html'
+
+        content = template.render(filenames=filenames)
+        self._write_file(destination=destination, filename=filename, content=content)
+
+    def _write_model_file(self, model, template, destination, filename):
         """ Write the model according to the template of the writer
 
         """
@@ -116,6 +143,7 @@ class FileWriter(object):
         f.write(content)
         f.close()
 
+    # TODO-CS: This one should not be here!
     def clean_folder(self, folder, except_files):
         """ Removes all files of directory except when file name
             is in except dictionary
@@ -151,9 +179,9 @@ class SDKWriter(object):
 
         """
 
-        self.vsdk_directory = '%s%s' % (directory, VSDK_PATH)
+        self.writer_directory = '%s%s' % (directory, VSDK_PATH)
 
-        if not os.path.exists(self.vsdk_directory):
+        if not os.path.exists(self.writer_directory):
             Printer.log("Copying default sources...")
             shutil.copytree(VANILLA_SRC_PATH, directory)
 
@@ -164,14 +192,14 @@ class SDKWriter(object):
                 except_files: dictionary of filenames to avoid removing
 
         """
-        writer = FileWriter(directory=self.vsdk_directory)
+        writer = FileWriter(directory=self.writer_directory)
 
         writer.clean_folder(folder=AUTOGENERATE_PATH, except_files=except_files)
         writer.clean_folder(folder=FETCHERS_PATH, except_files=except_files)
         writer.clean_folder(folder='', except_files=except_files)
 
-    def write_sdk(self, resources, apiversion, revision):
-        """ Update all files according to data
+    def write(self, resources, apiversion, revision):
+        """ Write all files according to data
 
             Args:
                 resources: A list of all resources to manage
@@ -195,7 +223,7 @@ class SDKWriter(object):
         task_manager.wait_until_exit()
         self._clean_files(except_files=filenames)
 
-        writer = FileWriter(directory=self.vsdk_directory)
+        writer = FileWriter(directory=self.writer_directory)
         writer.write_setup(version=apiversion, revision=revision)
 
         Printer.success('Successfully generated files for %s objects' % len(resources))
@@ -208,7 +236,7 @@ class SDKWriter(object):
                 filenames: list of generates filenames
 
         """
-        writer = FileWriter(directory=self.vsdk_directory)
+        writer = FileWriter(directory=self.writer_directory)
         (filename, classname) = writer.write_model(model=model)
 
         filenames[filename] = classname
@@ -220,7 +248,7 @@ class SDKWriter(object):
                 model: the model to write
 
         """
-        writer = FileWriter(directory=self.vsdk_directory)
+        writer = FileWriter(directory=self.writer_directory)
         writer.write_model_override(model=model)
 
     def _write_fetcher_file(self, model, filenames):
@@ -231,7 +259,63 @@ class SDKWriter(object):
                 filenames: list of generates filenames
 
         """
-        writer = FileWriter(directory=self.vsdk_directory)
+        writer = FileWriter(directory=self.writer_directory)
         (filename, classname) = writer.write_fetcher(model=model)
+
+        filenames[filename] = classname
+
+
+class DocWriter(object):
+    """ Writer of the Python VSD Documentation
+
+    """
+
+    def __init__(self, directory):
+        """ Initializes a writer to the specific directory
+
+            Args:
+                directory: directory where to copy sources
+
+        """
+        self.writer_directory = directory
+
+        if os.path.exists(self.writer_directory):
+            shutil.rmtree(self.writer_directory)
+
+    def write(self, resources, apiversion):
+        """ Write all files according to data
+
+            Args:
+                resources: A list of all resources to manage
+                apiversion: the version of the api
+
+            Returns:
+                Writes all html files into the directory
+
+        """
+
+        filenames = dict()
+        task_manager = TaskManager()
+
+        for model_name, model in resources.iteritems():
+            task_manager.start_task(method=self._write_html_for_model, model=model, filenames=filenames)
+
+        task_manager.wait_until_exit()
+
+        writer = FileWriter(directory=self.writer_directory)
+        writer.write_index_html(filenames)
+
+        Printer.success('Successfully generated documentation files for %s objects' % len(resources))
+
+    def _write_html_for_model(self, model, filenames):
+        """ Write the HTML file for the model
+
+            Args:
+                model: the model to write
+                filenames: list of generates filenames
+
+        """
+        writer = FileWriter(directory=self.writer_directory)
+        (filename, classname) = writer.write_html_for_model(model=model)
 
         filenames[filename] = classname

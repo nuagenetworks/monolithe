@@ -87,6 +87,7 @@ class ModelsProcessor(object):
                 A dictionary of attribute
 
         """
+        model['apis'] = apis
         for api in apis:
 
             path = api['path']
