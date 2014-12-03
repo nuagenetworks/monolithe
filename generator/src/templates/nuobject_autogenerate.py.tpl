@@ -45,7 +45,7 @@ class NU{{ model['name'] }}(NURESTObject):
         {% for name, attribute in model['properties'].iteritems() %}
         self._{{ attribute['local_name']|lower }} = None{% endfor %}
         {% for name, attribute in model['properties'].iteritems() %}
-        self.expose_attribute(local_name=u"{{ attribute['local_name']|lower }}", remote_name=u"{{ attribute['remote_name'] }}", attribute_type={{ attribute['local_type'] }}{% if attribute['type'] == 'enum' %}, choices={{ attribute['enum'] | trim}}{% endif %}){% endfor %}
+        self.expose_attribute(local_name=u"{{ attribute['local_name']|lower }}", remote_name=u"{{ attribute['remote_name'] }}", attribute_type={{ attribute['local_type'] }}{% if attribute['required'] == 'true' %}, is_required=True{% endif %}{% if attribute['uniqueItems'] == 'true' %}, is_unique=True{% endif %}{% if attribute['type'] == 'enum' %}, choices={{ attribute['enum'] | trim}}{% endif %}){% endfor %}
         {% if model['relations']|length > 0 %}
         # Fetchers
         {% for relation in model['relations'] %}

@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-v', "--apiversion",
                         dest="apiversion",
-                        help="version of the SDK to generate (examples: 1.0, 3.0, 3.1)",
+                        help="version of the documentation to generate (examples: 1.0, 3.0, 3.1)",
                         required=True,
                         type=float)
 
