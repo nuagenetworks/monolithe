@@ -6,7 +6,7 @@ import logging
 sys.path.append("./")
 
 from vsdk import NUVSDSession
-from vsdk import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubNetwork, NUSubNetworkTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
+from vsdk import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubnet, NUSubnetTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget
 from vsdk.utils import set_log_level
 
 # 'Setting a log level to see what happens (Optionnal)'
@@ -53,14 +53,14 @@ zone_template.name = u'Zone Template'
 domain_template.add_child_object(zone_template)
 
 # 'Create subnet'
-subnet = NUSubNetwork()
+subnet = NUSubnet()
 subnet.name = u'subnet name'
 subnet.address = u'10.0.0.0'
 subnet.netmask = u'255.255.255.0'
 zone.add_child_object(subnet)
 
 # 'Create subnet template'
-subnet_template = NUSubNetworkTemplate()
+subnet_template = NUSubnetTemplate()
 subnet_template.name = u'subnet template name'
 subnet_template.address = u'20.0.0.0'
 subnet_template.netmask = u'255.255.255.0'
@@ -72,9 +72,8 @@ vport.name = u'VPort example'
 
 subnet.add_child_object(vport)
 
-
 # Comment this line to avoid removing everything that has been created within the script.
-enterprise.delete()
+# enterprise.delete()
 
 # Stop using the CSPRoot session
 session.stop()
