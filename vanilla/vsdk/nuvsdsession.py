@@ -109,7 +109,7 @@ class NUVSDSession(object):
             self._user.fetch()
 
         controller.api_key = self._user.api_key
-        vsdk_logger.debug("[NUVSDSession] Started session with username %s in enterprise %s (key=%s)" % (self._username, self._password, self._user.api_key))
+        vsdk_logger.debug("[NUVSDSession] Started session with username %s in enterprise %s (key=%s)" % (self._username, self._enterprise, self._user.api_key))
 
     def stop(self):
         """ Stop the current VSD Session
@@ -119,4 +119,4 @@ class NUVSDSession(object):
         """
         controller = NURESTLoginController()
         controller.api_key = None
-        vsdk_logger.debug("[NUVSDSession] Session with username %s in enterprise %s terminated." % (self._username, self._password))
+        vsdk_logger.debug("[NUVSDSession] Session with username %s in enterprise %s terminated." % (self._username, self._enterprise))
