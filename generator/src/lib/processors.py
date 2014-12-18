@@ -87,7 +87,7 @@ class ModelsProcessor(object):
                 A dictionary of attribute
 
         """
-        model['apis'] = apis
+        model['apis'] = []
         for api in apis:
 
             path = api['path']
@@ -107,7 +107,6 @@ class ModelsProcessor(object):
             parent_remote_name = Utils.get_singular_name(names[0])
 
             if model['resource_name'] != parent_resource_name:
-
                 if parent_remote_name not in relations:
                     relations[parent_remote_name] = []
 
@@ -120,6 +119,12 @@ class ModelsProcessor(object):
                 }
 
                 relations[parent_remote_name].append(relation)
+
+                api['parent'] = dict()
+                api['parent']['remote_name'] = parent_remote_name
+                api['parent']['resource_name'] = parent_resource_name
+
+            model['apis'].append(api)
 
     @classmethod
     def _process_attributes(cls, model):
