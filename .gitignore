@@ -2,7 +2,7 @@
 _build/*
 .tm_properties
 generator/codegen
-generator/docs
+generator/docgen
 .DS_Store
 MANIFEST
 

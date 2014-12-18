@@ -1,2 +1,0 @@
-logging
-bambou==0.0.1

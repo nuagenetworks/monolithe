@@ -183,7 +183,7 @@ class HTMLFileWriter(FileWriter):
         """
         template = self.env.get_template(HTMLFileWriter.MODEL_TEMPLATE)
         destination = self.directory
-        filename = '%s.html' % model['plural_name'].lower()
+        filename = '%s.html' % model['name'].lower()
 
         self.write(template=template, destination=destination, filename=filename, model=model)
         return (filename, model['name'])
@@ -207,7 +207,7 @@ class SDKWriter(object):
 
     """
     VSDK_PATH = '/vsdk'
-    VANILLA_SRC_PATH = '../vanilla/'
+    VANILLA_SRC_PATH = '../vanilla/sdk/'
 
     IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
     IGNORED_RESOURCES = ['EventLog']
@@ -309,6 +309,7 @@ class DocWriter(object):
     """ Writer of the Python VSD Documentation
 
     """
+    VANILLA_SRC_PATH = '../vanilla/docs/'
 
     def __init__(self, directory):
         """ Initializes a writer to the specific directory
@@ -321,6 +322,10 @@ class DocWriter(object):
 
         if os.path.exists(self.writer_directory):
             shutil.rmtree(self.writer_directory)
+
+        shutil.copytree(DocWriter.VANILLA_SRC_PATH, self.writer_directory)
+
+        # raise Exception(directory)
 
     def write(self, resources, apiversion):
         """ Write all files according to data
