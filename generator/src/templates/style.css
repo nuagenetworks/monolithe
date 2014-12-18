@@ -1,0 +1,153 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica";
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+    margin-top: 50px;
+    font-weight: bold;
+    font-size: 1em;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+h3 {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.header {
+    width: 100%;
+    padding: 20px;
+    background-color: #F2F2F2;
+    z-index: 1000;
+}
+
+.summary {
+    width: 100%;
+    padding: 20px;
+    z-index: 0;
+}
+
+.summary h2 {
+    margin-top: 10px;
+}
+
+.summary ul {
+    list-style: none;
+    font-family: Menlo, Courier;
+    font-size: 0.8em;
+    padding-left: 20px;
+}
+
+.summary ul li{
+    margin-bottom: 5px;
+}
+
+.summary a {
+    text-decoration: none;
+    color: #6B94EC;
+}
+
+.main {
+     padding: 20px;
+}
+
+.attribute {
+    margin-top: 10px;
+    background-color: white;
+    border: 1px solid #f3f3f3;
+}
+
+.titlebanner {
+    padding: 10px;
+    background-color: #f3f3f3;
+}
+
+.content {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9em;
+}
+
+.name {
+    font-family: Menlo, Courier;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.metainformation {
+    margin-top: 8px;
+    margin-bottom: 0px;
+    font-weight: normal;
+    font-size: 0.8em;
+}
+
+.type {
+    color: #6B94EC;
+}
+
+.tag {
+    border-radius: 100px;
+    padding: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 0.9em;
+}
+
+.required {
+    color: white;
+    background-color: #F15C65;
+}
+
+.unique {
+    color: white;
+    background-color: #6B6B6B;
+}
+
+.enumvalues {
+    margin-top: 20px;
+}
+.enumvalues ul {
+    font-size: 0.9em;
+    font-weight: normal;
+    font-family: Menlo, Courier;
+    list-style: none;
+    padding-left: 5px;
+    color: #444;
+}
+
+.description p {
+    line-height: 20px;
+    margin: 2px;
+}
+
+
+.relation ul {
+    font-size: 0.8em;
+    font-family: Menlo, Courier;
+    list-style: none;
+}
+
+.relation ul li {
+    white-space: pre;
+}
+
+.relation ul li b{
+    color: #444;
+}
