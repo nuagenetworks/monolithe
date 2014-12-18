@@ -96,7 +96,7 @@
 
         <h2>Attributes Documentation</h2>
 
-        {% for name, attribute in model['properties'].iteritems()|sort(case_sensitive=False) %}
+        {% for name, attribute in model['properties']|dictsort %}
         <div class="attribute">
 
             <a name="{{name}}"></a>
