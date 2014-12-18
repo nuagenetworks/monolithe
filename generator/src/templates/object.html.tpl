@@ -1,4 +1,4 @@
-<h1>{{model['filename']}}</h1>
+<h1>{{model['remote_name']}}</h1>
 {{model['description']}}
 
 <h2>Attributes</h2>
