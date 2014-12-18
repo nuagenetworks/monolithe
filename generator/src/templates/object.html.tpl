@@ -4,6 +4,7 @@
 </header>
 
 <body>
+
     <div class="header">
         <h1>{{model['name']}}</h1>
         <p>{{model['description']}}</p>
@@ -12,92 +13,88 @@
 
     <div class="main">
 
-        <div class="summary">
-            <h2>Accessing {{model['plural_name']}}</h2>
-            <div class="content">
-                <ul>
-                {% for api in model['apis']|sort(attribute='path') %}
-
-                    {% set methods = [] %}
-                    {% for operation in api['operations']|sort %}
-                        {% do methods.append(operation['method']) %}
-                    {% endfor %}
-
-                    <li>{{api['path']}} <span class="httpmethods">[{{methods|join("|")}}]</span><li>
-                {% endfor %}
-                </ul>
-
-            </div>
-
-
-            <h2>{{model['name']}} Object Attributes Overview</h2>
-            <div class="content">
-                {
-                <ul>
-                {% for name, attribute in model['properties']|dictsort %}
-                    {% set type = attribute['type'] %}
-                    {% set description = attribute['description'] %}
-                    {% set required = attribute['required'] == 'true' %}
-                    {% set allowed = [] %}
-                    {% set allowed_values = "" %}
-
-                    {% if attribute['enum'] %}
-                        {% for value in attribute['enum']|sort %}
-                            {% do allowed.append(value) %}
-                        {% endfor %}
-                        {% if allowed|count > 0 %}
-                            {% set allowed_values = " (" + allowed|join("|") + ")" %}
-                        {% endif %}
-                    {% endif %}
-
-                    <li>
-                        <a href="#{{name}}" title="{{description}}">{{name}}</a>: <span class="type_{{type}}">{{type}}{{allowed_values}}
-                        {% if required %}
-                            <span class="required tag">required</span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-                </ul>
-                }
-            </div>
-            <br/>
-
-
-            <h2>Child Objects</h2>
-
-            <div class="content">
-                {% if model['relations']|count == 0 %}
-                <p> This object has no children</p>
-                {% endif %}
-
-                <ul>
-                {% for relation in model['relations']|sort %}
-
-                {% set api = relation['api'] %}
+        <h2>Accessing {{model['plural_name']}}</h2>
+        <div class="box">
+            <ul>
+            {% for api in model['apis']|sort(attribute='path') %}
 
                 {% set methods = [] %}
-                {% set object_name = model['resource_name'] %}
-                {% set remote_name = relation['remote_name'] %}
-                {% set resource_name = relation['resource_name'] %}
-                {% set path = api['path'] %}
-
-                {% for operation in api['operations'] %}
+                {% for operation in api['operations']|sort %}
                     {% do methods.append(operation['method']) %}
                 {% endfor %}
 
+                <li>{{api['path']}} <span class="httpmethods">[{{methods|join("|")}}]</span><li>
+            {% endfor %}
+            </ul>
 
-                <li>/{{object_name}}/{id}/<a href="{{remote_name}}.html">{{resource_name}}</a> <span class="httpmethods">[{{methods|join("|")}}]</span></li>
-                {% endfor %}
-                </ul>
-            </div>
+        </div>
 
+
+        <h2>{{model['name']}} Object Attributes Overview</h2>
+        <div class="box">
+            {
+            <ul>
+            {% for name, attribute in model['properties']|dictsort %}
+                {% set type = attribute['type'] %}
+                {% set description = attribute['description'] %}
+                {% set required = attribute['required'] == 'true' %}
+                {% set allowed = [] %}
+                {% set allowed_values = "" %}
+
+                {% if attribute['enum'] %}
+                    {% for value in attribute['enum']|sort %}
+                        {% do allowed.append(value) %}
+                    {% endfor %}
+                    {% if allowed|count > 0 %}
+                        {% set allowed_values = " (" + allowed|join("|") + ")" %}
+                    {% endif %}
+                {% endif %}
+
+                <li>
+                    <a href="#{{name}}" title="{{description}}">{{name}}</a>: <span class="type_{{type}}">{{type}}{{allowed_values}}
+                    {% if required %}
+                        <span class="required tag">required</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+            }
+        </div>
+
+
+        <h2>Child Objects</h2>
+
+        <div class="box">
+            {% if model['relations']|count == 0 %}
+            <p> This object has no children</p>
+            {% endif %}
+
+            <ul>
+            {% for relation in model['relations']|sort %}
+
+            {% set api = relation['api'] %}
+
+            {% set methods = [] %}
+            {% set object_name = model['resource_name'] %}
+            {% set remote_name = relation['remote_name'] %}
+            {% set resource_name = relation['resource_name'] %}
+            {% set path = api['path'] %}
+
+            {% for operation in api['operations'] %}
+                {% do methods.append(operation['method']) %}
+            {% endfor %}
+
+
+            <li>/{{object_name}}/{id}/<a href="{{remote_name}}.html">{{resource_name}}</a> <span class="httpmethods">[{{methods|join("|")}}]</span></li>
+            {% endfor %}
+            </ul>
         </div>
 
 
         <h2>Attributes Documentation</h2>
 
         {% for name, attribute in model['properties']|dictsort %}
-        <div class="attribute">
+        <div class="box">
 
             <a name="{{name}}"></a>
             <div class="titlebanner">

@@ -18,9 +18,9 @@ h1 {
 
 h2 {
     color: #333;
-    margin-top: 50px;
     font-weight: bold;
     font-size: 1em;
+    margin-top: 50px;
     border-bottom: 1px solid #f3f3f3;
 }
 
@@ -44,34 +44,36 @@ ul {
     padding: 20px;
     background-color: #F2F2F2;
     z-index: 1000;
+    position: fixed;
+}
+
+.main {
+    padding: 20px;
+    padding-top: 100px;
 }
 
 .summary {
 }
 
-.summary .content {
+.box {
     font-family: Menlo, Courier;
 }
 
-.summary .content .httpmethods {
+.httpmethods {
     color: #666;
 }
 
-.summary ul {
+.box ul {
     list-style: none;
     padding-left: 20px;
 }
 
-.summary ul li {
+.box ul li {
     margin-bottom: 5px;
 }
 
-.summary ul li .tag {
+.box ul li .tag {
     font-size: 0.6em;
-}
-
-.main {
-     padding: 20px;
 }
 
 .attribute {
@@ -80,33 +82,29 @@ ul {
     border: 1px solid #f3f3f3;
 }
 
-.titlebanner {
+.attribute .titlebanner {
     padding: 10px;
     background-color: #f3f3f3;
 }
 
-.content {
+.attribute .content {
     width: 100%;
     padding: 10px;
 }
 
-.name {
+.attribute .name {
     font-family: Menlo, Courier;
     font-weight: bold;
     margin: 0;
 }
 
-.metainformation {
+.attribute .metainformation {
     margin-top: 8px;
     margin-bottom: 0px;
     font-weight: normal;
 }
 
-.type {
-    color: #6B94EC;
-}
-
-.tag {
+.attribute .tag {
     border-radius: 100px;
     padding: 4px;
     padding-left: 10px;
