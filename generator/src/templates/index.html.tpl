@@ -1,9 +1,22 @@
-<h1>References</h1>
+<html>
+<header>
+    <link rel="stylesheet" type="text/css" href="../../src/templates/style.css" />
+</header>
 
-<ul>
-{% for filename, name in filenames.iteritems() %}
-    <li>
-        <a href="{{filename}}" title="Description of {{name}}">{{name}}</a>
-    </li>
-{% endfor %}
-</ul>
+<body>
+    <div class="header">
+        <h1>Virtualized Services Directory API Reference</h1>
+        <p>Welcome to VSD API Reference for version X.X</p>
+    </div>
+
+    <div class="summary">
+        <ul>
+        {% for filename, name in filenames.iteritems() %}
+            <li>
+                <a name="{{name}}" href="{{filename}}" title="API reference for {{name}}">{{name}}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
