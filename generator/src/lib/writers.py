@@ -23,7 +23,7 @@ class FileWriter(object):
         """ Initializes a FileWriter
 
         """
-        self.env = Environment(loader=PackageLoader('src', 'templates'))
+        self.env = Environment(loader=PackageLoader('src', 'templates'), extensions=["jinja2.ext.do"])
         self.directory = directory
 
     def write(self, template, destination, filename, **kwargs):

@@ -7,6 +7,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Helvetica";
+    font-size: 0.9em;
 }
 
 h1 {
@@ -35,6 +36,9 @@ a {
     color: #6B94EC;
 }
 
+ul {
+    font-size: 0.8em;
+}
 .header {
     width: 100%;
     padding: 20px;
@@ -43,24 +47,27 @@ a {
 }
 
 .summary {
-    width: 100%;
-    padding: 20px;
-    z-index: 0;
 }
 
-.summary h2 {
-    margin-top: 10px;
+.summary .content {
+    font-family: Menlo, Courier;
+}
+
+.summary .content .httpmethods {
+    color: #666;
 }
 
 .summary ul {
     list-style: none;
-    font-family: Menlo, Courier;
-    font-size: 0.8em;
     padding-left: 20px;
 }
 
-.summary ul li{
+.summary ul li {
     margin-bottom: 5px;
+}
+
+.summary ul li .tag {
+    font-size: 0.6em;
 }
 
 .main {
@@ -81,12 +88,10 @@ a {
 .content {
     width: 100%;
     padding: 10px;
-    font-size: 0.9em;
 }
 
 .name {
     font-family: Menlo, Courier;
-    font-size: 0.8em;
     font-weight: bold;
     margin: 0;
 }
@@ -95,7 +100,6 @@ a {
     margin-top: 8px;
     margin-bottom: 0px;
     font-weight: normal;
-    font-size: 0.8em;
 }
 
 .type {
@@ -107,7 +111,6 @@ a {
     padding: 4px;
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 0.9em;
 }
 
 .required {
@@ -124,7 +127,6 @@ a {
     margin-top: 20px;
 }
 .enumvalues ul {
-    font-size: 0.9em;
     font-weight: normal;
     font-family: Menlo, Courier;
     list-style: none;
@@ -137,23 +139,18 @@ a {
     margin: 2px;
 }
 
-
-.relation {
-    font-size: 0.8em !important;
-    font-family: Menlo, Courier;
+.type_int, .type_integer, .type_long, .type_float {
+    color: #B36B6B;
 }
 
-.relation ul {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    list-style: none;
-    padding-left: 10px;
+.type_string {
+    color: #D67C7B;
 }
 
-.relation ul li {
-    white-space: pre;
+.type_boolean {
+    color: #897A8F;
 }
 
-.relation ul li b{
-    color: #444;
+.type_enum {
+    color: #4CA61C;
 }
