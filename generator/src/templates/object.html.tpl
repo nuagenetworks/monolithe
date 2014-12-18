@@ -16,7 +16,7 @@
             <h2>Accessing {{model['plural_name']}}</h2>
             <div class="content">
                 <ul>
-                {% for api in model['apis']|sort %}
+                {% for api in model['apis']|sort(attribute='path') %}
 
                     {% set methods = [] %}
                     {% for operation in api['operations']|sort %}
