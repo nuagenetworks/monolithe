@@ -13,9 +13,13 @@
     <div class="summary">
         <h2>Attributes Summary</h2>
         <ul>
-        {% for name, attribute in model['properties'].iteritems() %}
-            <li><a href="#{{name}}">{{name}}</a></li>
+        {% for name, attribute in model['properties'].iteritems()|sort(case_sensitive=False) %}
+            <li><a href="#{{name}}">- {{name}}</a></li>
         {% endfor %}
+        <br>
+        <a href="#childapis">- Child APIs</a>
+        <br>
+        <a href="#parentapis">- Parent APIs</a>
         </ul>
     </div>
 
@@ -23,7 +27,7 @@
 
         <h2>Attributes Documentation</h2>
 
-        {% for name, attribute in model['properties'].iteritems() %}
+        {% for name, attribute in model['properties'].iteritems()|sort(case_sensitive=False) %}
         <div class="attribute">
 
             <a name="{{name}}"></a>
@@ -47,7 +51,7 @@
                 <div class="enumvalues">
                     <h3>Allowed values</h3>
                     <ul>
-                        {% for value in attribute['enum'] %}
+                        {% for value in attribute['enum']|sort %}
                             <li>{{value}}</li>
                         {% endfor %}
                     </ul>
@@ -61,58 +65,81 @@
         {% endfor %}
 
 
+
+        <a name="childapis"></a>
         <h2>Child APIs</h2>
-
-
         <div class="relation">
-            {% for api in model['apis'] %}
-            <ul>
-            {% for operation in api['operations'] %}
 
-            {% if operation['method'] == 'GET' %}
-                <li><b>GET   </b> {{api['path']}}</li>
+            {% if model['relations']|count == 0 %}
+            <p> This object has no children</p>
             {% endif %}
 
-            {% if operation['method'] == 'POST' %}
-                <li><b>POST  </b> {{api['path']}}</li>
-            {% endif %}
-
-            {% if operation['method'] == 'DELETE' %}
-                <li><b>DELETE</b> {{api['path']}}</li>
-            {% endif %}
-
-            {% endfor %}
-            </ul>
-            {% endfor %}
-        </div>
-
-
-
-        <h2>Parent APIs</h2>
-
-        <div class="relation">
             {% for relation in model['relations'] %}
             {% set api = relation['api'] %}
+
+            <a href="{{api['operations'][0]['type']|lower}}.html">- {{api['operations'][0]['type']|lower}}</a>
             <ul>
             {% for operation in api['operations'] %}
 
-            {% if operation['method'] == 'GET' %}
-                <li><b>GET   </b> {{api['path']}}</li>
-            {% endif %}
+                {% if operation['method'] == 'GET' %}
+                    {% set method = 'GET    ' %}
+                {% endif %}
 
-            {% if operation['method'] == 'POST' %}
-                <li><b>POST  </b> {{api['path']}}</li>
-            {% endif %}
+                {% if operation['method'] == 'POST' %}
+                    {% set method = 'POST   ' %}
+                {% endif %}
 
-            {% if operation['method'] == 'DELETE' %}
-                <li><b>DELETE</b> {{api['path']}}</li>
-            {% endif %}
+                {% if operation['method'] == 'DELETE' %}
+                    {% set method = 'DELETE ' %}
+                {% endif %}
+
+                <li><b>{{method}}</b>{{api['path']}}</li>
 
             {% endfor %}
              </ul>
             {% endfor %}
 
         </div>
+
+
+        <a name="parentapis"></a>
+        <h2>Parent APIs</h2>
+        <div class="relation">
+
+            {% if model['apis']|count == 0 %}
+            <p> This object has no parent</p>
+            {% endif %}
+
+            {% for api in model['apis'] %}
+
+            <ul>
+            {% for operation in api['operations'] %}
+
+            {% if operation['method'] == 'PUT' %}
+                {% set method = 'PUT    ' %}
+            {% endif %}
+
+            {% if operation['method'] == 'GET' %}
+                {% set method = 'GET    ' %}
+            {% endif %}
+
+            {% if operation['method'] == 'POST' %}
+                {% set method = 'POST   ' %}
+            {% endif %}
+
+            {% if operation['method'] == 'DELETE' %}
+                {% set method = 'DELETE ' %}
+            {% endif %}
+
+            <li><b>{{method}}</b>{{api['path']}}</li>
+
+            {% endfor %}
+            </ul>
+
+            {% endfor %}
+        </div>
+
+
     </div>
 </body>
 </html>

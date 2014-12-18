@@ -184,7 +184,8 @@ class HTMLFileWriter(FileWriter):
         template = self.env.get_template(HTMLFileWriter.MODEL_TEMPLATE)
         destination = self.directory
         filename = '%s.html' % model['name'].lower()
-
+        from pprint import pprint
+        pprint(model)
         self.write(template=template, destination=destination, filename=filename, model=model)
         return (filename, model['name'])
 
