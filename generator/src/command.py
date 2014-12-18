@@ -9,8 +9,9 @@ from lib import ModelsProcessor
 from lib import GitManager
 
 CODEGEN_DIRECTORY = './codegen'
-DOCS_DIRECTORY = './docs'
+DOCS_DIRECTORY = './docgen'
 
+API_URL = 'web/docs/api/'
 
 class Command(object):
     """ Command
@@ -41,9 +42,14 @@ class Command(object):
         if (git_repository):
             git_manager = GitManager(url=git_repository, branch=apiversion, directory=directory)
 
+        if vsdurl[-1] == '/':
+            vsdurl = vsdurl[:-1]
+
+        url = '%s/%s' % (vsdurl, API_URL)
+
         # Read Swagger
         swagger_parser = SwaggerParser()
-        resources = swagger_parser.grab_all(url=vsdurl, apiversion=apiversion)
+        resources = swagger_parser.grab_all(url=url, apiversion=apiversion)
 
         # Processed Swagger models
         processed_resources = ModelsProcessor.process(resources=resources)
@@ -74,9 +80,14 @@ class Command(object):
         else:
             directory = '%s/%s' % (DOCS_DIRECTORY, apiversion)
 
+        if vsdurl[-1] == '/':
+            vsdurl = vsdurl[:-1]
+
+        url = '%s/%s' % (vsdurl, API_URL)
+
         # Read Swagger
         swagger_parser = SwaggerParser()
-        resources = swagger_parser.grab_all(url=vsdurl, apiversion=apiversion)
+        resources = swagger_parser.grab_all(url=url, apiversion=apiversion)
 
         # Processed Swagger models
         processed_resources = ModelsProcessor.process(resources=resources)

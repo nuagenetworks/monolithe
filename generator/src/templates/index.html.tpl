@@ -11,7 +11,7 @@
 
     <div class="summary">
         <ul>
-        {% for filename, name in filenames.iteritems() %}
+        {% for filename, name in filenames|dictsort %}
             <li>
                 <a name="{{name}}" href="{{filename}}" title="API reference for {{name}}">{{name}}</a>
             </li>
