@@ -23,6 +23,10 @@
                         {% do methods.append(operation['method']) %}
                     {% endfor %}
 
+                    {% if 'parent' in api:%}
+                        {{api['parent']['resource_name']}}
+                    {% endif %}
+
                     <li>{{api['path']}} <span class="httpmethods">[{{methods|join("|")}}]</span><li>
                 {% endfor %}
                 </ul>
