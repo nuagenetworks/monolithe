@@ -187,18 +187,18 @@ class HTMLFileWriter(FileWriter):
         self.write(template=template, destination=destination, filename=filename, model=model)
         return (filename, model['name'])
 
-    def write_index(self, filenames):
+    def write_index(self, packages, models):
         """ Write HTML index to link all filenames
 
             Args:
-                filenames: dict of filename -> object
+                models: dict of all models
 
         """
         template = self.env.get_template(HTMLFileWriter.INDEX_TEMPLATE)
         destination = self.directory
         filename = 'index.html'
 
-        self.write(template=template, destination=destination, filename=filename, filenames=filenames)
+        self.write(template=template, destination=destination, filename=filename, packages=packages, models=models)
 
 
 class SDKWriter(object):
@@ -346,8 +346,10 @@ class DocWriter(object):
 
         task_manager.wait_until_exit()
 
+        packages = self._extract_packages(resources)
+
         writer = HTMLFileWriter(directory=self.writer_directory)
-        writer.write_index(filenames)
+        writer.write_index(packages, resources)
 
         Printer.success('Successfully generated documentation files for %s objects' % len(resources))
 
@@ -363,3 +365,19 @@ class DocWriter(object):
         (filename, classname) = writer.write_model(model=model)
 
         filenames[filename] = classname
+
+    def _extract_packages(self, models):
+        """ Returns a dictionnary containing for each package
+            a list of models name
+
+        """
+        packages = dict()
+
+        for name, model in models.iteritems():
+            package = model['package']
+            if package not in packages:
+                packages[package] = list()
+
+            packages[package].append(name)
+
+        return packages

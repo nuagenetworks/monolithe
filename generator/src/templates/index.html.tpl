@@ -11,11 +11,17 @@
 
     <div class="summary">
         <div class="content">
-            <ul>
-            {% for filename, name in filenames|dictsort %}
-                <li><a name="{{name}}" href="{{filename}}" title="API reference for {{name}}">{{name}}</a></li>
+
+            {% for package_name, model_names in packages|dictsort %}
+                <h3>{{package_name}}</h3>
+                <ul>
+                {% for model_name in model_names|sort %}
+                    {% set model = models[model_name] %}
+                    <li><a name="{{model['name']}}" href="{{model['resource_name']}}.html" title="API reference for {{model['name']}}">{{model['name']}}</a></li>
+                {% endfor %}
+                </ul>
             {% endfor %}
-            </ul>
+
         </div>
     </div>
 </body>

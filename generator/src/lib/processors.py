@@ -13,6 +13,28 @@ RESOURCE_MAPPING = {
     'SubNetworkTemplate': 'SubnetTemplate'
 }
 
+PACKAGE_MAPPING = {
+    '/alarm': 'alarm',
+    '/appd': 'appd',
+    '/common': 'common',
+    '/eventlog': 'eventlog',
+    '/gateway': 'gateway',
+    '/infrastructure': 'infrastructure',
+    '/job': 'job',
+    '/licensemgmt': 'licensemgmt',
+    '/network': 'network',
+    '/nsg': 'nsg',
+    '/policy': 'policy',
+    '/policy/acl': 'policy/acl',
+    '/policy/qos': 'policy/qos',
+    '/stats': 'stats',
+    '/sysmon': 'sysmon',
+    '/systemconfig': 'systemconfig',
+    '/usermgmt': 'usermgmt',
+    '/vm': 'vm',
+    '/vport': 'vport'
+}
+
 
 class ModelsProcessor(object):
     """ Process all models information that will be send to the writer """
@@ -43,7 +65,7 @@ class ModelsProcessor(object):
                     continue
 
                 # Printer.log('Processing %s' % name)
-
+                model['package'] = PACKAGE_MAPPING[resource['package']]
                 ModelsProcessor._process_name(model=model)
                 ModelsProcessor._process_apis(model=model, apis=resource['apis'], relations=relations)
                 ModelsProcessor._process_attributes(model=model)

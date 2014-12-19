@@ -62,8 +62,9 @@ class SwaggerParser(object):
             Returns:
                 Fills result dictionary
         """
-
-        resource_name = resource_path.split('/')[-1]
+        names = resource_path.split(SCHEMA_FILEPATH)[1].rsplit('/', 1);
+        package = names[0]
+        resource_name = names[1]
 
         try:  # Ugly hack due to Java issue: http://mvjira.mv.usa.alcatel.com/browse/VSD-546
             response = requests.get(resource_path, verify=False)
@@ -73,4 +74,6 @@ class SwaggerParser(object):
         if response.status_code != 200:
             Printer.raiseError("[HTTP %s] An error occured while retrieving %s at %s" % (response.status_code, resource_name, resource_path))
 
+
         results[resource_name] = response.json()
+        results[resource_name]['package'] = package
