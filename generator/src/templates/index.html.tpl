@@ -1,13 +1,14 @@
 <html>
 <header>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:800,700,400' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
 </header>
 
 <body>
     <div class="header">
         <div class="summary">
             <h1>Virtualized Services Directory API Reference</h1>
-            <p>Welcome to VSD API Reference for version X.X</p>
         </div>
         <div class="nav">
             <table>

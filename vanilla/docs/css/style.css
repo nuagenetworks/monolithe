@@ -6,7 +6,7 @@ html {
 body {
     margin: 0;
     padding: 0;
-    font-family: "Helvetica";
+    font-family: "Open Sans", "Helvetica";
     font-size: 0.9em;
 }
 
@@ -37,13 +37,13 @@ a {
 }
 
 ul {
-    font-size: 0.8em;
+    font-size: 0.9em;
 }
 
 .anchor {
     display: block;
     position: relative;
-    top: -150px;
+    top: -110px;
 }
 
 .header {
@@ -72,14 +72,13 @@ ul {
 
 .main {
     padding: 20px;
-    padding-top: 130px;
+    padding-top: 140px;
 }
 
 .summary {
 }
 
 .box {
-    font-family: Menlo, Courier;
 }
 
 .httpmethods {
@@ -87,6 +86,7 @@ ul {
 }
 
 .box ul {
+    font-family: 'Source Code Pro', Menlo, Courier;
     list-style: none;
     padding-left: 20px;
 }
@@ -99,7 +99,7 @@ ul {
     margin-top: 10px;
     background-color: white;
     border: 1px solid #f3f3f3;
-    font-family: "Helvetica";
+    font-family: "Open Sans", "Helvetica";
 }
 
 .attributedescription .titlebanner {
@@ -108,12 +108,11 @@ ul {
 }
 
 .attributedescription .content {
-    width: 100%;
     padding: 10px;
 }
 
 .attributedescription .name {
-    font-family: Menlo, Courier;
+    font-family: 'Source Code Pro', Menlo, Courier;
     font-weight: bold;
     margin: 0;
     font-size: 0.9em;
@@ -126,7 +125,7 @@ ul {
 }
 
 .tag {
-    font-family: Menlo, Courier;
+    font-family: 'Source Code Pro', Menlo, Courier;
     font-size: 0.7em;
     padding: 2px;
     padding-left: 6px;
@@ -148,7 +147,7 @@ ul {
 }
 .enumvalues ul {
     font-weight: normal;
-    font-family: Menlo, Courier;
+    font-family: 'Source Code Pro', Menlo, Courier;
     list-style: none;
     padding-left: 5px;
     color: #444;
@@ -177,6 +176,10 @@ ul {
 
 .type_date {
     color: #3A89D2;
+}
+
+.wiki p {
+    line-height: 20px;
 }
 
 .wiki h3 {

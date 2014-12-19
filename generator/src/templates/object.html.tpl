@@ -1,6 +1,8 @@
 <html>
 <header>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:800,700,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
 </header>
 
 <body>
@@ -8,27 +10,31 @@
     <div class="header">
         <div class="summary">
             <h1>{{model['name']}}</h1>
-            <p>{{model['description']}}</p>
         </div>
         <div class="nav">
             <table>
                 <tr>
                     <td><a href="index.html">API Reference</a></td>
-                    <td><a href="#cat1">Accessing {{model['plural_name']}}</a></td>
-                    <td><a href="#cat2">Attributes Overview</a></td>
-                    <td><a href="#cat3">Child Objects</a></td>
-                    <td><a href="#cat4">Attributes Documentation</a></td>
+                    <td><a href="#cat0">Description</a></td>
+                    <td><a href="#cat1">Accessing the object</a></td>
+                    <td><a href="#cat2">Object overview</a></td>
+                    <td><a href="#cat3">Children of the object</a></td>
+                    <td><a href="#cat4">Attributes documentation</a></td>
                 </tr>
-
             </table>
         </div>
     </div>
 
-
     <div class="main">
 
+        <a class="anchor" name="cat0"></a>
+        <h2>Description</h2>
+        <div class="box">
+            <p>{{model['description']}}</p>
+        </div>
+
         <a class="anchor" name="cat1"></a>
-        <h2>Accessing {{model['plural_name']}}</h2>
+        <h2>Accessing the object</h2>
         <div class="box">
             <ul>
             {% for api in model['apis']|sort(attribute='path') %}
@@ -49,11 +55,10 @@
 
             {% endfor %}
             </ul>
-
         </div>
 
         <a class="anchor" name="cat2"></a>
-        <h2>Attributes Overview</h2>
+        <h2>Object overview</h2>
         <div class="box">
             {
             <ul>
@@ -72,7 +77,6 @@
                         {% set allowed_values = " (" + allowed|join("|") + ")" %}
                     {% endif %}
                 {% endif %}
-
                 <li>
                     <a href="#{{name}}" title="{{description}}">{{name}}</a>: <span class="type_{{type}}">{{type}}{{allowed_values}}</span>{% if required %} <span class="tagrequired tag">required</span>{% endif %}{% if not loop.last %},{% endif %}
                 </li>
@@ -81,10 +85,8 @@
             }
         </div>
 
-
         <a class="anchor" name="cat3"></a>
-        <h2>Child Objects</h2>
-
+        <h2>Children of the object</h2>
         <div class="box">
             {% if model['relations']|count == 0 %}
             <p> This object has no children</p>
@@ -111,10 +113,8 @@
             </ul>
         </div>
 
-
         <a class="anchor" name="cat4"></a>
-        <h2>Attributes Documentation</h2>
-
+        <h2>Attributes documentation</h2>
         {% for name, attribute in model['properties']|dictsort %}
         <a name="{{name}}" class="anchor"></a>
         <div class="box">
@@ -125,16 +125,12 @@
                         {% if attribute['required'] == 'true' %} <span class="tagrequired tag">required</span>{% endif %}
                         {% if attribute['uniqueItems'] == 'true' %} <span class="tagunique tag">unique</span>{% endif %}
                     </span>
-
                 </div>
-
                 <div class="content">
-
                     <div class="description">
                         <h3>Description</h3>
                         <p>{{attribute['description']}}</p>
                     </div>
-
                     {% if attribute['enum'] %}
                     <div class="enumvalues">
                         <h3>Allowed values</h3>
@@ -145,12 +141,10 @@
                         </ul>
                     </div>
                     {% endif %}
-
                 </div>
             </div>
         </div>
         {% endfor %}
-
     </div>
 </body>
 </html>
