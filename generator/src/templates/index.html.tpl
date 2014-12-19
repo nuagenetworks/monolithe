@@ -27,7 +27,7 @@
                 <ul>
                 {% for model_name in model_names|sort %}
                     {% set model = models[model_name] %}
-                    <li><a name="{{model['name']}}" href="{{model['resource_name']}}.html" title="API reference for {{model['name']}}">{{model['name']}}</a></li>
+                    <li><a name="{{model['name']}}" href="{{model['remote_name']}}.html" title="API reference for {{model['name']}}">{{model['name']}}</a></li>
                 {% endfor %}
                 </ul>
             {% endfor %}
