@@ -52,7 +52,10 @@ class Utils(object):
         if plural_name[-3:] == 'ies':
             return plural_name[:-3] + 'y'
 
-        return plural_name[:-1]
+        if plural_name[-1] == 's':
+            return plural_name[:-1]
+
+        return plural_name
 
     @classmethod
     def get_plural_name(cls, singular_name):

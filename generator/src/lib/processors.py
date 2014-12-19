@@ -6,11 +6,23 @@ from utils import Utils
 from printer import Printer
 
 IGNORED_ATTRIBUTES = ["_fetchers"]
-IGNORED_RESOURCES = ['EventLog']
+IGNORED_RESOURCES = ['EventLog', 'PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
 
 RESOURCE_MAPPING = {
     'SubNetwork': 'Subnet',
-    'SubNetworkTemplate': 'SubnetTemplate'
+    'SubNetworkTemplate': 'SubnetTemplate',
+    'PortStatus': 'MonitoringPort',
+    'EnterpriseNetworkMacro': 'EnterpriseNetwork',
+    'RedundantGWGrp': 'RedundancyGroup',
+    'Service': 'ApplicationService',
+    'IPBinding': 'IPReservation',
+    'VPNConnect': 'VPNConnection',
+    'QosPrimitive': 'QOS',  # Not working because resource name is 'qos' instead of 'quoss'
+    'EgressQosPrimitive': 'EgressQOSPolicy',
+    'EgressACLTemplateEntry': 'EgressACLEntryTemplate',
+    'IngressACLTemplateEntry': 'IngressACLEntryTemplate',
+    'IngressAdvancedForwardingTemplate': 'IngressAdvFwdTemplate',
+    'IngressAdvancedForwardingTemplateEntry': 'IngressAdvFwdEntryTemplate'
 }
 
 PACKAGE_MAPPING = {
