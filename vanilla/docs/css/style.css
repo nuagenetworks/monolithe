@@ -90,10 +90,6 @@ ul {
     margin-bottom: 5px;
 }
 
-.box ul li .tag {
-    font-size: 0.6em;
-}
-
 .attributedescription {
     margin-top: 10px;
     background-color: white;
@@ -124,11 +120,12 @@ ul {
     font-weight: normal;
 }
 
-.attributedescription .tag {
-    border-radius: 100px;
-    padding: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+.tag {
+    font-family: Menlo, Courier;
+    font-size: 0.7em;
+    padding: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .required {

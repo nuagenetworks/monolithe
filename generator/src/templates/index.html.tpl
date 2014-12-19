@@ -5,8 +5,22 @@
 
 <body>
     <div class="header">
-        <h1>Virtualized Services Directory API Reference</h1>
-        <p>Welcome to VSD API Reference for version X.X</p>
+        <div class="summary">
+            <h1>Virtualized Services Directory API Reference</h1>
+            <p>Welcome to VSD API Reference for version X.X</p>
+        </div>
+        <div class="nav">
+            <table>
+                <tr>
+                    <td><a href="index.html">API Reference</a></td>
+                    <td><a href="#cat1">Accessing</a></td>
+                    <td><a href="#cat2">Attributes Overview</a></td>
+                    <td><a href="#cat3">Child Objects</a></td>
+                    <td><a href="#cat4">Attributes Documentation</a></td>
+                </tr>
+
+            </table>
+        </div>
     </div>
 
     <div class="main">

@@ -13,6 +13,7 @@
         <div class="nav">
             <table>
                 <tr>
+                    <td><a href="index.html">API Reference</a></td>
                     <td><a href="#cat1">Accessing {{model['plural_name']}}</a></td>
                     <td><a href="#cat2">Attributes Overview</a></td>
                     <td><a href="#cat3">Child Objects</a></td>
@@ -34,7 +35,7 @@
 
                 {% set methods = [] %}
                 {% for operation in api['operations']|sort %}
-                    {% do methods.append(operation['method']) %}
+                    {% do methods.append('<span title="' + operation['summary'] + '">' + operation['method'] + '</span>') %}
                 {% endfor %}
 
                 {% if 'parent' in api %}
@@ -104,7 +105,7 @@
             {% set path = api['path'] %}
 
             {% for operation in api['operations'] %}
-                {% do methods.append(operation['method']) %}
+                {% do methods.append('<span title="' + operation['summary'] + '">' + operation['method'] + '</span>') %}
             {% endfor %}
 
 
@@ -122,7 +123,7 @@
         <div class="box">
             <div class="attributedescription">
                 <div class="titlebanner">
-                    <span class="name">{{name}} <span class="type_{{attribute['type']}}">&lt;{{attribute['type']}}&gt;</span></span>
+                    <span class="name">{{name}} <span class="type_{{attribute['type']}}">{{attribute['type']}}</span></span>
                     <span class="metainformation">
                         {% if attribute['required'] == 'true' %} <span class="required tag">required</span>{% endif %}
                         {% if attribute['uniqueItems'] == 'true' %} <span class="unique tag">unique</span>{% endif %}
