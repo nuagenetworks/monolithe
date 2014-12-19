@@ -74,7 +74,7 @@
                 {% endif %}
 
                 <li>
-                    <a href="#{{name}}" title="{{description}}">{{name}}</a>: <span class="type_{{type}}">{{type}}{{allowed_values}}</span>{% if required %} <span class="required tag">required</span>{% endif %}{% if not loop.last %},{% endif %}
+                    <a href="#{{name}}" title="{{description}}">{{name}}</a>: <span class="type_{{type}}">{{type}}{{allowed_values}}</span>{% if required %} <span class="tagrequired tag">required</span>{% endif %}{% if not loop.last %},{% endif %}
                 </li>
             {% endfor %}
             </ul>
@@ -122,8 +122,8 @@
                 <div class="titlebanner">
                     <span class="name">{{name}} <span class="type_{{attribute['type']}}">{{attribute['type']}}</span></span>
                     <span class="metainformation">
-                        {% if attribute['required'] == 'true' %} <span class="required tag">required</span>{% endif %}
-                        {% if attribute['uniqueItems'] == 'true' %} <span class="unique tag">unique</span>{% endif %}
+                        {% if attribute['required'] == 'true' %} <span class="tagrequired tag">required</span>{% endif %}
+                        {% if attribute['uniqueItems'] == 'true' %} <span class="tagunique tag">unique</span>{% endif %}
                     </span>
 
                 </div>
