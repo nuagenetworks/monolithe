@@ -9,8 +9,9 @@
         <p>Welcome to VSD API Reference for version X.X</p>
     </div>
 
-    <div class="summary">
-        <div class="content">
+    <div class="main">
+        <h2>Available APIs</h2>
+        <div class="box">
             <ul>
             {% for filename, name in filenames|dictsort %}
                 <li><a name="{{name}}" href="{{filename}}" title="API reference for {{name}}">{{name}}</a></li>

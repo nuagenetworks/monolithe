@@ -6,13 +6,27 @@
 <body>
 
     <div class="header">
-        <h1>{{model['name']}}</h1>
-        <p>{{model['description']}}</p>
+        <div class="summary">
+            <h1>{{model['name']}}</h1>
+            <p>{{model['description']}}</p>
+        </div>
+        <div class="nav">
+            <table>
+                <tr>
+                    <td><a href="#cat1">Accessing {{model['plural_name']}}</a></td>
+                    <td><a href="#cat2">Attributes Overview</a></td>
+                    <td><a href="#cat3">Child Objects</a></td>
+                    <td><a href="#cat4">Attributes Documentation</a></td>
+                </tr>
+
+            </table>
+        </div>
     </div>
 
 
     <div class="main">
 
+        <a class="anchor" name="cat1"></a>
         <h2>Accessing {{model['plural_name']}}</h2>
         <div class="box">
             <ul>
@@ -23,14 +37,22 @@
                     {% do methods.append(operation['method']) %}
                 {% endfor %}
 
-                <li>{{api['path']}} <span class="httpmethods">[{{methods|join("|")}}]</span><li>
+                {% if 'parent' in api %}
+                    {% set parent_resource = api['parent']['resource_name'] %}
+                    {% set parent_url = api['parent']['remote_name'] %}
+                    {% set model_name = model['resource_name'] %}
+                    <li>/<a href="{{parent_url}}.html">{{parent_resource}}</a>/{id}/{{model_name}} <span class="httpmethods">[{{methods|join("|")}}]</span><li>
+                {% else %}
+                    <li>{{api['path']}} <span class="httpmethods">[{{methods|join("|")}}]</span><li>
+                {% endif %}
+
             {% endfor %}
             </ul>
 
         </div>
 
-
-        <h2>{{model['name']}} Object Attributes Overview</h2>
+        <a class="anchor" name="cat2"></a>
+        <h2>Attributes Overview</h2>
         <div class="box">
             {
             <ul>
@@ -62,6 +84,7 @@
         </div>
 
 
+        <a class="anchor" name="cat3"></a>
         <h2>Child Objects</h2>
 
         <div class="box">
@@ -91,42 +114,42 @@
         </div>
 
 
+        <a class="anchor" name="cat4"></a>
         <h2>Attributes Documentation</h2>
 
         {% for name, attribute in model['properties']|dictsort %}
+        <a name="{{name}}" class="anchor"></a>
         <div class="box">
+            <div class="attributedescription">
+                <div class="titlebanner">
+                    <span class="name">{{name}} <span class="type_{{attribute['type']}}">&lt;{{attribute['type']}}&gt;</span></span>
+                    <span class="metainformation">
+                        {% if attribute['required'] == 'true' %} <span class="required tag">required</span>{% endif %}
+                        {% if attribute['uniqueItems'] == 'true' %} <span class="unique tag">unique</span>{% endif %}
+                    </span>
 
-            <a name="{{name}}"></a>
-            <div class="titlebanner">
-                <span class="name">{{name}} <span class="type_{{attribute['type']}}">&lt;{{attribute['type']}}&gt;</span></span>
-                <span class="metainformation">
-                    {% if attribute['required'] == 'true' %} <span class="required tag">required</span>{% endif %}
-                    {% if attribute['uniqueItems'] == 'true' %} <span class="unique tag">unique</span>{% endif %}
-                </span>
-
-            </div>
-
-            <div class="content">
-
-                <div class="description">
-                    <h3>Description</h3>
-                    <p>{{attribute['description']}}</p>
                 </div>
 
-                {% if attribute['enum'] %}
-                <div class="enumvalues">
-                    <h3>Allowed values</h3>
-                    <ul>
-                        {% for value in attribute['enum']|sort %}
-                            <li>{{value}}</li>
-                        {% endfor %}
-                    </ul>
+                <div class="content">
+
+                    <div class="description">
+                        <h3>Description</h3>
+                        <p>{{attribute['description']}}</p>
+                    </div>
+
+                    {% if attribute['enum'] %}
+                    <div class="enumvalues">
+                        <h3>Allowed values</h3>
+                        <ul>
+                            {% for value in attribute['enum']|sort %}
+                                <li>{{value}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
                 </div>
-                {% endif %}
-
             </div>
-
-
         </div>
         {% endfor %}
 

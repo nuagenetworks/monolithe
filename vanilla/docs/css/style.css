@@ -39,17 +39,35 @@ a {
 ul {
     font-size: 0.8em;
 }
+
+.anchor {
+    display: block;
+    position: relative;
+    top: -150px;
+}
+
 .header {
     width: 100%;
-    padding: 20px;
     background-color: #F2F2F2;
     z-index: 1000;
     position: fixed;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.header .summary {
+    padding: 20px;
+}
+
+.header .nav table {
+    width: 100%;
+    text-align: center;
+    font-size: 0.9em;
+    margin-bottom: 5px;
 }
 
 .main {
     padding: 20px;
-    padding-top: 100px;
+    padding-top: 130px;
 }
 
 .summary {
@@ -76,35 +94,37 @@ ul {
     font-size: 0.6em;
 }
 
-.attribute {
+.attributedescription {
     margin-top: 10px;
     background-color: white;
     border: 1px solid #f3f3f3;
+    font-family: "Helvetica";
 }
 
-.attribute .titlebanner {
-    padding: 10px;
+.attributedescription .titlebanner {
+    padding: 8px;
     background-color: #f3f3f3;
 }
 
-.attribute .content {
+.attributedescription .content {
     width: 100%;
     padding: 10px;
 }
 
-.attribute .name {
+.attributedescription .name {
     font-family: Menlo, Courier;
     font-weight: bold;
     margin: 0;
+    font-size: 0.9em;
 }
 
-.attribute .metainformation {
+.attributedescription .metainformation {
     margin-top: 8px;
     margin-bottom: 0px;
     font-weight: normal;
 }
 
-.attribute .tag {
+.attributedescription .tag {
     border-radius: 100px;
     padding: 4px;
     padding-left: 10px;
