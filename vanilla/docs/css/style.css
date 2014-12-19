@@ -169,3 +169,7 @@ ul {
 .type_enum {
     color: #4CA61C;
 }
+
+.wiki code {
+    white-space: pre;
+}
