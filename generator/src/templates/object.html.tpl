@@ -74,10 +74,7 @@
                 {% endif %}
 
                 <li>
-                    <a href="#{{name}}" title="{{description}}">{{name}}</a>: <span class="type_{{type}}">{{type}}{{allowed_values}}
-                    {% if required %}
-                        <span class="required tag">required</span>
-                    {% endif %}
+                    <a href="#{{name}}" title="{{description}}">{{name}}</a>: <span class="type_{{type}}">{{type}}{{allowed_values}}</span>{% if required %} <span class="required tag">required</span>{% endif %}{% if not loop.last %},{% endif %}
                 </li>
             {% endfor %}
             </ul>
