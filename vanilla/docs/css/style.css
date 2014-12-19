@@ -133,12 +133,12 @@ ul {
     padding-right: 6px;
 }
 
-.required {
+.tagrequired {
     color: white;
     background-color: #F15C65;
 }
 
-.unique {
+.tagunique {
     color: white;
     background-color: #6B6B6B;
 }
