@@ -5,13 +5,23 @@
 
 <body>
     <div class="header">
-        <h1>Virtualized Services Directory API Reference</h1>
-        <p>Welcome to VSD API Reference for version X.X</p>
+        <div class="summary">
+            <h1>Virtualized Services Directory API Reference</h1>
+            <p>Welcome to VSD API Reference for version X.X</p>
+        </div>
+        <div class="nav">
+            <table>
+                <tr>
+                    <td><a href="usage.html">API Usage</a></td>
+                </tr>
+
+            </table>
+        </div>
     </div>
 
-    <div class="summary">
-        <div class="content">
-
+    <div class="main">
+        <h2>Available APIs</h2>
+        <div class="box">
             {% for package_name, model_names in packages|dictsort %}
                 <h3>{{package_name}}</h3>
                 <ul>
@@ -21,7 +31,6 @@
                 {% endfor %}
                 </ul>
             {% endfor %}
-
         </div>
     </div>
 </body>

@@ -18,9 +18,9 @@ h1 {
 
 h2 {
     color: #333;
-    margin-top: 50px;
     font-weight: bold;
     font-size: 1em;
+    margin-top: 50px;
     border-bottom: 1px solid #f3f3f3;
 }
 
@@ -39,78 +39,98 @@ a {
 ul {
     font-size: 0.8em;
 }
+
+.anchor {
+    display: block;
+    position: relative;
+    top: -150px;
+}
+
 .header {
     width: 100%;
-    padding: 20px;
     background-color: #F2F2F2;
     z-index: 1000;
+    position: fixed;
+    border-bottom: 1px solid #f0f0f0;
+    background-image: url(../img/nuage_logo.png);
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 300px;
+}
+
+.header .summary {
+    padding: 20px;
+}
+
+.header .nav table {
+    width: 100%;
+    text-align: center;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.main {
+    padding: 20px;
+    padding-top: 130px;
 }
 
 .summary {
 }
 
-.summary .content {
+.box {
     font-family: Menlo, Courier;
 }
 
-.summary .content .httpmethods {
+.httpmethods {
     color: #666;
 }
 
-.summary ul {
+.box ul {
     list-style: none;
     padding-left: 20px;
 }
 
-.summary ul li {
+.box ul li {
     margin-bottom: 5px;
 }
 
-.summary ul li .tag {
-    font-size: 0.6em;
-}
-
-.main {
-     padding: 20px;
-}
-
-.attribute {
+.attributedescription {
     margin-top: 10px;
     background-color: white;
     border: 1px solid #f3f3f3;
+    font-family: "Helvetica";
 }
 
-.titlebanner {
-    padding: 10px;
+.attributedescription .titlebanner {
+    padding: 8px;
     background-color: #f3f3f3;
 }
 
-.content {
+.attributedescription .content {
     width: 100%;
     padding: 10px;
 }
 
-.name {
+.attributedescription .name {
     font-family: Menlo, Courier;
     font-weight: bold;
     margin: 0;
+    font-size: 0.9em;
 }
 
-.metainformation {
+.attributedescription .metainformation {
     margin-top: 8px;
     margin-bottom: 0px;
     font-weight: normal;
 }
 
-.type {
-    color: #6B94EC;
-}
-
 .tag {
-    border-radius: 100px;
-    padding: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+    font-family: Menlo, Courier;
+    font-size: 0.7em;
+    padding: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .required {
@@ -140,17 +160,25 @@ ul {
 }
 
 .type_int, .type_integer, .type_long, .type_float {
-    color: #B36B6B;
+    color: #6E6FC5;
 }
 
 .type_string {
-    color: #D67C7B;
+    color: #B28B06;
 }
 
 .type_boolean {
-    color: #897A8F;
+    color: #879B00;
 }
 
 .type_enum {
-    color: #4CA61C;
+    color: #C54C1D;
+}
+
+.type_date {
+    color: #3A89D2;
+}
+
+.wiki code {
+    white-space: pre;
 }

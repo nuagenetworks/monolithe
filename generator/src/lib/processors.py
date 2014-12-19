@@ -5,7 +5,7 @@ import re
 from utils import Utils
 from printer import Printer
 
-IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
+IGNORED_ATTRIBUTES = ["_fetchers"]
 IGNORED_RESOURCES = ['EventLog']
 
 RESOURCE_MAPPING = {
