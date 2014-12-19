@@ -48,7 +48,7 @@ ul {
 
 .header {
     width: 100%;
-    background-color: #F2F2F2;
+    background-color: #F0F0F0;
     z-index: 1000;
     position: fixed;
     border-bottom: 1px solid #f0f0f0;
@@ -179,6 +179,22 @@ ul {
     color: #3A89D2;
 }
 
+.wiki h3 {
+    margin-top: 30px;
+}
+.wiki ul {
+    font-size: 0.9em;
+}
+
+.wiki ul li {
+    margin-bottom: 10px;
+}
+
 .wiki code {
     white-space: pre;
+    color: #333;
+    background-color: #f6f6f6;
+    border: 1px solid #f0f0f0;
+    padding: 2px;
+    display: block;
 }
