@@ -20,14 +20,13 @@
     </div>
 
     <div class="main">
-        <h2>Available APIs</h2>
         <div class="box">
             {% for package_name, model_names in packages|dictsort %}
-                <h3>{{package_name}}</h3>
+                <h2>{{package_name}}</h2>
                 <ul>
                 {% for model_name in model_names|sort %}
                     {% set model = models[model_name] %}
-                    <li><a name="{{model['name']}}" href="{{model['remote_name']}}.html" title="API reference for {{model['name']}}">{{model['name']}}</a></li>
+                    <li><a name="{{model['name']}}" href="{{model['remote_name']}}.html" title="API reference for {{model['name']}}">- {{model['resource_name']}}</a></li>
                 {% endfor %}
                 </ul>
             {% endfor %}

@@ -26,25 +26,25 @@ RESOURCE_MAPPING = {
 }
 
 PACKAGE_MAPPING = {
-    '/alarm': 'alarm',
-    '/appd': 'appd',
-    '/common': 'common',
-    '/eventlog': 'eventlog',
-    '/gateway': 'gateway',
-    '/infrastructure': 'infrastructure',
-    '/job': 'job',
-    '/licensemgmt': 'licensemgmt',
-    '/network': 'network',
-    '/nsg': 'nsg',
-    '/policy': 'policy',
-    '/policy/acl': 'policy/acl',
-    '/policy/qos': 'policy/qos',
-    '/stats': 'stats',
-    '/sysmon': 'sysmon',
-    '/systemconfig': 'systemconfig',
-    '/usermgmt': 'usermgmt',
-    '/vm': 'vm',
-    '/vport': 'vport'
+    '/alarm': 'Alarms',
+    '/appd': 'Application Designer',
+    '/common': 'Metadata',
+    '/eventlog': 'Event Logs',
+    '/gateway': 'Gateway Management',
+    '/infrastructure': 'Infrastructure Profiles',
+    '/job': 'Jobs',
+    '/licensemgmt': 'Licensing',
+    '/network': 'Core Networking',
+    '/nsg': 'Gateway Management',
+    '/policy': 'Policies',
+    '/policy/acl': 'Security Policies',
+    '/policy/qos': 'Policies',
+    '/stats': 'Statistics',
+    '/sysmon': 'System Monitoring',
+    '/systemconfig': 'System Configuration',
+    '/usermgmt': 'User Management',
+    '/vm': 'Virtual Machines',
+    '/vport': 'Core Networking'
 }
 
 
