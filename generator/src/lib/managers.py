@@ -54,7 +54,7 @@ class GitManager(object):
         """
         self.url = url
         self.directory = directory
-        self.branch = branch
+        self.branch = str(branch)
         self.repo = None
         self._nb_changes = 0
 
@@ -62,7 +62,7 @@ class GitManager(object):
         self.repo = Repo.clone_from(url=self.url, to_path=self.directory)
 
         try:
-            self.repo.git.checkout('3.0')
+            self.repo.git.checkout(self.branch)
             Printer.log('Switching to branch %s' % self.branch)
 
         except GitCommandError:
