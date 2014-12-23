@@ -209,7 +209,6 @@ class SDKWriter(object):
     VANILLA_SRC_PATH = '../vanilla/sdk/'
 
     IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
-    IGNORED_RESOURCES = ['EventLog']
     IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
 
     def __init__(self, directory):
@@ -224,6 +223,12 @@ class SDKWriter(object):
         if not os.path.exists(self.writer_directory):
             Printer.log("Copying default sources...")
             shutil.copytree(SDKWriter.VANILLA_SRC_PATH, directory)
+
+    def _remove_ignored_properties(self, model):
+        """ Removes properties that should be ignored
+
+        """
+        model['properties'] = {name:prop for (name, prop) in model['properties'].iteritems() if name not in SDKWriter.IGNORED_ATTRIBUTES}
 
     def write(self, resources, apiversion, revision):
         """ Write all files according to data
@@ -242,6 +247,7 @@ class SDKWriter(object):
         task_manager = TaskManager()
 
         for model_name, model in resources.iteritems():
+            self._remove_ignored_properties(model)
             task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=filenames)
             task_manager.start_task(method=self._write_override_file, model=model)
             task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=filenames)
