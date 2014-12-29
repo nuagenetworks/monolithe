@@ -98,11 +98,11 @@ class PythonFileWriter(FileWriter):
         """
         template = self.env.get_template(PythonFileWriter.MODEL_TEMPLATE)
         destination = '%s%s' % (self.directory, PythonFileWriter.AUTOGENERATE_PATH)
-        filename = 'nu%s.py' % model['name'].lower()
+        filename = 'nu%s.py' % model.name.lower()
 
         self.write(template=template, destination=destination, filename=filename, model=model)
 
-        return (filename, model['name'])
+        return (filename, model.name)
 
     def write_model_override(self, model):
         """ Write model override
@@ -110,13 +110,13 @@ class PythonFileWriter(FileWriter):
         """
         template = self.env.get_template(PythonFileWriter.MODEL_OVERRIDE_TEMPLATE)
         destination = self.directory
-        filename = 'nu%s.py' % model['name'].lower()
+        filename = 'nu%s.py' % model.name.lower()
 
         file_path = '%s/%s' % (destination, filename)
 
         if not os.path.isfile(file_path):
             self.write(template=template, destination=destination, filename=filename, model=model)
-            return (filename, model['name'])
+            return (filename, model.name)
 
         return None
 
@@ -126,11 +126,11 @@ class PythonFileWriter(FileWriter):
         """
         template = self.env.get_template(PythonFileWriter.FETCHER_TEMPLATE)
         destination = '%s%s' % (self.directory, PythonFileWriter.FETCHERS_PATH)
-        filename = 'nu%s_fetcher.py' % model['name'].lower()
+        filename = 'nu%s_fetcher.py' % model.name.lower()
 
         self.write(template=template, destination=destination, filename=filename, model=model)
 
-        return (filename, model['name'])
+        return (filename, model.name)
 
     def clean(self, except_files):
         """ Clean folder to remove all files except those generated
@@ -183,9 +183,9 @@ class HTMLFileWriter(FileWriter):
         """
         template = self.env.get_template(HTMLFileWriter.MODEL_TEMPLATE)
         destination = self.directory
-        filename = '%s.html' % model['name'].lower()
+        filename = '%s.html' % model.name.lower()
         self.write(template=template, destination=destination, filename=filename, model=model)
-        return (filename, model['name'])
+        return (filename, model.name)
 
     def write_index(self, packages, models):
         """ Write HTML index to link all filenames
@@ -224,11 +224,11 @@ class SDKWriter(object):
             Printer.log("Copying default sources...")
             shutil.copytree(SDKWriter.VANILLA_SRC_PATH, directory)
 
-    def _remove_ignored_properties(self, model):
-        """ Removes properties that should be ignored
+    def _remove_ignored_attributes(self, model):
+        """ Removes attributes that should be ignored
 
         """
-        model['properties'] = {name:prop for (name, prop) in model['properties'].iteritems() if name not in SDKWriter.IGNORED_ATTRIBUTES}
+        model.attributes = [attribute for attribute in model.attributes if attribute.remote_name not in SDKWriter.IGNORED_ATTRIBUTES]
 
     def write(self, resources, apiversion, revision):
         """ Write all files according to data
@@ -247,7 +247,7 @@ class SDKWriter(object):
         task_manager = TaskManager()
 
         for model_name, model in resources.iteritems():
-            self._remove_ignored_properties(model)
+            self._remove_ignored_attributes(model)
             task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=filenames)
             task_manager.start_task(method=self._write_override_file, model=model)
             task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=filenames)
@@ -380,7 +380,7 @@ class DocWriter(object):
         packages = dict()
 
         for name, model in models.iteritems():
-            package = model['package']
+            package = model.package
             if package not in packages:
                 packages[package] = list()
 

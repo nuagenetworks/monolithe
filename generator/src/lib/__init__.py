@@ -8,3 +8,4 @@ from managers import GitManager, TaskManager
 from utils import Utils
 from writers import SDKWriter, DocWriter
 from processors import ModelsProcessor
+from objects import Model, ModelAttribute

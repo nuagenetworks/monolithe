@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-NU{{ model['name'] }}
-{{ model['description'] }}
+NU{{ model.name }}
+{{ model.description }}
 
 Author Christophe Serafin <christophe.serafin@alcatel-lucent.com>
 
@@ -22,19 +22,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 """
 
-from .autogenerates import NU{{ model['name'] }} as AutoGenerate
+from .autogenerates import NU{{ model.name }} as AutoGenerate
 
 
-class NU{{ model['name'] }}(AutoGenerate):
-    """ Represents a NU{{ model['name'] }} object in the VSD
-        {{ model['description'] }}
+class NU{{ model.name }}(AutoGenerate):
+    """ Represents a NU{{ model.name }} object in the VSD
+        {{ model.description }}
 
-        This object should contain all NU{{ model['name'] }} specific methods
+        This object should contain all NU{{ model.name }} specific methods
 
     """
 
     def __init__(self, **kwargs):
-        """ Initializing a NU{{ model['name'] }} """
+        """ Initializing a NU{{ model.name }} """
 
-        super(NU{{ model['name'] }}, self).__init__(**kwargs)
+        super(NU{{ model.name }}, self).__init__(**kwargs)
 
