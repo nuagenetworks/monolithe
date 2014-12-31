@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {% set required_attributes = [] %}{% for attribute in model.attributes %}{% if attribute.is_required %}{% do required_attributes.append(attribute) %}{% endif %}{% endfor %}
 from courgette.lib import ContextUser
-from courgette.lib import {% if 'GET' in allowed_methods %}NuageGetAllTests, NuageGetTests, {% endif %}{% if 'UPDATE' in allowed_methods %}NuageUpdateTests, {% endif %}{% if 'DELETE' in allowed_methods %}NuageDeleteTests, {% endif %}{% if 'POST' in allowed_methods %}NuageCreateTests{% endif %}
+from courgette.lib import {% if 'GET' in allowed_methods %}NuageGetAllTests, NuageGetTests, {% endif %}{% if 'PUT' in allowed_methods %}NuageUpdateTests, {% endif %}{% if 'DELETE' in allowed_methods %}NuageDeleteTests, {% endif %}{% if 'POST' in allowed_methods %}NuageCreateTests{% endif %}
 from courgette.environments import NU{{model.environment_name}}Environment, NU{{model.getall_environment_name}}Environment
 
 {% if 'POST' in allowed_methods %}
@@ -39,7 +39,7 @@ class Create(NuageCreateTests):
 
         self.environment().clean(self){% endif %}
 
-{% if 'UPDATE' in allowed_methods %}
+{% if 'PUT' in allowed_methods %}
 class Update(NuageUpdateTests):
     """ NU{{model.name}} edition tests"""
 
@@ -119,7 +119,7 @@ class Get(NuageGetTests):
     def environment(self):
         """ Get test environment """
 
-        NU{{model.environment_name}}Environment
+        return NU{{model.environment_name}}Environment
 
     def get_allowed_users(self):
         """ Returns all users that should be allowed """

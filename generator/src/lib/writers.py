@@ -72,7 +72,7 @@ class CourgetteFileWriter(FileWriter):
     ENVIRONMENT_PATH = '/environments'
 
     TEST_TEMPLATE = 'courgette/tests.py.tpl'
-    TEST_PATH = '/tests/functionnal'
+    TEST_PATH = '/tests/functional'
 
     def write_environment(self, model):
         """ Write Environment
