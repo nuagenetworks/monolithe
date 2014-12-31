@@ -24,7 +24,8 @@ RESOURCE_MAPPING = {
     'IngressACLTemplateEntry': 'IngressACLEntryTemplate',
     'IngressAdvancedForwardingTemplate': 'IngressAdvFwdTemplate',
     'IngressAdvancedForwardingTemplateEntry': 'IngressAdvFwdEntryTemplate',
-    'AutoDiscGateway': 'AutoDiscoveredGateway'
+    'AutoDiscGateway': 'AutoDiscoveredGateway',
+    'VirtualMachine': 'VM'
 }
 
 PACKAGE_MAPPING = {
@@ -119,7 +120,9 @@ class ModelsProcessor(object):
         else:
             model.name = name
 
+        model.instance_name = Utils.get_python_name(model.name)
         model.plural_name = Utils.get_plural_name(model.name)
+        model.instance_plural_name = Utils.get_python_name(model.plural_name)
 
     @classmethod
     def _process_apis(cls, model, apis, relations):
@@ -139,7 +142,7 @@ class ModelsProcessor(object):
                 path = path[1:]
 
             model_api = ModelAPI()
-            model_api.path = path
+            model_api.path = '/%s' % path
             model_api.operations = api['operations']  # TOIMPROVE
 
             names = filter(bool, re.split('/\{id\}?/?', path))
@@ -165,6 +168,7 @@ class ModelsProcessor(object):
                 relation.plural_name = model.plural_name
                 relation.remote_name = model.remote_name
                 relation.resource_name = model.resource_name
+                relation.instance_plural_name = model.instance_plural_name
                 relation.api = model_api
                 relations[parent_remote_name].append(relation)
 

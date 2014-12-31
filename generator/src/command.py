@@ -4,7 +4,7 @@ __all__ = ['Command']
 
 from lib import SwaggerParser
 from lib import Printer
-from lib import SDKWriter, DocWriter
+from lib import SDKWriter, DocWriter, CourgetteWriter
 from lib import ModelsProcessor
 from lib import GitManager
 
@@ -95,3 +95,33 @@ class Command(object):
         # Write Python sources
         doc_writer = DocWriter(directory=directory)
         doc_writer.write(resources=processed_resources, apiversion=apiversion)
+
+
+    @classmethod
+    def generate_courgette(self, vsdurl, apiversion, output_path):
+        """ Generate Courgette sources
+
+            It will generate all the environments and tests for the Courgette Framework.
+
+            Args:
+                vsdurl: the url to the vsd api
+                apiversion: the version of the vsd api in a dotted notation (ex: 3.0)
+                output_path: the path to the output directory
+
+        """
+        directory = '%s' % output_path
+
+        if vsdurl[-1] == '/':
+            vsdurl = vsdurl[:-1]
+
+        url = '%s/%s' % (vsdurl, API_URL)
+
+        # Read Swagger
+        swagger_parser = SwaggerParser()
+        resources = swagger_parser.grab_all(url=url, apiversion=apiversion)
+
+        # Processed Swagger models
+        processed_resources = ModelsProcessor.process(resources=resources)
+
+        writer = CourgetteWriter(directory=directory)
+        writer.write(resources=processed_resources)

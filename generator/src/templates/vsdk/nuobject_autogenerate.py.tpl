@@ -49,8 +49,8 @@ class NU{{ model.name }}(NURESTObject):
         {% if model.relations|length > 0 %}
         # Fetchers
         {% for relation in model.relations %}
-        self.{{ relation.resource_name }} = []
-        self.{{ relation.resource_name }}_fetcher = NU{{ relation.plural_name }}Fetcher.fetcher_with_object(nurest_object=self, local_name=u"{{ relation.resource_name }}")
+        self.{{ relation.instance_plural_name }} = []
+        self.{{ relation.instance_plural_name }}_fetcher = NU{{ relation.plural_name }}Fetcher.fetcher_with_object(nurest_object=self, local_name=u"{{relation.instance_plural_name}}")
         {% endfor %}{% endif %}
         for key, value in kwargs.iteritems():
             if hasattr(self, key):
