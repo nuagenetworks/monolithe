@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
+class AvatarType(object):
+    """ AvatarType """
+
+    URL = u"URL"
+    BASE64 = u"BASE64"
+    COMPUTEDURL = u"COMPUTEDURL"
+
 class ApplicationDeploymentPolicy(object):
     """ ApplicationDeploymentPolicy """
 
@@ -124,6 +131,12 @@ class UserRole(object):
     ORGNETWORKDESIGNER = u'ORGNETWORKDESIGNER'
     ORGUSER = u'ORGUSER'
     USER = u'USER'
+
+class PolicyGroupType(object):
+    """ PolicyGroupType """
+
+    SOFTWARE = u"SOFTWARE"
+    HARDWARE = u"HARDWARE"
 
 class RedirectionTargetEndPointType(object):
     """ RedirectionTargetEndPointType """
