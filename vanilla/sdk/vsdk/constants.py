@@ -138,8 +138,41 @@ class PolicyGroupType(object):
     SOFTWARE = u"SOFTWARE"
     HARDWARE = u"HARDWARE"
 
+
 class RedirectionTargetEndPointType(object):
     """ RedirectionTargetEndPointType """
 
     L3 = u"L3";
     VIRTUAL_WIRE = u"VIRTUAL_WIRE";
+
+
+class TunnelType(object):
+    """ TunnelType """
+
+    DC_DEFAULT = u"DC_DEFAULT"
+    GRE = u"GRE"
+    VXLAN = u"VXLAN"
+
+
+class MulticastType(object):
+    """ MulticastType """
+
+    DISABLED = u"DISABLED"
+    ENABLED = u"ENABLED"
+    ENABLED_INHERITED = u"ENABLED_INHERITED"
+
+
+class DHCPBehavior(object):
+    """ DHCPBehavior """
+
+    FLOOD = u"FLOOD"
+    CONSUME = u"CONSUME"
+    RELAY = u"RELAY"
+
+
+class PATNATType(object):
+    """ PATNATType """
+
+    DISABLED = u"DISABLED"
+    ENABLED = u"ENABLED"
+    INHERITED = u"INHERITED"
