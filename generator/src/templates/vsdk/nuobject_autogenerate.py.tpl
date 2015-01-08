@@ -85,3 +85,9 @@ class NU{{ model.name }}(NURESTObject):
         """
         return u"{{ model.remote_name }}"
 
+    def get_fetcher_name(self):
+        """ Return the fetcher name that will be used in objects parents
+
+        """
+        return u"{{ model.instance_plural_name }}_fetcher"
+
