@@ -31,8 +31,8 @@ class DomainTunnelType(object):
     GRE = u"GRE"
 
 
-class NUFlowSecurityPolicyAction(object):
-    """ NUFlowSecurityPolicyAction """
+class FlowSecurityPolicyAction(object):
+    """ FlowSecurityPolicyAction """
 
     DROP = u"DROP"
     FORWARD = u"FORWARD"
