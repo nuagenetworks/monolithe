@@ -75,6 +75,10 @@ ul {
     padding-top: 140px;
 }
 
+.compact-title {
+    display: none;
+}
+
 .summary {
 }
 
@@ -207,12 +211,31 @@ ul {
         display: none;
     }
 
+    .compact-title {
+        display: block;
+    }
+
     .main {
         padding: 10px;
-        padding-top: -20px;
     }
 
     body {
-        font-size: 0.7em;
+        font-size: 0.6em;
+    }
+
+    h2 {
+        margin-top: 20px;
+    }
+
+    h2:nth-of-type(1) {
+        margin-top: 0px;
+    }
+
+    .box ul {
+        padding: 10px;
+    }
+
+    .attributedescription .content {
+        padding: 5px;
     }
 }
