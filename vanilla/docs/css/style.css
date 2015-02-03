@@ -201,3 +201,18 @@ ul {
     padding: 2px;
     display: block;
 }
+
+@media screen and (max-width: 600px) {
+    .header {
+        display: none;
+    }
+
+    .main {
+        padding: 10px;
+        padding-top: -20px;
+    }
+
+    body {
+        font-size: 0.7em;
+    }
+}
