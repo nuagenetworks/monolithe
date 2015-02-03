@@ -11,7 +11,7 @@ class Utils(object):
     @classmethod
     def get_python_name(cls, name):
         """ Transform a given name to python name """
-        first_cap_re = re.compile('(.)([A-Z](?!s[A-Z])[a-z]+)')
+        first_cap_re = re.compile('(.)([A-Z](?!s([A-Z])*)[a-z]+)')
         all_cap_re = re.compile('([a-z0-9])([A-Z])')
 
         def repl(matchobj):
