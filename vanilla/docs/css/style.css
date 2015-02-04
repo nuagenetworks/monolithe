@@ -75,6 +75,10 @@ ul {
     padding-top: 140px;
 }
 
+.compact-title {
+    display: none;
+}
+
 .summary {
 }
 
@@ -200,4 +204,38 @@ ul {
     border: 1px solid #f0f0f0;
     padding: 2px;
     display: block;
+}
+
+@media screen and (max-width: 600px) {
+    .header {
+        display: none;
+    }
+
+    .compact-title {
+        display: block;
+    }
+
+    .main {
+        padding: 10px;
+    }
+
+    body {
+        font-size: 0.6em;
+    }
+
+    h2 {
+        margin-top: 20px;
+    }
+
+    h2:nth-of-type(1) {
+        margin-top: 0px;
+    }
+
+    .box ul {
+        padding: 10px;
+    }
+
+    .attributedescription .content {
+        padding: 5px;
+    }
 }

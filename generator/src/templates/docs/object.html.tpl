@@ -26,6 +26,7 @@
     </div>
 
     <div class="main">
+        <h1 class="compact-title">{{model.name}}</h1>
 
         <a class="anchor" name="cat0"></a>
         <h2>Description</h2>
@@ -128,7 +129,6 @@
                 </div>
                 <div class="content">
                     <div class="description">
-                        <h3>Description</h3>
                         <p>{{attribute.description}}</p>
                     </div>
                     {% if attribute.choices %}
