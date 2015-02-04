@@ -125,6 +125,7 @@ class SwaggerFileParser(object):
         """
         self.path = path
         self.apiversion = apiversion
+        self.extension = '.txt'
 
     def grab_all(self):
         """ Read a JSON file and returns a dictionnary
@@ -135,7 +136,7 @@ class SwaggerFileParser(object):
             Returns:
                 Returns a dictionary containing all models definition
         """
-        schema_path = '%s%s.txt' % (self.path, ENTRY_POINT)
+        schema_path = '%s%s%s' % (self.path, ENTRY_POINT, self.extension)
 
         if not os.path.isfile(schema_path):
             Printer.raiseError("[File Path] Could not access %s" % (schema_path))
@@ -159,7 +160,7 @@ class SwaggerFileParser(object):
 
         models = dict()
         for api in data[SWAGGER_APIS]:
-            file_path = '%s%s.txt' % (self.path, api[SWAGGER_PATH])
+            file_path = '%s%s%s' % (self.path, api[SWAGGER_PATH], self.extension)
             task_manager.start_task(method=self._grab_resource, file_path=file_path, results=models)
 
         task_manager.wait_until_exit()
