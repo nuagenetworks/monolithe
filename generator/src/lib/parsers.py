@@ -1,20 +1,53 @@
 # -*- coding: utf-8 -*-
 
+import os
+import json
 import requests
 
 from printer import Printer
 from managers import TaskManager
+from utils import Utils
 
+ENTRY_POINT = '/api-docs'
 SCHEMA_FILEPATH = '/schema'
-ENTRY_PONT = '/api-docs'
 SWAGGER_APIS = 'apis'
+SWAGGER_APIVERSION = 'apiVersion'
 SWAGGER_PATH = 'path'
 
 
 class SwaggerParser(object):
-    """ Swagger Parser grabs all information from a JSON File """
+    """ Factory class
 
-    def grab_all(self, url, apiversion):
+    """
+    @classmethod
+    def factory(cls, url=None, path=None, apiversion=None):
+        """ Return the appropriate Parser according to the url or path given
+
+        """
+        if path:
+            return SwaggerFileParser(path=path, apiversion=apiversion)
+
+        return SwaggerURLParser(url=url, apiversion=apiversion)
+
+    def grab_all(self):
+        """ Ensure method name
+
+        """
+        raise Exception("Should be implemented by developer.")
+
+
+class SwaggerURLParser(object):
+    """ Swagger Parser grabs all information from a JSON File
+
+    """
+    def __init__(self, url, apiversion):
+        """ Initializes a new URL parser
+
+        """
+        self.url = url
+        self.apiversion = apiversion
+
+    def grab_all(self):
         """ Read a JSON file and returns a dictionnary
 
             Args:
@@ -28,8 +61,12 @@ class SwaggerParser(object):
                 described in http://host:port/V3_0/schema/api-docs according to swagger
                 specification
         """
-        base_url = '%sV%s' % (url, str(apiversion).replace(".", "_"))
-        schema_url = '%s%s%s' % (base_url, SCHEMA_FILEPATH, ENTRY_PONT)
+
+        if self.apiversion is None:
+            Printer.raiseError("Please specify your apiversion using -v option")
+
+        base_url = '%sV%s' % (self.url, str(self.apiversion).replace(".", "_"))
+        schema_url = '%s%s%s' % (base_url, SCHEMA_FILEPATH, ENTRY_POINT)
 
         response = requests.get(schema_url, verify=False)
 
@@ -62,7 +99,7 @@ class SwaggerParser(object):
             Returns:
                 Fills result dictionary
         """
-        names = resource_path.split(SCHEMA_FILEPATH)[1].rsplit('/', 1);
+        names = resource_path.split(SCHEMA_FILEPATH)[1].rsplit('/', 1)
         package = names[0]
         resource_name = names[1]
 
@@ -74,6 +111,82 @@ class SwaggerParser(object):
         if response.status_code != 200:
             Printer.raiseError("[HTTP %s] An error occured while retrieving %s at %s" % (response.status_code, resource_name, resource_path))
 
-
         results[resource_name] = response.json()
+        results[resource_name]['package'] = package
+
+
+class SwaggerFileParser(object):
+    """ Parse Swagger files
+
+    """
+    def __init__(self, path, apiversion):
+        """ Initializes a File parser
+
+        """
+        self.path = path
+        self.apiversion = apiversion
+
+    def grab_all(self):
+        """ Read a JSON file and returns a dictionnary
+
+            Args:
+                path: the path where to find the schema/api-docs
+
+            Returns:
+                Returns a dictionary containing all models definition
+        """
+        schema_path = '%s%s.txt' % (self.path, ENTRY_POINT)
+
+        if not os.path.isfile(schema_path):
+            Printer.raiseError("[File Path] Could not access %s" % (schema_path))
+
+        try:
+            data = json.load(open(schema_path))
+        except Exception, exc:
+            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (schema_path, exc))
+
+        if SWAGGER_APIS not in data:
+            Printer.raiseError("No apis information found in %s" % schema_path)
+
+        if SWAGGER_APIVERSION not in data:
+            Printer.raiseError("No api version found in %s" % schema_path)
+
+        # Grab version from JSON file if not specified
+        if self.apiversion is None:
+            self.apiversion = Utils.get_version(data[SWAGGER_APIVERSION])
+
+        task_manager = TaskManager()
+
+        models = dict()
+        for api in data[SWAGGER_APIS]:
+            file_path = '%s%s.txt' % (self.path, api[SWAGGER_PATH])
+            task_manager.start_task(method=self._grab_resource, file_path=file_path, results=models)
+
+        task_manager.wait_until_exit()
+
+        return models
+
+    def _grab_resource(self, file_path, results=dict()):
+        """ Grab resource information
+
+            Args:
+                file_path: the path where to the file
+                results: the dictionary to fill with all information
+
+            Returns:
+                Fills result dictionary
+        """
+        names = file_path.split(self.path)[1].rsplit('/', 1)
+        package = names[0]
+        resource_name = names[1]
+
+        if not os.path.isfile(file_path):
+            Printer.raiseError("[File Path] Could not access %s" % (file_path))
+
+        try:
+            data = json.load(open(file_path))
+        except Exception, exc:
+            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (file_path, exc))
+
+        results[resource_name] = data
         results[resource_name]['package'] = package

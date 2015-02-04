@@ -73,3 +73,41 @@ class Utils(object):
             return singular_name[:-1] + 'ies'
 
         return singular_name + 's'
+
+    @classmethod
+    def get_version(self, server_version):
+        """ Parse Server Api version to have a
+            proper float version
+
+            Args:
+                server_version: version that can be like V3_0
+
+            Returns:
+                return a float number
+
+        """
+        if server_version.startswith('V'):
+            server_version = server_version[1:]
+
+        server_version = server_version.replace('_', '.')
+
+        try:
+            version = float(server_version)
+        except:
+            Printer.warn("Could not get a valid version from %s" % server_version)
+            version = 0.0
+
+        return version
+
+    @classmethod
+    def remove_slash(cls, path):
+        """ Removes last slash
+
+        """
+        if path is None or len(path) == 0:
+            return None
+
+        if path[-1] == '/':
+            return path[:-1]
+
+        return path
