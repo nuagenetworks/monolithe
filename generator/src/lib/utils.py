@@ -46,6 +46,10 @@ class Utils(object):
         if type_name in ['double', 'float']:
             return 'float'
 
+        # Known as wrong on the server side.
+        if type_name in ['GWPersonality','ManagedObjectType','ActionType','Action','VPortTagEndPointType','TriggerType','FlowRedirectTargetType']:
+            return 'str'
+
         clean_name = type_name.lower().strip()
         if clean_name.startswith('array') or clean_name.startswith('collection'):
             return list
