@@ -47,7 +47,7 @@ class Utils(object):
             return 'float'
 
         clean_name = type_name.lower().strip()
-        if clean_name == 'enum' clean_name.startswith('array') or clean_name.startswith('collection'):
+        if clean_name == 'enum' or clean_name.startswith('array') or clean_name.startswith('collection'):
             return list
 
         Printer.warn("Cannot find type '%s' for attribute '%s' of object %s. Attribute has been converted to Python string." % (type_name, attribute_name, object_name))
