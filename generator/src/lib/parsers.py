@@ -125,7 +125,7 @@ class SwaggerFileParser(object):
         """
         self.path = path
         self.apiversion = apiversion
-        self.extension = '.txt'
+        self.extension = ''
 
     def grab_all(self):
         """ Read a JSON file and returns a dictionnary
