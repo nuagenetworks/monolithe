@@ -31,23 +31,24 @@ class Utils(object):
         if type_name in ['string', 'actiontype', 'direction', 'flowredirecttargettype', 'diffresult']:
             return 'str'
 
+        if type_name == 'long':
+            return 'long'
+
         if type_name == 'boolean':
             return 'bool'
 
         if type_name in ['int', 'integer']:
             return 'int'
 
-        if type_name == 'enum':
-            return 'str'
-
         if type_name in ['date']:
             return 'time'
 
-        if type_name == 'string':
-            return 'str'
-
         if type_name in ['double', 'float']:
             return 'float'
+
+        clean_name = type_name.lower().strip()
+        if clean_name == 'enum' clean_name.startswith('array') or clean_name.startswith('collection'):
+            return list
 
         Printer.warn("Cannot find type '%s' for attribute '%s' of object %s. Attribute has been converted to Python string." % (type_name, attribute_name, object_name))
         return 'str'
