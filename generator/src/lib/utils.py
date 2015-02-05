@@ -28,7 +28,7 @@ class Utils(object):
     def get_python_type_name(cls, type_name, attribute_name=None, object_name=None):
         """ Returns a python type according to a java type """
 
-        if type_name in ['string', 'actiontype', 'direction', 'flowredirecttargettype', 'diffresult']:
+        if type_name in ['string', 'str', 'enum']:
             return 'str'
 
         if type_name == 'long':
@@ -47,7 +47,7 @@ class Utils(object):
             return 'float'
 
         clean_name = type_name.lower().strip()
-        if clean_name == 'enum' or clean_name.startswith('array') or clean_name.startswith('collection'):
+        if clean_name.startswith('array') or clean_name.startswith('collection'):
             return list
 
         Printer.warn("Cannot find type '%s' for attribute '%s' of object %s. Attribute has been converted to Python string." % (type_name, attribute_name, object_name))
