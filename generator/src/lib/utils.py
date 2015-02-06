@@ -52,11 +52,11 @@ class Utils(object):
 
         clean_name = type_name.lower().strip()
         if clean_name.startswith('array') or clean_name.startswith('collection'):
-            return list
+            return 'list'
 
         # Special cases where we need to handle nested objects...
         if clean_name in ['vmresync', 'qosprimitive', 'egressqosprimitive', 'statisticspolicy', 'map', 'diffresult', 'object']:
-            return object
+            return 'object'
 
         return None
 
