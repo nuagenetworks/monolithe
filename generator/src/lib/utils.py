@@ -54,8 +54,11 @@ class Utils(object):
         if clean_name.startswith('array') or clean_name.startswith('collection'):
             return list
 
-        Printer.warn("Cannot find type '%s' for attribute '%s' of object %s. Attribute has been converted to Python string." % (type_name, attribute_name, object_name))
-        return 'str'
+        # Special cases where we need to handle nested objects...
+        if clean_name in ['vmresync', 'qosprimitive', 'egressqosprimitive', 'statisticspolicy', 'map', 'diffresult', 'object']:
+            return object
+
+        return None
 
     @classmethod
     def get_singular_name(cls, plural_name):
