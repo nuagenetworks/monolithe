@@ -2,12 +2,12 @@
 
 __all__ = ['Command']
 
-from lib import SwaggerParser
-from lib import Printer
-from lib import SDKWriter, DocWriter, CourgetteWriter
-from lib import ModelsProcessor
-from lib import GitManager
-from lib import Utils
+from .lib import SwaggerParser
+from .lib import Printer
+from .lib import SDKWriter, DocWriter, CourgetteWriter
+from .lib import ModelsProcessor
+from .lib import GitManager
+from .lib import Utils
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'
