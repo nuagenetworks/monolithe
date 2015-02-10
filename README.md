@@ -17,6 +17,7 @@ Python dependencies:
     * jinja2
     * colorama
     * gitpython
+    * requests
 
 Setup your Python Virtual Environment
 -------------------------------------
