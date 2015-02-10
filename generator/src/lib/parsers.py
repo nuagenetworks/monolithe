@@ -4,9 +4,9 @@ import os
 import json
 import requests
 
-from printer import Printer
-from managers import TaskManager
-from utils import Utils
+from .printer import Printer
+from .managers import TaskManager
+from .utils import Utils
 
 ENTRY_POINT = '/api-docs'
 SCHEMA_FILEPATH = '/schema'

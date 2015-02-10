@@ -2,9 +2,9 @@
 
 import re
 
-from utils import Utils
-from printer import Printer
-from objects import Model, ModelAttribute, ModelAPI, ModelRelation
+from .utils import Utils
+from .printer import Printer
+from .objects import Model, ModelAttribute, ModelAPI, ModelRelation
 
 IGNORED_ATTRIBUTES = ["_fetchers"]
 IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']

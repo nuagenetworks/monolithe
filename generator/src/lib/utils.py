@@ -2,7 +2,7 @@
 
 import re
 
-from printer import Printer
+from .printer import Printer
 
 
 class Utils(object):

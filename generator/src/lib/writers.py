@@ -5,9 +5,10 @@ import shutil
 
 from copy import deepcopy
 from jinja2 import Environment, PackageLoader
-from printer import Printer
-from managers import TaskManager
-from utils import Utils
+
+from .printer import Printer
+from .managers import TaskManager
+from .utils import Utils
 
 __all__ = ['HTMLFileWriter', 'VSDKFileWriter', 'CourgetteWriter']
 

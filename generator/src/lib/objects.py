@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from utils import Utils
+from .utils import Utils
 
 
 class Model(object):

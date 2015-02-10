@@ -5,7 +5,7 @@ import shutil
 import threading
 
 from git import Repo, GitCommandError
-from printer import Printer
+from .printer import Printer
 
 
 class TaskManager(object):

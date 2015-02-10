@@ -2,4 +2,4 @@
 
 __all__ = ['Command']
 
-from command import Command
+from .command import Command
