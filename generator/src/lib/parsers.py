@@ -3,6 +3,7 @@
 import os
 import json
 import requests
+import sys
 
 from .printer import Printer
 from .managers import TaskManager
@@ -143,8 +144,9 @@ class SwaggerFileParser(object):
 
         try:
             data = json.load(open(schema_path))
-        except Exception, exc:
-            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (schema_path, exc))
+        except Exception:
+            e = sys.exc_info()[1]
+            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (schema_path, e.args[0]))
 
         if SWAGGER_APIS not in data:
             Printer.raiseError("No apis information found in %s" % schema_path)
@@ -186,8 +188,9 @@ class SwaggerFileParser(object):
 
         try:
             data = json.load(open(file_path))
-        except Exception, exc:
-            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (file_path, exc))
+        except Exception:
+            e = sys.exc_info()[1]
+            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (file_path, e.args[0]))
 
         results[resource_name] = data
         results[resource_name]['package'] = package
