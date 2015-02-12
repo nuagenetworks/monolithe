@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import os
-import logging
+import sys
 from pprint import pprint
 
 from colorama import init
 init()
 from colorama import Fore, Style
+
 
 class Printer(object):
     """ Print output for VSD-CLI
@@ -30,8 +30,8 @@ class Printer(object):
             Args:
                 message: the message to print
         """
-        raise Exception('\033[91m[Error] %s\033[0m' % message)
-
+        cls.colorprint('[ERROR] %s' % message, Fore.RED)
+        sys.exit(1)
 
     @classmethod
     def success(cls, message):
