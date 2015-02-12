@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from lib import Utils
+from src.lib import Utils
 
 
 class GetPythonNameTest(TestCase):

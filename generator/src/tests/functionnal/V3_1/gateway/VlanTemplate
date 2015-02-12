@@ -1,0 +1,178 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/VlanTemplate",
+    "apis": [
+        {
+            "path": "/porttemplates/{id}/vlantemplates",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or Read all VLANs  associated to a Port",
+                    "type": "VlanTemplate",
+                    "nickname": "getPORTTEMPLATESVlanTemplates",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or Read all VLANs  associated to a Port",
+                    "type": "VlanTemplate",
+                    "nickname": "postPORTTEMPLATESVlanTemplates",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vlantemplates/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify or delete a specific VLAN Template",
+                    "type": "VlanTemplate",
+                    "nickname": "putVlanTemplates",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify or delete a specific VLAN Template",
+                    "type": "VlanTemplate",
+                    "nickname": "deleteVlanTemplates",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify or delete a specific VLAN Template",
+                    "type": "VlanTemplate",
+                    "nickname": "getVlanTemplates",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "VlanTemplate": {
+            "id": "VlanTemplate",
+            "description":"Represents VLAN Template under a PORT Template object.",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                    ]
+                },
+                "value": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "value of VLAN",
+                    "type": "integer"
+                },
+                "associatedEgressQOSPolicyID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the Egress QOS Policy associated with this Vlan.",
+                    "type": "string"
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A description of the Port",
+                    "type": "string"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

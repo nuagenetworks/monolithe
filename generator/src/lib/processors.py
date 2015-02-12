@@ -216,11 +216,13 @@ class ModelsProcessor(object):
 
             if attribute.local_type:
                 model.attributes.append(attribute)
-            # Simply ignore attributes otherwise...
-            # 02/06/2015
-            # Ignoring attribute enterprise of object InfrastructurePortProfile
-            # Ignoring attribute gateway of object InfrastructureGatewayProfile
-            # Ignoring attribute enterprise of object InfrastructureGatewayProfile
+            else:
+                # Simply ignore attributes otherwise...
+                # 02/06/2015
+                # Ignoring attribute enterprise of object InfrastructurePortProfile
+                # Ignoring attribute gateway of object InfrastructureGatewayProfile
+                # Ignoring attribute enterprise of object InfrastructureGatewayProfile
+                Printer.log("Deliberately ignoring attribute %s of object %s" % (attribute.remote_name, model.name))
 
     @classmethod
     def _process_relations(cls, model, relations):

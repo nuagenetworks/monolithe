@@ -1,0 +1,240 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/VPortMirror",
+    "apis": [
+        {
+            "path": "/vports/{id}/vportmirrors",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all vport mirrors under a given vport and create vport mirror for the given vport",
+                    "type": "VPortMirror",
+                    "nickname": "getVPORTSVPortMirrors",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Read all vport mirrors under a given vport and create vport mirror for the given vport",
+                    "type": "VPortMirror",
+                    "nickname": "postVPORTSVPortMirrors",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/mirrordestinations/{id}/vportmirrors",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Get all vport mirror for this mirror destination",
+                    "type": "VPortMirror",
+                    "nickname": "getMIRRORDESTINATIONSVPortMirrors",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vportmirrors/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, Update or Modify a specific vport mirror",
+                    "type": "VPortMirror",
+                    "nickname": "putVPortMirrors",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, Update or Modify a specific vport mirror",
+                    "type": "VPortMirror",
+                    "nickname": "deleteVPortMirrors",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, Update or Modify a specific vport mirror",
+                    "type": "VPortMirror",
+                    "nickname": "getVPortMirrors",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "VPortMirror": {
+            "id": "VPortMirror",
+            "description":"VPort Mirror Object represents the relationship between a vport and a mirror destination.",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                    ]
+                },
+                "attachedNetworkType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Type of the network attached - L2/L3",
+                    "type": "string"
+                },
+                "domainName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Domain name of the vport associated with the mirror destination",
+                    "type": "string"
+                },
+                "enterpiseName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Enterprise to which the vport associated with the mirror destination belongs to.",
+                    "type": "string"
+                },
+                "mirrorDestinationID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Destination ID of the mirror destination object.",
+                    "type": "string"
+                },
+                "mirrorDestinationName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the mirror destination",
+                    "type": "string"
+                },
+                "mirrorDirection": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Describes what type of traffic needs to be mirrors - ingress/egress/both Possible values are BOTH, INGRESS, EGRESS, .",
+                    "type": "enum",
+                    "enum": [
+                              "BOTH",
+                              "EGRESS",
+                              "INGRESS"
+                    ]
+                },
+                "networkName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the network to which the vport belongs to",
+                    "type": "string"
+                },
+                "vportId": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Id of the vport to which the mirror destination is associated with.",
+                    "type": "string"
+                },
+                "VPortName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the vport to which the mirror destination is associated with.",
+                    "type": "string"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

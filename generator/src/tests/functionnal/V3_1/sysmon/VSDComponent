@@ -1,0 +1,130 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/VSDComponent",
+    "apis": [
+        {
+            "path": "/vsds/{id}/components",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all components for a specific VSD",
+                    "type": "VSDComponent",
+                    "nickname": "getVSDSVSDComponents",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "VSDComponent": {
+            "id": "VSDComponent",
+            "description":"System Monitoring details for components of VSD system",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                    ]
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Description of the entity.",
+                    "type": "string"
+                },
+                "address": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "An optional IP to access this component.",
+                    "type": "string"
+                },
+                "location": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the entity to be associated with a location.",
+                    "type": "string"
+                },
+                "managementIP": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "An optional management IP to log into this component.",
+                    "type": "string"
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the entity with a name.",
+                    "type": "string"
+                },
+                "productVersion": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Product version supported by this entity.",
+                    "type": "string"
+                },
+                "status": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Current status of the entity. Possible values are UP, DOWN, ADMIN_DOWN, DEGRADED, .",
+                    "type": "enum",
+                    "enum": [
+                              "DEGRADED",
+                              "DOWN",
+                              "UP",
+                              "ADMIN_DOWN"
+                    ]
+                },
+                "type": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Type of the component Possible values are JBOSS, MEDIATOR, PERCONA, EJABBERD, TCA, STATSCOLLECTOR, STATSSERVER, .",
+                    "type": "enum",
+                    "enum": [
+                              "STATSCOLLECTOR",
+                              "EJABBERD",
+                              "PERCONA",
+                              "MEDIATOR",
+                              "STATSSERVER",
+                              "TCA",
+                              "JBOSS"
+                    ]
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

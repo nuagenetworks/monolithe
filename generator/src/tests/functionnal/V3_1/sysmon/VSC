@@ -1,0 +1,303 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/VSC",
+    "apis": [
+        {
+            "path": "/vrss/{id}/vscs",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Update VSCs association of a VRS",
+                    "type": "VSC",
+                    "nickname": "putVRSSVSCs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vscs/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read or Delete a specific VSC controller",
+                    "type": "VSC",
+                    "nickname": "putVSCs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read or Delete a specific VSC controller",
+                    "type": "VSC",
+                    "nickname": "deleteVSCs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read or Delete a specific VSC controller",
+                    "type": "VSC",
+                    "nickname": "getVSCs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vsps/{id}/vscs",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VSC controllers for a specific VSP",
+                    "type": "VSC",
+                    "nickname": "getVSPSVSCs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "VSC": {
+            "id": "VSC",
+            "description":"System Monitoring details for VSC",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "Job",
+                            "BGPPeer",
+                            "PortStatus",
+                            "VRS",
+                            "EventLog",
+                            "Alarm"
+                    ]
+                },
+                "alreadyMarkedForUnavailable": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Flag to indicate that it is already marked a unavailable.",
+                    "type": "boolean"
+                },
+                "address": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The IP of the VRS entity",
+                    "type": "string"
+                },
+                "managementIP": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The management IP of the VSC/HSC entity",
+                    "type": "string"
+                },
+                "unavailableTimestamp": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The duration the controller is unavailable (in millis).",
+                    "type": "long"
+                },
+                "vsds": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A collection of VSD id(s) which are identified by this controller.",
+                    "type": "Array[String]",
+                    "items": {
+                        "$ref":"Collection of String"
+                    }
+
+                },
+                "messages": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "An array of degraded messages.",
+                    "type": "Array[String]",
+                    "items": {
+                        "$ref":"Collection of String"
+                    }
+
+                },
+                "averageCPUUsage": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Average CPU usage percentage.",
+                    "type": "double"
+                },
+                "averageMemoryUsage": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Average memory usage percentage.",
+                    "type": "double"
+                },
+                "currentCPUUsage": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Current CPU usage percentage.",
+                    "type": "double"
+                },
+                "currentMemoryUsage": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Current memory usage percentage.",
+                    "type": "double"
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Description of the entity.",
+                    "type": "string"
+                },
+                "disks": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Set of disk usage details.",
+                    "type": "Array[DiskStats]",
+                    "items": {
+                        "$ref":"Collection of DiskStats"
+                    }
+
+                },
+                "lastStateChange": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Last state change timestamp (in millis).",
+                    "type": "long"
+                },
+                "location": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the entity to be associated with a location.",
+                    "type": "string"
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the entity with a name.",
+                    "type": "string"
+                },
+                "peakCPUUsage": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Peek CPU usage percentage.",
+                    "type": "double"
+                },
+                "peakMemoryUsage": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Peek memory usage percentage.",
+                    "type": "double"
+                },
+                "productVersion": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Product version supported by this entity.",
+                    "type": "string"
+                },
+                "status": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Computed status of the entity. Possible values are UP, DOWN, ADMIN_DOWN, DEGRADED, .",
+                    "type": "enum",
+                    "enum": [
+                              "DEGRADED",
+                              "DOWN",
+                              "UP",
+                              "ADMIN_DOWN"
+                    ]
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

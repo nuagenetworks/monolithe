@@ -120,7 +120,7 @@ class SwaggerFileParser(object):
     """ Parse Swagger files
 
     """
-    def __init__(self, path, apiversion):
+    def __init__(self, path, apiversion=None):
         """ Initializes a File parser
 
         """

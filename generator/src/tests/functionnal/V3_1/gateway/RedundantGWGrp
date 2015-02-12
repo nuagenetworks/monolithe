@@ -1,0 +1,296 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/RedundantGWGrp",
+    "apis": [
+        {
+            "path": "/enterprises/{id}/redundancygroups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all  Redundant Gateway Groups or create a  Redundant Gateway Group for a given enterprise",
+                    "type": "RedundantGWGrp",
+                    "nickname": "getENTERPRISESRedundantGWGrps",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Read all  Redundant Gateway Groups or create a  Redundant Gateway Group for a given enterprise",
+                    "type": "RedundantGWGrp",
+                    "nickname": "postENTERPRISESRedundantGWGrps",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/redundancygroups/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify or delete a specific Redundant Gateway Group",
+                    "type": "RedundantGWGrp",
+                    "nickname": "putRedundantGWGrps",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify or delete a specific Redundant Gateway Group",
+                    "type": "RedundantGWGrp",
+                    "nickname": "deleteRedundantGWGrps",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify or delete a specific Redundant Gateway Group",
+                    "type": "RedundantGWGrp",
+                    "nickname": "getRedundantGWGrps",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/redundancygroups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all Redundant Gateway Groups,this API can only be accessed by CSPROOT",
+                    "type": "RedundantGWGrp",
+                    "nickname": "getRedundantGWGrps",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all Redundant Gateway Groups,this API can only be accessed by CSPROOT",
+                    "type": "RedundantGWGrp",
+                    "nickname": "postRedundantGWGrps",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "RedundantGWGrp": {
+            "id": "RedundantGWGrp",
+            "description":"Represents Redundant Group formed by two Gateways",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "WANService",
+                            "Port",
+                            "PermittedAction",
+                            "Gateway",
+                            "EnterprisePermission",
+                            "EventLog",
+                            "Alarm"
+                    ]
+                },
+                "gatewayPeer1AutodiscoveredGatewayID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The Auto Discovered Gateway configuration owner in this Redundant Group. ",
+                    "type": "string"
+                },
+                "gatewayPeer2AutodiscoveredGatewayID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The Auto Discovered Gateway  peer in this Redundant Group",
+                    "type": "string"
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": " Description of the Redundancy Group",
+                    "type": "string"
+                },
+                "enterpriseID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The enterprise associated with this Redundant Group. This is a read only attribute",
+                    "type": "string"
+                },
+                "redundantGatewayStatus": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The status of  Redundant Group, possible values are FAILED, SUCCESS Possible values are FAILED, SUCCESS, .",
+                    "type": "enum",
+                    "enum": [
+                              "SUCCESS",
+                              "FAILED"
+                    ]
+                },
+                "gatewayPeer1ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The gateway configuration owner in this Redundant Group. when Redundant Group is deleted this gateway will recieve vport associations ",
+                    "type": "string"
+                },
+                "gatewayPeer1Name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The gateway   configuration owner name in this Redundant Group",
+                    "type": "string"
+                },
+                "gatewayPeer2ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The gateway peer in this Redundant Group. when Redundant Group is deleted this gateway will not recieve vport associations ",
+                    "type": "string"
+                },
+                "gatewayPeer2Name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The gateway peer name in this Redundant Group",
+                    "type": "string"
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the Redundancy Group ",
+                    "type": "string"
+                },
+                "permittedAction": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The permitted  action to USE/EXTEND  this Gateway Possible values are USE, READ, ALL, INSTANTIATE, EXTEND, .",
+                    "type": "enum",
+                    "enum": [
+                              "EXTEND",
+                              "INSTANTIATE",
+                              "USE",
+                              "READ",
+                              "ALL"
+                    ]
+                },
+                "personality": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "derived personality of the Redundancy Group - VSG,VRSG,NSG,OTHER Possible values are VSG, VSA, VRSG, DC7X50, NSG, HARDWARE_VTEP, OTHER, .",
+                    "type": "enum",
+                    "enum": [
+                              "DC7X50",
+                              "OTHER",
+                              "VRSG",
+                              "VSG",
+                              "VSA",
+                              "HARDWARE_VTEP",
+                              "NSG"
+                    ]
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

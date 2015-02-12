@@ -1,0 +1,301 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/BridgeInterface",
+    "apis": [
+        {
+            "path": "/domains/{id}/bridgeinterfaces",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all the bridge interfaces to a domain",
+                    "type": "BridgeInterface",
+                    "nickname": "getDOMAINSBridgeInterfaces",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/l2domains/{id}/bridgeinterfaces",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all the bridge interfaces to a l2 domain",
+                    "type": "BridgeInterface",
+                    "nickname": "getL2DOMAINSBridgeInterfaces",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/bridgeinterfaces/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify, delete bridge interface",
+                    "type": "BridgeInterface",
+                    "nickname": "putBridgeInterfaces",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify, delete bridge interface",
+                    "type": "BridgeInterface",
+                    "nickname": "deleteBridgeInterfaces",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify, delete bridge interface",
+                    "type": "BridgeInterface",
+                    "nickname": "getBridgeInterfaces",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vports/{id}/bridgeinterfaces",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "List all bridge interface in a vport and create one under a vport.",
+                    "type": "BridgeInterface",
+                    "nickname": "getVPORTSBridgeInterfaces",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "List all bridge interface in a vport and create one under a vport.",
+                    "type": "BridgeInterface",
+                    "nickname": "postVPORTSBridgeInterfaces",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "BridgeInterface": {
+            "id": "BridgeInterface",
+            "description":"Provides information for each bridge interface",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "Statistics",
+                            "DHCPOption",
+                            "QosPrimitive",
+                            "RedirectionTarget",
+                            "TCA",
+                            "PolicyDecision",
+                            "PolicyGroup",
+                            "EventLog"
+                    ]
+                },
+                "associatedFloatingIPAddress": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Floating Ip Address of this network interface eg: 10.1.2.1",
+                    "type": "string"
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Device name associated with this interface",
+                    "type": "string"
+                },
+                "attachedNetworkID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the l2 domain or Subnet that the VM is attached to",
+                    "type": "string"
+                },
+                "attachedNetworkType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "l2 domain or Subnet that the interface is attached to",
+                    "$ref": "ManagedObjectType"
+
+                },
+                "domainID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the domain that the VM is attached to",
+                    "type": "string"
+                },
+                "domainName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the domain that the VM is attached to",
+                    "type": "string"
+                },
+                "gateway": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Gateway of the subnet that the VM is connected to",
+                    "type": "string"
+                },
+                "netmask": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Netmask of the subnet that the VM is attached to",
+                    "type": "string"
+                },
+                "networkName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the network that the VM is attached to",
+                    "type": "string"
+                },
+                "policyDecisionID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The policy decision ID for this particular  interface",
+                    "type": "string"
+                },
+                "tierID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the tier that the interface is attached to.",
+                    "type": "string"
+                },
+                "VPortID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the vport that the interface is attached to",
+                    "type": "string"
+                },
+                "VPortName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the vport that the VM is attached to",
+                    "type": "string"
+                },
+                "zoneID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the zone that the interface is attached to",
+                    "type": "string"
+                },
+                "zoneName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the zone that the VM is attached to",
+                    "type": "string"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

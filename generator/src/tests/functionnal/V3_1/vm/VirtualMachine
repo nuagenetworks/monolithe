@@ -1,0 +1,620 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/VirtualMachine",
+    "apis": [
+        {
+            "path": "/vms/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read , modify and delete   a specific VM",
+                    "type": "VirtualMachine",
+                    "nickname": "putVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read , modify and delete   a specific VM",
+                    "type": "VirtualMachine",
+                    "nickname": "deleteVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read , modify and delete   a specific VM",
+                    "type": "VirtualMachine",
+                    "nickname": "getVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/l2domains/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to a l2 domain",
+                    "type": "VirtualMachine",
+                    "nickname": "getL2DOMAINSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/users/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs belonging to an user",
+                    "type": "VirtualMachine",
+                    "nickname": "getUSERSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/ingressacltemplates/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to an acl",
+                    "type": "VirtualMachine",
+                    "nickname": "getINGRESSACLTEMPLATESVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/zones/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to a zone",
+                    "type": "VirtualMachine",
+                    "nickname": "getZONESVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all the VMs in the data center. Permitted only for user with csproot role, Create VM , permitted only for user with cms role",
+                    "type": "VirtualMachine",
+                    "nickname": "getVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Read all the VMs in the data center. Permitted only for user with csproot role, Create VM , permitted only for user with cms role",
+                    "type": "VirtualMachine",
+                    "nickname": "postVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/egressacltemplates/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to an Egress acl",
+                    "type": "VirtualMachine",
+                    "nickname": "getEGRESSACLTEMPLATESVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/enterprises/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to an enterprise",
+                    "type": "VirtualMachine",
+                    "nickname": "getENTERPRISESVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vports/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to a vport",
+                    "type": "VirtualMachine",
+                    "nickname": "getVPORTSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/qos/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to an QOS profile",
+                    "type": "VirtualMachine",
+                    "nickname": "getQOSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/subnets/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to a subnet",
+                    "type": "VirtualMachine",
+                    "nickname": "getSUBNETSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/apps/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to an application",
+                    "type": "VirtualMachine",
+                    "nickname": "getAPPSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/tiers/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all virtual machine(s) in a tier",
+                    "type": "VirtualMachine",
+                    "nickname": "getTIERSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/domains/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to a domain",
+                    "type": "VirtualMachine",
+                    "nickname": "getDOMAINSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vrss/{id}/vms",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all VMs associated to a specific VRS",
+                    "type": "VirtualMachine",
+                    "nickname": "getVRSSVirtualMachines",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "VirtualMachine": {
+            "id": "VirtualMachine",
+            "description":"Read only API that can retrieve the VMs associated with a domain, zone or subnet for mediation created VM's for REST created  VM's you need to set the additional proxy user header in http request : X-Nuage-ProxyUservalue of the header has to be either :1) enterpriseName@UserName (example : Alcatel Lucent@bob)2) external ID of user in VSD, typically is UUID generally decided by the CMS tool in questionUser needs to have CMS privileges to use proxy user header",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "VMResync",
+                            "VMInterface",
+                            "VRS",
+                            "EventLog",
+                            "Alarm"
+                    ]
+                },
+                "appName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Application name that this VM belongs to",
+                    "type": "string"
+                },
+                "domainIDs": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Array of IDs of the domain that the VM is connected to",
+                    "type": "Array[String]",
+                    "items": {
+                        "$ref":"Collection of String"
+                    }
+
+                },
+                "enterpriseID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the enterprise that this VM belongs to",
+                    "type": "string"
+                },
+                "enterpriseName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the enterprise that this VM belongs to",
+                    "type": "string"
+                },
+                "hypervisorIP": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "IP address of the hypervisor that this VM is currently running in",
+                    "type": "string"
+                },
+                "interfaces": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "List of VM interfaces associated with the VM",
+                    "type": "Array[VMInterface]",
+                    "items": {
+                        "$ref":"Collection of VMInterface"
+                    }
+
+                },
+                "l2DomainIDs": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Array of IDs of the l2 domain that the VM is connected to",
+                    "type": "Array[String]",
+                    "items": {
+                        "$ref":"Collection of String"
+                    }
+
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the VM",
+                    "type": "string"
+                },
+                "resyncInfo": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Information of the status of the resync operation of a VM",
+                    "$ref": "VMResync"
+
+                },
+                "subnetIDs": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Array of IDs of the subnets that the VM is connected to",
+                    "type": "Array[String]",
+                    "items": {
+                        "$ref":"Collection of String"
+                    }
+
+                },
+                "userID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the user that created this VM",
+                    "type": "string"
+                },
+                "userName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Username of the user that created this VM",
+                    "type": "string"
+                },
+                "UUID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "UUID of the VM",
+                    "type": "string"
+                },
+                "status": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Status of the VM - UNKNOWN, NOSTATE, RUNNING, BLOCKED, PAUSED, SHUTDOWN, SHUTOFF, CRASHED, LAST, UNREACHABLE, INIT, DELETE_PENDING Possible values are UNKNOWN, NOSTATE, RUNNING, BLOCKED, PAUSED, SHUTDOWN, SHUTOFF, CRASHED, LAST, UNREACHABLE, INIT, DELETE_PENDING, .",
+                    "type": "enum",
+                    "enum": [
+                              "UNREACHABLE",
+                              "SHUTDOWN",
+                              "RUNNING",
+                              "NOSTATE",
+                              "LAST",
+                              "CRASHED",
+                              "SHUTOFF",
+                              "UNKNOWN",
+                              "PAUSED",
+                              "INIT",
+                              "DELETE_PENDING",
+                              "BLOCKED"
+                    ]
+                },
+                "reasonType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Reason of the event associated with the VM - UNKNOWN, NOSTATE_UNKNOWN, NOSTATE_LAST, RUNNING_UNKNOWN, RUNNING_BOOTED, RUNNING_MIGRATED, RUNNING_RESTORED, RUNNING_FROM_SNAPSHOT, RUNNING_UNPAUSED, RUNNING_MIGRATION_CANCELED, RUNNING_SAVE_CANCELED, RUNNING_LAST, BLOCKED_UNKNOWN, BLOCKED_LAST, PAUSED_UNKNOWN, PAUSED_USER, PAUSED_MIGRATION, PAUSED_SAVE, PAUSED_DUMP, PAUSED_IOERROR, PAUSED_WATCHDOG, PAUSED_FROM_SNAPSHOT, PAUSED_SHUTTING_DOWN, PAUSED_LAST, SHUTDOWN_UNKNOWN, SHUTDOWN_USER, SHUTDOWN_LAST, SHUTOFF_UNKNOWN, SHUTOFF_SHUTDOWN, SHUTOFF_DESTROYED, SHUTOFF_CRASHED, SHUTOFF_MIGRATED, SHUTOFF_SAVED, SHUTOFF_FAILED,SHUTOFF_FROM_SNAPSHOT, SHUTOFF_LAST, CRASHED_UNKNOWN, CRASHED_LAST Possible values are UNKNOWN, NOSTATE_UNKNOWN, NOSTATE_LAST, RUNNING_UNKNOWN, RUNNING_BOOTED, RUNNING_MIGRATED, RUNNING_RESTORED, RUNNING_FROM_SNAPSHOT, RUNNING_UNPAUSED, RUNNING_MIGRATION_CANCELED, RUNNING_SAVE_CANCELED, RUNNING_LAST, BLOCKED_UNKNOWN, BLOCKED_LAST, PAUSED_UNKNOWN, PAUSED_USER, PAUSED_MIGRATION, PAUSED_SAVE, PAUSED_DUMP, PAUSED_IOERROR, PAUSED_WATCHDOG, PAUSED_FROM_SNAPSHOT, PAUSED_SHUTTING_DOWN, PAUSED_LAST, SHUTDOWN_UNKNOWN, SHUTDOWN_USER, SHUTDOWN_LAST, SHUTOFF_UNKNOWN, SHUTOFF_SHUTDOWN, SHUTOFF_DESTROYED, SHUTOFF_CRASHED, SHUTOFF_MIGRATED, SHUTOFF_SAVED, SHUTOFF_FAILED, SHUTOFF_FROM_SNAPSHOT, SHUTOFF_LAST, CRASHED_UNKNOWN, CRASHED_LAST, FROM_SNAPSHOT, USER, MIGRATED, LAST, UNKNOWN_VAL, .",
+                    "type": "enum",
+                    "enum": [
+                              "MIGRATED",
+                              "RUNNING_MIGRATION_CANCELED",
+                              "NOSTATE_UNKNOWN",
+                              "PAUSED_FROM_SNAPSHOT",
+                              "SHUTDOWN_UNKNOWN",
+                              "PAUSED_UNKNOWN",
+                              "PAUSED_WATCHDOG",
+                              "SHUTOFF_MIGRATED",
+                              "RUNNING_UNKNOWN",
+                              "PAUSED_SAVE",
+                              "SHUTOFF_FAILED",
+                              "NOSTATE_LAST",
+                              "RUNNING_BOOTED",
+                              "PAUSED_SHUTTING_DOWN",
+                              "SHUTOFF_FROM_SNAPSHOT",
+                              "CRASHED_UNKNOWN",
+                              "SHUTOFF_DESTROYED",
+                              "PAUSED_DUMP",
+                              "UNKNOWN_VAL",
+                              "SHUTOFF_SAVED",
+                              "SHUTOFF_SHUTDOWN",
+                              "SHUTOFF_UNKNOWN",
+                              "RUNNING_UNPAUSED",
+                              "RUNNING_FROM_SNAPSHOT",
+                              "UNKNOWN",
+                              "RUNNING_LAST",
+                              "SHUTDOWN_LAST",
+                              "SHUTDOWN_USER",
+                              "BLOCKED_LAST",
+                              "USER",
+                              "RUNNING_SAVE_CANCELED",
+                              "PAUSED_USER",
+                              "RUNNING_MIGRATED",
+                              "RUNNING_RESTORED",
+                              "BLOCKED_UNKNOWN",
+                              "LAST",
+                              "CRASHED_LAST",
+                              "SHUTOFF_CRASHED",
+                              "PAUSED_MIGRATION",
+                              "PAUSED_LAST",
+                              "FROM_SNAPSHOT",
+                              "SHUTOFF_LAST",
+                              "PAUSED_IOERROR"
+                    ]
+                },
+                "VRSID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Id of the VRS that this VM is attached to.",
+                    "type": "string"
+                },
+                "zoneIDs": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Array of IDs of the zone that this VM is attached to",
+                    "type": "Array[String]",
+                    "items": {
+                        "$ref":"Collection of String"
+                    }
+
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

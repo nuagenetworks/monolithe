@@ -1,0 +1,678 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/QosPrimitive",
+    "apis": [
+        {
+            "path": "/domains/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a domain",
+                    "type": "QosPrimitive",
+                    "nickname": "getDOMAINSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a domain",
+                    "type": "QosPrimitive",
+                    "nickname": "postDOMAINSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/zones/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a zone",
+                    "type": "QosPrimitive",
+                    "nickname": "getZONESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a zone",
+                    "type": "QosPrimitive",
+                    "nickname": "postZONESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/domaintemplates/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a domain template",
+                    "type": "QosPrimitive",
+                    "nickname": "getDOMAINTEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a domain template",
+                    "type": "QosPrimitive",
+                    "nickname": "postDOMAINTEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/vports/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QoS profile associated to a vport",
+                    "type": "QosPrimitive",
+                    "nickname": "getVPORTSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QoS profile associated to a vport",
+                    "type": "QosPrimitive",
+                    "nickname": "postVPORTSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/subnets/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a subnet",
+                    "type": "QosPrimitive",
+                    "nickname": "getSUBNETSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a subnet",
+                    "type": "QosPrimitive",
+                    "nickname": "postSUBNETSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/zonetemplates/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a zone template",
+                    "type": "QosPrimitive",
+                    "nickname": "getZONETEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a zone template",
+                    "type": "QosPrimitive",
+                    "nickname": "postZONETEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/bridgeinterfaces/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QoS profile associated to a bridge interface",
+                    "type": "QosPrimitive",
+                    "nickname": "getBRIDGEINTERFACESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QoS profile associated to a bridge interface",
+                    "type": "QosPrimitive",
+                    "nickname": "postBRIDGEINTERFACESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/hostinterfaces/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QoS profile associated to a hostinterface",
+                    "type": "QosPrimitive",
+                    "nickname": "getHOSTINTERFACESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QoS profile associated to a hostinterface",
+                    "type": "QosPrimitive",
+                    "nickname": "postHOSTINTERFACESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/qos/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify or delete a specific QOS profile",
+                    "type": "QosPrimitive",
+                    "nickname": "putQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify or delete a specific QOS profile",
+                    "type": "QosPrimitive",
+                    "nickname": "deleteQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify or delete a specific QOS profile",
+                    "type": "QosPrimitive",
+                    "nickname": "getQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/subnettemplates/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a subnet template",
+                    "type": "QosPrimitive",
+                    "nickname": "getSUBNETTEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a subnet template",
+                    "type": "QosPrimitive",
+                    "nickname": "postSUBNETTEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/policydecisions/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all QOS profile associated to a policy decision",
+                    "type": "QosPrimitive",
+                    "nickname": "getPOLICYDECISIONSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/l2domaintemplates/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a l2domain template",
+                    "type": "QosPrimitive",
+                    "nickname": "getL2DOMAINTEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a l2domain template",
+                    "type": "QosPrimitive",
+                    "nickname": "postL2DOMAINTEMPLATESQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/l2domains/{id}/qos",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all QOS profile associated to a l2domain",
+                    "type": "QosPrimitive",
+                    "nickname": "getL2DOMAINSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all QOS profile associated to a l2domain",
+                    "type": "QosPrimitive",
+                    "nickname": "postL2DOMAINSQosPrimitives",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "QosPrimitive": {
+            "id": "QosPrimitive",
+            "description":"The object manipulates the QoS parameters attached to a domain, zone, or subnet",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "EventLog",
+                            "VirtualMachine"
+                    ]
+                },
+                "associatedDSCPForwardingClassTableID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the DSCP->Forwarding Class used by this Qos Policy",
+                    "type": "string"
+                },
+                "associatedDSCPForwardingClassTableName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the DSCP->Forwarding Class used by this Qos Policy",
+                    "type": "string"
+                },
+                "assocQosId": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of object associated with this QoS object",
+                    "type": "string"
+                },
+                "BUMCommittedBurstSize": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Committed burst size setting for BUM Shaper",
+                    "type": "string"
+                },
+                "BUMCommittedInformationRate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Committed information rate setting for BUM Shaper",
+                    "type": "string"
+                },
+                "BUMPeakBurstSize": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Peak burst size setting for Broadcast/Multicast rate limiting",
+                    "type": "string"
+                },
+                "BUMPeakInformationRate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Peak rate setting for Broadcast/Multicast rate limiting",
+                    "type": "string"
+                },
+                "BUMRateLimitingActive": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Flag the indicates whether Broadcast/Multicast rate limiting is enabled or disabled",
+                    "type": "boolean"
+                },
+                "burst": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The maximum burst size associated with the rate limiter",
+                    "type": "string"
+                },
+                "committedBurstSize": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Committed burst size associated with the rate limiter",
+                    "type": "string"
+                },
+                "committedInformationRate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Committed bandwidth that is allowed from each VM",
+                    "type": "string"
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A description of the QoS object",
+                    "type": "string"
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A unique name of the QoS object",
+                    "type": "string"
+                },
+                "peak": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Peak bandwidth that is allowed from each VM",
+                    "type": "string"
+                },
+                "rateLimitingActive": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies if rate limiting must be implemented",
+                    "type": "boolean"
+                },
+                "rewriteForwardingClass": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Specifies if the rewrite flag is set for the QoS policy / template",
+                    "type": "boolean"
+                },
+                "serviceClass": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Class of service to be used. Service classes in order of priority are A (1), B (2), C(3), D(4), E(5), F(6), G(7) and H(8) Possible values are NONE, A, B, C, D, E, F, G, H, .",
+                    "type": "enum",
+                    "enum": [
+                              "D",
+                              "E",
+                              "F",
+                              "G",
+                              "A",
+                              "B",
+                              "C",
+                              "H",
+                              "NONE"
+                    ]
+                },
+                "trustedForwardingClass": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Specifies if the trusted flag is set for the QoS policy / template",
+                    "type": "boolean"
+                },
+                "active": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "If enabled, it means that this ACL or QOS entry is active",
+                    "type": "boolean"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

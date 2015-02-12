@@ -1,0 +1,407 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/Group",
+    "apis": [
+        {
+            "path": "/zones/{id}/groups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to attach to a specific zone, Modify API can be used to add or delete groups that are permitted to attach to a specific zone. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "getZONESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "PUT",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to attach to a specific zone, Modify API can be used to add or delete groups that are permitted to attach to a specific zone. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "putZONESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/domaintemplates/{id}/groups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to instantiate a domain template, Modify API can be used to add or delete groups that are permitted to instantiate a domain template. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "getDOMAINTEMPLATESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "PUT",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to instantiate a domain template, Modify API can be used to add or delete groups that are permitted to instantiate a domain template. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "putDOMAINTEMPLATESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/groups/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify and delete a specific group",
+                    "type": "Group",
+                    "nickname": "putGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify and delete a specific group",
+                    "type": "Group",
+                    "nickname": "deleteGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify and delete a specific group",
+                    "type": "Group",
+                    "nickname": "getGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/users/{id}/groups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all the groups that an user belongs to",
+                    "type": "Group",
+                    "nickname": "getUSERSGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/enterprises/{id}/groups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all groups accociated to an enterprise",
+                    "type": "Group",
+                    "nickname": "getENTERPRISESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all groups accociated to an enterprise",
+                    "type": "Group",
+                    "nickname": "postENTERPRISESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/domains/{id}/groups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to read a domain and all the entities under the domain like zone, subnet etc, Modify API can be used to add or delete groups that are permitted to read a domain and all the entities under the domain like zone, subnet etc",
+                    "type": "Group",
+                    "nickname": "getDOMAINSGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "PUT",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to read a domain and all the entities under the domain like zone, subnet etc, Modify API can be used to add or delete groups that are permitted to read a domain and all the entities under the domain like zone, subnet etc",
+                    "type": "Group",
+                    "nickname": "putDOMAINSGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/l2domains/{id}/groups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to attach to a specific l2 domain, Modify API can be used to add or delete groups that are permitted to attach to a specific l2 domain. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "getL2DOMAINSGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "PUT",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to attach to a specific l2 domain, Modify API can be used to add or delete groups that are permitted to attach to a specific l2 domain. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "putL2DOMAINSGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/l2domaintemplates/{id}/groups",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to instantiate a l2 domain template, Modify API can be used to add or delete groups that are permitted to instantiate a l2 domain template. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "getL2DOMAINTEMPLATESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "PUT",
+                    "summary": "Read all API can be used to get the groups of users that are permitted to instantiate a l2 domain template, Modify API can be used to add or delete groups that are permitted to instantiate a l2 domain template. In case of modify(PUT), input JSON body should be an array of ID of the group",
+                    "type": "Group",
+                    "nickname": "putL2DOMAINTEMPLATESGroups",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Group": {
+            "id": "Group",
+            "description":"Identifies a group within an enterprise",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "User",
+                            "EventLog"
+                    ]
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Description of the group",
+                    "type": "string"
+                },
+                "name": {
+                    "required": "true",
+                    "uniqueItems": false,
+                    "description": "A unique name of the group",
+                    "type": "string"
+                },
+                "private": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A private group is visible only by the owner of the group. Public groups are visible by all users in the enterprise",
+                    "type": "boolean"
+                },
+                "role": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The role associated with this group - CSPROOT, CSPOPERATOR, ORGADMIN, ORGNETWORKDESIGNER, ORGUSER and USER Possible values are SYSTEM, JMS, CSPROOT, CMS, CSPOPERATOR, ORGADMIN, ORGAPPDESIGNER, ORGNETWORKDESIGNER, ORGUSER, USER, UNKNOWN, SUPER_USER_SET_VALUES, SUPER_USER_ROLES, .",
+                    "type": "enum",
+                    "enum": [
+                              "CMS",
+                              "SUPER_USER_SET_VALUES",
+                              "SYSTEM",
+                              "UNKNOWN",
+                              "ORGNETWORKDESIGNER",
+                              "JMS",
+                              "ORGADMIN",
+                              "SUPER_USER_ROLES",
+                              "ORGUSER",
+                              "USER",
+                              "ORGAPPDESIGNER",
+                              "CSPROOT",
+                              "CSPOPERATOR"
+                    ]
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

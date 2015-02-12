@@ -1,0 +1,292 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/Zone",
+    "apis": [
+        {
+            "path": "/domains/{id}/zones",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all zones for a given domain",
+                    "type": "Zone",
+                    "nickname": "getDOMAINSZones",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all zones for a given domain",
+                    "type": "Zone",
+                    "nickname": "postDOMAINSZones",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/zones",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all the zones in the data center. Permitted only for user with csproot/cms role",
+                    "type": "Zone",
+                    "nickname": "getZones",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/zones/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify or delete a specific zone",
+                    "type": "Zone",
+                    "nickname": "putZones",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify or delete a specific zone",
+                    "type": "Zone",
+                    "nickname": "deleteZones",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify or delete a specific zone",
+                    "type": "Zone",
+                    "nickname": "getZones",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Zone": {
+            "id": "Zone",
+            "description":"The zone is a collection of subnets attached to a domain. The zone concept enables the definition of policies for collections of subnets",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "Statistics",
+                            "SubNetwork",
+                            "DHCPOption",
+                            "VMInterface",
+                            "PermittedAction",
+                            "QosPrimitive",
+                            "TCA",
+                            "StatisticsPolicy",
+                            "EventLog",
+                            "VirtualMachine",
+                            "Group"
+                    ]
+                },
+                "address": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "IP address of the subnet defined. In case of zone, this is an optional field for and allows users to allocate an IP address range to a zone. The VSD will auto-assign IP addresses to subnets from this range if a specific IP address is not defined for the subnet",
+                    "type": "string"
+                },
+                "associatedApplicationID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The associated application ID.",
+                    "type": "string"
+                },
+                "associatedApplicationObjectID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The associated application object ID.",
+                    "type": "string"
+                },
+                "associatedApplicationObjectType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The associated application object type. Refer to API section for supported types.",
+                    "type": "enum",
+                    "enum": [
+                    ]
+                },
+                "templateID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The ID of the template that this zone was derived from",
+                    "type": "string"
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A description of the zone",
+                    "type": "string"
+                },
+                "IPType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "IPv4 or IPv6(only IPv4 is supported in R1.0) Possible values are IPV4, IPV6, .",
+                    "type": "enum",
+                    "enum": [
+                              "IPV6",
+                              "IPV4"
+                    ]
+                },
+                "maintenanceMode": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "maintenanceMode is an enum that indicates if the Zone is accepting VM activation requests. Possible values are DISABLED, ENABLED and ENABLED_INHERITED Possible values are DISABLED, ENABLED, ENABLED_INHERITED, .",
+                    "type": "enum",
+                    "enum": [
+                              "ENABLED",
+                              "ENABLED_INHERITED",
+                              "DISABLED"
+                    ]
+                },
+                "name": {
+                    "required": "true",
+                    "uniqueItems": false,
+                    "description": "Name of the current entity(Zone or zone template or subnet etc..) Valid characters are alphabets, numbers, space and hyphen( - ).",
+                    "type": "string"
+                },
+                "netmask": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Netmask of the subnet defined",
+                    "type": "string"
+                },
+                "numberOfHostsInSubnets": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Number of hosts in each of the subnets that can be created under a zone and are auto-assigned IP addresses",
+                    "type": "int"
+                },
+                "publicZone": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "If a zone is marked as public, then it is lined to the public network associated with this data center",
+                    "type": "boolean"
+                },
+                "multicast": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "multicast is enum that indicates multicast policy on zone/zone template. Possible values are ENABLED ,DISABLED  and INHERITED Possible values are INHERITED, ENABLED, DISABLED, .",
+                    "type": "enum",
+                    "enum": [
+                              "ENABLED",
+                              "INHERITED",
+                              "DISABLED"
+                    ]
+                },
+                "associatedMulticastChannelMapID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The ID of the Multi Cast Channel Map  this zone/zone template is associated with. This has to be set when  enableMultiCast is set to ENABLED",
+                    "type": "string"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

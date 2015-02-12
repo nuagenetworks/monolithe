@@ -1,0 +1,170 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/LDAPConfiguration",
+    "apis": [
+        {
+            "path": "/enterprises/{id}/ldapconfigurations",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read LDAP configuration associated to an enterprise",
+                    "type": "LDAPConfiguration",
+                    "nickname": "getENTERPRISESLDAPConfigurations",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/ldapconfigurations/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read and modify a specific LDAP configuration",
+                    "type": "LDAPConfiguration",
+                    "nickname": "putLDAPConfigurations",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read and modify a specific LDAP configuration",
+                    "type": "LDAPConfiguration",
+                    "nickname": "getLDAPConfigurations",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "LDAPConfiguration": {
+            "id": "LDAPConfiguration",
+            "description":"Configuration of LDAP parameters associated with an enterprise. This will enable authentication through an external LDAP server for this enterprise",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                    ]
+                },
+                "acceptAllCertificates": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Accept all certificates from the LDAP server",
+                    "type": "boolean"
+                },
+                "certificate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The certificate to authenticate with the LDAP server",
+                    "type": "string"
+                },
+                "enabled": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Whether LDAP authentication is enabled of the enterprise",
+                    "type": "boolean"
+                },
+                "port": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Port to be used for the LDAP server",
+                    "type": "string"
+                },
+                "server": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The LDAP server IP or FQDN",
+                    "type": "string"
+                },
+                "SSLEnabled": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Enable SSL for communication with the LDAP server",
+                    "type": "boolean"
+                },
+                "userDNTemplate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The DN template to be used for authentication. The template needs to have a string _USERID_ in it. This will be replaced by  the userId of the user who makes the REST API call. For example, template UID=_USERID_,OU=company,DC=com will converted to  UID=admin,OU=company,DC=com and this will be used as DN for LDAP authentication.",
+                    "type": "string"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

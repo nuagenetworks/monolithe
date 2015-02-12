@@ -1,0 +1,351 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/WANService",
+    "apis": [
+        {
+            "path": "/redundancygroups/{id}/services",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or Read all wan services  associated to a Redundant Gateway Group",
+                    "type": "WANService",
+                    "nickname": "getREDUNDANCYGROUPSWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or Read all wan services  associated to a Redundant Gateway Group",
+                    "type": "WANService",
+                    "nickname": "postREDUNDANCYGROUPSWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/autodiscoveredgateways/{id}/services",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all wan services  associated to a Gateway",
+                    "type": "WANService",
+                    "nickname": "getAUTODISCOVEREDGATEWAYSWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/services/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify or delete a specific wan service",
+                    "type": "WANService",
+                    "nickname": "putWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify or delete a specific wan service",
+                    "type": "WANService",
+                    "nickname": "deleteWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify or delete a specific wan service",
+                    "type": "WANService",
+                    "nickname": "getWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/gateways/{id}/services",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or Read all wan services  associated to a Gateway",
+                    "type": "WANService",
+                    "nickname": "getGATEWAYSWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or Read all wan services  associated to a Gateway",
+                    "type": "WANService",
+                    "nickname": "postGATEWAYSWANServices",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "WANService": {
+            "id": "WANService",
+            "description":"Represents WAN Service Object.",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "PermittedAction",
+                            "Metadata",
+                            "EnterprisePermission",
+                            "EventLog",
+                            "Alarm"
+                    ]
+                },
+                "associatedDomainID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ID of the entity to which the WAN Service is attached to. This could be ID DOMAIN/L2DOMAIN",
+                    "type": "string"
+                },
+                "domainName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The associated domain name.",
+                    "type": "string"
+                },
+                "enterpriseName": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The associated enterprise name.",
+                    "type": "string"
+                },
+                "associatedVPNConnectID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The associated vpn connect ID.",
+                    "type": "string"
+                },
+                "configType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Type of the CONFIG -  STATIC Possible values are STATIC, DYNAMIC, .",
+                    "type": "enum",
+                    "enum": [
+                              "STATIC",
+                              "DYNAMIC"
+                    ]
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A description of the WAN Service",
+                    "type": "string"
+                },
+                "externalRouteTarget": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Route target associated with the WAN. It is an optional parameterthat can be provided by the user",
+                    "type": "string"
+                },
+                "IRBEnabled": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines whether Integrated Routing and Bridging is enabled on the WAN Service",
+                    "type": "boolean"
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the WAN Service",
+                    "type": "string"
+                },
+                "orphan": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Indicates if this WAN Service is orphan or not.",
+                    "type": "boolean"
+                },
+                "permittedAction": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The permitted  action to USE/EXTEND  this Gateway Possible values are USE, READ, ALL, INSTANTIATE, EXTEND, .",
+                    "type": "enum",
+                    "enum": [
+                              "EXTEND",
+                              "INSTANTIATE",
+                              "USE",
+                              "READ",
+                              "ALL"
+                    ]
+                },
+                "servicePolicy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of 7X50 Policy assoicated with service",
+                    "type": "string"
+                },
+                "serviceType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Type of the SERVICE -  L3,L2 Possible values are L3, L2, .",
+                    "type": "enum",
+                    "enum": [
+                              "L2",
+                              "L3"
+                    ]
+                },
+                "tunnelType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Type of the SERVICE - GRE,VXLAN Possible values are DC_DEFAULT, GRE, VXLAN, .",
+                    "type": "enum",
+                    "enum": [
+                              "DC_DEFAULT",
+                              "VXLAN",
+                              "GRE"
+                    ]
+                },
+                "userMnemonic": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "user mnemonic of the WAN Service",
+                    "type": "string"
+                },
+                "useUserMnemonic": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines whether to use user mnemonic of the WAN Service",
+                    "type": "boolean"
+                },
+                "vnId": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "VNID of the BackHaul Subnet of L3Domain /L2Domain to which this WANService is associated",
+                    "type": "long"
+                },
+                "WANServiceIdentifier": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifier of the WAN Service",
+                    "type": "string"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

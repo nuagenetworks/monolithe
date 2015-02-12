@@ -1,0 +1,308 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/PATNATPool",
+    "apis": [
+        {
+            "path": "/patnatpools/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read, modify or delete a specific Gateway",
+                    "type": "PATNATPool",
+                    "nickname": "putPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "summary": "Read, modify or delete a specific Gateway",
+                    "type": "PATNATPool",
+                    "nickname": "deletePATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read, modify or delete a specific Gateway",
+                    "type": "PATNATPool",
+                    "nickname": "getPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/patnatpools",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Create or read all PATNATPool,this API can only be accessed by CSPROOT",
+                    "type": "PATNATPool",
+                    "nickname": "getPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "POST",
+                    "summary": "Create or read all PATNATPool,this API can only be accessed by CSPROOT",
+                    "type": "PATNATPool",
+                    "nickname": "postPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/nsgateways/{id}/patnatpools",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all PATNATPools  associated to a PATNATPool/ Associate PATNATPools to a given NS gateway",
+                    "type": "PATNATPool",
+                    "nickname": "getNSGATEWAYSPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "PUT",
+                    "summary": "Read all PATNATPools  associated to a PATNATPool/ Associate PATNATPools to a given NS gateway",
+                    "type": "PATNATPool",
+                    "nickname": "putNSGATEWAYSPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/gateways/{id}/patnatpools",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all PATNATPools  associated to a PATNATPool/ Associate PATNATPools to a given gateway",
+                    "type": "PATNATPool",
+                    "nickname": "getGATEWAYSPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "PUT",
+                    "summary": "Read all PATNATPools  associated to a PATNATPool/ Associate PATNATPools to a given gateway",
+                    "type": "PATNATPool",
+                    "nickname": "putGATEWAYSPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/enterprises/{id}/patnatpools",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read all PATNATPools for which the given enterprise has permissions to use",
+                    "type": "PATNATPool",
+                    "nickname": "getENTERPRISESPATNATPools",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "PATNATPool": {
+            "id": "PATNATPool",
+            "description":"Represents PAT NAT Pool object.",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                            "EnterprisePermission",
+                            "NATMapEntry"
+                    ]
+                },
+                "addressRange": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Pool of IP Address that is available for use ex : 130.12.0.0/16",
+                    "type": "string"
+                },
+                "associatedGatewayId": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Default PAT IP Address, must belong to the pool above",
+                    "type": "string"
+                },
+                "associatedGatewayType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": " Refer to API section for supported types.",
+                    "type": "enum",
+                    "enum": [
+                    ]
+                },
+                "defaultPATIP": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Default PAT IP Address, must belong to the pool above",
+                    "type": "string"
+                },
+                "description": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "A description of the PATNATPool",
+                    "type": "string"
+                },
+                "name": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Name of the PATNATPool",
+                    "type": "string"
+                },
+                "permittedAction": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "The permitted  action to USE/EXTEND  this Gateway Possible values are USE, READ, ALL, INSTANTIATE, EXTEND, .",
+                    "type": "enum",
+                    "enum": [
+                              "EXTEND",
+                              "INSTANTIATE",
+                              "USE",
+                              "READ",
+                              "ALL"
+                    ]
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

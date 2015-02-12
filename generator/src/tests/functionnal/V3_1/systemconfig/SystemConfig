@@ -1,0 +1,601 @@
+{
+    "apiVersion": "V3_1",
+    "swaggerVersion": "1.2",
+    "basePath": "/",
+    "resourcePath": "/SystemConfig",
+    "apis": [
+        {
+            "path": "/systemconfigs/{id}",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "Read and modify the system config. Permitted only for user with csproot role",
+                    "type": "SystemConfig",
+                    "nickname": "putSystemConfigs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                },
+                {
+                    "method": "GET",
+                    "summary": "Read and modify the system config. Permitted only for user with csproot role",
+                    "type": "SystemConfig",
+                    "nickname": "getSystemConfigs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/systemconfigs",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Read system config information. Permitted only for user with csproot role",
+                    "type": "SystemConfig",
+                    "nickname": "getSystemConfigs",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "required": true,
+                            "type": "string",
+                            "paramType": "path"
+                        }
+                    ],
+                    "responseMessages": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "SystemConfig": {
+            "id": "SystemConfig",
+            "description":"The system configuration which can be dynamically managed using rest api.",
+            "properties": {
+                "_fetchers":{
+                    "type":"string",
+                    "description":"internal property",
+                    "enum":[
+                    ]
+                },
+                "ACLAllowOrigin": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the domains allowed for access control list.",
+                    "type": "string"
+                },
+                "APIKeyRenewalInterval": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the interval, before the expiry time, that can used to renew the apiKey by making me API call. Minimum value is 1 min and maximum is 5 min.",
+                    "type": "long"
+                },
+                "APIKeyValidity": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the apiKey validity duration in seconds. Default is 24 hours and minimum value is 10 min.",
+                    "type": "long"
+                },
+                "ASNumber": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": " Autonomous System Number,Used for RT/RD auto-generation",
+                    "type": "long"
+                },
+                "ADGatewayPurgeTime": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Timers in sec for undefined vms to be deleted(min =7200, max = 86400).",
+                    "type": "int"
+                },
+                "avatarBasePath": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines location where image files needs to be copied. Above URL should be configured to read the file from this location.",
+                    "type": "string"
+                },
+                "avatarBaseURL": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the url to read the avatar image files",
+                    "type": "string"
+                },
+                "offsetCustomerID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Customer id offset, this value has to be set before jboss starts , after that any change of value is ignored (minexclusive = 0, max = 20000) system wide value",
+                    "type": "long"
+                },
+                "customerIDUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Customer id upper limit, system wide value",
+                    "type": "long"
+                },
+                "customerKey": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Customer key associated with the licese",
+                    "type": "string"
+                },
+                "DHCPOptionSize": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines total DHCP options that can be set on a domain.",
+                    "type": "int"
+                },
+                "domainTunnelType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Default Domain Tunnel Type .Possible values are VXLAN,GRE Possible values are DC_DEFAULT, GRE, VXLAN, .",
+                    "type": "enum",
+                    "enum": [
+                              "DC_DEFAULT",
+                              "VXLAN",
+                              "GRE"
+                    ]
+                },
+                "ejbcaNSGCertificateProfile": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "EJBCA NSG Certificate Profile",
+                    "type": "string"
+                },
+                "ejbcaNSGEndEntityProfile": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "EJBCA NSG End Entity Profile",
+                    "type": "string"
+                },
+                "ejbcaOCSPResponderCN": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "EJBCA OCSP Responder CommonName",
+                    "type": "string"
+                },
+                "ejbcaOCSPResponderURI": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "EJBCA OCSP Responder URI",
+                    "type": "string"
+                },
+                "ejbcaVspRootCa": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "EJBCA VSP CA",
+                    "type": "string"
+                },
+                "esiID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "ESI ID offset",
+                    "type": "int"
+                },
+                "eventLogCleanupInterval": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Cleanup task run interval in seconds (Min: every hour, Max: every day)",
+                    "type": "long"
+                },
+                "eventLogEntryMaxAge": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Maximum age in days for cleanup of the eventlog entries (Min: 1 day, Max: 6 months). On every periodic interval run, any eventlog entries older than the maxage will be deleted.",
+                    "type": "int"
+                },
+                "eventProcessorInterval": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines time interval in milliseconds when events collected for a client should be processed. Minimum value is 250ms.",
+                    "type": "long"
+                },
+                "eventProcessorMaxEventsCount": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the maximum number of events to be collected in case of events burst. Value should be between 100 to 500.",
+                    "type": "int"
+                },
+                "eventProcessorTimeout": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the maximum time period in milliseconds for the Rest server to wait before sending the events from the system. Value should be between 25000ms to 100000ms.",
+                    "type": "long"
+                },
+                "EVPNBGPCommunityTagASNumber": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": " Autonomous System Number,Used for EVPNBGPCommunityTag auto-generation",
+                    "type": "long"
+                },
+                "EVPNBGPCommunityTagLowerLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "EVPNBGPCommunityTag lower limit",
+                    "type": "long"
+                },
+                "EVPNBGPCommunityTagUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "EVPNBGPCommunityTag upper limit",
+                    "type": "long"
+                },
+                "inactiveTimeout": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the inactive timeout for the client. If the client is inactive for more than timeout, server clears off all the cache/information regarding the client. This value should be greater than event processor max timeout",
+                    "type": "long"
+                },
+                "LDAPTrustStoreCertifcate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Location of the truststore which is need to store LDAP server certificates. Default is cacerts located in java.home/lib/security/cacerts. Uncomment below setting if you need to use a different file",
+                    "type": "string"
+                },
+                "LDAPTrustStorePassword": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Password to access the truststore. Uncomment below line to change its value.",
+                    "type": "string"
+                },
+                "LRUCacheSizePerSubnet": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "LRU Map size per subnet ( to hold the deleted vm's ip addresses min =32, max 256).",
+                    "type": "int"
+                },
+                "alarmsMaxPerObject": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Maximum alarms per object for example max distinct alarms for specific VM (min = 5, max =20)",
+                    "type": "int"
+                },
+                "pageMaxSize": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines upper bound for the page size (allowed max=1000). Configured or input page size should be less than this max page size.",
+                    "type": "int"
+                },
+                "maxResponse": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines maximum results returned by the REST call (allowed max=5000).",
+                    "type": "int"
+                },
+                "nsgBootstrapEndpoint": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "NSG Bootstrap Endpoint",
+                    "type": "string"
+                },
+                "nsgConfigEndpoint": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "NSG Config Endpoint",
+                    "type": "string"
+                },
+                "nsgLocalUiUrl": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "NSG Local UI URL - will be redirected on NSG to localhost",
+                    "type": "string"
+                },
+                "pageSize": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the page size for the results returned by the REST call.",
+                    "type": "int"
+                },
+                "postProcessorThreadsCount": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Post processor thread count.",
+                    "type": "int"
+                },
+                "reflexiveACLTimeout": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Defines the timeout in seconds for reflexive ACLs. This value applies for both TCP and UDP connections. Default value is 180 seconds and the timeout should be between 10 to 86400 seconds.",
+                    "type": "long"
+                },
+                "RDLowerLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route distinguisher lower limit",
+                    "type": "long"
+                },
+                "RDPublicNetworkLowerLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route distinguisher public network lower limit",
+                    "type": "long"
+                },
+                "RDPublicNetworkUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route distinguisher public network upper limit",
+                    "type": "long"
+                },
+                "RDUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route distinguisher upper limit",
+                    "type": "long"
+                },
+                "RTLowerLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route target lower limit",
+                    "type": "long"
+                },
+                "RTPublicNetworkLowerLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route target public network lower limit",
+                    "type": "long"
+                },
+                "RTPublicNetworkUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route target public network upper limit",
+                    "type": "long"
+                },
+                "RTUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "route target upper limit",
+                    "type": "long"
+                },
+                "offsetServiceID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Service id offset, this value has to be set before jboss starts during install time, after that any change of value is ignored (minexclusive = 0, max = 40000) system wide value",
+                    "type": "long"
+                },
+                "serviceIDUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Service id upper limit system wide value",
+                    "type": "long"
+                },
+                "stackTraceEnabled": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "True to enable stacktrace in the REST call.",
+                    "type": "boolean"
+                },
+                "statsCollectorAddress": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Specify the ip address(es) of the stats collector.",
+                    "type": "string"
+                },
+                "statsCollectorPort": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Specify the port number(s) of the stats collector.",
+                    "type": "string"
+                },
+                "statsMaxDataPoints": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Specifies the maximum number of data points to support.",
+                    "type": "int"
+                },
+                "statsMinDuration": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Default minimum duration for statistics to be displayed in UI is 30 days in seconds.",
+                    "type": "long"
+                },
+                "statsNumberOfDataPoints": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Specifies number of data points.",
+                    "type": "int"
+                },
+                "subnetResyncInterval": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "After resync on a subnet , another resync on the same subnet is allowed based on the below value subnet resync complete wait time in min (min = 5, max =15)",
+                    "type": "int"
+                },
+                "subnetResyncOutstandingInterval": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Outstanding subnet resync interval (in secs). (min = 10, max = 50) system wide value",
+                    "type": "int"
+                },
+                "sysmonCleanupTaskInterval": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Sysmon cleanup task run interval in seconds (Min: 10 secs,  Max: 3600 secs)",
+                    "type": "long"
+                },
+                "sysmonNodePresenceTimeout": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Node presence timeout in seconds if no messages (Min: 600,  Max: 86400)",
+                    "type": "long"
+                },
+                "sysmonProbeResponseTimeout": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Probe response timeout in seconds (Min: 5,  Max: 60)",
+                    "type": "long"
+                },
+                "statsTSDBServerAddress": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Specifies the TSDB server location.",
+                    "type": "string"
+                },
+                "twoFactorCodeExpiry": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Two Factor Code Expiry in Seconds",
+                    "type": "int"
+                },
+                "twoFactorCodeLength": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Two Factor Code Length",
+                    "type": "int"
+                },
+                "twoFactorCodeSeedLength": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Two Factor Seed length in bytes",
+                    "type": "int"
+                },
+                "VMCacheSize": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "LRU Map size for vm (min = 1000, max =100000) this value has to set based on memory given to VSD jvm not finalized.",
+                    "type": "int"
+                },
+                "VMResyncOutstandingInterval": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Outstanding VM resync interval (in secs). (min = 500, max =2000) system wide value",
+                    "type": "int"
+                },
+                "VMPurgeTime": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Timers in sec for undefined vms to be deleted(min =60, max = 600).",
+                    "type": "int"
+                },
+                "VMResyncDeletionWaitTime": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "After resync on vm , if no controller returns with a VM request with in the below timeframe then it will get deleted deletion wait time in min (min = 1, max =5)",
+                    "type": "int"
+                },
+                "VMUnreachableCleanupTime": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Timers in sec for unreachable VMs for cleanup(min = 3600, max = 86400).",
+                    "type": "int"
+                },
+                "VMUnreachableTime": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Timers in sec for unreachable VMs (min =1800, max = 7200)",
+                    "type": "int"
+                },
+                "VNIDLowerLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Virtual network ID offset",
+                    "type": "int"
+                },
+                "VNIDPublicNetworkLowerLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Virtual network ID public network lower limit",
+                    "type": "int"
+                },
+                "VNIDPublicNetworkUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Virtual network ID public network upper limit",
+                    "type": "int"
+                },
+                "VNIDUpperLimit": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Virtual network ID upper limit",
+                    "type": "int"
+                },
+                "VSCOnSameVersionAsVSD": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This flag is used to indicate that whether VSC is on the same version as VSD or not.",
+                    "type": "boolean"
+                },
+                "VSDReadOnlyMode": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "True means VSD readonly mode enabled. False means VSD readonly mode disabled",
+                    "type": "boolean"
+                },
+                "dynamicWANServiceDiffTime": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Timers in sec for  dynamic WAN Services to be considered not seen by 7X50(min =3600, max = 7200)",
+                    "type": "int"
+                },
+                "staticWANServicePurgeTime": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Timers in sec for unreacheable static WAN Services to be deleted(min =3600, max = 7200)",
+                    "type": "int"
+                },
+                "creationDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Holds the time that this object was created.",
+                    "type": "date"
+                },
+                "lastUpdatedBy": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that last modified this object.",
+                    "type": "string"
+                },
+                "lastUpdatedDate": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Determines the time that this object was last updated.",
+                    "type": "date"
+                },
+                "owner": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "Identifies the user that has created this object.",
+                    "type": "string"
+                },
+                "externalID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This attribute is set when an external management system is managing this object. When set, the VSD will issue a warning if the user tries to modify this object directly through the UI or the API. For example, if VMware vCloud or Openstack create a network, then this network cannot be deleted directly by a user without requiring extra confirmation. This allows integrations to separate between managed objects by external entities and directly managed objects.",
+                    "type": "string"
+                },
+                "ID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is a unique ID for the object (UUID) that is auto-populated by the VSD and it is used in both the http URI or other objects to refer to the particular object.",
+                    "type": "string"
+                },
+                "parentID": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the ID of the parent object.",
+                    "type": "string"
+                },
+                "parentType": {
+                    "required": "false",
+                    "uniqueItems": false,
+                    "description": "This is the type of parent object for the particular object.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
