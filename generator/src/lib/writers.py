@@ -455,10 +455,10 @@ class DocWriter(object):
                 filenames: list of generates filenames
 
         """
-        writer = HTMLFileWriter(directory=self.writer_directory)
-        (filename, classname) = writer.write_model(model=model)
-
-        filenames[filename] = classname
+        if model.name != RESTUSER:
+            writer = HTMLFileWriter(directory=self.writer_directory)
+            (filename, classname) = writer.write_model(model=model)
+            filenames[filename] = classname
 
     def _extract_packages(self, models):
         """ Returns a dictionnary containing for each package
