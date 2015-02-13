@@ -74,7 +74,10 @@ class SwaggerURLParser(object):
         if response.status_code != 200:
             Printer.raiseError("[HTTP %s] Could not access %s" % (response.status_code, schema_url))
 
-        data = response.json()
+        try:
+            data = response.json()
+        except:
+            Printer.raiseError("Could not load properly json from %s" % schema_url)
 
         if SWAGGER_APIS not in data:
             Printer.raiseError("No apis information found at %s" % schema_url)
@@ -112,7 +115,11 @@ class SwaggerURLParser(object):
         if response.status_code != 200:
             Printer.raiseError("[HTTP %s] An error occured while retrieving %s at %s" % (response.status_code, resource_name, resource_path))
 
-        results[resource_name] = response.json()
+        try:
+            results[resource_name] = response.json()
+        except:
+            Printer.raiseError("Could not load properly json from %s" % resource_path)
+
         results[resource_name]['package'] = package
 
 
