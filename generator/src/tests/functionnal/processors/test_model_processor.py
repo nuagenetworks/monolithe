@@ -29,7 +29,7 @@ class ModelsProcessorTests(TestCase):
 
         """
         processed_resources = ModelsProcessor.process(resources=self.resources)
-        self.assertEquals(len(processed_resources), 94)
+        self.assertEquals(len(processed_resources), 95)
 
         # Normal resource
         self.assertIn('Enterprise', processed_resources)
