@@ -6,6 +6,9 @@ from .utils import Utils
 from .printer import Printer
 from .objects import Model, ModelAttribute, ModelAPI, ModelRelation
 
+USER = 'User'
+RESTUSER = 'RESTUser'
+
 IGNORED_ATTRIBUTES = ["_fetchers"]
 IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
 
@@ -55,7 +58,7 @@ class ModelsProcessor(object):
     """ Process all models information that will be send to the writer """
 
     @classmethod
-    def process(self, resources):
+    def process(cls, resources):
         """ Prepare all resources
 
             Args:
@@ -90,6 +93,9 @@ class ModelsProcessor(object):
 
         for name, model in models.iteritems():
             ModelsProcessor._process_relations(model, relations)
+
+        # Specific case of the REST User
+        ModelsProcessor._process_rest_user(models, relations)
 
         Printer.success('Processed succeed for %s objects' % len(models))
 
@@ -156,7 +162,17 @@ class ModelsProcessor(object):
             parent_resource_name = names[0]
             parent_remote_name = Utils.get_singular_name(names[0])
 
+            should_create_relation = False
+
             if model.resource_name != parent_resource_name:
+                should_create_relation = True
+
+            elif model_api.operations[0]['method'] in ['GET', 'POST']:
+                should_create_relation = True
+                parent_resource_name = 'me'
+                parent_remote_name = RESTUSER
+
+            if should_create_relation:
                 if parent_remote_name not in relations:
                     relations[parent_remote_name] = []
 
@@ -170,6 +186,7 @@ class ModelsProcessor(object):
                 relation.resource_name = model.resource_name
                 relation.instance_plural_name = model.instance_plural_name
                 relation.api = model_api
+
                 relations[parent_remote_name].append(relation)
 
             model.apis.append(model_api)
@@ -237,3 +254,42 @@ class ModelsProcessor(object):
             model.relations = relations[model.remote_name]
         else:
             model.relations = []
+
+    @classmethod
+    def _process_rest_user(cls, models, relations):
+        """ Process the specific case of the NURESTUser object
+
+            Add a RESTUser object in models, based on User
+        """
+        from copy import deepcopy
+        rest_user_model = Model()
+        rest_user_model.name = RESTUSER
+        rest_user_model.remote_name = 'me'
+        rest_user_model.relations = relations[RESTUSER]
+        rest_user_model.attributes = deepcopy(models[USER].attributes)
+
+        role = ModelAttribute()
+        role.description = u'Role of the user'
+        role.remote_name = u'role'
+        role.local_name = u'role'
+        role.remote_type = u'String'
+        role.local_type = u'str'
+        rest_user_model.attributes.append(role)
+
+        enterprise_id = ModelAttribute()
+        enterprise_id.description = u'Identifier of the enterprise'
+        enterprise_id.remote_name = u'enterpriseID'
+        enterprise_id.local_name = u'enterprise_id'
+        enterprise_id.remote_type = u'String'
+        enterprise_id.local_type = u'str'
+        rest_user_model.attributes.append(enterprise_id)
+
+        enterprise_name = ModelAttribute()
+        enterprise_name.description = u'Name of the enterprise'
+        enterprise_name.remote_name = u'enterpriseName'
+        enterprise_name.local_name = u'enterprise_name'
+        enterprise_name.remote_type = u'String'
+        enterprise_name.local_type = u'str'
+        rest_user_model.attributes.append(enterprise_name)
+
+        models[RESTUSER] = rest_user_model

@@ -74,6 +74,43 @@ class ModelAPI(object):
         self.parameters = []
         self.response_messages = []
 
+class ModelOperation(object):
+    """ Describe a model operation
+
+    """
+    def __init__(self):
+        """ Defines an API
+
+            Example:
+                method: GET|POST|PUT|DELETE
+                summary: a description
+                parameters: List of parameters
+                responseMessages:
+
+        """
+        self.method = None
+        self.summary = None
+        self.parameters = []
+        self.responseMessages = []
+
+class ModelOperationParameter(object):
+    """ Describe a model operation
+
+    """
+    def __init__(self):
+        """ Defines an API
+
+            Example:
+                name: id
+                required: true
+                type: string
+                paramType: path|body|form
+
+        """
+        self.name = None
+        self.required = None
+        self.type = None
+        self.paramType = None
 
 class ModelRelation(object):
     """ Defines a model relation object

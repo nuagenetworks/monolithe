@@ -12,6 +12,8 @@ from .utils import Utils
 
 __all__ = ['HTMLFileWriter', 'VSDKFileWriter', 'CourgetteWriter']
 
+RESTUSER = 'RESTUser'
+
 
 class FileWriter(object):
     """ Basic file writer to write a file.
@@ -138,6 +140,7 @@ class VSDKFileWriter(FileWriter):
     FETCHER_TEMPLATE = 'vsdk/nuobject_fetcher.py.tpl'
     MODEL_OVERRIDE_TEMPLATE = 'vsdk/nuobject_override.py.tpl'
     MODEL_TEMPLATE = 'vsdk/nuobject_autogenerate.py.tpl'
+    RESTUSER_TEMPLATE = 'vsdk/nurestuser.py.tpl'
 
     def write_setup_file(self, version, revision):
         """ Write setup.py file
@@ -163,6 +166,20 @@ class VSDKFileWriter(FileWriter):
 
         """
         template = self.env.get_template(VSDKFileWriter.MODEL_TEMPLATE)
+
+        destination = '%s%s' % (self.directory, VSDKFileWriter.AUTOGENERATE_PATH)
+        filename = 'nu%s.py' % model.name.lower()
+
+        self.write(template=template, destination=destination, filename=filename, model=model)
+
+        return (filename, model.name)
+
+    def write_restuser_model(self, model):
+        """ Write autogenerate rest user model file
+
+        """
+
+        template = self.env.get_template(VSDKFileWriter.RESTUSER_TEMPLATE)
         destination = '%s%s' % (self.directory, VSDKFileWriter.AUTOGENERATE_PATH)
         filename = 'nu%s.py' % model.name.lower()
 
@@ -335,7 +352,11 @@ class SDKWriter(object):
 
         """
         writer = VSDKFileWriter(directory=self.writer_directory)
-        (filename, classname) = writer.write_model(model=model)
+
+        if model.name != RESTUSER:
+            (filename, classname) = writer.write_model(model=model)
+        else:
+            (filename, classname) = writer.write_restuser_model(model=model)
 
         filenames[filename] = classname
 
@@ -358,9 +379,10 @@ class SDKWriter(object):
 
         """
         writer = VSDKFileWriter(directory=self.writer_directory)
-        (filename, classname) = writer.write_fetcher(model=model)
 
-        filenames[filename] = classname
+        if model.name != RESTUSER:
+            (filename, classname) = writer.write_fetcher(model=model)
+            filenames[filename] = classname
 
     def _clean_files(self, except_files):
         """ Removes not generated files
