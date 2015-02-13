@@ -20,6 +20,7 @@
                     <td><a href="#cat2">Object overview</a></td>
                     <td><a href="#cat3">Children of the object</a></td>
                     <td><a href="#cat4">Attributes documentation</a></td>
+                    <td><a href="#cat5">Python SDK documentation</a></td>
                 </tr>
             </table>
         </div>
@@ -145,6 +146,26 @@
             </div>
         </div>
         {% endfor %}
+
+        <a class="anchor" name="cat5"></a>
+        <h2>Python SDK Documentation</h2>
+        <div class="box">
+            class <i>vsdk.</i>NU{{model.name}}
+
+            <h3>Attribute names</h3>
+            <ul>
+            {% for attribute in model.attributes|sort(attribute='local_name') %}
+                <li><a href="#{{attribute.remote_name}}" title="{{attribute.description}}">{{attribute.local_name}}</a></li>
+            {% endfor %}
+            </ul>
+
+            <h3>Fetcher names</h3>
+            <ul>
+            {% for relation in model.relations|sort %}
+                <li><a href="{{relation.remote_name}}.html">{{relation.instance_plural_name}}</a>_fetchers</li>
+            {% endfor %}
+            </ul>
+        </div>
     </div>
 </body>
 </html>
