@@ -36,3 +36,5 @@ class GetPythonNameTest(TestCase):
         self.assertPythonNameEquals('VPortsTag', 'vports_tag')
         self.assertPythonNameEquals('VPortsTagOptionL2Domain', 'vports_tag_option_l2_domain')
         self.assertPythonNameEquals('IDsTORemove', 'ids_to_remove')
+        self.assertPythonNameEquals('MultiNICVPortsFetcher', 'multi_nic_vports_fetcher')
+        self.assertPythonNameEquals('FloatingIPID', 'floating_ip_id')

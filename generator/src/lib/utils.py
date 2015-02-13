@@ -8,20 +8,36 @@ from .printer import Printer
 class Utils(object):
     """ utils """
 
+
+    @classmethod
+    def _string_clean(cls, string):
+        """ String cleaning for specific cases
+
+            This is very specific and is used to force
+            some underscore while using get_python_name.
+
+            Args:
+                string: the string to clean
+
+            Returns:
+                Returns a clean string
+        """
+        rep = {
+            "VPort": "Vport",
+            "IPID": "IpID"
+        }
+
+        rep = dict((re.escape(k), v) for k, v in rep.iteritems())
+        pattern = re.compile("|".join(rep.keys()))
+        return pattern.sub(lambda m: rep[re.escape(m.group(0))], string)
+
     @classmethod
     def get_python_name(cls, name):
         """ Transform a given name to python name """
         first_cap_re = re.compile('(.)([A-Z](?!s([A-Z])*)[a-z]+)')
         all_cap_re = re.compile('([a-z0-9])([A-Z])')
 
-        def repl(matchobj):
-            """ Replacement method """
-            if matchobj.start() == 0:
-                return matchobj.expand(r"\1\2")
-            else:
-                return matchobj.expand(r"\1_\2")
-
-        s1 = first_cap_re.sub(repl, name)
+        s1 = first_cap_re.sub(r'\1_\2', Utils._string_clean(name))
         return all_cap_re.sub(r'\1_\2', s1).lower()
 
     @classmethod
@@ -77,10 +93,13 @@ class Utils(object):
         """ Returns the plural name of the singular name """
 
         vowels = ['a', 'e', 'i', 'o', 'u', 'y']
-        if singular_name[-1:] == 'y' and singular_name[-2] not in vowels:
+        if singular_name[-1] == 'y' and singular_name[-2] not in vowels:
             return singular_name[:-1] + 'ies'
 
-        return singular_name + 's'
+        if singular_name[-1] != 's':
+            return singular_name + 's'
+
+        return singular_name
 
     @classmethod
     def get_version(self, server_version):
