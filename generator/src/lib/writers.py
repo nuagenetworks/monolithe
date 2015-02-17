@@ -469,6 +469,10 @@ class DocWriter(object):
 
         for name, model in models.iteritems():
             package = model.package
+
+            if package is None:
+                continue
+
             if package not in packages:
                 packages[package] = list()
 
