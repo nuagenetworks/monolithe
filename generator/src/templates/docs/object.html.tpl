@@ -46,7 +46,7 @@
                     {% do methods.append('<span title="' + operation['summary'] + '">' + operation['method'] + '</span>') %}
                 {% endfor %}
 
-                {% if api.parent_resource_name %}
+                {% if api.parent_resource_name and api.parent_resource_name != 'me' %}
                     {% set parent_resource = api.parent_resource_name %}
                     {% set parent_url = api.parent_remote_name %}
                     {% set model_name = model.resource_name %}
