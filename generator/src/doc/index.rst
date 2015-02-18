@@ -8,6 +8,7 @@ Contents:
 
    intro
    installation
+   general_concepts
    first_steps
    vsdk
 
