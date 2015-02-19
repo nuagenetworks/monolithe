@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-"""
-Copyright 2014 Alcatel-Lucent USA Inc.
-NU{{ model.name }}
-{{ model.description }}
-"""
+# Copyright 2014 Alcatel-Lucent USA Inc.
+# NU{{ model.name }}
+# {{ model.description }}
+
 from .autogenerates import NU{{ model.name }} as AutoGenerate
 
 

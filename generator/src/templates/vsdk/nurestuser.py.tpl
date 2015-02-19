@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-"""
-Copyright 2014 Alcatel-Lucent USA Inc.
-NU{{ model.name }}
-{{ model.description }}
-"""
+# Copyright 2014 Alcatel-Lucent USA Inc.
+# NU{{ model.name }}
+# {{ model.description }}
+
 {% for relation in model.relations %}
 from ..fetchers import NU{{ relation.plural_name }}Fetcher{% endfor %}
 from bambou import NURESTBasicUser{% if model.has_time_attribute %}

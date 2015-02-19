@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-"""
-Copyright 2014 Alcatel-Lucent USA Inc.
-NU{{ model.plural_name }}Fetcher
-"""
+# Copyright 2014 Alcatel-Lucent USA Inc.
+# NU{{ model.plural_name }}Fetcher
+
 from bambou import NURESTFetcher
 
 
