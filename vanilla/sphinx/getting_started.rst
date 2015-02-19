@@ -87,7 +87,7 @@ To illustrate, let's create, update an delete an enteprise. The VSDK consider
 that the root of the VSD hierarchy is the current user. Thus, an enterprise is
 a child object of the current user.
 
-First we instantiate an NUEnterprise object (the name is the only mandatoyy option)
+First we instantiate an :class:`vsdk.NUEnterprise` object (the name is the only mandatoyy option)
 
 >>> my_enterprise = vsdk.NUEnterprise(name='FooBar')
 

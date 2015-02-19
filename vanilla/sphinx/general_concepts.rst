@@ -83,67 +83,23 @@ CRUD Operations
 
 :class:`bambou.NURESTObject` allows to perform all sorts of CRUD operations.
 
-.. method:: fetch([callback=None])
+.. automethod:: bambou.NURESTObject.fetch
+    :noindex:
 
-    Gets the latest version of the object from the server.
+.. automethod:: bambou.NURESTObject.save
+    :noindex:
 
-    Example:
+.. automethod:: bambou.NURESTObject.delete
+    :noindex:
 
-        >>> enterprise = NUEnterprise(id="xxx-xxx-xxx-xxx")
-        >>> enterprise.fetch() # will get the enterprise with id "xxx-xxx-xxx-xxx"
-        >>> print enterprise.name
-        "My Enterprise"
+.. automethod:: bambou.NURESTObject.add_child_object
+    :noindex:
 
+.. automethod:: bambou.NURESTObject.assign_objects
+    :noindex:
 
-.. method:: save([callback=None])
-
-    Saves the current state of the object in the server.
-
-    Example:
-
-        >>> enterprise.name = "My Super Enterprise"
-        >>> enterprise.save() # will save the new name in the server
-
-
-.. method:: delete([callback=None])
-
-    Deletes the object from the server.
-
-    Example:
-
-        >>> enterprise.delete() # will delete the enterprise from the server
-
-
-.. method:: create_child_object(nurest_object[, callback=None])
-
-    Creates another :class:`bambou.NURESTObject` as a child of the current object.
-
-    Example:
-
-        >>> group = NUGroup(name="Super Guys")
-        >>> enterprise.create_child_object(group) # the new group as been created in the enterprise
-
-
-.. method:: assign_objects(objects, nurest_object_type[, callback=None])
-
-    Assigns a bunch of objects to the current object (for instance, putting users into a group).
-
-    Example:
-
-        >>> group.assign_objects([user1, user2, user3], NUUser.rest_name) # user1, user2 and user3 are now part of the group
-
-
-.. method:: instantiate_child_object(nurest_object, from_template[, callback=None])
-
-    Creates the object as an instance of the given template.
-
-    Example:
-
-        >>> enterprise = NUEnterprise(id="xxxx-xxxx-xxx-xxxx") # create a VSDK object NUEnterprise with an existing ID (or retrieve one)
-        >>> domain_template = NUDomainTemplate(id="yyyy-yyyy-yyyy-yyyy") # create a VSDK object NUDomainTemplate with an existing ID (or retrieve one)
-        >>> domain = NUDomain(name="my new instance") # create a new NUDomain to be intantiated from domain_template
-        >>>
-        >>> enterprise.instantiate_child_object(domain, domain_template) # instatiate the new domain in the server
+.. automethod:: bambou.NURESTObject.instantiate_child_object
+    :noindex:
 
 
 .. note:: All these methods require the current :class:`bambou.NURESTObject` to have a valid :py:attr:`ID`.
@@ -159,26 +115,11 @@ Converting to and from a Python Dictionary
 
 :class:`bambou.NURESTObject` allows quick and easy conversion from and to python dictionaries
 
-.. method:: from_dict(dictionary)
+.. automethod:: bambou.NURESTObject.from_dict
+    :noindex:
 
-    Sets all the exposed ReST attribues from the given dictionary
-
-    Example:
-
-        >>> info = {"name": "my group", "private": False}
-        >>> group = NUGroup()
-        >>> group.from_dict(info)
-        >>> print "name: %s - private: %s" % (group.name, group.private)
-        "name: my group - private: False"
-
-
-.. method:: to_dict()
-
-    Convert the current object into a Dictionary using all exposed ReST attributes
-
-    Example::
-        >>> print group.to_dict()
-        {"name": "my group", "private": False, "ID": "xxxx-xxx-xxxx-xxx", ...}
+.. automethod:: bambou.NURESTObject.to_dict
+    :noindex:
 
 .. note:: you never need to process to the actual JSON conversion when sending info to the server. :class:`bambou.NURESTConnection` will do that automatically.
 
@@ -195,29 +136,15 @@ Fetching Children List
 
 :class:`bambou.NURESTFetcher` has one important method:
 
-.. method:: fetch([filter=None[, order_by=None[, group_by=[][, page=None[, page_size=None[, commit=True[, async=False[, callback=None]]]]]]]])
-
-    Gets the list of children objects it manages and add them into the its :class:`bambou.NURESTObject` declared list.
-    For instance a :class:`vsdk.fetchers.NUUsersFetcher` of :class:`vsdk.NUEnterprise` will get a list of :class:`vsdk.NUUser` and put them into the property :py:attr:`users`
-    of the :class:`vsdk.NUEnterprise`.
-
-    Returns:
-
-        Tuple containing the fetcher itself, the fetcher owner, the list of fetched objects and the :class:`bambou.NURESTConnection` that was used.
-
-        .. note:: You don't need to use this tuple is you work in synchronous mode. We'll talk more about the asynchronous mode later.
-
-    Example:
-
-        >>> myenterprise.domains_fetcher.fetch() # fetch domains in an enterprise
-        >>> print myenterprise.domains # print the list of fetched objects
-        [<NUDomain at xxx>, <NUDomain at yyyy>, <NUDomain at zzz>]
-
+.. audomethod:: bambou.NURESTFetcher.fetch_objects
+    :noindex:
 
 Discussion about Fetchers
 +++++++++++++++++++++++++
 
 Fetcher is a powerfull concept that makes the process of getting child objects completely generic and code friendly. :class:`bambou.NURESTObject` provides methods that allow to deal programatically with the fetchers and children lists in a completely generic way.
+
+.. warning:: WE NEED TO USE AUTODOC FOR THESE ONES
 
 .. method:: children_rest_names()
 
@@ -320,28 +247,22 @@ NURESTLoginController
 
 :class:`bambou.NURESTLoginController` is the class that manages a current authenticated ReST session. It is used by :class:`bambou.NURESTConnection` to correctly populate the user crendentials. This class contains several poperties.
 
-.. attribute:: user
+.. autoattribute:: bambou.NURESTLoginController.user
+    :noindex:
 
-    The user login.
+.. autoattribute:: bambou.NURESTLoginController.password
+    :noindex:
 
-.. attribute:: password
+.. autoattribute:: bambou.NURESTLoginController.enterprise
+    :noindex:
 
-    The password, in clear text. (clear text is mandatory for LDAP based authentication). This password is only used once to get the API key.
-    All subsequent calls will use the API key.
+.. autoattribute:: bambou.NURESTLoginController.api_key
+    :noindex:
 
-.. attribute:: enterprise
+.. autoattribute:: bambou.NURESTLoginController.url
+    :noindex:
 
-    The enterprise name the user belongs to.
-
-.. attribute:: api_key
-
-    The API key to use instead of the password. This is mandatory for all calls other than `/me`
-
-.. attribute:: url
-
-    The VSD Server ReST API endpoint. Usually it `https://vsd-host:8443`
-
-In order to populate the API key it is mandatory to do a call with the `/me` API using the :py:class:`NURESTUser`. Here is a full login example:
+In order to populate the API key it is mandatory to do a call with the `/me` API using the :class:`vsdk.NURESTUser`. Here is a full login example:
 
 .. code-block:: python
     :linenos:
@@ -387,31 +308,17 @@ Using the NURESTPushCenter
 
 Only 4 methods are important:
 
-.. method:: start()
+.. automethod:: bambou.NURESTPushCenter.start
+    :noindex:
 
-    Starts to listen events.
+.. automethod:: bambou.NURESTPushCenter.stop
+    :noindex:
 
+.. automethod:: bambou.NURESTPushCenter.add_delegate
+    :noindex:
 
-.. method:: stop()
-
-    Stops the push center.
-
-
-.. method:: add_delegate(callback)
-
-    Register a delegate function or a method to be called when a push is received. The prototype of a the callback function must be the following:
-
-    .. code-block:: python
-
-        def on_receive_push(data)
-
-    :py:attr:`data` is a dictionary containing the encoded raw push JSON structure.
-
-
-.. method:: remove_delegate(callback)
-
-    Unregister a registered delegate function or a method.
-
+.. automethod:: bambou.NURESTPushCenter.remove_delegate
+    :noindex:
 
 Simple Example
 ++++++++++++++
