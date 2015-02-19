@@ -9,49 +9,49 @@ VSDK provides a set of objects that allows the manipulation of VSD entities very
 
 `Bambou` is composed of the following classes:
 
-.. class:: NURESTConnection
+* :class:`bambou.NURESTConnection`
 
     A low level class that is used each time there's a need to communicate with the VSD server.
 
-.. class:: NURESTModelController
+* :class:`bambou.NURESTModelController`
 
     Singleton that controls all defined model objects.
 
-.. class:: NURESTUser
+* :class:`bambou.NURESTBasicUser`
 
     Represents the user used for authentication and fetching root objects.
 
-.. class:: NURESTLoginController
+* :class:`bambou.NURESTLoginController`
 
     Represents a ReST communication session, using a `NURESTUser` for authentication.
 
-.. class:: NURESTObject
+* :class:`bambou.NURESTObject`
 
     Parent class of all ReST entities. All VSDK objects are inheriting from this class.
 
-.. class:: NURESTFetcher
+* :class:`bambou.NURESTFetcher`
 
     Class used to get children of a `NURESTObject`.
 
-.. class:: NURESTPushCenter
+* :class:`bambou.NURESTPushCenter`
 
     Class that deals with intercepting and rerouting VSD ReST Push Notifications.
 
 
-.. note:: The most important classes you need to know are :py:class:`NURESTObject`, :py:class:`NURESTFetcher` and :py:class:`NURESTPushCenter`.
+.. note:: The most important classes you need to know are :class:`bambou.NURESTObject`, :class:`bambou.NURESTFetcher` and :class:`bambou.NURESTPushCenter`.
 
 
 
 NURESTObject
 ------------
 
-:py:class:`NURESTObject` is the parent class of all VSDK entities.
+:class:`bambou.NURESTObject` is the parent class of all VSDK entities.
 
 
 ReST Names
 ++++++++++
 
-All :py:class:`NURESTObject` subclasses **must** implement a given method that will return the actual ReST name of the objects. For instance, the ReST name of  a VSD enterprise is `enterprise` while it is `egressacltemplate` for Egress Security Policies. This name is used to forges API and also can be used as an unique key for identifying random VSDK objects.
+All :class:`bambou.NURESTObject` subclasses **must** implement a given method that will return the actual ReST name of the objects. For instance, the ReST name of  a VSD enterprise is `enterprise` while it is `egressacltemplate` for Egress Security Policies. This name is used to forges API and also can be used as an unique key for identifying random VSDK objects.
 
 .. note:: ReST names are auto generated. You never need to manually define them.
 
@@ -59,7 +59,7 @@ All :py:class:`NURESTObject` subclasses **must** implement a given method that w
 ReST API URI generation
 +++++++++++++++++++++++
 
-:py:class:`NURESTObject` is able to forge all the URI needed to interact with the server through the ReST API.
+:class:`bambou.NURESTObject` is able to forge all the URI needed to interact with the server through the ReST API.
 
 For instance, if an object with a ReST name set to `object` needs to get the list of children with ReST name set to `subobject`, `Bambou` will create the following endpoing URL `/objects/{id}/subobjects`. if an object with a ReST name set to `object` needs to fetch itself, the generated URL will be `/objects/{id}`
 
@@ -81,7 +81,7 @@ Not only the attribute can be exposed, but also its type and other informations 
 CRUD Operations
 +++++++++++++++
 
-:py:class:`NURESTObject` allows to perform all sorts of CRUD operations.
+:class:`bambou.NURESTObject` allows to perform all sorts of CRUD operations.
 
 .. method:: fetch([callback=None])
 
@@ -116,7 +116,7 @@ CRUD Operations
 
 .. method:: create_child_object(nurest_object[, callback=None])
 
-    Creates another :py:class:`NURESTObject` as a child of the current object.
+    Creates another :class:`bambou.NURESTObject` as a child of the current object.
 
     Example:
 
@@ -146,7 +146,7 @@ CRUD Operations
         >>> enterprise.instantiate_child_object(domain, domain_template) # instatiate the new domain in the server
 
 
-.. note:: All these methods require the current :py:class:`NURESTObject` to have a valid :py:attr:`ID`.
+.. note:: All these methods require the current :class:`bambou.NURESTObject` to have a valid :py:attr:`ID`.
 
 .. note:: You may notice that there is no creation method. Creation is always happening from a parent object and is done using.
 
@@ -157,7 +157,7 @@ CRUD Operations
 Converting to and from a Python Dictionary
 ++++++++++++++++++++++++++++++++++++++++++
 
-:py:class:`NURESTObject` allows quick and easy conversion from and to python dictionaries
+:class:`bambou.NURESTObject` allows quick and easy conversion from and to python dictionaries
 
 .. method:: from_dict(dictionary)
 
@@ -180,30 +180,30 @@ Converting to and from a Python Dictionary
         >>> print group.to_dict()
         {"name": "my group", "private": False, "ID": "xxxx-xxx-xxxx-xxx", ...}
 
-.. note:: you never need to process to the actual JSON conversion when sending info to the server. :py:class:`NURESTConnection` will do that automatically.
+.. note:: you never need to process to the actual JSON conversion when sending info to the server. :class:`bambou.NURESTConnection` will do that automatically.
 
 
 
 NURESTFetcher
 -------------
 
-:py:class:`NURESTFetchers` are objects allowing a :py:class:`NURESTObject` to fetch its children :py:class:`NURESTObjects`. All :py:class:`NURESTObjects` have one or more fetchers, unless it's a final object in the VSD model hierarchy. :py:class:`NURESTFetcher` provides a lot of possibility regarding the way you want to get a given children list. It can deal with simple object fetching, pagination, filtering, request headers, grouping etc.
+:class:`bambou.NURESTFetcher` are objects allowing a :class:`bambou.NURESTObject` to fetch its children :class:`bambou.NURESTObject`. All :class:`bambou.NURESTObject` have one or more fetchers, unless it's a final object in the VSD model hierarchy. :class:`bambou.NURESTFetcher` provides a lot of possibility regarding the way you want to get a given children list. It can deal with simple object fetching, pagination, filtering, request headers, grouping etc.
 
 
 Fetching Children List
 ++++++++++++++++++++++
 
-:py:class:`NURESTFetcher` has one important method:
+:class:`bambou.NURESTFetcher` has one important method:
 
 .. method:: fetch([filter=None[, order_by=None[, group_by=[][, page=None[, page_size=None[, commit=True[, async=False[, callback=None]]]]]]]])
 
-    Gets the list of children objects it manages and add them into the its :py:class:`NURESTObject` declared list.
-    For instance a :py:class:`NUUsersFetcher` of :py:class:`NUEnterprise` will get a list of :py:class:`NUUser` and put them into the property :py:attr:`users`
-    of the :py:class:`NUEnterprise`.
+    Gets the list of children objects it manages and add them into the its :class:`bambou.NURESTObject` declared list.
+    For instance a :class:`vsdk.fetchers.NUUsersFetcher` of :class:`vsdk.NUEnterprise` will get a list of :class:`vsdk.NUUser` and put them into the property :py:attr:`users`
+    of the :class:`vsdk.NUEnterprise`.
 
     Returns:
 
-        Tuple containing the fetcher itself, the fetcher owner, the list of fetched objects and the :py:class:`NURESTConnection` that was used.
+        Tuple containing the fetcher itself, the fetcher owner, the list of fetched objects and the :class:`bambou.NURESTConnection` that was used.
 
         .. note:: You don't need to use this tuple is you work in synchronous mode. We'll talk more about the asynchronous mode later.
 
@@ -217,7 +217,7 @@ Fetching Children List
 Discussion about Fetchers
 +++++++++++++++++++++++++
 
-Fetcher is a powerfull concept that makes the process of getting child objects completely generic and code friendly. :py:class:`NURESTObject` provides methods that allow to deal programatically with the fetchers and children lists in a completely generic way.
+Fetcher is a powerfull concept that makes the process of getting child objects completely generic and code friendly. :class:`bambou.NURESTObject` provides methods that allow to deal programatically with the fetchers and children lists in a completely generic way.
 
 .. method:: children_rest_names()
 
@@ -318,7 +318,7 @@ We talked about how to do a lot of things, but all of them needs to be done once
 NURESTLoginController
 +++++++++++++++++++++
 
-:py:class:`NURESTLoginController` is the class that manages a current authenticated ReST session. It is used by :py:class:`NURESTConnection` to correctly populate the user crendentials. This class contains several poperties.
+:class:`bambou.NURESTLoginController` is the class that manages a current authenticated ReST session. It is used by :class:`bambou.NURESTConnection` to correctly populate the user crendentials. This class contains several poperties.
 
 .. attribute:: user
 
@@ -364,7 +364,7 @@ Pretty painful... but there's an easy way.
 NUVSDSession
 ++++++++++++
 
-VSDK provides a shortcut to do all of this in one line, the :py:class:`NUVSDSession`. The previous section's code is strictly equivalent to the following:
+VSDK provides a shortcut to do all of this in one line, the :class:`vsdk.NUVSDSession`. The previous section's code is strictly equivalent to the following:
 
 .. code-block:: python
     :linenos:
@@ -380,7 +380,7 @@ VSDK provides a shortcut to do all of this in one line, the :py:class:`NUVSDSess
 NURESTPushCenter
 ----------------
 
-The VSD API supports client side push through a long polling connection. ReST clients can connect to that channel and will get a notification as soon as he or someone else in the system changes something. This events are filtered by permissions, which means that if someone change a property of an object you cannot see, you won't get notified. VSDK provides the :py:class:`NURESTPushCenter`, which is a singleton that encapsulates the logic to deal with this event channel. It runs in its own thread and will call registered callbacks when it receives a push.
+The VSD API supports client side push through a long polling connection. ReST clients can connect to that channel and will get a notification as soon as he or someone else in the system changes something. This events are filtered by permissions, which means that if someone change a property of an object you cannot see, you won't get notified. VSDK provides the :class:`bambou.NURESTPushCenter`, which is a singleton that encapsulates the logic to deal with this event channel. It runs in its own thread and will call registered callbacks when it receives a push.
 
 Using the NURESTPushCenter
 ++++++++++++++++++++++++++

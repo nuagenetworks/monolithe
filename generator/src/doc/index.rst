@@ -1,4 +1,4 @@
-VSDK documentation
+VSDK Documentation
 ==================
 
 General Documentation
@@ -10,10 +10,9 @@ This section contains all the concepts to use VSDK and a lot of tutorials and ex
     :maxdepth: 1
     :glob:
 
-    intro
     installation
     general_concepts
-    first_steps
+    tutorial_beginner
 
 
 VSDK API Reference
