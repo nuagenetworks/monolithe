@@ -1,0 +1,145 @@
+#!/usr/bin/env python
+
+import argparse
+import sys
+import importlib
+import os
+import shutil
+import re
+
+VANILLA_DOC = "./src/doc"
+
+# rm -rf ./codegen/$version/doc
+# cp -Rf ./src/doc ./codegen/$version/
+# sphinx-apidoc -o codegen/$version/doc codegen/$version
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="VSDK API Reference Documentation Generator.")
+
+    parser.add_argument('-v', "--version",
+                        dest="version",
+                        help="Path to vsdk sources",
+                        type=str)
+
+    args = parser.parse_args()
+
+
+    vsdk_path = "codegen/%s" % args.version
+    base_doc_path = "%s/doc/" % vsdk_path
+
+    sys.path.append(vsdk_path)
+
+
+
+    ## Sphinx preprocess
+
+    if os.path.exists(base_doc_path):
+        shutil.rmtree(base_doc_path)
+    shutil.copytree(VANILLA_DOC, base_doc_path)
+    os.system("sphinx-apidoc -o '%s' '%s'" % (base_doc_path, vsdk_path))
+
+
+
+    ## Bambou
+
+    bambou_doc_path   = "%s/bambou" % base_doc_path
+
+    if os.path.exists(bambou_doc_path):
+        shutil.rmtree(bambou_doc_path)
+    os.makedirs(bambou_doc_path)
+
+    bambou_module = importlib.import_module("bambou")
+    bambou_install_path = os.path.dirname(bambou_module.__file__)
+    os.system("cd %s/vsdk && ln -s %s bambou" % (vsdk_path, bambou_install_path))
+    bambou_api_file = open("%s/bambou_reference.rst" % (base_doc_path), "w")
+    bambou_api_file.write("Bambou API Reference\n")
+    bambou_api_file.write("====================\n\n")
+    bambou_api_file.write(".. toctree::\n")
+    bambou_api_file.write("    :maxdepth: 2\n")
+    bambou_api_file.write("    :glob:\n\n")
+    bambou_api_file.write("    bambou/*\n\n")
+    bambou_api_file.close()
+    os.system("cd %s/vsdk && rm -f bambou" % vsdk_path)
+
+    for class_name in bambou_module.__all__:
+        f = open("%s/bambou.%s.rst" % (bambou_doc_path, class_name.lower()), "w")
+        f.write("%s\n" % class_name)
+        f.write("%s\n\n" % re.sub(r".", "=", class_name))
+
+        f.write(".. autoclass:: bambou.%s\n" % class_name)
+        f.write("    :members:\n")
+        f.write("    :inherited-members:\n")
+        f.write("    :member-order: groupwise\n")
+        f.write("\n")
+        f.close()
+
+
+    ## VSDK
+
+    vsdk_doc_path   = "%s/vsdk" % base_doc_path
+
+    if os.path.exists(vsdk_doc_path):
+        shutil.rmtree(vsdk_doc_path)
+    os.makedirs(vsdk_doc_path)
+
+    vsdk_model_module = importlib.import_module("vsdk")
+    model_api_file = open("%s/vsdk_reference.rst" % (base_doc_path), "w")
+    model_api_file.write("VSDK API Reference\n")
+    model_api_file.write("==================\n\n")
+    model_api_file.write("**Models**\n\n")
+    model_api_file.write(".. toctree::\n")
+    model_api_file.write("    :maxdepth: 2\n")
+    model_api_file.write("    :glob:\n\n")
+    model_api_file.write("    vsdk/models.*\n\n\n")
+    model_api_file.write("**Fetchers**\n\n")
+    model_api_file.write(".. toctree::\n")
+    model_api_file.write("    :maxdepth: 2\n")
+    model_api_file.write("    :glob:\n\n")
+    model_api_file.write("    vsdk/fetchers.*\n\n\n")
+
+    model_api_file.close()
+
+    for class_name in vsdk_model_module.__all__:
+        if class_name == "AutoGenerate":
+            continue
+
+        f = open("%s/models.%s.rst" % (vsdk_doc_path, class_name.lower()), "w")
+        f.write("%s\n" % class_name)
+        f.write("%s\n\n" % re.sub(r".", "=", class_name))
+
+        f.write(".. autoclass:: vsdk.%s\n" % class_name)
+        f.write("    :members:\n")
+        f.write("    :inherited-members:\n")
+        f.write("    :member-order: groupwise\n")
+        f.write("\n")
+        f.close()
+
+    vsdk_fetchers_module = importlib.import_module("vsdk.fetchers")
+    for class_name in vsdk_fetchers_module.__all__:
+        if class_name == "AutoGenerate":
+            continue
+
+        f = open("%s/fetchers.%s.rst" % (vsdk_doc_path, class_name.lower()), "w")
+        f.write("%s\n" % class_name)
+        f.write("%s\n\n" % re.sub(r".", "=", class_name))
+
+        f.write(".. autoclass:: vsdk.fetchers.%s\n" % class_name)
+        f.write("    :members:\n")
+        f.write("    :inherited-members:\n")
+        f.write("    :member-order: groupwise\n")
+        f.write("\n")
+        f.close()
+
+
+    ## Shinx postproccessing
+
+    os.remove("%s/vsdk.rst" % base_doc_path)
+    os.remove("%s/vsdk.autogenerates.rst" % base_doc_path)
+    os.remove("%s/vsdk.fetchers.rst" % base_doc_path)
+    os.remove("%s/modules.rst" % base_doc_path)
+    os.remove("%s/setup.rst" % base_doc_path)
+
+    os.system("cd '%s' && make html" % base_doc_path)
+    os.system("cd '%s' && rm -rf ./documentation && mv doc/_build/html ./documentation && rm -rf doc" % vsdk_path)
+
