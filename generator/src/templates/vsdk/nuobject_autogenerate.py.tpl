@@ -6,7 +6,8 @@
 
 {% for relation in model.relations %}
 from ..fetchers import NU{{ relation.plural_name }}Fetcher{% endfor %}
-from bambou import NURESTObject{% if model.has_time_attribute %}
+from bambou import NURESTObject
+from bambou.utils.decorators import classproperty{% if model.has_time_attribute %}
 from time import time{% endif %}
 
 
@@ -59,9 +60,9 @@ class NU{{ model.name }}(NURESTObject):
     {% endfor %}
     # Methods
 
-    @classmethod
-    def get_remote_name(cls):
-        """ Remote name that will be used to generates URI
+    @classproperty
+    def rest_name(cls):
+        """ REST name that will be used to generates URI
 
         """
         return u"{{ model.remote_name }}"

@@ -6,7 +6,8 @@
 
 {% for relation in model.relations %}
 from ..fetchers import NU{{ relation.plural_name }}Fetcher{% endfor %}
-from bambou import NURESTBasicUser{% if model.has_time_attribute %}
+from bambou import NURESTBasicUser
+from bambou.utils.decorators import classproperty{% if model.has_time_attribute %}
 from time import time{% endif %}
 
 
@@ -34,9 +35,8 @@ class NU{{ model.name }}(NURESTBasicUser):
         self.{{ relation.instance_plural_name }} = []
         self.{{ relation.instance_plural_name }}_fetcher = NU{{ relation.plural_name }}Fetcher.fetcher_with_object(nurest_object=self, local_name=u"{{relation.instance_plural_name}}")
         {% endfor %}{% endif %}
-        for key, value in kwargs.iteritems():
-            if hasattr(self, key):
-                setattr(self, key, value)
+
+        self._compute_args(**kwargs)
 
     # Properties
     {% for attribute in model.attributes %}
@@ -60,14 +60,14 @@ class NU{{ model.name }}(NURESTBasicUser):
     {% endfor %}
     # Methods
 
-    @classmethod
-    def get_remote_name(cls):
+    @classproperty
+    def rest_name(cls):
         """ Remote name that will be used to generates URI
 
         """
         return u"{{ model.remote_name }}"
 
-    @classmethod
+    @classproperty
     def is_resource_name_fixed(cls):
         """ Fixed resource name """
 
@@ -80,11 +80,11 @@ class NU{{ model.name }}(NURESTBasicUser):
                 Retrns a complete url containing /me
         """
 
-        name = self.__class__.get_resource_name()
-        url = self.__class__.base_url()
+        name = self.__class__.rest_resource_name
+        url = self.__class__.rest_base_url
         return "%s/%s" % (url, name)
 
     def get_resource_url_for_child_type(self, object_type):
         """ Get the resource url for the object type """
 
-        return "%s/%s" % (self.__class__.base_url(), object_type.get_resource_name())
+        return "%s/%s" % (self.__class__.rest_base_url, object_type.rest_resource_name)
