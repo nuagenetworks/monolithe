@@ -7,7 +7,7 @@ import os
 import shutil
 import re
 
-VANILLA_DOC = "./src/doc"
+VANILLA_DOC = "../vanilla/sphinx"
 
 # rm -rf ./codegen/$version/doc
 # cp -Rf ./src/doc ./codegen/$version/
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
 
     vsdk_path = "codegen/%s" % args.version
-    base_doc_path = "%s/doc/" % vsdk_path
+    base_doc_path = "%s/sphinx/" % vsdk_path
 
     sys.path.append(vsdk_path)
 
