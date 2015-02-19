@@ -35,9 +35,8 @@ class NU{{ model.name }}(NURESTObject):
         self.{{ relation.instance_plural_name }} = []
         self.{{ relation.instance_plural_name }}_fetcher = NU{{ relation.plural_name }}Fetcher.fetcher_with_object(nurest_object=self, local_name=u"{{relation.instance_plural_name}}")
         {% endfor %}{% endif %}
-        for key, value in kwargs.iteritems():
-            if hasattr(self, key):
-                setattr(self, key, value)
+
+        self._compute_args(**kwargs)
 
     # Properties
     {% for attribute in model.attributes %}
