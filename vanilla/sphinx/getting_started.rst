@@ -1,5 +1,5 @@
-Tutorial - Beginner
-===================
+Getting Started
+===============
 
 Connection
 ----------

@@ -15,9 +15,9 @@ exclude_patterns = ['_build', '../vsdk/autogenerates']
 pygments_style = 'sphinx'
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-# html_theme = "nature"
+# html_theme = "pyramid"
 # html_static_path = ['_static']
 htmlhelp_basename = '32doc'
-
+html_logo = 'nuage-logo.png'
 autodoc_member_order = "groupwise"
-autodoc_default_flags = ['members', 'inherited-members']
+autodoc_default_flags = []

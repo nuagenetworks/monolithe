@@ -1,8 +1,8 @@
 VSDK Documentation
 ==================
 
-General Documentation
----------------------
+Getting Started
+---------------
 
 This section contains all the concepts to use VSDK and a lot of tutorials and examples.
 
@@ -10,9 +10,22 @@ This section contains all the concepts to use VSDK and a lot of tutorials and ex
     :maxdepth: 1
     :glob:
 
+    license
     installation
     general_concepts
-    tutorial_beginner
+    getting_started
+
+
+Sample Code
+-----------
+
+This section show sample code you can reuse for a variety of day to day operations.
+
+.. toctree::
+    :maxdepth: 2
+    :glob:
+
+    sample_code
 
 
 VSDK API Reference
