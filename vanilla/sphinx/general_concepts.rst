@@ -92,7 +92,7 @@ CRUD Operations
 .. automethod:: bambou.NURESTObject.delete
     :noindex:
 
-.. automethod:: bambou.NURESTObject.add_child_object
+.. automethod:: bambou.NURESTObject.create_child_object
     :noindex:
 
 .. automethod:: bambou.NURESTObject.assign_objects
@@ -136,7 +136,7 @@ Fetching Children List
 
 :class:`bambou.NURESTFetcher` has one important method:
 
-.. audomethod:: bambou.NURESTFetcher.fetch_objects
+.. automethod:: bambou.NURESTFetcher.fetch
     :noindex:
 
 Discussion about Fetchers
@@ -144,9 +144,7 @@ Discussion about Fetchers
 
 Fetcher is a powerfull concept that makes the process of getting child objects completely generic and code friendly. :class:`bambou.NURESTObject` provides methods that allow to deal programatically with the fetchers and children lists in a completely generic way.
 
-.. warning:: WE NEED TO USE AUTODOC FOR THESE ONES
-
-.. method:: children_rest_names()
+.. automethod:: bambou.NURESTObject.children_rest_names
 
     Gets the list of all possible children ReST names.
 

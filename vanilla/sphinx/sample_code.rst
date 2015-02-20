@@ -21,23 +21,24 @@ This sample function will populate a given domain with a given number of zones, 
 .. code-block:: python
     :linenos:
 
+    import vsdk
+    import ipaddress
+
     def populate_test_domain(domain, number_of_zones, number_of_subnets_per_zone, number_of_vports_per_subnet):
         """ Populate a domain with test data
 
             Args:
-                domain (vsd.NUDomain | vsd.NUDomainTemplate): base domain to populate
+                domain (vsdk.NUDomain | vsdk.NUDomainTemplate): base domain to populate
                 number_of_zones (int): number of desired zones
                 number_of_subnets_per_zone (int): number of desired subnets per zone
                 number_of_vports_per_subnet (int): number of desired vports per subnet (only available if domain is not a template)
         """
-        # pip install ipaddress on python < 3.0 otherwise it is included
-        import ipaddress
 
         # check if the domain is a template
         # if so use children template classes instead of instances
         is_template = domain.is_template()
-        zone_class = NUZoneTemplate if is_template else NUZone
-        subnet_class = NUSubnetTemplate if is_template else NUSubnet
+        zone_class = vsdk.NUZoneTemplate if is_template else vsdk.NUZone
+        subnet_class = vsdk.NUSubnetTemplate if is_template else vsdk.NUSubnet
 
         # generate a network and subnets
         network = ipaddress.ip_network(u'10.0.0.0/8')
@@ -47,7 +48,7 @@ This sample function will populate a given domain with a given number of zones, 
         for i in range(0, number_of_zones):
 
             zone = zone_class(name="Zone %d" % i)
-            domain.add_child_object(zone)
+            domain.create_child_object(zone)
             domain.add_child(zone)
 
             #creates subnets
@@ -60,7 +61,7 @@ This sample function will populate a given domain with a given number of zones, 
                 nm = "%s" % subnetwork.netmask
 
                 subnet = subnet_class(name="Subnet %d %d" % (i, j), address=ip, netmask=nm, gateway=gw)
-                zone.add_child_object(subnet)
+                zone.create_child_object(subnet)
                 zone.add_child(subnet)
 
                 # if the given domain is a template, we stop
@@ -70,17 +71,17 @@ This sample function will populate a given domain with a given number of zones, 
                 # Otherwise we create the VPorts
                 for k in range(0, number_of_vports_per_subnet):
 
-                    vport = NUVport(name="VPort %d-%d-%d", (i, j, k), type="VM", address_spoofing="INHERITED", multicast="INHERITED")
-                    subnet.add_child_object(vport)
+                    vport = vsdk.NUVport(name="VPort %d-%d-%d", (i, j, k), type="VM", address_spoofing="INHERITED", multicast="INHERITED")
+                    subnet.create_child_object(vport)
                     subnet.add_child(vport)
 
 
     if __name__ == "__main__":
 
-        session = NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION).start()
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION).start()
 
         # get a domain
-        domain = NUDomain(id="x")
+        domain = vsdk.NUDomain(id="x")
         domain.fetch()
 
         # do the job
@@ -88,12 +89,14 @@ This sample function will populate a given domain with a given number of zones, 
 
 
 Gateway Provisioning
-------------------------
+--------------------
 
 This sample function will create a gateway with ports, vlan and give some permissions to an enterprise
 
 .. code-block:: python
     :linenos:
+
+    import vsdk
 
     def create_datacenter_gateway_template(name, personality, network_port_names, access_port_names, vlan_range, vlans_values, vsdsession, description=None):
         """ Creates a DC Gateway template
@@ -113,28 +116,28 @@ This sample function will create a gateway with ports, vlan and give some permis
         """
 
         # create the gateway template
-        gateway_template = NUGatewayTemplate(name=name, personality=personality, description=description)
+        gateway_template = vsdk.NUGatewayTemplate(name=name, personality=personality, description=description)
 
-        vsdsession.user.add_child_object(gateway_template)
+        vsdsession.user.create_child_object(gateway_template)
 
         # create a network port for each given network_port_names
         for network_port_name in network_port_names:
 
-            network_port_template = NUPortTemplate(name=network_port_name, physical_name=network_port_name, portType="NETWORK")
-            gateway_template.add_child_object(network_port_template)
+            network_port_template = vsdk.NUPortTemplate(name=network_port_name, physical_name=network_port_name, portType="NETWORK")
+            gateway_template.create_child_object(network_port_template)
 
 
         # create an access port for each given access_port_names
         for access_port_name in access_port_names:
 
-            access_port_template = NUPortTemplate(name=access_port_name, physical_name=access_port_name, portType="ACCESS", vlan_range=vlan_range)
-            gateway_template.add_child_object(access_port_template)
+            access_port_template = vsdk.NUPortTemplate(name=access_port_name, physical_name=access_port_name, portType="ACCESS", vlan_range=vlan_range)
+            gateway_template.create_child_object(access_port_template)
 
             # create a VLAN for each given vlans_values
             for vlan_value in vlans_values:
 
-                vlan = NUVLANTemplate(value=vlan_value)
-                access_port_template.add_child_object(vlan)
+                vlan = vsdk.NUVLANTemplate(value=vlan_value)
+                access_port_template.create_child_object(vlan)
 
         return gateway_template
 
@@ -153,17 +156,17 @@ This sample function will create a gateway with ports, vlan and give some permis
                 vsdk.NUGateway: the newly created gateway.
         """
 
-        gateway = NUGateway(name=name, personality=personality)
+        gateway = vsdk.NUGateway(name=name, personality=personality)
         vsdsession.user.instantiate_child_object(gateway, gateway_template)
-        permission = NUEnterprisePermission(permitted_action=permission, permitted_entity_id=enterprise.id)
-        gateway.add_child_object(permission)
+        permission = vsdk.NUEnterprisePermission(permitted_action=permission, permitted_entity_id=enterprise.id)
+        gateway.create_child_object(permission)
 
         return gateway
 
         if __name__ == "__main__":
 
             # start the session
-            session = NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
+            session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
             session.start()
 
             # get an enterprise
@@ -197,18 +200,20 @@ Automatic Virtual Machine Provisioning
 
 
 Populating Well-Known IANA Application Services
-------------------------------------------
+-----------------------------------------------
 
 This function will fetch the latest known application services from IANA and create them as application services
 
 .. code-block:: python
     :linenos:
 
+    import requests
+    import csv
+    import vsdk
+
     def import_known_application_services(session):
 
         # pip install requests
-        import requests
-        import csv
 
         protocols = requests.get('http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv').content
         csvreader = csv.reader(protocols.split('\r\n'))
@@ -224,7 +229,7 @@ This function will fetch the latest known application services from IANA and cre
                 if not name:
                     continue;
 
-                appservice = NUApplicationService()
+                appservice = vsdk.NUApplicationService()
                 appservice.protocol = "6" if protocol is "tcp" else "17"
                 appservice.name = "%s/%d - %s " % (appservice.protocol, port_number, name)
                 appservice.destination_port = port_number
@@ -234,7 +239,7 @@ This function will fetch the latest known application services from IANA and cre
                 appservice.source_port = "*"
                 appservice.dscp = "*"
 
-                session.user.add_child_object(appservice)
+                session.user.create_child_object(appservice)
 
             except Exception as ex:
                 print ex;
@@ -242,7 +247,7 @@ This function will fetch the latest known application services from IANA and cre
 
     if __name__ == "__main__":
 
-        session = NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION).start()
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION).start()
         import_known_application_services(session)
 
 
