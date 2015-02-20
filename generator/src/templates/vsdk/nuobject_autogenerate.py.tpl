@@ -18,6 +18,8 @@ class NU{{ model.name }}(NURESTObject):
 
     """
 
+    __rest_name__ = u"{{ model.remote_name }}"
+
     def __init__(self, **kwargs):
         """ Initializes a {{ model.name }} instance
 
@@ -59,13 +61,6 @@ class NU{{ model.name }}(NURESTObject):
     {{ attribute.local_name }} = property(_get_{{ attribute.local_name }}, _set_{{ attribute.local_name }})
     {% endfor %}
     # Methods
-
-    @classproperty
-    def rest_name(cls):
-        """ REST name that will be used to generates URI
-
-        """
-        return u"{{ model.remote_name }}"
 
     def get_fetcher_name(self):
         """ Return the fetcher name that will be used in objects parents

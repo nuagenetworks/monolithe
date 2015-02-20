@@ -18,6 +18,8 @@ class NU{{ model.name }}(NURESTBasicUser):
 
     """
 
+    __rest_name__ = "me"
+
     def __init__(self, **kwargs):
         """ Initializes a {{ model.name }} instance
 
@@ -61,13 +63,6 @@ class NU{{ model.name }}(NURESTBasicUser):
     # Methods
 
     @classproperty
-    def rest_name(cls):
-        """ Remote name that will be used to generates URI
-
-        """
-        return u"{{ model.remote_name }}"
-
-    @classproperty
     def is_resource_name_fixed(cls):
         """ Fixed resource name """
 
@@ -81,10 +76,10 @@ class NU{{ model.name }}(NURESTBasicUser):
         """
 
         name = self.__class__.rest_resource_name
-        url = self.__class__.rest_base_url
+        url = self.__class__.rest_base_url()
         return "%s/%s" % (url, name)
 
     def get_resource_url_for_child_type(self, object_type):
         """ Get the resource url for the object type """
 
-        return "%s/%s" % (self.__class__.rest_base_url, object_type.rest_resource_name)
+        return "%s/%s" % (self.__class__.rest_base_url(), object_type.rest_resource_name)
