@@ -71,14 +71,15 @@ This sample function will populate a given domain with a given number of zones, 
                 # Otherwise we create the VPorts
                 for k in range(0, number_of_vports_per_subnet):
 
-                    vport = vsdk.NUVport(name="VPort %d-%d-%d", (i, j, k), type="VM", address_spoofing="INHERITED", multicast="INHERITED")
+                    vport = vsdk.NUVPort(name="VPort %d-%d-%d" % (i, j, k), type="VM", address_spoofing="INHERITED", multicast="INHERITED")
                     subnet.create_child_object(vport)
                     subnet.add_child(vport)
 
 
     if __name__ == "__main__":
 
-        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION).start()
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
+        session.start()
 
         # get a domain
         domain = vsdk.NUDomain(id="x")
@@ -123,14 +124,14 @@ This sample function will create a gateway with ports, vlan and give some permis
         # create a network port for each given network_port_names
         for network_port_name in network_port_names:
 
-            network_port_template = vsdk.NUPortTemplate(name=network_port_name, physical_name=network_port_name, portType="NETWORK")
+            network_port_template = vsdk.NUPortTemplate(name=network_port_name, physical_name=network_port_name, port_type="NETWORK")
             gateway_template.create_child_object(network_port_template)
 
 
         # create an access port for each given access_port_names
         for access_port_name in access_port_names:
 
-            access_port_template = vsdk.NUPortTemplate(name=access_port_name, physical_name=access_port_name, portType="ACCESS", vlan_range=vlan_range)
+            access_port_template = vsdk.NUPortTemplate(name=access_port_name, physical_name=access_port_name, port_type="ACCESS", vlan_range=vlan_range)
             gateway_template.create_child_object(access_port_template)
 
             # create a VLAN for each given vlans_values
@@ -142,7 +143,7 @@ This sample function will create a gateway with ports, vlan and give some permis
         return gateway_template
 
 
-    def create_datacenter_gateway(name, gateway_template, enterprise, vsdsession, permission="USE"):
+    def create_datacenter_gateway(name, system_id, gateway_template, enterprise, vsdsession, permission="USE"):
         """ Creates a gateway instance from a gateway template, and gives given permission to given enterprise
 
             Args:
@@ -156,27 +157,27 @@ This sample function will create a gateway with ports, vlan and give some permis
                 vsdk.NUGateway: the newly created gateway.
         """
 
-        gateway = vsdk.NUGateway(name=name, personality=personality)
+        gateway = vsdk.NUGateway(name=name, system_id=system_id)
         vsdsession.user.instantiate_child_object(gateway, gateway_template)
         permission = vsdk.NUEnterprisePermission(permitted_action=permission, permitted_entity_id=enterprise.id)
         gateway.create_child_object(permission)
 
         return gateway
 
-        if __name__ == "__main__":
+    if __name__ == "__main__":
 
-            # start the session
-            session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
-            session.start()
+        # start the session
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
+        session.start()
 
-            # get an enterprise
-            enterprise = session.user.enterprises_fetcher.fetch(filter="name == 'Triple A'")
+        # get an enterprise
+        enterprise = session.user.enterprises_fetcher.fetch(filter="name == 'Triple A'")[2][0]
 
-            # create a gateway template
-            gw_tmpl = create_data_gateway_template("my template", "VSRG", ["port0"], ["port1", "port2"], "0-400", [100, 200], session)
+        # create a gateway template
+        gw_tmpl = create_datacenter_gateway_template("my template", "VRSG", ["port0"], ["port1", "port2"], "0-400", [100, 200], session)
 
-            # instantiate a gateway from the template and give USE permission to enterprise
-            gw = create_datacenter_gateway("gateway 1", gw_tmpl, enterprise, session)
+        # instantiate a gateway from the template and give USE permission to enterprise
+        gw = create_datacenter_gateway("gateway 1", "id1", gw_tmpl, enterprise, session)
 
 
 Populating a test environment
@@ -221,23 +222,16 @@ This function will fetch the latest known application services from IANA and cre
         for row in csvreader:
 
             try:
-                name = row[0]
                 port_number = row[1]
-                protocol = row[2]
-                description = row[3]
+                proto = "6" if row[2] is "tcp" else "17"
+                desc = row[3]
+                name = "%s - %s - %s " % (proto, port_number, row[0])
 
                 if not name:
                     continue;
 
-                appservice = vsdk.NUApplicationService()
-                appservice.protocol = "6" if protocol is "tcp" else "17"
-                appservice.name = "%s/%d - %s " % (appservice.protocol, port_number, name)
-                appservice.destination_port = port_number
-                appservice.description = description
-                appservice.direction = "REFLEXIVE"
-                appservice.ether_type = "0x0800"
-                appservice.source_port = "*"
-                appservice.dscp = "*"
+                appservice = vsdk.NUApplicationService(name=name, protocol=proto, destination_port=port_number, description=desc, direction="REFLEXIVE",\
+                                                       ether_type="0x0800", source_port="*", dscp="*")
 
                 session.user.create_child_object(appservice)
 
@@ -247,7 +241,8 @@ This function will fetch the latest known application services from IANA and cre
 
     if __name__ == "__main__":
 
-        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION).start()
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
+        session.start()
         import_known_application_services(session)
 
 
