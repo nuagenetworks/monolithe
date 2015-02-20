@@ -24,4 +24,6 @@ class GetPluralNameTest(TestCase):
         self.assertPluralNameEquals('Enterprise', 'Enterprises')
         self.assertPluralNameEquals('Enterprises', 'Enterprises')
         self.assertPluralNameEquals('policy', 'policies')
+        self.assertPluralNameEquals('gateway', 'gateways')
+        self.assertPluralNameEquals('Gateway', 'Gateways')
         self.assertPluralNameEquals('qos', 'qos')
