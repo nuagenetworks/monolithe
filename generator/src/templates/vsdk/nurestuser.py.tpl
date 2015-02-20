@@ -57,7 +57,7 @@ class NU{{ model.name }}(NURESTBasicUser):
             Notes:
                 {{ attribute.description }}
 
-                {% if attribute.local_name != attribute.remote_name}
+                {% if attribute.local_name != attribute.remote_name %}
                 This attribute is named `{{ attribute.remote_name }}` in VSD API.
                 {% endif %}
         """
@@ -69,7 +69,7 @@ class NU{{ model.name }}(NURESTBasicUser):
             Notes:
                 {{ attribute.description }}
 
-                {% if attribute.local_name != attribute.remote_name}
+                {% if attribute.local_name != attribute.remote_name %}
                 This attribute is named `{{ attribute.remote_name }}` in VSD API.
                 {% endif %}
         """
