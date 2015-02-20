@@ -28,7 +28,8 @@ RESOURCE_MAPPING = {
     'IngressAdvancedForwardingTemplate': 'IngressAdvFwdTemplate',
     'IngressAdvancedForwardingTemplateEntry': 'IngressAdvFwdEntryTemplate',
     'AutoDiscGateway': 'AutoDiscoveredGateway',
-    'VirtualMachine': 'VM'
+    'VirtualMachine': 'VM',
+    'Vlan': 'VLAN',
 }
 
 PACKAGE_MAPPING = {
