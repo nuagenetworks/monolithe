@@ -159,7 +159,7 @@ if __name__ == '__main__':
     shutil.copytree(VANILLA_DOC, base_doc_path)
 
     process = subprocess.Popen(['sphinx-apidoc', '-o', base_doc_path, vsdk_path], env=subprocess_environ)
-    print process.communicate()
+    process.communicate()
 
     ## Bambou
 
@@ -204,7 +204,7 @@ if __name__ == '__main__':
     origin_path = os.getcwd()
     os.chdir(base_doc_path)
     process = subprocess.Popen(['make', 'html'], env=subprocess_environ)
-    print process.communicate()
+    process.communicate()
     os.chdir(origin_path)
 
     os.system("cd '%s' && rm -rf ./documentation && mv sphinx/_build/html ./documentation && rm -rf sphinx" % vsdk_path)
