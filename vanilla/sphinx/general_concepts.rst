@@ -9,34 +9,13 @@ VSDK provides a set of objects that allows the manipulation of VSD entities very
 
 `Bambou` is composed of the following classes:
 
-* :class:`bambou.NURESTConnection`
-
-    A low level class that is used each time there's a need to communicate with the VSD server.
-
-* :class:`bambou.NURESTModelController`
-
-    Singleton that controls all defined model objects.
-
-* :class:`bambou.NURESTBasicUser`
-
-    Represents the user used for authentication and fetching root objects.
-
-* :class:`bambou.NURESTLoginController`
-
-    Represents a ReST communication session, using a `NURESTUser` for authentication.
-
-* :class:`bambou.NURESTObject`
-
-    Parent class of all ReST entities. All VSDK objects are inheriting from this class.
-
-* :class:`bambou.NURESTFetcher`
-
-    Class used to get children of a `NURESTObject`.
-
-* :class:`bambou.NURESTPushCenter`
-
-    Class that deals with intercepting and rerouting VSD ReST Push Notifications.
-
+* :class:`bambou.NURESTConnection`: A low level class that is used each time there's a need to communicate with the VSD server.
+* :class:`bambou.NURESTModelController` :Singleton that controls all defined model objects.
+* :class:`bambou.NURESTBasicUser`: Represents the user used for authentication and fetching root objects.
+* :class:`bambou.NURESTLoginController`: Represents a ReST communication session, using a `NURESTUser` for authentication.
+* :class:`bambou.NURESTObject`: Parent class of all ReST entities. All VSDK objects are inheriting from this class.
+* :class:`bambou.NURESTFetcher`: Class used to get children of a `NURESTObject`.
+* :class:`bambou.NURESTPushCenter`: Class that deals with intercepting and rerouting VSD ReST Push Notifications.
 
 .. note:: The most important classes you need to know are :class:`bambou.NURESTObject`, :class:`bambou.NURESTFetcher` and :class:`bambou.NURESTPushCenter`.
 
@@ -92,7 +71,7 @@ CRUD Operations
 .. automethod:: bambou.NURESTObject.delete
     :noindex:
 
-.. automethod:: bambou.NURESTObject.add_child_object
+.. automethod:: bambou.NURESTObject.create_child_object
     :noindex:
 
 .. automethod:: bambou.NURESTObject.assign_objects
@@ -134,72 +113,37 @@ NURESTFetcher
 Fetching Children List
 ++++++++++++++++++++++
 
-:class:`bambou.NURESTFetcher` has one important method:
+:class:`bambou.NURESTFetcher` has three importants methods:
 
-.. audomethod:: bambou.NURESTFetcher.fetch_objects
+.. automethod:: bambou.NURESTFetcher.retrieve
     :noindex:
+
+.. automethod:: bambou.NURESTFetcher.fetch_many
+    :noindex:
+
+.. automethod:: bambou.NURESTFetcher.fetch_one
+    :noindex:
+
 
 Discussion about Fetchers
 +++++++++++++++++++++++++
 
 Fetcher is a powerfull concept that makes the process of getting child objects completely generic and code friendly. :class:`bambou.NURESTObject` provides methods that allow to deal programatically with the fetchers and children lists in a completely generic way.
 
-.. warning:: WE NEED TO USE AUTODOC FOR THESE ONES
+.. automethod:: bambou.NURESTObject.children_rest_names
+    :noindex:
 
-.. method:: children_rest_names()
+.. automethod:: bambou.NURESTObject.children_for_rest_name
+    :noindex:
 
-    Gets the list of all possible children ReST names.
+.. automethod:: bambou.NURESTObject.children_lists
+    :noindex:
 
-    Example:
+.. automethod:: bambou.NURESTObject.children_fetcher_for_rest_name
+    :noindex:
 
-        >>> application = NUApplication()
-        >>> application.children_rest_names()
-        ["flow", "tier"]
-
-
-.. method:: children_for_rest_name(rest_name)
-
-    Gets a particular children list based on a given ReST name.
-
-    Example:
-
-        >>> application = NUApplication(id="xxx-xxx-xxx")
-        >>> application.tiers_fetcher.fetch()
-        >>> print application.children_for_rest_name(NUTier.rest_name)
-        [<NUTier at xxx>, <NUTier at yyy>]
-
-
-.. method:: children_lists()
-
-    Gets a list of all children list;
-
-    Example:
-
-        >>> application = NUApplication(id="xxx-xxx-xxx")
-        >>> application.children_lists.fetch()
-        >>> print application.children_for_rest_name(NUTier.rest_name)
-        [[<NUTier at xxx>, <NUTier at yyy>], [<NUFlow at aaaa>, <NUFlow at bbbb>, <NUFlow at cccc>]]
-
-
-.. method:: children_fetcher_for_rest_name()
-
-    Returns the fetcher for a given children ReST name.
-
-    Example:
-
-        >>> print application.children_fetcher_for_rest_name(NUFlow.rest_name)
-        <NUFlowsFetcher at yyyy>
-
-
-.. method:: children_fetchers()
-
-    Returns a list of all children fetchers of the object.
-
-    Example:
-
-        >>> print application.children_fetchers()
-        [<NUTiersFetcher at xxxx>, <NUFlowsFetcher at yyyy>]
-
+.. automethod:: bambou.NURESTObject.children_fetchers
+    :noindex:
 
 This allows complete abstract programatic operations on any objects.
 
@@ -237,55 +181,9 @@ For instance, the following function will create a new :py:class:`NUMetadata` to
 
 
 
-Authentication
----------------------
-We talked about how to do a lot of things, but all of them needs to be done once your are authenticated. This section describes how to authenticate yourself.
-
-
-NURESTLoginController
-+++++++++++++++++++++
-
-:class:`bambou.NURESTLoginController` is the class that manages a current authenticated ReST session. It is used by :class:`bambou.NURESTConnection` to correctly populate the user crendentials. This class contains several poperties.
-
-.. autoattribute:: bambou.NURESTLoginController.user
-    :noindex:
-
-.. autoattribute:: bambou.NURESTLoginController.password
-    :noindex:
-
-.. autoattribute:: bambou.NURESTLoginController.enterprise
-    :noindex:
-
-.. autoattribute:: bambou.NURESTLoginController.api_key
-    :noindex:
-
-.. autoattribute:: bambou.NURESTLoginController.url
-    :noindex:
-
-In order to populate the API key it is mandatory to do a call with the `/me` API using the :class:`vsdk.NURESTUser`. Here is a full login example:
-
-.. code-block:: python
-    :linenos:
-
-    login_controller = NURESTLoginController()
-    login_controller.user = "csproot"
-    login_controller.enterprise = "csp"
-    login_controller.password = "secret"
-    login_controller.url = "https://myvsd:8443/nuage/api/3_1"
-
-    current_user = NURESTUser.get_default()
-    current_user.fetch()
-    login_controller.api_key = current_user.api_key
-
-    # business as usual
-
-Pretty painful... but there's an easy way.
-
-
 NUVSDSession
-++++++++++++
-
-VSDK provides a shortcut to do all of this in one line, the :class:`vsdk.NUVSDSession`. The previous section's code is strictly equivalent to the following:
+---------------------
+We talked about how to do a lot of things, but all of them needs to be done once your are authenticated. This section describes how to authenticate yourself. VSDK provides a shortcut to do all of this in one line, the :class:`vsdk.NUVSDSession`. The previous section's code is strictly equivalent to the following:
 
 .. code-block:: python
     :linenos:
