@@ -6,8 +6,7 @@
 
 {% for relation in model.relations %}
 from ..fetchers import NU{{ relation.plural_name }}Fetcher{% endfor %}
-from bambou import NURESTObject
-from bambou.utils.decorators import classproperty{% if model.has_time_attribute %}
+from bambou import NURESTObject{% if model.has_time_attribute %}
 from time import time{% endif %}
 
 

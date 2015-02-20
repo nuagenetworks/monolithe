@@ -6,8 +6,7 @@
 
 {% for relation in model.relations %}
 from ..fetchers import NU{{ relation.plural_name }}Fetcher{% endfor %}
-from bambou import NURESTBasicUser
-from bambou.utils.decorators import classproperty{% if model.has_time_attribute %}
+from bambou import NURESTBasicUser{% if model.has_time_attribute %}
 from time import time{% endif %}
 
 
@@ -18,7 +17,7 @@ class NU{{ model.name }}(NURESTBasicUser):
 
     """
 
-    __rest_name__ = "me"
+    __rest_name__ = u"me"
 
     def __init__(self, **kwargs):
         """ Initializes a {{ model.name }} instance
@@ -62,7 +61,7 @@ class NU{{ model.name }}(NURESTBasicUser):
     {% endfor %}
     # Methods
 
-    @classproperty
+    @classmethod
     def is_resource_name_fixed(cls):
         """ Fixed resource name """
 
