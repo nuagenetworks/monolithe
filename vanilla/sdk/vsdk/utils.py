@@ -8,8 +8,17 @@ def set_log_level(level, handler=None):
     """ Set both VSDK and Bambou log level to the given level
 
         Args:
-            level: a logging level (ex: logging.DEBUG, logging.ERROR)
-            handler: a logging handler (ex: logging.Streamhandler)
+            level (logging.level): a logging level
+            handler (logging.Handler): a logging handler
+
+        Notes:
+            if no handler is provided, it will automatically create a new StreamHandler.
+
+        Examples:
+            >>> set_log_level(logging.INFO)
+            >>> set_log_level(logging.DEBUG, logging.Streamhandler())
+            >>> set_log_level(logging.ERROR)
+
     """
 
     from bambou import bambou_logger

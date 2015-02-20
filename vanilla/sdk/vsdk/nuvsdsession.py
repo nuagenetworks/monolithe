@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-Copyright 2014 Alcatel-Lucent USA Inc.
-NUVSDSession
-"""
+
+# Copyright 2014 Alcatel-Lucent USA Inc.
 
 from bambou import NURESTLoginController
 from nurestuser import NURESTUser
-from .utils import vsdk_logger
+from .utils import *
 
 
 class NUVSDSession(object):
@@ -16,18 +14,23 @@ class NUVSDSession(object):
     """
 
     def __init__(self, username, password, enterprise, api_url):
-        """ Initializes a new connection to the VSD
+        """ Initializes a new user sesssion on the VSD
 
-            Connection will enable to access the VSD Api using
-            specific objects
+            Notes:
+                This session will enable to access the VSD Api using
+                its user. Use session.user to retrieve the user that is currently
+                logged in.
 
             Args:
-                username: the name of the user to connect with
-                password: the password associated with the username
-                enterprise: the name of the enterprise
-                api_url: the API endpoint
+                username (str): username to login to the VSD
+                password (str): username associated password
+                enterprise (str): name of the enterprise
+                api_url (str): API Url of the VSD
 
+            Example:
+                >>> session = NUVSDSession(username=u'john', password=u'doe', enterprise=u'My Company', api_url=u'https://.../nuage/api/v3_1')
         """
+
         self._username = username
         self._password = password
         self._enterprise = enterprise
@@ -35,43 +38,32 @@ class NUVSDSession(object):
         self._user = None
 
     def _get_user(self):
-        """ Returns the current user of the session
+        """ Get the user for the current session
 
             Returns:
-                A user represented as a NURESTUser
-
+                vsdk.NURESTUser: the user
         """
         return self._user
 
     user = property(_get_user, None)
 
-    def impersonate(self, user, enterprise):
-        """ Impersonate the user of the enterprise
-
-            To stop the impersonation, call stop_impersonate()
-
-            Args:
-                user: the username
-                enterprise: the name of the enterprise
-
-        """
-        controller = NURESTLoginController()
-        controller.impersonate(user=user, enterprise=enterprise)
-
-    def stop_impersonate(self):
-        """ Stop impersonating a user
-
-        """
-        controller = NURESTLoginController()
-        controller.stop_impersonate()
-
     def start(self):
-        """ Start the current VSD Session
+        """ Start the VSD Session with the given user
 
-            Authenticate the user and set the API Key that will be
-            used for HTTP/s requests
+            Notes:
+                Authenticate the user and set the API Key that will be
+                used for HTTP/s requests.
+
+                All calls between start() and stop() will be made with the
+                current user.
+
+            Examples:
+                >>> session.start()
+                >>> # session.user is the active user
+                >>> session.stop()
 
         """
+
         controller = NURESTLoginController()
 
         if controller.api_key is not None:
@@ -92,14 +84,16 @@ class NUVSDSession(object):
             self._user.fetch()
 
         controller.api_key = self._user.api_key
-        vsdk_logger.debug("[NUVSDSession] Started session with username %s in enterprise %s (key=%s)" % (self._username, self._enterprise, self._user.api_key))
+        vsdk_logger.debug("[NUVSDSession] Started session with username %s in enterprise %s (key=%s)" % (self._username, self._password, self._user.api_key))
 
     def stop(self):
-        """ Stop the current VSD Session
+        """ Stop the VSD Session
 
-            Release the API Key for the next session
-
+            Notes:
+                Release the API Key for the next session.
+                Stop is automatically called when starting a new session.
         """
+
         controller = NURESTLoginController()
         controller.api_key = None
-        vsdk_logger.debug("[NUVSDSession] Session with username %s in enterprise %s terminated." % (self._username, self._enterprise))
+        vsdk_logger.debug("[NUVSDSession] Session with username %s in enterprise %s terminated." % (self._username, self._password))

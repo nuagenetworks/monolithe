@@ -7,14 +7,21 @@ from bambou import NURESTFetcher
 
 
 class NU{{ model.plural_name }}Fetcher(NURESTFetcher):
-    """ Represents a NU{{ model.plural_name }} fetcher """
+    """ Represents a NU{{ model.plural_name }} fetcher
+
+        Notes:
+            This fetcher enables to fetch NU{{ model.name }} objects.
+
+        See:
+            bambou.NURESTFetcher
+    """
 
     @classmethod
     def managed_class(cls):
-        """ This fetcher manages NU{{ model.name }} objects
+        """ Return NU{{ model.name }} class that is managed.
 
             Returns:
-                Returns the NU{{ model.name }} class
+                vsdk.NU{{ model.name }}: the managed class
         """
 
         from .. import NU{{ model.name }}
