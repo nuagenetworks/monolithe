@@ -113,9 +113,15 @@ NURESTFetcher
 Fetching Children List
 ++++++++++++++++++++++
 
-:class:`bambou.NURESTFetcher` has one important method:
+:class:`bambou.NURESTFetcher` has three importants methods:
 
-.. automethod:: bambou.NURESTFetcher.fetch
+.. automethod:: bambou.NURESTFetcher.retrieve
+    :noindex:
+
+.. automethod:: bambou.NURESTFetcher.fetch_many
+    :noindex:
+
+.. automethod:: bambou.NURESTFetcher.fetch_one
     :noindex:
 
 

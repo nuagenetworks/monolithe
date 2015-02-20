@@ -171,7 +171,7 @@ This sample function will create a gateway with ports, vlan and give some permis
         session.start()
 
         # get an enterprise
-        enterprise = session.user.enterprises_fetcher.fetch(filter="name == 'Triple A'")[2][0]
+        enterprise = session.user.enterprises_fetcher.fetch_one(filter="name == 'Triple A'")[2][0]
 
         # create a gateway template
         gw_tmpl = create_datacenter_gateway_template("my template", "VRSG", ["port0"], ["port1", "port2"], "0-400", [100, 200], session)
