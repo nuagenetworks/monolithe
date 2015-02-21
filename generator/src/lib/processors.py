@@ -30,6 +30,7 @@ RESOURCE_MAPPING = {
     'AutoDiscGateway': 'AutoDiscoveredGateway',
     'VirtualMachine': 'VM',
     'Vlan': 'VLAN',
+    'VlanTemplate': 'VLANTemplate'
 }
 
 PACKAGE_MAPPING = {
