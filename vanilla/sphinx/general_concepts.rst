@@ -115,13 +115,13 @@ Fetching Children List
 
 :class:`bambou.NURESTFetcher` has three importants methods:
 
-.. automethod:: bambou.NURESTFetcher.retrieve
+.. automethod:: bambou.NURESTFetcher.fetch
     :noindex:
 
-.. automethod:: bambou.NURESTFetcher.fetch_many
+.. automethod:: bambou.NURESTFetcher.get
     :noindex:
 
-.. automethod:: bambou.NURESTFetcher.fetch_one
+.. automethod:: bambou.NURESTFetcher.get_first
     :noindex:
 
 
@@ -130,20 +130,15 @@ Discussion about Fetchers
 
 Fetcher is a powerfull concept that makes the process of getting child objects completely generic and code friendly. :class:`bambou.NURESTObject` provides methods that allow to deal programatically with the fetchers and children lists in a completely generic way.
 
+.. automethod:: bambou.NURESTObject.fetcher_for_rest_name
+    :noindex:
+
+.. automethod:: bambou.NURESTObject.fetchers
+    :noindex:
+
 .. automethod:: bambou.NURESTObject.children_rest_names
     :noindex:
 
-.. automethod:: bambou.NURESTObject.children_for_rest_name
-    :noindex:
-
-.. automethod:: bambou.NURESTObject.children_lists
-    :noindex:
-
-.. automethod:: bambou.NURESTObject.children_fetcher_for_rest_name
-    :noindex:
-
-.. automethod:: bambou.NURESTObject.children_fetchers
-    :noindex:
 
 This allows complete abstract programatic operations on any objects.
 
@@ -158,11 +153,7 @@ For instance, the following function will create a new :py:class:`NUMetadata` to
         for fetcher in root_object.children_fetchers():
 
             # Fetch the list of the children
-            (_, _, children, connection) = fetcher.fetch(filter=filter)
-
-            # Ignoring connection errors
-            if not connection.response_code == 200:
-                continue
+            children = fetcher.get(filter=filter, conn)
 
             # Loop on all fetched children
             for child in children:
