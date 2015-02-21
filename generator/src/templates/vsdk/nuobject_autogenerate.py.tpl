@@ -46,8 +46,7 @@ class NU{{ model.name }}(NURESTObject):
         {% if model.relations|length > 0 %}
         # Fetchers
         {% for relation in model.relations %}
-        self.{{ relation.instance_plural_name }} = []
-        self.{{ relation.instance_plural_name }}_fetcher = NU{{ relation.plural_name }}Fetcher.fetcher_with_object(nurest_object=self, local_name=u"{{relation.instance_plural_name}}")
+        self.{{ relation.instance_plural_name }} = NU{{ relation.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
         {% endfor %}{% endif %}
 
         self._compute_args(**kwargs)
@@ -80,21 +79,3 @@ class NU{{ model.name }}(NURESTObject):
 
     {{ attribute.local_name }} = property(_get_{{ attribute.local_name }}, _set_{{ attribute.local_name }})
     {% endfor %}
-    # Methods
-
-    def get_fetcher_name(self):
-        """ Get the name of the fetcher that will be used in NU{{ model.name }} parent objects.
-
-            Notes:
-                This method enables the developer to retrieve the fetcher name
-                when dealing with Python object introspection.
-
-            Returns:
-                string: string that represents the name of a NU{{ model.name }} fetcher.
-
-            Examples:
-                >>> {{ model.name.lower() }}.get_fetcher_name()
-                {{ model.instance_plural_name }}_fetcher
-        """
-        return u"{{ model.instance_plural_name }}_fetcher"
-
