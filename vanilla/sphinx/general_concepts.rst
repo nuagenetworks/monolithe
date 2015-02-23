@@ -20,6 +20,40 @@ VSDK provides a set of objects that allows the manipulation of VSD entities very
 .. note:: The most important classes you need to know are :class:`bambou.NURESTObject`, :class:`bambou.NURESTFetcher` and :class:`bambou.NURESTPushCenter`.
 
 
+NUVSDSession
+------------
+
+This section describes how to authenticate yourself. the :class:`vsdk.NUVSDSession`. A session represents some user credentials coupled with an API URL. All ReST calls are done using the current active session.
+
+.. code-block:: python
+    :linenos:
+
+    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443", version="3.2")
+    session.start()
+
+    # your script
+
+
+It is also possible to create sub session with the python statement `with`:
+
+.. code-block:: python
+    :linenos:
+
+    cspsession = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443", version="3.2")
+    adminsession = NUVSDSession(username="admin", password="secret", enterprise="My Enterprise", api_url="https://myvsd:8443", version="3.2")
+
+    cspsession.start()
+
+    # this part of the code will use the CSP root user
+
+    with adminsession as session:
+        # this code will be executed as admin of My Enterprise
+
+    # back to csp root session
+
+.. note:: when using `with`, the given session is automatically started if needed.
+
+
 
 NURESTObject
 ------------
@@ -169,21 +203,6 @@ For instance, the following function will create a new :py:class:`NUMetadata` to
     metadata = NUMetadata(name="my metadata", blob="hello world!")
 
     apply_metadata_to_all_children(enterprise, metadata, filter="creationDate > '01-01-2015'")
-
-
-
-NUVSDSession
----------------------
-We talked about how to do a lot of things, but all of them needs to be done once your are authenticated. This section describes how to authenticate yourself. VSDK provides a shortcut to do all of this in one line, the :class:`vsdk.NUVSDSession`. The previous section's code is strictly equivalent to the following:
-
-.. code-block:: python
-    :linenos:
-
-    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443", version="3.2")
-    session.start()
-    current_user = session.user
-
-    # business as usual
 
 
 
