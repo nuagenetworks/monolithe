@@ -28,7 +28,7 @@ class FileWriter(object):
         """ Initializes a FileWriter
 
         """
-        self.env = Environment(loader=PackageLoader('src', 'templates'), extensions=["jinja2.ext.do"])
+        self.env = Environment(loader=PackageLoader('vsdgenerators', 'templates'), extensions=["jinja2.ext.do"])
         self.directory = directory
 
     def write(self, template, destination, filename, **kwargs):
@@ -289,7 +289,7 @@ class SDKWriter(object):
 
     """
     VSDK_PATH = '/vsdk'
-    VANILLA_SRC_PATH = '../vanilla/sdk/'
+    VANILLA_SRC_PATH = './vanilla/sdk/'
 
     IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
     IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
@@ -402,7 +402,7 @@ class DocWriter(object):
     """ Writer of the Python VSD Documentation
 
     """
-    VANILLA_SRC_PATH = '../vanilla/docs/'
+    VANILLA_SRC_PATH = './vanilla/docs/'
 
     def __init__(self, directory):
         """ Initializes a writer to the specific directory

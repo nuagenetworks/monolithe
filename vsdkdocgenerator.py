@@ -9,7 +9,7 @@ import re
 import inspect
 import subprocess
 
-VANILLA_DOC = "../vanilla/sphinx"
+VANILLA_DOC = "./vanilla/sphinx"
 
 def _parse_module(module):
 
@@ -136,11 +136,7 @@ def _write_vsdk_reference(base_doc_path):
     model_api_file.close()
 
 
-
-
-
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser(description="VSDK API Reference Documentation Generator.")
     parser.add_argument('-v', "--version", dest="version", help="version of the vsdk", type=str)
 
@@ -210,4 +206,5 @@ if __name__ == '__main__':
     os.system("cd '%s' && rm -rf ./documentation && mv sphinx/_build/html ./documentation && rm -rf sphinx" % vsdk_path)
 
 
-
+if __name__ == '__main__':
+    main()

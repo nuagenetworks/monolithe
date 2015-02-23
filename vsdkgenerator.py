@@ -5,8 +5,8 @@ import sys
 
 sys.path.append("../")
 
-if __name__ == '__main__':
 
+def main():
     parser = argparse.ArgumentParser(description="Python SDK Generator.")
 
     parser.add_argument('-u', "--vsdurl",
@@ -43,5 +43,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    from src import Command
+    from vsdgenerators import Command
     Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=args.apiversion, revision=args.revision, git_repository=args.giturl, push=args.push)
+
+if __name__ == '__main__':
+    main()
