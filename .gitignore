@@ -1,8 +1,8 @@
 *.py[cod]
 _build/*
 .tm_properties
-generator/codegen
-generator/docgen
+vsdgenerators/codegen
+vsdgenerators/docgen
 .DS_Store
 MANIFEST
 
