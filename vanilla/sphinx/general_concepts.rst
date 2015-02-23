@@ -9,15 +9,28 @@ VSDK provides a set of objects that allows the manipulation of VSD entities very
 
 `Bambou` is composed of the following classes:
 
-* :class:`bambou.NURESTConnection`: A low level class that is used each time there's a need to communicate with the VSD server.
-* :class:`bambou.NURESTModelController` :Singleton that controls all defined model objects.
-* :class:`bambou.NURESTBasicUser`: Represents the user used for authentication and fetching root objects.
-* :class:`bambou.NURESTLoginController`: Represents a ReST communication session, using a `NURESTUser` for authentication.
-* :class:`bambou.NURESTObject`: Parent class of all ReST entities. All VSDK objects are inheriting from this class.
-* :class:`bambou.NURESTFetcher`: Class used to get children of a `NURESTObject`.
-* :class:`bambou.NURESTPushCenter`: Class that deals with intercepting and rerouting VSD ReST Push Notifications.
+* :class:`bambou.NURESTConnection`
+    A low level class that is used each time there's a need to communicate with the VSD server.
 
-.. note:: The most important classes you need to know are :class:`bambou.NURESTObject`, :class:`bambou.NURESTFetcher` and :class:`bambou.NURESTPushCenter`.
+* :class:`bambou.NURESTModelController`
+    Singleton that controls all defined model objects.
+
+* :class:`bambou.NURESTBasicUser`
+    Represents the user used for authentication and fetching root objects.
+
+* :class:`bambou.NURESTLoginController`
+    Represents a ReST communication session, using a `NURESTUser` for authentication.
+
+* :class:`bambou.NURESTObject`
+    Parent class of all ReST entities. All VSDK objects are inheriting from this class.
+
+* :class:`bambou.NURESTFetcher`
+    Class used to get children of a `NURESTObject`.
+
+* :class:`bambou.NURESTPushCenter`
+    Class that deals with intercepting and rerouting VSD ReST Push Notifications.
+
+.. note:: The most important classes you need to know are :class:`bambou.NURESTSession`, :class:`bambou.NURESTObject`, :class:`bambou.NURESTFetcher` and :class:`bambou.NURESTPushCenter`. This document will only covers these classes.
 
 
 NUVSDSession
