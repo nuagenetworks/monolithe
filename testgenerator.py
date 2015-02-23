@@ -29,5 +29,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    from src import Command
+    from vsdgenerators import Command
     Command.generate_courgette(vsdurl=args.vsdurl, apiversion=args.apiversion, output_path=args.output_path)
