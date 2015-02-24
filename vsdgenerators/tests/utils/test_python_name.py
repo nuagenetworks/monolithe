@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from src.lib import Utils
+from vsdgenerators.lib import Utils
 
 
 class GetPythonNameTest(TestCase):
