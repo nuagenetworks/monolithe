@@ -6,7 +6,7 @@ import sys
 sys.path.append("../")
 
 
-def main():
+def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="Python SDK Generator.")
 
     parser.add_argument('-u', "--vsdurl",
@@ -41,10 +41,15 @@ def main():
                         help="Push to the GIT repository when finished",
                         action="store_true")
 
+    parser.add_argument('-o', "--output",
+                        dest='dest',
+                        help="directory where the sources will be generated",
+                        type=str)
+
     args = parser.parse_args()
 
     from vsdgenerators import Command
-    Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=args.apiversion, revision=args.revision, git_repository=args.giturl, push=args.push)
+    Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=args.apiversion, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push)
 
 if __name__ == '__main__':
     main()

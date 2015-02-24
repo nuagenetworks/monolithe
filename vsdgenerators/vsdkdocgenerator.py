@@ -136,15 +136,16 @@ def _write_vsdk_reference(base_doc_path):
     model_api_file.close()
 
 
-def main():
+def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="VSDK API Reference Documentation Generator.")
     parser.add_argument('-v', "--version", dest="version", help="version of the vsdk", type=str)
+    parser.add_argument('-s', "--sources", dest="sources", help="path to directory containing the sources", default='codegen', type=str)
 
     args          = parser.parse_args()
-    vsdk_path     = "codegen/%s" % args.version
-    base_doc_path = "%s/sphinx/" % vsdk_path
+    vsdk_path     = "%s/%s" % (args.sources, args.version)
+    base_doc_path = "%s/sphinx/" % os.path.abspath(vsdk_path)
 
-    sys.path.append("%s/%s" % (os.path.dirname(os.path.realpath(__file__)), vsdk_path))
+    sys.path.append(os.path.abspath(vsdk_path))
     subprocess_environ = {"PYTHONPATH": ":".join(sys.path), "PATH": os.environ["PATH"]}
 
 
