@@ -3,12 +3,13 @@
 import os
 
 from unittest import TestCase
-from src.lib.parsers import SwaggerParser, SwaggerFileParser
+from vsdgenerators.lib.parsers import SwaggerParser, SwaggerFileParser
 
 def get_valid_path():
     """ Returns swagger path """
 
-    return '%s/src/tests/functionnal/V3_1' % os.getcwd()
+    print '%s/tests/functionnal/V3_1' % os.getcwd()
+    return '%s/tests/functionnal/V3_1' % os.getcwd()
 
 
 class SwaggerFileParserTests(TestCase):
