@@ -249,13 +249,14 @@ Here is an sample code that will print the push data on every push:
 .. code-block:: python
     :linenos:
 
-    NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443" version="3.2").start()
+    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443" version="3.2")
+    session.start()
 
     def on_receive_push(data):
         print(data);
 
-    NURESTPushCenter().add_delegate(on_receive_push);
-    NURESTPushCenter().start()
+    session.push_center.add_delegate(on_receive_push);
+    session.push_center.start()
 
     # default stupid run loop. don't do that in real life :)
     while True:
@@ -272,12 +273,12 @@ A more interesting use case:
 
     class EnterpriseUsersController (Object):
 
-        def __init__(self, parent_enterprise):
+        def __init__(self, parent_enterprise, push_center):
 
             self.parent_enterprise = parent_enterprise
 
             # we assume the push center is already configured
-            NURESTPushCenter().add_delegate(self.on_receive_user_push)
+            push_center.add_delegate(self.on_receive_user_push)
 
         def on_receive_user_push(self, data):
 
@@ -311,10 +312,11 @@ A more interesting use case:
                     self.enterprise.remove_child(pushed_user)
 
 
-    NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443" version="3.2").start()
+    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443" version="3.2")
+    session.start()
 
     enterprise = NUEnterprise(id=some_id)
-    enterprise_users_controller = EnterpriseUsersController(enterprise)
+    enterprise_users_controller = EnterpriseUsersController(enterprise, session.push_center)
 
     # from now on, the user list of enterprise will always be up to date from the server!
 
