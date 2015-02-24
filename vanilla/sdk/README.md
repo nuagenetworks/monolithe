@@ -40,18 +40,10 @@ How it works
 Here is a quick example !
 ::
 
-# # -*- coding: utf-8 -*-
+    # # -*- coding: utf-8 -*-
 
-import sys
-import logging
-
-sys.path.append("./")
-
-from vsdk import NUVSDSession
-from vsdk import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubnet, NUSubnetTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget, NUVM, NUVMInterface
-from vsdk.utils import set_log_level
-
-from bambou.exceptions import BambouHTTPError
+    from vsdk import NUVSDSession
+    from vsdk import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubnet, NUSubnetTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget, NUVM, NUVMInterface
 
     # 'Create a session for CSPRoot'
     session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.220.152:8443', version=u'3.1')
