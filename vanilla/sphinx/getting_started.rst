@@ -13,7 +13,7 @@ Let's import vsdk, and configure logging so that we can visualize the rest calls
 
 Now we can start a session as `csproot` :
 
->>> session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.150.222:8443/nuage/api/v3_2')
+>>> session = NUVSDSession(username='csproot', password='csproot', enterprise='csp', api_url='https://135.227.150.222:8443', version='3.2')
 >>> session.start()
 Bambou Sending >>>>>>
 GET https://135.227.150.222:8443/nuage/api/v3_2/me with following data:
@@ -229,7 +229,7 @@ Out[29]:
 (<vsdk.nuenterprise.NUEnterprise at 0x7f1e30b878d0>,
  <bambou.nurest_connection.NURESTConnection at 0x7f1e30c004d0>)
 
-If someone else made changes on this object, we can read it again :
+If someone else made changes on this object, we can fetch it again :
 
 >>> my_enterprise.fetch()
 Bambou Sending >>>>>>
