@@ -241,85 +241,26 @@ Only 4 methods are important:
 .. automethod:: bambou.NURESTPushCenter.remove_delegate
     :noindex:
 
-Simple Example
-++++++++++++++
+Example
++++++++
 
-Here is an sample code that will print the push data on every push:
+Here is an really simple code sample that will print the push data on every push:
 
 .. code-block:: python
     :linenos:
 
-    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443" version="3.2")
+    from vsdk import *
+    from pprint import pprint
+
+    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443", version="3.2")
     session.start()
 
     def on_receive_push(data):
-        print(data);
+        pprint(data);
 
     session.push_center.add_delegate(on_receive_push);
     session.push_center.start()
 
     # default stupid run loop. don't do that in real life :)
     while True:
-        sleep(1000)
-
-
-Advanced Example
-++++++++++++++++
-
-A more interesting use case:
-
-.. code-block:: python
-    :linenos:
-
-    class EnterpriseUsersController (Object):
-
-        def __init__(self, parent_enterprise, push_center):
-
-            self.parent_enterprise = parent_enterprise
-
-            # we assume the push center is already configured
-            push_center.add_delegate(self.on_receive_user_push)
-
-        def on_receive_user_push(self, data):
-
-            # a single push can contains multiple events as they are clobbed together by the server if needed
-            for event in data["events"]:
-
-                # if the push is not about users, we don't care
-                if event["entityType"] != NUUser.rest_name:
-                    continue
-
-                # We get the data. Server sends an array of entities, but it can contains only one object
-                user_info = event["entities"][0]
-
-                # if the pushed user is not part of the parent enterprise, we also don't care
-                if user_info["parentID"] != self.parent_enterprise.id:
-                    continue
-
-                # create a transient NUUser from the data
-                pushed_user = NUUser(data=user_info)
-
-                if event["type"] == "CREATE":
-                    # locally insert the object in the correct children list
-                    self.enterprise.add_child(pushed_user)
-
-                elif event["type"] == "UPDATE":
-                    # locally replace a user with the new version in the correct children list
-                    self.enterprise.update_child(pushed_user)
-
-                elif event["type"] == "DELETE":
-                    # locally remove the user from the correct children list
-                    self.enterprise.remove_child(pushed_user)
-
-
-    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443" version="3.2")
-    session.start()
-
-    enterprise = NUEnterprise(id=some_id)
-    enterprise_users_controller = EnterpriseUsersController(enterprise, session.push_center)
-
-    # from now on, the user list of enterprise will always be up to date from the server!
-
-    while True:
-        sleep(1000)
-
+        time.sleep(1000)
