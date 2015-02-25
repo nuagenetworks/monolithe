@@ -138,7 +138,7 @@ def _write_vsdk_reference(base_doc_path):
 
 def main():
     parser = argparse.ArgumentParser(description="VSDK API Reference Documentation Generator.")
-    parser.add_argument('-v', "--version", dest="version", help="version of the vsdk", type=str)
+    parser.add_argument('-v', "--version", dest="version", help="version of the vsdk", required=True, type=str)
 
     args          = parser.parse_args()
     vsdk_path     = "codegen/%s" % args.version
