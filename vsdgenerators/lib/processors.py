@@ -228,6 +228,7 @@ class ModelsProcessor(object):
                     model.has_time_attribute = True
 
                 if attribute.remote_type == 'enum':
+                    model.has_choices = True
                     attribute.choices = prop['enum']
 
             else:

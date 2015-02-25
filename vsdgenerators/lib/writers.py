@@ -141,6 +141,9 @@ class VSDKFileWriter(FileWriter):
     MODEL_OVERRIDE_TEMPLATE = 'vsdk/nuobject_override.py.tpl'
     MODEL_TEMPLATE = 'vsdk/nuobject_autogenerate.py.tpl'
     RESTUSER_TEMPLATE = 'vsdk/nurestuser.py.tpl'
+    CONSTANTS_TEMPLATE = 'vsdk/constants.py.tpl'
+
+    OVERRIDE_PATH = 'vanilla/sdk/overrides'
 
     def write_setup_file(self, version, revision):
         """ Write setup.py file
@@ -160,6 +163,16 @@ class VSDKFileWriter(FileWriter):
         filename = 'setup.py'
 
         self.write(template=template, destination=destination, filename=filename, apiversion=version, revisionnumber=revision)
+
+    def write_constants_file(self, constants):
+        """ Write constants file
+
+        """
+        template = self.env.get_template(VSDKFileWriter.CONSTANTS_TEMPLATE)
+        destination = self.directory
+        filename = 'constants.py'
+
+        self.write(template=template, destination=destination, filename=filename, constants=constants)
 
     def write_model(self, model):
         """ Write autogenerate model file
@@ -195,13 +208,17 @@ class VSDKFileWriter(FileWriter):
         destination = self.directory
         filename = 'nu%s.py' % model.name.lower()
 
+        override_path = '%s/%s' % (VSDKFileWriter.OVERRIDE_PATH, 'nu%s.override.py' % model.name.lower())
+        # print override_path
+
+        override_content = None
+        if os.path.isfile(override_path):
+            override_content = open(override_path).read()
+
         file_path = '%s/%s' % (destination, filename)
 
-        if not os.path.isfile(file_path):
-            self.write(template=template, destination=destination, filename=filename, model=model)
-            return (filename, model.name)
-
-        return None
+        self.write(template=template, destination=destination, filename=filename, model=model, override_content=override_content)
+        return (filename, model.name)
 
     def write_fetcher(self, model):
         """ Write fetcher
@@ -289,10 +306,12 @@ class SDKWriter(object):
 
     """
     VSDK_PATH = '/vsdk'
-    VANILLA_SRC_PATH = './vanilla/sdk/'
+    VANILLA_SRC_PATH = './vanilla/sdk/base/'
 
     IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
     IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
+
+    GENERAL_CONSTANTS = ['multicast','iptype','maintenancemode','permittedaction','connectionstate','forwardingclasses']
 
     def __init__(self, directory):
         """ Initializes a writer to the specific directory
@@ -307,11 +326,38 @@ class SDKWriter(object):
             Printer.log("Copying default sources...")
             shutil.copytree(SDKWriter.VANILLA_SRC_PATH, directory)
 
-    def _remove_ignored_attributes(self, model):
-        """ Removes attributes that should be ignored
+        # if os.path.exists(self.writer_directory):
+        #     shutil.rmtree(self.writer_directory)
+        #
+        # shutil.copytree(SDKWriter.VANILLA_SRC_PATH, directory)
+
+    def _prepare_attributes(self, model, constants):
+        """ Removes attributes and computes constants
 
         """
-        model.attributes = [attribute for attribute in model.attributes if attribute.remote_name not in SDKWriter.IGNORED_ATTRIBUTES]
+        attributes = list()
+        for attribute in model.attributes:
+            if attribute.remote_name in SDKWriter.IGNORED_ATTRIBUTES:
+                continue
+
+            attributes.append(attribute)
+
+            if hasattr(attribute, 'choices') and len(attribute.choices) > 0:
+
+                if attribute.remote_name.lower() not in SDKWriter.GENERAL_CONSTANTS:
+                    name = '%s%s%s' % (model.name, attribute.remote_name[0].upper(), attribute.remote_name[1:])
+                else:
+                    name = '%s%s' % (attribute.remote_name[0].upper(), attribute.remote_name[1:])
+
+                constants[name] = self._make_constants_value(attribute.choices)
+
+        # Specific case here :(
+        constants['ProtocolType'] = {'TCP': '6','UDP': '7','ICMP': '1','IGMP': '2','IGP': '9','OSPF': '9','ESP': '0','AH': '1','GRE': '7'}
+
+        model.attributes = attributes
+
+    def _make_constants_value(self, choices):
+        return {choice: choice for choice in choices}
 
     def write(self, resources, apiversion, revision):
         """ Write all files according to data
@@ -326,11 +372,12 @@ class SDKWriter(object):
 
         """
         filenames = dict()
+        constants = dict()
 
         task_manager = TaskManager()
 
         for model_name, model in resources.iteritems():
-            self._remove_ignored_attributes(model)
+            self._prepare_attributes(model=model, constants=constants)
             task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=filenames)
             task_manager.start_task(method=self._write_override_file, model=model)
             task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=filenames)
@@ -340,6 +387,9 @@ class SDKWriter(object):
 
         writer = VSDKFileWriter(directory=self.writer_directory)
         writer.write_setup_file(version=apiversion, revision=revision)
+
+        writer.write_constants_file(constants=constants)
+
 
         Printer.success('Successfully generated files for %s objects' % len(resources))
 
@@ -573,7 +623,7 @@ class CourgetteWriter(object):
         """ Removes attributes that should be ignored
 
         """
-        model.attributes = [attribute for attribute in model.attributes if attribute.remote_name not in SDKWriter.IGNORED_ATTRIBUTES]
+        model.attributes = [attribute for attribute in model.attributes if attribute.remote_name not in CourgetteWriter.IGNORED_ATTRIBUTES]
 
     def _get_parent_names(self, model):
         """ Get parents remote name of the given model
