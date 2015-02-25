@@ -3,6 +3,7 @@
 import os
 import inspect
 import sys
+import pkg_resources
 
 classes = []
 
@@ -27,3 +28,8 @@ for module in os.listdir(os.path.dirname(__file__)):
         classes.extend(names)
 
 __all__ = classes
+
+
+from bambou import BambouConfig
+default_attrs = pkg_resources.resource_filename(__name__, '/resources/attrs_defaults.ini')
+BambouConfig.set_default_values_config_file(default_attrs)

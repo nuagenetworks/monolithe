@@ -10,4 +10,8 @@ setup(
     description='VSD Python SDK for API',
     long_description=open('README.md').read(),
     install_requires=[line for line in open('requirements.txt')],
+    include_package_data=True,
+    data_files=[
+        ('resources', ['resources/attrs_defaults.ini'])
+    ]
 )
