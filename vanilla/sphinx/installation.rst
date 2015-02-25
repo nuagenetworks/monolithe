@@ -17,23 +17,32 @@ VSDK Vanilla is a repository that contains everything needed to generate the fol
 .. note:: If you want to use a published version of the VSDK, you don't need to read this part.
 
 
-Setting up the environement
+Setting up the environment
 +++++++++++++++++++++++++++
 
 .. code-block:: bash
     :linenos:
 
-    cd /usr/local/src
+    # create a virtual env
+    cd /some/path/
     virtualenv vsdk-env
     cd vsdk-env
     source bin/activate
+
+    # install dependency (this won't be necessary soon)
+    pip install Contextual==0.7a1.dev-r2695 --allow-external Contextual --allow-unverified Contextual
+
+    # install bambou
     git clone http://[your-login]@github.mv.usa.alcatel.com/chserafi/bambou.git
     cd bambou
     pip install -r requirements.txt
     python setup.py install
 
+    # get the vsdk vanilla repository
+    cd /some/path/
     git clone http://[your-login]@github.mv.usa.alcatel.com/amercada/vsdk-vanilla.git
-    pip install -r requirements.txt --allow-external Contextual --allow-unverified Contextual
+    pip install -r requirements.txt
+
 
 
 Generating VSDK

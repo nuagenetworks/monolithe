@@ -12,6 +12,6 @@ setup(
     install_requires=[line for line in open('requirements.txt')],
     include_package_data=True,
     data_files=[
-        ('resources', ['resources/attrs_defaults.ini'])
+        ('vsdk/resources', ['vsdk/resources/attrs_defaults.ini'])
     ]
 )
