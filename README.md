@@ -9,7 +9,7 @@ Supported version:
     * Python 2.7
     * Python 3
 
-Dependancies
+Dependencies
 ------------
 
 Python dependencies:
