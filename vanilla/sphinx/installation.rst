@@ -62,7 +62,7 @@ Get the `Bambou` source code and install it in the virtual env:
     :linenos:
 
     # cd to the root folder to your virtual env
-    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/chserafi/bambou.git
+    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/vsdk/bambou.git
     cd bambou
     pip install -r requirements.txt
     python setup.py install
@@ -79,7 +79,7 @@ Get the `vsdk-vanilla` repository and install the requirements:
     :linenos:
 
     # cd to the root folder to your virtual env
-    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/amercada/vsdk-vanilla.git
+    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/vsdk/vsdk-vanilla.git
     pip install -r requirements.txt
 
 
@@ -145,12 +145,12 @@ You can use this dirty little script to prepare your `vsdk-vanilla` environment 
     cd $VENV_NAME && \
     source bin/activate && \
     pip install Contextual==0.7a1.dev-r2695 --allow-external Contextual --allow-unverified Contextual && \
-    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/chserafi/bambou.git && \
+    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/vsdk/bambou.git && \
     cd bambou && \
     pip install -r requirements.txt && \
     python setup.py develop && \
     cd .. && \
-    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/amercada/vsdk-vanilla.git && \
+    git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/vsdk/vsdk-vanilla.git && \
     cd vsdk-vanilla && \
     pip install -r requirements.txt && \
     ./vsdkgenerator.py -u $RUNNING_VSD_SERVER -v $API_VERSION && \

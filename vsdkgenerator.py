@@ -33,7 +33,7 @@ def main():
     parser.add_argument('-g', "--giturl",
                         dest="giturl",
                         help="GIT repository URL. If not specified, it will create an SDK from scratch.",
-                        # default='http://github.mv.usa.alcatel.com/chserafi/vsdk',
+                        # default='http://github.mv.usa.alcatel.com/vsdk/vsdk',
                         type=str)
 
     parser.add_argument('-p', "--push",
