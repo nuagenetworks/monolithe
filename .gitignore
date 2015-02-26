@@ -1,6 +1,5 @@
 *.py[cod]
 _build/*
-.tm_properties
 codegen
 docgen
 .DS_Store
