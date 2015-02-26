@@ -138,8 +138,8 @@ def _write_vsdk_reference(base_doc_path):
 
 def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="VSDK API Reference Documentation Generator.")
-    parser.add_argument('-v', "--version", dest="version", help="version of the vsdk", type=str)
     parser.add_argument('-s', "--sources", dest="sources", help="path to directory containing the sources", default='codegen', type=str)
+    parser.add_argument('-v', "--version", dest="version", help="version of the vsdk", required=True, type=str)
 
     args          = parser.parse_args()
     vsdk_path     = "%s/%s" % (args.sources, args.version)

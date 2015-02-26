@@ -11,10 +11,9 @@ This section contains all the concepts to use VSDK and a lot of tutorials and ex
     :glob:
 
     license
-    installation
     general_concepts
+    installation
     getting_started
-
 
 Sample Code
 -----------

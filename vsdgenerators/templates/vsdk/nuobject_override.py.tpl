@@ -15,7 +15,7 @@ class NU{{ model.name }}(AutoGenerate):
     """
 
     def __init__(self, **kwargs):
-        """ Initializes a {{ model.name }} instance
+        """ Initializes a NU{{ model.name }} instance
 
             Notes:
                 You can specify all parameters while calling this methods.
@@ -28,3 +28,6 @@ class NU{{ model.name }}(AutoGenerate):
         """
 
         super(NU{{ model.name }}, self).__init__(**kwargs)
+{% if override_content %}
+    {{ override_content.replace('\n', '\n    ') }}
+{% endif %}
