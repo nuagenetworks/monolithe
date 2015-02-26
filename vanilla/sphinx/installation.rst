@@ -94,7 +94,7 @@ From the same python virtualenv (be sure it's active)
     :linenos:
 
     # cd to the vsdk-vanilla folder to your virtual env
-    ./vsdkgenerator.py -u $RUNNING_VSD_SERVER -v $API_VERSION
+    ./vsdkgenerator -u $RUNNING_VSD_SERVER -v $API_VERSION
     cd codegen/3.2
     python setup.py install
 
@@ -112,7 +112,7 @@ From the same python virtualenv (be sure it's active)
     :linenos:
 
     # cd to the vsdk-vanilla folder to your virtual env
-    ./vsdkdocgenerator.py -v $API_VERSION
+    ./vsdkdocgenerator -v $API_VERSION
 
 The doc will be available in `docgen/$API-VERSION/vsdkdoc`
 
@@ -153,7 +153,7 @@ You can use this dirty little script to prepare your `vsdk-vanilla` environment 
     git clone http://$GIT_USERNAME@github.mv.usa.alcatel.com/vsdk/vsdk-vanilla.git && \
     cd vsdk-vanilla && \
     pip install -r requirements.txt && \
-    ./vsdkgenerator.py -u $RUNNING_VSD_SERVER -v $API_VERSION && \
+    ./vsdkgenerator -u $RUNNING_VSD_SERVER -v $API_VERSION && \
     cd codegen/3.2 && \
     python setup.py install && \
     echo "" && \
