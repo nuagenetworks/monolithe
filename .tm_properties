@@ -1,0 +1,23 @@
+## Archipel Default TextMate 2 Configuration
+## DO NOT CHANGE THE TABSIZE AND SOFTTABS VALUES
+##
+## Copyright 2011 Antoine Mercadal <antoine.mercadal@inframonde.eu>
+
+projectDirectory        = "$CWD"
+TM_PROJECT_DIRECTORY    = "$projectDirectory"
+tabSize                 = 4
+softTabs                = true
+showInvisibles          = true
+exclude                 = "{*.{o,pyc},codegen,docgen}"
+excludeInFileChooser    = "{$excludeInFileChooser,$exclude}"
+excludeInFolderSearch   = "{$excludeInFolderSearch,$exclude,*.cib}"
+excludeInBrowser        = "{$excludeInBrowser,$exclude}"
+windowTitle             = "$TM_DISPLAYNAME — ${CWD/^.*\///} $TM_SCM_BRANCH"
+projectDirectory        = "$CWD"
+showInvisibles          = true
+invisiblesMap           = "~ \t┊"
+TM_MAKE_FILE            = '${CWD}/buildArchipel -bag'
+
+
+[ *.{icns,ico,jpg,jpeg,m4v,nib,pdf,png,psd,pyc,rtf,tif,tiff,cib} ]
+binary                  = true
