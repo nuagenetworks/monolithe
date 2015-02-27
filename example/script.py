@@ -15,7 +15,7 @@ from bambou.exceptions import BambouHTTPError
 set_log_level(logging.INFO)
 
 # 'Create a session for CSPRoot'
-session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.220.152:8443', version=u'3.1')
+session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://vsd:8443', version=u'3.1')
 
 # 'Start using the CSPRoot session
 try:
