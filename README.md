@@ -7,17 +7,12 @@ Supported version:
 
     * Python 2.6
     * Python 2.7
-    * Python 3
 
 Dependencies
 ------------
 
-Python dependencies:
+Python dependencies (see `requirements.txt` file)
 
-    * jinja2
-    * colorama
-    * gitpython
-    * requests
 
 Setup your Python Virtual Environment
 -------------------------------------
@@ -40,20 +35,21 @@ How it works
 
     (vsdk-vanilla-env) $ cd vsdk-vanilla
     (vsdk-vanilla-env) $ cd generator
-    (vsdk-vanilla-env) $ ./vsdkgenerator -h  # Display help command
+    (vsdk-vanilla-env) $ vsdkgenerator -h  # Display help command
 
 Generate a new API
 ------------------
 This will take default sources and will create a new SDK in `codegen/{{version}}`
 
-    (vsdk-vanilla-env) $ ./vsdkgenerator -u https://135.227.220.152:8443 -v 3.0
+    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1
+    (vsdk-vanilla-env) $ vsdkgenerator -f ~/Path/To/V3_1
 
 Work from an existing API version
 ---------------------------------
 This will clone the branch of the given git repository and update the SDK sources according to the VSD API.
 _Note: If the branch does not exists, it will automatically create one_
 
-    (vsdk-vanilla-env) $ ./vsdkgenerator -u https://135.227.220.152:8443 -v 3.0 -g http://github.mv.usa.alcatel.com/vsdk/vsdk.git
+    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g http://github.mv.usa.alcatel.com/vsdk/vsdk.git
 
 
 Work from an existing API version and Push
@@ -61,7 +57,7 @@ Work from an existing API version and Push
 This will clone the branch of the given git repository and will push generates sources to the repository
 _Note: If the branch does not exists, it will automatically create one_
 
-    (vsdk-vanilla-env) $ ./vsdkgenerator -u https://135.227.220.152:8443 -v 3.0 -g http://github.mv.usa.alcatel.com/vsdk/vsdk.git --push
+    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g http://github.mv.usa.alcatel.com/vsdk/vsdk.git --push
 
 What to do when I have my Python SDK sources:
 =============================================
@@ -91,5 +87,3 @@ It will install the vsdk from the github repository
 Any Trouble ?
 =============
 It can happen ! Do not hesitate to send a quick email to `christophe.serafin@alcatel-lucent.com`
-
-

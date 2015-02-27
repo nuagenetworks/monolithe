@@ -1,5 +1,5 @@
-# Python SDK for VSD API
-
+Python SDK for VSD
+==================
 
 Python SDK for Nuage VSD solution.
 
@@ -9,17 +9,19 @@ Supported version:
 
     * Python 2.6
     * Python 2.7
-    * Python 3
 
-## Dependancies
+Dependencies
+------------
 
-Python dependencies:
+Python dependencies (see `requirements.txt` file)
 
     * bambou
     * logging
 
-## Setup your Python Virtual Environment
+Setup your Python Virtual Environment
+-------------------------------------
 
+_Note: If you do not have virtualenv installed, use `pip install virtualenv` to install it on your system_
 
 Create your `virtualenv`
 
@@ -29,10 +31,11 @@ Activate your environment
 
     $ cd vsdk-env
     $ source bin/activate
-    (vsdk-env) $
+    (vsdk-env) $ # You are now inside your python virtual environment
 
 
-## How it works
+How it works ?
+--------------
 
 Here is a quick example !
 
@@ -42,7 +45,7 @@ Here is a quick example !
     from vsdk import NUEnterprise, NUUser, NUDomainTemplate, NUDomain, NUGatewayTemplate, NUGateway, NUZone, NUZoneTemplate, NUSubnet, NUSubnetTemplate, NUVPort, NURedirectionTargetTemplate, NURedirectionTarget, NUVM, NUVMInterface
 
     # 'Create a session for CSPRoot'
-    session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.220.152:8443', version=u'3.1')
+    session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://vsd:8443', version=u'3.1')
 
     # 'Start using the CSPRoot session
     session.start()
