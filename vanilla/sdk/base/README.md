@@ -1,7 +1,8 @@
-Python SDK for VSD API
-======================
+# Python SDK for VSD API
+
 
 Python SDK for Nuage VSD solution.
+
 *Website: http://www.nuagenetworks.net/*
 
 Supported version:
@@ -10,35 +11,31 @@ Supported version:
     * Python 2.7
     * Python 3
 
-Dependancies
-------------
+## Dependancies
 
 Python dependencies:
 
     * bambou
     * logging
 
-Setup your Python Virtual Environment
--------------------------------------
+## Setup your Python Virtual Environment
 
-Create your virtualenv
-::
+
+Create your `virtualenv`
 
     $ virtualenv vsdk-env
 
 Activate your environment
-::
 
     $ cd vsdk-env
     $ source bin/activate
     (vsdk-env) $
 
 
-How it works
+## How it works
 ------------
 
 Here is a quick example !
-::
 
     # # -*- coding: utf-8 -*-
 
@@ -55,15 +52,15 @@ Here is a quick example !
     # Create an enterprise with csproot user
     enterprise = NUEnterprise()
     enterprise.name = u'VSDK Test'
-    csproot.create_child_object(enterprise)
+    csproot.create_child(enterprise)
 
     # Create a domain template and an instance
     domain_template = NUDomainTemplate()
     domain_template.name = u'Domain Template example'
-    enterprise.create_child_object(domain_template)
+    enterprise.create_child(domain_template)
     domain = NUDomain()
     domain.name = u'Instance Domain example'
-    enterprise.instantiate_child_object(domain, domain_template)
+    enterprise.instantiate_child(domain, domain_template)
 
     # Delete created objects
     domain_template.delete()
