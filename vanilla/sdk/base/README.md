@@ -33,7 +33,6 @@ Activate your environment
 
 
 ## How it works
-------------
 
 Here is a quick example !
 
