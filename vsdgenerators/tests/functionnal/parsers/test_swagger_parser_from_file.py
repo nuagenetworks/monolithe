@@ -8,8 +8,7 @@ from vsdgenerators.lib.parsers import SwaggerParser, SwaggerFileParser
 def get_valid_path():
     """ Returns swagger path """
 
-    print '%s/tests/functionnal/V3_1' % os.getcwd()
-    return '%s/tests/functionnal/V3_1' % os.getcwd()
+    return '%s/vsdgenerators/tests/functionnal/V3_1' % os.getcwd()
 
 
 class SwaggerFileParserTests(TestCase):

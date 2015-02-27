@@ -9,7 +9,7 @@ from vsdgenerators.lib.processors import ModelsProcessor
 def get_valid_path():
     """ Returns swagger path """
 
-    return '%s/tests/functionnal/V3_1' % os.getcwd()
+    return '%s/vsdgenerators/tests/functionnal/V3_1' % os.getcwd()
 
 
 class ModelsProcessorTests(TestCase):
