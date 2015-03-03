@@ -93,7 +93,7 @@ First we instantiate an :class:`vsdk.NUEnterprise` object (the name is the only 
 
 Create it on the VSD. The method will return an enterprise object and a connection, but we won't need them here.
 
->>> session.user.create_child_object(my_enterprise)
+>>> session.user.create_child(my_enterprise)
 Bambou Sending >>>>>>
 POST https://135.227.150.222:8443/nuage/api/v3_2/enterprises with following data:
 {

@@ -48,7 +48,7 @@ This sample function will populate a given domain with a given number of zones, 
         for i in range(0, number_of_zones):
 
             zone = zone_class(name="Zone %d" % i)
-            domain.create_child_object(zone)
+            domain.create_child(zone)
             domain.add_child(zone)
 
             #creates subnets
@@ -61,7 +61,7 @@ This sample function will populate a given domain with a given number of zones, 
                 nm = "%s" % subnetwork.netmask
 
                 subnet = subnet_class(name="Subnet %d %d" % (i, j), address=ip, netmask=nm, gateway=gw)
-                zone.create_child_object(subnet)
+                zone.create_child(subnet)
                 zone.add_child(subnet)
 
                 # if the given domain is a template, we stop
@@ -72,7 +72,7 @@ This sample function will populate a given domain with a given number of zones, 
                 for k in range(0, number_of_vports_per_subnet):
 
                     vport = vsdk.NUVPort(name="VPort %d-%d-%d" % (i, j, k), type="VM", address_spoofing="INHERITED", multicast="INHERITED")
-                    subnet.create_child_object(vport)
+                    subnet.create_child(vport)
                     subnet.add_child(vport)
 
 
@@ -119,26 +119,26 @@ This sample function will create a gateway with ports, vlan and give some permis
         # create the gateway template
         gateway_template = vsdk.NUGatewayTemplate(name=name, personality=personality, description=description)
 
-        vsdsession.user.create_child_object(gateway_template)
+        vsdsession.user.create_child(gateway_template)
 
         # create a network port for each given network_port_names
         for network_port_name in network_port_names:
 
             network_port_template = vsdk.NUPortTemplate(name=network_port_name, physical_name=network_port_name, port_type="NETWORK")
-            gateway_template.create_child_object(network_port_template)
+            gateway_template.create_child(network_port_template)
 
 
         # create an access port for each given access_port_names
         for access_port_name in access_port_names:
 
             access_port_template = vsdk.NUPortTemplate(name=access_port_name, physical_name=access_port_name, port_type="ACCESS", vlan_range=vlan_range)
-            gateway_template.create_child_object(access_port_template)
+            gateway_template.create_child(access_port_template)
 
             # create a VLAN for each given vlans_values
             for vlan_value in vlans_values:
 
                 vlan = vsdk.NUVLANTemplate(value=vlan_value)
-                access_port_template.create_child_object(vlan)
+                access_port_template.create_child(vlan)
 
         return gateway_template
 
@@ -160,7 +160,7 @@ This sample function will create a gateway with ports, vlan and give some permis
         gateway = vsdk.NUGateway(name=name, system_id=system_id)
         vsdsession.user.instantiate_child_object(gateway, gateway_template)
         permission = vsdk.NUEnterprisePermission(permitted_action=permission, permitted_entity_id=enterprise.id)
-        gateway.create_child_object(permission)
+        gateway.create_child(permission)
 
         return gateway
 
@@ -233,7 +233,7 @@ This function will fetch the latest known application services from IANA and cre
                 appservice = vsdk.NUApplicationService(name=name, protocol=proto, destination_port=port_number, description=desc, direction="REFLEXIVE",\
                                                        ether_type="0x0800", source_port="*", dscp="*")
 
-                session.user.create_child_object(appservice)
+                session.user.create_child(appservice)
 
             except Exception as ex:
                 print ex;
