@@ -134,10 +134,10 @@ CRUD Operations
 .. automethod:: bambou.NURESTObject.create_child
     :noindex:
 
-.. automethod:: bambou.NURESTObject.assign_objects
+.. automethod:: bambou.NURESTObject.assign
     :noindex:
 
-.. automethod:: bambou.NURESTObject.instantiate_child_object
+.. automethod:: bambou.NURESTObject.instantiate_child
     :noindex:
 
 
