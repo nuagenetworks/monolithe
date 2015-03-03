@@ -158,7 +158,7 @@ This sample function will create a gateway with ports, vlan and give some permis
         """
 
         gateway = vsdk.NUGateway(name=name, system_id=system_id)
-        vsdsession.user.instantiate_child_object(gateway, gateway_template)
+        vsdsession.user.instantiate_child(gateway, gateway_template)
         permission = vsdk.NUEnterprisePermission(permitted_action=permission, permitted_entity_id=enterprise.id)
         gateway.create_child(permission)
 

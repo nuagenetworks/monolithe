@@ -131,7 +131,7 @@ CRUD Operations
 .. automethod:: bambou.NURESTObject.delete
     :noindex:
 
-.. automethod:: bambou.NURESTObject.create_child_object
+.. automethod:: bambou.NURESTObject.create_child
     :noindex:
 
 .. automethod:: bambou.NURESTObject.assign_objects
@@ -143,7 +143,7 @@ CRUD Operations
 
 .. note:: All these methods require the current :class:`bambou.NURESTObject` to have a valid :attr:`bambou.NURESTObject.ID`.
 
-.. note:: You may notice that there is no creation method. Creation is always happening from a parent object and is done using `create_child_object`.
+.. note:: You may notice that there is no creation method. Creation is always happening from a parent object and is done using `create_child`.
 
 .. note:: You may notice that an optional parameter :py:attr:`callback` is present. This is because VSDK can work completely asynchronously.
 
@@ -219,7 +219,7 @@ For instance, the following function will create a new :class:`vsdk.NUMetadata` 
             for child in children:
 
                 # Add the metadata to the current children
-                child.create_child_object(metadata)
+                child.create_child(metadata)
 
                 # Start over recursively on the children of the current child
                 apply_metadata_to_all_children(child, metadata)
