@@ -3,11 +3,37 @@ Installation
 
 This section explains how to install vsdk.
 
+.. note:: this manual may not be up to date until the release 1.0 of `vsdk`.
 
-VSDK Installation
------------------
 
-.. note:: This is not possible to do this today. Please see `VSDK Vanilla`_.
+VSDK Installation from zips
+---------------------------
+
+You can set up a virtual environment if you like:
+
+.. code-block:: bash
+  :linenos:
+
+  virtualenv vsdk-env
+  cd vsdk-env
+  source bin/activate
+
+
+Then download the zips archives for `Bambou` and `vsdk`. Then run the following commands:
+
+.. code-block:: bash
+  :linenos:
+
+  pip install Contextual==0.7a1.dev-r2695 --allow-external Contextual --allow-unverified Contextual
+  pip install bambou-*.zip
+  pip install vsdk-*-api*.zip
+
+
+
+VSDK Installation from PIP
+--------------------------
+
+.. note:: This is not possible to do this today. Please see `VSDK Installation from zips`_ or `VSDK Vanilla`_.
 
 Install the VSDK from a public source:
 
@@ -25,7 +51,6 @@ Or install it from a local git repository:
     pip install git+ssh://github.mv.usa.alcatel.com:vsdk/vsdk.git
 
 
-
 VSDK Vanilla
 ------------
 
@@ -34,7 +59,7 @@ VSDK Vanilla is a repository that contains everything needed to generate:
 - The VSDK from a running VSD server or a VSD generated swagger file
 - The VSDK API Reference from VSDK (this document)
 
-.. note:: If you want to use a published version of the VSDK, see `VSDK Installation`_.
+.. note:: If you want to use a published version of the VSDK, see `VSDK Installation from zips`_ or `VSDK Installation from PIP`_.
 
 
 Set up a Virtual Environment
