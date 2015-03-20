@@ -8,6 +8,7 @@ from .printer import Printer
 class Utils(object):
     """ utils """
 
+    INVARIANT_NAMES = ['qos', 'vrs']
 
     @classmethod
     def _string_clean(cls, string):
@@ -80,6 +81,9 @@ class Utils(object):
     def get_singular_name(cls, plural_name):
         """ Returns the singular name of the plural name """
 
+        if plural_name in Utils.INVARIANT_NAMES:
+            return plural_name
+
         if plural_name[-3:] == 'ies':
             return plural_name[:-3] + 'y'
 
@@ -91,6 +95,9 @@ class Utils(object):
     @classmethod
     def get_plural_name(cls, singular_name):
         """ Returns the plural name of the singular name """
+
+        if singular_name in Utils.INVARIANT_NAMES:
+            return singular_name
 
         vowels = ['a', 'e', 'i', 'o', 'u', 'y']
         if singular_name[-1] == 'y' and singular_name[-2] not in vowels:
