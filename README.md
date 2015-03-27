@@ -1,5 +1,4 @@
-VSDK Vanilla
-============
+# vsdk vanilla
 
 SDK Generator for Nuage Network API
 
@@ -8,82 +7,68 @@ Supported version:
     * Python 2.6
     * Python 2.7
 
-Dependencies
-------------
 
-Python dependencies (see `requirements.txt` file)
+## dependencies
+
+Install the dependencies
+
+    $ pip install -r requirements.txt
 
 
-Setup your Python Virtual Environment
--------------------------------------
+# installation
 
-Create your virtualenv
-::
+Create a and activate a virtualenv (if you want)
 
     $ virtualenv vsdk-vanilla-env
-
-Activate your environment
-::
-
     $ cd vsdk-vanilla-env
     $ source bin/activate
-    (vsdk-vanilla-env) $
 
 
-How it works
-============
+## generate and install a new vsdk
 
-    (vsdk-vanilla-env) $ cd vsdk-vanilla
-    (vsdk-vanilla-env) $ cd generator
-    (vsdk-vanilla-env) $ vsdkgenerator -h  # Display help command
-
-Generate a new API
-------------------
 This will take default sources and will create a new SDK in `codegen/{{version}}`
 
-    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1
-    (vsdk-vanilla-env) $ vsdkgenerator -f ~/Path/To/V3_1
+You can generate the `vsdk` for a particular API version against a running version of VSD by doing:
 
-Work from an existing API version
----------------------------------
-This will clone the branch of the given git repository and update the SDK sources according to the VSD API.
-_Note: If the branch does not exists, it will automatically create one_
+    $ vsdkgenerator -u https://url_of_vsd:8443 -v 3.1
 
-    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g https://github.com/nuagenetworks/vsdk.git
+You can also generate it from an API definition file if you have one (but you certainly don't):
 
+    $ vsdkgenerator -f /path/to/V3_1
 
-Work from an existing API version and Push
-------------------------------------------
-This will clone the branch of the given git repository and will push generates sources to the repository
-_Note: If the branch does not exists, it will automatically create one_
+The source code for the generated `vsdk` will be available in `codegen/{version}`.
 
-    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g https://github.com/nuagenetworks/vsdk.git --push
+You can then install it by simply doing:
 
-What to do when I have my Python SDK sources:
-=============================================
-
-You will have several options here:
-
-* Install your SDK in development mode
-It will be update everytime your SDK sources change:
-
-    (vsdk-vanilla-env) $ cd codegen/3.0/
-    (vsdk-vanilla-env) $ python setup.py develop
-
-* Create a package and install it wherever you want
-It will create a `dist` folder containing a `tar.gz` file that can be installed using `pip install vsdk.tar.gz` command:
-
-    (vsdk-vanilla-env) $ cd codegen/3.0/
-    (vsdk-vanilla-env) $ python setup.py sdist
-
-    (your-own-env) $ pip install dist/vsdk-3.0-1.tar.gz
+    $ cd /codegen/3.2
+    $ pip install -r requirements.txt && python setup.py install
 
 
-* Install the vsdk from your repository
-It will install the vsdk from the github repository
+## generate and install a new vspk
 
-    (your-own-env) $ pip install git+https://github.com/nuagenetworks/vsdk.git
+`vspk` is a package that allows to embed multiple `vsdk` version in a same package. This way, it is possible to use multiple VSD API version in the same script.
 
-Any Trouble ?
-=============
-It can happen ! Do not hesitate to send a quick email to `christophe.serafin@alcatel-lucent.com`
+> Note: you must already have some generated version of `vsdk`
+
+    $ vspkgenerator --version 3.0,3.1,3.2
+
+The generated `vspk` will be in the `codegen/vspk` directory. To install it:
+
+    $ cd codegen/vspk
+    $ pip install -r requirements.txt && python setup.py install
+
+
+# Usage
+
+The official way to use `vsdk` is through `vspk`. You can do something like this in a script:
+
+    from vspk.vsdk import v3_2 as vsdk
+
+    session = vsdk.NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://vsp:8443', version='3.2')
+    session.start()
+
+    license = NULicense()
+    license.license = LICENSE_BLOB
+    session.user.create_child(license)
+
+
