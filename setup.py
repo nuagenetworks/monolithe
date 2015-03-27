@@ -20,8 +20,8 @@ setup(
         'console_scripts': [
             'vsdk-generator = vsdgenerators.vsdkgenerator:main',
             'vsdkdoc-generator = vsdgenerators.vsdkdocgenerator:main',
-            'apidoc-generator = vsdgenerators.apidocgenerator:main',
-            'test-generator = vsdgenerators.testgenerator:main']
+            'vspk-generator = vsdgenerators.vspkgenerator:main'
+            'apidoc-generator = vsdgenerators.apidocgenerator:main']
     },
     download_url='%s/tarball/0.2' % github_repo
 )
