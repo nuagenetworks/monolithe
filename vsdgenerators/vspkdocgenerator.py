@@ -55,11 +55,6 @@ def _parse_module(module):
 
     return classes
 
-
-
-
-
-
 def _generate_classes_doc(doc_path, some_classes, module_name, file_prefix):
 
     for class_info in some_classes:
@@ -100,12 +95,6 @@ def _generate_classes_doc(doc_path, some_classes, module_name, file_prefix):
         f.write("\n")
         f.close()
 
-
-
-
-
-
-
 def _write_bambou_reference(base_doc_path):
     f = open("%s/bambou_reference.rst" % (base_doc_path), "w")
     f.write("Bambou API Reference\n")
@@ -116,95 +105,95 @@ def _write_bambou_reference(base_doc_path):
     f.write("    bambou/*\n\n")
     f.close()
 
-
-
-
-def _write_vsdk_reference(base_doc_path):
-    model_api_file = open("%s/vsdk_reference.rst" % (base_doc_path), "w")
-    model_api_file.write("VSDK API Reference\n")
+def _write_vsdk_reference(base_doc_path, version):
+    model_api_file = open("%s/vsdk_%s_reference.rst" % (base_doc_path, version), "w")
+    model_api_file.write("VSDK API %s Reference\n" % version)
     model_api_file.write("==================\n\n")
     model_api_file.write("**Models**\n\n")
     model_api_file.write(".. toctree::\n")
     model_api_file.write("    :maxdepth: 1\n")
     model_api_file.write("    :glob:\n\n")
-    model_api_file.write("    vsdk/models.*\n\n\n")
+    model_api_file.write("    vspk/%s/models.*\n\n\n" % version)
     model_api_file.write("**Fetchers**\n\n")
     model_api_file.write(".. toctree::\n")
     model_api_file.write("    :maxdepth: 1\n")
     model_api_file.write("    :glob:\n\n")
-    model_api_file.write("    vsdk/fetchers.*\n\n\n")
+    model_api_file.write("    vspk/%s/fetchers.*\n\n\n" % version)
     model_api_file.close()
 
 
 def main(argv=sys.argv):
-    parser = argparse.ArgumentParser(description="VSDK API Reference Documentation Generator.")
-    parser.add_argument('-s', "--sources", dest="sources", help="path to directory containing the sources", default='codegen', type=str)
-    parser.add_argument('-v', "--version", dest="version", help="version of the vsdk", required=True, type=str)
+    parser = argparse.ArgumentParser(description="vspk api reference documentation generator.")
+    args            = parser.parse_args()
 
-    args          = parser.parse_args()
-    vsdk_path     = "%s/%s" % (args.sources, args.version)
-    base_doc_path = "%s/sphinx/" % os.path.abspath(vsdk_path)
+    vspk_path       = "codegen/vspk/vspk"
+    temp_doc_path   = "/tmp/docgen/vspkdoc"
+    export_doc_path = "docgen/vspkdoc"
 
-    sys.path.append(os.path.abspath(vsdk_path))
-    subprocess_environ = {"PYTHONPATH": ":".join(sys.path), "PATH": os.environ["PATH"]}
+    sys.path.append(os.path.abspath(vspk_path))
+    python_path = sys.path
+    python_path.append("%s/../codegen/vspk" % os.path.dirname(os.path.realpath(__file__)))
+    subprocess_environ = {"PYTHONPATH": ":".join(python_path), "PATH": os.environ["PATH"]}
 
 
     ## Sphinx preprocess
-
-    if os.path.exists(base_doc_path):
-        shutil.rmtree(base_doc_path)
-    shutil.copytree(VANILLA_DOC, base_doc_path)
-
-    process = subprocess.Popen(['sphinx-apidoc', '-o', base_doc_path, vsdk_path], env=subprocess_environ)
+    if os.path.exists(temp_doc_path):
+        shutil.rmtree(temp_doc_path)
+    shutil.copytree(VANILLA_DOC, temp_doc_path)
+    process = subprocess.Popen(['sphinx-apidoc', '-o', temp_doc_path, vspk_path], env=subprocess_environ)
     process.communicate()
 
+
     ## Bambou
-
-    bambou_doc_path   = "%s/bambou" % base_doc_path
-
+    bambou_doc_path = "%s/bambou" % temp_doc_path
     if os.path.exists(bambou_doc_path):
         shutil.rmtree(bambou_doc_path)
     os.makedirs(bambou_doc_path)
-
-    _write_bambou_reference(base_doc_path)
-
+    _write_bambou_reference(temp_doc_path)
     bambou_module = importlib.import_module("bambou")
     _generate_classes_doc(bambou_doc_path, _parse_module(bambou_module), "bambou", "bambou")
 
 
-    ## VSDK
+    ## VSPK
+    vspk_doc_path = "%s/vspk" % temp_doc_path
+    vsdks_path = "%s/vsdk" % vspk_path
 
-    vsdk_doc_path   = "%s/vsdk" % base_doc_path
+    for item in os.listdir(vsdks_path):
 
-    if os.path.exists(vsdk_doc_path):
-        shutil.rmtree(vsdk_doc_path)
-    os.makedirs(vsdk_doc_path)
+        if os.path.isfile("%s/%s" % (vsdks_path, item)):
+            continue
 
-    _write_vsdk_reference(base_doc_path)
+        version = item.replace("v", "").replace("_", ".")
+        version_doc_path = "%s/%s" % (vspk_doc_path, version)
 
-    vsdk_model_module = importlib.import_module("vsdk")
-    _generate_classes_doc(vsdk_doc_path, _parse_module(vsdk_model_module), "vsdk", "models")
+        if os.path.exists(version_doc_path):
+            shutil.rmtree(version_doc_path)
+        os.makedirs(version_doc_path)
 
-    vsdk_fetchers_module = importlib.import_module("vsdk.fetchers")
-    _generate_classes_doc(vsdk_doc_path, _parse_module(vsdk_fetchers_module), "vsdk.fetchers", "fetchers")
+        _write_vsdk_reference(temp_doc_path, version)
+
+        vsdk_model_module = importlib.import_module("vspk.vsdk.%s" % item)
+        _generate_classes_doc(version_doc_path, _parse_module(vsdk_model_module), "vspk.vsdk.%s" % item, "models")
+
+        vsdk_fetchers_module = importlib.import_module("vspk.vsdk.%s.fetchers" % item)
+        _generate_classes_doc(version_doc_path, _parse_module(vsdk_fetchers_module), "vspk.vsdk.%s.fetchers" % item, "fetchers")
 
 
     ## Sphinx postproccess
+    os.system("rm -rf %s/vspk.*.rst" % temp_doc_path)
+    os.system("rm -rf %s/vspk.rst" % temp_doc_path)
 
-    os.remove("%s/vsdk.rst" % base_doc_path)
-    os.remove("%s/vsdk.autogenerates.rst" % base_doc_path)
-    os.remove("%s/vsdk.fetchers.rst" % base_doc_path)
-    os.remove("%s/modules.rst" % base_doc_path)
-    os.remove("%s/setup.rst" % base_doc_path)
-
-    #os.system("cd '%s' && make html" % base_doc_path)
     origin_path = os.getcwd()
-    os.chdir(base_doc_path)
+    os.chdir(temp_doc_path)
     process = subprocess.Popen(['make', 'html'], env=subprocess_environ)
     process.communicate()
     os.chdir(origin_path)
 
-    os.system("cd '%s' && rm -rf ./documentation && mv sphinx/_build/html ./documentation && rm -rf sphinx" % vsdk_path)
+    if os.path.exists(export_doc_path):
+        shutil.rmtree(export_doc_path)
+    shutil.copytree("%s/_build/html/" % temp_doc_path, export_doc_path)
+
+    os.system("rm -rf '%s'" % temp_doc_path)
 
 
 if __name__ == '__main__':

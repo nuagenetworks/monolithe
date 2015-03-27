@@ -24,7 +24,7 @@ def main(argv=sys.argv):
 
     parser.add_argument('-o', "--output",
                         dest="dest",
-                        default="docgen",
+                        default="docgen/apidoc",
                         help="destination directory for the sources",
                         type=str)
 

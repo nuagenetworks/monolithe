@@ -1,4 +1,4 @@
-VSDK Documentation
+VSPK Documentation
 ==================
 
 Getting Started
@@ -15,10 +15,11 @@ This section contains all the concepts to use VSDK and a lot of tutorials and ex
     installation
     getting_started
 
-Sample Code
------------
 
-This section show sample code you can reuse for a variety of day to day operations.
+Sample Scripts
+--------------
+
+This section show sample scripts you can reuse for a variety of day to day operations.
 
 .. toctree::
     :maxdepth: 2
@@ -36,7 +37,7 @@ This section describes all models and fetchers from the VSDK.
     :maxdepth: 1
     :glob:
 
-    vsdk_reference
+    vsdk_*_reference
 
 
 Bambou API Reference
