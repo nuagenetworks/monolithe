@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from vsdgenerators.lib import Utils
+from generators.lib import Utils
 
 
 class GetPluralNameTest(TestCase):
