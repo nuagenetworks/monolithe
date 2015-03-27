@@ -14,13 +14,21 @@ for item in os.listdir(vsdks_path):
 
 setup(
     name='vspk',
-    packages=packages,
-    include_package_data=True,
-    version='0.1',
-    description='VSPK',
-    long_description=open('README.md').read(),
+    version='0.0.1',
     author='Antoine Mercadal',
     author_email='antoine@nuagenetworks.net',
-    classifiers=[],
+    packages=packages,
+    description='Nuage Networks VSP Software Development Kit',
+    long_description=open('README.md').read(),
     install_requires=[line for line in open('requirements.txt')],
+    license='TODO',
+    url='https://github.com/nuagenetworks',
+    include_package_data=True,
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Topic :: Utilities",
+        "License :: Other/Proprietary License",
+        "Environment :: Console",
+        "Intended Audience :: Developers"
+    ]
 )
