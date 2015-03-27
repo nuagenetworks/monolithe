@@ -49,7 +49,7 @@ Work from an existing API version
 This will clone the branch of the given git repository and update the SDK sources according to the VSD API.
 _Note: If the branch does not exists, it will automatically create one_
 
-    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g http://github.mv.usa.alcatel.com/vsdk/vsdk.git
+    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g https://github.com/nuagenetworks/vsdk.git
 
 
 Work from an existing API version and Push
@@ -57,7 +57,7 @@ Work from an existing API version and Push
 This will clone the branch of the given git repository and will push generates sources to the repository
 _Note: If the branch does not exists, it will automatically create one_
 
-    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g http://github.mv.usa.alcatel.com/vsdk/vsdk.git --push
+    (vsdk-vanilla-env) $ vsdkgenerator -u https://vsd:8443 -v 3.1 -g https://github.com/nuagenetworks/vsdk.git --push
 
 What to do when I have my Python SDK sources:
 =============================================
@@ -82,7 +82,7 @@ It will create a `dist` folder containing a `tar.gz` file that can be installed 
 * Install the vsdk from your repository
 It will install the vsdk from the github repository
 
-    (your-own-env) $ pip install git+http://github.mv.usa.alcatel.com/vsdk/vsdk.git
+    (your-own-env) $ pip install git+https://github.com/nuagenetworks/vsdk.git
 
 Any Trouble ?
 =============

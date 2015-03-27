@@ -1,6 +1,6 @@
 from setuptools import setup
 
-github_repo = 'http://github.mv.usa.alcatel.com/corentih/vsdk-vanilla'
+github_repo = 'https://github.com/nuagenetworks/vsdk-vanilla'
 deps = ['jinja2', 'colorama', 'gitpython', 'argparse', 'requests', 'bambou',
         'sphinx==1.2.3', 'sphinx_rtd_theme', 'sphinxcontrib-napoleon',
         'Contextual==0.7a1.dev-r2695']

@@ -48,7 +48,7 @@ Or install it from a local git repository:
 .. code-block:: bash
     :linenos:
 
-    pip install git+ssh://github.mv.usa.alcatel.com:vsdk/vsdk.git
+    pip install git+ssh://github.com/nuagenetworksgithub.com:vsdk/vsdk.git
 
 
 VSDK Vanilla
