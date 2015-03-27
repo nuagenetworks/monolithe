@@ -26,7 +26,7 @@ def include_vsdk(vsdk_version, vsdk_base_path, vspk_path):
     source_sdk_path = "%s/%s/vsdk/" % (vsdk_base_path, vsdk_version)
     dest_sdk_path   = "%s/vspk/vsdk/%s" % (vspk_path, parsed_version)
 
-    print " * Installing vsdk version %s to vspk" % vsdk_version
+    print " * Packaging vsdk version %s to vspk" % vsdk_version
 
     shutil.copytree(source_sdk_path, dest_sdk_path)
 
@@ -34,13 +34,13 @@ def include_vsdk(vsdk_version, vsdk_base_path, vspk_path):
 def main(argv=sys.argv):
 
     parser = argparse.ArgumentParser(description="VSPK Package Generator.")
-    parser.add_argument('-v', "--versions", dest="versions", help="versions of the vsdks to package coma separated, no space", required=True, type=str)
+    parser.add_argument('-v', "--versions", dest="versions", nargs='*', help="Versions", required=True, type=str)
 
     args = parser.parse_args()
 
     prepare_vspk_destination(PATH_VANILLA_VSPK, PATH_GENERATED_VSPK)
 
-    for version in args.versions.split(","):
+    for version in args.versions:
         include_vsdk(version, PATH_CODEGEN, PATH_GENERATED_VSPK)
 
 
