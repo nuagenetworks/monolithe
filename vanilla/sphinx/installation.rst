@@ -11,13 +11,15 @@ Install the vspk from a public source:
     pip install vspk
 
 
-VSDK Vanilla
-------------
+Monolithe
+---------
 
-vsdk-vanilla is a repository that contains everything needed to generate:
+`monolithe` is a repository that contains everything needed to generate:
 
 - The `vsdk` from a running VSD server or a VSD generated swagger file
 - The `vspk` from a list of generated `vsdk` (this document)
+- The `vspk` api documentation
+- The VSD ReST API api documentation
 
 
 Set up a Virtual Environment
@@ -45,17 +47,17 @@ Get the `Bambou` source code and install it in the virtual env:
     pip install bambou
 
 
-Get vsdk-vanilla
+Get monolithe
 ++++++++++++++++
 
-Get the `vsdk-vanilla` repository and install the requirements:
+Get the `monolithe` repository and install the requirements:
 
 .. code-block:: bash
     :linenos:
 
     # cd to the root folder to your virtual env
-    git clone https://github.com/nuagenetworks/vsdk-vanilla.git
-    cd vsdk-vanilla
+    git clone https://github.com/nuagenetworks/monolithe.git
+    cd monolithe
     pip install -r requirements.txt
 
 

@@ -1,6 +1,6 @@
-# vsdk vanilla
+# Monolithe
 
-SDK Generator for Nuage Network API
+Monolithe is the generator of all documentation and SDK for Nuage Network VSP.
 
 Supported version:
 
@@ -19,8 +19,8 @@ Install the dependencies
 
 Create a and activate a virtualenv (if you want)
 
-    $ virtualenv vsdk-vanilla-env
-    $ cd vsdk-vanilla-env
+    $ virtualenv monolithe-env
+    $ cd monolithe-env
     $ source bin/activate
 
 
