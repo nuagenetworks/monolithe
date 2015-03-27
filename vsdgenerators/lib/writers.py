@@ -143,7 +143,7 @@ class VSDKFileWriter(FileWriter):
     RESTUSER_TEMPLATE = 'vsdk/nurestuser.py.tpl'
     CONSTANTS_TEMPLATE = 'vsdk/constants.py.tpl'
 
-    OVERRIDE_PATH = 'vanilla/sdk/overrides'
+    OVERRIDE_PATH = 'vanilla/vsdk/overrides'
 
     def write_setup_file(self, version, revision):
         """ Write setup.py file
@@ -306,7 +306,7 @@ class SDKWriter(object):
 
     """
     VSDK_PATH = '/vsdk'
-    VANILLA_SRC_PATH = './vanilla/sdk/base/'
+    VANILLA_SRC_PATH = './vanilla/vsdk/base/'
 
     IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
     IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
