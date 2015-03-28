@@ -4,7 +4,7 @@ VSPK Documentation
 Getting Started
 ---------------
 
-This section contains all the concepts to use VSDK and a lot of tutorials and examples.
+This section contains all the concepts to use `vsdk` and a lot of tutorials and examples.
 
 .. toctree::
     :maxdepth: 1
@@ -31,7 +31,7 @@ This section show sample scripts you can reuse for a variety of day to day opera
 VSDK API Reference
 ------------------
 
-This section describes all models and fetchers from the VSDK.
+This section describes all models and fetchers from the `vsdk`.
 
 .. toctree::
     :maxdepth: 1

@@ -108,7 +108,7 @@ def _write_bambou_reference(base_doc_path):
 def _write_vsdk_reference(base_doc_path, version):
     model_api_file = open("%s/vsdk_%s_reference.rst" % (base_doc_path, version), "w")
     model_api_file.write("VSDK API %s Reference\n" % version)
-    model_api_file.write("==================\n\n")
+    model_api_file.write("=======================\n\n")
     model_api_file.write("**Models**\n\n")
     model_api_file.write(".. toctree::\n")
     model_api_file.write("    :maxdepth: 1\n")

@@ -83,7 +83,7 @@ Every method performing ReST calls return a tuple of objects : the object that
 has been created/updated/deleted, and a connection object that contains
 informations about the ReST call (status code, potential error message, etc.)
 
-To illustrate, let's create, update an delete an enteprise. The VSDK consider
+To illustrate, let's create, update an delete an enteprise. The `vsdk` consider
 that the root of the VSD hierarchy is the current user. Thus, an enterprise is
 a child object of the current user.
 

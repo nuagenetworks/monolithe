@@ -20,7 +20,7 @@ def prepare_vspk_destination(source_path, destination_path):
 
 
 def include_vsdk(vsdk_version, vsdk_base_path, vspk_path):
-    """ Install Generated version of VSDK to VSPK"""
+    """ Install Generated version of vsdk to vspk"""
 
     parsed_version  = "v%s" % vsdk_version.replace(".", "_")
     source_sdk_path = "%s/%s/vsdk/" % (vsdk_base_path, vsdk_version)
@@ -33,7 +33,7 @@ def include_vsdk(vsdk_version, vsdk_base_path, vspk_path):
 
 def main(argv=sys.argv):
 
-    parser = argparse.ArgumentParser(description="VSPK Package Generator.")
+    parser = argparse.ArgumentParser(description="vspk Package Generator.")
     parser.add_argument('-v', "--versions", dest="versions", nargs='*', help="Versions", required=True, type=str)
 
     args = parser.parse_args()

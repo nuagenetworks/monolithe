@@ -1,7 +1,7 @@
 Code Snippets
 =============
 
-This section provides various code snippets and scripts you can use or get inspiration from to develop your own scripts or application using the VSDK.
+This section provides various code snippets and scripts you can use or get inspiration from to develop your own scripts or application using the `vsdk`.
 
 
 Enterprise Onboarding
