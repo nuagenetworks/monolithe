@@ -33,6 +33,14 @@ Then install the dependencies:
 
 ## Usage
 
+Monolithe can generate:
+
+- various versions of `vsdk`
+- a `vspk` including various version of `vsdks`
+- the documentation for `vspk`
+- various versions of VSD Server ReST API documentation.
+
+
 ### Generate vsdk packages
 
 You can generate a `vsdk` for a particular API version against a running version of VSD by doing:
