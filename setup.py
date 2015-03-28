@@ -5,10 +5,10 @@ deps = ['jinja2', 'colorama', 'gitpython', 'argparse', 'requests', 'bambou',
 
 setup(
     name='monolithe',
-    packages=['vsdgenerators', 'vsdgenerators.lib'],
+    packages=['generators', 'generators.lib'],
     include_package_data=True,
-    version='0.2',
-    description='VSD generator',
+    version='0.0.1',
+    description='Monolithe is the generator of all documentation and SDK for Nuage Network VSP',
     author='Christophe Serafin',
     author_email='christophe.serafin@nuagenetworks.net',
     url="https://github.com/nuagenetworks/monolithe",
@@ -16,9 +16,9 @@ setup(
     install_requires=deps,
     entry_points={
         'console_scripts': [
-            'vsdk-generator = vsdgenerators.vsdkgenerator:main',
-            'vsdkdoc-generator = vsdgenerators.vsdkdocgenerator:main',
-            'vspk-generator = vsdgenerators.vspkgenerator:main'
-            'apidoc-generator = vsdgenerators.apidocgenerator:main']
+            'vsdk-generator = generators.vsdkgenerator:main',
+            'vspkdoc-generator = generators.vspkdocgenerator:main',
+            'vspk-generator = generators.vspkgenerator:main',
+            'apidoc-generator = generators.apidocgenerator:main']
     }
 )

@@ -28,7 +28,7 @@ class FileWriter(object):
         """ Initializes a FileWriter
 
         """
-        self.env = Environment(loader=PackageLoader('vsdgenerators', 'templates'), extensions=["jinja2.ext.do"])
+        self.env = Environment(loader=PackageLoader('generators', 'templates'), extensions=["jinja2.ext.do"])
         self.directory = directory
 
     def write(self, template, destination, filename, **kwargs):
