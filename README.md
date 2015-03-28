@@ -52,7 +52,7 @@ The source code for the generated `vsdk` packages will be available in `codegen/
 
 Once all the `vsdk` versions you want to include in `vspk` have been generated, run the following command:
 
-    $ vspk-generator --version 3.0,3.1,3.2
+    $ vspk-generator --version 3.0 3.1 3.2
 
 The source code for the generated `vsdp` package will be available in `codegen/vspk`.
 
