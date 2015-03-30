@@ -34,7 +34,7 @@ def include_vsdk(vsdk_version, vsdk_base_path, vspk_path):
 def main(argv=sys.argv):
 
     parser = argparse.ArgumentParser(description="VSPK Package Generator.")
-    parser.add_argument('-v', "--versions", dest="versions", nargs='*', help="Versions", required=True, type=str)
+    parser.add_argument('-v', "--versions", dest="versions", nargs='*', help="Specify all supported VSDK versions", required=True, type=str)
 
     args = parser.parse_args()
 
