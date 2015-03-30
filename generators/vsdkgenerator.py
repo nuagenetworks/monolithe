@@ -14,9 +14,10 @@ def main(argv=sys.argv):
                         help="URL of your VSD API where to get the get JSON information without version (ex: https://host:port/web/docs/api/)",
                         type=str)
 
-    parser.add_argument('-v', "--apiversion",
-                        dest="apiversion",
-                        help="version of the SDK to generate (examples: 1.0, 3.0, 3.1)",
+    parser.add_argument('-v', "--apiversions",
+                        dest="versions",
+                        help="versions of the SDK to generate (examples: 1.0 3.0 3.1)",
+                        nargs="*",
                         type=float)
 
     parser.add_argument('-f', "--file",
@@ -49,7 +50,12 @@ def main(argv=sys.argv):
     args = parser.parse_args()
 
     from generators import Command
-    Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=args.apiversion, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push)
+
+    if args.versions:
+        for version in args.versions:
+            Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=version, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push)
+    else:
+        Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=None, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push)
 
 if __name__ == '__main__':
     main()
