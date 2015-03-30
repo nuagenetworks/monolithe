@@ -5,7 +5,8 @@ import inspect
 import sys
 import pkg_resources
 
-classes = []
+from vsdk.utils import set_log_level
+classes = ['set_log_level']
 
 for module in os.listdir(os.path.dirname(__file__)):
     if module.startswith('nu') and module.endswith('.py'):
