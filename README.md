@@ -1,6 +1,6 @@
-# vsdk vanilla
+# Monolithe
 
-SDK Generator for Nuage Network API
+Monolithe is the generator of all documentation and SDK for Nuage Network VSP.
 
 Supported version:
 
@@ -8,67 +8,82 @@ Supported version:
     * Python 2.7
 
 
-## dependencies
 
-Install the dependencies
+## Installation
 
+### Install  from package
+
+You can get Monolithe from PyPi:
+
+    $ pip install monolithe
+
+
+### Install  from sources
+
+If not already done, get the source code:
+
+    $ git clone https://github.com/nuagenetworks/monolithe.git
+
+Then install the dependencies:
+
+    $ cd monolithe
     $ pip install -r requirements.txt
 
 
-# installation
 
-Create a and activate a virtualenv (if you want)
+## Usage
 
-    $ virtualenv vsdk-vanilla-env
-    $ cd vsdk-vanilla-env
-    $ source bin/activate
+Monolithe can generate:
 
-
-## generate and install a new vsdk
-
-This will take default sources and will create a new SDK in `codegen/{{version}}`
-
-You can generate the `vsdk` for a particular API version against a running version of VSD by doing:
-
-    $ vsdkgenerator -u https://url_of_vsd:8443 -v 3.1
-
-You can also generate it from an API definition file if you have one (but you certainly don't):
-
-    $ vsdkgenerator -f /path/to/V3_1
-
-The source code for the generated `vsdk` will be available in `codegen/{version}`.
-
-You can then install it by simply doing:
-
-    $ cd /codegen/3.2
-    $ pip install -r requirements.txt && python setup.py install
+- various versions of `vsdk`
+- a `vspk` including various version of `vsdks`
+- the documentation for `vspk`
+- various versions of VSD Server ReST API documentation.
 
 
-## generate and install a new vspk
+### Generate vsdk packages
 
-`vspk` is a package that allows to embed multiple `vsdk` version in a same package. This way, it is possible to use multiple VSD API version in the same script.
+You can generate a `vsdk` for a particular API version against a running version of VSD by doing:
 
-> Note: you must already have some generated version of `vsdk`
+    $ vsdk-generator -u VSD_SERVER_API_URL -v VERSION
 
-    $ vspkgenerator --version 3.0,3.1,3.2
+For instance:
 
-The generated `vspk` will be in the `codegen/vspk` directory. To install it:
+    $ vsdk-generator -u https://api.nuagenetworks.net:8443 -v 3.0
+    $ vsdk-generator -u https://api.nuagenetworks.net:8443 -v 3.1
+    $ vsdk-generator -u https://api.nuagenetworks.net:8443 -v 3.2
 
-    $ cd codegen/vspk
-    $ pip install -r requirements.txt && python setup.py install
-
-
-# Usage
-
-The official way to use `vsdk` is through `vspk`. You can do something like this in a script:
-
-    from vspk.vsdk import v3_2 as vsdk
-
-    session = vsdk.NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://vsp:8443', version='3.2')
-    session.start()
-
-    license = NULicense()
-    license.license = LICENSE_BLOB
-    session.user.create_child(license)
+The source code for the generated `vsdk` packages will be available in `codegen/{version}`.
 
 
+### Generate vspk package
+
+Once all the `vsdk` versions you want to include in `vspk` have been generated, run the following command:
+
+    $ vspk-generator --version 3.0 3.1 3.2
+
+The source code for the generated `vsdp` package will be available in `codegen/vspk`.
+
+
+### Generate vspk documentation
+
+To generate the `vspk` API Documentation, run the following command:
+
+    $ vspkdoc-generator
+
+The generated documentation will be available in `docgen/vspkdoc`
+
+
+### Generate VSD Server ReST API documentation
+
+You can generate a  VSD Server ReST API documentation for a particular API version against a running version of VSD by doing:
+
+    $ vsdapidoc-generator -u VSD_SERVER_API_URL -v VERSION
+
+For instance:
+
+    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.0
+    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.1
+    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.2
+
+The generated documentation will be available in `docgen/apidoc/{{version}}`

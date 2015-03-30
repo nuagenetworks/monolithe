@@ -53,7 +53,7 @@ Here is a quick example !
 
     # Create an enterprise with csproot user
     enterprise = NUEnterprise()
-    enterprise.name = u'VSDK Test'
+    enterprise.name = u'vsdk Test'
     csproot.create_child(enterprise)
 
     # Create a domain template and an instance

@@ -4,5 +4,5 @@
 import sys
 
 if __name__ == '__main__':
-    from vsdgenerators.vsdkdocgenerator import main
+    from generators.apidocgenerator import main
     sys.exit(main(sys.argv))

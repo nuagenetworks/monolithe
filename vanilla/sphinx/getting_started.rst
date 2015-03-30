@@ -4,16 +4,16 @@ Getting Started
 Connection
 ----------
 
-Let's import vsdk, and configure logging so that we can visualize the rest calls.
+Let's import a `vsdk` from the `vspk`, and configure logging so that we can visualize the rest calls.
 
->>> import vsdk, logging
->>> log = logging.getLogger('bambou')
->>> log.addHandler(logging.StreamHandler())
->>> log.setLevel(logging.DEBUG)
+>>> from vspk.vsdk import v3_2 as vsdk
+>>> from vspk.vsdk.v3_2.utils import set_log_level
+>>> import logging
+>>> set_log_level(logging.INFO)
 
 Now we can start a session as `csproot` :
 
->>> session = NUVSDSession(username='csproot', password='csproot', enterprise='csp', api_url='https://135.227.150.222:8443', version='3.2')
+>>> session = vsdk.NUVSDSession(username='csproot', password='csproot', enterprise='csp', api_url='https://135.227.150.222:8443', version='3.2')
 >>> session.start()
 Bambou Sending >>>>>>
 GET https://135.227.150.222:8443/nuage/api/v3_2/me with following data:
@@ -42,7 +42,7 @@ GET https://135.227.150.222:8443/nuage/api/v3_2/me
     }
 ]
 
-The session instance now have its :attr:`vsdk.NUVSDSession.user` attribute populated. Every object has a `to_dict()` method that allows to easily visualize an object and it's API attributes :
+The session instance now have its :attr:`vspk.vsdk.v3_2.NUVSDSession.user` attribute populated. Every object has a `to_dict()` method that allows to easily visualize an object and it's API attributes :
 
 >>> session.user.to_dict()
 {'APIKey': u'92790b4b-85e0-4f40-9835-2aa242f24a57',
@@ -65,7 +65,7 @@ The session instance now have its :attr:`vsdk.NUVSDSession.user` attribute popul
  u'role': u'CSPROOT',
  u'userName': u'csproot'}
 
-CRUD operations
+CRUD Operations
 ---------------
 
 The VSD follows a tree structure : a given object can have one or multiple
@@ -74,7 +74,7 @@ contains zones, etc. For the reason we will often to the `current object`, its
 `parent object`, and its `children`.
 
 Every classes have generics methods to perform CRUD operations relatively to the current object :
-  * `add_child_objet()` creates a child object on the VSD
+  * `add_child()` creates a child object on the VSD
   * `fetch()` read the current object on the VSD.
   * `save()` updates the current object on the VSD
   * `delete()` deletes the current object on the VSD
@@ -83,7 +83,7 @@ Every method performing ReST calls return a tuple of objects : the object that
 has been created/updated/deleted, and a connection object that contains
 informations about the ReST call (status code, potential error message, etc.)
 
-To illustrate, let's create, update an delete an enteprise. The VSDK consider
+To illustrate, let's create, update an delete an enteprise. The `vsdk` consider
 that the root of the VSD hierarchy is the current user. Thus, an enterprise is
 a child object of the current user.
 

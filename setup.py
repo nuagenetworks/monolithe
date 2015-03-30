@@ -1,27 +1,24 @@
 from setuptools import setup
 
-github_repo = 'https://github.com/nuagenetworks/vsdk-vanilla'
 deps = ['jinja2', 'colorama', 'gitpython', 'argparse', 'requests', 'bambou',
-        'sphinx==1.2.3', 'sphinx_rtd_theme', 'sphinxcontrib-napoleon',
-        'Contextual==0.7a1.dev-r2695']
+        'sphinx==1.2.3', 'sphinx_rtd_theme', 'sphinxcontrib-napoleon']
 
 setup(
-    name='vsdgenerators',
-    packages=['vsdgenerators', 'vsdgenerators.lib'],
+    name='monolithe',
+    packages=['generators', 'generators.lib'],
     include_package_data=True,
-    version='0.2',
-    description='VSD generator',
+    version='0.0.1',
+    description='Monolithe is the generator of all documentation and SDK for Nuage Network VSP',
     author='Christophe Serafin',
-    author_email='Christophe.Serafin@nuagenetworks.net',
-    url=github_repo,
+    author_email='christophe.serafin@nuagenetworks.net',
+    url="https://github.com/nuagenetworks/monolithe",
     classifiers=[],
     install_requires=deps,
     entry_points={
         'console_scripts': [
-            'vsdk-generator = vsdgenerators.vsdkgenerator:main',
-            'vsdkdoc-generator = vsdgenerators.vsdkdocgenerator:main',
-            'vspk-generator = vsdgenerators.vspkgenerator:main'
-            'apidoc-generator = vsdgenerators.apidocgenerator:main']
-    },
-    download_url='%s/tarball/0.2' % github_repo
+            'vsdk-generator = generators.vsdkgenerator:main',
+            'vspkdoc-generator = generators.vspkdocgenerator:main',
+            'vspk-generator = generators.vspkgenerator:main',
+            'apidoc-generator = generators.apidocgenerator:main']
+    }
 )

@@ -7,4 +7,3 @@ bambou
 sphinx
 sphinx_rtd_theme
 sphinxcontrib-napoleon
-Contextual==0.7a1.dev-r2695

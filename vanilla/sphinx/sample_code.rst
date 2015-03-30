@@ -1,7 +1,7 @@
 Code Snippets
 =============
 
-This section provides various code snippets and scripts you can use or get inspiration from to develop your own scripts or application using the VSDK.
+This section provides various code snippets and scripts you can use or get inspiration from to develop your own scripts or application using the `vsdk`.
 
 
 Enterprise Onboarding
@@ -21,7 +21,7 @@ This sample function will populate a given domain with a given number of zones, 
 .. code-block:: python
     :linenos:
 
-    import vsdk
+    from vspk.vsdk import v3_2 as vsdk
     import ipaddress
 
     def populate_test_domain(domain, number_of_zones, number_of_subnets_per_zone, number_of_vports_per_subnet):
@@ -97,7 +97,7 @@ This sample function will create a gateway with ports, vlan and give some permis
 .. code-block:: python
     :linenos:
 
-    import vsdk
+    from vspk.vsdk import v3_2 as vsdk
 
     def create_datacenter_gateway_template(name, personality, network_port_names, access_port_names, vlan_range, vlans_values, vsdsession, description=None):
         """ Creates a DC Gateway template
@@ -210,7 +210,7 @@ This function will fetch the latest known application services from IANA and cre
 
     import requests
     import csv
-    import vsdk
+    from vspk.vsdk import v3_2 as vsdk
 
     def import_known_application_services(session):
 
@@ -261,7 +261,7 @@ Working with Push Center
 .. code-block:: python
     :linenos:
 
-    from vsdk import *
+    from vspk.vsdk.v3_2 import *
     from time import sleep
     from pprint import pprint
 

@@ -5,7 +5,7 @@ vsdk_logger = logging.getLogger('vsdk')
 
 
 def set_log_level(level, handler=None):
-    """ Set both VSDK and Bambou log level to the given level
+    """ Set both vsdk and Bambou log level to the given level
 
         Args:
             level (logging.level): a logging level
