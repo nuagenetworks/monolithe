@@ -5,6 +5,7 @@ import json
 import requests
 import sys
 
+from copy import deepcopy
 from .printer import Printer
 from .managers import TaskManager
 from .utils import Utils
@@ -120,7 +121,45 @@ class SwaggerURLParser(object):
         except:
             Printer.raiseError("Could not load properly json from %s" % resource_path)
 
-        results[resource_name]['package'] = package
+        if resource_name == 'Metadata':
+            # Make copy for global metadata and aggregate
+            # Sad that I had to do that :(
+            Printer.log('Metadata found!')
+
+            info = results[resource_name]
+
+            metadata_info = deepcopy(info)
+            global_metadata_info = deepcopy(info)
+            aggregate_metadata_info = deepcopy(info)
+
+            metadata_info['apis'] = []
+            global_metadata_info['apis'] = []
+            aggregate_metadata_info['apis'] = []
+
+            metadata_info['models']['Metadata']['id'] = 'Metadata'
+            global_metadata_info['models']['Metadata']['id'] = 'GlobalMetadata'
+            aggregate_metadata_info['models']['Metadata']['id'] = 'AggregateMetadata'
+
+
+            for api in info['apis']:
+                api_copy = deepcopy(api)
+                if '/aggregatemetadatas' in api['path']:
+                    aggregate_metadata_info['apis'].append(api_copy)
+                elif '/globalmetadatas' in api['path']:
+                    global_metadata_info['apis'].append(api_copy)
+                else:
+                    metadata_info['apis'].append(api_copy)
+
+            results['Metadata'] = metadata_info
+            results['GlobalMetadata'] = global_metadata_info
+            results['AggregateMetadata'] = aggregate_metadata_info
+
+            results['Metadata']['package'] = package
+            results['GlobalMetadata']['package'] = package
+            results['AggregateMetadata']['package'] = package
+
+        else:
+            results[resource_name]['package'] = package
 
 
 class SwaggerFileParser(object):

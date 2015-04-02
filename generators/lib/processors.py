@@ -209,9 +209,9 @@ class ModelsProcessor(object):
                 A beautiful python name
 
         """
-        # if name in ATTRIBUTE_MAPPING:
-        #     return Utils.get_python_name(ATTRIBUTE_MAPPING[name])
-        #
+        if name in ATTRIBUTE_MAPPING:
+            return Utils.get_python_name(ATTRIBUTE_MAPPING[name])
+
         return Utils.get_python_name(name)
 
     @classmethod
