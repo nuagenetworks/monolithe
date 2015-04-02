@@ -57,7 +57,7 @@ class Utils(object):
         if type_name in ['int', 'integer']:
             return 'int'
 
-        if type_name in ['date']:
+        if type_name in ['date', 'datetime', 'time']:
             return 'time'
 
         if type_name in ['double', 'float']:

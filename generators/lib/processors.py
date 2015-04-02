@@ -10,6 +10,11 @@ USER = 'User'
 RESTUSER = 'RESTUser'
 
 IGNORED_ATTRIBUTES = ["_fetchers"]
+
+ATTRIBUTE_MAPPING = {
+    'global': 'globalMetadata'
+}
+
 IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
 
 RESOURCE_MAPPING = {
@@ -194,6 +199,22 @@ class ModelsProcessor(object):
             model.apis.append(model_api)
 
     @classmethod
+    def _process_local_name(cls, name):
+        """ Change local name according to the remote name
+
+            Args:
+                name: the remote name
+
+            Returns:
+                A beautiful python name
+
+        """
+        # if name in ATTRIBUTE_MAPPING:
+        #     return Utils.get_python_name(ATTRIBUTE_MAPPING[name])
+        #
+        return Utils.get_python_name(name)
+
+    @classmethod
     def _process_attributes(cls, model, properties):
         """ Removes ignored attributes and update attribute type / name
 
@@ -210,7 +231,7 @@ class ModelsProcessor(object):
 
             attribute = ModelAttribute()
             attribute.remote_name = name
-            attribute.local_name = Utils.get_python_name(name)
+            attribute.local_name = cls._process_local_name(name)
             attribute.description = prop['description']
 
             if 'required' in prop and prop['required'] == 'true':
@@ -270,6 +291,12 @@ class ModelsProcessor(object):
         rest_user_model.remote_name = 'me'
         rest_user_model.relations = relations[RESTUSER]
         rest_user_model.attributes = deepcopy(models[USER].attributes)
+
+        ignored_attributes = ['restrictionDate']
+
+        for attribute in rest_user_model.attributes:
+            if attribute.remote_name in ignored_attributes:
+                rest_user_model.attributes.remove(attribute)
 
         role = ModelAttribute()
         role.description = u'Role of the user'
