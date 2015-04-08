@@ -49,7 +49,7 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    from generators import Command
+    from monolithe import Command
 
     if args.versions:
         for version in args.versions:

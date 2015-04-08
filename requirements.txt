@@ -4,6 +4,6 @@ gitpython
 argparse
 requests
 bambou
-sphinx
+Sphinx>=0.6,<1.3b
 sphinx_rtd_theme
 sphinxcontrib-napoleon

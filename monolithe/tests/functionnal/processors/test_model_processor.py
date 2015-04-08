@@ -3,13 +3,13 @@
 import os
 
 from unittest import TestCase
-from generators.lib.parsers import SwaggerFileParser
-from generators.lib.processors import ModelsProcessor
+from monolithe.lib.parsers import SwaggerFileParser
+from monolithe.lib.processors import ModelsProcessor
 
 def get_valid_path():
     """ Returns swagger path """
 
-    return '%s/generators/tests/functionnal/V3_1' % os.getcwd()
+    return '%s/monolithe/tests/functionnal/V3_1' % os.getcwd()
 
 
 class ModelsProcessorTests(TestCase):

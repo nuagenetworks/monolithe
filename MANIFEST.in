@@ -1,3 +1,4 @@
 include README.md
-recursive-include generators/templates *
-recursive-include generators/vanilla *
+include requirements.txt
+recursive-include monolithe/templates *
+recursive-include monolithe/vanilla *
