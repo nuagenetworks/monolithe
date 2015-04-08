@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from generators.lib import Utils
+from monolithe.lib import Utils
 
 
 class GetPluralNameTest(TestCase):

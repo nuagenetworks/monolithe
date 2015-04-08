@@ -30,7 +30,7 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    from generators import Command
+    from monolithe import Command
     Command.generate_doc(vsdurl=args.vsdurl, path=args.path, apiversion=args.apiversion, output_path=args.dest)
 
 if __name__ == '__main__':
