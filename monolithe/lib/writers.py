@@ -13,6 +13,7 @@ from .utils import Utils
 __all__ = ['HTMLFileWriter', 'VSDKFileWriter', 'CourgetteWriter']
 
 RESTUSER = 'RESTUser'
+VANILLA_PATH = '%s/../vanilla' % os.path.dirname(os.path.realpath(__file__))
 
 
 class FileWriter(object):
@@ -28,7 +29,7 @@ class FileWriter(object):
         """ Initializes a FileWriter
 
         """
-        self.env = Environment(loader=PackageLoader('generators', 'templates'), extensions=["jinja2.ext.do"])
+        self.env = Environment(loader=PackageLoader('monolithe', 'templates'), extensions=["jinja2.ext.do"])
         self.directory = directory
 
     def write(self, template, destination, filename, **kwargs):
@@ -143,7 +144,7 @@ class VSDKFileWriter(FileWriter):
     RESTUSER_TEMPLATE = 'vsdk/nurestuser.py.tpl'
     CONSTANTS_TEMPLATE = 'vsdk/constants.py.tpl'
 
-    OVERRIDE_PATH = 'vanilla/vsdk/overrides'
+    OVERRIDE_PATH = '%s/vsdk/overrides' % VANILLA_PATH
 
     def write_setup_file(self, version, revision):
         """ Write setup.py file
@@ -306,7 +307,7 @@ class SDKWriter(object):
 
     """
     VSDK_PATH = '/vsdk'
-    VANILLA_SRC_PATH = './vanilla/vsdk/base/'
+    VANILLA_SRC_PATH = '%s/vsdk/base/' % VANILLA_PATH
 
     IGNORED_ATTRIBUTES = ["ID", "externalID", "parentID", "parentType", "owner", "creationDate", "lastUpdatedDate", "lastUpdatedBy", "_fetchers"]
     IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
@@ -452,7 +453,7 @@ class DocWriter(object):
     """ Writer of the Python VSD Documentation
 
     """
-    VANILLA_SRC_PATH = './vanilla/docs/'
+    VANILLA_SRC_PATH = '%s/docs/' % VANILLA_PATH
 
     def __init__(self, directory):
         """ Initializes a writer to the specific directory

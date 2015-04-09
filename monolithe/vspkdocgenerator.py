@@ -9,7 +9,7 @@ import re
 import inspect
 import subprocess
 
-VANILLA_DOC = "./vanilla/sphinx"
+VANILLA_DOC = "%s/vanilla/sphinx" % os.path.dirname(os.path.realpath(__file__))
 
 def _parse_module(module):
 

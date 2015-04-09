@@ -5,7 +5,7 @@ import sys
 import os
 import shutil
 
-PATH_VANILLA_VSPK   = "./vanilla/vspk"
+PATH_VANILLA_VSPK = '%s/vanilla/vspk' % os.path.dirname(os.path.realpath(__file__))
 PATH_CODEGEN        = "./codegen"
 PATH_GENERATED_VSPK = "%s/vspk" % PATH_CODEGEN
 
