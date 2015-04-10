@@ -27,7 +27,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Navigation <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li class=""><a href="#accessing">Accessing the Object</a></li>
+                            <li class=""><a href="#parents">Parents</a></li>
                             <li class="divider"></li>
                             <li class=""><a href="#overview">Overview</a></li>
                             <li class="divider"></li>
@@ -44,52 +44,65 @@
         </div>
     </nav>
 
+    {# macro to create a method label #}
+    {% macro label_for_method(method) %}
+    {% if method == "GET" %}
+    {% set label_class = "label-primary" %}
+    {% elif method == "POST" %}
+    {% set label_class = "label-info" %}
+    {% elif method == "PUT" %}
+    {% set label_class = "label-success" %}
+    {% elif method == "DELETE" %}
+    {% set label_class = "label-danger" %}
+    {% endif %}
+    <span class="label {{label_class}}">{{method.lower()}}</span>
+    {% endmacro %}
+
+    {# formatting information #}
+    {% set local_api = [] %}
+    {% set parent_apis = [] %}
+    {% for api in model.apis|sort(attribute='path') %}
+    {% set methods = [] %}
+    {% for operation in api.operations|sort %}
+    {% do methods.append(operation['method']) %}
+    {% do methods.sort() %}
+    {% endfor %}
+    {% if api.parent_resource_name and api.parent_resource_name != 'me' %}
+    {% do parent_apis.append({"parent_resource": api.parent_resource_name, "parent_url": api.parent_remote_name, "model_name": model.resource_name, "methods": methods}) %}
+    {% else %}
+    {% do local_api.append({"path": api.path, "methods": methods}) %}
+    {% endif %}
+    {% endfor %}
 
     <div class="container" id="top">
 
         <h1>{{model.name}}</h1>
         <p>{{model.description}}</p>
 
-        <h2 id="accessing">Accessing the object</h2>
-        <ul class="list-group">
-        {% for api in model.apis|sort(attribute='path') %}
 
-            {% set methods = [] %}
-            {% for operation in api.operations|sort %}
-                {% do methods.append(operation['method']) %}
-            {% endfor %}
 
-            <li class="list-group-item">
-                <span class="fixed-text">
-                {% if api.parent_resource_name and api.parent_resource_name != 'me' %}
-                {% set parent_resource = api.parent_resource_name %}
-                {% set parent_url = api.parent_remote_name %}
-                {% set model_name = model.resource_name %}
-                    /<a href="{{parent_url}}.html">{{parent_resource}}</a>/{id}/{{model_name}}
-                {% else %}
-                    {{api.path}}
-                {% endif %}
-                </span>
 
-                {% for method in methods|sort|reverse %}
-                {% if method == "GET" %}
-                {% set label_class = "label-primary" %}
-                {% elif method == "POST" %}
-                {% set label_class = "label-info" %}
-                {% elif method == "PUT" %}
-                {% set label_class = "label-success" %}
-                {% elif method == "DELETE" %}
-                {% set label_class = "label-danger" %}
-                {% endif %}
-                <span class="label {{label_class}} float-right" style="margin-left: 5px">{{method.lower()}}</span>
-                {% endfor %}
+        <h3 id="self">API</h3>
+        {% if local_api|count %}
+        <table class="table">
+            <tr>
+                <td>
+                    <span class="fixed-text">{{local_api[0].path}}</span>
+                </td>
+                <td>
+                <td style="text-align: right; font-size: 13px">
+                    {% for method in local_api[0].methods %}
+                    {{label_for_method(method)}}
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+        {% else %}
+        <p>This object is not dircetly accessible.</p>
+        {% endif %}
 
-            </li>
 
-        {% endfor %}
-        </ul>
-
-        <h2 id="overview">Object overview</h2>
+        <h3 id="overview">Object overview</h3>
         <div class="well well-sm fixed-text">
             {
             <ul>
@@ -120,11 +133,32 @@
             }
         </div>
 
-        <h2>Children of the object</h2>
-        {% if model.relations|count == 0 %}
-        <p> This object has no children</p>
+
+        <h3 id="parents">Parents</h3>
+        <table class="table">
+
+        {% if parent_apis|count %}
+        {% for api in parent_apis %}
+            <tr>
+                <td>
+                    <span class="fixed-text">/<a href="{{parent_url}}.html">{{api.parent_resource}}</a>/id/{{api.model_name}}</span>
+                </td>
+                <td style="text-align: right; font-size: 13px">
+                    {% for method in api.methods %}
+                    {{label_for_method(method)}}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+        {% else %}
+        <p>This object has no parent API.</p>
         {% endif %}
-        <ul class="list-group">
+
+
+
+        <h3 id="children">Children</h2>
+        <table class="table">
         {% for relation in model.relations|sort %}
 
         {% set api = relation.api %}
@@ -139,29 +173,23 @@
                 {% do methods.append(operation['method']) %}
             {% endfor %}
 
-            <li class="list-group-item">
-                <span class="fixed-text">
-                    /{{object_name}}/{id}/<a href="{{remote_name}}.html">{{resource_name}}</a>
-                </span>
-                {% for method in methods|sort|reverse %}
-                {% if method == "GET" %}
-                {% set label_class = "label-primary" %}
-                {% elif method == "POST" %}
-                {% set label_class = "label-info" %}
-                {% elif method == "PUT" %}
-                {% set label_class = "label-success" %}
-                {% elif method == "DELETE" %}
-                {% set label_class = "label-danger" %}
-                {% endif %}
-
-                <span class="label {{label_class}} float-right" style="margin-left: 5px">{{method.lower()}}</span>
-                {% endfor %}
-            </li>
+            <tr>
+                <td>
+                    <span class="fixed-text">
+                        /{{object_name}}/id/<a href="{{remote_name}}.html">{{resource_name}}</a>
+                    </span>
+                </td>
+                <td style="text-align: right; font-size: 13px">
+                    {% for method in methods|sort|reverse %}
+                    {{label_for_method(method)}}
+                    {% endfor %}
+                </td>
+            </tr>
         {% endfor %}
-        </ul>
+        </table>
 
 
-        <h2 id="attributes">Attributes documentation</h2>
+        <h3 id="attributes">Attributes documentation</h3>
         {% for attribute in model.attributes|sort(attribute='local_name') %}
         <div class="panel panel-default" id="attr_{{attribute.remote_name}}">
             <div class="panel-heading fixed-text">
