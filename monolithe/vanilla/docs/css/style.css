@@ -1,149 +1,10 @@
-html {
-    margin: 0;
-    padding: 0;
+.code {
+    white-space: pre;
+    font-family: Menlo, Courier;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Open Sans", "Helvetica";
-    font-size: 0.9em;
-}
-
-h1 {
-    font-weight: bold;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-}
-
-h2 {
-    color: #333;
-    font-weight: bold;
-    font-size: 1em;
-    margin-top: 50px;
-    border-bottom: 1px solid #f3f3f3;
-}
-
-h3 {
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-a {
-    text-decoration: none;
-    color: #6B94EC;
-}
-
-ul {
-    font-size: 0.9em;
-}
-
-.anchor {
-    display: block;
-    position: relative;
-    top: -130px;
-}
-
-.header {
-    width: 100%;
-    background-color: #F0F0F0;
-    z-index: 1000;
-    position: fixed;
-    border-bottom: 1px solid #f0f0f0;
-    background-image: url(../img/nuage_logo.png);
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 300px;
-}
-
-.header .summary {
-    padding: 20px;
-}
-
-.header .nav table {
-    width: 100%;
-    text-align: center;
-    font-size: 0.9em;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.main {
-    padding: 20px;
-    padding-top: 140px;
-}
-
-.compact-title {
-    display: none;
-}
-
-.summary {
-}
-
-.box {
-}
-
-.httpmethods {
-    color: #666;
-}
-
-.box ul {
-    font-family: 'Source Code Pro', Menlo, Courier;
-    list-style: none;
-    padding-left: 20px;
-}
-
-.box ul li {
-    margin-bottom: 5px;
-}
-
-.attributedescription {
-    margin-top: 10px;
-    background-color: white;
-    border: 1px solid #f3f3f3;
-    font-family: "Open Sans", "Helvetica";
-}
-
-.attributedescription .titlebanner {
-    padding: 8px;
-    background-color: #f3f3f3;
-}
-
-.attributedescription .content {
-    padding: 10px;
-}
-
-.attributedescription .name {
-    font-family: 'Source Code Pro', Menlo, Courier;
-    font-weight: bold;
-    margin: 0;
-    font-size: 0.9em;
-}
-
-.attributedescription .metainformation {
-    margin-top: 8px;
-    margin-bottom: 0px;
-    font-weight: normal;
-}
-
-.tag {
-    font-family: 'Source Code Pro', Menlo, Courier;
-    font-size: 0.7em;
-    padding: 2px;
-    padding-left: 6px;
-    padding-right: 6px;
-}
-
-.tagrequired {
-    color: white;
-    background-color: #F15C65;
-}
-
-.tagunique {
-    color: white;
-    background-color: #6B6B6B;
+.fixed-text {
+    font-family: Menlo, Courier;
 }
 
 .enumvalues {
@@ -155,11 +16,6 @@ ul {
     list-style: none;
     padding-left: 5px;
     color: #444;
-}
-
-.description p {
-    line-height: 20px;
-    margin: 2px;
 }
 
 .type_int, .type_integer, .type_long, .type_float {
@@ -206,36 +62,6 @@ ul {
     display: block;
 }
 
-@media screen and (max-width: 600px) {
-    .header {
-        display: none;
-    }
-
-    .compact-title {
-        display: block;
-    }
-
-    .main {
-        padding: 10px;
-    }
-
-    body {
-        font-size: 0.6em;
-    }
-
-    h2 {
-        margin-top: 20px;
-    }
-
-    h2:nth-of-type(1) {
-        margin-top: 0px;
-    }
-
-    .box ul {
-        padding: 10px;
-    }
-
-    .attributedescription .content {
-        padding: 5px;
-    }
+.float-right {
+    float: right;
 }
