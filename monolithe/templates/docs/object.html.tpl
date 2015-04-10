@@ -4,10 +4,10 @@
     <link href="css/style.css" rel="stylesheet">
 </header>
 
-<body style="padding-top: 70px">
+<body>
 
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -56,7 +56,7 @@
 
             {% set methods = [] %}
             {% for operation in api.operations|sort %}
-                {% do methods.append('<span title="' + operation['summary'] + '">' + operation['method'] + '</span>') %}
+                {% do methods.append(operation['method']) %}
             {% endfor %}
 
             <li class="list-group-item">
@@ -71,8 +71,17 @@
                 {% endif %}
                 </span>
 
-                {% for method in methods|sort %}
-                <span class="label label-primary float-right" style="margin-left: 5px">{{method.lower()}}</span>
+                {% for method in methods|sort|reverse %}
+                {% if method == "GET" %}
+                {% set label_class = "label-primary" %}
+                {% elif method == "POST" %}
+                {% set label_class = "label-info" %}
+                {% elif method == "PUT" %}
+                {% set label_class = "label-success" %}
+                {% elif method == "DELETE" %}
+                {% set label_class = "label-danger" %}
+                {% endif %}
+                <span class="label {{label_class}} float-right" style="margin-left: 5px">{{method.lower()}}</span>
                 {% endfor %}
 
             </li>
@@ -127,15 +136,25 @@
         {% set path = api.path %}
 
             {% for operation in api.operations %}
-                {% do methods.append('<span title="' + operation['summary'] + '">' + operation['method'] + '</span>') %}
+                {% do methods.append(operation['method']) %}
             {% endfor %}
 
             <li class="list-group-item">
                 <span class="fixed-text">
                     /{{object_name}}/{id}/<a href="{{remote_name}}.html">{{resource_name}}</a>
                 </span>
-                {% for method in methods|sort %}
-                <span class="label label-primary float-right" style="margin-left: 5px">{{method.lower()}}</span>
+                {% for method in methods|sort|reverse %}
+                {% if method == "GET" %}
+                {% set label_class = "label-primary" %}
+                {% elif method == "POST" %}
+                {% set label_class = "label-info" %}
+                {% elif method == "PUT" %}
+                {% set label_class = "label-success" %}
+                {% elif method == "DELETE" %}
+                {% set label_class = "label-danger" %}
+                {% endif %}
+
+                <span class="label {{label_class}} float-right" style="margin-left: 5px">{{method.lower()}}</span>
                 {% endfor %}
             </li>
         {% endfor %}
@@ -144,9 +163,9 @@
 
         <h2 id="attributes">Attributes documentation</h2>
         {% for attribute in model.attributes|sort(attribute='local_name') %}
-        <div class="panel panel-default">
+        <div class="panel panel-default" id="attr_{{attribute.remote_name}}">
             <div class="panel-heading fixed-text"><b>{{attribute.remote_name}}</b>
-                <span class="type_{{attribute.remote_type}} fixed-text" id="attr_{{attribute.remote_name}}">{{attribute.remote_type}}</span>
+                <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.remote_type}}</span>
                 {% if attribute.is_required %}
                 <span class="label label-default float-right">required</span>
                 {% endif %}
@@ -156,11 +175,12 @@
             </div>
 
             <div class="panel-body">
+                <p><b>Discussion</b></p>
                 <p>{{attribute.description}}</p>
 
                 {% if attribute.choices %}
+                <p><b>Allowed values</b></p>
                 <div class="panel panel-info">
-                    <div class="panel-heading"><b>Allowed values</b></div>
                     <ul class="list-group fixed-text">
                     {% for value in attribute.choices|sort %}
                         <li class="list-group-item">{{value}}</li>
@@ -169,7 +189,8 @@
                 </div>
                 {% endif %}
 
-                <p><b>vsdk attribute: </b><span class="fixed-text">{{attribute.local_name}}</span></p>
+                <p><b>vsdk attribute</b></p>
+                <p class="fixed-text">{{attribute.local_name}}</p>
             </div>
         </div>
         {% endfor %}
