@@ -139,8 +139,6 @@ class SwaggerURLParser(object):
         if resource_name == 'Metadata':
             # Make copy for global metadata and aggregate
             # Sad that I had to do that :(
-            Printer.log('Metadata found!')
-
             info = results[resource_name]
 
             metadata_info = deepcopy(info)
