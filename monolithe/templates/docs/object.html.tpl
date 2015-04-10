@@ -164,10 +164,11 @@
         <h2 id="attributes">Attributes documentation</h2>
         {% for attribute in model.attributes|sort(attribute='local_name') %}
         <div class="panel panel-default" id="attr_{{attribute.remote_name}}">
-            <div class="panel-heading fixed-text"><b>{{attribute.remote_name}}</b>
+            <div class="panel-heading fixed-text">
+                <b>{{attribute.remote_name}}</b>
                 <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.remote_type}}</span>
                 {% if attribute.is_required %}
-                <span class="label label-default float-right">required</span>
+                <span class="label label-danger float-right">required</span>
                 {% endif %}
                 {% if attribute.is_unique %}
                 <span class="label label-info float-right">unique</span>
