@@ -21,7 +21,7 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
-                    <li><a data-id="intro" href="#intro">{{model.name}}</a></li>
+                    <li><a data-id="intro" href="#intro">Top</a></li>
                     <li><a data-id="apiresources" href="#apiresources">API Resources</a></li>
                     <li><a data-id="overview" href="#overview">Overview</a></li>
                     <li><a data-id="parents" href="#parents">Parents</a></li>
@@ -35,10 +35,14 @@
                         </ul>
                     </li>
                 </ul>
-                <div class="form-group searchbox">
-                    <input type="search" class="form-control" placeholder="Search" id="searchfield">
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" id="searchresult" style="display: none"></ul>
-                </div>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group dropdown" style="display: inline">
+                        <div style="display: table-cell;">
+                            <input type="text" class="form-control" placeholder="Search" id="searchfield">
+                            <ul class="dropdown-menu dropdown-menu-left" role="menu" id="searchresult" style="display: none"></ul>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </nav>

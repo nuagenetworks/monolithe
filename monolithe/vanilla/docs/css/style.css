@@ -83,11 +83,3 @@ section {
     overflow: hidden;
     overflow-y: auto;
 }
-
-.searchbox {
-    width: 150px;
-    float: right;
-    margin-right: 5px;
-    margin-top: 8px;
-    margin-bottom: 0px;
-}

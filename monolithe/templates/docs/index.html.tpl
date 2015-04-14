@@ -33,10 +33,14 @@
                         </ul>
                     </li>
                 </ul>
-                <div class="form-group searchbox">
-                    <input type="text" class="form-control" placeholder="Search" id="searchfield">
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" id="searchresult" style="display: none"></ul>
-                </div>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group dropdown" style="display: inline">
+                        <div style="display: table-cell;">
+                            <input type="text" class="form-control" placeholder="Search" id="searchfield">
+                            <ul class="dropdown-menu dropdown-menu-left" role="menu" id="searchresult" style="display: none"></ul>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </nav>
