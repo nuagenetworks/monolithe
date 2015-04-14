@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>{{model.name}} API Reference</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -36,11 +36,9 @@
                     </li>
                 </ul>
                 <form class="navbar-form navbar-right" role="search">
-                    <div class="form-group dropdown" style="display: inline">
-                        <div style="display: table-cell;">
-                            <input type="text" class="form-control" placeholder="Search" id="searchfield">
-                            <ul class="dropdown-menu dropdown-menu-left" role="menu" id="searchresult" style="display: none"></ul>
-                        </div>
+                    <div class="form-group dropdown">
+                        <input type="text" class="form-control" placeholder="Search" id="searchfield">
+                        <ul class="dropdown-menu dropdown-menu-left" role="menu" id="searchresult" style="display: none"></ul>
                     </div>
                 </form>
             </div>
