@@ -1,14 +1,15 @@
-<html>
-<header>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-</header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{model.name}} API Reference</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
 
-<body>
+<body data-spy="scroll" data-target="#navbarmain">
 
-
-    <nav class="navbar navbar-inverse navbar-static-top">
-        <div class="container">
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="navbarmain">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -16,30 +17,28 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">VSD API Documentation</a>
+                <a class="navbar-brand" href="index.html">VSD API Documentation</a>
             </div>
-
-            <div id="navbar" class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
-                    <li class=""><a href="index.html">Home</a></li>
-                    <li class=""><a href="usage.html">API Usage</a></li>
-                    <li class="#top"><a href="#top">Top</a></li>
+                    <li><a data-id="intro" href="#intro">{{model.name}}</a></li>
+                    <li><a data-id="apiresources" href="#apiresources">API Resources</a></li>
+                    <li><a data-id="overview" href="#overview">Overview</a></li>
+                    <li><a data-id="parents" href="#parents">Parents</a></li>
+                    <li><a data-id="children" href="#children">Children</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Navigation <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Attributes <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li class=""><a href="#parents">Parents</a></li>
-                            <li class="divider"></li>
-                            <li class=""><a href="#overview">Overview</a></li>
-                            <li class="divider"></li>
-                            <li class=""><a href="#children">Children</a></li>
-                            <li class="divider"></li>
-                            <li class=""><a href="#attributes">Attributes</a></li>
                             {% for attribute in model.attributes|sort(attribute='local_name') %}
-                            <li class=""><a href="#attr_{{attribute.remote_name}}"><span class="fixed-text">{{attribute.remote_name}}</span></a></li>
+                            <li><a data-id="attr_{{attribute.remote_name}}" href="#attr_{{attribute.remote_name}}" class="fixed-text">{{attribute.remote_name}}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
                 </ul>
+                <div class="form-group searchbox">
+                    <input type="search" class="form-control" placeholder="Search" id="searchfield">
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" id="searchresult" style="display: none"></ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -59,7 +58,7 @@
     {% endmacro %}
 
     {# formatting information #}
-    {% set local_api = [] %}
+    {% set local_apis = [] %}
     {% set parent_apis = [] %}
     {% for api in model.apis|sort(attribute='path') %}
     {% set methods = [] %}
@@ -70,163 +69,182 @@
     {% if api.parent_resource_name and api.parent_resource_name != 'me' %}
     {% do parent_apis.append({"parent_resource": api.parent_resource_name, "parent_url": api.parent_remote_name, "model_name": model.resource_name, "methods": methods}) %}
     {% else %}
-    {% do local_api.append({"path": api.path, "methods": methods}) %}
+    {% do local_apis.append({"path": api.path.replace("{id}", "id"), "methods": methods}) %}
     {% endif %}
     {% endfor %}
 
-    <div class="container" id="top">
+    <div class="container">
 
-        <h1>{{model.name}}</h1>
-        <p>{{model.description}}</p>
+        <section id="intro">
+            <h1>{{model.name}}</h1>
+            <p>{{model.description}}</p>
+        </section>
 
+        <section id="apiresources">
+            <h3>API Resource</h3>
+            {% if local_apis|count %}
+            <table class="table">
+                {% for local_api in local_apis %}
+                <tr>
+                    <td>
+                        <span class="fixed-text">{{local_api.path}}</span>
+                    </td>
+                    <td style="text-align: right; font-size: 13px">
+                        {% for method in local_api.methods %}
+                        {{label_for_method(method)}}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr><td></td><td></td></tr>
+            </table>
+            {% else %}
+            <p>This object is not dircetly accessible.</p>
+            {% endif %}
+        </section>
 
+        <section id="overview">
+            <h3>Object overview</h3>
+            <div class="well well-sm fixed-text">
+                {
+                <ul>
+                {% for attribute in model.attributes|sort(attribute='local_name') %}
+                    {% set type = attribute.remote_type %}
+                    {% set description = attribute.description %}
+                    {% set required = attribute.is_required %}
+                    {% set allowed = [] %}
+                    {% set allowed_values = "" %}
 
-
-        <h3 id="self">API</h3>
-        {% if local_api|count %}
-        <table class="table">
-            <tr>
-                <td>
-                    <span class="fixed-text">{{local_api[0].path}}</span>
-                </td>
-                <td>
-                <td style="text-align: right; font-size: 13px">
-                    {% for method in local_api[0].methods %}
-                    {{label_for_method(method)}}
-                    {% endfor %}
-                </td>
-            </tr>
-        </table>
-        {% else %}
-        <p>This object is not dircetly accessible.</p>
-        {% endif %}
-
-
-        <h3 id="overview">Object overview</h3>
-        <div class="well well-sm fixed-text">
-            {
-            <ul>
-            {% for attribute in model.attributes|sort(attribute='local_name') %}
-                {% set type = attribute.remote_type %}
-                {% set description = attribute.description %}
-                {% set required = attribute.is_required %}
-                {% set allowed = [] %}
-                {% set allowed_values = "" %}
-
-                {% if attribute.choices %}
-                    {% for value in attribute.choices|sort %}
-                        {% do allowed.append(value) %}
-                    {% endfor %}
-                    {% if allowed|count > 0 %}
-                        {% set allowed_values = " (" + allowed|join("|") + ")" %}
+                    {% if attribute.choices %}
+                        {% for value in attribute.choices|sort %}
+                            {% do allowed.append(value) %}
+                        {% endfor %}
+                        {% if allowed|count > 0 %}
+                            {% set allowed_values = " (" + allowed|join("|") + ")" %}
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-                <li style="list-style: none">
-                    <a href="#attr_{{attribute.remote_name}}" title="{{description}}">{{attribute.remote_name}}</a>:
-                    <span class="type_{{type}}">{{type}}{{allowed_values}}</span>
-                    {% if required %}
-                    <span class="label label-primary fixed-text">required</span>
-                    {% endif %}{% if not loop.last %},{% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-            }
-        </div>
+                    <li style="list-style: none">
+                        <a href="#attr_{{attribute.remote_name}}" title="{{description}}">{{attribute.remote_name}}</a>:
+                        <span class="type_{{type}}">{{type}}{{allowed_values}}</span>
+                        {% if required %}
+                        <span class="label label-primary fixed-text">required</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+                }
+            </div>
+        </section>
 
+        <section id="parents">
+            <h3>Parents</h3>
+            <table class="table">
+                {% if parent_apis|count %}
+                {% for api in parent_apis %}
+                <tr>
+                    <td>
+                        <span class="fixed-text">/<a href="{{api.parent_url}}.html">{{api.parent_resource}}</a>/id/{{api.model_name}}</span>
+                    </td>
+                    <td style="text-align: right; font-size: 13px">
+                        {% for method in api.methods %}
+                        {{label_for_method(method)}}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr><td></td><td></td></tr>
+            </table>
+            {% else %}
+            <p>This object has no parent API.</p>
+            {% endif %}
+        </section>
 
-        <h3 id="parents">Parents</h3>
-        <table class="table">
-
-        {% if parent_apis|count %}
-        {% for api in parent_apis %}
-            <tr>
-                <td>
-                    <span class="fixed-text">/<a href="{{parent_url}}.html">{{api.parent_resource}}</a>/id/{{api.model_name}}</span>
-                </td>
-                <td style="text-align: right; font-size: 13px">
-                    {% for method in api.methods %}
-                    {{label_for_method(method)}}
-                    {% endfor %}
-                </td>
-            </tr>
-        {% endfor %}
-        </table>
-        {% else %}
-        <p>This object has no parent API.</p>
-        {% endif %}
-
-
-
-        <h3 id="children">Children</h2>
-        <table class="table">
-        {% for relation in model.relations|sort %}
-
-        {% set api = relation.api %}
-
-        {% set methods = [] %}
-        {% set object_name = model.resource_name %}
-        {% set remote_name = relation.remote_name %}
-        {% set resource_name = relation.resource_name %}
-        {% set path = api.path %}
-
-            {% for operation in api.operations %}
+        <section id="children">
+            <h3>Children</h3>
+            {% if model.relations|count %}
+            <table class="table">
+                {% for relation in model.relations|sort %}
+                {% set api = relation.api %}
+                {% set methods = [] %}
+                {% set object_name = model.resource_name %}
+                {% set remote_name = relation.remote_name %}
+                {% set resource_name = relation.resource_name %}
+                {% set path = api.path %}
+                {% for operation in api.operations %}
                 {% do methods.append(operation['method']) %}
-            {% endfor %}
+                {% endfor %}
+                <tr>
+                    <td>
+                        <span class="fixed-text">
+                            /{{object_name}}/id/<a href="{{remote_name}}.html">{{resource_name}}</a>
+                        </span>
+                    </td>
+                    <td style="text-align: right; font-size: 13px">
+                        {% for method in methods|sort|reverse %}
+                        {{label_for_method(method)}}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr><td></td><td></td></tr>
+            </table>
+            {% else %}
+            <p>This object has no child.</p>
+            {% endif %}
+        </section>
 
-            <tr>
-                <td>
-                    <span class="fixed-text">
-                        /{{object_name}}/id/<a href="{{remote_name}}.html">{{resource_name}}</a>
-                    </span>
-                </td>
-                <td style="text-align: right; font-size: 13px">
-                    {% for method in methods|sort|reverse %}
-                    {{label_for_method(method)}}
-                    {% endfor %}
-                </td>
-            </tr>
-        {% endfor %}
-        </table>
+        <section id="attributes">
+            <h3>Attributes documentation</h3>
+            {% for attribute in model.attributes|sort(attribute='local_name') %}
+            <section id="attr_{{attribute.remote_name}}" class="filterable" data-filter-keyword="{{attribute.remote_name}}" style="padding-top: 60px; margin-top: -60px;">
+                <div class="panel panel-default">
+                    <div class="panel-heading fixed-text">
+                        <b>{{attribute.remote_name}}</b>
+                        <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.remote_type}}</span>
+                        {% if attribute.is_required %}
+                        <span class="label label-danger float-right">required</span>
+                        {% endif %}
+                        {% if attribute.is_unique %}
+                        <span class="label label-info float-right">unique</span>
+                        {% endif %}
+                    </div>
 
+                    <div class="panel-body">
+                        <p><b>Discussion</b></p>
+                        <p>{{attribute.description}}</p>
 
-        <h3 id="attributes">Attributes documentation</h3>
-        {% for attribute in model.attributes|sort(attribute='local_name') %}
-        <div class="panel panel-default" id="attr_{{attribute.remote_name}}">
-            <div class="panel-heading fixed-text">
-                <b>{{attribute.remote_name}}</b>
-                <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.remote_type}}</span>
-                {% if attribute.is_required %}
-                <span class="label label-danger float-right">required</span>
-                {% endif %}
-                {% if attribute.is_unique %}
-                <span class="label label-info float-right">unique</span>
-                {% endif %}
-            </div>
+                        {% if attribute.choices %}
+                        <p><b>Allowed values</b></p>
+                        <div class="panel panel-info">
+                            <ul class="list-group fixed-text">
+                            {% for value in attribute.choices|sort %}
+                                <li class="list-group-item">{{value}}</li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
 
-            <div class="panel-body">
-                <p><b>Discussion</b></p>
-                <p>{{attribute.description}}</p>
-
-                {% if attribute.choices %}
-                <p><b>Allowed values</b></p>
-                <div class="panel panel-info">
-                    <ul class="list-group fixed-text">
-                    {% for value in attribute.choices|sort %}
-                        <li class="list-group-item">{{value}}</li>
-                    {% endfor %}
-                    </ul>
+                        <p><b>vsdk attribute</b></p>
+                        <p class="fixed-text">{{attribute.local_name}}</p>
+                    </div>
                 </div>
-                {% endif %}
+            </section>
+            {% endfor %}
+        </section>
 
-                <p><b>vsdk attribute</b></p>
-                <p class="fixed-text">{{attribute.local_name}}</p>
-            </div>
-        </div>
-        {% endfor %}
+    </div>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/search.js"></script>
 
+    <script>
+        $(document).ready(function()
+        {
+            initialize_search("attr_");
+            initialize_scrollspy();
+        });
+    </script>
 </body>
 </html>

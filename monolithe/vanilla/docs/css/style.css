@@ -1,3 +1,14 @@
+body {
+    position: relative;
+    padding-top: 40px;
+    overflow: auto;
+}
+
+section {
+    padding-top:40px;
+    margin-top:-40px;
+}
+
 .code {
     white-space: pre;
     font-family: Menlo, Courier;
@@ -65,4 +76,18 @@
 
 .float-right {
     float: right;
+}
+
+.dropdown-menu {
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.searchbox {
+    width: 150px;
+    float: right;
+    margin-right: 5px;
+    margin-top: 8px;
+    margin-bottom: 0px;
 }
