@@ -8,7 +8,7 @@
 
 <body data-spy="scroll" data-target="#navbarmain">
 
-    <nav class="navbar navbar-inverse navbar-fixed-top" id="navbarmain">
+    <nav class="navbar navbar-default navbar-fixed-top" id="navbarmain">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -78,7 +78,7 @@
     <div class="container">
 
         <section id="intro">
-            <h1>{{model.name}}</h1>
+            <h2>{{model.name}}</h2>
             <p>{{model.description}}</p>
         </section>
 
@@ -109,7 +109,7 @@
             <h3>Object overview</h3>
             <div class="well well-sm fixed-text">
                 {
-                <ul>
+                <ul style="padding-left: 10px">
                 {% for attribute in model.attributes|sort(attribute='local_name') %}
                     {% set type = attribute.remote_type %}
                     {% set description = attribute.description %}
@@ -122,7 +122,7 @@
                             {% do allowed.append(value) %}
                         {% endfor %}
                         {% if allowed|count > 0 %}
-                            {% set allowed_values = " (" + allowed|join("|") + ")" %}
+                            {% set allowed_values = " (" + allowed|join(" | ") + ")" %}
                         {% endif %}
                     {% endif %}
                     <li style="list-style: none">
@@ -182,9 +182,11 @@
                         </span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
+                        <div style="pull-right">
                         {% for method in methods|sort|reverse %}
                         {{label_for_method(method)}}
                         {% endfor %}
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
