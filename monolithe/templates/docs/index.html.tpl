@@ -70,7 +70,7 @@
 
     <script>
         $(document).ready(function() {
-            initialize_search();
+            initialize_search("");
             initialize_scrollspy();
         });
     </script>
