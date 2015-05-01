@@ -57,7 +57,12 @@ PACKAGE_MAPPING = {
     '/systemconfig': 'System Configuration',
     '/usermgmt': 'User Management',
     '/vm': 'Virtual Machines',
-    '/vport': 'Core Networking'
+    '/vport': 'Core Networking',
+    '/certificate': 'Certificate',
+    '/cms': 'Cloud Management System',
+    '/ipsec': 'IP Sec',
+    '/keyserver': 'Key Server',
+    '/vmware': 'VMware',
 }
 
 

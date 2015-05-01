@@ -28,7 +28,7 @@
                         <ul class="dropdown-menu" role="menu">
                             {% for package_name, model_names in packages|dictsort %}
                             <li class="divider"></li>
-                            <li><a data-id="section-{{package_name}}" href="#section-{{package_name}}">{{package_name}}</a></li>
+                            <li><a data-id="section-{{package_name| replace(" ", "_")}}" href="#section-{{package_name | replace(" ", "_")}}">{{package_name}}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -46,14 +46,14 @@
     <div class="container" id="content">
 
         {% for package_name, model_names in packages|dictsort %}
-        <section id="section-{{package_name}}">
+        <section id="section-{{package_name | replace(" ", "_")}}">
             <h3>{{package_name}}</h3>
             <table class="table">
                 {% for model_name in model_names|sort %}
                 {% set model = models[model_name] %}
                 <tr>
                     <td>
-                        <a style="padding-top: 60px; margin-top: -60px" class="filterable"
+                        <a class="filterable"
                             data-filter-keyword="{{model.resource_name}}" id="{{model.resource_name}}" href="{{model.remote_name}}.html"
                             title="API reference for {{model.name}}">{{model.resource_name}}</a>
                     </td>

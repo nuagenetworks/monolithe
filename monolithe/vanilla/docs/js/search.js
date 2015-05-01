@@ -38,7 +38,7 @@ function initialize_search(id_prefix)
             if (keyword.match("^" + filter))
             {
                 item.click(function() {
-                    $("html,body").animate({scrollTop: $("#" + id_prefix + keyword).offset().top}, 300);
+                    $("html,body").animate({scrollTop: $("#" + id_prefix + keyword).offset().top - 60}, 300);
                     searchResult.css("display", "none");
                     searchfield.val(keyword);
                 })
@@ -54,7 +54,7 @@ function initialize_scrollspy()
 {
     $("body").scrollspy({target:"#navbarmain", offset: 0});
 
-    $("#navbarmain li a").click(function(event) {
+    $("#navbarmain li a[data-id]").click(function(event) {
         $("html,body").animate({scrollTop: $("#" + $(this).attr("data-id")).offset().top}, 300);
         return false;
     });
