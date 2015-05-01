@@ -284,7 +284,7 @@ class HTMLFileWriter(FileWriter):
         """
         template = self.env.get_template(HTMLFileWriter.MODEL_TEMPLATE)
         destination = self.directory
-        filename = '%s.html' % model.name.lower()
+        filename = '%s.html' % model.remote_name.lower()
         self.write(template=template, destination=destination, filename=filename, model=model)
         return (filename, model.name)
 

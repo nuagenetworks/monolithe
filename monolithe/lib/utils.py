@@ -8,7 +8,7 @@ from .printer import Printer
 class Utils(object):
     """ utils """
 
-    INVARIANT_NAMES = ['qos', 'vrs']
+    INVARIANT_NAMES = ['qos', 'vrs', 'cms', 'statistics']
 
     @classmethod
     def _string_clean(cls, string):
