@@ -2,6 +2,9 @@
 
 __all__ = ['Command']
 
+import os
+import shutil
+
 from .lib import SwaggerParser
 from .lib import Printer
 from .lib import SDKWriter, DocWriter, CourgetteWriter
@@ -20,7 +23,7 @@ class Command(object):
 
     """
     @classmethod
-    def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False):
+    def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False):
         """ Generate the Python SDK according to given parameters
 
             It will generate a new SDK from vanilla/vsdk sources or update the targeted repository.
@@ -32,6 +35,7 @@ class Command(object):
                 git_repository: the GIT repository URL from where to start
                 output_path: the path to the output directory
                 push: boolean to ask for the push or not
+                force: force removal of the existing codegen directory
 
         """
         path = Utils.remove_slash(path)
@@ -55,6 +59,9 @@ class Command(object):
             directory = '%s/%s' % (output_path, apiversion)
         else:
             directory = '%s/%s' % (CODEGEN_DIRECTORY, apiversion)
+
+        if force_removal and os.path.exists(directory):
+            shutil.rmtree(directory)
 
         # Grab existing sources
         git_manager = None
