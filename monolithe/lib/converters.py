@@ -134,7 +134,7 @@ class SwaggerToSpecConverter(object):
         resource = {
             'metadata': {},
             'apis': {
-                'parents': swagger_infos['apis'],
+                'parents': {api['path']: api for api in swagger_infos['apis']},
                 'children': None
             },
             'model': {
@@ -174,9 +174,9 @@ class SwaggerToSpecConverter(object):
                 relations: dict containing all relations between resources
 
         """
-        for api in apis:
+        for path, api in apis.iteritems():
 
-            path = api['path']
+            api.pop('path')
 
             if path.startswith('/'):
                 path = path[1:]
@@ -188,7 +188,7 @@ class SwaggerToSpecConverter(object):
             api['entityName'] = model['entityName']
 
             if model['RESTName'] not in relations:
-                relations[model['RESTName']] = []
+                relations[model['RESTName']] = {}
 
             # Parent relation
             parent_resource_name = names[0]
@@ -206,19 +206,17 @@ class SwaggerToSpecConverter(object):
 
             if should_create_relation:
                 if parent_rest_name not in relations:
-                    relations[parent_rest_name] = []
+                    relations[parent_rest_name] = {}
 
                 # Why ?
                 # model_api.parent_rest_name = parent_rest_name
                 # model_api.parent_resource_name = parent_resource_name
 
+                relations[parent_rest_name][path] = {
+                    'entityName': model['entityName'],
+                    'operations': api['operations']
+                }
 
-                relation = dict()
-                relation['entityName'] = model['entityName']
-                relation['path'] = api['path']
-                relation['operations'] = api['operations']
-
-                relations[parent_rest_name].append(relation)
 
     @classmethod
     def _process_attributes(cls, model):
@@ -245,10 +243,20 @@ class SwaggerToSpecConverter(object):
 
             if '$ref' in attribute:
                 attribute['type'] = attribute['$ref']
+                attribute.pop('$ref')
 
             if attribute['type'] == 'enum' and 'enum' in attribute:
                 attribute['allowedChoices'] = attribute['enum']
                 attribute.pop('enum')
+
+            if 'type' in attribute:
+                clean_type = attribute['type'].lower().strip()
+                if clean_type.startswith('array') or clean_type.startswith('collection'):
+                    attribute['type'] = 'array'
+
+            # Remove attributes
+            if 'items' in attribute:
+                attribute.pop('items')
 
             # Default values
             if 'filterable' not in attribute:
