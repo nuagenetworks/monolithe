@@ -4,7 +4,7 @@ import re
 
 from .utils import Utils
 from .printer import Printer
-from .objects import Model, ModelAttribute, ModelAPI, ModelRelation
+from .objects import Model, ModelAttribute, ModelAPI
 
 USER = 'User'
 RESTUSER = 'RESTUser'
@@ -80,34 +80,22 @@ class ModelsProcessor(object):
                 a processed list of resources
 
         """
-        relations = dict()
         models = dict()
 
         for resource_name, resource in resources.iteritems():
 
-            for name, swagger_model in resource['model'].iteritems():
+            # from pprint import pprint
+            # pprint(resource)
+            # raise Exception()
 
-                if name in IGNORED_RESOURCES:
-                    continue
+            model = Model()
+            model.description = resource['model']['description']
+            ModelsProcessor._process_package(model=model, package=resource['model']['package'])
+            ModelsProcessor._process_name(model=model, name=resource['model']['entityName'], resource_name=resource['model']['resourceName'])
+            ModelsProcessor._process_apis(model=model, apis=resource['apis'])
+            ModelsProcessor._process_attributes(model=model, attributes=resource['model']['attributes'])
 
-                # No APIs, no relations, go to hell !
-                if len(resource['apis']) == 0:
-                    continue
-
-                model = Model()
-                model.description = swagger_model['description']
-                ModelsProcessor._process_package(model=model, package=resource['package'])
-                ModelsProcessor._process_name(model=model, name=swagger_model['entityName'])
-                ModelsProcessor._process_apis(model=model, apis=resource['apis']['children'], relations=relations)
-                ModelsProcessor._process_attributes(model=model, properties=swagger_model['properties'])
-
-                models[model.name] = model
-
-        for name, model in models.iteritems():
-            ModelsProcessor._process_relations(model, relations)
-
-        # Specific case of the REST User
-        ModelsProcessor._process_rest_user(models, relations)
+            models[model.name] = model
 
         Printer.success('Processed succeed for %s objects' % len(models))
 
@@ -124,7 +112,7 @@ class ModelsProcessor(object):
             model.package = package
 
     @classmethod
-    def _process_name(cls, model, name):
+    def _process_name(cls, model, name, resource_name):
         """ Compute the name and plural name of from the swagger
             model
 
@@ -139,11 +127,14 @@ class ModelsProcessor(object):
             model.name = name
 
         model.instance_name = Utils.get_python_name(model.name)
+        model.instance_name = Utils.get_python_name(model.name)
         model.plural_name = Utils.get_plural_name(model.name)
         model.instance_plural_name = Utils.get_python_name(model.plural_name)
+        model.remote_name = Utils.get_singular_name(resource_name)
+        model.resource_name = resource_name
 
     @classmethod
-    def _process_apis(cls, model, apis, relations):
+    def _process_apis(cls, model, apis):
         """ Process apis for the given model
 
             Args:
@@ -152,59 +143,47 @@ class ModelsProcessor(object):
                 relations: dict containing all relations between resources
 
         """
-        for api in apis:
+        for path, api in apis['children'].iteritems():
 
-            path = api['path']
-
-            if path.startswith('/'):
-                path = path[1:]
-
-            model_api = ModelAPI()
-            model_api.path = '/%s' % path
-            model_api.operations = api['operations']  # TOIMPROVE
+            if api['entityName'] == model.name:
+                continue
 
             names = filter(bool, re.split('/\{id\}?/?', path))
 
-            model.resource_name = names[-1]
-            model.remote_name = Utils.get_singular_name(names[-1])
+            parent_resource_name = names[0]
+            parent_rest_name = Utils.get_singular_name(names[0])
 
-            if model.remote_name not in relations:
-                relations[model.remote_name] = []
+            model_api = ModelAPI()
+            model_api.resource_name = parent_resource_name
+            model_api.remote_name = parent_rest_name
+            model_api.plural_name = Utils.get_plural_name(api['entityName'])
+            model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
+            model_api.operations = api['operations']
+
+            model.apis['children'][path] = model_api
+
+        for path, api in apis['parents'].iteritems():
+
+            if api['entityName'] == model.name:
+                continue
+
+            # Check when it is necessary to use this !
+            names = filter(bool, re.split('/\{id\}?/?', path))
 
             parent_resource_name = names[0]
-            parent_remote_name = Utils.get_singular_name(names[0])
+            parent_rest_name = Utils.get_singular_name(names[0])
 
-            should_create_relation = False
+            model_api = ModelAPI()
+            model_api.resource_name = parent_resource_name
+            model_api.remote_name = parent_rest_name
+            model_api.plural_name = Utils.get_plural_name(api['entityName'])
+            model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
+            model_api.operations = api['operations']
 
-            if model.resource_name != parent_resource_name:
-                should_create_relation = True
-
-            elif model_api.operations[0]['method'] in ['GET', 'POST']:
-                should_create_relation = True
-                parent_resource_name = 'me'
-                parent_remote_name = RESTUSER
-
-            if should_create_relation:
-                if parent_remote_name not in relations:
-                    relations[parent_remote_name] = []
-
-                model_api.parent_remote_name = parent_remote_name
-                model_api.parent_resource_name = parent_resource_name
-
-                relation = ModelRelation()
-                relation.name = model.name
-                relation.plural_name = model.plural_name
-                relation.remote_name = model.remote_name
-                relation.resource_name = model.resource_name
-                relation.instance_plural_name = model.instance_plural_name
-                relation.api = model_api
-
-                relations[parent_remote_name].append(relation)
-
-            model.apis.append(model_api)
+            model.apis['children'][path] = model_api
 
     @classmethod
-    def _process_local_name(cls, name):
+    def _process_attribute_local_name(cls, name):
         """ Change local name according to the remote name
 
             Args:
@@ -220,7 +199,7 @@ class ModelsProcessor(object):
         return Utils.get_python_name(name)
 
     @classmethod
-    def _process_attributes(cls, model, properties):
+    def _process_attributes(cls, model, attributes):
         """ Removes ignored attributes and update attribute type / name
 
             Args:
@@ -229,102 +208,41 @@ class ModelsProcessor(object):
 
         """
 
-        for name, prop in properties.iteritems():
-
-            if name in IGNORED_ATTRIBUTES:
-                continue
+        for name, attr in attributes.iteritems():
 
             attribute = ModelAttribute()
             attribute.remote_name = name
-            attribute.local_name = cls._process_local_name(name)
-            attribute.description = prop['description']
+            attribute.local_name = cls._process_attribute_local_name(name)
 
-            if 'required' in prop and prop['required'] == 'true':
-                attribute.is_required = True
+            attribute.description = attr['description']
+            attribute.type = attr['type']
+            attribute.required = attr['required']
+            attribute.uniqueItems = attr['uniqueItems']
+            attribute.filterable = attr['filterable']
+            attribute.readonly = attr['readonly']
+            attribute.orderable = attr['orderable']
+            attribute.creationOnly = attr['creationOnly']
+            attribute.autogenerated = attr['autogenerated']
+            attribute.format = attr['format']
+            attribute.minLength = attr['minLength']
+            attribute.maxLength = attr['maxLength']
+            attribute.minValue = attr['minValue']
+            attribute.maxValue = attr['maxValue']
+            attribute.allowedChars = attr['allowedChars']
+            attribute.allowedChoices = attr['allowedChoices']
+            attribute.defaultOrder = attr['defaultOrder']
 
-            if 'uniqueItems' in prop and prop['uniqueItems'] == 'true':
-                attribute.is_unique = True
+            attribute.local_type = Utils.get_python_type_name(type_name=attribute.type, attribute_name=name, object_name=model.name)
 
-            if 'type' in prop:
-                attribute.remote_type = prop['type']
-                attribute.local_type = Utils.get_python_type_name(type_name=prop['type'], attribute_name=name, object_name=model.name)
-
-                # Should this model import the time or not according to its attributes
-                if attribute.local_type == 'time':
-                    model.has_time_attribute = True
-
-                if attribute.remote_type == 'enum':
-                    model.has_choices = True
-                    attribute.choices = prop['enum']
-
-            else:
-                attribute.local_type = Utils.get_python_type_name(type_name=prop['$ref'], attribute_name=name, object_name=model.name)
+            if attribute.local_type == 'time':
+                model.has_time_attribute = True
 
             if attribute.local_type:
                 model.attributes.append(attribute)
             else:
                 # Simply ignore attributes otherwise...
-                # 02/06/2015
+                # CS 02/06/2015
                 # Ignoring attribute enterprise of object InfrastructurePortProfile
                 # Ignoring attribute gateway of object InfrastructureGatewayProfile
                 # Ignoring attribute enterprise of object InfrastructureGatewayProfile
                 Printer.log("Deliberately ignoring attribute %s of object %s" % (attribute.remote_name, model.name))
-
-    @classmethod
-    def _process_relations(cls, model, relations):
-        """ Attach relations to the current model
-
-            Args:
-                model: the processed model
-                relations: all existing relations
-
-        """
-        if model.remote_name in relations:
-            model.relations = relations[model.remote_name]
-        else:
-            model.relations = []
-
-    @classmethod
-    def _process_rest_user(cls, models, relations):
-        """ Process the specific case of the NURESTUser object
-
-            Add a RESTUser object in models, based on User
-        """
-        from copy import deepcopy
-        rest_user_model = Model()
-        rest_user_model.name = RESTUSER
-        rest_user_model.remote_name = 'me'
-        rest_user_model.relations = relations[RESTUSER]
-        rest_user_model.attributes = deepcopy(models[USER].attributes)
-
-        ignored_attributes = ['restrictionDate']
-
-        for attribute in rest_user_model.attributes:
-            if attribute.remote_name in ignored_attributes:
-                rest_user_model.attributes.remove(attribute)
-
-        role = ModelAttribute()
-        role.description = u'Role of the user'
-        role.remote_name = u'role'
-        role.local_name = u'role'
-        role.remote_type = u'String'
-        role.local_type = u'str'
-        rest_user_model.attributes.append(role)
-
-        enterprise_id = ModelAttribute()
-        enterprise_id.description = u'Identifier of the enterprise'
-        enterprise_id.remote_name = u'enterpriseID'
-        enterprise_id.local_name = u'enterprise_id'
-        enterprise_id.remote_type = u'String'
-        enterprise_id.local_type = u'str'
-        rest_user_model.attributes.append(enterprise_id)
-
-        enterprise_name = ModelAttribute()
-        enterprise_name.description = u'Name of the enterprise'
-        enterprise_name.remote_name = u'enterpriseName'
-        enterprise_name.local_name = u'enterprise_name'
-        enterprise_name.remote_type = u'String'
-        enterprise_name.local_type = u'str'
-        rest_user_model.attributes.append(enterprise_name)
-
-        models[RESTUSER] = rest_user_model

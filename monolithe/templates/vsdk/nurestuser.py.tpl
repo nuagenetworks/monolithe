@@ -4,8 +4,8 @@
 # NU{{ model.name }}
 # {{ model.description }}
 
-{% for relation in model.relations %}
-from ..fetchers import NU{{ relation.plural_name }}Fetcher{% endfor %}
+{% for api in model.apis['children'].values() %}
+from ..fetchers import NU{{ api.plural_name }}Fetcher{% endfor %}
 from bambou import NURESTBasicUser{% if model.has_time_attribute %}
 from time import time{% endif %}
 
@@ -40,10 +40,10 @@ class NU{{ model.name }}(NURESTBasicUser):
         self._{{ attribute.local_name|lower }} = None{% endfor %}
         {% for attribute in model.attributes %}
         self.expose_attribute(local_name=u"{{ attribute.local_name|lower }}", remote_name=u"{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}{% if attribute.is_required %}, is_required=True{% endif %}{% if attribute.is_unique %}, is_unique=True{% endif %}{% if attribute.choices %}, choices={{ attribute.choices|sort|trim }}{% endif %}){% endfor %}
-        {% if model.relations|length > 0 %}
+        {% if model.apis['children']|length > 0 %}
         # Fetchers
-        {% for relation in model.relations %}
-        self.{{ relation.instance_plural_name }} = NU{{ relation.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
+        {% for api in model.apis['children'].values() %}
+        self.{{ api.instance_plural_name }} = NU{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
         {% endfor %}{% endif %}
 
         self._compute_args(**kwargs)

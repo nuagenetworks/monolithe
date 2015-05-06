@@ -28,8 +28,7 @@ class Model(object):
         self.resource_name = None  # The name of the resource used in URI
         self.package = None  # The name of the package where the model is defined
         self.attributes = []  # A list of all properties of the object
-        self.relations = []  # A list of children models
-        self.apis = []  # A list of all apis available for this model
+        self.apis = {'children': {}, 'parents': {}}  # A list of all apis available for this model
 
         self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
@@ -70,13 +69,18 @@ class ModelAPI(object):
                 parent_remote_name: enterprise
                 parent_resource_name: enterprises
         """
-        self.path = None
         self.method = None
-        self.parent_remote_name = None
-        self.parent_resource_name = None
+        # self.parent_remote_name = None
+        # self.parent_resource_name = None
         self.description = None
         self.parameters = []
         self.response_messages = []
+
+        self.resource_name = None
+        self.remote_name = None
+        self.plural_name = None
+        self.instance_plural_name = None
+
 
 class ModelOperation(object):
     """ Describe a model operation
