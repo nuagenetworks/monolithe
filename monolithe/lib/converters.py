@@ -111,7 +111,7 @@ class SwaggerToSpecConverter(object):
         # Specific case of the REST User
         SwaggerToSpecConverter._process_rest_user(specifications, relations)
 
-        Printer.success('Processed %s objects from swagger description files' % len(specifications))
+        Printer.success('Converted %s objects from swagger description files' % len(specifications))
 
         return specifications
 
@@ -120,7 +120,6 @@ class SwaggerToSpecConverter(object):
         """ Switch from swagger information to something more processable
 
         """
-
         model_name = swagger_infos['models'].keys()[0] # Still Metadata trick here...
 
         for api in swagger_infos['apis']:

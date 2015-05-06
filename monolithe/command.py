@@ -13,6 +13,7 @@ from .lib import ModelsProcessor
 from .lib import GitManager
 from .lib import Utils
 from .lib import SwaggerToSpecConverter
+from .lib import SpecParser
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'
@@ -55,7 +56,7 @@ class Command(object):
                 json.dump(spec, file, indent=4)
 
     @classmethod
-    def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False):
+    def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False, specs_path=None):
         """ Generate the Python SDK according to given parameters
 
             It will generate a new SDK from vanilla/vsdk sources or update the targeted repository.
@@ -82,6 +83,10 @@ class Command(object):
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources)
+
+        if specs_path is not None:
+            candidates = SpecParser.grab_all(specs_path)
+            specs.update(candidates)
 
         # Process Swagger models
         processed_resources = ModelsProcessor.process(resources=specs)

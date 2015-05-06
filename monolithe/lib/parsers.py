@@ -15,6 +15,7 @@ SCHEMA_FILEPATH = '/schema'
 SWAGGER_APIS = 'apis'
 SWAGGER_APIVERSION = 'apiVersion'
 SWAGGER_PATH = 'path'
+SPEC_EXTENSION = '.spec'
 
 ## Monkey patch to use PROTOCOL_TLSv1 by default in requests
 from requests.packages.urllib3.poolmanager import PoolManager
@@ -301,17 +302,7 @@ class SwaggerFileParser(AbstractSwaggerParser):
             Returns:
                 the corresponding JSON
         """
-        if not os.path.isfile(path):
-            Printer.raiseError("[File Path] Could not access %s" % (path))
-
-        data = None
-        try:
-            data = json.load(open(path))
-        except Exception:
-            e = sys.exc_info()[1]
-            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (path, e.args[0]))
-
-        return data
+        return JSONParser.parse(path)
 
     def get_information(self, path):
         """ Return information about
@@ -320,3 +311,66 @@ class SwaggerFileParser(AbstractSwaggerParser):
                 (package, resource_name)
         """
         return path.split(self.path)[1].rsplit('/', 1)
+
+
+class SpecParser(object):
+    """ Parse specifications directory """
+
+    @classmethod
+    def grab_all(cls, directory):
+        """ Grab all specification in given directory and return a dictionary of specs.
+
+            Returns:
+                A dictionary of specification
+
+        """
+
+        if not os.path.isdir(directory):
+            Printer.raiseError("[File Path] Not a directory %s" % (directory))
+
+        specs = dict()
+        filenames = []
+        for filename in os.listdir(directory):
+            if filename.endswith(SPEC_EXTENSION):
+                filenames.append(filename)
+                filepath = '%s/%s' % (directory, filename)
+
+                data = JSONParser.parse(filepath)
+                name = data['model']['entityName']
+
+                specs[name] = data
+
+        Printer.success('Parsed %s specifications' % len(filenames))
+        return specs
+
+
+class JSONParser(object):
+    """ Parse a JSON file"""
+
+    @classmethod
+    def parse(cls, filepath):
+        """ Parse the file located at filepath
+            and return a JSON structure
+
+            Args:
+                filepath: the path to the file
+
+            Returns:
+                A JSON Structure
+
+            Raises:
+                Exception if no content could be decoded
+
+        """
+        if not os.path.isfile(filepath):
+            Printer.raiseError("[File Path] Could not access %s" % (filepath))
+
+        data = None
+        try:
+            data = json.load(open(filepath))
+        except Exception:
+            e = sys.exc_info()[1]
+            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (filepath, e.args[0]))
+
+        return data
+

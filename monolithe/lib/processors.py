@@ -84,10 +84,6 @@ class ModelsProcessor(object):
 
         for resource_name, resource in resources.iteritems():
 
-            # from pprint import pprint
-            # pprint(resource)
-            # raise Exception()
-
             model = Model()
             model.description = resource['model']['description']
             ModelsProcessor._process_package(model=model, package=resource['model']['package'])
