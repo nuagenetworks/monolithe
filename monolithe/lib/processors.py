@@ -85,7 +85,7 @@ class ModelsProcessor(object):
 
         for resource_name, resource in resources.iteritems():
 
-            for name, swagger_model in resource['models'].iteritems():
+            for name, swagger_model in resource['model'].iteritems():
 
                 if name in IGNORED_RESOURCES:
                     continue
@@ -97,8 +97,8 @@ class ModelsProcessor(object):
                 model = Model()
                 model.description = swagger_model['description']
                 ModelsProcessor._process_package(model=model, package=resource['package'])
-                ModelsProcessor._process_name(model=model, name=swagger_model['id'])
-                ModelsProcessor._process_apis(model=model, apis=resource['apis'], relations=relations)
+                ModelsProcessor._process_name(model=model, name=swagger_model['entityName'])
+                ModelsProcessor._process_apis(model=model, apis=resource['apis']['children'], relations=relations)
                 ModelsProcessor._process_attributes(model=model, properties=swagger_model['properties'])
 
                 models[model.name] = model

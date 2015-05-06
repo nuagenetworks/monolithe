@@ -11,15 +11,19 @@ class Model(object):
         """ Initializes a model object
 
             Example:
-                name: Enterprise
-                plural_name: Enterprises
-                remote_name: enterprise
-                resource_name: enterprises
-                package: usermgt
+                name: EnterpriseNetwork
+                instance_name: enterprise_network
+                plural_name: EnterpriseNetworks
+                instance_plural_name: enterprise_networks
+                remote_name: enterprisenetwork
+                resource_name: enterprisenetworks
+                package: network
         """
         self.description = None
         self.name = None  # The original name of the object
+        self.instance_name = None # Name of the object as an instance
         self.plural_name = None  # the original name in plural
+        self.instance_plural_name = None # Name of the object as an instance of array or fetcher
         self.remote_name = None  # The remote name of the object
         self.resource_name = None  # The name of the resource used in URI
         self.package = None  # The name of the package where the model is defined

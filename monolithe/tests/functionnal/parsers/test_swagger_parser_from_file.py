@@ -3,7 +3,7 @@
 import os
 
 from unittest import TestCase
-from monolithe.lib.parsers import SwaggerParser, SwaggerFileParser
+from monolithe.lib.parsers import SwaggerParserFactory, SwaggerFileParser
 
 def get_valid_path():
     """ Returns swagger path """
@@ -19,17 +19,18 @@ class SwaggerFileParserTests(TestCase):
         """ SwaggerFileParser manages file parsing
 
         """
-        parser = SwaggerParser.factory(url=None, path=get_valid_path(), apiversion=None)
+        parser = SwaggerParserFactory.create(url=None, path=get_valid_path(), apiversion=None)
         self.assertEqual(type(parser), SwaggerFileParser)
 
     def test_grab_all(self):
         """ SwaggerFileParser grab all files and correct version
 
         """
+        print get_valid_path()
         parser = SwaggerFileParser(path=get_valid_path())
         resources = parser.grab_all()
 
-        self.assertEquals(len(resources), 107)
+        self.assertEquals(len(resources), 109)
         self.assertEquals(parser.apiversion, 3.1)
         self.assertIn('Enterprise', resources)
         self.assertEquals(resources['Enterprise'], {u'apiVersion': u'V3_1',

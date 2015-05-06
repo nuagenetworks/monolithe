@@ -4,16 +4,19 @@ __all__ = ['Command']
 
 import os
 import shutil
+import json
 
-from .lib import SwaggerParser
+from .lib import SwaggerParserFactory
 from .lib import Printer
 from .lib import SDKWriter, DocWriter, CourgetteWriter
 from .lib import ModelsProcessor
 from .lib import GitManager
 from .lib import Utils
+from .lib import SwaggerToSpecConverter
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'
+SPECGEN_DIRECTORY = './specgen'
 
 API_URL = 'web/docs/api/'
 
@@ -22,6 +25,36 @@ class Command(object):
     """ Command
 
     """
+    @classmethod
+    def generate_specs(cls, vsdurl, path, apiversion, output_path=None):
+        """ Generate specs
+
+        """
+        path = Utils.remove_slash(path)
+        url = cls._get_api_url(vsdurl)
+
+        if url is None and path is None:
+            Printer.raiseError("Please provide a vsd url or a path to swagger json file")
+
+        # Read Swagger
+        swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
+        resources = swagger_parser.grab_all()
+
+        # Processed Swagger models
+        specs = SwaggerToSpecConverter.convert(resources=resources)
+
+        if not output_path:
+            output_path = SPECGEN_DIRECTORY
+
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
+
+        for name, spec in specs.iteritems():
+            file_path = '%s/%s.spec' % (output_path, name.lower())
+            with open(file_path, 'wb') as file:
+                json.dump(spec, file, indent=2)
+
+
     @classmethod
     def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False):
         """ Generate the Python SDK according to given parameters
@@ -45,11 +78,11 @@ class Command(object):
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
         # Read Swagger
-        swagger_parser = SwaggerParser.factory(url=url, path=path, apiversion=apiversion)
+        swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
         resources = swagger_parser.grab_all()
 
         # Processed Swagger models
-        processed_resources = ModelsProcessor.process(resources=resources)
+        processed_resources = SwaggerToSpecConverter.convert(resources=resources)
 
         # Compute output directory according to the version
         if apiversion is None:
@@ -94,7 +127,7 @@ class Command(object):
         url = cls._get_api_url(vsdurl)
 
         # Read Swagger
-        swagger_parser = SwaggerParser.factory(url=url, apiversion=apiversion, path=path)
+        swagger_parser = SwaggerParserFactory.create(url=url, apiversion=apiversion, path=path)
         resources = swagger_parser.grab_all()
 
         # Processed Swagger models
@@ -131,7 +164,7 @@ class Command(object):
         url = cls._get_api_url(vsdurl)
 
         # Read Swagger
-        swagger_parser = SwaggerParser.factory(url=url, apiversion=apiversion, path=path)
+        swagger_parser = SwaggerParserFactory.create(url=url, apiversion=apiversion, path=path)
         resources = swagger_parser.grab_all()
 
         # Processed Swagger models
