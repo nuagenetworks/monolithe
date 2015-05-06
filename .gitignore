@@ -2,6 +2,7 @@
 _build/*
 codegen
 docgen
+specgen
 .DS_Store
 MANIFEST
 
