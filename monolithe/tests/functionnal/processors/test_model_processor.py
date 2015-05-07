@@ -4,12 +4,13 @@ import os
 
 from unittest import TestCase
 from monolithe.lib.parsers import SwaggerFileParser
+from monolithe.lib.converters import SwaggerToSpecConverter
 from monolithe.lib.processors import ModelsProcessor
 
 def get_valid_path():
     """ Returns swagger path """
 
-    return '%s/monolithe/tests/functionnal/V3_1' % os.getcwd()
+    return '%s/monolithe/tests/static/V3_1' % os.getcwd()
 
 
 class ModelsProcessorTests(TestCase):
@@ -22,7 +23,9 @@ class ModelsProcessorTests(TestCase):
 
         """
         parser = SwaggerFileParser(path=get_valid_path())
-        cls.resources = parser.grab_all()
+        swagger_resources = parser.grab_all()
+
+        cls.resources = SwaggerToSpecConverter.convert(resources=swagger_resources)
 
     def test_process_resources(self):
         """ ModelsProcessor process resources
@@ -47,11 +50,11 @@ class ModelsProcessorTests(TestCase):
         self.assertEquals(model_enterprise.plural_name, 'Enterprises')
         self.assertEquals(model_enterprise.instance_name, 'enterprise')
         self.assertEquals(model_enterprise.instance_plural_name, 'enterprises')
-        self.assertEquals(len(model_enterprise.relations), 26)
+        self.assertEquals(len(model_enterprise.apis['children']), 26)
 
         # Attributes
         attributes = model_enterprise.attributes
-        resource_properies = self.resources['Enterprise']['models']['Enterprise']['properties']
+        resource_properies = self.resources['Enterprise']['model']['attributes']
 
         self.assertEquals(len(attributes), 21)
 

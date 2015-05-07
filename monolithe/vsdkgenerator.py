@@ -52,15 +52,20 @@ def main(argv=sys.argv):
                         help="Force removal of the existing generated code",
                         action="store_true")
 
+    parser.add_argument('-s', "--specs",
+                        dest='specs_path',
+                        help="Path to directory that contains .spec files",
+                        type=str)
+
     args = parser.parse_args()
 
     from monolithe import Command
 
     if args.versions:
         for version in args.versions:
-            Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=version, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push, force_removal=args.force_removal)
+            Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=version, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push, force_removal=args.force_removal, specs_path=args.specs_path)
     else:
-        Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=None, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push, force_removal=args.force_removal)
+        Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=None, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push, force_removal=args.force_removal, specs_path=args.specs_path)
 
 if __name__ == '__main__':
     main()

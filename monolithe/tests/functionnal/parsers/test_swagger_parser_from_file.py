@@ -8,7 +8,7 @@ from monolithe.lib.parsers import SwaggerParserFactory, SwaggerFileParser
 def get_valid_path():
     """ Returns swagger path """
 
-    return '%s/monolithe/tests/functionnal/V3_1' % os.getcwd()
+    return '%s/monolithe/tests/static/V3_1' % os.getcwd()
 
 
 class SwaggerFileParserTests(TestCase):

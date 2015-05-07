@@ -13,6 +13,7 @@ from .lib import ModelsProcessor
 from .lib import GitManager
 from .lib import Utils
 from .lib import SwaggerToSpecConverter
+from .lib import SpecParser
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'
@@ -40,7 +41,7 @@ class Command(object):
         swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
         resources = swagger_parser.grab_all()
 
-        # Processed Swagger models
+        # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources)
 
         if not output_path:
@@ -52,11 +53,10 @@ class Command(object):
         for name, spec in specs.iteritems():
             file_path = '%s/%s.spec' % (output_path, name.lower())
             with open(file_path, 'wb') as file:
-                json.dump(spec, file, indent=2)
-
+                json.dump(spec, file, indent=4)
 
     @classmethod
-    def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False):
+    def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False, specs_path=None):
         """ Generate the Python SDK according to given parameters
 
             It will generate a new SDK from vanilla/vsdk sources or update the targeted repository.
@@ -81,8 +81,15 @@ class Command(object):
         swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
         resources = swagger_parser.grab_all()
 
-        # Processed Swagger models
-        processed_resources = SwaggerToSpecConverter.convert(resources=resources)
+        # Convert Swagger models
+        specs = SwaggerToSpecConverter.convert(resources=resources)
+
+        if specs_path is not None:
+            candidates = SpecParser.grab_all(specs_path)
+            specs.update(candidates)
+
+        # Process Swagger models
+        processed_resources = ModelsProcessor.process(resources=specs)
 
         # Compute output directory according to the version
         if apiversion is None:
@@ -130,8 +137,11 @@ class Command(object):
         swagger_parser = SwaggerParserFactory.create(url=url, apiversion=apiversion, path=path)
         resources = swagger_parser.grab_all()
 
-        # Processed Swagger models
-        processed_resources = ModelsProcessor.process(resources=resources)
+        # Convert Swagger models
+        specs = SwaggerToSpecConverter.convert(resources=resources)
+
+        # Process Swagger models
+        processed_resources = ModelsProcessor.process(resources=specs)
 
         # Compute output directory according to the version
         if apiversion is None:

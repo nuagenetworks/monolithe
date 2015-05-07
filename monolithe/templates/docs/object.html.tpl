@@ -163,15 +163,13 @@
 
         <section id="children">
             <h3>Children</h3>
-            {% if model.relations|count %}
+            {% if model.apis['children']|count %}
             <table class="table">
-                {% for relation in model.relations|sort %}
-                {% set api = relation.api %}
+                {% for path, api in model.apis['children'].iteriterms()|sort %}
                 {% set methods = [] %}
                 {% set object_name = model.resource_name %}
-                {% set remote_name = relation.remote_name %}
-                {% set resource_name = relation.resource_name %}
-                {% set path = api.path %}
+                {% set remote_name = api.remote_name %}
+                {% set resource_name = api.resource_name %}
                 {% for operation in api.operations %}
                 {% do methods.append(operation['method']) %}
                 {% endfor %}
