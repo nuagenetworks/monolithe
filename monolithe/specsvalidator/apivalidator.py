@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import json
 from validationerrors import APISpecAttributeDefinitionError
 from validationerrors import APISpecAttributeCapitalizationError
 from validationerrors import APISpecMissingTokenError
@@ -14,52 +13,17 @@ class APIValidator:
 
     """
 
-    def __init__(self, specification_file, candidate_file):
+    def __init__(self, specification, candidate):
         """ Initialize the validator
 
         """
-        self.specification_file = specification_file
-        self.candidate_file     = candidate_file
-        self.candidate          = None
-        self.specification      = None
+        self.candidate          = specification
+        self.specification      = candidate
         self.parent_api_errors  = []
         self.attribute_errors   = []
-        self.metadata           = None
-        self.object_rest_name   = None
-
-    def parse_specification_file(self):
-        """ Parse the API specification file
-
-        """
-        specification_file = open(self.specification_file, 'r')
-        specification_data = specification_file.read()
-        specification_file.close()
-        self.specification = json.loads(specification_data)
-
-        self.object_rest_name = self.specification["model"]["RESTName"]
-
-        if "metadata" in self.specification:
-            self.metadata = self.specification["metadata"]
-
-    def parse_candidate_file(self):
-        """ Parse the Candidate specification file
-
-        """
-        candidate_file = open(self.candidate_file, 'r')
-        candidate_data = candidate_file.read()
-        candidate_file.close()
-        self.candidate = json.loads(candidate_data)
 
     def run(self):
         """ Run the validation
-
-        """
-        self.parse_specification_file()
-        self.parse_candidate_file()
-        self.validate()
-
-    def validate(self):
-        """ Validate the candidate file against the API specification
 
         """
         self.validate_attributes_definition()
