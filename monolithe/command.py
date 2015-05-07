@@ -40,7 +40,7 @@ class Command(object):
 
         # Read Swagger
         swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
-        resources = swagger_parser.grab_all()
+        resources = swagger_parser.grab_all(filters=[entity_name])
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources)

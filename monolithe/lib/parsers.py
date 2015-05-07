@@ -92,7 +92,7 @@ class AbstractSwaggerParser(object):
 
     # Methods
 
-    def grab_all(self):
+    def grab_all(self, filters=[]):
         """ Read a JSON file and returns a dictionnary
 
             Args:
@@ -122,13 +122,13 @@ class AbstractSwaggerParser(object):
         models = dict()
         for api in data[SWAGGER_APIS]:
             path = self.path_for_swagger_model(api[SWAGGER_PATH])
-            task_manager.start_task(method=self._grab_resource, path=path, results=models)
+            task_manager.start_task(method=self._grab_resource, path=path, results=models, filters=filters)
 
         task_manager.wait_until_exit()
 
         return models
 
-    def _grab_resource(self, path, results=dict()):
+    def _grab_resource(self, path, results=dict(), filters=[]):
         """ Grab resource information
 
             Args:
@@ -140,6 +140,10 @@ class AbstractSwaggerParser(object):
         """
 
         (package, resource_name) = self.get_information(path)
+
+        if len(filters) > 0 and resource_name not in filters:
+            return
+
         infos = self.get_swagger_model(path, resource_name)
 
         if resource_name == 'Metadata':

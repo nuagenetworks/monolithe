@@ -7,7 +7,6 @@ from .printer import Printer
 from .objects import Model, ModelAttribute, ModelAPI
 
 USER = 'User'
-RESTUSER = 'RESTUser'
 
 IGNORED_ATTRIBUTES = ["_fetchers"]
 
