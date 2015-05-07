@@ -103,13 +103,13 @@ class SwaggerToSpecConverter(object):
             SwaggerToSpecConverter._process_name(model=model)
 
             entity_name = model['entityName']
+
             if name != entity_name:
+                # Switching entities names
                 specifications[entity_name] = specifications[name]
                 specifications.pop(name)
-
                 model = specifications[entity_name]['model']
                 parents_apis = specifications[entity_name]['apis']['parents']
-
 
             if len(filters) > 0 and entity_name not in filters:
                 continue;
@@ -117,7 +117,11 @@ class SwaggerToSpecConverter(object):
             SwaggerToSpecConverter._process_apis(model=model, apis=parents_apis, relations=relations)
             SwaggerToSpecConverter._process_attributes(model=model)
 
-        for name, specification in specifications.iteritems():
+        for entity_name, specification in specifications.iteritems():
+
+            if len(filters) > 0 and entity_name not in filters:
+                continue;
+
             model = specification['model']
             SwaggerToSpecConverter._process_children_apis(model=model, apis=specification['apis'], relations=relations)
 
