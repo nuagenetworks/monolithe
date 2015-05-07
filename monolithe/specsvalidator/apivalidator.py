@@ -8,6 +8,9 @@ from validationerrors import APISpecMissingAttributeDefinitionError
 from validationerrors import APISpecMissingParentAPIError
 from validationerrors import APISpecMissingParentAPIMethodError
 
+IGNORED_ATTRIBUTES = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]
+
+
 class APIValidator:
     """ Valdidate a candidate spec file against a spec file
 
@@ -17,8 +20,8 @@ class APIValidator:
         """ Initialize the validator
 
         """
-        self.candidate          = specification
-        self.specification      = candidate
+        self.candidate          = candidate
+        self.specification      = specification
         self.parent_api_errors  = []
         self.attribute_errors   = []
 
@@ -66,6 +69,9 @@ class APIValidator:
         candidate_attributes_definition     = self.candidate["model"]["attributes"]
 
         for attribute_name in specification_attributes_definition:
+
+            if attribute_name in IGNORED_ATTRIBUTES:
+                continue
 
             if not attribute_name in candidate_attributes_definition:
                 if attribute_name.lower() in [attr.lower() for attr in candidate_attributes_definition]:
