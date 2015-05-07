@@ -40,10 +40,10 @@ class Command(object):
 
         # Read Swagger
         swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
-        resources = swagger_parser.grab_all(filters=[entity_name])
+        resources = swagger_parser.grab_all()
 
         # Convert Swagger models
-        specs = SwaggerToSpecConverter.convert(resources=resources)
+        specs = SwaggerToSpecConverter.convert(resources=resources, filters=[entity_name])
 
         if entity_name in specs:
             return specs[entity_name]
@@ -76,7 +76,8 @@ class Command(object):
             os.makedirs(output_path)
 
         for name, spec in specs.iteritems():
-            file_path = '%s/%s.spec' % (output_path, name.lower())
+
+            file_path = '%s/%s.spec' % (output_path, spec['model']['entityName'].lower())
             with open(file_path, 'wb') as file:
                 json.dump(spec, file, indent=4)
 

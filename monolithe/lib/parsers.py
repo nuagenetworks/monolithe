@@ -377,4 +377,3 @@ class JSONParser(object):
             Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (filepath, e.args[0]))
 
         return data
-

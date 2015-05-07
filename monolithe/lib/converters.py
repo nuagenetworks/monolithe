@@ -70,7 +70,7 @@ class SwaggerToSpecConverter(object):
     """ Convert Swagger structure to a Specification structure """
 
     @classmethod
-    def convert(cls, resources):
+    def convert(cls, resources, filters=[]):
         """ Prepare all resources
 
             Args:
@@ -101,6 +101,19 @@ class SwaggerToSpecConverter(object):
             parents_apis = specifications[name]['apis']['parents']
 
             SwaggerToSpecConverter._process_name(model=model)
+
+            entity_name = model['entityName']
+            if name != entity_name:
+                specifications[entity_name] = specifications[name]
+                specifications.pop(name)
+
+                model = specifications[entity_name]['model']
+                parents_apis = specifications[entity_name]['apis']['parents']
+
+
+            if len(filters) > 0 and entity_name not in filters:
+                continue;
+
             SwaggerToSpecConverter._process_apis(model=model, apis=parents_apis, relations=relations)
             SwaggerToSpecConverter._process_attributes(model=model)
 
@@ -319,7 +332,7 @@ class SwaggerToSpecConverter(object):
 
             Add a RESTUser object in models, based on User
         """
-        if USER not in models:
+        if USER not in models or RESTUSER not in relations:
             return
 
         models[RESTUSER] = deepcopy(models[USER])
