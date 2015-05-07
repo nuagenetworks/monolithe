@@ -26,6 +26,31 @@ class Command(object):
     """ Command
 
     """
+
+    @classmethod
+    def get_spec(cls, vsdurl, apiversion, entity_name, path=None):
+        """
+
+        """
+        path = Utils.remove_slash(path)
+        url = cls._get_api_url(vsdurl)
+
+        if url is None and path is None:
+            Printer.raiseError("Please provide a vsd url or a path to swagger json file")
+
+        # Read Swagger
+        swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
+        resources = swagger_parser.grab_all()
+
+        # Convert Swagger models
+        specs = SwaggerToSpecConverter.convert(resources=resources)
+
+        if entity_name in specs:
+            return specs[entity_name]
+
+        return None
+
+
     @classmethod
     def generate_specs(cls, vsdurl, path, apiversion, output_path=None):
         """ Generate specs
