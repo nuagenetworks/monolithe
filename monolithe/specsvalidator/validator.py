@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
 from apivalidator import APIValidator
 
 class Validator:
@@ -12,7 +13,7 @@ class Validator:
         """ Initialize the validator
 
         """
-        self._report       = {};
+        self._report            = {};
         self.specification_path = specification_path
         self.candidate_path     = candidate_path
 
@@ -37,7 +38,15 @@ class Validator:
                 specification_file_path = "%s/%s" % (self.specification_path, file)
                 candidate_file_path     = "%s/%s" % (self.candidate_path, file)
 
-                spec_validator = APIValidator(specification_file_path, candidate_file_path)
+                specification_file = open(specification_file_path, 'r')
+                specification_data = json.loads(specification_file.read())
+                specification_file.close()
+
+                candidate_file = open(candidate_file_path, 'r')
+                candidate_data = json.loads(candidate_file.read())
+                candidate_file.close()
+
+                spec_validator = APIValidator(specification_data, candidate_data)
                 spec_validator.run()
                 self._report[file_name] = spec_validator
 
