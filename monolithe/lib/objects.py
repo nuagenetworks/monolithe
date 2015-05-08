@@ -69,7 +69,7 @@ class ModelAPI(object):
                 parent_remote_name: enterprise
                 parent_resource_name: enterprises
         """
-        self.method = None
+        self.operations = []
         # self.parent_remote_name = None
         # self.parent_resource_name = None
         self.description = None

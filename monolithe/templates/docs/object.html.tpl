@@ -59,22 +59,6 @@
     <span class="label {{label_class}}">{{method.lower()}}</span>
     {% endmacro %}
 
-    {# formatting information #}
-    {% set local_apis = [] %}
-    {% set parent_apis = [] %}
-    {% for api in model.apis|sort(attribute='path') %}
-    {% set methods = [] %}
-    {% for operation in api.operations|sort %}
-    {% do methods.append(operation['method']) %}
-    {% do methods.sort() %}
-    {% endfor %}
-    {% if api.parent_resource_name and api.parent_resource_name != 'me' %}
-    {% do parent_apis.append({"parent_resource": api.parent_resource_name, "parent_url": api.parent_remote_name, "model_name": model.resource_name, "methods": methods}) %}
-    {% else %}
-    {% do local_apis.append({"path": api.path.replace("{id}", "id"), "methods": methods}) %}
-    {% endif %}
-    {% endfor %}
-
     <div class="container">
 
         <section id="intro">
@@ -84,9 +68,9 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {% if local_apis|count %}
+            {% if model.apis["parents"]|count %}
             <table class="table">
-                {% for local_api in local_apis %}
+                {% for local_api in model.apis["parents"] %}
                 <tr>
                     <td>
                         <span class="fixed-text">{{local_api.path}}</span>
@@ -111,14 +95,14 @@
                 {
                 <ul style="padding-left: 10px">
                 {% for attribute in model.attributes|sort(attribute='local_name') %}
-                    {% set type = attribute.remote_type %}
+                    {% set type = attribute.type %}
                     {% set description = attribute.description %}
-                    {% set required = attribute.is_required %}
+                    {% set required = attribute.required %}
                     {% set allowed = [] %}
                     {% set allowed_values = "" %}
 
-                    {% if attribute.choices %}
-                        {% for value in attribute.choices|sort %}
+                    {% if attribute.allowed_choices %}
+                        {% for value in attribute.allowed_choices|sort %}
                             {% do allowed.append(value) %}
                         {% endfor %}
                         {% if allowed|count > 0 %}
@@ -141,8 +125,8 @@
         <section id="parents">
             <h3>Parents</h3>
             <table class="table">
-                {% if parent_apis|count %}
-                {% for api in parent_apis %}
+                {% if model.apis["parents"]|count %}
+                {% for path, api in model.apis["parents"].iteritems() %}
                 <tr>
                     <td>
                         <span class="fixed-text">/<a href="{{api.parent_url}}.html">{{api.parent_resource}}</a>/id/{{api.model_name}}</span>
@@ -164,25 +148,18 @@
         <section id="children">
             <h3>Children</h3>
             {% if model.apis['children']|count %}
+            {% for path, api in model.apis['children'].iteritems()|sort %}
             <table class="table">
-                {% for path, api in model.apis['children'].iteriterms()|sort %}
-                {% set methods = [] %}
-                {% set object_name = model.resource_name %}
-                {% set remote_name = api.remote_name %}
-                {% set resource_name = api.resource_name %}
-                {% for operation in api.operations %}
-                {% do methods.append(operation['method']) %}
-                {% endfor %}
                 <tr>
                     <td>
                         <span class="fixed-text">
-                            /{{object_name}}/id/<a href="{{remote_name}}.html">{{resource_name}}</a>
+                            /{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{path}}</a>
                         </span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
                         <div style="pull-right">
-                        {% for method in methods|sort|reverse %}
-                        {{label_for_method(method)}}
+                        {% for operation in api.operations|sort|reverse %}
+                        {{label_for_method(operation["method"])}}
                         {% endfor %}
                         </div>
                     </td>
@@ -203,10 +180,10 @@
                     <div class="panel-heading fixed-text">
                         <b>{{attribute.remote_name}}</b>
                         <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.remote_type}}</span>
-                        {% if attribute.is_required %}
+                        {% if attribute.required %}
                         <span class="label label-danger float-right">required</span>
                         {% endif %}
-                        {% if attribute.is_unique %}
+                        {% if attribute.unique_items %}
                         <span class="label label-info float-right">unique</span>
                         {% endif %}
                     </div>
@@ -215,11 +192,11 @@
                         <p><b>Discussion</b></p>
                         <p>{{attribute.description}}</p>
 
-                        {% if attribute.choices %}
+                        {% if attribute.allowed_choices %}
                         <p><b>Allowed values</b></p>
                         <div class="panel panel-info">
                             <ul class="list-group fixed-text">
-                            {% for value in attribute.choices|sort %}
+                            {% for value in attribute.allowed_choices|sort %}
                                 <li class="list-group-item">{{value}}</li>
                             {% endfor %}
                             </ul>
@@ -237,6 +214,7 @@
     </div>
 
 
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/search.js"></script>
@@ -248,5 +226,6 @@
             initialize_scrollspy();
         });
     </script>
+
 </body>
 </html>
