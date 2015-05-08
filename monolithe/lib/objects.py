@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .utils import Utils
-
 
 class Model(object):
     """ Defines a model object
@@ -64,22 +62,22 @@ class ModelAPI(object):
         """ Defines an API
 
             Example:
-                path: GET
-                method: /enterprises/id/gateway
-                parent_remote_name: enterprise
-                parent_resource_name: enterprises
-        """
-        self.operations = []
-        # self.parent_remote_name = None
-        # self.parent_resource_name = None
-        self.description = None
-        self.parameters = []
-        self.response_messages = []
+                path: /enterprises/id/gateway
+                resource_name : enterprisenetworks
+                remote_name : enterprisenetwork
+                name : EnterpriseNetwork
+                plural_name : EnterpriseNetworks
+                instance_plural_name : enterprise_networks
 
+        """
+        self.name = None
+        self.path = None
         self.resource_name = None
         self.remote_name = None
         self.plural_name = None
         self.instance_plural_name = None
+
+        self.operations = []
 
 
 class ModelOperation(object):
@@ -90,16 +88,11 @@ class ModelOperation(object):
         """ Defines an API
 
             Example:
-                method: GET|POST|PUT|DELETE
-                summary: a description
-                parameters: List of parameters
-                responseMessages:
+                method: GET
 
         """
         self.method = None
-        self.summary = None
-        self.parameters = []
-        self.responseMessages = []
+
 
 class ModelOperationParameter(object):
     """ Describe a model operation
@@ -119,6 +112,7 @@ class ModelOperationParameter(object):
         self.required = None
         self.type = None
         self.paramType = None
+
 
 class ModelRelation(object):
     """ Defines a model relation object
