@@ -85,24 +85,22 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {% if model.apis["parents"]|count %}
+            {% if model.apis["self"] %}
             <table class="table table-condensed">
-                {% for local_api in model.apis["parents"] %}
                 <tr>
                     <td>
-                        <span class="fixed-text">{{local_api.path}}</span>
+                        <span class="fixed-text">{{model.apis["self"].path.replace("{id}", "id")}}</span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
-                        {% for method in local_api.methods %}
-                        {{label_for_method(method)}}
+                        {% for operation in model.apis["self"].operations %}
+                        {{label_for_method(operation.method)}}
                         {% endfor %}
                     </td>
                 </tr>
-                {% endfor %}
                 <tr><td></td><td></td></tr>
             </table>
             {% else %}
-            <p>This object is not dircetly accessible.</p>
+            <p>This object is not directly accessible.</p>
             {% endif %}
         </section>
 
@@ -153,7 +151,7 @@
                 {% for path, api in model.apis["parents"].iteritems() %}
                 <tr>
                     <td>
-                        <span class="fixed-text">/<a href="{{api.parent_url}}.html">{{api.parent_resource}}</a>/id/{{api.model_name}}</span>
+                        <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/id/{{model.resource_name}}</span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
                         {% for method in api.methods %}
@@ -176,7 +174,7 @@
                 {% for path, api in model.apis['children'].iteritems()|sort %}
                 <tr>
                     <td>
-                        <span class="fixed-text">/{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{path}}</a></span>
+                        <span class="fixed-text">/{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a></span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
                         {% for operation in api.operations|sort|reverse %}
