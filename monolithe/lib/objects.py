@@ -69,7 +69,6 @@ class ModelAPI(object):
                 instance_plural_name : enterprise_networks
 
         """
-
         self.path = None
         self.resource_name = None
         self.remote_name = None
