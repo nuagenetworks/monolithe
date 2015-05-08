@@ -4,7 +4,7 @@ import re
 
 from .utils import Utils
 from .printer import Printer
-from .objects import Model, ModelAttribute, ModelAPI
+from .objects import Model, ModelAttribute, ModelAPI, ModelOperation
 
 USER = 'User'
 
@@ -145,15 +145,20 @@ class ModelsProcessor(object):
 
             names = filter(bool, re.split('/\{id\}?/?', path))
 
-            parent_resource_name = names[0]
-            parent_rest_name = Utils.get_singular_name(names[0])
+            child_resource_name = names[-1]
+            child_rest_name = Utils.get_singular_name(names[-1])
 
             model_api = ModelAPI()
-            model_api.resource_name = parent_resource_name
-            model_api.remote_name = parent_rest_name
+            model_api.path = path
+            model_api.resource_name = child_resource_name
+            model_api.remote_name = child_rest_name
             model_api.plural_name = Utils.get_plural_name(api['entityName'])
             model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
-            model_api.operations = api['operations']
+
+            for operation in api['operations']:
+                model_operation = ModelOperation()
+                model_operation.method = operation['method']
+                model_api.operations.append(model_operation)
 
             model.apis['children'][path] = model_api
 
@@ -173,9 +178,17 @@ class ModelsProcessor(object):
             model_api.remote_name = parent_rest_name
             model_api.plural_name = Utils.get_plural_name(api['entityName'])
             model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
-            model_api.operations = api['operations']
 
-            model.apis['children'][path] = model_api
+            for operation in api['operations']:
+                model_operation = ModelOperation()
+                model_operation.method = operation['method']
+                model_api.operations.append(model_operation)
+
+
+            model.apis['parents'][path] = model_api
+
+        if model.name == 'Domain':
+            print model.apis['children']
 
     @classmethod
     def _process_attribute_local_name(cls, name):
