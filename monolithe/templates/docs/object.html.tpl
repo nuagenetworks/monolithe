@@ -45,6 +45,8 @@
         </div>
     </nav>
 
+    {% set inherited_attributes_list = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]%}
+
     {# macro to create a method label #}
     {% macro label_for_method(method) %}
     {% if method == "GET" %}
@@ -59,6 +61,21 @@
     <span class="label {{label_class}}">{{method.lower()}}</span>
     {% endmacro %}
 
+    {# macro to create allowed_choices list #}
+    {% macro string_for_allowed_choices(attribute) %}
+    {% set allowed = [] %}
+    {% set allowed_values = "" %}
+    {% if attribute.allowed_choices %}
+    {% for value in attribute.allowed_choices|sort %}
+    {% do allowed.append(value) %}
+    {% endfor %}
+    {% if allowed|count > 0 %}
+    {% set allowed_values = " (" + allowed|join(" | ") + ")" %}
+    {% endif %}
+    {% endif %}
+    {{allowed_values}}
+    {% endmacro %}
+
     <div class="container">
 
         <section id="intro">
@@ -69,7 +86,7 @@
         <section id="apiresources">
             <h3>API Resource</h3>
             {% if model.apis["parents"]|count %}
-            <table class="table">
+            <table class="table table-condensed">
                 {% for local_api in model.apis["parents"] %}
                 <tr>
                     <td>
@@ -90,33 +107,40 @@
         </section>
 
         <section id="overview">
-            <h3>Object overview</h3>
-            <div class="well well-sm fixed-text">
+            <h3>Overview</h3>
+            <div class="fixed-text">
                 {
                 <ul style="padding-left: 10px">
-                {% for attribute in model.attributes|sort(attribute='local_name') %}
-                    {% set type = attribute.type %}
-                    {% set description = attribute.description %}
-                    {% set required = attribute.required %}
-                    {% set allowed = [] %}
-                    {% set allowed_values = "" %}
 
-                    {% if attribute.allowed_choices %}
-                        {% for value in attribute.allowed_choices|sort %}
-                            {% do allowed.append(value) %}
-                        {% endfor %}
-                        {% if allowed|count > 0 %}
-                            {% set allowed_values = " (" + allowed|join(" | ") + ")" %}
-                        {% endif %}
-                    {% endif %}
+                <li style="list-style: none"><span style="color: #9A9A9A; font-weight: bold">/* object attributes */<br/></span></li>
+
+                {% set inherited_attributes = [] %}
+
+                    {% for attribute in model.attributes|sort(attribute='local_name') %}
+                    {% if not attribute.remote_name in inherited_attributes_list %}
                     <li style="list-style: none">
-                        <a href="#attr_{{attribute.remote_name}}" title="{{description}}">{{attribute.remote_name}}</a>:
-                        <span class="type_{{type}}">{{type}}{{allowed_values}}</span>
-                        {% if required %}
+                        <a href="#attr_{{attribute.remote_name}}" title="{{attribute.description}}">{{attribute.remote_name}}</a>:
+                        <span class="type_{{attribute.type}}">{{attribute.type}}{{string_for_allowed_choices(attribute)}}</span>
+                        {% if attribute.required %}
                         <span class="label label-primary fixed-text">required</span>
                         {% endif %}
                     </li>
-                {% endfor %}
+                    {% else %}
+                    {% do inherited_attributes.append(attribute) %}
+                    {% endif %}
+                    {% endfor %}
+
+                <li style="list-style: none"><span style="color: #9A9A9A; font-weight: bold"><br/>/* inherited attributes */<br/></span></li>
+
+                    {% for attribute in inherited_attributes %}
+                    <li style="list-style: none">
+                        <a href="#attr_{{attribute.remote_name}}" title="{{attribute.description}}">{{attribute.remote_name}}</a>:
+                        <span class="type_{{attribute.type}}">{{attribute.type}}{{string_for_allowed_choices(attribute)}}</span>
+                        {% if attribute.required %}
+                        <span class="label label-primary fixed-text">required</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
                 </ul>
                 }
             </div>
@@ -124,7 +148,7 @@
 
         <section id="parents">
             <h3>Parents</h3>
-            <table class="table">
+            <table class="table table-condensed">
                 {% if model.apis["parents"]|count %}
                 {% for path, api in model.apis["parents"].iteritems() %}
                 <tr>
@@ -148,20 +172,16 @@
         <section id="children">
             <h3>Children</h3>
             {% if model.apis['children']|count %}
-            {% for path, api in model.apis['children'].iteritems()|sort %}
-            <table class="table">
+            <table class="table table-condensed">
+                {% for path, api in model.apis['children'].iteritems()|sort %}
                 <tr>
                     <td>
-                        <span class="fixed-text">
-                            /{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{path}}</a>
-                        </span>
+                        <span class="fixed-text">/{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{path}}</a></span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
-                        <div style="pull-right">
                         {% for operation in api.operations|sort|reverse %}
                         {{label_for_method(operation["method"])}}
                         {% endfor %}
-                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -179,7 +199,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading fixed-text">
                         <b>{{attribute.remote_name}}</b>
-                        <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.remote_type}}</span>
+                        <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.type}}</span>
                         {% if attribute.required %}
                         <span class="label label-danger float-right">required</span>
                         {% endif %}
