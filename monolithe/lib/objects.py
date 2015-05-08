@@ -65,10 +65,12 @@ class ModelAPI(object):
                 path: /enterprises/id/gateway
                 resource_name : enterprisenetworks
                 remote_name : enterprisenetwork
-                plural_name : enterprisenetworks
+                name : EnterpriseNetwork
+                plural_name : EnterpriseNetworks
                 instance_plural_name : enterprise_networks
 
         """
+        self.name = None
         self.path = None
         self.resource_name = None
         self.remote_name = None

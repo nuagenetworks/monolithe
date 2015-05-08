@@ -129,7 +129,7 @@
                 {% for path, api in model.apis["parents"].iteritems() %}
                 <tr>
                     <td>
-                        <span class="fixed-text">/<a href="{{api.parent_url}}.html">{{api.parent_resource}}</a>/id/{{api.model_name}}</span>
+                        <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/id/{{model.resource_name}}</span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
                         {% for method in api.methods %}
@@ -153,7 +153,7 @@
                 <tr>
                     <td>
                         <span class="fixed-text">
-                            /{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{path}}</a>
+                            /{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>
                         </span>
                     </td>
                     <td style="text-align: right; font-size: 13px">

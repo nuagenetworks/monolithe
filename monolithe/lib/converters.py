@@ -190,6 +190,7 @@ class SwaggerToSpecConverter(object):
                 relations: dict containing all relations between resources
 
         """
+
         for path, api in apis.iteritems():
 
             api.pop('path')
@@ -201,7 +202,6 @@ class SwaggerToSpecConverter(object):
 
             model['resourceName'] = names[-1]
             model['RESTName'] = Utils.get_singular_name(names[-1])
-            api['entityName'] = model['entityName']
 
             if model['RESTName'] not in relations:
                 relations[model['RESTName']] = {}
@@ -209,6 +209,9 @@ class SwaggerToSpecConverter(object):
             # Parent relation
             parent_resource_name = names[0]
             parent_rest_name = Utils.get_singular_name(names[0])
+
+            api['resourceName'] = parent_resource_name
+            api['RESTName'] = parent_rest_name
 
             should_create_relation = False
 

@@ -138,6 +138,7 @@ class ModelsProcessor(object):
                 relations: dict containing all relations between resources
 
         """
+
         for path, api in apis['children'].iteritems():
 
             if api['entityName'] == model.name:
@@ -164,31 +165,16 @@ class ModelsProcessor(object):
 
         for path, api in apis['parents'].iteritems():
 
-            if api['entityName'] == model.name:
-                continue
-
-            # Check when it is necessary to use this !
-            names = filter(bool, re.split('/\{id\}?/?', path))
-
-            parent_resource_name = names[0]
-            parent_rest_name = Utils.get_singular_name(names[0])
-
             model_api = ModelAPI()
-            model_api.resource_name = parent_resource_name
-            model_api.remote_name = parent_rest_name
-            model_api.plural_name = Utils.get_plural_name(api['entityName'])
-            model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
+            model_api.resource_name = api['resourceName']
+            model_api.remote_name = api['RESTName']
 
             for operation in api['operations']:
                 model_operation = ModelOperation()
                 model_operation.method = operation['method']
                 model_api.operations.append(model_operation)
 
-
             model.apis['parents'][path] = model_api
-
-        if model.name == 'Domain':
-            print model.apis['children']
 
     @classmethod
     def _process_attribute_local_name(cls, name):
