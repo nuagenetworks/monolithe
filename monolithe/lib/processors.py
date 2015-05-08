@@ -179,7 +179,6 @@ class ModelsProcessor(object):
             model_api.plural_name = Utils.get_plural_name(api['entityName'])
             model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
 
-<<<<<<< HEAD
             for operation in api['operations']:
                 model_operation = ModelOperation()
                 model_operation.method = operation['method']
@@ -190,9 +189,6 @@ class ModelsProcessor(object):
 
         if model.name == 'Domain':
             print model.apis['children']
-=======
-            model.apis['parents'][path] = model_api
->>>>>>> 4828db1a7d91f01c7acfb8af2dad21e997c89a71
 
     @classmethod
     def _process_attribute_local_name(cls, name):
