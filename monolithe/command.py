@@ -14,6 +14,7 @@ from .lib import GitManager
 from .lib import Utils
 from .lib import SwaggerToSpecConverter
 from .lib import SpecParser
+from .lib import TestsRunner
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'
@@ -26,6 +27,38 @@ class Command(object):
     """ Command
 
     """
+    @classmethod
+    def run_tests(cls, vsdurl, username, password, enterprise, version, datas):
+        """ Run all tests according to the given data
+
+            `data` contains information:
+                `spec`: the specification
+                `parent`: the parent information
+                `default_values`: the default values for the object
+
+            Args:
+                data (dict):
+
+        """
+        for data in datas:
+            Printer.log('******* %s' % data['resourceName'])
+
+            entity_name = data['resourceName']
+            parent_object = data['parentObject']
+            default_values = data['defaultValues']
+
+            spec = data['spec']
+            if spec is None or len(spec) == 0:
+                spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, entity_name=entity_name)
+
+            runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, spec=spec, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
+            results = runner.run()
+
+            Printer.log(results)
+            if len(results.errors) > 0:
+                for error in results.errors:
+                    Printer.warn('Error in %s' % error[0])
+                    Printer.warn(error[1])
 
     @classmethod
     def get_spec(cls, vsdurl, apiversion, entity_name, path=None):
@@ -49,7 +82,6 @@ class Command(object):
             return specs[entity_name]
 
         return None
-
 
     @classmethod
     def generate_specs(cls, vsdurl, path, apiversion, output_path=None):

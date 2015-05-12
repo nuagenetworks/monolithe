@@ -145,3 +145,20 @@ class Utils(object):
             return path[:-1]
 
         return path
+
+    @classmethod
+    def get_vspk_version(cls, version):
+        """ Get the vspk version according to the given version
+
+            Args:
+                version (int): the version
+
+            Returns:
+                version as string
+
+            Example:
+                get_vspk_version(3.1)
+                >>> v3_1
+
+        """
+        return ('v%s' % version).replace('.', '_')
