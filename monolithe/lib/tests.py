@@ -3,6 +3,7 @@
 import re
 import requests
 import logging
+import json
 
 from .printer import Printer
 from .factory import VSDKFactory
@@ -14,38 +15,40 @@ from bambou.config import BambouConfig
 HTTP_METHOD_POST = 'POST'
 HTTP_METHOD_GET = 'GET'
 HTTP_METHOD_DELETE = 'DELETE'
-HTTP_METHOD_UPDATE = 'UPDATE'
+HTTP_METHOD_UPDATE = 'PUT'
 
 
 class TestHelper(object):
 
-    vsdk = None
+    _vsdk = None
+    _debug = False
 
     @classmethod
     def set_debug_mode(cls, debug=True):
-        if debug:
-            cls.vsdk.utils.set_log_level(logging.DEBUG)
+        cls._debug = debug
+
+        if cls._debug:
+            cls._vsdk.utils.set_log_level(logging.DEBUG)
         else:
-            cls.vsdk.utils.set_log_level(logging.ERROR)
+            cls._vsdk.utils.set_log_level(logging.ERROR)
 
     @classmethod
     def use_vsdk(cls, vsdk):
-        cls.vsdk = vsdk
+        cls._vsdk = vsdk
 
     @classmethod
     def current_push_center(cls):
-        session = cls.vsdk.NUVSDSession.get_current_session()
+        session = cls._vsdk.NUVSDSession.get_current_session()
         return session.push_center
 
     @classmethod
     def set_api_key(cls, api_key):
-        session = cls.vsdk.NUVSDSession.get_current_session()
+        session = cls._vsdk.NUVSDSession.get_current_session()
         session.login_controller.api_key = api_key
-        Printer.warn('API is now = %s' % session.login_controller.api_key)
 
     @classmethod
     def session_headers(cls):
-        session = cls.vsdk.NUVSDSession.get_current_session()
+        session = cls._vsdk.NUVSDSession.get_current_session()
         controller = session.login_controller
 
         headers = dict()
@@ -81,6 +84,37 @@ class TestHelper(object):
     def send_get(cls, url, remove_header=None):
         return cls.send_request(method='get', url=url, remove_header=remove_header)
 
+
+class FunctionalTestCase(TestCase):
+
+    def assertErrorEqual(self, errors, title, description, remote_name=u'', index=0):
+        """ Check if errors received matches
+
+        """
+        self.assertEqual(errors[index]['descriptions'][0]['title'], title)
+        self.assertEqual(errors[index]['descriptions'][0]['description'], description)
+        self.assertEqual(errors[index]['property'], remote_name)
+
+    def assertConnectionStatus(self, connection, expected_status):
+        """ Check if the connection has expected status
+
+        """
+        message = self.connection_failure_message(connection, expected_status)
+        self.assertEqual(connection.response.status_code, expected_status, message)
+
+    def connection_failure_message(cls, connection, expected_status):
+        """ Returns a message that explains the connection status failure """
+
+        message = '%s != %s\n' % (connection.response.status_code, expected_status)
+
+        message += '%s %s finished with status code: [%s]\n' % (connection.request.method, connection.request.url, connection.response.status_code)
+        message += 'Headers\n%s\n' % json.dumps(connection.request.headers, indent=2)
+        message += 'Body\n%s\n' % json.dumps(connection.request.data, indent=2)
+
+        if len(connection.response.errors) > 0:
+            message += 'Errors\n%s\n' % json.dumps(connection.response.errors, indent=2)
+
+        return message
 
 class TestMaker(object):
     """ Make tests
@@ -199,6 +233,8 @@ class TestMaker(object):
         return (test_name, test_func)
 
 
+##### CREATE TESTS
+
 class CreateTestMaker(TestMaker):
     """ TestCase for create objects
 
@@ -236,16 +272,6 @@ class CreateTestMaker(TestMaker):
         return TestSuite(map(CreateTestCase, tests))
 
 
-class FunctionalTestCase(TestCase):
-
-    def assertErrorEqual(self, errors, title, description, remote_name=u'', index=0):
-        """ Check if errors received matches """
-
-        self.assertEqual(errors[index]['descriptions'][0]['title'], title)
-        self.assertEqual(errors[index]['descriptions'][0]['description'], description)
-        self.assertEqual(errors[index]['property'], remote_name)
-
-
 class CreateTestCase(FunctionalTestCase):
 
     parent = None
@@ -280,14 +306,10 @@ class CreateTestCase(FunctionalTestCase):
         """ Create an object with all its valid attributes should always succeed with 201 response
 
         """
-        Printer.warn('Creating %s' % self.vsdobject.rest_name)
-        Printer.json(self.vsdobject.to_dict())
-
         (obj, connection) = self.parent.create_child(self.vsdobject)
 
         self.assertEquals(connection.response.status_code, 201)
         self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
-
 
     # Attributes tests
     def _test_create_object_with_required_attribute_as_none_should_fail(self, attribute):
@@ -308,7 +330,6 @@ class CreateTestCase(FunctionalTestCase):
 
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
-        Printer.json(self.vsdobject.to_dict())
         (obj, connection) = self.parent.create_child(self.vsdobject)
 
         if default_value is not None:
@@ -330,6 +351,135 @@ class CreateTestCase(FunctionalTestCase):
         self.assertEqual(connection.response.status_code, 409)
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
 
+
+##### UPDATE TESTS
+
+class UpdateTestMaker(TestMaker):
+    """ TestCase for updating objects
+
+    """
+    def __init__(self, parent, vsdobject, user):
+        """ Initializes a test case for updating objects
+
+        """
+        super(UpdateTestMaker, self).__init__()
+        self.parent = parent
+        self.vsdobject = vsdobject
+        self.user = user
+
+        # Object tests
+        self.register_test('_test_update_object_with_same_attributes_should_fail')
+        # self.register_test('_test_update_object_without_authentication_should_fail')
+
+        # Attribute tests
+        # self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
+        # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
+        self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        # self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
+
+    def test_suite(self):
+        """ Inject generated tests
+
+        """
+        UpdateTestCase.parent = self.parent
+        UpdateTestCase.vsdobject = self.vsdobject
+        UpdateTestCase.user = self.user
+
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=UpdateTestCase)
+        for test_name, test_func in tests.iteritems():
+            setattr(UpdateTestCase, test_name, test_func)
+
+        return TestSuite(map(UpdateTestCase, tests))
+
+
+class UpdateTestCase(FunctionalTestCase):
+
+    parent = None
+    vsdobject = None
+    user = None
+
+    def setUp(self):
+        """ Setting up create test
+
+        """
+        self.parent.create_child(self.vsdobject)
+
+    def tearDown(self):
+        """ Clean up environment
+
+        """
+        self.vsdobject.delete()
+
+    # Objects tests
+    def _test_update_object_without_authentication_should_fail(self):
+        """ Update an object without authentication """
+
+        TestHelper.set_api_key(None)
+        (obj, connection) = self.vsdobject.save()
+        TestHelper.set_api_key(self.user.api_key)
+
+        self.assertConnectionStatus(connection, 401)
+
+    def _test_update_object_with_same_attributes_should_fail(self):
+        """ Update an object with same attributes should always fail with 409 error
+
+        """
+        (obj, connection) = self.vsdobject.save()
+
+        self.assertConnectionStatus(connection, 409)
+        self.assertErrorEqual(connection.response.errors, title=u'No changes to modify the entity', description=u'There are no attribute changes to modify the entity.')
+
+    # Attributes tests
+    def _test_update_object_with_required_attribute_as_none_should_fail(self, attribute):
+        """ Update an object with a required attribute as None """
+
+        default_value = getattr(self.vsdobject, attribute.local_name)
+        setattr(self.vsdobject, attribute.local_name, None)
+        (obj, connection) = self.vsdobject.save()
+
+        if default_value is not None:
+            setattr(self.vsdobject, attribute.local_name, default_value)
+
+        self.assertConnectionStatus(connection, 409)
+        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'This value is mandatory.', remote_name=attribute.remote_name)
+
+    def _test_update_object_with_attribute_with_choices_as_none_should_fail(self, attribute):
+        """ Update an objet with an attribute with choices as none should fail """
+
+        default_value = getattr(self.vsdobject, attribute.local_name)
+        setattr(self.vsdobject, attribute.local_name, None)
+        (obj, connection) = self.vsdobject.save()
+
+        if default_value is not None:
+            setattr(self.vsdobject, attribute.local_name, default_value)
+
+        self.assertConnectionStatus(connection, 409)
+        self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+
+    def _test_update_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
+        """ Update an object with a wrong choice attribute """
+
+        default_value = getattr(self.vsdobject, attribute.local_name)
+        setattr(self.vsdobject, attribute.local_name, u'A random value')
+        (obj, connection) = self.vsdobject.save()
+        if default_value is not None:
+            setattr(self.vsdobject, attribute.local_name, default_value)
+
+        self.assertConnectionStatus(connection, 409)
+        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
+
+    def _test_update_object_with_attribute_as_none_should_succeed(self, attribute):
+        """ Update an objet with an attribute as none """
+
+        default_value = getattr(self.vsdobject, attribute.local_name)
+        setattr(self.vsdobject, attribute.local_name, None)
+        (obj, connection) = self.vsdobject.save()
+
+        if default_value is not None:
+            setattr(self.vsdobject, attribute.local_name, default_value)
+
+        self.assertConnectionStatus(connection, 200)
+        self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
 
 class TestsRunner(object):
     """ Runner for VSD Objects tests
@@ -381,23 +531,16 @@ class TestsRunner(object):
         for path, api in self.spec['apis']['parents'].iteritems():
             for operation in api['operations']:
                 method = operation['method']
+                Printer.log('%s %s' % (method, path))
                 if method == HTTP_METHOD_POST:
                     self.is_create_allowed = True
                 elif method == HTTP_METHOD_GET:
                     self.is_get_all_allowed = True
-
-        # Self is not present here... :( Find another way !
-        # for path, api in self.spec['apis']['self'].iteritems():
-        #     for operation in api['operations']:
-        #         method = operation['method']
-        #         if method == HTTP_METHOD_GET:
-        #             self.is_get_allowed = True
-        #         elif method == HTTP_METHOD_UPDATE:
-        #             self.is_update_allowed = True
-        #         elif method == HTTP_METHOD_DELETE:
-        #             self.is_delete_allowed = True
-        #         elif method == HTTP_METHOD_POST:
-        #             self.is_create_allowed = True
+                    self.is_get_allowed = True
+                elif method == HTTP_METHOD_UPDATE:
+                    self.is_update_allowed = True
+                elif method == HTTP_METHOD_DELETE:
+                    self.is_delete_allowed = True
 
         Printer.log('---------------------------------')
         Printer.log('parent = %s' % self.parent)
@@ -417,8 +560,12 @@ class TestsRunner(object):
 
         """
         suite = None
-        if self.is_create_allowed:
-            maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
+        # if self.is_create_allowed:
+#             maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
+#             suite = maker.test_suite()
+
+        if self.is_update_allowed:
+            maker = UpdateTestMaker(self.parent, self.vsdobject, self.user)
             suite = maker.test_suite()
 
         # Do the same of update and delete.. and combine suites

@@ -57,10 +57,10 @@ class Command(object):
             results = runner.run()
 
             Printer.log(results)
-            if len(results.errors) > 0:
-                for error in results.errors:
-                    Printer.warn('Error in %s' % error[0])
-                    Printer.warn(error[1])
+            if len(results.failures) > 0:
+                for failure in results.failures:
+                    Printer.warn('Failure in %s' % failure[0])
+                    Printer.warn(failure[1])
 
             all_results[entity_name] = results
 
