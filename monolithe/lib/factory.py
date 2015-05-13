@@ -74,6 +74,16 @@ class VSDKFactory(object):
         return None
 
     @classmethod
+    def class_from_spec(cls, spec):
+        """ Create a NURESTObject from the given specification
+
+            Args:
+                spec: the specification
+
+        """
+        pass
+
+    @classmethod
     def get_instance(cls, resource_name, **attributes):
         """ Get instance of a object related to its resource name
 
@@ -86,6 +96,26 @@ class VSDKFactory(object):
                 no resource name matches.
         """
         klass = cls.class_from_resource(resource_name)
+
+        if klass:
+            python_attributes = cls._convert_attributes(attributes)
+            return klass(**python_attributes)
+
+        return None
+
+    @classmethod
+    def get_instance_from_spec(cls, spec, **attributes):
+        """ Get instance of a object related to its resource name
+
+            Args:
+                resource_name: the resource name
+                attributes: additionnal attributes
+
+            Returns:
+                Returns the instance or None if
+                no resource name matches.
+        """
+        klass = cls.class_from_spec(spec)
 
         if klass:
             python_attributes = cls._convert_attributes(attributes)

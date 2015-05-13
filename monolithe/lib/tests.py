@@ -255,7 +255,7 @@ class CreateTestMaker(TestMaker):
         # Attribute tests
         self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
         self.register_test_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        # self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
+        self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
 
     def test_suite(self):
         """ Inject generated tests
@@ -559,18 +559,20 @@ class TestsRunner(object):
             TestSuite is computed according to what is defined in the spec
 
         """
-        suite = None
-        # if self.is_create_allowed:
-#             maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
-#             suite = maker.test_suite()
+        all_suites = TestSuite()
+        if self.is_create_allowed:
+            maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
+            suite = maker.test_suite()
+            all_suites.addTests(suite)
 
         if self.is_update_allowed:
             maker = UpdateTestMaker(self.parent, self.vsdobject, self.user)
             suite = maker.test_suite()
+            all_suites.addTests(suite)
 
         # Do the same of update and delete.. and combine suites
 
-        return suite
+        return all_suites
 
     def run(self):
         """ Runs all tests on the specified VSD
