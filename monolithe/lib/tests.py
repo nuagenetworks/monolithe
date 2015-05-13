@@ -253,9 +253,9 @@ class CreateTestMaker(TestMaker):
         # self.register_test('_test_create_object_without_authentication_should_fail')
 
         # Attribute tests
-        self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_test_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
+        # self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
+        # self.register_test_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        # self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
 
     def test_suite(self):
         """ Inject generated tests
@@ -372,9 +372,9 @@ class UpdateTestMaker(TestMaker):
         # self.register_test('_test_update_object_without_authentication_should_fail')
 
         # Attribute tests
+        # self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
         # self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
         # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
         # self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
 
     def test_suite(self):
@@ -485,7 +485,7 @@ class TestsRunner(object):
     """ Runner for VSD Objects tests
 
     """
-    def __init__(self, vsdurl, username, password, enterprise, version, spec, parent_resource=None, parent_id=None, **attributes):
+    def __init__(self, vsdurl, username, password, enterprise, version, model, parent_resource=None, parent_id=None, **default_values):
         """ Initializes the TestsRunner.
 
             Args:
@@ -494,25 +494,25 @@ class TestsRunner(object):
                 password (string): the password for the username
                 enterprise (string): the enterprise
                 version (float): the vsd api version (eg 3.2)
-                spec (dict): the JSON representation of the specification
+                model (Model): the model representation of the object to test
                 parent_resource: the parent_resource if necessary
                 parent_id: the parent id if necessary
-                attributes: all attributes to have a valid version of the spec
+                default_values: all default values to have a valid version of the model
 
         """
         VSDKFactory.init(version)
-        vsdk = VSDKFactory.get_vsdk_package(version)
+        vsdk = VSDKFactory.get_vsdk_package()
         TestHelper.use_vsdk(vsdk)
 
         session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise, version=version)
         session.start()
 
         self.user = session.user
-        self.spec = spec
-        self.resource_name = spec['model']['resourceName']
+        self.resource_name = model.resource_name
 
-        python_attributes = {Utils.get_python_name(name): value for name, value in attributes.iteritems()}
-        self.vsdobject = VSDKFactory.get_instance(self.resource_name, **python_attributes)
+        python_attributes = {Utils.get_python_name(name): value for name, value in default_values.iteritems()}
+        self.vsdobject = VSDKFactory.get_instance_from_model(model, **python_attributes)
+
         self.parent = None
 
         if parent_resource and parent_id:
@@ -522,15 +522,17 @@ class TestsRunner(object):
             except:
                 Printer.raiseError('Could not find parent %s with ID=%s' % (parent_resource, parent_id))
 
+        VSDKFactory.update_fetchers_for_object(self.parent, self.vsdobject, model)
+
         self.is_create_allowed = False
         self.is_delete_allowed = False
         self.is_get_allowed = False
         self.is_get_all_allowed = False
         self.is_update_allowed = False
 
-        for path, api in self.spec['apis']['parents'].iteritems():
-            for operation in api['operations']:
-                method = operation['method']
+        for path, api in model.apis['parents'].iteritems():
+            for operation in api.operations:
+                method = operation.method
                 Printer.log('%s %s' % (method, path))
                 if method == HTTP_METHOD_POST:
                     self.is_create_allowed = True
@@ -556,7 +558,7 @@ class TestsRunner(object):
     def test_suite(self):
         """ Returns a TestSuite that can be run
 
-            TestSuite is computed according to what is defined in the spec
+            TestSuite is computed according to what is defined in the model
 
         """
         all_suites = TestSuite()

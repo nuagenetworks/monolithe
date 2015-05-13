@@ -2,6 +2,7 @@
 
 __all__ = ['Command']
 
+import sys
 import os
 import shutil
 import json
@@ -50,10 +51,14 @@ class Command(object):
             default_values = data['defaultValues']
 
             spec = data['spec']
+
             if spec is None or len(spec) == 0:
                 spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, entity_name=entity_name)
 
-            runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, spec=spec, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
+            processed_spec = ModelsProcessor.process(resources={spec['model']['entityName']: spec})
+            model = processed_spec[spec['model']['entityName']]
+
+            runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, model=model, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
             results = runner.run()
 
             Printer.log(results)
