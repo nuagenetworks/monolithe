@@ -99,10 +99,10 @@ class VSDKFactory(object):
 
             for api in model.apis['children'].values():
                 fetcher_name = 'NU%sFetcher' % api.plural_name
-                fetcher = getattr(vsdk, fetcher_name, None)
+                fetcher = getattr(vsdk.fetchers, fetcher_name, None)
 
                 if fetcher is None:
-                    raise ImportError('Could import fetcher %s from vsdk package' % fetcher_name)
+                    raise ImportError('Could not import fetcher %s from vsdk package' % fetcher_name)
 
                 setattr(self, api.instance_plural_name, fetcher.fetcher_with_object(parent_object=self))
 
