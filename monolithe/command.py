@@ -138,7 +138,7 @@ class Command(object):
         processed_resources = ModelsProcessor.process(resources=resources)
 
         writer = CourgetteWriter(directory=directory)
-        writer.write(resources=processed_resources)
+        writer.write(resources=processed_resources, apiversion=apiversion)
 
     @classmethod
     def _get_api_url(cls, vsdurl=None):

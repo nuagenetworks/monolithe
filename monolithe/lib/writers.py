@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import shutil
 
@@ -9,6 +7,7 @@ from jinja2 import Environment, PackageLoader
 from .printer import Printer
 from .managers import TaskManager
 from .utils import Utils
+import yaml
 
 __all__ = ['HTMLFileWriter', 'VSDKFileWriter', 'CourgetteWriter']
 
@@ -41,12 +40,6 @@ class FileWriter(object):
             kwargs: data that will be transmitted to the template
 
         """
-        if not os.path.exists(destination):
-            try:
-                os.makedirs(destination)
-            except:  # The directory can be created while creating it.
-                pass
-
         content = template.render(kwargs)
         self._write_file(destination=destination, filename=filename, content=content)
 
@@ -59,11 +52,21 @@ class FileWriter(object):
                 content: the content to write
 
         """
+        if not os.path.exists(destination):
+            os.makedirs(destination)
         filepath = '%s/%s' % (destination, filename)
 
         f = open(filepath, 'w+')
         f.write(content)
         f.close()
+
+    def write_yaml(self, destination, filename, content):
+        if not os.path.exists(destination):
+            os.makedirs(destination)
+        filepath = '%s/%s' % (destination, filename)
+        with open(filepath, 'w') as f:
+            yaml.dump(content, f, default_flow_style=False)
+
 
 
 class CourgetteFileWriter(FileWriter):
@@ -71,62 +74,26 @@ class CourgetteFileWriter(FileWriter):
         Will be used by CourgetteWriter
 
     """
-    GETALL_ENVIRONMENT_TEMPLATE = 'courgette/getall_environment.py.tpl'
     ENVIRONMENT_TEMPLATE = 'courgette/environment.py.tpl'
     ENVIRONMENT_PATH = '/environments'
+    ATTRIBUTES_PATH = '/environments/attributes'
 
-    TEST_TEMPLATE = 'courgette/tests.py.tpl'
-    TEST_PATH = '/tests/functional'
-
-    def write_environment(self, model):
+    def write_environment(self, model, apiversion=None):
         """ Write Environment
 
         """
         template = self.env.get_template(CourgetteFileWriter.ENVIRONMENT_TEMPLATE)
         destination = '%s%s' % (self.directory, CourgetteFileWriter.ENVIRONMENT_PATH)
         filename = 'nu%s.py' % model.environment_name.lower()
-
-        self.write(template=template, destination=destination, filename=filename, model=model)
-
+        self.write(template=template, destination=destination, filename=filename, model=model, apiversion=apiversion)
         return (filename, model.name)
 
-    def write_getall_environment(self, model):
-        """ Write getall environment
-
+    def write_attributes(self, environment_name, attributes):
+        """ Write attributes as yaml file
         """
-        template = self.env.get_template(CourgetteFileWriter.GETALL_ENVIRONMENT_TEMPLATE)
-        destination = '%s%s' % (self.directory, CourgetteFileWriter.ENVIRONMENT_PATH)
-        filename = 'nu%s.py' % model.getall_environment_name.lower()
-
-        self.write(template=template, destination=destination, filename=filename, model=model)
-
-        return (filename, model.name)
-
-    def write_test(self, model, allowed_methods):
-        """ Write test
-
-        """
-        template = self.env.get_template(CourgetteFileWriter.TEST_TEMPLATE)
-        destination = '%s%s' % (self.directory, CourgetteFileWriter.TEST_PATH)
-        filename = 'nu%s.py' % model.environment_name.lower()
-
-        self.write(template=template, destination=destination, filename=filename, model=model, allowed_methods=allowed_methods)
-
-        return (filename, model.name)
-
-    def _write_file(self, destination, filename, content):
-        """ Write filename at the given destination with the given content
-
-            Args:
-                destination: the destination where to create the file
-                filename: the file name
-                content: the content to write
-
-        """
-        filepath = '%s/%s' % (destination, filename)
-
-        if not os.path.exists(filepath):
-            super(CourgetteFileWriter, self)._write_file(destination, filename, content)
+        filename = 'nu%s.yaml' % environment_name.lower()
+        destination = '%s/%s' % (self.directory, CourgetteFileWriter.ATTRIBUTES_PATH)
+        self.write_yaml(destination, filename, attributes)
 
 
 class VSDKFileWriter(FileWriter):
@@ -210,13 +177,10 @@ class VSDKFileWriter(FileWriter):
         filename = 'nu%s.py' % model.name.lower()
 
         override_path = '%s/%s' % (VSDKFileWriter.OVERRIDE_PATH, 'nu%s.override.py' % model.name.lower())
-        # print override_path
 
         override_content = None
         if os.path.isfile(override_path):
             override_content = open(override_path).read()
-
-        file_path = '%s/%s' % (destination, filename)
 
         self.write(template=template, destination=destination, filename=filename, model=model, override_content=override_content)
         return (filename, model.name)
@@ -554,29 +518,43 @@ class CourgetteWriter(object):
         """
 
         """
-        roots = dict()
-
-        for model_name, model in resources.iteritems():
-
+        def _is_root_elmt(model):
             parent_names = self._get_parent_names(model)
-            allowed_methods = self._get_allowed_methods(model)
+            if (not parent_names or parent_names == ['RESTUser']):
+                allowed_methods = self._get_allowed_methods(model)
+                if 'POST' in allowed_methods:
+                    return True
+            return False
 
-            if len(parent_names) == 0 and 'POST' in allowed_methods:
+        roots = dict()
+        for model_name, model in resources.iteritems():
+            if _is_root_elmt(model):
                 model.parent = 'csproot'
                 model.environment_name = model.name
                 model.parent_environment_name = None
                 roots[model_name] = model
-
         return roots
 
-    def _traverse_model(self, model, resources, origin=None):
+    def _write_attributes(self, model):
+        attr_dict = dict()
+        for attr in model.attributes:
+            attr_dict[attr.local_name] = {
+                'required': attr.is_required,
+                'description': attr.description,
+                'type': attr.remote_type,
+                'value': None
+            }
+        writer = CourgetteFileWriter(directory=self.writer_directory)
+        writer.write_attributes(model.environment_name, attr_dict)
+
+
+    def _traverse_model(self, model, resources, origin=None, apiversion=None):
         """ Traverse the current model, and write it!
 
         """
         self._remove_ignored_attributes(model)
-        self._write_environment(model)
-        self._write_getall_environment(model)
-        self._write_tests(model)
+        self._write_environment(model, apiversion=apiversion)
+        self._write_attributes(model)
 
         for relation in model.relations:
 
@@ -595,15 +573,15 @@ class CourgetteWriter(object):
             elif len(parent_names) == 1:
                 child_model.environment_name = '%s%s' % (model.environment_name, child_model.name) if origin else child_model.name
                 child_model.parent_environment_name = model.environment_name
-                self._traverse_model(model=child_model, resources=resources, origin=origin)
+                self._traverse_model(model=child_model, resources=resources, origin=origin, apiversion=apiversion)
 
             else:
                 m = deepcopy(child_model)
                 m.environment_name = '%s%s' % (model.environment_name, m.name) if origin else '%s%s' % (model.name, m.name)
                 m.parent_environment_name = model.environment_name
-                self._traverse_model(model=m, resources=resources, origin=model)
+                self._traverse_model(model=m, resources=resources, origin=model, apiversion=apiversion)
 
-    def write(self, resources):
+    def write(self, resources, apiversion=None):
         """ Write all environments and tests files for courgette
 
             Args:
@@ -616,7 +594,7 @@ class CourgetteWriter(object):
         roots = self._get_root_objects(resources)
 
         for name, model in roots.iteritems():
-            self._traverse_model(model, resources)
+            self._traverse_model(model, resources, apiversion=apiversion)
 
         Printer.success('Successfully generated tests files for %s objects' % len(resources))
 
@@ -664,7 +642,7 @@ class CourgetteWriter(object):
                         return True
         return False
 
-    def _write_environment(self, model):
+    def _write_environment(self, model, apiversion=None):
         """ Write an environment for single model
             and the given parent
 
@@ -676,7 +654,7 @@ class CourgetteWriter(object):
                 Nothing yet
         """
         writer = CourgetteFileWriter(directory=self.writer_directory)
-        writer.write_environment(model=model)
+        writer.write_environment(model=model, apiversion=apiversion)
 
     def _write_getall_environment(self, model):
         """ Write an environment for a getAll model
