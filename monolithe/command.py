@@ -2,7 +2,6 @@
 
 __all__ = ['Command']
 
-import sys
 import os
 import shutil
 import json
@@ -44,9 +43,6 @@ class Command(object):
         all_results = dict()
 
         for data in datas:
-            Printer.log('******* %s' % data['resourceName'])
-
-            entity_name = data['resourceName']
             parent_object = data['parentObject']
             default_values = data['defaultValues']
 
