@@ -40,6 +40,8 @@ class Command(object):
                 data (dict):
 
         """
+        all_results = dict()
+
         for data in datas:
             Printer.log('******* %s' % data['resourceName'])
 
@@ -59,6 +61,10 @@ class Command(object):
                 for error in results.errors:
                     Printer.warn('Error in %s' % error[0])
                     Printer.warn(error[1])
+
+            all_results[entity_name] = results
+
+        return all_results
 
     @classmethod
     def get_spec(cls, vsdurl, apiversion, entity_name, path=None):

@@ -162,3 +162,4 @@ class Utils(object):
 
         """
         return ('v%s' % version).replace('.', '_')
+

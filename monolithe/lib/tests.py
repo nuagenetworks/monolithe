@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import re
+import requests
+import logging
 
 from .printer import Printer
 from .factory import VSDKFactory
+from .utils import Utils
 from unittest import TestCase, TestSuite, TextTestRunner
 
 from bambou.config import BambouConfig
@@ -12,6 +15,71 @@ HTTP_METHOD_POST = 'POST'
 HTTP_METHOD_GET = 'GET'
 HTTP_METHOD_DELETE = 'DELETE'
 HTTP_METHOD_UPDATE = 'UPDATE'
+
+
+class TestHelper(object):
+
+    vsdk = None
+
+    @classmethod
+    def set_debug_mode(cls, debug=True):
+        if debug:
+            cls.vsdk.utils.set_log_level(logging.DEBUG)
+        else:
+            cls.vsdk.utils.set_log_level(logging.ERROR)
+
+    @classmethod
+    def use_vsdk(cls, vsdk):
+        cls.vsdk = vsdk
+
+    @classmethod
+    def current_push_center(cls):
+        session = cls.vsdk.NUVSDSession.get_current_session()
+        return session.push_center
+
+    @classmethod
+    def set_api_key(cls, api_key):
+        session = cls.vsdk.NUVSDSession.get_current_session()
+        session.login_controller.api_key = api_key
+        Printer.warn('API is now = %s' % session.login_controller.api_key)
+
+    @classmethod
+    def session_headers(cls):
+        session = cls.vsdk.NUVSDSession.get_current_session()
+        controller = session.login_controller
+
+        headers = dict()
+        headers['Content-Type'] = u'application/json'
+        headers['X-Nuage-Organization'] = controller.enterprise
+        headers['Authorization'] = controller.get_authentication_header()
+
+        return headers
+
+    @classmethod
+    def send_request(cls, method, url, data=None, remove_header=None):
+
+        headers = cls.session_headers()
+
+        if remove_header:
+            headers.pop(remove_header)
+
+        return requests.request(method=method, url=url, data=data, verify=False, headers=headers)
+
+    @classmethod
+    def send_post(cls, url, data, remove_header=None):
+        return cls.send_request(method='post', url=url, data=data, remove_header=remove_header)
+
+    @classmethod
+    def send_put(cls, url, data, remove_header=None):
+        return cls.send_request(method='put', url=url, data=data, remove_header=remove_header)
+
+    @classmethod
+    def send_delete(cls, url, data, remove_header=None):
+        return cls.send_request(method='delete', url=url, data=data, remove_header=remove_header)
+
+    @classmethod
+    def send_get(cls, url, remove_header=None):
+        return cls.send_request(method='get', url=url, remove_header=remove_header)
 
 
 class TestMaker(object):
@@ -135,20 +203,23 @@ class CreateTestMaker(TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, vsdobject):
+    def __init__(self, parent, vsdobject, user):
         """ Initializes a test case for creating objects
 
         """
         super(CreateTestMaker, self).__init__()
         self.parent = parent
         self.vsdobject = vsdobject
+        self.user = user
 
         # Object tests
-        self.register_test('_test_create_object_in_parent_with_all_valid_attributes_should_succeed')
-        self.register_test('_test_create_object_with_dummy_test')
+        self.register_test('_test_create_object_with_all_valid_attributes_should_succeed')
+        # self.register_test('_test_create_object_without_authentication_should_fail')
 
         # Attribute tests
-        # self.register_test_for_attribute('test_create_object_in_parent_with_all_valid_attributes_should_succeed')
+        self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
+        self.register_test_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        # self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
 
     def test_suite(self):
         """ Inject generated tests
@@ -156,6 +227,7 @@ class CreateTestMaker(TestMaker):
         """
         CreateTestCase.parent = self.parent
         CreateTestCase.vsdobject = self.vsdobject
+        CreateTestCase.user = self.user
 
         tests = self.make_tests(vsdobject=self.vsdobject, testcase=CreateTestCase)
         for test_name, test_func in tests.iteritems():
@@ -164,10 +236,21 @@ class CreateTestMaker(TestMaker):
         return TestSuite(map(CreateTestCase, tests))
 
 
-class CreateTestCase(TestCase):
+class FunctionalTestCase(TestCase):
+
+    def assertErrorEqual(self, errors, title, description, remote_name=u'', index=0):
+        """ Check if errors received matches """
+
+        self.assertEqual(errors[index]['descriptions'][0]['title'], title)
+        self.assertEqual(errors[index]['descriptions'][0]['description'], description)
+        self.assertEqual(errors[index]['property'], remote_name)
+
+
+class CreateTestCase(FunctionalTestCase):
 
     parent = None
     vsdobject = None
+    user = None
 
     def setUp(self):
         """ Setting up create test
@@ -181,25 +264,71 @@ class CreateTestCase(TestCase):
         """
         if self.vsdobject and self.vsdobject.id:
             self.vsdobject.delete()
+            self.vsdobject.id = None
 
-    def _test_create_object_in_parent_with_all_valid_attributes_should_succeed(self):
+    # Objects tests
+    def _test_create_object_without_authentication_should_fail(self):
+        """ Create an object without authentication """
+
+        TestHelper.set_api_key(None)
+        (obj, connection) = self.parent.create_child(self.vsdobject)
+        TestHelper.set_api_key(self.user.api_key)
+
+        self.assertEqual(connection.response.status_code, 401)
+
+    def _test_create_object_with_all_valid_attributes_should_succeed(self):
         """ Create an object with all its valid attributes should always succeed with 201 response
 
         """
         Printer.warn('Creating %s' % self.vsdobject.rest_name)
         Printer.json(self.vsdobject.to_dict())
-        (obj, connection) = self.parent.create_child(self.vsdobject)
 
-        Printer.warn(connection.response.errors)
+        (obj, connection) = self.parent.create_child(self.vsdobject)
 
         self.assertEquals(connection.response.status_code, 201)
         self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
 
-    def _test_create_object_with_dummy_test(self):
-        """ This is a dummy test
 
-        """
-        self.assertEquals(True, True)
+    # Attributes tests
+    def _test_create_object_with_required_attribute_as_none_should_fail(self, attribute):
+        """ Create an object with a required attribute as None """
+
+        default_value = getattr(self.vsdobject, attribute.local_name)
+        setattr(self.vsdobject, attribute.local_name, None)
+        (obj, connection) = self.parent.create_child(self.vsdobject)
+
+        if default_value is not None:
+            setattr(self.vsdobject, attribute.local_name, default_value)
+
+        self.assertEqual(connection.response.status_code, 409)
+        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'This value is mandatory.', remote_name=attribute.remote_name)
+
+    def _test_create_object_with_attribute_as_none_should_succeed(self, attribute):
+        """ Create an objet with an attribute as none """
+
+        default_value = getattr(self.vsdobject, attribute.local_name)
+        setattr(self.vsdobject, attribute.local_name, None)
+        Printer.json(self.vsdobject.to_dict())
+        (obj, connection) = self.parent.create_child(self.vsdobject)
+
+        if default_value is not None:
+            setattr(self.vsdobject, attribute.local_name, default_value)
+        Printer.warn(connection.response.errors)
+
+        self.assertEqual(connection.response.status_code, 201)
+        self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+
+    def _test_create_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
+        """ Create an object with a wrong choice attribute """
+
+        default_value = getattr(self.vsdobject, attribute.local_name)
+        setattr(self.vsdobject, attribute.local_name, u'A random value')
+        (obj, connection) = self.parent.create_child(self.vsdobject)
+        if default_value is not None:
+            setattr(self.vsdobject, attribute.local_name, default_value)
+
+        self.assertEqual(connection.response.status_code, 409)
+        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
 
 
 class TestsRunner(object):
@@ -223,13 +352,17 @@ class TestsRunner(object):
         """
         VSDKFactory.init(version)
         vsdk = VSDKFactory.get_vsdk_package(version)
+        TestHelper.use_vsdk(vsdk)
 
         session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise, version=version)
         session.start()
 
+        self.user = session.user
         self.spec = spec
         self.resource_name = spec['model']['resourceName']
-        self.vsdobject = VSDKFactory.get_instance(self.resource_name, **attributes)
+
+        python_attributes = {Utils.get_python_name(name): value for name, value in attributes.iteritems()}
+        self.vsdobject = VSDKFactory.get_instance(self.resource_name, **python_attributes)
         self.parent = None
 
         if parent_resource and parent_id:
@@ -285,7 +418,7 @@ class TestsRunner(object):
         """
         suite = None
         if self.is_create_allowed:
-            maker = CreateTestMaker(self.parent, self.vsdobject)
+            maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
             suite = maker.test_suite()
 
         # Do the same of update and delete.. and combine suites
@@ -297,13 +430,12 @@ class TestsRunner(object):
 
         """
         BambouConfig.set_should_raise_bambou_http_error(False)
-
-        import logging
-        bambou_logger = logging.getLogger('bambou')
-        bambou_logger.setLevel(logging.INFO)
+        TestHelper.set_debug_mode(False)
 
         suite = self.test_suite()
         results = TextTestRunner().run(suite)
 
+        TestHelper.set_debug_mode(False)
         BambouConfig.set_should_raise_bambou_http_error(True)
+
         return results
