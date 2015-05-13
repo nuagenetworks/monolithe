@@ -28,7 +28,7 @@ class Command(object):
 
     """
     @classmethod
-    def run_tests(cls, vsdurl, username, password, enterprise, version, datas):
+    def run_tests(cls, vsdurl, username, password, enterprise, version, data):
         """ Run all tests according to the given data
 
             `data` contains information:
@@ -40,39 +40,26 @@ class Command(object):
                 data (dict):
 
         """
-        all_results = dict()
+        resource_name = None
 
-        for data in datas:
+        if 'resourceName' in data:
+            Printer.log('******* %s' % data['resourceName'])
+            resource_name = data['resourceName']
 
-            entity_name = None
+        parent_object = data['parentObject']
+        default_values = data['defaultValues']
 
-            if 'resourceName' in data:
-                Printer.log('******* %s' % data['resourceName'])
-                entity_name = data['resourceName']
+        spec = data['spec']
 
-            parent_object = data['parentObject']
-            default_values = data['defaultValues']
+        if spec is None or len(spec) == 0:
+            spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, entity_name=resource_name)
 
-            spec = data['spec']
+        processed_spec = ModelsProcessor.process(resources={spec['model']['entityName']: spec})
+        model = processed_spec[spec['model']['entityName']]
 
-            if spec is None or len(spec) == 0:
-                spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, entity_name=entity_name)
+        runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, model=model, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
 
-            processed_spec = ModelsProcessor.process(resources={spec['model']['entityName']: spec})
-            model = processed_spec[spec['model']['entityName']]
-
-            runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, model=model, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
-            results = runner.run()
-
-            Printer.log(results)
-            if len(results.failures) > 0:
-                for failure in results.failures:
-                    Printer.warn('Failure in %s' % failure[0])
-                    Printer.warn(failure[1])
-
-            all_results[entity_name] = results
-
-        return all_results
+        return runner.run()
 
     @classmethod
     def get_spec(cls, vsdurl, apiversion, entity_name, path=None):
