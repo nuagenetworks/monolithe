@@ -4,11 +4,16 @@ import re
 import requests
 import logging
 import json
+import time
+import sys
+
+from copy import deepcopy
 
 from .printer import Printer
 from .factory import VSDKFactory
 from .utils import Utils
-from unittest import TestCase, TestSuite, TextTestRunner
+from unittest import TestCase, TestSuite, TestResult
+from collections import OrderedDict
 
 from bambou.config import BambouConfig
 
@@ -19,12 +24,17 @@ HTTP_METHOD_UPDATE = 'PUT'
 
 
 class TestHelper(object):
+    """ Helper to make tests easier
 
+    """
     _vsdk = None
     _debug = False
 
     @classmethod
     def set_debug_mode(cls, debug=True):
+        """ Activate debug mode
+
+        """
         cls._debug = debug
 
         if cls._debug:
@@ -34,20 +44,32 @@ class TestHelper(object):
 
     @classmethod
     def use_vsdk(cls, vsdk):
+        """ Retain used vsdk
+
+        """
         cls._vsdk = vsdk
 
     @classmethod
     def current_push_center(cls):
+        """ Get current push center
+
+        """
         session = cls._vsdk.NUVSDSession.get_current_session()
         return session.push_center
 
     @classmethod
     def set_api_key(cls, api_key):
+        """ Change api key
+
+        """
         session = cls._vsdk.NUVSDSession.get_current_session()
         session.login_controller.api_key = api_key
 
     @classmethod
     def session_headers(cls):
+        """ Get headers
+
+        """
         session = cls._vsdk.NUVSDSession.get_current_session()
         controller = session.login_controller
 
@@ -60,7 +82,9 @@ class TestHelper(object):
 
     @classmethod
     def send_request(cls, method, url, data=None, remove_header=None):
+        """ Send request with removed header
 
+        """
         headers = cls.session_headers()
 
         if remove_header:
@@ -70,22 +94,166 @@ class TestHelper(object):
 
     @classmethod
     def send_post(cls, url, data, remove_header=None):
+        """ Send a POST request
+
+        """
         return cls.send_request(method='post', url=url, data=data, remove_header=remove_header)
 
     @classmethod
     def send_put(cls, url, data, remove_header=None):
+        """ Send a PUT request
+
+        """
         return cls.send_request(method='put', url=url, data=data, remove_header=remove_header)
 
     @classmethod
     def send_delete(cls, url, data, remove_header=None):
+        """ Send a DELETE request
+
+        """
         return cls.send_request(method='delete', url=url, data=data, remove_header=remove_header)
 
     @classmethod
     def send_get(cls, url, remove_header=None):
+        """ Send a GET request
+
+        """
         return cls.send_request(method='get', url=url, remove_header=remove_header)
 
 
-class FunctionalTestCase(TestCase):
+class _MonolitheTestResult(TestResult):
+    """ A TestResult
+
+    """
+    def __init__(self):
+        """ Initialized a new result
+
+        """
+        TestResult.__init__(self)
+        self.tests = OrderedDict()
+
+    def getDescription(self, test):
+        """ Get test description
+
+        """
+        return str(test).split(' ')[0]  # Removing (package.name)
+
+    def addSuccess(self, test):
+        """ Add success to the result
+
+        """
+        TestResult.addSuccess(self, test)
+        self.tests[self.getDescription(test)] = {'status': 'SUCCESS'}
+
+    def addError(self, test, err, connection):
+        """ Add error to the result
+
+        """
+        TestResult.addError(self, test, err)
+        self.tests[self.getDescription(test)] = {'status': 'ERROR', 'stacktrace': err, 'connection': test.last_connection}
+
+    def addFailure(self, test, err, connection):
+        """ Add failure to the result
+
+        """
+        TestResult.addFailure(self, test, err)
+        self.tests[self.getDescription(test)] = {'status': 'FAILURE', 'stacktrace': err, 'connection': test.last_connection}
+
+    def __repr__(self):
+        """ Representation
+
+        """
+        return "<%s testsRun=%i errors=%i failures=%i>" % \
+               (str(self.__class__), self.testsRun, len(self.errors), len(self.failures))
+
+
+class _MonolitheTestRunner(object):
+    """
+
+    """
+    def __init__(self):
+        """ Initialized """
+        pass
+
+    def _makeResult(self):
+        """ Return a TestResult implementation
+
+        """
+        return _MonolitheTestResult()
+
+    def run(self, test):
+        """ Run the given test case or test suite.
+
+        """
+        result = self._makeResult()
+        startTime = time.time()
+        test(result)
+        stopTime = time.time()
+        timeTaken = stopTime - startTime
+
+        run = result.testsRun
+        Printer.log("Ran %d test%s in %.3fs" %
+                            (run, run != 1 and "s" or "", timeTaken))
+
+        if not result.wasSuccessful():
+            Printer.warn("FAILED (failures=%i, errors=%i)" % (len(result.failures), len(result.errors)))
+        else:
+            Printer.success("OK")
+        return result
+
+
+class _MonolitheTestCase(TestCase):
+
+    _last_connection = None  # Last connection to present errors
+    parent = None  # Parent VSD object
+    vsdobject = None  # Current VSD object
+    user = None  # Current RESTUser
+
+    @property
+    def last_connection(self):
+        """ Returns last connection """
+        return self._last_connection
+
+    @last_connection.setter
+    def last_connection(self, connection):
+        self._last_connection = deepcopy(connection)
+
+    # Very Dark Side of unittest... Maybe we should upgrade to unittest2 to do that.
+    # Will see that later !
+    # CS 05-13-2015
+    def run(self, result=None):
+        if result is None: result = self.defaultTestResult()
+        result.startTest(self)
+        testMethod = getattr(self, self._testMethodName)
+
+        try:
+            try:
+                self.setUp()
+            except KeyboardInterrupt:
+                raise
+            except:
+                result.addError(self, sys.exc_info(), self.last_connection)
+                return
+            ok = False
+            try:
+                testMethod()
+                ok = True
+            except self.failureException:
+                result.addFailure(self, sys.exc_info(), self.last_connection)
+            except KeyboardInterrupt:
+                raise
+            except:
+                result.addError(self, sys.exc_info(), self.last_connection)
+            try:
+                self.tearDown()
+            except KeyboardInterrupt:
+                raise
+            except:
+                result.addError(self, sys.exc_info(), self.last_connection)
+                ok = False
+            if ok: result.addSuccess(self)
+        finally:
+            result.stopTest(self)
 
     def assertErrorEqual(self, errors, title, description, remote_name=u'', index=0):
         """ Check if errors received matches
@@ -115,6 +283,7 @@ class FunctionalTestCase(TestCase):
             message += 'Errors\n%s\n' % json.dumps(connection.response.errors, indent=2)
 
         return message
+
 
 class TestMaker(object):
     """ Make tests
@@ -185,7 +354,6 @@ class TestMaker(object):
             (test_name, test_func) = self._create_test(testcase=testcase, vsdobject=vsdobject, function_name=function_name)
             tests[test_name] = test_func
 
-        Printer.log("------ ALL TESTS:\n%s" % tests.keys())
         return tests
 
     def _create_test(self, testcase, function_name, vsdobject, attribute=None):
@@ -250,7 +418,7 @@ class CreateTestMaker(TestMaker):
 
         # Object tests
         self.register_test('_test_create_object_with_all_valid_attributes_should_succeed')
-        # self.register_test('_test_create_object_without_authentication_should_fail')
+        self.register_test('_test_create_object_without_authentication_should_fail')
 
         # Attribute tests
         # self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
@@ -272,11 +440,13 @@ class CreateTestMaker(TestMaker):
         return TestSuite(map(CreateTestCase, tests))
 
 
-class CreateTestCase(FunctionalTestCase):
+class CreateTestCase(_MonolitheTestCase):
 
-    parent = None
-    vsdobject = None
-    user = None
+    def __init__(self, methodName='runTest'):
+        """ Initialize
+
+        """
+        _MonolitheTestCase.__init__(self, methodName)
 
     def setUp(self):
         """ Setting up create test
@@ -292,12 +462,16 @@ class CreateTestCase(FunctionalTestCase):
             self.vsdobject.delete()
             self.vsdobject.id = None
 
+        self.last_connection = None
+
     # Objects tests
     def _test_create_object_without_authentication_should_fail(self):
         """ Create an object without authentication """
 
         TestHelper.set_api_key(None)
         (obj, connection) = self.parent.create_child(self.vsdobject)
+        self.last_connection = connection
+
         TestHelper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
@@ -307,6 +481,7 @@ class CreateTestCase(FunctionalTestCase):
 
         """
         (obj, connection) = self.parent.create_child(self.vsdobject)
+        self.last_connection = connection
 
         self.assertConnectionStatus(connection, 201)
         self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
@@ -318,6 +493,7 @@ class CreateTestCase(FunctionalTestCase):
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.parent.create_child(self.vsdobject)
+        self.last_connection = connection
 
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
@@ -331,10 +507,10 @@ class CreateTestCase(FunctionalTestCase):
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.parent.create_child(self.vsdobject)
+        self.last_connection = connection
 
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
-        Printer.warn(connection.response.errors)
 
         self.assertConnectionStatus(connection, 201)
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
@@ -345,6 +521,7 @@ class CreateTestCase(FunctionalTestCase):
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, u'A random value')
         (obj, connection) = self.parent.create_child(self.vsdobject)
+        self.last_connection = connection
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
 
@@ -392,11 +569,13 @@ class UpdateTestMaker(TestMaker):
         return TestSuite(map(UpdateTestCase, tests))
 
 
-class UpdateTestCase(FunctionalTestCase):
+class UpdateTestCase(_MonolitheTestCase):
 
-    parent = None
-    vsdobject = None
-    user = None
+    def __init__(self, methodName='runTest'):
+        """ Initialize
+
+        """
+        _MonolitheTestCase.__init__(self, methodName)
 
     def setUp(self):
         """ Setting up create test
@@ -409,6 +588,7 @@ class UpdateTestCase(FunctionalTestCase):
 
         """
         self.vsdobject.delete()
+        self.last_connection = None
 
     # Objects tests
     def _test_update_object_without_authentication_should_fail(self):
@@ -416,6 +596,7 @@ class UpdateTestCase(FunctionalTestCase):
 
         TestHelper.set_api_key(None)
         (obj, connection) = self.vsdobject.save()
+        self.last_connection = connection
         TestHelper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
@@ -425,6 +606,7 @@ class UpdateTestCase(FunctionalTestCase):
 
         """
         (obj, connection) = self.vsdobject.save()
+        self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
         self.assertErrorEqual(connection.response.errors, title=u'No changes to modify the entity', description=u'There are no attribute changes to modify the entity.')
@@ -436,7 +618,7 @@ class UpdateTestCase(FunctionalTestCase):
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.vsdobject.save()
-
+        self.last_connection = connection
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
 
@@ -449,6 +631,7 @@ class UpdateTestCase(FunctionalTestCase):
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.vsdobject.save()
+        self.last_connection = connection
 
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
@@ -462,6 +645,7 @@ class UpdateTestCase(FunctionalTestCase):
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, u'A random value')
         (obj, connection) = self.vsdobject.save()
+        self.last_connection = connection
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
 
@@ -474,12 +658,14 @@ class UpdateTestCase(FunctionalTestCase):
         default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.vsdobject.save()
+        self.last_connection = connection
 
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 200)
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+
 
 class TestsRunner(object):
     """ Runner for VSD Objects tests
@@ -533,7 +719,6 @@ class TestsRunner(object):
         for path, api in model.apis['parents'].iteritems():
             for operation in api.operations:
                 method = operation.method
-                Printer.log('%s %s' % (method, path))
                 if method == HTTP_METHOD_POST:
                     self.is_create_allowed = True
                 elif method == HTTP_METHOD_GET:
@@ -543,17 +728,6 @@ class TestsRunner(object):
                     self.is_update_allowed = True
                 elif method == HTTP_METHOD_DELETE:
                     self.is_delete_allowed = True
-
-        Printer.log('---------------------------------')
-        Printer.log('parent = %s' % self.parent)
-        Printer.log('vsdobject = %s' % self.vsdobject)
-        Printer.log('resource_name = %s' % self.resource_name)
-        Printer.log('is_create_allowed = %s' % self.is_create_allowed)
-        Printer.log('is_delete_allowed = %s' % self.is_delete_allowed)
-        Printer.log('is_get_allowed = %s' % self.is_get_allowed)
-        Printer.log('is_get_all_allowed = %s' % self.is_get_all_allowed)
-        Printer.log('is_update_allowed = %s' % self.is_update_allowed)
-        Printer.log('---------------------------------')
 
     def test_suite(self):
         """ Returns a TestSuite that can be run
@@ -584,7 +758,7 @@ class TestsRunner(object):
         TestHelper.set_debug_mode(False)
 
         suite = self.test_suite()
-        results = TextTestRunner().run(suite)
+        results = _MonolitheTestRunner().run(suite)
 
         TestHelper.set_debug_mode(False)
         BambouConfig.set_should_raise_bambou_http_error(True)

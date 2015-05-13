@@ -4,7 +4,6 @@ import importlib
 
 from utils import Utils
 from bambou import NURESTFetcher, NURESTObject
-from .printer import Printer
 
 
 class VSDKFactory(object):
@@ -39,10 +38,8 @@ class VSDKFactory(object):
         """
         vsdk = None
         try:
-            Printer.log('Importing from vspk.vsdk.%s' % cls._version)
             vsdk = importlib.import_module('vspk.vsdk.%s' % cls._version)
         except ImportError:
-            Printer.log('Importing from vsdk')
             vsdk = importlib.import_module('vsdk')
         except ImportError as error:
             raise ImportError('Could not found vspk or vsdk library. Please install requirements using command line `pip install -r requirements.txt`.\n%s' % error)
