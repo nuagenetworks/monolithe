@@ -91,16 +91,16 @@ class FunctionalTestCase(TestCase):
         """ Check if errors received matches
 
         """
-        self.assertEqual(errors[index]['descriptions'][0]['title'], title)
-        self.assertEqual(errors[index]['descriptions'][0]['description'], description)
-        self.assertEqual(errors[index]['property'], remote_name)
+        self.assertEquals(errors[index]['descriptions'][0]['title'], title)
+        self.assertEquals(errors[index]['descriptions'][0]['description'], description)
+        self.assertEquals(errors[index]['property'], remote_name)
 
     def assertConnectionStatus(self, connection, expected_status):
         """ Check if the connection has expected status
 
         """
         message = self.connection_failure_message(connection, expected_status)
-        self.assertEqual(connection.response.status_code, expected_status, message)
+        self.assertEquals(connection.response.status_code, expected_status, message)
 
     def connection_failure_message(cls, connection, expected_status):
         """ Returns a message that explains the connection status failure """
@@ -300,7 +300,7 @@ class CreateTestCase(FunctionalTestCase):
         (obj, connection) = self.parent.create_child(self.vsdobject)
         TestHelper.set_api_key(self.user.api_key)
 
-        self.assertEqual(connection.response.status_code, 401)
+        self.assertConnectionStatus(connection, 401)
 
     def _test_create_object_with_all_valid_attributes_should_succeed(self):
         """ Create an object with all its valid attributes should always succeed with 201 response
@@ -308,7 +308,7 @@ class CreateTestCase(FunctionalTestCase):
         """
         (obj, connection) = self.parent.create_child(self.vsdobject)
 
-        self.assertEquals(connection.response.status_code, 201)
+        self.assertConnectionStatus(connection, 201)
         self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
 
     # Attributes tests
@@ -322,7 +322,7 @@ class CreateTestCase(FunctionalTestCase):
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
 
-        self.assertEqual(connection.response.status_code, 409)
+        self.assertConnectionStatus(connection, 409)
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'This value is mandatory.', remote_name=attribute.remote_name)
 
     def _test_create_object_with_attribute_as_none_should_succeed(self, attribute):
@@ -336,7 +336,7 @@ class CreateTestCase(FunctionalTestCase):
             setattr(self.vsdobject, attribute.local_name, default_value)
         Printer.warn(connection.response.errors)
 
-        self.assertEqual(connection.response.status_code, 201)
+        self.assertConnectionStatus(connection, 201)
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
 
     def _test_create_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
@@ -348,7 +348,7 @@ class CreateTestCase(FunctionalTestCase):
         if default_value is not None:
             setattr(self.vsdobject, attribute.local_name, default_value)
 
-        self.assertEqual(connection.response.status_code, 409)
+        self.assertConnectionStatus(connection, 409)
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
 
 
