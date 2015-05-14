@@ -17,6 +17,8 @@ SWAGGER_APIVERSION = 'apiVersion'
 SWAGGER_PATH = 'path'
 SPEC_EXTENSION = '.spec'
 
+from converters import RESOURCE_MAPPING
+
 ## Monkey patch to use PROTOCOL_TLSv1 by default in requests
 from requests.packages.urllib3.poolmanager import PoolManager
 import ssl
@@ -92,6 +94,25 @@ class AbstractSwaggerParser(object):
 
     # Methods
 
+    def _convert_filters(self, filters):
+        """ Transform entityName in filters to resource name
+
+        """
+        valid_names = RESOURCE_MAPPING.values()
+        default_names = RESOURCE_MAPPING.keys()
+
+        new_filters = []
+        for f in filters:
+            try:
+                index = valid_names.index(f)
+                name = default_names[index]
+            except ValueError:
+                name = f
+
+            new_filters.append(name)
+
+        return new_filters
+
     def grab_all(self, filters=[]):
         """ Read a JSON file and returns a dictionnary
 
@@ -118,6 +139,8 @@ class AbstractSwaggerParser(object):
             self.apiversion = Utils.get_version(data[SWAGGER_APIVERSION])
 
         task_manager = TaskManager()
+
+        filters = self._convert_filters(filters)
 
         models = dict()
         for api in data[SWAGGER_APIS]:

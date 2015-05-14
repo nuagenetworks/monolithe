@@ -42,9 +42,9 @@ class Command(object):
         """
         resource_name = None
 
-        if 'resourceName' in data:
-            Printer.log('******* %s' % data['resourceName'])
-            resource_name = data['resourceName']
+        if 'entityName' in data:
+            Printer.log('******* %s' % data['entityName'])
+            entity_name = data['entityName']
 
         parent_object = data['parentObject']
         default_values = data['defaultValues']
@@ -52,7 +52,7 @@ class Command(object):
         spec = data['spec']
 
         if spec is None or len(spec) == 0:
-            spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, entity_name=resource_name)
+            spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, entity_name=entity_name)
 
         processed_spec = ModelsProcessor.process(resources={spec['model']['entityName']: spec})
         model = processed_spec[spec['model']['entityName']]
@@ -74,7 +74,7 @@ class Command(object):
 
         # Read Swagger
         swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
-        resources = swagger_parser.grab_all()
+        resources = swagger_parser.grab_all(filters=[entity_name])
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources, filters=[entity_name])
