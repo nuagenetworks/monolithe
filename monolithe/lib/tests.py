@@ -23,6 +23,8 @@ HTTP_METHOD_DELETE = 'DELETE'
 HTTP_METHOD_UPDATE = 'PUT'
 
 
+IGNORED_ATTRIBUTES = ['id', 'parent_id', 'parent_type', 'creation_date', 'owner', 'last_updated_date', 'last_updated_by']
+
 class TestHelper(object):
     """ Helper to make tests easier
 
@@ -273,16 +275,7 @@ class _MonolitheTestCase(TestCase):
     def connection_failure_message(cls, connection, expected_status):
         """ Returns a message that explains the connection status failure """
 
-        message = '%s != %s\n' % (connection.response.status_code, expected_status)
-
-        message += '%s %s finished with status code: [%s]\n' % (connection.request.method, connection.request.url, connection.response.status_code)
-        message += 'Headers\n%s\n' % json.dumps(connection.request.headers, indent=2)
-        message += 'Body\n%s\n' % json.dumps(connection.request.data, indent=2)
-
-        if len(connection.response.errors) > 0:
-            message += 'Errors\n%s\n' % json.dumps(connection.response.errors, indent=2)
-
-        return message
+        return 'Expected status code %s != %s\n' % (expected_status, connection.response.status_code)
 
 
 class TestMaker(object):
@@ -345,6 +338,10 @@ class TestMaker(object):
         attributes = vsdobject.get_attributes()
 
         for attribute in attributes:
+
+            if attribute.local_name in IGNORED_ATTRIBUTES:
+                continue
+
             for function_name, conditions in self._attributes_registry.iteritems():
                 if self.does_attribute_meet_condition(attribute, conditions):
                     (test_name, test_func) = self._create_test(testcase=testcase, vsdobject=vsdobject, function_name=function_name, attribute=attribute)
@@ -452,7 +449,8 @@ class CreateTestCase(_MonolitheTestCase):
         """ Setting up create test
 
         """
-        pass
+        self.last_connection = None
+        self.pristine_vsdobject = deepcopy(self.vsdobject)
 
     def tearDown(self):
         """ Clean up environment
@@ -463,6 +461,7 @@ class CreateTestCase(_MonolitheTestCase):
             self.vsdobject.id = None
 
         self.last_connection = None
+        self.vsdobject = self.pristine_vsdobject
 
     # Objects tests
     def _test_create_object_without_authentication_should_fail(self):
@@ -490,13 +489,9 @@ class CreateTestCase(_MonolitheTestCase):
     def _test_create_object_with_required_attribute_as_none_should_fail(self, attribute):
         """ Create an object with a required attribute as None """
 
-        default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.parent.create_child(self.vsdobject)
         self.last_connection = connection
-
-        if default_value is not None:
-            setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 409)
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'This value is mandatory.', remote_name=attribute.remote_name)
@@ -504,13 +499,9 @@ class CreateTestCase(_MonolitheTestCase):
     def _test_create_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Create an objet with an attribute as none """
 
-        default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.parent.create_child(self.vsdobject)
         self.last_connection = connection
-
-        if default_value is not None:
-            setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 201)
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
@@ -518,12 +509,9 @@ class CreateTestCase(_MonolitheTestCase):
     def _test_create_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Create an object with a wrong choice attribute """
 
-        default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, u'A random value')
         (obj, connection) = self.parent.create_child(self.vsdobject)
         self.last_connection = connection
-        if default_value is not None:
-            setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 409)
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
@@ -551,7 +539,7 @@ class UpdateTestMaker(TestMaker):
         # Attribute tests
         self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
         self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
+        # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
         self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
 
     def test_suite(self):
@@ -581,6 +569,9 @@ class UpdateTestCase(_MonolitheTestCase):
         """ Setting up create test
 
         """
+        self.last_connection = None
+        self.pristine_vsdobject = deepcopy(self.vsdobject)
+
         self.parent.create_child(self.vsdobject)
 
     def tearDown(self):
@@ -588,7 +579,9 @@ class UpdateTestCase(_MonolitheTestCase):
 
         """
         self.vsdobject.delete()
+
         self.last_connection = None
+        self.vsdobject = self.pristine_vsdobject
 
     # Objects tests
     def _test_update_object_without_authentication_should_fail(self):
@@ -615,12 +608,9 @@ class UpdateTestCase(_MonolitheTestCase):
     def _test_update_object_with_required_attribute_as_none_should_fail(self, attribute):
         """ Update an object with a required attribute as None """
 
-        default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.vsdobject.save()
         self.last_connection = connection
-        if default_value is not None:
-            setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 409)
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'This value is mandatory.', remote_name=attribute.remote_name)
@@ -628,13 +618,9 @@ class UpdateTestCase(_MonolitheTestCase):
     def _test_update_object_with_attribute_with_choices_as_none_should_fail(self, attribute):
         """ Update an objet with an attribute with choices as none should fail """
 
-        default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.vsdobject.save()
         self.last_connection = connection
-
-        if default_value is not None:
-            setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 409)
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
@@ -642,12 +628,9 @@ class UpdateTestCase(_MonolitheTestCase):
     def _test_update_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Update an object with a wrong choice attribute """
 
-        default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, u'A random value')
         (obj, connection) = self.vsdobject.save()
         self.last_connection = connection
-        if default_value is not None:
-            setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 409)
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
@@ -655,13 +638,9 @@ class UpdateTestCase(_MonolitheTestCase):
     def _test_update_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Update an objet with an attribute as none """
 
-        default_value = getattr(self.vsdobject, attribute.local_name)
         setattr(self.vsdobject, attribute.local_name, None)
         (obj, connection) = self.vsdobject.save()
         self.last_connection = connection
-
-        if default_value is not None:
-            setattr(self.vsdobject, attribute.local_name, default_value)
 
         self.assertConnectionStatus(connection, 200)
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
