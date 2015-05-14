@@ -132,8 +132,14 @@ class VSDKFactory(object):
         setattr(fetcher_klass, 'managed_class', classmethod(managed_class))
 
         fetcher = fetcher_klass()
-
         setattr(parent, model.instance_plural_name, fetcher.fetcher_with_object(parent_object=parent))
+
+    @classmethod
+    def get_fetcher_instance(cls, parent, child):
+        """ Get the fetcher instance from the parent that contains the child
+
+        """
+        return parent.fetcher_for_rest_name(child.rest_name)
 
     @classmethod
     def get_instance(cls, resource_name, **attributes):

@@ -788,6 +788,212 @@ class DeleteTestCase(_MonolitheTestCase):
     # No Attributes tests
 
 
+##### GET TESTS
+
+
+class GetTestMaker(TestMaker):
+    """ TestCase for create objects
+
+    """
+    def __init__(self, parent, vsdobject, user):
+        """ Initializes a test case for creating objects
+
+        """
+        super(GetTestMaker, self).__init__()
+        self.parent = parent
+        self.vsdobject = vsdobject
+        self.user = user
+
+        # Object tests
+        self.register_test('_test_get_object_without_authentication_should_fail')
+        self.register_test('_test_get_object_with_valid_id_should_succeed')
+        self.register_test('_test_get_object_with_wrong_id_should_succeed')
+
+        # No Attribute tests
+
+    def test_suite(self):
+        """ Inject generated tests
+
+        """
+        GetTestCase.parent = self.parent
+        GetTestCase.vsdobject = self.vsdobject
+        GetTestCase.user = self.user
+
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetTestCase)
+        for test_name, test_func in tests.iteritems():
+            setattr(GetTestCase, test_name, test_func)
+
+        return TestSuite(map(GetTestCase, tests))
+
+
+class GetTestCase(_MonolitheTestCase):
+
+    def __init__(self, methodName='runTest'):
+        """ Initialize
+
+        """
+        _MonolitheTestCase.__init__(self, methodName)
+        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+
+    def setUp(self):
+        """ Setting up get test
+
+        """
+        self.last_connection = None
+        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+
+        self.parent.create_child(self.vsdobject)
+
+    def tearDown(self):
+        """ Clean up environment
+
+        """
+        self.vsdobject.delete()
+
+    # Objects tests
+    def _test_get_object_without_authentication_should_fail(self):
+        """ Get an object without authentication """
+
+        TestHelper.set_api_key(None)
+        (obj, connection) = self.vsdobject.fetch()
+        self.last_connection = connection
+
+        TestHelper.set_api_key(self.user.api_key)
+
+        self.assertConnectionStatus(connection, 401)
+
+    def _test_get_object_with_valid_id_should_succeed(self):
+        """ Get an object with its id should always succeed with 204 response
+
+        """
+        (obj, connection) = self.vsdobject.fetch()
+        self.last_connection = connection
+
+        self.assertConnectionStatus(connection, 200)
+        self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
+
+    def _test_get_object_with_wrong_id_should_succeed(self):
+        """ Get an object with a wrong id should fail with 404 error
+
+        """
+        default_id = self.vsdobject.id
+        invalid_id = u'Unknown ID'
+        self.vsdobject.id = invalid_id
+        (obj, connection) = self.vsdobject.fetch()
+        self.last_connection = connection
+
+        self.vsdobject.id = default_id
+
+        self.assertConnectionStatus(connection, 404)
+        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.vsdobject.rest_name, description=u'Cannot find %s with ID %s' % (self.vsdobject.rest_name, invalid_id))
+
+    # No Attributes tests
+
+
+##### GETALL TESTS
+
+
+class GetAllTestMaker(TestMaker):
+    """ TestCase for create objects
+
+    """
+    def __init__(self, parent, vsdobject, user):
+        """ Initializes a test case for creating objects
+
+        """
+        super(GetAllTestMaker, self).__init__()
+        self.parent = parent
+        self.vsdobject = vsdobject
+        self.user = user
+
+        # Object tests
+        self.register_test('_test_get_all_objects_without_authentication_should_fail')
+        self.register_test('_test_get_all_objects_without_content_should_success')
+        self.register_test('_test_get_all_objects_with_content_should_success')
+
+        # No Attribute tests
+
+    def test_suite(self):
+        """ Inject generated tests
+
+        """
+        GetAllTestCase.parent = self.parent
+        GetAllTestCase.vsdobject = self.vsdobject
+        GetAllTestCase.user = self.user
+
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetAllTestCase)
+        for test_name, test_func in tests.iteritems():
+            setattr(GetAllTestCase, test_name, test_func)
+
+        return TestSuite(map(GetAllTestCase, tests))
+
+
+class GetAllTestCase(_MonolitheTestCase):
+
+    def __init__(self, methodName='runTest'):
+        """ Initialize
+
+        """
+        _MonolitheTestCase.__init__(self, methodName)
+        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+
+    def setUp(self):
+        """ Setting up get test
+
+        """
+        self.last_connection = None
+        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+
+    def tearDown(self):
+        """ Clean up environment
+
+        """
+        pass
+
+    # Objects tests
+    def _test_get_all_objects_without_authentication_should_fail(self):
+        """ Get all object without authentication """
+
+        TestHelper.set_api_key(None)
+        fetcher = VSDKFactory.get_fetcher_instance(self.parent, self.vsdobject)
+        (fetcher, parent, children) = fetcher.fetch()
+        connection = fetcher.current_connection
+
+        self.last_connection = connection
+
+        TestHelper.set_api_key(self.user.api_key)
+
+        self.assertConnectionStatus(connection, 401)
+
+    def _test_get_all_objects_without_content_should_success(self):
+        """ Get all object without content should succeed with 200 response
+
+        """
+        fetcher = VSDKFactory.get_fetcher_instance(self.parent, self.vsdobject)
+        (fetcher, parent, children) = fetcher.fetch()
+        connection = fetcher.current_connection
+        self.last_connection = connection
+
+        self.assertConnectionStatus(connection, 200)
+
+    def _test_get_all_objects_with_content_should_success(self):
+        """ Get all object with content should succeed with 200 response
+
+        """
+        self.parent.create_child(self.vsdobject)
+
+        fetcher = VSDKFactory.get_fetcher_instance(self.parent, self.vsdobject)
+        (fetcher, parent, children) = fetcher.fetch()
+        connection = fetcher.current_connection
+
+        self.last_connection = connection
+        self.vsdobject.delete()
+
+        self.assertConnectionStatus(connection, 200)
+
+    # Attributes tests
+    # Filter, Order, Page etc.
+
 
 class TestsRunner(object):
     """ Runner for VSD Objects tests
@@ -864,6 +1070,7 @@ class TestsRunner(object):
 
         """
         all_suites = TestSuite()
+
         if self.is_create_allowed:
             maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
             suite = maker.test_suite()
@@ -879,7 +1086,15 @@ class TestsRunner(object):
             suite = maker.test_suite()
             all_suites.addTests(suite)
 
-        # Do the same of update and get here
+        if self.is_get_allowed:
+            maker = GetTestMaker(self.parent, self.vsdobject, self.user)
+            suite = maker.test_suite()
+            all_suites.addTests(suite)
+
+        if self.is_get_all_allowed:
+            maker = GetAllTestMaker(self.parent, self.vsdobject, self.user)
+            suite = maker.test_suite()
+            all_suites.addTests(suite)
 
         return all_suites
 
