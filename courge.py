@@ -17,6 +17,7 @@ data = {'parentObject' :
             'name': 'A group',
             'description': 'a random group',
             'private': 'false',
+            'accountRestrictions': 'true'
         },
         'spec': {} # Should be the JSON spec. Empty for now
        }

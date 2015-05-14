@@ -21,8 +21,10 @@ HTTP_METHOD_GET = 'GET'
 HTTP_METHOD_DELETE = 'DELETE'
 HTTP_METHOD_UPDATE = 'PUT'
 
+IGNORED_ATTRIBUTES = ['id', 'parent_id', 'parent_type', 'creation_date', 'owner', 'last_updated_date', 'last_updated_by', 'external_id']
 
-IGNORED_ATTRIBUTES = ['id', 'parent_id', 'parent_type', 'creation_date', 'owner', 'last_updated_date', 'last_updated_by']
+DEVELOPMENT_MODE = True
+
 
 class TestHelper(object):
     """ Helper to make tests easier
@@ -42,6 +44,26 @@ class TestHelper(object):
             cls._vsdk.utils.set_log_level(logging.DEBUG)
         else:
             cls._vsdk.utils.set_log_level(logging.ERROR)
+
+    @classmethod
+    def trace(cls, connection):
+        """ Trace connection information
+
+        """
+        request = connection.request
+        response = connection.response
+
+        Printer.warn("%s %s [Response %s]" % (request.method, request.url, response.status_code))
+        Printer.log("Header")
+        Printer.json(request.headers)
+        Printer.log("Body")
+        Printer.json(request.data)
+        Printer.log("Response")
+        Printer.json(response.data)
+        if len(response.errors):
+            Printer.log("Errors")
+            Printer.json(response.errors)
+
 
     @classmethod
     def use_vsdk(cls, vsdk):
@@ -146,6 +168,9 @@ class _MonolitheTestResult(TestResult):
         TestResult.addSuccess(self, test)
         self.tests[self.getDescription(test)] = {'status': 'SUCCESS'}
 
+        if DEVELOPMENT_MODE:
+            Printer.success('OK')
+
     def addError(self, test, err, connection):
         """ Add error to the result
 
@@ -153,12 +178,23 @@ class _MonolitheTestResult(TestResult):
         TestResult.addError(self, test, err)
         self.tests[self.getDescription(test)] = {'status': 'ERROR', 'stacktrace': err, 'connection': test.last_connection}
 
+        if DEVELOPMENT_MODE:
+            Printer.warn('ERROR')
+            Printer.warn(err[1])
+            TestHelper.trace(test.last_connection)
+
+
     def addFailure(self, test, err, connection):
         """ Add failure to the result
 
         """
         TestResult.addFailure(self, test, err)
         self.tests[self.getDescription(test)] = {'status': 'FAILURE', 'stacktrace': err, 'connection': test.last_connection}
+
+        if DEVELOPMENT_MODE:
+            Printer.warn('Failure')
+            Printer.warn(err[1])
+            TestHelper.trace(test.last_connection)
 
     def __repr__(self):
         """ Representation
@@ -238,7 +274,9 @@ class _MonolitheTestCase(TestCase):
                 return
             ok = False
             try:
-                # Printer.log('Running %s' % self._testMethodName)
+                if DEVELOPMENT_MODE:
+                    Printer.log('%s...' % self._testMethodName)
+
                 testMethod()
                 ok = True
             except self.failureException:
@@ -262,18 +300,20 @@ class _MonolitheTestCase(TestCase):
         """ Check if errors received matches
 
         """
-        self.assertEquals(errors[index]['descriptions'][0]['title'], title)
-        self.assertEquals(errors[index]['descriptions'][0]['description'], description)
-        self.assertEquals(errors[index]['property'], remote_name)
+        self.assertEquals(errors[index]['descriptions'][0]['title'], title, 'Expected error title "%s" != "%s"' % (title, errors[index]['descriptions'][0]['title']))
+        self.assertEquals(errors[index]['descriptions'][0]['description'], description, 'Expected error description "%s" != "%s"' % (description, errors[index]['descriptions'][0]['description']))
+        self.assertEquals(errors[index]['property'], remote_name, 'Expected error property "%s" != "%s"' % (remote_name, errors[index]['property']))
 
     def assertConnectionStatus(self, connection, expected_status):
         """ Check if the connection has expected status
 
         """
-        message = self.connection_failure_message(connection, expected_status)
+        message = self._connection_failure_message(connection, expected_status)
         self.assertEquals(connection.response.status_code, expected_status, message)
 
-    def connection_failure_message(cls, connection, expected_status):
+    # Messages
+
+    def _connection_failure_message(cls, connection, expected_status):
         """ Returns a message that explains the connection status failure """
 
         return 'Expected status code %s != %s\n' % (expected_status, connection.response.status_code)
@@ -532,14 +572,15 @@ class UpdateTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        # self.register_test('_test_update_object_with_same_attributes_should_fail')
-        # self.register_test('_test_update_object_without_authentication_should_fail')
+        self.register_test('_test_update_object_with_same_attributes_should_fail')
+        self.register_test('_test_update_object_without_authentication_should_fail')
 
         # Attribute tests
-        # self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        # self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
+        self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
+        self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
         # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
-        # self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
+
 
     def test_suite(self):
         """ Inject generated tests
@@ -643,6 +684,111 @@ class UpdateTestCase(_MonolitheTestCase):
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
 
 
+##### DELETE TESTS
+
+
+class DeleteTestMaker(TestMaker):
+    """ TestCase for create objects
+
+    """
+    def __init__(self, parent, vsdobject, user):
+        """ Initializes a test case for creating objects
+
+        """
+        super(DeleteTestMaker, self).__init__()
+        self.parent = parent
+        self.vsdobject = vsdobject
+        self.user = user
+
+        # Object tests
+        self.register_test('_test_delete_object_without_authentication_should_fail')
+        self.register_test('_test_delete_object_with_valid_id_should_succeed')
+        self.register_test('_test_delete_object_with_wrong_id_should_succeed')
+
+
+        # No Attribute tests
+
+    def test_suite(self):
+        """ Inject generated tests
+
+        """
+        DeleteTestCase.parent = self.parent
+        DeleteTestCase.vsdobject = self.vsdobject
+        DeleteTestCase.user = self.user
+
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=DeleteTestCase)
+        for test_name, test_func in tests.iteritems():
+            setattr(DeleteTestCase, test_name, test_func)
+
+        return TestSuite(map(DeleteTestCase, tests))
+
+
+class DeleteTestCase(_MonolitheTestCase):
+
+    def __init__(self, methodName='runTest'):
+        """ Initialize
+
+        """
+        _MonolitheTestCase.__init__(self, methodName)
+        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+
+    def setUp(self):
+        """ Setting up create test
+
+        """
+        self.last_connection = None
+        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+
+        self.parent.create_child(self.vsdobject)
+
+    def tearDown(self):
+        """ Clean up environment
+
+        """
+        if self.vsdobject.id is not None:
+            self.vsdobject.delete()
+
+    # Objects tests
+    def _test_delete_object_without_authentication_should_fail(self):
+        """ Delete an object without authentication """
+
+        TestHelper.set_api_key(None)
+        (obj, connection) = self.vsdobject.delete()
+        self.last_connection = connection
+
+        TestHelper.set_api_key(self.user.api_key)
+
+        self.assertConnectionStatus(connection, 401)
+
+    def _test_delete_object_with_valid_id_should_succeed(self):
+        """ Delete an object with its id should always succeed with 204 response
+
+        """
+        (obj, connection) = self.vsdobject.delete()
+        self.last_connection = connection
+
+        self.assertConnectionStatus(connection, 204)
+        self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
+
+    def _test_delete_object_with_wrong_id_should_succeed(self):
+        """ Delete an object with a wrong id should fail with 404 error
+
+        """
+        default_id = self.vsdobject.id
+        invalid_id = u'Unknown ID'
+        self.vsdobject.id = invalid_id
+        (obj, connection) = self.vsdobject.delete()
+        self.last_connection = connection
+
+        self.vsdobject.id = default_id
+
+        self.assertConnectionStatus(connection, 404)
+        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.vsdobject.rest_name, description=u'Cannot find %s with ID %s' % (self.vsdobject.rest_name, invalid_id))
+
+    # No Attributes tests
+
+
+
 class TestsRunner(object):
     """ Runner for VSD Objects tests
 
@@ -682,7 +828,7 @@ class TestsRunner(object):
                 self.parent = VSDKFactory.get_instance(parent_resource, id=parent_id)
                 self.parent.fetch()
             except:
-                Printer.raiseError('Could not find parent %s with ID=%s' % (parent_resource, parent_id))
+                raise AttributeError('Could not find parent %s with ID=%s' % (parent_resource, parent_id))
 
         VSDKFactory.update_fetchers_for_object(self.parent, self.vsdobject, model)
 
@@ -695,15 +841,21 @@ class TestsRunner(object):
         for path, api in model.apis['parents'].iteritems():
             for operation in api.operations:
                 method = operation.method
+                # Printer.log('%s %s' % (method, path))
                 if method == HTTP_METHOD_POST:
                     self.is_create_allowed = True
                 elif method == HTTP_METHOD_GET:
                     self.is_get_all_allowed = True
-                    self.is_get_allowed = True
-                elif method == HTTP_METHOD_UPDATE:
-                    self.is_update_allowed = True
-                elif method == HTTP_METHOD_DELETE:
-                    self.is_delete_allowed = True
+
+        for operation in model.apis['self'].operations:
+            method = operation.method
+            # Printer.log('%s' % (method))
+            if method == HTTP_METHOD_UPDATE:
+                self.is_update_allowed = True
+            elif method == HTTP_METHOD_DELETE:
+                self.is_delete_allowed = True
+            elif method == HTTP_METHOD_GET:
+                self.is_get_allowed = True
 
     def test_suite(self):
         """ Returns a TestSuite that can be run
@@ -722,7 +874,12 @@ class TestsRunner(object):
             suite = maker.test_suite()
             all_suites.addTests(suite)
 
-        # Do the same of update and delete.. and combine suites
+        if self.is_delete_allowed:
+            maker = DeleteTestMaker(self.parent, self.vsdobject, self.user)
+            suite = maker.test_suite()
+            all_suites.addTests(suite)
+
+        # Do the same of update and get here
 
         return all_suites
 

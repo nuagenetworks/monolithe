@@ -107,7 +107,7 @@ class VSDKFactory(object):
 
         classname = "NU%s" % model.name
         klass = type(str(classname), (NURESTObject, ), {"__init__": init})
-        klass.__rest_name__ = model.resource_name
+        klass.__rest_name__ = model.remote_name
 
         cls._resources[model.resource_name] = klass  # Override
 

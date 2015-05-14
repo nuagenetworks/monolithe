@@ -59,19 +59,7 @@ class Command(object):
 
         runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, model=model, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
 
-        results = runner.run()
-
-        for name, info in results.tests.iteritems():
-            print name
-            print info['status']
-            if info['status'] != 'SUCCESS':
-                print info['stacktrace']
-                print info['connection'].request.method + ' ' + info['connection'].request.url
-                print info['connection'].response.status_code
-                print info['connection'].response.errors
-            print '---------'
-
-        return results
+        return runner.run()
 
     @classmethod
     def get_spec(cls, vsdurl, apiversion, entity_name, path=None):
