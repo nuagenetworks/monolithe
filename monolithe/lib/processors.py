@@ -165,13 +165,6 @@ class ModelsProcessor(object):
 
         for path, api in apis['parents'].iteritems():
 
-            is_self = False
-
-            names = filter(bool, re.split('/\{id\}?/?', path))
-
-            if len(names) == 1:
-                is_self = True
-
             model_api = ModelAPI()
             model_api.path = path
             model_api.resource_name = api['resourceName']
@@ -182,10 +175,19 @@ class ModelsProcessor(object):
                 model_operation.method = operation['method']
                 model_api.operations.append(model_operation)
 
-            if is_self:
-                model.apis['self'] = model_api
-            else:
-                model.apis['parents'][path] = model_api
+            model.apis['parents'][path] = model_api
+
+        for path, api in apis['self'].iteritems():
+
+            model_api = ModelAPI()
+            model_api.path = path
+
+            for operation in api['operations']:
+                model_operation = ModelOperation()
+                model_operation.method = operation['method']
+                model_api.operations.append(model_operation)
+
+            model.apis['self'][path] = model_api
 
     @classmethod
     def _process_attribute_local_name(cls, name):

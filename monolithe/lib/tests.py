@@ -1053,15 +1053,16 @@ class TestsRunner(object):
                 elif method == HTTP_METHOD_GET:
                     self.is_get_all_allowed = True
 
-        for operation in model.apis['self'].operations:
-            method = operation.method
-            # Printer.log('%s' % (method))
-            if method == HTTP_METHOD_UPDATE:
-                self.is_update_allowed = True
-            elif method == HTTP_METHOD_DELETE:
-                self.is_delete_allowed = True
-            elif method == HTTP_METHOD_GET:
-                self.is_get_allowed = True
+        for path, api in model.apis['self'].iteritems():
+            for operation in api.operations:
+                method = operation.method
+                # Printer.log('%s' % (method))
+                if method == HTTP_METHOD_UPDATE:
+                    self.is_update_allowed = True
+                elif method == HTTP_METHOD_DELETE:
+                    self.is_delete_allowed = True
+                elif method == HTTP_METHOD_GET:
+                    self.is_get_allowed = True
 
     def test_suite(self):
         """ Returns a TestSuite that can be run

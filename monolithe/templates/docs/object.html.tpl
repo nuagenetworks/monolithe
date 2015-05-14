@@ -85,18 +85,21 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {% if model.apis["self"] %}
+            
+            {% if model.apis["self"]|count %}
             <table class="table table-condensed">
+                {% for path, api in model.apis["self"].iteritems() %}
                 <tr>
                     <td>
-                        <span class="fixed-text">{{model.apis["self"].path.replace("{id}", "id")}}</span>
+                        <span class="fixed-text">{{path.replace("{id}", "id")}}</span>
                     </td>
                     <td style="text-align: right; font-size: 13px">
-                        {% for operation in model.apis["self"].operations %}
+                        {% for operation in api.operations %}
                         {{label_for_method(operation.method)}}
                         {% endfor %}
                     </td>
                 </tr>
+                {% endfor %}
                 <tr><td></td><td></td></tr>
             </table>
             {% else %}

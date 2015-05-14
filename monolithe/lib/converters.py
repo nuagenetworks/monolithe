@@ -98,7 +98,6 @@ class SwaggerToSpecConverter(object):
             specifications[name] = cls._reorganize_structure(name, resource)
 
             model = specifications[name]['model']
-            parents_apis = specifications[name]['apis']['parents']
 
             SwaggerToSpecConverter._process_name(model=model)
 
@@ -109,12 +108,11 @@ class SwaggerToSpecConverter(object):
                 specifications[entity_name] = specifications[name]
                 specifications.pop(name)
                 model = specifications[entity_name]['model']
-                parents_apis = specifications[entity_name]['apis']['parents']
 
             if len(filters) > 0 and entity_name not in filters:
                 continue;
 
-            SwaggerToSpecConverter._process_apis(model=model, apis=parents_apis, relations=relations)
+            SwaggerToSpecConverter._process_apis(model=model, apis=specifications[entity_name]['apis'], relations=relations)
             SwaggerToSpecConverter._process_attributes(model=model)
 
         for entity_name, specification in specifications.iteritems():
@@ -151,7 +149,8 @@ class SwaggerToSpecConverter(object):
             'metadata': {},
             'apis': {
                 'parents': {api['path']: api for api in swagger_infos['apis']},
-                'children': None
+                'children': None,
+                'self': {}
             },
             'model': {
                 "package": swagger_infos['package'],
@@ -191,14 +190,11 @@ class SwaggerToSpecConverter(object):
 
         """
 
-        for path, api in apis.iteritems():
+        for path, api in apis['parents'].iteritems():
 
             api.pop('path')
 
-            if path.startswith('/'):
-                path = path[1:]
-
-            names = filter(bool, re.split('/\{id\}?/?', path))
+            names = filter(bool, re.split('/\{id\}?/?', path[1:] if path.startswith('/') else path))
 
             model['resourceName'] = names[-1]
             model['RESTName'] = Utils.get_singular_name(names[-1])
@@ -215,27 +211,33 @@ class SwaggerToSpecConverter(object):
 
             should_create_relation = False
 
-            if model['resourceName'] != parent_resource_name:
+            if len(names) == 2:
                 should_create_relation = True
 
-            elif api['operations'][0]['method'] in ['GET', 'POST']:
-                should_create_relation = True
-                parent_resource_name = 'me'
-                parent_rest_name = RESTUSER
+            else: # only 1 name
+                method = api['operations'][0]['method']
+
+                if method == 'POST' or (method == 'GET' and '{id}' not in path):
+                    should_create_relation = True
+                    parent_resource_name = 'me'
+                    parent_rest_name = RESTUSER
+                else:
+                    if path not in apis['self']:
+                        apis['self'][path] = {'operations': []}
+
+                    apis['self'][path]['operations'] = api['operations']
 
             if should_create_relation:
                 if parent_rest_name not in relations:
                     relations[parent_rest_name] = {}
-
-                # Why ?
-                # model_api.parent_rest_name = parent_rest_name
-                # model_api.parent_resource_name = parent_resource_name
 
                 relations[parent_rest_name][path] = {
                     'entityName': model['entityName'],
                     'operations': api['operations']
                 }
 
+        for path in apis['self']:
+            apis['parents'].pop(path, None)
 
     @classmethod
     def _process_attributes(cls, model):
