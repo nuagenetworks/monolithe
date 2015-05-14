@@ -504,7 +504,7 @@ class CreateTestCase(_MonolitheTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 201)
-        self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+        # self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
 
     def _test_create_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Create an object with a wrong choice attribute """
@@ -623,7 +623,7 @@ class UpdateTestCase(_MonolitheTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+        # self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
 
     def _test_update_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Update an object with a wrong choice attribute """
