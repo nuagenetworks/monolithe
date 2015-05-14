@@ -330,14 +330,14 @@ class TestMaker(object):
         self._object_registry = dict()
         self._attributes_registry = dict()
 
-    def register_test(self, function_name, **conditions):
+    def register_method(self, function_name, **conditions):
         """ Register test for all attributes
 
         """
         if function_name not in self._object_registry:
             self._object_registry[function_name] = conditions
 
-    def register_test_for_attribute(self, function_name, **conditions):
+    def register_method_for_attribute(self, function_name, **conditions):
         """ Register an attribute test for all given conditions
 
         """
@@ -364,7 +364,7 @@ class TestMaker(object):
 
         return True
 
-    def make_tests(self, vsdobject, testcase):
+    def make_methods(self, vsdobject, testcase):
         """ Make all tests that should be run for the given object in the specified testcase
 
             Args:
@@ -455,15 +455,15 @@ class CreateTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_create_object_with_all_valid_attributes_should_succeed')
-        self.register_test('_test_create_object_without_authentication_should_fail')
+        self.register_method('_test_create_object_with_all_valid_attributes_should_succeed')
+        self.register_method('_test_create_object_without_authentication_should_fail')
 
         # Attribute tests
-        self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_test_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
+        self.register_method_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
+        self.register_method_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        self.register_method_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
 
-    def test_suite(self):
+    def suite(self):
         """ Inject generated tests
 
         """
@@ -471,7 +471,7 @@ class CreateTestMaker(TestMaker):
         CreateTestCase.vsdobject = self.vsdobject
         CreateTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=CreateTestCase)
+        tests = self.make_methods(vsdobject=self.vsdobject, testcase=CreateTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(CreateTestCase, test_name, test_func)
 
@@ -572,17 +572,17 @@ class UpdateTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_update_object_with_same_attributes_should_fail')
-        self.register_test('_test_update_object_without_authentication_should_fail')
+        self.register_method('_test_update_object_with_same_attributes_should_fail')
+        self.register_method('_test_update_object_without_authentication_should_fail')
 
         # Attribute tests
-        self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
-        # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
+        self.register_method_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        self.register_method_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
+        self.register_method_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
+        # self.register_method_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
 
 
-    def test_suite(self):
+    def suite(self):
         """ Inject generated tests
 
         """
@@ -590,7 +590,7 @@ class UpdateTestMaker(TestMaker):
         UpdateTestCase.vsdobject = self.vsdobject
         UpdateTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=UpdateTestCase)
+        tests = self.make_methods(vsdobject=self.vsdobject, testcase=UpdateTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(UpdateTestCase, test_name, test_func)
 
@@ -701,14 +701,14 @@ class DeleteTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_delete_object_without_authentication_should_fail')
-        self.register_test('_test_delete_object_with_valid_id_should_succeed')
-        self.register_test('_test_delete_object_with_wrong_id_should_succeed')
+        self.register_method('_test_delete_object_without_authentication_should_fail')
+        self.register_method('_test_delete_object_with_valid_id_should_succeed')
+        self.register_method('_test_delete_object_with_wrong_id_should_succeed')
 
 
         # No Attribute tests
 
-    def test_suite(self):
+    def suite(self):
         """ Inject generated tests
 
         """
@@ -716,7 +716,7 @@ class DeleteTestMaker(TestMaker):
         DeleteTestCase.vsdobject = self.vsdobject
         DeleteTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=DeleteTestCase)
+        tests = self.make_methods(vsdobject=self.vsdobject, testcase=DeleteTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(DeleteTestCase, test_name, test_func)
 
@@ -805,13 +805,13 @@ class GetTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_get_object_without_authentication_should_fail')
-        self.register_test('_test_get_object_with_valid_id_should_succeed')
-        self.register_test('_test_get_object_with_wrong_id_should_succeed')
+        self.register_method('_test_get_object_without_authentication_should_fail')
+        self.register_method('_test_get_object_with_valid_id_should_succeed')
+        self.register_method('_test_get_object_with_wrong_id_should_succeed')
 
         # No Attribute tests
 
-    def test_suite(self):
+    def suite(self):
         """ Inject generated tests
 
         """
@@ -819,7 +819,7 @@ class GetTestMaker(TestMaker):
         GetTestCase.vsdobject = self.vsdobject
         GetTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetTestCase)
+        tests = self.make_methods(vsdobject=self.vsdobject, testcase=GetTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(GetTestCase, test_name, test_func)
 
@@ -907,13 +907,13 @@ class GetAllTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_get_all_objects_without_authentication_should_fail')
-        self.register_test('_test_get_all_objects_without_content_should_success')
-        self.register_test('_test_get_all_objects_with_content_should_success')
+        self.register_method('_test_get_all_objects_without_authentication_should_fail')
+        self.register_method('_test_get_all_objects_without_content_should_success')
+        self.register_method('_test_get_all_objects_with_content_should_success')
 
         # No Attribute tests
 
-    def test_suite(self):
+    def suite(self):
         """ Inject generated tests
 
         """
@@ -921,7 +921,7 @@ class GetAllTestMaker(TestMaker):
         GetAllTestCase.vsdobject = self.vsdobject
         GetAllTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetAllTestCase)
+        tests = self.make_methods(vsdobject=self.vsdobject, testcase=GetAllTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(GetAllTestCase, test_name, test_func)
 
@@ -1064,7 +1064,7 @@ class TestsRunner(object):
                 elif method == HTTP_METHOD_GET:
                     self.is_get_allowed = True
 
-    def test_suite(self):
+    def suite(self):
         """ Returns a TestSuite that can be run
 
             TestSuite is computed according to what is defined in the model
@@ -1074,27 +1074,27 @@ class TestsRunner(object):
 
         if self.is_create_allowed:
             maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.test_suite()
+            suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_update_allowed:
             maker = UpdateTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.test_suite()
+            suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_delete_allowed:
             maker = DeleteTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.test_suite()
+            suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_get_allowed:
             maker = GetTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.test_suite()
+            suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_get_all_allowed:
             maker = GetAllTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.test_suite()
+            suite = maker.suite()
             all_suites.addTests(suite)
 
         return all_suites
@@ -1106,7 +1106,7 @@ class TestsRunner(object):
         BambouConfig.set_should_raise_bambou_http_error(False)
         TestHelper.set_debug_mode(False)
 
-        suite = self.test_suite()
+        suite = self.suite()
         results = _MonolitheTestRunner().run(suite)
 
         TestHelper.set_debug_mode(False)
