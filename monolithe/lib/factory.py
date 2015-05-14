@@ -176,6 +176,14 @@ class VSDKFactory(object):
         return None
 
     @classmethod
+    def get_instance_copy(cls, instance):
+        """ Creates a brand new copy of the instance
+
+        """
+        klass = instance.__class__
+        return klass(data=instance.to_dict())
+
+    @classmethod
     def _convert_attributes(cls, attributes):
         """ Convert attributes to with Python names
 

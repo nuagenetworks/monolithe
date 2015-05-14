@@ -3,7 +3,6 @@
 import re
 import requests
 import logging
-import json
 import time
 import sys
 
@@ -218,6 +217,7 @@ class _MonolitheTestCase(TestCase):
 
     @last_connection.setter
     def last_connection(self, connection):
+        """ set last_connection """
         self._last_connection = deepcopy(connection)
 
     # Very Dark Side of unittest... Maybe we should upgrade to unittest2 to do that.
@@ -238,6 +238,7 @@ class _MonolitheTestCase(TestCase):
                 return
             ok = False
             try:
+                # Printer.log('Running %s' % self._testMethodName)
                 testMethod()
                 ok = True
             except self.failureException:
@@ -444,13 +445,14 @@ class CreateTestCase(_MonolitheTestCase):
 
         """
         _MonolitheTestCase.__init__(self, methodName)
+        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.pristine_vsdobject = deepcopy(self.vsdobject)
+        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
 
     def tearDown(self):
         """ Clean up environment
@@ -459,9 +461,6 @@ class CreateTestCase(_MonolitheTestCase):
         if self.vsdobject and self.vsdobject.id:
             self.vsdobject.delete()
             self.vsdobject.id = None
-
-        self.last_connection = None
-        self.vsdobject = self.pristine_vsdobject
 
     # Objects tests
     def _test_create_object_without_authentication_should_fail(self):
@@ -533,14 +532,14 @@ class UpdateTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_update_object_with_same_attributes_should_fail')
-        self.register_test('_test_update_object_without_authentication_should_fail')
+        # self.register_test('_test_update_object_with_same_attributes_should_fail')
+        # self.register_test('_test_update_object_without_authentication_should_fail')
 
         # Attribute tests
-        self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
+        # self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        # self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
         # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
+        # self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
 
     def test_suite(self):
         """ Inject generated tests
@@ -564,13 +563,14 @@ class UpdateTestCase(_MonolitheTestCase):
 
         """
         _MonolitheTestCase.__init__(self, methodName)
+        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.pristine_vsdobject = deepcopy(self.vsdobject)
+        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
 
         self.parent.create_child(self.vsdobject)
 
@@ -579,9 +579,6 @@ class UpdateTestCase(_MonolitheTestCase):
 
         """
         self.vsdobject.delete()
-
-        self.last_connection = None
-        self.vsdobject = self.pristine_vsdobject
 
     # Objects tests
     def _test_update_object_without_authentication_should_fail(self):

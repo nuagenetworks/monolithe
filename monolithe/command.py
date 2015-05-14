@@ -66,6 +66,7 @@ class Command(object):
             print info['status']
             if info['status'] != 'SUCCESS':
                 print info['stacktrace']
+                print info['connection'].request.method + ' ' + info['connection'].request.url
                 print info['connection'].response.status_code
                 print info['connection'].response.errors
             print '---------'
