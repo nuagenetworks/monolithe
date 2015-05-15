@@ -222,7 +222,7 @@ class SwaggerToSpecConverter(object):
             api['RESTName'] = parent_rest_name
 
             for operation in api['operations']:
-                operation['availability'] = None,
+                operation['availability'] = None
 
             should_create_relation = False
 
@@ -238,7 +238,7 @@ class SwaggerToSpecConverter(object):
                     parent_rest_name = RESTUSER
                 else:
                     if path not in apis['self']:
-                        apis['self'][path] = {'operations': [], 'availability': None, 'resourceName': model['resourceName'], 'RESTName': model['RESTName']}
+                        apis['self'][path] = {'operations': [], 'resourceName': model['resourceName'], 'RESTName': model['RESTName']}
 
                     apis['self'][path]['operations'] = [{'method': operation['method'], 'availability': None} for operation in api['operations']]
 
