@@ -32,7 +32,10 @@ class ModelsProcessorTests(TestCase):
 
         """
         processed_resources = ModelsProcessor.process(resources=self.resources)
-        self.assertEquals(len(processed_resources), 96)
+
+        print processed_resources.keys()
+
+        self.assertEquals(len(processed_resources), 95)
 
         # Normal resource
         self.assertIn('Enterprise', processed_resources)
@@ -54,9 +57,9 @@ class ModelsProcessorTests(TestCase):
 
         # Attributes
         attributes = model_enterprise.attributes
-        resource_properies = self.resources['Enterprise']['model']['attributes']
+        resource_properies = self.resources['enterprise']['model']['attributes']
 
-        self.assertEquals(len(attributes), 21)
+        self.assertEquals(len(attributes), 13)
 
         for attribute in attributes:
             self.assertIn(attribute.remote_name, resource_properies)

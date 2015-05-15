@@ -87,7 +87,7 @@ class ModelsProcessor(object):
             model.description = resource['model']['description']
             ModelsProcessor._process_package(model=model, package=resource['model']['package'])
             ModelsProcessor._process_name(model=model, name=resource['model']['entityName'], resource_name=resource['model']['resourceName'])
-            ModelsProcessor._process_apis(model=model, apis=resource['apis'])
+            ModelsProcessor._process_apis(model=model, apis=resource['apis'], resources=resources)
             ModelsProcessor._process_attributes(model=model, attributes=resource['model']['attributes'])
 
             models[model.name] = model
@@ -129,7 +129,7 @@ class ModelsProcessor(object):
         model.resource_name = resource_name
 
     @classmethod
-    def _process_apis(cls, model, apis):
+    def _process_apis(cls, model, apis, resources):
         """ Process apis for the given model
 
             Args:
@@ -141,7 +141,7 @@ class ModelsProcessor(object):
 
         for path, api in apis['children'].iteritems():
 
-            if api['entityName'] == model.name:
+            if api['resourceName'] == model.resource_name:
                 continue
 
             names = filter(bool, re.split('/\{id\}?/?', path))
@@ -149,11 +149,17 @@ class ModelsProcessor(object):
             child_resource_name = names[-1]
             child_rest_name = Utils.get_singular_name(names[-1])
 
+            if child_rest_name.startswith('all'):
+                entity_name = resources[child_rest_name[3:]]['model']['entityName']
+            else:
+                entity_name = resources[child_rest_name]['model']['entityName']
+
+
             model_api = ModelAPI()
             model_api.path = path
             model_api.resource_name = child_resource_name
             model_api.remote_name = child_rest_name
-            model_api.plural_name = Utils.get_plural_name(api['entityName'])
+            model_api.plural_name = Utils.get_plural_name(entity_name)
             model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
 
             for operation in api['operations']:
