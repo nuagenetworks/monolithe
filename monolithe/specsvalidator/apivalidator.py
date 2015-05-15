@@ -110,15 +110,13 @@ class APIValidator:
         """ Validate self API information
 
         """
-        import pprint
-        pprint.pprint(self.specification)
         specification_self_apis_definition = self.specification["apis"]["self"]
         candidate_self_apis_definition     = self.candidate["apis"]["self"]
 
         for api_path in specification_self_apis_definition:
 
             if not api_path in candidate_self_apis_definition:
-                self.self_api_errors.append(APISpecMissingSelfAPIError(api_path))
+                self.self_api_errors.append(APISpecMissingAPIError(api_path))
 
             else:
                 specification_self_api_definition = specification_self_apis_definition[api_path]
