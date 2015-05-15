@@ -10,7 +10,7 @@ from .printer import Printer
 USER = 'User'
 RESTUSER = 'RESTUser'
 
-IGNORED_ATTRIBUTES = ["_fetchers"]
+IGNORED_ATTRIBUTES = ["_fetchers", "creationDate", "parentID", "owner", "parentType", "lastUpdatedBy", "lastUpdatedDate", "externalID", "ID" ]
 
 ATTRIBUTE_MAPPING = {
     'global': 'globalMetadata'
