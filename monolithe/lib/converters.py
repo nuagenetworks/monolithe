@@ -151,7 +151,7 @@ class SwaggerToSpecConverter(object):
                 'api_version': swagger_infos['apiVersion'][1:].replace("_", "."),
                 'author': '',
                 'comments': '',
-                'date': date.today().strftime("%d-%m-%Y"),
+                'date': date.today().strftime("%m-%d-%Y"),
                 'dev_backend': '',
                 'dev_frontend': '',
                 'dev_qd': '',
