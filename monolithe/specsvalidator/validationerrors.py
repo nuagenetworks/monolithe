@@ -63,7 +63,7 @@ class APISpecMissingAttributeDefinitionError:
         return "<%s> attribute '%s': is missing" % (self.__class__.__name__, self.attribute_name)
 
 
-class APISpecMissingParentAPIError:
+class APISpecMissingAPIError:
     """ Represents an API path missing error
 
     """
@@ -75,10 +75,10 @@ class APISpecMissingParentAPIError:
         return "%s: missing" % (self.api_name)
 
     def __repr__(self):
-        return "<%s> parent api '%s': is missing" % (self.__class__.__name__, self.api_name)
+        return "<%s> api '%s': is missing" % (self.__class__.__name__, self.api_name)
 
 
-class APISpecMissingParentAPIMethodError:
+class APISpecMissingAPIMethodError:
     """ Represents an API missing method error
 
     """
@@ -92,4 +92,4 @@ class APISpecMissingParentAPIMethodError:
         return "%s: methods should be '%s' but is '%s'" % (self.api_path, self.expected_methods, self.actual_methods)
 
     def __repr__(self):
-        return "<%s> parent api '%s': expected_methods: '%s', actual_methods: '%s'" % (self.__class__.__name__, self.api_path, self.expected_methods, self.actual_methods)
+        return "<%s> api '%s': expected_methods: '%s', actual_methods: '%s'" % (self.__class__.__name__, self.api_path, self.expected_methods, self.actual_methods)

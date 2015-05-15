@@ -5,8 +5,8 @@ from validationerrors import APISpecAttributeDefinitionError
 from validationerrors import APISpecAttributeCapitalizationError
 from validationerrors import APISpecMissingTokenError
 from validationerrors import APISpecMissingAttributeDefinitionError
-from validationerrors import APISpecMissingParentAPIError
-from validationerrors import APISpecMissingParentAPIMethodError
+from validationerrors import APISpecMissingAPIError
+from validationerrors import APISpecMissingAPIMethodError
 
 IGNORED_ATTRIBUTES = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]
 
@@ -23,6 +23,7 @@ class APIValidator:
         self.candidate          = candidate
         self.specification      = specification
         self.parent_api_errors  = []
+        self.self_api_errors    = []
         self.attribute_errors   = []
 
     def run(self):
@@ -31,6 +32,7 @@ class APIValidator:
         """
         self.validate_attributes_definition()
         self.validate_parent_apis_definition()
+        self.validate_self_api_definition()
 
     ## Attributes Validation
 
@@ -89,9 +91,9 @@ class APIValidator:
                 self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, "allowedChoices")
 
 
-    ## Parent API Validation
+    ## APIs Validation
 
-    def _validate_candidate_api(self, api_path, specification_parent_api_definition, candidate_parent_api_definition):
+    def _validate_candidate_api(self, api_path, specification_parent_api_definition, candidate_parent_api_definition, target_reports):
         """ Check all methods are correct
 
         """
@@ -99,13 +101,32 @@ class APIValidator:
         candidate_methods     = ", ".join([operation["method"] for operation in sorted(candidate_parent_api_definition["operations"])])
 
         if candidate_methods != specification_methods:
-            self.parent_api_errors.append(APISpecMissingParentAPIMethodError(api_path=api_path, expected_methods=specification_methods, actual_methods=candidate_methods))
+            target_reports.append(APISpecMissingAPIMethodError(api_path=api_path, expected_methods=specification_methods, actual_methods=candidate_methods))
             return False
 
         return True
 
+    def validate_self_api_definition(self):
+        """ Validate self API information
+
+        """
+        specification_self_apis_definition = self.specification["apis"]["self"]
+        candidate_self_apis_definition     = self.candidate["apis"]["self"]
+
+        for api_path in specification_self_apis_definition:
+
+            if not api_path in candidate_self_apis_definition:
+                self.self_api_errors.append(APISpecMissingAPIError(api_path))
+
+            else:
+                specification_self_api_definition = specification_self_apis_definition[api_path]
+                candidate_self_api_definition     = candidate_self_apis_definition[api_path]
+
+                self._validate_candidate_api(api_path, specification_self_api_definition, candidate_self_api_definition, self.self_api_errors)
+
+
     def validate_parent_apis_definition(self):
-        """ Validate API information
+        """ Validate Parent API information
 
         """
         specification_parent_apis_definition = self.specification["apis"]["parents"]
@@ -114,11 +135,11 @@ class APIValidator:
         for api_path in specification_parent_apis_definition:
 
             if not api_path in candidate_parent_apis_definition:
-                self.parent_api_errors.append(APISpecMissingParentAPIError(api_path))
+                self.parent_api_errors.append(APISpecMissingAPIError(api_path))
 
             else:
                 specification_parent_api_definition = specification_parent_apis_definition[api_path]
                 candidate_parent_api_definition     = candidate_parent_apis_definition[api_path]
 
-                self._validate_candidate_api(api_path, specification_parent_api_definition, candidate_parent_api_definition)
+                self._validate_candidate_api(api_path, specification_parent_api_definition, candidate_parent_api_definition, self.parent_api_errors)
 
