@@ -104,23 +104,23 @@ class SwaggerToSpecConverter(object):
 
             entity_name = model['entityName']
 
-            if name != entity_name:
-                # Switching entities names
-                specifications[entity_name] = specifications[name]
+            SwaggerToSpecConverter._process_apis(model=model, apis=specifications[name]['apis'], relations=relations)
+
+            if len(filters) > 0 and model['RESTName'] not in filters:
                 specifications.pop(name)
-                model = specifications[entity_name]['model']
+                continue
 
-            if len(filters) > 0 and entity_name not in filters:
-                continue;
-
-            SwaggerToSpecConverter._process_apis(model=model, apis=specifications[entity_name]['apis'], relations=relations)
             SwaggerToSpecConverter._process_attributes(model=model)
 
-        for entity_name, specification in specifications.iteritems():
+            rest_name = model['RESTName']
+            if name != rest_name:
+                # Switching entities names
+                specifications[rest_name] = specifications[name]
+                specifications.pop(name)
+                model = specifications[rest_name]['model']
 
-            if len(filters) > 0 and entity_name not in filters:
-                continue;
 
+        for rest_name, specification in specifications.iteritems():
             model = specification['model']
             SwaggerToSpecConverter._process_children_apis(model=model, apis=specification['apis'], relations=relations)
 
@@ -220,7 +220,9 @@ class SwaggerToSpecConverter(object):
 
             api['resourceName'] = parent_resource_name
             api['RESTName'] = parent_rest_name
-            api['availability'] = None,
+
+            for operation in api['operations']:
+                operation['availability'] = None,
 
             should_create_relation = False
 
@@ -238,7 +240,7 @@ class SwaggerToSpecConverter(object):
                     if path not in apis['self']:
                         apis['self'][path] = {'operations': [], 'availability': None, 'resourceName': model['resourceName'], 'RESTName': model['RESTName']}
 
-                    apis['self'][path]['operations'] = api['operations']
+                    apis['self'][path]['operations'] = [{'method': operation['method'], 'availability': None} for operation in api['operations']]
 
             if should_create_relation:
                 if parent_rest_name not in relations:
@@ -247,9 +249,7 @@ class SwaggerToSpecConverter(object):
                 relations[parent_rest_name][path] = {
                     'resourceName': model['resourceName'],
                     'RESTName': model['RESTName'],
-                    'entityName': model['entityName'],
-                    'operations': api['operations'],
-                    'availability': None,
+                    'operations': [{'method': operation['method'], 'availability': None} for operation in api['operations']]
                 }
 
         for path in apis['self']:

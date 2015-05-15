@@ -40,11 +40,11 @@ class Command(object):
                 data (dict):
 
         """
-        resource_name = None
+        rest_name = None
 
-        if 'entityName' in data:
-            Printer.log('******* %s' % data['entityName'])
-            entity_name = data['entityName']
+        if 'RESTName' in data:
+            Printer.log('******* %s' % data['RESTName'])
+            rest_name = data['RESTName']
 
         parent_object = data['parentObject']
         default_values = data['defaultValues']
@@ -52,7 +52,7 @@ class Command(object):
         spec = data['spec']
 
         if spec is None or len(spec) == 0:
-            spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, entity_name=entity_name)
+            spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, rest_name=rest_name)
 
         processed_spec = ModelsProcessor.process(resources={spec['model']['entityName']: spec})
         model = processed_spec[spec['model']['entityName']]
@@ -62,7 +62,7 @@ class Command(object):
         return runner.run()
 
     @classmethod
-    def get_spec(cls, vsdurl, apiversion, entity_name, path=None):
+    def get_spec(cls, vsdurl, apiversion, rest_name, path=None):
         """
 
         """
@@ -74,13 +74,13 @@ class Command(object):
 
         # Read Swagger
         swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
-        resources = swagger_parser.grab_all(filters=[entity_name])
+        resources = swagger_parser.grab_all(filters=[rest_name])
 
         # Convert Swagger models
-        specs = SwaggerToSpecConverter.convert(resources=resources, filters=[entity_name])
+        specs = SwaggerToSpecConverter.convert(resources=resources, filters=[rest_name])
 
-        if entity_name in specs:
-            return specs[entity_name]
+        if rest_name in specs:
+            return specs[rest_name]
 
         return None
 
@@ -112,7 +112,7 @@ class Command(object):
 
             file_path = '%s/%s.spec' % (output_path, spec['model']['entityName'].lower())
             with open(file_path, 'wb') as file:
-                json.dump(spec, file, indent=4)
+                json.dump(spec, file, indent=4, sort_keys=True)
 
     @classmethod
     def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False, specs_path=None):

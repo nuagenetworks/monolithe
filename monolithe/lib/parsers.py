@@ -99,13 +99,13 @@ class AbstractSwaggerParser(object):
 
         """
         valid_names = RESOURCE_MAPPING.values()
-        default_names = RESOURCE_MAPPING.keys()
+        rest_names = [name.lower() for name in RESOURCE_MAPPING.keys()]
 
         new_filters = []
         for f in filters:
             try:
                 index = valid_names.index(f)
-                name = default_names[index]
+                name = rest_names[index]
             except ValueError:
                 name = f
 
@@ -164,7 +164,13 @@ class AbstractSwaggerParser(object):
 
         (package, resource_name) = self.get_information(path)
 
-        if len(filters) > 0 and resource_name not in filters:
+        entity_name = resource_name
+        if entity_name in RESOURCE_MAPPING:
+            entity_name = RESOURCE_MAPPING[entity_name]
+
+        rest_name = Utils.get_singular_name(entity_name.lower())
+
+        if len(filters) > 0 and rest_name not in filters:
             return
 
         infos = self.get_swagger_model(path, resource_name)

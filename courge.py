@@ -9,9 +9,9 @@ vsd_options = {
 data = {'parentObject' :
         {
             'resourceName': 'enterprises',
-            'id': '4aadb100-c5f4-4797-8076-693165bdc119'
+            'id': '4aae6a26-6427-4055-b514-ecd73524823b'
         },
-        'entityName': 'Group', # Name to search for the specification (Temporary)
+        'RESTName': 'group', # Name to search for the specification (Temporary)
         'defaultValues' :
         {
             'name': 'A group',
