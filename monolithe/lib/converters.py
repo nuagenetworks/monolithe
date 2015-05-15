@@ -2,6 +2,7 @@
 
 import re
 from copy import deepcopy
+from datetime import date
 
 from .utils import Utils
 from .printer import Printer
@@ -146,7 +147,18 @@ class SwaggerToSpecConverter(object):
                 operation.pop('type', None)
 
         resource = {
-            'metadata': {},
+            'metadata': {
+                'api_version': swagger_infos['apiVersion'][1:].replace("_", "."),
+                'author': '',
+                'comments': '',
+                'date': date.today().strftime("%d-%m-%Y"),
+                'dev_backend': '',
+                'dev_frontend': '',
+                'dev_qd': '',
+                'plm': '',
+                'prd_url': 'http://',
+                'revisions': []
+            },
             'apis': {
                 'parents': {api['path']: api for api in swagger_infos['apis']},
                 'children': None,
@@ -208,6 +220,7 @@ class SwaggerToSpecConverter(object):
 
             api['resourceName'] = parent_resource_name
             api['RESTName'] = parent_rest_name
+            api['availability'] = None,
 
             should_create_relation = False
 
@@ -223,7 +236,7 @@ class SwaggerToSpecConverter(object):
                     parent_rest_name = RESTUSER
                 else:
                     if path not in apis['self']:
-                        apis['self'][path] = {'operations': []}
+                        apis['self'][path] = {'operations': [], 'availability': None, 'resourceName': model['resourceName'], 'RESTName': model['RESTName']}
 
                     apis['self'][path]['operations'] = api['operations']
 
@@ -232,8 +245,11 @@ class SwaggerToSpecConverter(object):
                     relations[parent_rest_name] = {}
 
                 relations[parent_rest_name][path] = {
+                    'resourceName': model['resourceName'],
+                    'RESTName': model['RESTName'],
                     'entityName': model['entityName'],
-                    'operations': api['operations']
+                    'operations': api['operations'],
+                    'availability': None,
                 }
 
         for path in apis['self']:
@@ -323,6 +339,15 @@ class SwaggerToSpecConverter(object):
             if 'allowedChoices' not in attribute:
                 attribute['allowedChoices'] = None
 
+            if 'defaultValue' not in attribute:
+                attribute['defaultValue'] = None
+
+            if 'availableForRole' not in attribute:
+                attribute['defaultValue'] = None
+
+            if 'availability' not in attribute:
+                attribute['availability'] = None
+
     @classmethod
     def _process_children_apis(cls, model, apis, relations):
         """ Attach relations to the current model
@@ -375,6 +400,8 @@ class SwaggerToSpecConverter(object):
                 u"allowedChars": None,
                 u"allowedChoices": None,
                 u"defaultOrder": False,
+                u"defaultValue": None,
+                u"availability": None,
             }
 
         models[RESTUSER]['model']['attributes']['role'] = role_attribute
@@ -397,6 +424,8 @@ class SwaggerToSpecConverter(object):
                 u"allowedChars": None,
                 u"allowedChoices": None,
                 u"defaultOrder": False,
+                u"defaultValue": None,
+                u"availability": None,
             }
 
         models[RESTUSER]['model']['attributes']['enterpriseName'] = entreprise_name_attribute
@@ -419,6 +448,8 @@ class SwaggerToSpecConverter(object):
                 u"allowedChars": None,
                 u"allowedChoices": None,
                 u"defaultOrder": False,
+                u"defaultValue": None,
+                u"availability": None,
             }
 
         models[RESTUSER]['model']['attributes']['enterpriseID'] = entreprise_id_attribute
