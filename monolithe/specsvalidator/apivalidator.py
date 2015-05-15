@@ -82,13 +82,11 @@ class APIValidator:
                     self.attribute_errors.append(APISpecMissingAttributeDefinitionError(attribute_name=attribute_name))
 
             else:
-                specification_attribute_definition      = specification_attributes_definition[attribute_name]
-                candidate_attribute_definition = candidate_attributes_definition[attribute_name]
+                specification_attribute_definition = specification_attributes_definition[attribute_name]
+                candidate_attribute_definition     = candidate_attributes_definition[attribute_name]
 
-                self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, "required")
-                self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, "type")
-                self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, "uniqueItems")
-                self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, "allowedChoices")
+                for token in specification_attribute_definition:
+                    self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, token)
 
 
     ## APIs Validation

@@ -10,6 +10,7 @@ class APISpecAttributeDefinitionError:
         self.expected_value = expected_value
         self.actual_value   = actual_value
         self.token          = token
+        self.name           = "Attribute Information Error"
 
     def __str__(self):
         return "%s: '%s' should be '%s' but is '%s'" % (self.attribute_name, self.token, self.expected_value, self.actual_value)
@@ -24,6 +25,7 @@ class APISpecAttributeCapitalizationError:
 
     def __init__(self, attribute_name):
         self.attribute_name = attribute_name
+        self.name           = "Attribute Naming Error"
 
     def __str__(self):
         return "%s: capitalization seems wrong" % (self.attribute_name)
@@ -39,7 +41,8 @@ class APISpecMissingTokenError:
 
     def __init__(self, token, attribute_name):
         self.attribute_name = attribute_name
-        self.token = token
+        self.token          = token
+        self.name           = "Missing Attribute Information Error"
 
     def __str__(self):
         return "%s: information token '%s' is missing" % (self.attribute_name, self.token)
@@ -55,6 +58,7 @@ class APISpecMissingAttributeDefinitionError:
 
     def __init__(self, attribute_name):
         self.attribute_name = attribute_name
+        self.name           = "Missing Attribute Error"
 
     def __str__(self):
         return "%s: is missing" % (self.attribute_name)
@@ -70,6 +74,7 @@ class APISpecMissingAPIError:
 
     def __init__(self, api_name):
         self.api_name = api_name
+        self.name     = "Missing API Error"
 
     def __str__(self):
         return "%s: missing" % (self.api_name)
@@ -87,6 +92,7 @@ class APISpecMissingAPIMethodError:
         self.api_path = api_path
         self.expected_methods = expected_methods
         self.actual_methods = actual_methods
+        self.name     = "Missing API Method"
 
     def __str__(self):
         return "%s: methods should be '%s' but is '%s'" % (self.api_path, self.expected_methods, self.actual_methods)
