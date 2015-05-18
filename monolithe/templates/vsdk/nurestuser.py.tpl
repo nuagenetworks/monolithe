@@ -39,7 +39,7 @@ class NU{{ model.name }}(NURESTBasicUser):
         {% for attribute in model.attributes %}
         self._{{ attribute.local_name|lower }} = None{% endfor %}
         {% for attribute in model.attributes %}
-        self.expose_attribute(local_name=u"{{ attribute.local_name|lower }}", remote_name=u"{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique_items }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
+        self.expose_attribute(local_name=u"{{ attribute.local_name|lower }}", remote_name=u"{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
         {% if model.apis['children']|length > 0 %}
         # Fetchers
         {% for api in model.apis['children'].values() %}

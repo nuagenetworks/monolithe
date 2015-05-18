@@ -278,9 +278,9 @@ class SwaggerToSpecConverter(object):
                 attribute['required'] = False
 
             if 'uniqueItems' in attribute and attribute['uniqueItems'] == 'true':
-                attribute['uniqueItems'] = True
+                attribute['unique'] = True
             else:
-                attribute['uniqueItems'] = False
+                attribute['unique'] = False
 
             if '$ref' in attribute:
                 attribute['type'] = attribute['$ref']
@@ -386,7 +386,7 @@ class SwaggerToSpecConverter(object):
                 u"description": "Role of the user.",
                 u"type": "string",
                 u"required": False,
-                u"uniqueItems": False,
+                u"unique": False,
                 u"filterable": False,
                 u"readonly": False,
                 u"orderable": False,
@@ -410,7 +410,7 @@ class SwaggerToSpecConverter(object):
                 u"description": "Name of the enterprise.",
                 u"type": "string",
                 u"required": False,
-                u"uniqueItems": False,
+                u"unique": False,
                 u"filterable": False,
                 u"readonly": False,
                 u"orderable": False,
@@ -434,7 +434,7 @@ class SwaggerToSpecConverter(object):
                 u"description": "Identifier of the enterprise.",
                 u"type": "string",
                 u"required": False,
-                u"uniqueItems": False,
+                u"unique": False,
                 u"filterable": False,
                 u"readonly": False,
                 u"orderable": False,

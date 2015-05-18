@@ -230,7 +230,7 @@ class ModelsProcessor(object):
             attribute.description = attr['description']
             attribute.type = attr['type']
             attribute.required = attr['required']
-            attribute.unique_items = attr['uniqueItems']
+            attribute.unique = attr['unique']
             attribute.filterable = attr['filterable']
             attribute.readonly = attr['readonly']
             attribute.orderable = attr['orderable']

@@ -204,7 +204,7 @@
                         {% if attribute.required %}
                         <span class="label label-danger float-right">required</span>
                         {% endif %}
-                        {% if attribute.unique_items %}
+                        {% if attribute.unique %}
                         <span class="label label-info float-right">unique</span>
                         {% endif %}
                     </div>
