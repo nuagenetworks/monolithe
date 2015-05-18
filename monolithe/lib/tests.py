@@ -275,7 +275,7 @@ class _MonolitheTestCase(TestCase):
             except KeyboardInterrupt:
                 raise
             except BambouHTTPError as error:
-                result.addError(self, sys.exc_info(), error.connection)
+                result.addError(self, [None, u'Test setUp has failed', None], error.connection)
                 return
             except:
                 result.addError(self, sys.exc_info())
