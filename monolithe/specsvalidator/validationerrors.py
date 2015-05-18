@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-class APISpecAttributeDefinitionError:
+class APISpecAttributeCharacteristicError:
     """ Represents an API attribute definition validation error
 
     """
 
-    def __init__(self, token, attribute_name, expected_value=None, actual_value=None):
+    def __init__(self, characteristic, attribute_name, expected_value=None, actual_value=None):
         self.attribute_name = attribute_name
         self.expected_value = expected_value
         self.actual_value   = actual_value
-        self.token          = token
-        self.name           = "Attribute Information Error"
+        self.characteristic = characteristic
+        self.name           = "Attribute Characteristic Error"
 
     def __str__(self):
-        return "%s: '%s' should be '%s' but is '%s'" % (self.attribute_name, self.token, self.expected_value, self.actual_value)
+        return "%s: '%s' should be '%s' but is '%s'" % (self.attribute_name, self.characteristic, self.expected_value, self.actual_value)
 
     def __repr__(self):
-            return "<%s> attribute '%s', token: '%s', expected: '%s', actual: '%s'" % (self.__class__.__name__, self.attribute_name, self.token, self.expected_value, self.actual_value)
+            return "<%s> attribute '%s', characteristic: '%s', expected: '%s', actual: '%s'" % (self.__class__.__name__, self.attribute_name, self.characteristic, self.expected_value, self.actual_value)
 
 class APISpecAttributeCapitalizationError:
     """ Represents an API attribute capitalization error
@@ -34,24 +34,24 @@ class APISpecAttributeCapitalizationError:
             return "<%s> wrong capitalization for '%s'" % (self.__class__.__name__, self.attribute_name)
 
 
-class APISpecMissingTokenError:
-    """ Represents an API definition missing info token error
+class APISpecAttributeMissingCharacteristicError:
+    """ Represents an API definition missing info characteristic error
 
     """
 
-    def __init__(self, token, attribute_name):
+    def __init__(self, characteristic, attribute_name):
         self.attribute_name = attribute_name
-        self.token          = token
+        self.characteristic          = characteristic
         self.name           = "Missing Attribute Information Error"
 
     def __str__(self):
-        return "%s: information token '%s' is missing" % (self.attribute_name, self.token)
+        return "%s: information characteristic '%s' is missing" % (self.attribute_name, self.characteristic)
 
     def __repr__(self):
-        return "<%s> attribute '%s': missing token: '%s'" % (self.__class__.__name__, self.attribute_name, self.token)
+        return "<%s> attribute '%s': missing characteristic: '%s'" % (self.__class__.__name__, self.attribute_name, self.characteristic)
 
 
-class APISpecMissingAttributeDefinitionError:
+class APISpecAttributeMissingDefinitionError:
     """ Represents an API attribute missing error
 
     """
@@ -67,7 +67,8 @@ class APISpecMissingAttributeDefinitionError:
         return "<%s> attribute '%s': is missing" % (self.__class__.__name__, self.attribute_name)
 
 
-class APISpecMissingAPIError:
+
+class APISpecAPIMissingError:
     """ Represents an API path missing error
 
     """
@@ -83,7 +84,7 @@ class APISpecMissingAPIError:
         return "<%s> api '%s': is missing" % (self.__class__.__name__, self.api_name)
 
 
-class APISpecMissingAPIMethodError:
+class APISpecAPIMissingMethodError:
     """ Represents an API missing method error
 
     """
