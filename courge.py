@@ -8,16 +8,15 @@ vsd_options = {
 
 data = {'parentObject' :
         {
-            'resourceName': 'enterprises',
-            'id': '4aae6a26-6427-4055-b514-ecd73524823b'
+            'resourceName': 'subnets',
+            'id': '41fb2560-8080-4d56-a1a8-c41bc6b00c4b'
         },
-        'RESTName': 'group', # Name to search for the specification (Temporary)
+        'RESTName': 'addressrange', # Name to search for the specification (Temporary)
         'defaultValues' :
         {
-            'name': 'A group',
-            'description': 'a random group',
-            'private': 'false',
-            'accountRestrictions': 'true'
+            'DHCPPoolType' : 'HOST',
+            'maxAddress' : '10.34.17.10',
+            'minAddress' : '10.34.17.20'
         },
         'spec': {} # Should be the JSON spec. Empty for now
        }

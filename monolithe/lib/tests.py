@@ -15,6 +15,7 @@ from unittest import TestCase, TestSuite, TestResult
 from collections import OrderedDict
 
 from bambou.config import BambouConfig
+from bambou.exceptions import BambouHTTPError
 
 HTTP_METHOD_POST = 'POST'
 HTTP_METHOD_GET = 'GET'
@@ -50,6 +51,9 @@ class TestHelper(object):
         """ Trace connection information
 
         """
+        if not connection:
+            return
+
         request = connection.request
         response = connection.response
 
@@ -171,17 +175,17 @@ class _MonolitheTestResult(TestResult):
         if DEVELOPMENT_MODE:
             Printer.success('OK')
 
-    def addError(self, test, err, connection):
+    def addError(self, test, err, connection=None):
         """ Add error to the result
 
         """
         TestResult.addError(self, test, err)
-        self.tests[self.getDescription(test)] = {'status': 'ERROR', 'stacktrace': err, 'connection': test.last_connection}
+        self.tests[self.getDescription(test)] = {'status': 'ERROR', 'stacktrace': err, 'connection': connection}
 
         if DEVELOPMENT_MODE:
             Printer.warn('ERROR')
             Printer.warn(err[1])
-            TestHelper.trace(test.last_connection)
+            TestHelper.trace(connection)
 
 
     def addFailure(self, test, err, connection):
@@ -189,12 +193,12 @@ class _MonolitheTestResult(TestResult):
 
         """
         TestResult.addFailure(self, test, err)
-        self.tests[self.getDescription(test)] = {'status': 'FAILURE', 'stacktrace': err, 'connection': test.last_connection}
+        self.tests[self.getDescription(test)] = {'status': 'FAILURE', 'stacktrace': err, 'connection': connection}
 
         if DEVELOPMENT_MODE:
             Printer.warn('Failure')
             Printer.warn(err[1])
-            TestHelper.trace(test.last_connection)
+            TestHelper.trace(connection)
 
     def __repr__(self):
         """ Representation
@@ -267,10 +271,14 @@ class _MonolitheTestCase(TestCase):
         try:
             try:
                 self.setUp()
+                BambouConfig.set_should_raise_bambou_http_error(False)
             except KeyboardInterrupt:
                 raise
+            except BambouHTTPError as error:
+                result.addError(self, sys.exc_info(), error.connection)
+                return
             except:
-                result.addError(self, sys.exc_info(), self.last_connection)
+                result.addError(self, sys.exc_info())
                 return
             ok = False
             try:
@@ -278,6 +286,7 @@ class _MonolitheTestCase(TestCase):
                     Printer.log('%s...' % self._testMethodName)
 
                 testMethod()
+                BambouConfig.set_should_raise_bambou_http_error(True)
                 ok = True
             except self.failureException:
                 result.addFailure(self, sys.exc_info(), self.last_connection)
@@ -1103,13 +1112,7 @@ class TestsRunner(object):
         """ Runs all tests on the specified VSD
 
         """
-        BambouConfig.set_should_raise_bambou_http_error(False)
-        TestHelper.set_debug_mode(False)
-
         suite = self.suite()
         results = _MonolitheTestRunner().run(suite)
-
-        TestHelper.set_debug_mode(False)
-        BambouConfig.set_should_raise_bambou_http_error(True)
 
         return results

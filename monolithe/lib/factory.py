@@ -83,6 +83,7 @@ class VSDKFactory(object):
                 spec: the specification
 
         """
+
         def init(self, **kwargs):
             """ """
             NURESTObject.__init__(self)
