@@ -54,8 +54,8 @@ class Command(object):
         if spec is None or len(spec) == 0:
             spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, rest_name=rest_name)
 
-        processed_spec = ModelsProcessor.process(resources={spec['model']['entityName']: spec})
-        model = processed_spec[spec['model']['entityName']]
+        processed_spec = ModelsProcessor.process(resources={spec['model']['resouceName']: spec})
+        model = processed_spec[spec['model']['resourceName']]
 
         runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, model=model, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
 
