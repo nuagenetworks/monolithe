@@ -149,18 +149,18 @@ class ModelsProcessor(object):
             child_resource_name = names[-1]
             child_rest_name = Utils.get_singular_name(names[-1])
 
-            if child_rest_name.startswith('all'):
-                entity_name = resources[child_rest_name[3:]]['model']['entityName']
-            else:
-                entity_name = resources[child_rest_name]['model']['entityName']
-
-
             model_api = ModelAPI()
             model_api.path = path
             model_api.resource_name = child_resource_name
             model_api.remote_name = child_rest_name
-            model_api.plural_name = Utils.get_plural_name(entity_name)
-            model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
+
+            if child_rest_name.startswith('all'):
+                child_rest_name = child_rest_name[3:]
+
+            if child_rest_name in resources:
+                entity_name = resources[child_rest_name]['model']['entityName']
+                model_api.plural_name = Utils.get_plural_name(entity_name)
+                model_api.instance_plural_name = Utils.get_python_name(model_api.plural_name)
 
             for operation in api['operations']:
                 model_operation = ModelOperation()
