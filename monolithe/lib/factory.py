@@ -83,8 +83,6 @@ class VSDKFactory(object):
                 spec: the specification
 
         """
-        vsdk = cls.get_vsdk_package()
-
         def init(self, **kwargs):
             """ """
             NURESTObject.__init__(self)
@@ -93,15 +91,6 @@ class VSDKFactory(object):
                 setattr(self, '_%s' % attribute.local_name.lower(), None)
                 allowed_choices = attribute.allowed_choices.sort() if attribute.allowed_choices and len(attribute.allowed_choices) > 0 else None
                 self.expose_attribute(local_name=attribute.local_name.lower(), remote_name=attribute.remote_name, attribute_type=attribute.local_type, is_required=attribute.required, choices=allowed_choices)
-
-            for api in model.apis['children'].values():
-                fetcher_name = 'NU%sFetcher' % api.plural_name
-                fetcher = getattr(vsdk.fetchers, fetcher_name, None)
-
-                if fetcher is None:
-                    raise ImportError('Could not import fetcher %s from vsdk package' % fetcher_name)
-
-                setattr(self, api.instance_plural_name, fetcher.fetcher_with_object(parent_object=self))
 
             self._compute_args(**kwargs)
 
