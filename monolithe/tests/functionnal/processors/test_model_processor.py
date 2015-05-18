@@ -33,22 +33,26 @@ class ModelsProcessorTests(TestCase):
         """
         processed_resources = ModelsProcessor.process(resources=self.resources)
 
-        print processed_resources.keys()
-
         self.assertEquals(len(processed_resources), 95)
 
         # Normal resource
-        self.assertIn('Enterprise', processed_resources)
+        self.assertIn('enterprise', processed_resources) # Rest names
+        self.assertNotIn('Enterprise', processed_resources)
 
         # Mapped resources
-        self.assertIn('Subnet', processed_resources)
+        self.assertIn('subnet', processed_resources)
         self.assertNotIn('SubNetwork', processed_resources)
 
         # Ignored resources
         self.assertNotIn('PublicNetworkMacro', processed_resources)
 
+        # Special cases
+        self.assertIn('eventlog', processed_resources.keys())
+        self.assertIn('alarm', processed_resources.keys())
+        self.assertNotIn('allalarm', processed_resources.keys())
+
         # Model information
-        model_enterprise = processed_resources['Enterprise']
+        model_enterprise = processed_resources['enterprise']
         self.assertEquals(model_enterprise.name, 'Enterprise')
         self.assertEquals(model_enterprise.plural_name, 'Enterprises')
         self.assertEquals(model_enterprise.instance_name, 'enterprise')

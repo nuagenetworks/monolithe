@@ -90,7 +90,7 @@ class ModelsProcessor(object):
             ModelsProcessor._process_apis(model=model, apis=resource['apis'], resources=resources)
             ModelsProcessor._process_attributes(model=model, attributes=resource['model']['attributes'])
 
-            models[model.name] = model
+            models[model.remote_name] = model
 
         Printer.success('Processed succeed for %s objects' % len(models))
 
