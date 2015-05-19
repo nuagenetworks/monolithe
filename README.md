@@ -98,6 +98,25 @@ You can generate an API specification of any VSD Servers by doing:
 
 For instance:
 
-    $ -generator -u https://api.nuagenetworks.net:8443 -v 3.2
+    $ spec-generator -u https://api.nuagenetworks.net:8443 -v 3.2
 
 The generated specification will be available in `specgen/{version}`
+
+### Validate API Specifications
+
+You can validate that a specification file is conform to another by doing""
+
+    $ spec-validator -s SPECIFICATION_FILE -c CANDIDATE_FILE
+
+For instance:
+
+    $ spec-validator -s domain.spec -c candidate-domain.spec
+
+
+You can also validate an entire specification folder against another one by doing:
+
+    $ spec-validator -s SPECIFICATION_FOLDER -c CANDIDATE_FOLDEr
+
+For instance:
+
+    $ spec-validator -s api-specification -c candidate-api-specification

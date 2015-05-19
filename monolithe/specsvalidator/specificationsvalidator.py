@@ -13,42 +13,75 @@ class SpecificationsValidator:
         """ Initialize the validator
 
         """
-        self._report            = {};
-        self.specification_path = specification_path
-        self.candidate_path     = candidate_path
+        self._candidate_files     = []
+        self._candidate_path      = candidate_path
+        self._specification_files = []
+        self._specification_path  = specification_path
+        self._report              = {};
+        self._mode                = None
+
+        if os.path.isdir(self._specification_path) and os.path.isdir(self._candidate_path):
+            self._specification_files = [file for file in os.listdir(self._specification_path)]
+            self._candidate_files     = [file for file in os.listdir(self._candidate_path)]
+            self._mode                = "folder"
+
+        elif not os.path.isdir(self._specification_path) and not os.path.isdir(self._candidate_path):
+            self._specification_files = [self._specification_path]
+            self._candidate_files     = [self._candidate_path]
+            self._mode                = "file"
+
+        else:
+            raise Exception("You must either pass two folers or two files.")
+
 
     def run(self):
         """ Run the validator
 
         """
-        if os.path.isdir(self.specification_path) and os.path.isdir(self.candidate_path):
 
-            for file in os.listdir(self.specification_path):
+        if self._mode == "file":
+            self._run_file_mode()
+        else:
+            self._run_folder_mode()
 
-                file_name = os.path.splitext(file)[0]
-                file_ext  = os.path.splitext(file)[1]
 
-                if file_ext != ".spec":
-                    continue
 
-                if not os.path.exists("%s/%s" % (self.candidate_path, file)):
-                    self.final_report[file_name] = None
-                    continue
+    def _run_file_mode(self):
+        """ Run validation against two files
 
-                specification_file_path = "%s/%s" % (self.specification_path, file)
-                candidate_file_path     = "%s/%s" % (self.candidate_path, file)
+        """
+        self._validate_files(self._specification_files[0], self._candidate_files[0]);
 
-                specification_file = open(specification_file_path, 'r')
-                specification_data = json.loads(specification_file.read())
-                specification_file.close()
+    def _run_folder_mode(self):
+        """ Run validation against two folders
 
-                candidate_file = open(candidate_file_path, 'r')
-                candidate_data = json.loads(candidate_file.read())
-                candidate_file.close()
+        """
+        for file in self._specification_files:
 
-                spec_validator = APISpecificationValidator(specification_data, candidate_data)
-                spec_validator.run()
-                self._report[file_name] = spec_validator
+            specification_file = os.path.join(self._specification_path, file)
+            candidate_file     = os.path.join(self._candidate_path, file)
+
+            if os.path.splitext(specification_file)[1] != ".spec":
+                continue
+
+            if not os.path.exists(candidate_file):
+                self._report[os.path.basename(specification_file)] = None
+                continue
+
+            self._validate_files(specification_file, candidate_file);
+
+    def _validate_files(self, specification_file_path, candidate_file_path):
+        """ Actually performs validation against to files
+
+        """
+        with open(specification_file_path, 'r') as specification_file, open(candidate_file_path, 'r') as candidate_file:
+            specification_data = json.loads(specification_file.read())
+            candidate_data     = json.loads(candidate_file.read())
+
+        spec_validator = APISpecificationValidator(specification_data, candidate_data)
+        spec_validator.run()
+        self._report[os.path.basename(specification_file_path)] = spec_validator
+
 
     def print_console_report(self):
         """ Print the report as text
@@ -56,6 +89,7 @@ class SpecificationsValidator:
         """
         missing_candidate_count      = 0
         parent_apis_validation_count = 0
+        self_apis_validation_count   = 0
         attribute_validation_count   = 0
 
         for entity, validation in sorted(self._report.items()):
@@ -80,9 +114,17 @@ class SpecificationsValidator:
 
                 if len(validation.parent_api_errors):
                     errored = True
-                    out = "%s\033[91mapi conformity errors\033[0m" % out
+                    out = "%s\033[91mparent api conformity errors\033[0m" % out
                     for error in validation.parent_api_errors:
                         parent_apis_validation_count = parent_apis_validation_count + 1
+                        out = "%s\n     %s" % (out, error)
+                    out = "%s\n\n" % out
+
+                if len(validation.self_api_errors):
+                    errored = True
+                    out = "%s\033[91mself api conformity errors\033[0m" % out
+                    for error in validation.self_api_errors:
+                        self_apis_validation_count = self_apis_validation_count + 1
                         out = "%s\n     %s" % (out, error)
                     out = "%s\n\n" % out
 
@@ -90,8 +132,9 @@ class SpecificationsValidator:
                 print out
 
         missing_candidates = "\033[92m0\033[0m"  if not missing_candidate_count else "\033[91m%d\033[0m" % missing_candidate_count
-        validation_errors = "\033[92m0\033[0m"  if not parent_apis_validation_count else "\033[91m%d\033[0m" % parent_apis_validation_count
-        api_errors = "\033[92m0\033[0m"  if not attribute_validation_count else "\033[91m%d\033[0m" % attribute_validation_count
+        validation_errors = "\033[92m0\033[0m"  if not attribute_validation_count else "\033[91m%d\033[0m" % attribute_validation_count
+        parent_apis_errors = "\033[92m0\033[0m"  if not parent_apis_validation_count else "\033[91m%d\033[0m" % parent_apis_validation_count
+        self_apis_errors = "\033[92m0\033[0m"  if not self_apis_validation_count else "\033[91m%d\033[0m" % self_apis_validation_count
 
-        print "missing apis: %s, api validation errors: %s, attribute validation errors: %s\n" % (missing_candidates, validation_errors, api_errors)
+        print "missing apis: %s, self api validation errors: %s, parent api validation errors: %s, attribute validation errors: %s\n" % (missing_candidates, self_apis_errors, parent_apis_errors, validation_errors)
 
