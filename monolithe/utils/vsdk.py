@@ -77,7 +77,7 @@ class VSDKUtils(object):
             return 'float'
 
         # Known as wrong on the server side.
-        if type_name in ['GWPersonality','ManagedObjectType','ActionType','Action','VPortTagEndPointType','TriggerType','FlowRedirectTargetType']:
+        if type_name in ['GWPersonality', 'ManagedObjectType', 'ActionType', 'Action', 'VPortTagEndPointType', 'TriggerType', 'FlowRedirectTargetType']:
             return 'str'
 
         clean_name = type_name.lower().strip()
@@ -126,7 +126,6 @@ class VSDKUtils(object):
         """
         if singular_name in Constants.INVARIANT_NAMES:
             return singular_name
-
 
         if singular_name[-1] == 'y' and singular_name[-2] not in Constants.VOWELS:
             return singular_name[:-1] + 'ies'
@@ -181,3 +180,13 @@ class VSDKUtils(object):
 
         """
         return ('v%s' % version).replace('.', '_')
+
+    @classmethod
+    def get_vsd_url(cls, url, version):
+        """ Get the vsd url for the given version
+
+        """
+        if url[-1] == '/':
+            url = url[:1]
+
+        return '%s/web/docs/api/%s' % (url, cls.get_string_version(version).upper())

@@ -1,38 +1,48 @@
 # -*- coding: utf-8 -*-
 
-import os
+from mock import patch
 
-from unittest import TestCase
-from monolithe.lib.parsers import SwaggerParserFactory, SwaggerFileParser
-
-def get_valid_path():
-    """ Returns swagger path """
-
-    return '%s/monolithe/tests/static/V3_1' % os.getcwd()
+from monolithe.tests.functional import FunctionalTest
+from monolithe.tests.functional.utils import MockUtils
+from monolithe.lib.parsers import SwaggerParser
+from monolithe.utils.printer import Printer
 
 
-class SwaggerFileParserTests(TestCase):
+class SwaggerURLParserTests(FunctionalTest):
     """ Tests for SwaggerParser using file option
 
     """
-    def test_factory_file_parser(self):
-        """ SwaggerFileParser manages file parsing
+    def test_run_call_api_docs_entry_point(self):
+        """ SwaggerParser call correct /schema/api-docs URI
 
         """
-        parser = SwaggerParserFactory.create(url=None, path=get_valid_path(), apiversion=None)
-        self.assertEqual(type(parser), SwaggerFileParser)
+        parser = SwaggerParser(vsdurl='https://135.227.222.112:8443', path=None, apiversion=3.1)
 
-    def test_grab_all(self):
-        """ SwaggerFileParser grab all files and correct version
+        mock = MockUtils.create_swagger_response(status_code=400, filepath=None)
 
-        """
-        parser = SwaggerFileParser(path=get_valid_path())
-        resources = parser.grab_all()
+        Printer.should_raise_exception(True)
+        with patch('requests.get', mock):
+            with self.assertRaises(Exception):
+                parser.run()
 
-        self.assertEquals(len(resources), 109)
-        self.assertEquals(parser.apiversion, 3.1)
-        self.assertIn('Enterprise', resources)
-        self.assertEquals(resources['Enterprise'], {u'apiVersion': u'V3_1',
+        Printer.should_raise_exception(False)
+
+        url = MockUtils.get_mock_parameter(mock, 'url')
+
+        self.assertEqual(url, u'https://135.227.222.112:8443/web/docs/api/V3_1/schema/api-docs')
+
+    def test_run(self):
+        """ SwaggerParser retrieve all entities  """
+
+        parser = SwaggerParser(vsdurl='https://135.227.222.112:8443', path=None, apiversion=3.1)
+        resources = parser.run()
+
+        # Verify principal entities
+        self.assertIn('Enterprise', resources.keys())
+        self.assertIn('Subnet', resources.keys())
+        self.assertIn('Alarm', resources.keys())
+
+        self.assertEqual(resources['Enterprise'], {u'apiVersion': u'V3_1',
                                                     u'apis': [{u'operations': [{u'method': u'GET',
                                                                                 u'nickname': u'getEnterprises',
                                                                                 u'parameters': [{u'name': u'id',
@@ -101,35 +111,6 @@ class SwaggerFileParserTests(TestCase):
                                                                                                         u'required': u'false',
                                                                                                         u'type': u'string',
                                                                                                         u'uniqueItems': False},
-                                                                                                u'_fetchers': {u'description': u'internal property',
-                                                                                                               u'enum': [u'User',
-                                                                                                                         u'Service',
-                                                                                                                         u'GatewayTemplate',
-                                                                                                                         u'VirtualMachine',
-                                                                                                                         u'Group',
-                                                                                                                         u'RedundantGWGrp',
-                                                                                                                         u'NSGatewayTemplate',
-                                                                                                                         u'L2DomainTemplate',
-                                                                                                                         u'EventLog',
-                                                                                                                         u'InfrastructureGatewayProfile',
-                                                                                                                         u'InfrastructurePortProfile',
-                                                                                                                         u'NSGateway',
-                                                                                                                         u'Domain',
-                                                                                                                         u'EnterpriseNetworkMacro',
-                                                                                                                         u'EgressQosPrimitive',
-                                                                                                                         u'Alarm',
-                                                                                                                         u'LDAPConfiguration',
-                                                                                                                         u'DomainTemplate',
-                                                                                                                         u'Job',
-                                                                                                                         u'DSCPForwardingClassTable',
-                                                                                                                         u'RateLimiter',
-                                                                                                                         u'App',
-                                                                                                                         u'Gateway',
-                                                                                                                         u'L2Domain',
-                                                                                                                         u'PublicNetworkMacro',
-                                                                                                                         u'MultiCastChannelMap',
-                                                                                                                         u'PATNATPool'],
-                                                                                                               u'type': u'string'},
                                                                                                 u'allowAdvancedQOSConfiguration': {u'description': u'Controls whether this enterprise has access to advanced QoS settings',
                                                                                                                                    u'required': u'false',
                                                                                                                                    u'type': u'boolean',
@@ -155,6 +136,18 @@ class SwaggerFileParserTests(TestCase):
                                                                                                                               u'required': u'false',
                                                                                                                               u'type': u'enum',
                                                                                                                               u'uniqueItems': False},
+                                                                                                u'associatedEnterpriseSecurityId': {u'description': u'Readonly Id of the associated group key encryption profile',
+                                                                                                                                    u'required': u'false',
+                                                                                                                                    u'type': u'string',
+                                                                                                                                    u'uniqueItems': False},
+                                                                                                u'associatedGroupKeyEncryptionProfileId': {u'description': u'Readonly Id of the associated group key encryption profile',
+                                                                                                                                           u'required': u'false',
+                                                                                                                                           u'type': u'string',
+                                                                                                                                           u'uniqueItems': False},
+                                                                                                u'associatedKeyServerMonitorId': {u'description': u'Readonly Id of the associated keyserver monitor',
+                                                                                                                                  u'required': u'false',
+                                                                                                                                  u'type': u'string',
+                                                                                                                                  u'uniqueItems': False},
                                                                                                 u'avatarData': {u'description': u'URL to the avatar data associated with the enterprise. If the avatarType is URL then value of avatarData should an URL of the image. If the avatarType BASE64 then avatarData should be BASE64 encoded value of the image',
                                                                                                                 u'required': u'false',
                                                                                                                 u'type': u'string',
@@ -178,6 +171,12 @@ class SwaggerFileParserTests(TestCase):
                                                                                                                  u'required': u'false',
                                                                                                                  u'type': u'string',
                                                                                                                  u'uniqueItems': False},
+                                                                                                u'encryptionManagementMode': {u'description': u'encryption management mode for this enterprise Possible values are DISABLED, MANAGED, .',
+                                                                                                                              u'enum': [u'DISABLED',
+                                                                                                                                        u'MANAGED'],
+                                                                                                                              u'required': u'false',
+                                                                                                                              u'type': u'enum',
+                                                                                                                              u'uniqueItems': False},
                                                                                                 u'enterpriseProfileID': {u'description': u'Enterprise profile id for this enterprise',
                                                                                                                          u'required': u'false',
                                                                                                                          u'type': u'string',
@@ -217,7 +216,15 @@ class SwaggerFileParserTests(TestCase):
                                                                                                 u'parentType': {u'description': u'This is the type of parent object for the particular object.',
                                                                                                                 u'required': u'false',
                                                                                                                 u'type': u'string',
-                                                                                                                u'uniqueItems': False}}}},
+                                                                                                                u'uniqueItems': False},
+                                                                                                u'receiveMultiCastListId': {u'description': u'Readonly Id of the auto generated receive multicast list associated with this enterprise profile',
+                                                                                                                            u'required': u'false',
+                                                                                                                            u'type': u'string',
+                                                                                                                            u'uniqueItems': False},
+                                                                                                u'sendMultiCastListId': {u'description': u'Readonly Id of the auto generated send multicast list associated with this enterprise profile',
+                                                                                                                         u'required': u'false',
+                                                                                                                         u'type': u'string',
+                                                                                                                         u'uniqueItems': False}}}},
                                                     'package': u'/usermgmt',
                                                     u'resourcePath': u'/Enterprise',
                                                     u'swaggerVersion': u'1.2'})

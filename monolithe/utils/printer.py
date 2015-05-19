@@ -9,8 +9,16 @@ from colorama import Fore, Style
 
 
 class Printer(object):
-    """ Print output for VSD-CLI
+    """ Print output
+
     """
+
+    __raise_exception__ = False
+
+    @classmethod
+    def should_raise_exception(cls, should_raise=True):
+        """"""
+        cls.__raise_exception__ = should_raise
 
     @classmethod
     def colorprint(cls, message, color=''):
@@ -30,7 +38,11 @@ class Printer(object):
             Args:
                 message: the message to print
         """
-        cls.colorprint('[ERROR] %s' % message, Fore.RED)
+        error_message = '[ERROR] %s' % message
+        if cls.__raise_exception__:
+            raise Exception(error_message)
+
+        cls.colorprint(error_message, Fore.RED)
         sys.exit(1)
 
     @classmethod

@@ -46,8 +46,28 @@ class URLUtils(object):
                 >>> False
 
         """
+        if path is None:
+            return False
+
         for protocol in Constants.HTTP_PROTOCOLS:
             if path.startswith(protocol):
                 return True
 
         return False
+
+    @classmethod
+    def split_resource_path(self, resource_path):
+        """ Split resource path to retrieve the package and the resource name
+
+            Args:
+                resource_path (string): the resource path
+
+            Returns:
+                (package, resource_name)
+
+            Example:
+                split_resource_path('/usermgmt/User')
+                >>> (/usermgmt, User)
+        """
+
+        return resource_path.rsplit('/', 1)

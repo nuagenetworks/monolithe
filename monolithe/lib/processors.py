@@ -58,7 +58,7 @@ class ModelsProcessor(object):
                 name: the name from swagger
 
         """
-        model.name = ParsingUtils.get_resource_name(name)
+        model.name = ParsingUtils.get_correct_name(name)
 
         model.instance_name = Utils.get_python_name(model.name)
         model.plural_name = Utils.get_plural_name(model.name)

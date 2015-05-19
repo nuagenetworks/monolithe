@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import json
+import os
+import sys
+
 from monolithe.utils.constants import Constants
+from monolithe.utils.printer import Printer
 
 
 class ParsingUtils(object):
@@ -25,8 +30,8 @@ class ParsingUtils(object):
         return package_name
 
     @classmethod
-    def get_resource_name(cls, resource_name):
-        """ Returns the resource name
+    def get_correct_name(cls, name):
+        """ Returns the correct name of the entity
 
             Args:
                 resource_name (string): the resource_name name
@@ -35,7 +40,24 @@ class ParsingUtils(object):
                 Returns the corresponding name
 
         """
-        if resource_name in Constants.RESOURCE_MAPPING:
-            return Constants.RESOURCE_MAPPING[resource_name]
+        if name in Constants.RESOURCE_MAPPING:
+            return Constants.RESOURCE_MAPPING[name]
 
-        return resource_name
+        return name
+
+    @classmethod
+    def parseJSON(self, filepath):
+        """
+
+        """
+        if not os.path.isfile(filepath):
+            Printer.raiseError("[File Path] Could not access %s" % (filepath))
+
+        data = None
+        try:
+            data = json.load(open(filepath))
+        except Exception:
+            e = sys.exc_info()[1]
+            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (filepath, e.args[0]))
+
+        return data

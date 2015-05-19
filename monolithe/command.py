@@ -6,7 +6,7 @@ import os
 import shutil
 import json
 
-from .lib import SwaggerParserFactory
+from .lib import SwaggerParser
 from .lib import SDKWriter, DocWriter, CourgetteWriter
 from .lib import ModelsProcessor
 from .lib import GitManager
@@ -20,8 +20,6 @@ from monolithe.utils.urls import URLUtils
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'
 SPECGEN_DIRECTORY = './specgen'
-
-API_URL = 'web/docs/api/'
 
 
 class Command(object):
@@ -74,8 +72,8 @@ class Command(object):
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
         # Read Swagger
-        swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
-        resources = swagger_parser.grab_all(filters=[rest_name])
+        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        resources = swagger_parser.run(filters=[rest_name])
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources, filters=[rest_name])
@@ -97,8 +95,8 @@ class Command(object):
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
         # Read Swagger
-        swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
-        resources = swagger_parser.grab_all()
+        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        resources = swagger_parser.run()
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources)
@@ -140,8 +138,8 @@ class Command(object):
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
         # Read Swagger
-        swagger_parser = SwaggerParserFactory.create(url=url, path=path, apiversion=apiversion)
-        resources = swagger_parser.grab_all()
+        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        resources = swagger_parser.run()
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources)
@@ -196,8 +194,8 @@ class Command(object):
         url = cls._get_api_url(vsdurl)
 
         # Read Swagger
-        swagger_parser = SwaggerParserFactory.create(url=url, apiversion=apiversion, path=path)
-        resources = swagger_parser.grab_all()
+        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        resources = swagger_parser.run()
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources)
@@ -236,8 +234,8 @@ class Command(object):
         url = cls._get_api_url(vsdurl)
 
         # Read Swagger
-        swagger_parser = SwaggerParserFactory.create(url=url, apiversion=apiversion, path=path)
-        resources = swagger_parser.grab_all()
+        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        resources = swagger_parser.run()
 
         # Processed Swagger models
         processed_resources = ModelsProcessor.process(resources=resources)
