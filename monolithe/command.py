@@ -106,6 +106,8 @@ class Command(object):
         if not output_path:
             output_path = SPECGEN_DIRECTORY
 
+        output_path = '%s/%s' % (output_path, apiversion)
+
         if not os.path.exists(output_path):
             os.makedirs(output_path)
 
