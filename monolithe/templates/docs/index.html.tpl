@@ -48,18 +48,14 @@
         {% for package_name, model_names in packages|dictsort %}
         <section id="section-{{package_name | replace(" ", "_")}}">
             <h3>{{package_name}}</h3>
-                {% for model_name in model_names|sort %}
-                {% set model = models[model_name] %}
-                <div class="row">
-                    <div class="col-xs-12" style="padding: 10px; border-top: 1px solid #E7E7E7">
-                        <a class="filterable"
-                            data-filter-keyword="{{model.resource_name}}" id="{{model.resource_name}}" href="{{model.remote_name}}.html"
-                            title="API reference for {{model.name}}">{{model.resource_name}}</a>
-                    </div>
+            {% for model_name in model_names|sort %}
+            {% set model = models[model_name] %}
+            <div class="row bordered-row">
+                <div class="col-xs-12">
+                    <a class="filterable" data-filter-keyword="{{model.resource_name}}" id="{{model.resource_name}}" href="{{model.remote_name}}.html" title="API reference for {{model.name}}">{{model.resource_name}}</a>
                 </div>
-                {% endfor %}
-                <tr><td></td></tr>
-            </table>
+            </div>
+            {% endfor %}
         </section>
         {% endfor %}
 

@@ -110,8 +110,7 @@
 
         <section id="overview">
             <h3>Overview</h3>
-                <span class="fixed-text">{</span>
-                <table style="margin-left: 10px; width: 90">
+                <table>
                     {% for attribute in model.attributes|sort(attribute='local_name') %}
                     <tr>
                         <td class="fixed-text">
@@ -126,7 +125,6 @@
                     </tr>
                     {% endfor %}
                 </table>
-                <span class="fixed-text">}</span>
         </section>
 
         <section id="apiresources">
@@ -185,12 +183,9 @@
 
     </div>
 
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/search.js"></script>
-
     <script>
         $(document).ready(function()
         {
