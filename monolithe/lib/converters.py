@@ -5,7 +5,7 @@ from copy import deepcopy
 from datetime import date
 
 from .utils import Utils
-from .printer import Printer
+from monolithe.utils.printer import Printer
 
 from monolithe.utils.constants import Constants
 

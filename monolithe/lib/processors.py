@@ -3,7 +3,7 @@
 import re
 
 from .utils import Utils
-from .printer import Printer
+from monolithe.utils.printer import Printer
 from .objects import Model, ModelAttribute, ModelAPI, ModelOperation
 
 from monolithe.utils.parse import ParsingUtils

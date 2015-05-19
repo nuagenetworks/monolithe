@@ -8,7 +8,7 @@ import sys
 
 from copy import deepcopy
 
-from .printer import Printer
+from monolithe.utils.printer import Printer
 from .factory import VSDKFactory
 from .utils import Utils
 from unittest import TestCase, TestSuite, TestResult

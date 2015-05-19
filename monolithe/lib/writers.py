@@ -6,7 +6,7 @@ import shutil
 from copy import deepcopy
 from jinja2 import Environment, PackageLoader
 
-from .printer import Printer
+from monolithe.utils.printer import Printer
 from .managers import TaskManager
 from .utils import Utils
 

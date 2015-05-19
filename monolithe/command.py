@@ -7,14 +7,15 @@ import shutil
 import json
 
 from .lib import SwaggerParserFactory
-from .lib import Printer
 from .lib import SDKWriter, DocWriter, CourgetteWriter
 from .lib import ModelsProcessor
 from .lib import GitManager
-from .lib import Utils
 from .lib import SwaggerToSpecConverter
 from .lib import SpecParser
 from .lib import TestsRunner
+
+from monolithe.utils.printer import Printer
+from monolithe.utils.urls import URLUtils
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'

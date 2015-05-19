@@ -18,7 +18,7 @@ class SwaggerUtils(object):
                 >>> (/usermgmt, User)
         """
 
-        if resource_path and resource_path.starts_with(reference_path):
+        if resource_path and resource_path.startswith(reference_path):
             return resource_path.split(reference_path)[1].rsplit('/', 1)
 
         return resource_path.rsplit('/', 2)[-2:]

@@ -4,7 +4,7 @@ from monolithe.utils.constants import Constants
 
 
 class ParsingUtils(object):
-    """ URL Utilities
+    """ Parsing Utilities
 
     """
 

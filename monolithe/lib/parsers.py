@@ -6,7 +6,7 @@ import requests
 import sys
 
 from copy import deepcopy
-from .printer import Printer
+from monolithe.utils.printer import Printer
 from .managers import TaskManager
 from .utils import Utils
 
@@ -20,6 +20,7 @@ SWAGGER_PATH = 'path'
 SPEC_EXTENSION = '.spec'
 
 from monolithe.utils.constants import Constants
+from monolithe.utils.vsdk import VSDKUtils
 
 ## Monkey patch to use PROTOCOL_TLSv1 by default in requests
 from requests.packages.urllib3.poolmanager import PoolManager
@@ -138,7 +139,7 @@ class AbstractSwaggerParser(object):
             Printer.raiseError("No api version found in api-docs")
 
         if self.apiversion is None:
-            self.apiversion = Utils.get_float_version(data[SWAGGER_APIVERSION])
+            self.apiversion = VSDKUtils.get_float_version(data[SWAGGER_APIVERSION])
 
         task_manager = TaskManager()
 
