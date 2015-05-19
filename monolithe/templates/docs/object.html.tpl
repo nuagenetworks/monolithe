@@ -22,8 +22,8 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
                     <li><a data-id="intro" href="#intro">Top</a></li>
-                    <li><a data-id="apiresources" href="#apiresources">API Resources</a></li>
                     <li><a data-id="overview" href="#overview">Overview</a></li>
+                    <li><a data-id="apiresources" href="#apiresources">API Resource</a></li>
                     <li><a data-id="parents" href="#parents">Parents</a></li>
                     <li><a data-id="children" href="#children">Children</a></li>
                     <li class="dropdown">
@@ -81,28 +81,6 @@
             <p>{{model.description}}</p>
         </section>
 
-        <section id="apiresources">
-            <h3>API Resource</h3>
-
-            {% if model.apis["self"]|count %}
-
-            {% for path, api in model.apis["self"].iteritems() %}
-            <div class="row bordered-row">
-                <div class="col-xs-7">
-                    <span class="fixed-text">{{path.replace("{id}", "id")}}</span>
-                </div>
-                <div class="col-xs-5 text-right">
-                    {% for operation in api.operations %}
-                    {{label_for_method(operation.method)}}
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p>This object is not directly accessible.</p>
-            {% endif %}
-        </section>
-
         <section id="overview">
             <h3>Overview</h3>
                 <span class="fixed-text">{</span>
@@ -124,18 +102,40 @@
                 <span class="fixed-text">}</span>
         </section>
 
+        <section id="apiresources">
+            <h3>API Resource</h3>
+
+            {% if model.apis.self|count %}
+
+            {% for path, api in model.apis.self.iteritems() %}
+            <div class="row bordered-row">
+                <div class="col-xs-7">
+                    <span class="fixed-text">{{path.replace("{id}", "id")}}</span>
+                </div>
+                <div class="col-xs-5 text-right">
+                    {% for operation in api.operations %}
+                    {{label_for_method(operation.method)}}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>This object is not directly accessible.</p>
+            {% endif %}
+        </section>
+
         <section id="parents">
             <h3>Parents</h3>
-            {% if model.apis["parents"]|count %}
-            {% for path, api in model.apis["parents"].iteritems() %}
+            {% if model.apis.parents|count %}
+            {% for path, api in model.apis.parents.iteritems() %}
             <div class="row bordered-row">
                 <div class="col-xs-7">
                     <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/id/{{model.resource_name}}</span>
                 </div>
                 <div class="col-xs-5 text-right">
-                    {% for method in api.methods %}
-                    {{label_for_method(method)}}
-                    {% endfor %}
+                   {% for operation in api.operations|sort|reverse %}
+                   {{label_for_method(operation.method)}}
+                   {% endfor %}
                 </div>
             </div>
             {% endfor %}
@@ -146,16 +146,16 @@
 
         <section id="children">
             <h3>Children</h3>
-            {% if model.apis['children']|count %}
+            {% if model.apis.children|count %}
 
-            {% for path, api in model.apis['children'].iteritems()|sort %}
+            {% for path, api in model.apis.children.iteritems()|sort %}
             <div class="row bordered-row">
                 <div class="col-xs-7">
                     <span class="fixed-text">/{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a></span>
                 </div>
                 <div class="col-xs-5 text-right">
                     {% for operation in api.operations|sort|reverse %}
-                    {{label_for_method(operation["method"])}}
+                    {{label_for_method(operation.method)}}
                     {% endfor %}
                 </div>
             </div>
