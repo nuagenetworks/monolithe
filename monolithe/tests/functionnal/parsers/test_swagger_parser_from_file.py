@@ -26,7 +26,6 @@ class SwaggerFileParserTests(TestCase):
         """ SwaggerFileParser grab all files and correct version
 
         """
-        print get_valid_path()
         parser = SwaggerFileParser(path=get_valid_path())
         resources = parser.grab_all()
 

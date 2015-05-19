@@ -35,7 +35,8 @@ class SwaggerToSpecConverterTests(TestCase):
 
         resources = SwaggerToSpecConverter.convert(resources=self.swagger_resources)
 
-        self.assertEqual(len(resources), 95)
+        self.assertEqual(len(resources), 96)
         self.assertIn('eventlog', resources.keys())
         self.assertIn('alarm', resources.keys())
         self.assertNotIn('allalarm', resources.keys())
+        self.assertIn('RESTUser', resources.keys())

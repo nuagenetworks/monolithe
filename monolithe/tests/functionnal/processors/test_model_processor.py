@@ -33,7 +33,7 @@ class ModelsProcessorTests(TestCase):
         """
         processed_resources = ModelsProcessor.process(resources=self.resources)
 
-        self.assertEquals(len(processed_resources), 95)
+        self.assertEquals(len(processed_resources), 96)
 
         # Normal resource
         self.assertIn('enterprise', processed_resources) # Rest names

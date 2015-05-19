@@ -366,12 +366,14 @@ class SwaggerToSpecConverter(object):
 
             Add a RESTUser object in models, based on User
         """
-        if USER not in models or RESTUSER not in relations:
+
+        if USER.lower() not in models or RESTUSER not in relations:
             return
 
-        models[RESTUSER] = deepcopy(models[USER])
+        models[RESTUSER] = deepcopy(models[USER.lower()])
         models[RESTUSER]['model']['entityName'] = RESTUSER
         models[RESTUSER]['model']['RESTName'] = 'me'
+        models[RESTUSER]['model']['resourceName'] = 'me'
         models[RESTUSER]['apis']['children'] = relations[RESTUSER]
 
         # Still needed ??

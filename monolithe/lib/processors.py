@@ -86,7 +86,7 @@ class ModelsProcessor(object):
             model = Model()
             model.description = resource['model']['description']
             ModelsProcessor._process_package(model=model, package=resource['model']['package'])
-            ModelsProcessor._process_name(model=model, name=resource['model']['entityName'], resource_name=resource['model']['resourceName'])
+            ModelsProcessor._process_name(model=model, name=resource['model']['entityName'], resource_name=resource['model']['resourceName'], remote_name=resource['model']['RESTName'])
             ModelsProcessor._process_apis(model=model, apis=resource['apis'], resources=resources)
             ModelsProcessor._process_attributes(model=model, attributes=resource['model']['attributes'])
 
@@ -107,7 +107,7 @@ class ModelsProcessor(object):
             model.package = package
 
     @classmethod
-    def _process_name(cls, model, name, resource_name):
+    def _process_name(cls, model, name, resource_name, remote_name):
         """ Compute the name and plural name of from the swagger
             model
 
@@ -122,10 +122,9 @@ class ModelsProcessor(object):
             model.name = name
 
         model.instance_name = Utils.get_python_name(model.name)
-        model.instance_name = Utils.get_python_name(model.name)
         model.plural_name = Utils.get_plural_name(model.name)
         model.instance_plural_name = Utils.get_python_name(model.plural_name)
-        model.remote_name = Utils.get_singular_name(resource_name)
+        model.remote_name = remote_name.lower()
         model.resource_name = resource_name
 
     @classmethod
@@ -144,7 +143,7 @@ class ModelsProcessor(object):
             if api['resourceName'] == model.resource_name:
                 continue
 
-            names = filter(bool, re.split('/\{id\}?/?', path))
+            names = filter(bool, re.split('/\{id\}?/?', path[1:] if path.startswith('/') else path))
 
             child_resource_name = names[-1]
             child_rest_name = Utils.get_singular_name(names[-1])
