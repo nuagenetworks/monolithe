@@ -48,9 +48,9 @@
     {# macro to create a method label #}
     {% macro label_for_method(method) %}
     {% if method == "GET" %}
-    {% set label_class = "label-primary" %}
+    {% set label_class = "label-default" %}
     {% elif method == "POST" %}
-    {% set label_class = "label-info" %}
+    {% set label_class = "label-primary" %}
     {% elif method == "PUT" %}
     {% set label_class = "label-success" %}
     {% elif method == "DELETE" %}
@@ -73,6 +73,33 @@
     {% endif %}
     {{allowed_values}}
     {% endmacro %}
+
+    {# macro to create api list #}
+    {% macro make_api_list(apis, mode, nothing_string) %}
+    {% if apis|count %}
+    {% for path, api in apis.iteritems()|sort %}
+    <div class="row bordered-row">
+        <div class="col-xs-7">
+            {% if mode == "self" %}
+            <span class="fixed-text">{{path.replace("{id}", "<span class=\"text-muted\">id</span>")}}</span>
+            {% elif mode == "parents" %}
+            <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/<span class="text-muted">id</span>/{{model.resource_name}}</span>
+            {% else %}
+            <span class="fixed-text">/{{model.resource_name}}/<span class="text-muted">id</span>/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a></span>
+            {% endif %}
+        </div>
+        <div class="col-xs-5 text-right">
+            {% for operation in api.operations|sort(attribute="method") %}
+            {{label_for_method(operation.method)}}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>{{nothing_string}}</p>
+    {% endif %}
+    {% endmacro %}
+
 
     <div class="container">
 
@@ -104,65 +131,17 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-
-            {% if model.apis.self|count %}
-
-            {% for path, api in model.apis.self.iteritems() %}
-            <div class="row bordered-row">
-                <div class="col-xs-7">
-                    <span class="fixed-text">{{path.replace("{id}", "id")}}</span>
-                </div>
-                <div class="col-xs-5 text-right">
-                    {% for operation in api.operations %}
-                    {{label_for_method(operation.method)}}
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p>This object is not directly accessible.</p>
-            {% endif %}
+            {{make_api_list(model.apis.self, "self", "This object is not directly accessible.")}}
         </section>
 
         <section id="parents">
             <h3>Parents</h3>
-            {% if model.apis.parents|count %}
-            {% for path, api in model.apis.parents.iteritems() %}
-            <div class="row bordered-row">
-                <div class="col-xs-7">
-                    <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/id/{{model.resource_name}}</span>
-                </div>
-                <div class="col-xs-5 text-right">
-                   {% for operation in api.operations|sort|reverse %}
-                   {{label_for_method(operation.method)}}
-                   {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p>This object has no parent API.</p>
-            {% endif %}
+            {{make_api_list(model.apis.parents, "parents", "This object has no parents.")}}
         </section>
 
         <section id="children">
             <h3>Children</h3>
-            {% if model.apis.children|count %}
-
-            {% for path, api in model.apis.children.iteritems()|sort %}
-            <div class="row bordered-row">
-                <div class="col-xs-7">
-                    <span class="fixed-text">/{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a></span>
-                </div>
-                <div class="col-xs-5 text-right">
-                    {% for operation in api.operations|sort|reverse %}
-                    {{label_for_method(operation.method)}}
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <p>This object has no child.</p>
-            {% endif %}
+            {{make_api_list(model.apis.children, "children", "This object has no child.")}}
         </section>
 
         <section id="attributes">
@@ -172,7 +151,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading fixed-text">
                         <b>{{attribute.remote_name}}</b>
-                        <span class="type_{{attribute.remote_type}} fixed-text">{{attribute.type}}</span>
+                        <span class="type_{{attribute.type}} fixed-text">{{attribute.type}}</span>
                         {% if attribute.required %}
                         <span class="label label-danger float-right">required</span>
                         {% endif %}
