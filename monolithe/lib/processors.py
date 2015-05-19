@@ -6,63 +6,8 @@ from .utils import Utils
 from .printer import Printer
 from .objects import Model, ModelAttribute, ModelAPI, ModelOperation
 
-USER = 'User'
-
-IGNORED_ATTRIBUTES = ["_fetchers"]
-
-ATTRIBUTE_MAPPING = {
-    'global': 'globalMetadata'
-}
-
-IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
-
-RESOURCE_MAPPING = {
-    'SubNetwork': 'Subnet',
-    'SubNetworkTemplate': 'SubnetTemplate',
-    'PortStatus': 'MonitoringPort',
-    'EnterpriseNetworkMacro': 'EnterpriseNetwork',
-    'RedundantGWGrp': 'RedundancyGroup',
-    'Service': 'ApplicationService',
-    'IPBinding': 'IPReservation',
-    'VPNConnect': 'VPNConnection',
-    'QosPrimitive': 'QOS',  # Not working because resource name is 'qos' instead of 'quoss'
-    'EgressQosPrimitive': 'EgressQOSPolicy',
-    'EgressACLTemplateEntry': 'EgressACLEntryTemplate',
-    'IngressACLTemplateEntry': 'IngressACLEntryTemplate',
-    'IngressAdvancedForwardingTemplate': 'IngressAdvFwdTemplate',
-    'IngressAdvancedForwardingTemplateEntry': 'IngressAdvFwdEntryTemplate',
-    'AutoDiscGateway': 'AutoDiscoveredGateway',
-    'VirtualMachine': 'VM',
-    'Vlan': 'VLAN',
-    'VlanTemplate': 'VLANTemplate'
-}
-
-PACKAGE_MAPPING = {
-    '/alarm': 'Alarms',
-    '/appd': 'Application Designer',
-    '/common': 'Metadata',
-    '/eventlog': 'Event Logs',
-    '/gateway': 'Gateway Management',
-    '/infrastructure': 'Infrastructure Profiles',
-    '/job': 'Jobs',
-    '/licensemgmt': 'Licensing',
-    '/network': 'Core Networking',
-    '/nsg': 'Gateway Management',
-    '/policy': 'Policies',
-    '/policy/acl': 'Security Policies',
-    '/policy/qos': 'Policies',
-    '/stats': 'Statistics',
-    '/sysmon': 'System Monitoring',
-    '/systemconfig': 'System Configuration',
-    '/usermgmt': 'User Management',
-    '/vm': 'Virtual Machines',
-    '/vport': 'Core Networking',
-    '/certificate': 'Certificate',
-    '/cms': 'Cloud Management System',
-    '/ipsec': 'IP Sec',
-    '/keyserver': 'Key Server',
-    '/vmware': 'VMware',
-}
+from monolithe.utils.parse import ParsingUtils
+from monolithe.utils.constants import Constants
 
 
 class ModelsProcessor(object):
@@ -101,10 +46,7 @@ class ModelsProcessor(object):
         """ Process package name
 
         """
-        if package in PACKAGE_MAPPING:
-            model.package = PACKAGE_MAPPING[package]
-        else:
-            model.package = package
+        model.package = ParsingUtils.get_package_name(package)
 
     @classmethod
     def _process_name(cls, model, name, resource_name, remote_name):
@@ -116,10 +58,7 @@ class ModelsProcessor(object):
                 name: the name from swagger
 
         """
-        if name in RESOURCE_MAPPING:
-            model.name = RESOURCE_MAPPING[name]
-        else:
-            model.name = name
+        model.name = ParsingUtils.get_resource_name(name)
 
         model.instance_name = Utils.get_python_name(model.name)
         model.plural_name = Utils.get_plural_name(model.name)
@@ -205,8 +144,8 @@ class ModelsProcessor(object):
                 A beautiful python name
 
         """
-        if name in ATTRIBUTE_MAPPING:
-            return Utils.get_python_name(ATTRIBUTE_MAPPING[name])
+        if name in Constants.ATTRIBUTE_MAPPING:
+            return Utils.get_python_name(Constants.ATTRIBUTE_MAPPING[name])
 
         return Utils.get_python_name(name)
 

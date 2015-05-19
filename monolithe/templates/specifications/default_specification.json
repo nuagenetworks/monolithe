@@ -1,0 +1,30 @@
+{
+    "model": 
+    {
+        "RESTName": "", 
+        "attributes": {}, 
+        "description": "", 
+        "entityName": "", 
+        "package": "", 
+        "resourceName": ""
+    },
+    "apis": 
+    {
+        "parents": {},
+        "children": {},
+        "self": {},
+    }, 
+    "metadata": 
+    {
+        "api_version": "3.2", 
+        "author": "", 
+        "comments": "", 
+        "date": "mm-dd-yyyy", 
+        "dev_backend": "", 
+        "dev_frontend": "", 
+        "dev_qd": "", 
+        "plm": "", 
+        "prd_url": "http://", 
+        "revisions": []
+    }
+}

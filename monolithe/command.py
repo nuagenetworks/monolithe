@@ -66,7 +66,7 @@ class Command(object):
         """
 
         """
-        path = Utils.remove_slash(path)
+        path = URLUtils.remove_slash(path)
         url = cls._get_api_url(vsdurl)
 
         if url is None and path is None:
@@ -89,7 +89,7 @@ class Command(object):
         """ Generate specs
 
         """
-        path = Utils.remove_slash(path)
+        path = URLUtils.remove_slash(path)
         url = cls._get_api_url(vsdurl)
 
         if url is None and path is None:
@@ -130,7 +130,7 @@ class Command(object):
                 force: force removal of the existing codegen directory
 
         """
-        path = Utils.remove_slash(path)
+        path = URLUtils.remove_slash(path)
         url = cls._get_api_url(vsdurl)
 
         if url is None and path is None:
@@ -189,7 +189,7 @@ class Command(object):
                 output_path: the path to the output directory
 
         """
-        path = Utils.remove_slash(path)
+        path = URLUtils.remove_slash(path)
         url = cls._get_api_url(vsdurl)
 
         # Read Swagger
@@ -229,7 +229,7 @@ class Command(object):
         """
         directory = '%s' % output_path
 
-        path = Utils.remove_slash(path)
+        path = URLUtils.remove_slash(path)
         url = cls._get_api_url(vsdurl)
 
         # Read Swagger
@@ -250,7 +250,7 @@ class Command(object):
                 vsdurl: the vsd url given
 
         """
-        url = Utils.remove_slash(vsdurl)
+        url = URLUtils.remove_slash(vsdurl)
 
         if url:
             return '%s/%s' % (vsdurl, API_URL)

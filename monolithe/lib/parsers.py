@@ -10,6 +10,8 @@ from .printer import Printer
 from .managers import TaskManager
 from .utils import Utils
 
+from monolithe.utils.swagger import SwaggerUtils
+
 ENTRY_POINT = '/api-docs'
 SCHEMA_FILEPATH = '/schema'
 SWAGGER_APIS = 'apis'
@@ -17,7 +19,7 @@ SWAGGER_APIVERSION = 'apiVersion'
 SWAGGER_PATH = 'path'
 SPEC_EXTENSION = '.spec'
 
-from converters import RESOURCE_MAPPING
+from monolithe.utils.constants import Constants
 
 ## Monkey patch to use PROTOCOL_TLSv1 by default in requests
 from requests.packages.urllib3.poolmanager import PoolManager
@@ -98,8 +100,8 @@ class AbstractSwaggerParser(object):
         """ Transform entityName in filters to resource name
 
         """
-        valid_names = RESOURCE_MAPPING.values()
-        rest_names = [name.lower() for name in RESOURCE_MAPPING.keys()]
+        valid_names = Constants.RESOURCE_MAPPING.values()
+        rest_names = [name.lower() for name in Constants.RESOURCE_MAPPING.keys()]
 
         new_filters = []
         for f in filters:
@@ -136,7 +138,7 @@ class AbstractSwaggerParser(object):
             Printer.raiseError("No api version found in api-docs")
 
         if self.apiversion is None:
-            self.apiversion = Utils.get_version(data[SWAGGER_APIVERSION])
+            self.apiversion = Utils.get_float_version(data[SWAGGER_APIVERSION])
 
         task_manager = TaskManager()
 
@@ -165,8 +167,8 @@ class AbstractSwaggerParser(object):
         (package, resource_name) = self.get_information(path)
 
         entity_name = resource_name
-        if entity_name in RESOURCE_MAPPING:
-            entity_name = RESOURCE_MAPPING[entity_name]
+        if entity_name in Constants.RESOURCE_MAPPING:
+            entity_name = Constants.RESOURCE_MAPPING[entity_name]
 
         rest_name = Utils.get_singular_name(entity_name.lower())
 
@@ -284,7 +286,7 @@ class SwaggerURLParser(AbstractSwaggerParser):
             Returns:
                 (package, resource_name)
         """
-        return path.split(SCHEMA_FILEPATH)[1].rsplit('/', 1)
+        return SwaggerUtils.split_resource_path(path, reference_path=SCHEMA_FILEPATH)
 
 
 class SwaggerFileParser(AbstractSwaggerParser):
@@ -343,7 +345,7 @@ class SwaggerFileParser(AbstractSwaggerParser):
             Returns:
                 (package, resource_name)
         """
-        return path.split(self.path)[1].rsplit('/', 1)
+        return SwaggerUtils.split_resource_path(path, reference_path=self.path)
 
 
 class SpecParser(object):

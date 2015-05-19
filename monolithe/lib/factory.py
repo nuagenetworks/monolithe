@@ -20,7 +20,7 @@ class VSDKFactory(object):
             to its remote name.
 
         """
-        cls._version = Utils.get_vspk_version(version)
+        cls._version = Utils.get_string_version(version)
         vsdk = cls.get_vsdk_package()
         classnames = [name for name in dir(vsdk) if name.startswith('NU') and not name.endswith('Fetcher')]
 

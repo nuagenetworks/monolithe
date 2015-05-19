@@ -3,13 +3,13 @@
 import re
 
 from .printer import Printer
+from .constants import Constants
 
 
-class Utils(object):
-    """ utils """
+class VSDKUtils(object):
+    """ VSDK Utilities
 
-    INVARIANT_NAMES = ['qos', 'vrs', 'cms', 'statistics']
-
+    """
     @classmethod
     def _string_clean(cls, string):
         """ String cleaning for specific cases
@@ -34,17 +34,30 @@ class Utils(object):
 
     @classmethod
     def get_python_name(cls, name):
-        """ Transform a given name to python name """
+        """ Transform a given name to python name
+
+            Args:
+                name (string): the name to convert
+
+            Returns:
+                A pythonic name
+
+            Exammple:
+                get_python_name(EnterpriseNetwork)
+                >>> enterprise_network
+
+        """
         first_cap_re = re.compile('(.)([A-Z](?!s([A-Z])*)[a-z]+)')
         all_cap_re = re.compile('([a-z0-9])([A-Z])')
 
-        s1 = first_cap_re.sub(r'\1_\2', Utils._string_clean(name))
+        s1 = first_cap_re.sub(r'\1_\2', cls._string_clean(name))
         return all_cap_re.sub(r'\1_\2', s1).lower()
 
     @classmethod
     def get_python_type_name(cls, type_name, attribute_name=None, object_name=None):
-        """ Returns a python type according to a java type """
+        """ Returns a python type according to a java type
 
+        """
         if type_name in ['string', 'str', 'enum']:
             return 'str'
 
@@ -79,9 +92,15 @@ class Utils(object):
 
     @classmethod
     def get_singular_name(cls, plural_name):
-        """ Returns the singular name of the plural name """
+        """ Returns the singular name of the plural name
 
-        if plural_name in Utils.INVARIANT_NAMES:
+            Args:
+                plural_name (string): the plural name
+
+            Returns:
+                Return the singular of the plural name
+        """
+        if plural_name in Constants.INVARIANT_NAMES:
             return plural_name
 
         if plural_name[-3:] == 'ies':
@@ -94,13 +113,22 @@ class Utils(object):
 
     @classmethod
     def get_plural_name(cls, singular_name):
-        """ Returns the plural name of the singular name """
+        """ Returns the plural name of the singular name
 
-        if singular_name in Utils.INVARIANT_NAMES:
+            Certain words are invariant.
+
+            Args:
+                singular_name (string): the singular name to pluralize
+
+            Returns:
+                The pluralized version of the singular name
+
+        """
+        if singular_name in Constants.INVARIANT_NAMES:
             return singular_name
 
-        vowels = ['a', 'e', 'i', 'o', 'u', 'y']
-        if singular_name[-1] == 'y' and singular_name[-2] not in vowels:
+
+        if singular_name[-1] == 'y' and singular_name[-2] not in Constants.VOWELS:
             return singular_name[:-1] + 'ies'
 
         if singular_name[-1] != 's':
@@ -109,18 +137,22 @@ class Utils(object):
         return singular_name
 
     @classmethod
-    def get_version(self, server_version):
+    def get_float_version(self, server_version):
         """ Parse Server Api version to have a
             proper float version
 
             Args:
-                server_version: version that can be like V3_0
+                server_version: version that can be like v3_0
 
             Returns:
                 return a float number
 
+            Example:
+                get_float_version(v3_0)
+                >>> 3.0
+
         """
-        if server_version.startswith('V'):
+        if server_version.lower().startswith('v'):
             server_version = server_version[1:]
 
         server_version = server_version.replace('_', '.')
@@ -134,30 +166,17 @@ class Utils(object):
         return version
 
     @classmethod
-    def remove_slash(cls, path):
-        """ Removes last slash
-
-        """
-        if path is None or len(path) == 0:
-            return None
-
-        if path[-1] == '/':
-            return path[:-1]
-
-        return path
-
-    @classmethod
-    def get_vspk_version(cls, version):
+    def get_string_version(cls, version):
         """ Get the vspk version according to the given version
 
             Args:
-                version (int): the version
+                version (float): the version
 
             Returns:
                 version as string
 
             Example:
-                get_vspk_version(3.1)
+                get_string_version(3.1)
                 >>> v3_1
 
         """

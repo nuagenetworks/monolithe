@@ -7,64 +7,7 @@ from datetime import date
 from .utils import Utils
 from .printer import Printer
 
-USER = 'User'
-RESTUSER = 'RESTUser'
-
-IGNORED_ATTRIBUTES = ["_fetchers", "creationDate", "parentID", "owner", "parentType", "lastUpdatedBy", "lastUpdatedDate", "externalID", "ID" ]
-
-ATTRIBUTE_MAPPING = {
-    'global': 'globalMetadata'
-}
-
-IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
-
-RESOURCE_MAPPING = {
-    'SubNetwork': 'Subnet',
-    'SubNetworkTemplate': 'SubnetTemplate',
-    'PortStatus': 'MonitoringPort',
-    'EnterpriseNetworkMacro': 'EnterpriseNetwork',
-    'RedundantGWGrp': 'RedundancyGroup',
-    'Service': 'ApplicationService',
-    'IPBinding': 'IPReservation',
-    'VPNConnect': 'VPNConnection',
-    'QosPrimitive': 'QOS',  # Not working because resource name is 'qos' instead of 'quoss'
-    'EgressQosPrimitive': 'EgressQOSPolicy',
-    'EgressACLTemplateEntry': 'EgressACLEntryTemplate',
-    'IngressACLTemplateEntry': 'IngressACLEntryTemplate',
-    'IngressAdvancedForwardingTemplate': 'IngressAdvFwdTemplate',
-    'IngressAdvancedForwardingTemplateEntry': 'IngressAdvFwdEntryTemplate',
-    'AutoDiscGateway': 'AutoDiscoveredGateway',
-    'VirtualMachine': 'VM',
-    'Vlan': 'VLAN',
-    'VlanTemplate': 'VLANTemplate'
-}
-
-PACKAGE_MAPPING = {
-    '/alarm': 'Alarms',
-    '/appd': 'Application Designer',
-    '/common': 'Metadata',
-    '/eventlog': 'Event Logs',
-    '/gateway': 'Gateway Management',
-    '/infrastructure': 'Infrastructure Profiles',
-    '/job': 'Jobs',
-    '/licensemgmt': 'Licensing',
-    '/network': 'Core Networking',
-    '/nsg': 'Gateway Management',
-    '/policy': 'Policies',
-    '/policy/acl': 'Security Policies',
-    '/policy/qos': 'Policies',
-    '/stats': 'Statistics',
-    '/sysmon': 'System Monitoring',
-    '/systemconfig': 'System Configuration',
-    '/usermgmt': 'User Management',
-    '/vm': 'Virtual Machines',
-    '/vport': 'Core Networking',
-    '/certificate': 'Certificate',
-    '/cms': 'Cloud Management System',
-    '/ipsec': 'IP Sec',
-    '/keyserver': 'Key Server',
-    '/vmware': 'VMware',
-}
+from monolithe.utils.constants import Constants
 
 
 class SwaggerToSpecConverter(object):
@@ -87,7 +30,7 @@ class SwaggerToSpecConverter(object):
 
         for name, resource in resources.iteritems():
 
-            if name in IGNORED_RESOURCES:
+            if name in Constants.IGNORED_RESOURCES:
                 Printer.warn('Ignored resource %s' % name)
                 continue
 
@@ -101,8 +44,6 @@ class SwaggerToSpecConverter(object):
             model = specifications[name]['model']
 
             SwaggerToSpecConverter._process_name(model=model)
-
-            entity_name = model['entityName']
 
             SwaggerToSpecConverter._process_apis(model=model, apis=specifications[name]['apis'], relations=relations)
 
@@ -118,7 +59,6 @@ class SwaggerToSpecConverter(object):
                 specifications[rest_name] = specifications[name]
                 specifications.pop(name)
                 model = specifications[rest_name]['model']
-
 
         for rest_name, specification in specifications.iteritems():
             model = specification['model']
@@ -136,7 +76,7 @@ class SwaggerToSpecConverter(object):
         """ Switch from swagger information to something more processable
 
         """
-        model_name = swagger_infos['models'].keys()[0] # Still Metadata trick here...
+        model_name = swagger_infos['models'].keys()[0]  # Still Metadata trick here...
 
         for api in swagger_infos['apis']:
             for operation in api['operations']:
@@ -188,8 +128,8 @@ class SwaggerToSpecConverter(object):
         """
         name = model['entityName']
 
-        if name in RESOURCE_MAPPING:
-            model['entityName'] = RESOURCE_MAPPING[name]
+        if name in Constants.RESOURCE_MAPPING:
+            model['entityName'] = Constants.RESOURCE_MAPPING[name]
 
     @classmethod
     def _process_apis(cls, model, apis, relations):
@@ -229,13 +169,13 @@ class SwaggerToSpecConverter(object):
             if len(names) == 2:
                 should_create_relation = True
 
-            else: # only 1 name
+            else:  # only 1 name
                 method = api['operations'][0]['method']
 
                 if method == 'POST' or (method == 'GET' and '{id}' not in path):
                     should_create_relation = True
                     parent_resource_name = 'me'
-                    parent_rest_name = RESTUSER
+                    parent_rest_name = Constants.RESTUSER
                 else:
                     if path not in apis['self']:
                         apis['self'][path] = {'operations': [], 'resourceName': model['resourceName'], 'RESTName': model['RESTName']}
@@ -266,7 +206,7 @@ class SwaggerToSpecConverter(object):
         """
         attributes = model['attributes']
 
-        for name in IGNORED_ATTRIBUTES:
+        for name in Constants.IGNORED_ATTRIBUTES:
             if name in attributes:
                 attributes.pop(name)
 
@@ -366,22 +306,13 @@ class SwaggerToSpecConverter(object):
 
             Add a RESTUser object in models, based on User
         """
-
-        if USER.lower() not in models or RESTUSER not in relations:
+        if Constants.USER.lower() not in models or Constants.RESTUSER not in relations:
             return
 
-        models[RESTUSER] = deepcopy(models[USER.lower()])
-        models[RESTUSER]['model']['entityName'] = RESTUSER
-        models[RESTUSER]['model']['RESTName'] = 'me'
-        models[RESTUSER]['model']['resourceName'] = 'me'
-        models[RESTUSER]['apis']['children'] = relations[RESTUSER]
-
-        # Still needed ??
-        # ignored_attributes = ['restrictionDate']
-        #
-        # for attribute_name, attribute_infos in models[RESTUSER]['model']['attributes'].iteritems():
-        #     if attribute_name in ignored_attributes:
-        #         rest_user_model.attributes.remove(attribute)
+        models[Constants.RESTUSER] = deepcopy(models[Constants.USER.lower()])
+        models[Constants.RESTUSER]['model']['entityName'] = Constants.RESTUSER
+        models[Constants.RESTUSER]['model']['RESTName'] = 'me'
+        models[Constants.RESTUSER]['apis']['children'] = relations[Constants.RESTUSER]
 
         # Additional attributes
         role_attribute = {
@@ -406,7 +337,7 @@ class SwaggerToSpecConverter(object):
                 u"availability": None,
             }
 
-        models[RESTUSER]['model']['attributes']['role'] = role_attribute
+        models[Constants.RESTUSER]['model']['attributes']['role'] = role_attribute
 
         entreprise_name_attribute = {
                 u"description": "Name of the enterprise.",
@@ -430,7 +361,7 @@ class SwaggerToSpecConverter(object):
                 u"availability": None,
             }
 
-        models[RESTUSER]['model']['attributes']['enterpriseName'] = entreprise_name_attribute
+        models[Constants.RESTUSER]['model']['attributes']['enterpriseName'] = entreprise_name_attribute
 
         entreprise_id_attribute = {
                 u"description": "Identifier of the enterprise.",
@@ -454,4 +385,4 @@ class SwaggerToSpecConverter(object):
                 u"availability": None,
             }
 
-        models[RESTUSER]['model']['attributes']['enterpriseID'] = entreprise_id_attribute
+        models[Constants.RESTUSER]['model']['attributes']['enterpriseID'] = entreprise_id_attribute
