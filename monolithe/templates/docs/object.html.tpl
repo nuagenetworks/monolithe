@@ -45,8 +45,6 @@
         </div>
     </nav>
 
-    {% set inherited_attributes_list = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]%}
-
     {# macro to create a method label #}
     {% macro label_for_method(method) %}
     {% if method == "GET" %}
@@ -85,23 +83,21 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            
+
             {% if model.apis["self"]|count %}
-            <table class="table table-condensed">
-                {% for path, api in model.apis["self"].iteritems() %}
-                <tr>
-                    <td>
-                        <span class="fixed-text">{{path.replace("{id}", "id")}}</span>
-                    </td>
-                    <td style="text-align: right; font-size: 13px">
-                        {% for operation in api.operations %}
-                        {{label_for_method(operation.method)}}
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %}
-                <tr><td></td><td></td></tr>
-            </table>
+
+            {% for path, api in model.apis["self"].iteritems() %}
+            <div class="row bordered-row">
+                <div class="col-xs-7">
+                    <span class="fixed-text">{{path.replace("{id}", "id")}}</span>
+                </div>
+                <div class="col-xs-5 text-right">
+                    {% for operation in api.operations %}
+                    {{label_for_method(operation.method)}}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
             {% else %}
             <p>This object is not directly accessible.</p>
             {% endif %}
@@ -109,62 +105,40 @@
 
         <section id="overview">
             <h3>Overview</h3>
-            <div class="fixed-text">
-                {
-                <ul style="padding-left: 10px">
-
-                <li style="list-style: none"><span style="color: #9A9A9A; font-weight: bold">/* object attributes */<br/></span></li>
-
-                {% set inherited_attributes = [] %}
-
+                <span class="fixed-text">{</span>
+                <table style="margin-left: 10px; width: 90">
                     {% for attribute in model.attributes|sort(attribute='local_name') %}
-                    {% if not attribute.remote_name in inherited_attributes_list %}
-                    <li style="list-style: none">
-                        <a href="#attr_{{attribute.remote_name}}" title="{{attribute.description}}">{{attribute.remote_name}}</a>:
-                        <span class="type_{{attribute.type}}">{{attribute.type}}{{string_for_allowed_choices(attribute)}}</span>
-                        {% if attribute.required %}
-                        <span class="label label-primary fixed-text">required</span>
-                        {% endif %}
-                    </li>
-                    {% else %}
-                    {% do inherited_attributes.append(attribute) %}
-                    {% endif %}
+                    <tr>
+                        <td class="fixed-text">
+                            <a href="#attr_{{attribute.remote_name}}" title="{{attribute.description}}">{{attribute.remote_name}}</a>
+                        </td>
+                        <td style="padding-left: 10px" class="fixed-text hide-xs">
+                            <span class="type_{{attribute.type}}">{{attribute.type}}{{string_for_allowed_choices(attribute)}}</span>
+                            {% if attribute.required %}
+                            <span class="label label-primary fixed-text">required</span>
+                            {% endif %}
+                        </td>
+                    </tr>
                     {% endfor %}
-
-                <li style="list-style: none"><span style="color: #9A9A9A; font-weight: bold"><br/>/* inherited attributes */<br/></span></li>
-
-                    {% for attribute in inherited_attributes %}
-                    <li style="list-style: none">
-                        <a href="#attr_{{attribute.remote_name}}" title="{{attribute.description}}">{{attribute.remote_name}}</a>:
-                        <span class="type_{{attribute.type}}">{{attribute.type}}{{string_for_allowed_choices(attribute)}}</span>
-                        {% if attribute.required %}
-                        <span class="label label-primary fixed-text">required</span>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-                }
-            </div>
+                </table>
+                <span class="fixed-text">}</span>
         </section>
 
         <section id="parents">
             <h3>Parents</h3>
-            <table class="table table-condensed">
-                {% if model.apis["parents"]|count %}
-                {% for path, api in model.apis["parents"].iteritems() %}
-                <tr>
-                    <td>
-                        <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/id/{{model.resource_name}}</span>
-                    </td>
-                    <td style="text-align: right; font-size: 13px">
-                        {% for method in api.methods %}
-                        {{label_for_method(method)}}
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %}
-                <tr><td></td><td></td></tr>
-            </table>
+            {% if model.apis["parents"]|count %}
+            {% for path, api in model.apis["parents"].iteritems() %}
+            <div class="row bordered-row">
+                <div class="col-xs-7">
+                    <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/id/{{model.resource_name}}</span>
+                </div>
+                <div class="col-xs-5 text-right">
+                    {% for method in api.methods %}
+                    {{label_for_method(method)}}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
             {% else %}
             <p>This object has no parent API.</p>
             {% endif %}
@@ -173,21 +147,19 @@
         <section id="children">
             <h3>Children</h3>
             {% if model.apis['children']|count %}
-            <table class="table table-condensed">
-                {% for path, api in model.apis['children'].iteritems()|sort %}
-                <tr>
-                    <td>
-                        <span class="fixed-text">/{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a></span>
-                    </td>
-                    <td style="text-align: right; font-size: 13px">
-                        {% for operation in api.operations|sort|reverse %}
-                        {{label_for_method(operation["method"])}}
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %}
-                <tr><td></td><td></td></tr>
-            </table>
+
+            {% for path, api in model.apis['children'].iteritems()|sort %}
+            <div class="row bordered-row">
+                <div class="col-xs-7">
+                    <span class="fixed-text">/{{model.resource_name}}/id/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a></span>
+                </div>
+                <div class="col-xs-5 text-right">
+                    {% for operation in api.operations|sort|reverse %}
+                    {{label_for_method(operation["method"])}}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
             {% else %}
             <p>This object has no child.</p>
             {% endif %}

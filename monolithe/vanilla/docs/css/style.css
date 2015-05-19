@@ -74,6 +74,15 @@ section {
     display: block;
 }
 
+.bordered-row {
+    padding: 10px 0;
+    border-top: 1px solid #E7E7E7
+}
+
+.bordered-row:last-child {
+    border-bottom: 1px solid #E7E7E7
+}
+
 .float-right {
     float: right;
 }
@@ -82,4 +91,10 @@ section {
     max-height: 500px;
     overflow: hidden;
     overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    .hide-xs {
+        display: none;
+    }
 }
