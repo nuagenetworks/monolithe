@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-from validationerrors import APISpecAttributeCharacteristicError
-from validationerrors import APISpecAttributeCapitalizationError
-from validationerrors import APISpecAttributeMissingCharacteristicError
-from validationerrors import APISpecAttributeMissingDefinitionError
-from validationerrors import APISpecAPIMissingError
-from validationerrors import APISpecAPIMissingMethodError
+from exceptions import APISpecAttributeCharacteristicException
+from exceptions import APISpecAttributeCapitalizationException
+from exceptions import APISpecAttributeMissingCharacteristicException
+from exceptions import APISpecAttributeMissingDefinitionException
+from exceptions import APISpecAPIMissingException
+from exceptions import APISpecAPIMissingMethodException
 
 IGNORED_ATTRIBUTES = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]
 
@@ -54,12 +54,12 @@ class APISpecificationValidator:
         """
 
         if not characteristic in candidate_attribute_definition:
-            err = APISpecAttributeMissingCharacteristicError(attribute_name=attr_name, characteristic=characteristic)
+            err = APISpecAttributeMissingCharacteristicException(attribute_name=attr_name, characteristic=characteristic)
             self._append_validation_error(self.attribute_errors, attr_name, "missing_characteristics", err)
             return False
 
         if candidate_attribute_definition[characteristic] != specification_attribute_definition[characteristic]:
-            err = APISpecAttributeCharacteristicError(attribute_name=attr_name,
+            err = APISpecAttributeCharacteristicException(attribute_name=attr_name,
                                                         characteristic=characteristic,
                                                         expected_value=specification_attribute_definition[characteristic],
                                                         actual_value=candidate_attribute_definition[characteristic])
@@ -73,7 +73,7 @@ class APISpecificationValidator:
             candidate_choices = ", ".join(sorted(candidate_attribute_definition[characteristic]))
 
             if candidate_choices != specification_choices:
-                err = APISpecAttributeCharacteristicError(attribute_name=attr_name,
+                err = APISpecAttributeCharacteristicException(attribute_name=attr_name,
                                                             characteristic=characteristic,
                                                             expected_value=specification_attribute_definition[characteristic],
                                                             actual_value=candidate_attribute_definition[characteristic])
@@ -99,10 +99,10 @@ class APISpecificationValidator:
 
             if not attribute_name in candidate_attributes_definition:
                 if attribute_name.lower() in [attr.lower() for attr in candidate_attributes_definition]:
-                    err = APISpecAttributeCapitalizationError(attribute_name=attribute_name)
+                    err = APISpecAttributeCapitalizationException(attribute_name=attribute_name)
                     self._append_validation_error(self.attribute_errors, attribute_name, "capitalization_errors", err)
                 else:
-                    err = APISpecAttributeMissingDefinitionError(attribute_name=attribute_name)
+                    err = APISpecAttributeMissingDefinitionException(attribute_name=attribute_name)
                     self._append_validation_error(self.attribute_errors, attribute_name, "missing_attributes", err)
 
             else:
@@ -123,7 +123,7 @@ class APISpecificationValidator:
         candidate_methods     = ", ".join([operation["method"] for operation in sorted(candidate_parent_api_definition["operations"])])
 
         if candidate_methods != specification_methods:
-            err = APISpecAPIMissingMethodError(api_path=api_path, expected_methods=specification_methods, actual_methods=candidate_methods)
+            err = APISpecAPIMissingMethodException(api_path=api_path, expected_methods=specification_methods, actual_methods=candidate_methods)
             self._append_validation_error(target_reports, api_path, "method_errors", err)
             return False
 
@@ -139,7 +139,7 @@ class APISpecificationValidator:
         for api_path in specification_self_apis_definition:
 
             if not api_path in candidate_self_apis_definition:
-                err = APISpecAPIMissingError(api_path)
+                err = APISpecAPIMissingException(api_path)
                 self._append_validation_error(self.self_api_errors, api_path, "missing_apis", err)
 
             else:
@@ -159,7 +159,7 @@ class APISpecificationValidator:
         for api_path in specification_parent_apis_definition:
 
             if not api_path in candidate_parent_apis_definition:
-                err = APISpecAPIMissingError(api_path)
+                err = APISpecAPIMissingException(api_path)
                 self._append_validation_error(self.parent_api_errors, api_path, "missing_apis", err)
 
             else:
