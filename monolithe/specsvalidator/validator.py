@@ -2,7 +2,7 @@
 
 import os
 import json
-from apivalidator import APIValidator
+from apispecificationvalidator import APISpecificationValidator
 
 class Validator:
     """ Validates an entire spec candidate folder against an entire spec folder
@@ -46,7 +46,7 @@ class Validator:
                 candidate_data = json.loads(candidate_file.read())
                 candidate_file.close()
 
-                spec_validator = APIValidator(specification_data, candidate_data)
+                spec_validator = APISpecificationValidator(specification_data, candidate_data)
                 spec_validator.run()
                 self._report[file_name] = spec_validator
 

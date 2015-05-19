@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['Command', 'APIValidator']
+__all__ = ['Command', 'APISpecificationValidator']
 
 from .command import Command
-from .specsvalidator.apivalidator import APIValidator
+from .specsvalidator.apispecificationvalidator import APISpecificationValidator

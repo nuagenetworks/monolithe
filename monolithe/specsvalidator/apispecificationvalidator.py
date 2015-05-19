@@ -11,7 +11,7 @@ from validationerrors import APISpecAPIMissingMethodError
 IGNORED_ATTRIBUTES = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]
 
 
-class APIValidator:
+class APISpecificationValidator:
     """ Valdidate a candidate spec file against a spec file
 
     """
