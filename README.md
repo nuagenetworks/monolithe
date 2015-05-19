@@ -1,6 +1,6 @@
 # Monolithe
 
-Monolithe is the generator of all documentation and SDK for Nuage Network VSP.
+Monolithe is the generator of everything.
 
 Supported version:
 
@@ -33,12 +33,15 @@ Then install the dependencies:
 
 ## Usage
 
-Monolithe can generate:
+Monolithe can:
 
-- various versions of `vsdk`
-- a `vspk` including various version of `vsdks`
-- the documentation for `vspk`
-- various versions of VSD Server ReST API documentation.
+- generate `vsdks`
+- generate `vspk`
+- generate documentation for `vspk`
+- generate VSD Server ReST API documentation.
+- generate VSD API Specification
+- generate reports of specification conformity of a VSD server
+- generate tests for VSD API using specifications
 
 
 ### Generate vsdk packages
@@ -60,9 +63,9 @@ The source code for the generated `vsdk` packages will be available in `codegen/
 
 Once all the `vsdk` versions you want to include in `vspk` have been generated, run the following command:
 
-    $ vspk-generator --version 3.0 3.1 3.2
+    $ vspk-generator -v 3.0 3.1 3.2
 
-The source code for the generated `vsdp` package will be available in `codegen/vspk`.
+The source code for the generated `vspk` package will be available in `codegen/vspk`.
 
 
 ### Generate vspk documentation
@@ -82,8 +85,19 @@ You can generate a  VSD Server ReST API documentation for a particular API versi
 
 For instance:
 
-    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.0
-    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.1
     $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.2
 
-The generated documentation will be available in `docgen/apidoc/{{version}}`
+The generated documentation will be available in `docgen/apidoc/{version}`
+
+
+### Generate API Specification from a VSD Server
+
+You can generate an API specification of any VSD Servers by doing:
+
+    $ spec-generator -u VSD_SERVER_API_URL -v VERSION
+
+For instance:
+
+    $ -generator -u https://api.nuagenetworks.net:8443 -v 3.2
+
+The generated specification will be available in `specgen/{version}`
