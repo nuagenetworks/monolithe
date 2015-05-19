@@ -5,7 +5,7 @@ import sys
 import argparse
 from pprint import pprint
 
-from specsvalidator.validator import Validator
+from specsvalidator.specificationsvalidator import SpecificationsValidator
 
 
 def main(argv=sys.argv):
@@ -27,7 +27,7 @@ def main(argv=sys.argv):
     args = parser.parse_args()
 
 
-    validator = Validator(args.specification_path, args.candidate_path)
+    validator = SpecificationsValidator(args.specification_path, args.candidate_path)
     validator.run()
     validator.print_console_report()
 

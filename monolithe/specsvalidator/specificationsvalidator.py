@@ -4,7 +4,7 @@ import os
 import json
 from apispecificationvalidator import APISpecificationValidator
 
-class Validator:
+class SpecificationsValidator:
     """ Validates an entire spec candidate folder against an entire spec folder
 
     """
