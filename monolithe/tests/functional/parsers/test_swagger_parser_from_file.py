@@ -315,3 +315,34 @@ class SwaggerFileParserTests(FunctionalTest):
                                                     'package': u'/usermgmt',
                                                     u'resourcePath': u'/Enterprise',
                                                     u'swaggerVersion': u'1.2'})
+
+    def test_run_with_filter_on_enterprise(self):
+        """ SwaggerParser run with filter should find direct entity
+
+        """
+        path = self.get_valid_path()
+        parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
+        resources = parser.run(filters=['enterprise'])
+
+        self.assertEqual(len(resources), 1)
+
+    def test_run_with_filter_on_complex_name(self):
+        """ SwaggerParser run with filter should find entity with similar names
+
+        """
+        path = self.get_valid_path()
+        parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
+        resources = parser.run(filters=['ingressadvfwdentrytemplate'])
+
+        self.assertEqual(len(resources), 3)
+        self.assertEqual(resources.keys(), [u'IngressACLEntryTemplate', u'IngressAdvFwdEntryTemplate', u'IngressAdvFwdTemplate'])
+
+    def test_run_with_filter_with_unknown_name(self):
+        """ SwaggerParser run with unknown filter should not find any entity
+
+        """
+        path = self.get_valid_path()
+        parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
+        resources = parser.run(filters=['UnknownName'])
+
+        self.assertEqual(len(resources), 0)

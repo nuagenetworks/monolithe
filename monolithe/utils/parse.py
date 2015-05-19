@@ -6,6 +6,7 @@ import sys
 
 from monolithe.utils.constants import Constants
 from monolithe.utils.printer import Printer
+from difflib import SequenceMatcher
 
 
 class ParsingUtils(object):
@@ -46,7 +47,7 @@ class ParsingUtils(object):
         return name
 
     @classmethod
-    def parseJSON(self, filepath):
+    def parseJSON(cls, filepath):
         """
 
         """
@@ -61,3 +62,46 @@ class ParsingUtils(object):
             Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (filepath, e.args[0]))
 
         return data
+
+    @classmethod
+    def are_similar_strings(cls, string1, string2, ratio=0.8):
+        """
+
+        """
+        r = SequenceMatcher(None, string1, string2).ratio()
+
+        if r >= ratio:
+            return True
+
+        return False
+
+    @classmethod
+    def have_similar_strings(cls, string1, strings, ratio=0.8):
+        """
+
+        """
+        for string in strings:
+            if cls.are_similar_strings(string1, string):
+                return True
+
+        return False
+
+    @classmethod
+    def reverse_filters(cls, filters):
+        """ Reverse filters according to resource mapping constants
+
+        """
+        valid_names = Constants.RESOURCE_MAPPING.values()
+        rest_names = [name.lower() for name in Constants.RESOURCE_MAPPING.keys()]
+
+        new_filters = []
+        for f in filters:
+            try:
+                index = valid_names.index(f)
+                name = rest_names[index]
+            except ValueError:
+                name = f
+
+            new_filters.append(name)
+
+        return new_filters

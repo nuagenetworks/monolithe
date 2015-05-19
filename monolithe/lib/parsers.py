@@ -74,8 +74,7 @@ class SwaggerParser(object):
         if self.apiversion is None:
             self.apiversion = VSDKUtils.get_float_version(api_docs[SWAGGER_APIVERSION])
 
-        # TODO-CS: Add filters later
-        # filters = self._convert_filters(filters)
+        filters = ParsingUtils.reverse_filters(filters)
 
         models = dict()
         task_manager = TaskManager()
@@ -106,7 +105,7 @@ class SwaggerParser(object):
         model_name = ParsingUtils.get_correct_name(model_name)
         rest_name = VSDKUtils.get_singular_name(model_name.lower())
 
-        if len(filters) > 0 and rest_name not in filters:
+        if len(filters) > 0 and not ParsingUtils.have_similar_strings(rest_name, filters):
             return
 
         func = getattr(self, function_name)
@@ -149,25 +148,6 @@ class SwaggerParser(object):
         results['Metadata'] = metadata_info
         results['GlobalMetadata'] = global_metadata_info
         results['AggregateMetadata'] = aggregate_metadata_info
-
-#     def _convert_filters(self, filters):
-#         """ Transform entityName in filters to resource name
-#
-#         """
-#         valid_names = Constants.RESOURCE_MAPPING.values()
-#         rest_names = [name.lower() for name in Constants.RESOURCE_MAPPING.keys()]
-#
-#         new_filters = []
-#         for f in filters:
-#             try:
-#                 index = valid_names.index(f)
-#                 name = rest_names[index]
-#             except ValueError:
-#                 name = f
-#
-#             new_filters.append(name)
-#
-#         return new_filters
 
     # Specific methods
 
