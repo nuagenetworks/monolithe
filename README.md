@@ -119,4 +119,4 @@ You can also validate an entire specification folder against another one by doin
 
 For instance:
 
-    $ spec-validator -s api-specification -c candidate-api-specification
+    $ spec-validator -s api-specification -c candidate-api-specificationI wa
