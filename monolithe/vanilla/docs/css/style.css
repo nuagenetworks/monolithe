@@ -30,7 +30,7 @@ section {
     color: #444;
 }
 
-.type_int, .type_integer, .type_long, .type_float {
+.type_int, .type_float {
     color: #6E6FC5;
 }
 
@@ -48,6 +48,10 @@ section {
 
 .type_date {
     color: #3A89D2;
+}
+
+.type_list {
+    color: #71908e;
 }
 
 .wiki p {
