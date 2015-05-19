@@ -21,6 +21,7 @@ class SwaggerURLParserTests(FunctionalTest):
         mock = MockUtils.create_swagger_response(status_code=400, filepath=None)
 
         Printer.should_raise_exception(True)
+
         with patch('requests.get', mock):
             with self.assertRaises(Exception):
                 parser.run()
@@ -41,7 +42,9 @@ class SwaggerURLParserTests(FunctionalTest):
         self.assertIn('Enterprise', resources.keys())
         self.assertIn('Subnet', resources.keys())
         self.assertIn('Alarm', resources.keys())
+        self.assertIn('Domain', resources.keys())
 
+        # Verify Enterprise
         self.assertEqual(resources['Enterprise'], {u'apiVersion': u'V3_1',
                                                     u'apis': [{u'operations': [{u'method': u'GET',
                                                                                 u'nickname': u'getEnterprises',
