@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-from exceptions import APISpecAttributeCharacteristicException
-from exceptions import APISpecAttributeCapitalizationException
-from exceptions import APISpecAttributeMissingCharacteristicException
-from exceptions import APISpecAttributeMissingDefinitionException
-from exceptions import APISpecAPIMissingException
-from exceptions import APISpecAPIMissingMethodException
+import difflib
+from exceptions import *
+
 
 IGNORED_ATTRIBUTES = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]
 
@@ -92,17 +89,25 @@ class APISpecificationValidator:
         specification_attributes_definition = self.specification["model"]["attributes"]
         candidate_attributes_definition     = self.candidate["model"]["attributes"]
 
+        ## check for missing attributes or wrong characteristic
         for attribute_name in specification_attributes_definition:
 
             if attribute_name in IGNORED_ATTRIBUTES:
                 continue
 
             if not attribute_name in candidate_attributes_definition:
-                if attribute_name.lower() in [attr.lower() for attr in candidate_attributes_definition]:
-                    err = APISpecAttributeCapitalizationException(attribute_name=attribute_name)
-                    self._append_validation_error(self.attribute_errors, attribute_name, "capitalization_errors", err)
+
+                search_list = {}
+                for key in candidate_attributes_definition.keys():
+                    search_list[key.lower()] = key
+
+                potential_matches = difflib.get_close_matches(attribute_name, search_list.keys())
+                final_matches = [search_list[key] for key in potential_matches]
+                if len(potential_matches):
+                    err = APISpecAttributeMispelledDeclarationException(attribute_name=attribute_name, potential_attributes=final_matches)
+                    self._append_validation_error(self.attribute_errors, attribute_name, "mispelling_errors", err)
                 else:
-                    err = APISpecAttributeMissingDefinitionException(attribute_name=attribute_name)
+                    err = APISpecAttributeMissingDeclarationException(attribute_name=attribute_name)
                     self._append_validation_error(self.attribute_errors, attribute_name, "missing_attributes", err)
 
             else:
@@ -111,6 +116,16 @@ class APISpecificationValidator:
 
                 for characteristic in specification_attribute_definition:
                     self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, characteristic)
+
+        ## Check for extra attribiutes in candidate spec
+        for attribute_name in candidate_attributes_definition:
+
+            if attribute_name in IGNORED_ATTRIBUTES:
+                continue
+
+            if not attribute_name in specification_attributes_definition:
+                err = APISpecAttributeExtraDeclarationException(attribute_name=attribute_name)
+                self._append_validation_error(self.attribute_errors, attribute_name, "extra_attributes_errors", err)
 
 
     ## APIs Validation

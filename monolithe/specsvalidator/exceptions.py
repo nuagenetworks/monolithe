@@ -15,23 +15,18 @@ class APISpecAttributeCharacteristicException:
     def __str__(self):
         return "%s: '%s' should be '%s' but is '%s'" % (self.attribute_name, self.characteristic, self.expected_value, self.actual_value)
 
-    def __repr__(self):
-            return "<%s> attribute '%s', characteristic: '%s', expected: '%s', actual: '%s'" % (self.__class__.__name__, self.attribute_name, self.characteristic, self.expected_value, self.actual_value)
-
-class APISpecAttributeCapitalizationException:
+class APISpecAttributeMispelledDeclarationException:
     """ Represents an API attribute capitalization error
 
     """
 
-    def __init__(self, attribute_name):
-        self.attribute_name = attribute_name
-        self.name           = "Attribute Naming Error"
+    def __init__(self, attribute_name, potential_attributes):
+        self.attribute_name       = attribute_name
+        self.name                 = "Mispell Attribute Error"
+        self.potential_attributes = potential_attributes
 
     def __str__(self):
-        return "%s: capitalization seems wrong" % (self.attribute_name)
-
-    def __repr__(self):
-            return "<%s> wrong capitalization for '%s'" % (self.__class__.__name__, self.attribute_name)
+        return "%s seems to be mispelled. Potenial solutions: %s" % (self.attribute_name, self.potential_attributes)
 
 
 class APISpecAttributeMissingCharacteristicException:
@@ -41,17 +36,14 @@ class APISpecAttributeMissingCharacteristicException:
 
     def __init__(self, characteristic, attribute_name):
         self.attribute_name = attribute_name
-        self.characteristic          = characteristic
-        self.name           = "Missing Attribute Information Error"
+        self.characteristic = characteristic
+        self.name           = "Missing Characteristic Error"
 
     def __str__(self):
         return "%s: information characteristic '%s' is missing" % (self.attribute_name, self.characteristic)
 
-    def __repr__(self):
-        return "<%s> attribute '%s': missing characteristic: '%s'" % (self.__class__.__name__, self.attribute_name, self.characteristic)
 
-
-class APISpecAttributeMissingDefinitionException:
+class APISpecAttributeMissingDeclarationException:
     """ Represents an API attribute missing error
 
     """
@@ -63,8 +55,18 @@ class APISpecAttributeMissingDefinitionException:
     def __str__(self):
         return "%s: is missing" % (self.attribute_name)
 
-    def __repr__(self):
-        return "<%s> attribute '%s': is missing" % (self.__class__.__name__, self.attribute_name)
+
+class APISpecAttributeExtraDeclarationException:
+    """ Represents an API extra attribute error
+
+    """
+
+    def __init__(self, attribute_name):
+        self.attribute_name       = attribute_name
+        self.name                 = "Extra Attribute Error"
+
+    def __str__(self):
+        return "%s: should not exist" % (self.attribute_name)
 
 
 
@@ -80,9 +82,6 @@ class APISpecAPIMissingException:
     def __str__(self):
         return "%s: missing" % (self.api_name)
 
-    def __repr__(self):
-        return "<%s> api '%s': is missing" % (self.__class__.__name__, self.api_name)
-
 
 class APISpecAPIMissingMethodException:
     """ Represents an API missing method error
@@ -97,6 +96,3 @@ class APISpecAPIMissingMethodException:
 
     def __str__(self):
         return "%s: methods should be '%s' but is '%s'" % (self.api_path, self.expected_methods, self.actual_methods)
-
-    def __repr__(self):
-        return "<%s> api '%s': expected_methods: '%s', actual_methods: '%s'" % (self.__class__.__name__, self.api_path, self.expected_methods, self.actual_methods)
