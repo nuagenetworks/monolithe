@@ -9,7 +9,7 @@ import json
 from .lib import SwaggerParser
 from .lib import SDKWriter, DocWriter, CourgetteWriter
 from .lib import ModelsProcessor
-from .lib import SwaggerToSpecConverter
+from .lib import SwaggerTransformer
 from .lib import SpecificationParser
 from .lib import TestsRunner
 
@@ -71,7 +71,7 @@ class Command(object):
         resources = swagger_parser.run(filters=[rest_name])
 
         # Convert Swagger models
-        specs = SwaggerToSpecConverter.convert(resources=resources, filters=[rest_name])
+        specs = SwaggerTransformer.convert(resources=resources, filters=[rest_name])
 
         if rest_name in specs:
             return specs[rest_name]
@@ -91,7 +91,7 @@ class Command(object):
         resources = swagger_parser.run()
 
         # Convert Swagger models
-        specs = SwaggerToSpecConverter.convert(resources=resources)
+        specs = SwaggerTransformer.convert(resources=resources)
 
         if not output_path:
             output_path = SPECGEN_DIRECTORY
@@ -131,7 +131,7 @@ class Command(object):
         resources = swagger_parser.run()
 
         # Convert Swagger models
-        specs = SwaggerToSpecConverter.convert(resources=resources)
+        specs = SwaggerTransformer.convert(resources=resources)
 
         if specs_path is not None:
             candidates = SpecificationParser.run(specs_path)
@@ -173,7 +173,7 @@ class Command(object):
         resources = swagger_parser.run()
 
         # Convert Swagger models
-        specs = SwaggerToSpecConverter.convert(resources=resources)
+        specs = SwaggerTransformer.convert(resources=resources)
 
         # Process Swagger models
         processed_resources = ModelsProcessor.process(resources=specs)

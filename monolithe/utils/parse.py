@@ -4,6 +4,8 @@ import json
 import os
 import sys
 
+from collections import OrderedDict
+
 from monolithe.utils.constants import Constants
 from monolithe.utils.printer import Printer
 from difflib import SequenceMatcher
@@ -105,3 +107,16 @@ class ParsingUtils(object):
             new_filters.append(name)
 
         return new_filters
+
+    @classmethod
+    def order(cls, results):
+        """ Returns an Ordered Dictionary of the results
+
+            Args:
+                results (dict): a dictionary
+
+            Returns:
+                An ordrered dictionary structure
+
+        """
+        return OrderedDict(sorted(results.items(), key=lambda t: t[0]))

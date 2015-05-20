@@ -59,7 +59,7 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    from monolithe import Command
+    from monolithe.command import Command
 
     if args.versions:
         for version in args.versions:

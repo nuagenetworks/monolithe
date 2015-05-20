@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from .constants import Constants
 
 
@@ -56,18 +58,64 @@ class URLUtils(object):
         return False
 
     @classmethod
-    def split_resource_path(self, resource_path):
-        """ Split resource path to retrieve the package and the resource name
+    def is_root_url(self, path, methods):
+        """ Verify if the path and methods corresponds to a root url
 
             Args:
-                resource_path (string): the resource path
+                path (string): the path to verify
+                methods (list): a list of methods ['GET', 'POST', ...]
+
+            Returns:
+                True if the path is a root url
+                False otherwise
+
+            Examples:
+
+                is_root_url('/enterprises/{id}', ['PUT'])
+                >>> False
+
+                is_root_url('/enterprises/{id}', ['GET'])
+                >>> True
+
+                is_root_url('/enterprises', ['POST'])
+                >>> True
+
+        """
+        return 'POST' in methods or ('{id}' not in path and 'GET' in methods)
+
+    @classmethod
+    def split_package_path(cls, package_path):
+        """ Split package path to retrieve the package and the resource name
+
+            Args:
+                package_path (string): the package path
 
             Returns:
                 (package, resource_name)
 
             Example:
-                split_resource_path('/usermgmt/User')
+                split_package_path('/usermgmt/User')
                 >>> (/usermgmt, User)
         """
 
-        return resource_path.rsplit('/', 1)
+        return package_path.rsplit('/', 1)
+
+    @classmethod
+    def resources_from_path(cls, path):
+        """ Retrieve all resources names from the given path
+
+            Args:
+                path (string): the path
+
+            Returns:
+                A list of resources
+
+            Examples:
+                resources_from_path('/enterprises/{id}/domain')
+                >>> ['enterprises', 'domains']
+
+        """
+        if path is None:
+            return None
+
+        return filter(bool, re.split('/\{id\}?/?', path[1:] if path.startswith('/') else path))

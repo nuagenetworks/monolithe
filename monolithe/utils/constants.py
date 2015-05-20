@@ -13,9 +13,15 @@ class Constants(object):
     IGNORED_ATTRIBUTES = ["_fetchers", "creationDate", "parentID", "owner", "parentType", "lastUpdatedBy", "lastUpdatedDate", "externalID", "ID" ]
     IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
 
+    DEFAULT_SPECIFICATION_PATH = u'/templates/specifications/default_specification.json'
+    DEFAULT_ATTRIBUTE_PATH = u'/templates/specifications/default_attribute.json'
+    DEFAULT_API_PATH = u'/templates/specifications/default_api.json'
+
     # Entities
-    USER = 'User'
-    RESTUSER = 'RESTUser'
+    USER = u'User'
+    USER_REST_NAME = u'user'
+    RESTUSER = u'RESTUser'
+    RESTUSER_REST_NAME = u'me'
 
     # Mapping
     RESOURCE_MAPPING = {

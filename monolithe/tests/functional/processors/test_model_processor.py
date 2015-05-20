@@ -2,7 +2,7 @@
 
 from monolithe.tests.functional import FunctionalTest
 from monolithe.lib.parsers import SwaggerParser
-from monolithe.lib.converters import SwaggerToSpecConverter
+from monolithe.lib.transformers import SwaggerTransformer
 from monolithe.lib.processors import ModelsProcessor
 
 
@@ -18,7 +18,7 @@ class ModelsProcessorTests(FunctionalTest):
         parser = SwaggerParser(path=cls.get_valid_path(), vsdurl=None, apiversion=None)
         swagger_resources = parser.run()
 
-        cls.resources = SwaggerToSpecConverter.convert(resources=swagger_resources)
+        cls.resources = SwaggerTransformer.convert(resources=swagger_resources)
 
     def test_process_resources(self):
         """ ModelsProcessor process resources

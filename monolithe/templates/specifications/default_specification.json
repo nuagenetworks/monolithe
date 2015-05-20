@@ -1,18 +1,18 @@
 {
     "model": 
     {
-        "RESTName": "", 
+        "RESTName": null, 
         "attributes": {}, 
-        "description": "", 
-        "entityName": "", 
-        "package": "", 
-        "resourceName": ""
+        "description": null, 
+        "entityName": null, 
+        "package": null, 
+        "resourceName": null
     },
     "apis": 
     {
         "parents": {},
         "children": {},
-        "self": {},
+        "self": {}
     }, 
     "metadata": 
     {

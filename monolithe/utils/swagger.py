@@ -4,7 +4,7 @@
 #
 #     """
 #     @classmethod
-#     def split_resource_path(self, resource_path, reference_path=None):
+#     def split_package_path(self, resource_path, reference_path=None):
 #         """ Split resource path to retrieve the package and the resource name
 #
 #             Args:
@@ -14,7 +14,7 @@
 #                 (package, resource_name)
 #
 #             Example:
-#                 split_resource_path('/usermgmt/User')
+#                 split_package_path('/usermgmt/User')
 #                 >>> (/usermgmt, User)
 #         """
 #

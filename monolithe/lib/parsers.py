@@ -7,8 +7,6 @@ from copy import deepcopy
 from monolithe.utils.printer import Printer
 from .managers import TaskManager
 
-from collections import OrderedDict
-
 from monolithe.utils.vsdk import VSDKUtils
 from monolithe.utils.urls import URLUtils
 from monolithe.utils.parse import ParsingUtils
@@ -54,7 +52,7 @@ class SwaggerParser(object):
 
         models = self._run(base_path=base_path, function_name=function_name, filters=filters)
 
-        return OrderedDict(sorted(models.items(), key=lambda t: t[0]))
+        return ParsingUtils.order(models)
 
     # Utilities
 
@@ -65,7 +63,7 @@ class SwaggerParser(object):
         func = getattr(self, function_name)
         api_docs = func(base_path=base_path, path=API_DOCS)
 
-        if SWAGGER_APIS not in api_docs:
+        if SWAGGER_APIS not in api_docs or len(api_docs[SWAGGER_APIS]) == 0:
             Printer.raiseError("No apis information found in api-docs")
 
         if SWAGGER_APIVERSION not in api_docs:
@@ -100,7 +98,7 @@ class SwaggerParser(object):
                 Fills result dictionary
         """
 
-        (package, model_name) = URLUtils.split_resource_path(path)
+        (package, model_name) = URLUtils.split_package_path(path)
 
         model_name = ParsingUtils.get_correct_name(model_name)
         rest_name = VSDKUtils.get_singular_name(model_name.lower())
@@ -133,14 +131,22 @@ class SwaggerParser(object):
         aggregate_metadata_info['apis'] = []
 
         metadata_info['models']['Metadata']['id'] = 'Metadata'
-        global_metadata_info['models']['Metadata']['id'] = 'GlobalMetadata'
-        aggregate_metadata_info['models']['Metadata']['id'] = 'AggregateMetadata'
+
+        global_metadata_info['models']['GlobalMetadata'] = global_metadata_info['models']['Metadata']
+        global_metadata_info['models'].pop('Metadata')
+        global_metadata_info['models']['GlobalMetadata']['id'] = 'GlobalMetadata'
+
+
+        aggregate_metadata_info['models']['AggregateMetadata'] = aggregate_metadata_info['models']['Metadata']
+        aggregate_metadata_info['models'].pop('Metadata')
+        aggregate_metadata_info['models']['AggregateMetadata']['id'] = 'AggregateMetadata'
+
 
         for api in resource['apis']:
             api_copy = deepcopy(api)
-            if '/aggregatemetadatas' in api['path']:
+            if 'aggregatemetadatas' in api['path']:
                 aggregate_metadata_info['apis'].append(api_copy)
-            elif '/globalmetadatas' in api['path']:
+            elif 'globalmetadatas' in api['path']:
                 global_metadata_info['apis'].append(api_copy)
             else:
                 metadata_info['apis'].append(api_copy)
