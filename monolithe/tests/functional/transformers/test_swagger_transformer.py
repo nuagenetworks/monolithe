@@ -1,0 +1,1217 @@
+# -*- coding: utf-8 -*-
+
+from monolithe.tests.functional import FunctionalTest
+from monolithe.lib.parsers import SwaggerParser
+from monolithe.lib.transformers import SwaggerTransformer
+
+from monolithe.utils.printer import Printer
+
+
+class SwaggerTransformerTests(FunctionalTest):
+    """ Tests for SwaggerParser using file option
+
+    """
+    @classmethod
+    def setUpClass(cls):
+        """ Set up context
+
+        """
+        parser = SwaggerParser(path=cls.get_valid_path(), vsdurl=None, apiversion=None)
+        cls.swagger_resources = parser.run()
+
+    @classmethod
+    def tearDownClass(cls):
+        """ Clean up context
+        """
+        cls.swagger_resources = None
+
+    def test_convert_returns_all_rest_names(self):
+        """ SwaggerTransformer returns a dictionary with all rest names
+        """
+
+        resources = SwaggerTransformer.convert(resources=self.swagger_resources)
+
+        self.assertEqual(len(resources), 99)
+        self.assertEqual(resources.keys(), [u'addressrange',
+                                            u'alarm',
+                                            u'app',
+                                            u'application',
+                                            u'applicationservice',
+                                            u'autodiscoveredgateway',
+                                            u'bgppeer',
+                                            u'bootstrap',
+                                            u'bootstrapactivation',
+                                            u'bridgeinterface',
+                                            u'component',
+                                            u'dhcpoption',
+                                            u'domain',
+                                            u'domaintemplate',
+                                            u'dscpforwardingclassmapping',
+                                            u'dscpforwardingclasstable',
+                                            u'egressaclentrytemplate',
+                                            u'egressacltemplate',
+                                            u'egressqospolicy',
+                                            u'enterprise',
+                                            u'enterprisenetwork',
+                                            u'enterprisepermission',
+                                            u'enterpriseprofile',
+                                            u'eventlog',
+                                            u'floatingip',
+                                            u'flow',
+                                            u'flowforwardingpolicy',
+                                            u'flowsecuritypolicy',
+                                            u'gateway',
+                                            u'gatewaytemplate',
+                                            u'globalmetadata',
+                                            u'group',
+                                            u'hostinterface',
+                                            u'hsc',
+                                            u'infraconfig',
+                                            u'infrastructuregatewayprofile',
+                                            u'infrastructureportprofile',
+                                            u'ingressaclentrytemplate',
+                                            u'ingressacltemplate',
+                                            u'ingressadvfwdentrytemplate',
+                                            u'ingressadvfwdtemplate',
+                                            u'ipreservation',
+                                            u'job',
+                                            u'l2domain',
+                                            u'l2domaintemplate',
+                                            u'ldapconfiguration',
+                                            u'license',
+                                            u'location',
+                                            u'me',
+                                            u'metadata',
+                                            u'mirrordestination',
+                                            u'monitoringport',
+                                            u'multicastchannelmap',
+                                            u'multicastrange',
+                                            u'multinicvport',
+                                            u'natmapentry',
+                                            u'networklayout',
+                                            u'nsgateway',
+                                            u'nsgatewaytemplate',
+                                            u'patnatpool',
+                                            u'permission',
+                                            u'policydecision',
+                                            u'policygroup',
+                                            u'policygrouptemplate',
+                                            u'port',
+                                            u'porttemplate',
+                                            u'publicnetwork',
+                                            u'qos',
+                                            u'ratelimiter',
+                                            u'redirectiontarget',
+                                            u'redirectiontargettemplate',
+                                            u'redundancygroup',
+                                            u'resync',
+                                            u'service',
+                                            u'sharednetworkresource',
+                                            u'staticroute',
+                                            u'statistics',
+                                            u'statisticscollector',
+                                            u'statisticspolicy',
+                                            u'subnet',
+                                            u'subnettemplate',
+                                            u'systemconfig',
+                                            u'tca',
+                                            u'tier',
+                                            u'user',
+                                            u'virtualip',
+                                            u'vlan',
+                                            u'vlantemplate',
+                                            u'vm',
+                                            u'vminterface',
+                                            u'vpnconnection',
+                                            u'vport',
+                                            u'vportmirror',
+                                            u'vrs',
+                                            u'vsc',
+                                            u'vsd',
+                                            u'vsp',
+                                            u'zone',
+                                            u'zonetemplate'])
+
+    def test_convert_returns_domain_with_all_information(self):
+        """ SwaggerTransformer returns a Domain with all information
+
+        """
+        resources = SwaggerTransformer.convert(resources=self.swagger_resources)
+
+        self.assertIn('domain', resources)
+        self.assertEqual(resources['domain'], {u'apis': {u'children': {u'/domains/{id}/bridgeinterfaces': {u'RESTName': u'domain',
+                                                             u'operations': {u'availability': None,
+                                                                             u'method': u'GET'},
+                                                             u'resourceName': u'domains'},
+                         u'/domains/{id}/dhcpoptions': {u'RESTName': u'domain',
+                                                        u'operations': {u'availability': None,
+                                                                        u'method': u'POST'},
+                                                        u'resourceName': u'domains'},
+                         u'/domains/{id}/egressacltemplates': {u'RESTName': u'domain',
+                                                               u'operations': {u'availability': None,
+                                                                               u'method': u'POST'},
+                                                               u'resourceName': u'domains'},
+                         u'/domains/{id}/eventlogs': {u'RESTName': u'domain',
+                                                      u'operations': {u'availability': None,
+                                                                      u'method': u'GET'},
+                                                      u'resourceName': u'domains'},
+                         u'/domains/{id}/floatingips': {u'RESTName': u'domain',
+                                                        u'operations': {u'availability': None,
+                                                                        u'method': u'POST'},
+                                                        u'resourceName': u'domains'},
+                         u'/domains/{id}/groups': {u'RESTName': u'domain',
+                                                   u'operations': {u'availability': None,
+                                                                   u'method': u'PUT'},
+                                                   u'resourceName': u'domains'},
+                         u'/domains/{id}/hostinterfaces': {u'RESTName': u'domain',
+                                                           u'operations': {u'availability': None,
+                                                                           u'method': u'GET'},
+                                                           u'resourceName': u'domains'},
+                         u'/domains/{id}/ingressacltemplates': {u'RESTName': u'domain',
+                                                                u'operations': {u'availability': None,
+                                                                                u'method': u'POST'},
+                                                                u'resourceName': u'domains'},
+                         u'/domains/{id}/ingressadvfwdtemplates': {u'RESTName': u'domain',
+                                                                   u'operations': {u'availability': None,
+                                                                                   u'method': u'POST'},
+                                                                   u'resourceName': u'domains'},
+                         u'/domains/{id}/jobs': {u'RESTName': u'domain',
+                                                 u'operations': {u'availability': None,
+                                                                 u'method': u'POST'},
+                                                 u'resourceName': u'domains'},
+                         u'/domains/{id}/permissions': {u'RESTName': u'domain',
+                                                        u'operations': {u'availability': None,
+                                                                        u'method': u'POST'},
+                                                        u'resourceName': u'domains'},
+                         u'/domains/{id}/policygroups': {u'RESTName': u'domain',
+                                                         u'operations': {u'availability': None,
+                                                                         u'method': u'POST'},
+                                                         u'resourceName': u'domains'},
+                         u'/domains/{id}/qos': {u'RESTName': u'domain',
+                                                u'operations': {u'availability': None,
+                                                                u'method': u'POST'},
+                                                u'resourceName': u'domains'},
+                         u'/domains/{id}/redirectiontargets': {u'RESTName': u'domain',
+                                                               u'operations': {u'availability': None,
+                                                                               u'method': u'POST'},
+                                                               u'resourceName': u'domains'},
+                         u'/domains/{id}/staticroutes': {u'RESTName': u'domain',
+                                                         u'operations': {u'availability': None,
+                                                                         u'method': u'POST'},
+                                                         u'resourceName': u'domains'},
+                         u'/domains/{id}/statistics': {u'RESTName': u'domain',
+                                                       u'operations': {u'availability': None,
+                                                                       u'method': u'GET'},
+                                                       u'resourceName': u'domains'},
+                         u'/domains/{id}/statisticspolicies': {u'RESTName': u'domain',
+                                                               u'operations': {u'availability': None,
+                                                                               u'method': u'POST'},
+                                                               u'resourceName': u'domains'},
+                         u'/domains/{id}/subnets': {u'RESTName': u'domain',
+                                                    u'operations': {u'availability': None,
+                                                                    u'method': u'GET'},
+                                                    u'resourceName': u'domains'},
+                         u'/domains/{id}/tcas': {u'RESTName': u'domain',
+                                                 u'operations': {u'availability': None,
+                                                                 u'method': u'POST'},
+                                                 u'resourceName': u'domains'},
+                         u'/domains/{id}/vminterfaces': {u'RESTName': u'domain',
+                                                         u'operations': {u'availability': None,
+                                                                         u'method': u'GET'},
+                                                         u'resourceName': u'domains'},
+                         u'/domains/{id}/vms': {u'RESTName': u'domain',
+                                                u'operations': {u'availability': None,
+                                                                u'method': u'GET'},
+                                                u'resourceName': u'domains'},
+                         u'/domains/{id}/vpnconnections': {u'RESTName': u'domain',
+                                                           u'operations': {u'availability': None,
+                                                                           u'method': u'POST'},
+                                                           u'resourceName': u'domains'},
+                         u'/domains/{id}/vports': {u'RESTName': u'domain',
+                                                   u'operations': {u'availability': None,
+                                                                   u'method': u'GET'},
+                                                   u'resourceName': u'domains'},
+                         u'/domains/{id}/zones': {u'RESTName': u'domain',
+                                                  u'operations': {u'availability': None,
+                                                                  u'method': u'POST'},
+                                                  u'resourceName': u'domains'}},
+           u'parents': {u'/domains': {u'RESTName': u'domain',
+                                      u'operations': {u'availability': None,
+                                                      u'method': u'GET'},
+                                      u'resourceName': u'domains'},
+                        u'/domaintemplates/{id}/domains': {u'RESTName': u'domaintemplate',
+                                                           u'operations': {u'availability': None,
+                                                                           u'method': u'GET'},
+                                                           u'resourceName': u'domaintemplates'},
+                        u'/enterprises/{id}/domains': {u'RESTName': u'enterprise',
+                                                       u'operations': {u'availability': None,
+                                                                       u'method': u'POST'},
+                                                       u'resourceName': u'enterprises'}},
+           u'self': {u'/domains/{id}': {u'RESTName': u'domain',
+                                        u'operations': {u'availability': None,
+                                                        u'method': u'GET'},
+                                        u'resourceName': u'domains'}}},
+ u'metadata': {u'api_version': 3.1,
+               u'author': u'',
+               u'comments': u'',
+               u'date': '05-20-2015',
+               u'dev_backend': u'',
+               u'dev_frontend': u'',
+               u'dev_qd': u'',
+               u'plm': u'',
+               u'prd_url': u'http://',
+               u'revisions': []},
+ u'model': {u'RESTName': u'domain',
+            u'attributes': {u'DHCPBehavior': {u'allowedChars': None,
+                                              u'allowedChoices': [u'CONSUME',
+                                                                  u'FLOOD',
+                                                                  u'RELAY'],
+                                              u'autogenerated': False,
+                                              u'availability': None,
+                                              u'creationOnly': False,
+                                              u'defaultOrder': False,
+                                              u'defaultValue': None,
+                                              u'description': u'',
+                                              u'filterable': False,
+                                              u'format': None,
+                                              u'maxLength': None,
+                                              u'maxValue': None,
+                                              u'minLength': None,
+                                              u'minValue': None,
+                                              u'orderable': False,
+                                              u'readonly': False,
+                                              u'required': False,
+                                              u'type': 'str',
+                                              u'uniqueItems': False},
+                            u'DHCPServerAddress': {u'allowedChars': None,
+                                                   u'allowedChoices': None,
+                                                   u'autogenerated': False,
+                                                   u'availability': None,
+                                                   u'creationOnly': False,
+                                                   u'defaultOrder': False,
+                                                   u'defaultValue': None,
+                                                   u'description': u'',
+                                                   u'filterable': False,
+                                                   u'format': None,
+                                                   u'maxLength': None,
+                                                   u'maxValue': None,
+                                                   u'minLength': None,
+                                                   u'minValue': None,
+                                                   u'orderable': False,
+                                                   u'readonly': False,
+                                                   u'required': False,
+                                                   u'type': 'str',
+                                                   u'uniqueItems': False},
+                            u'PATEnabled': {u'allowedChars': None,
+                                            u'allowedChoices': [u'ENABLED',
+                                                                u'INHERITED',
+                                                                u'DISABLED'],
+                                            u'autogenerated': False,
+                                            u'availability': None,
+                                            u'creationOnly': False,
+                                            u'defaultOrder': False,
+                                            u'defaultValue': None,
+                                            u'description': u'',
+                                            u'filterable': False,
+                                            u'format': None,
+                                            u'maxLength': None,
+                                            u'maxValue': None,
+                                            u'minLength': None,
+                                            u'minValue': None,
+                                            u'orderable': False,
+                                            u'readonly': False,
+                                            u'required': False,
+                                            u'type': 'str',
+                                            u'uniqueItems': False},
+                            u'applicationDeploymentPolicy': {u'allowedChars': None,
+                                                             u'allowedChoices': [u'ZONE',
+                                                                                 u'NONE'],
+                                                             u'autogenerated': False,
+                                                             u'availability': None,
+                                                             u'creationOnly': False,
+                                                             u'defaultOrder': False,
+                                                             u'defaultValue': None,
+                                                             u'description': u'',
+                                                             u'filterable': False,
+                                                             u'format': None,
+                                                             u'maxLength': None,
+                                                             u'maxValue': None,
+                                                             u'minLength': None,
+                                                             u'minValue': None,
+                                                             u'orderable': False,
+                                                             u'readonly': False,
+                                                             u'required': False,
+                                                             u'type': 'str',
+                                                             u'uniqueItems': False},
+                            u'associatedMulticastChannelMapID': {u'allowedChars': None,
+                                                                 u'allowedChoices': None,
+                                                                 u'autogenerated': False,
+                                                                 u'availability': None,
+                                                                 u'creationOnly': False,
+                                                                 u'defaultOrder': False,
+                                                                 u'defaultValue': None,
+                                                                 u'description': u'',
+                                                                 u'filterable': False,
+                                                                 u'format': None,
+                                                                 u'maxLength': None,
+                                                                 u'maxValue': None,
+                                                                 u'minLength': None,
+                                                                 u'minValue': None,
+                                                                 u'orderable': False,
+                                                                 u'readonly': False,
+                                                                 u'required': False,
+                                                                 u'type': 'str',
+                                                                 u'uniqueItems': False},
+                            u'backHaulRouteDistinguisher': {u'allowedChars': None,
+                                                            u'allowedChoices': None,
+                                                            u'autogenerated': False,
+                                                            u'availability': None,
+                                                            u'creationOnly': False,
+                                                            u'defaultOrder': False,
+                                                            u'defaultValue': None,
+                                                            u'description': u'',
+                                                            u'filterable': False,
+                                                            u'format': None,
+                                                            u'maxLength': None,
+                                                            u'maxValue': None,
+                                                            u'minLength': None,
+                                                            u'minValue': None,
+                                                            u'orderable': False,
+                                                            u'readonly': False,
+                                                            u'required': False,
+                                                            u'type': 'str',
+                                                            u'uniqueItems': False},
+                            u'backHaulRouteTarget': {u'allowedChars': None,
+                                                     u'allowedChoices': None,
+                                                     u'autogenerated': False,
+                                                     u'availability': None,
+                                                     u'creationOnly': False,
+                                                     u'defaultOrder': False,
+                                                     u'defaultValue': None,
+                                                     u'description': u'',
+                                                     u'filterable': False,
+                                                     u'format': None,
+                                                     u'maxLength': None,
+                                                     u'maxValue': None,
+                                                     u'minLength': None,
+                                                     u'minValue': None,
+                                                     u'orderable': False,
+                                                     u'readonly': False,
+                                                     u'required': False,
+                                                     u'type': 'str',
+                                                     u'uniqueItems': False},
+                            u'backHaulVNID': {u'allowedChars': None,
+                                              u'allowedChoices': None,
+                                              u'autogenerated': False,
+                                              u'availability': None,
+                                              u'creationOnly': False,
+                                              u'defaultOrder': False,
+                                              u'defaultValue': None,
+                                              u'description': u'',
+                                              u'filterable': False,
+                                              u'format': None,
+                                              u'maxLength': None,
+                                              u'maxValue': None,
+                                              u'minLength': None,
+                                              u'minValue': None,
+                                              u'orderable': False,
+                                              u'readonly': False,
+                                              u'required': False,
+                                              u'type': 'long',
+                                              u'uniqueItems': False},
+                            u'customerID': {u'allowedChars': None,
+                                            u'allowedChoices': None,
+                                            u'autogenerated': False,
+                                            u'availability': None,
+                                            u'creationOnly': False,
+                                            u'defaultOrder': False,
+                                            u'defaultValue': None,
+                                            u'description': u'',
+                                            u'filterable': False,
+                                            u'format': None,
+                                            u'maxLength': None,
+                                            u'maxValue': None,
+                                            u'minLength': None,
+                                            u'minValue': None,
+                                            u'orderable': False,
+                                            u'readonly': False,
+                                            u'required': False,
+                                            u'type': 'long',
+                                            u'uniqueItems': False},
+                            u'description': {u'allowedChars': None,
+                                             u'allowedChoices': None,
+                                             u'autogenerated': False,
+                                             u'availability': None,
+                                             u'creationOnly': False,
+                                             u'defaultOrder': False,
+                                             u'defaultValue': None,
+                                             u'description': u'',
+                                             u'filterable': False,
+                                             u'format': None,
+                                             u'maxLength': None,
+                                             u'maxValue': None,
+                                             u'minLength': None,
+                                             u'minValue': None,
+                                             u'orderable': False,
+                                             u'readonly': False,
+                                             u'required': False,
+                                             u'type': 'str',
+                                             u'uniqueItems': False},
+                            u'labelID': {u'allowedChars': None,
+                                         u'allowedChoices': None,
+                                         u'autogenerated': False,
+                                         u'availability': None,
+                                         u'creationOnly': False,
+                                         u'defaultOrder': False,
+                                         u'defaultValue': None,
+                                         u'description': u'',
+                                         u'filterable': False,
+                                         u'format': None,
+                                         u'maxLength': None,
+                                         u'maxValue': None,
+                                         u'minLength': None,
+                                         u'minValue': None,
+                                         u'orderable': False,
+                                         u'readonly': False,
+                                         u'required': False,
+                                         u'type': 'long',
+                                         u'uniqueItems': False},
+                            u'maintenanceMode': {u'allowedChars': None,
+                                                 u'allowedChoices': [u'ENABLED',
+                                                                     u'ENABLED_INHERITED',
+                                                                     u'DISABLED'],
+                                                 u'autogenerated': False,
+                                                 u'availability': None,
+                                                 u'creationOnly': False,
+                                                 u'defaultOrder': False,
+                                                 u'defaultValue': None,
+                                                 u'description': u'',
+                                                 u'filterable': False,
+                                                 u'format': None,
+                                                 u'maxLength': None,
+                                                 u'maxValue': None,
+                                                 u'minLength': None,
+                                                 u'minValue': None,
+                                                 u'orderable': False,
+                                                 u'readonly': False,
+                                                 u'required': False,
+                                                 u'type': 'str',
+                                                 u'uniqueItems': False},
+                            u'multicast': {u'allowedChars': None,
+                                           u'allowedChoices': [u'ENABLED',
+                                                               u'INHERITED',
+                                                               u'DISABLED'],
+                                           u'autogenerated': False,
+                                           u'availability': None,
+                                           u'creationOnly': False,
+                                           u'defaultOrder': False,
+                                           u'defaultValue': None,
+                                           u'description': u'',
+                                           u'filterable': False,
+                                           u'format': None,
+                                           u'maxLength': None,
+                                           u'maxValue': None,
+                                           u'minLength': None,
+                                           u'minValue': None,
+                                           u'orderable': False,
+                                           u'readonly': False,
+                                           u'required': False,
+                                           u'type': 'str',
+                                           u'uniqueItems': False},
+                            u'name': {u'allowedChars': None,
+                                      u'allowedChoices': None,
+                                      u'autogenerated': False,
+                                      u'availability': None,
+                                      u'creationOnly': False,
+                                      u'defaultOrder': False,
+                                      u'defaultValue': None,
+                                      u'description': u'',
+                                      u'filterable': False,
+                                      u'format': None,
+                                      u'maxLength': None,
+                                      u'maxValue': None,
+                                      u'minLength': None,
+                                      u'minValue': None,
+                                      u'orderable': False,
+                                      u'readonly': False,
+                                      u'required': False,
+                                      u'type': 'str',
+                                      u'uniqueItems': False},
+                            u'routeDistinguisher': {u'allowedChars': None,
+                                                    u'allowedChoices': None,
+                                                    u'autogenerated': False,
+                                                    u'availability': None,
+                                                    u'creationOnly': False,
+                                                    u'defaultOrder': False,
+                                                    u'defaultValue': None,
+                                                    u'description': u'',
+                                                    u'filterable': False,
+                                                    u'format': None,
+                                                    u'maxLength': None,
+                                                    u'maxValue': None,
+                                                    u'minLength': None,
+                                                    u'minValue': None,
+                                                    u'orderable': False,
+                                                    u'readonly': False,
+                                                    u'required': False,
+                                                    u'type': 'str',
+                                                    u'uniqueItems': False},
+                            u'routeTarget': {u'allowedChars': None,
+                                             u'allowedChoices': None,
+                                             u'autogenerated': False,
+                                             u'availability': None,
+                                             u'creationOnly': False,
+                                             u'defaultOrder': False,
+                                             u'defaultValue': None,
+                                             u'description': u'',
+                                             u'filterable': False,
+                                             u'format': None,
+                                             u'maxLength': None,
+                                             u'maxValue': None,
+                                             u'minLength': None,
+                                             u'minValue': None,
+                                             u'orderable': False,
+                                             u'readonly': False,
+                                             u'required': False,
+                                             u'type': 'str',
+                                             u'uniqueItems': False},
+                            u'serviceID': {u'allowedChars': None,
+                                           u'allowedChoices': None,
+                                           u'autogenerated': False,
+                                           u'availability': None,
+                                           u'creationOnly': False,
+                                           u'defaultOrder': False,
+                                           u'defaultValue': None,
+                                           u'description': u'',
+                                           u'filterable': False,
+                                           u'format': None,
+                                           u'maxLength': None,
+                                           u'maxValue': None,
+                                           u'minLength': None,
+                                           u'minValue': None,
+                                           u'orderable': False,
+                                           u'readonly': False,
+                                           u'required': False,
+                                           u'type': 'long',
+                                           u'uniqueItems': False},
+                            u'templateID': {u'allowedChars': None,
+                                            u'allowedChoices': None,
+                                            u'autogenerated': False,
+                                            u'availability': None,
+                                            u'creationOnly': False,
+                                            u'defaultOrder': False,
+                                            u'defaultValue': None,
+                                            u'description': u'',
+                                            u'filterable': False,
+                                            u'format': None,
+                                            u'maxLength': None,
+                                            u'maxValue': None,
+                                            u'minLength': None,
+                                            u'minValue': None,
+                                            u'orderable': False,
+                                            u'readonly': False,
+                                            u'required': False,
+                                            u'type': 'str',
+                                            u'uniqueItems': False},
+                            u'tunnelType': {u'allowedChars': None,
+                                            u'allowedChoices': [u'DC_DEFAULT',
+                                                                u'VXLAN',
+                                                                u'GRE'],
+                                            u'autogenerated': False,
+                                            u'availability': None,
+                                            u'creationOnly': False,
+                                            u'defaultOrder': False,
+                                            u'defaultValue': None,
+                                            u'description': u'',
+                                            u'filterable': False,
+                                            u'format': None,
+                                            u'maxLength': None,
+                                            u'maxValue': None,
+                                            u'minLength': None,
+                                            u'minValue': None,
+                                            u'orderable': False,
+                                            u'readonly': False,
+                                            u'required': False,
+                                            u'type': 'str',
+                                            u'uniqueItems': False}},
+            u'description': u'This object is used to manipulate domain state. A domain corresponds to a distributed Virtual Router and Switch (dVRS)',
+            u'entityName': u'Domain',
+            u'package': u'/network',
+            u'resourceName': u'domains'}})
+
+    def test_convert_returns_rest_user_with_all_information(self):
+        """ SwaggerTransformer returns a RESTUser with all information
+
+        """
+
+        resources = SwaggerTransformer.convert(resources=self.swagger_resources)
+
+        self.assertIn('me', resources)
+        self.assertEqual(resources['me'], {
+                                          u'apis': {
+                                            u'children': {
+                                              u'/applicationservices': {
+                                                u'RESTName': u'applicationservice',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'applicationservices'
+                                              },
+                                              u'/autodiscoveredgateways': {
+                                                u'RESTName': u'autodiscoveredgateway',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'autodiscoveredgateways'
+                                              },
+                                              u'/domains': {
+                                                u'RESTName': u'domain',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'domains'
+                                              },
+                                              u'/egressaclentrytemplates': {
+                                                u'RESTName': u'egressaclentrytemplate',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'egressaclentrytemplates'
+                                              },
+                                              u'/egressacltemplates': {
+                                                u'RESTName': u'egressacltemplate',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'egressacltemplates'
+                                              },
+                                              u'/egressqospolicies': {
+                                                u'RESTName': u'egressqospolicy',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'egressqospolicies'
+                                              },
+                                              u'/enterpriseprofiles': {
+                                                u'RESTName': u'enterpriseprofile',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'enterpriseprofiles'
+                                              },
+                                              u'/enterprises': {
+                                                u'RESTName': u'enterprise',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'enterprises'
+                                              },
+                                              u'/floatingips': {
+                                                u'RESTName': u'floatingip',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'floatingips'
+                                              },
+                                              u'/gateways': {
+                                                u'RESTName': u'gateway',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'gateways'
+                                              },
+                                              u'/gatewaytemplates': {
+                                                u'RESTName': u'gatewaytemplate',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'gatewaytemplates'
+                                              },
+                                              u'/globalmetadatas': {
+                                                u'RESTName': u'globalmetadata',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'globalmetadatas'
+                                              },
+                                              u'/infrastructuregatewayprofiles': {
+                                                u'RESTName': u'infrastructuregatewayprofile',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'infrastructuregatewayprofiles'
+                                              },
+                                              u'/infrastructureportprofiles': {
+                                                u'RESTName': u'infrastructureportprofile',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'infrastructureportprofiles'
+                                              },
+                                              u'/ingressaclentrytemplates': {
+                                                u'RESTName': u'ingressaclentrytemplate',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'ingressaclentrytemplates'
+                                              },
+                                              u'/ingressacltemplates': {
+                                                u'RESTName': u'ingressacltemplate',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'ingressacltemplates'
+                                              },
+                                              u'/l2domains': {
+                                                u'RESTName': u'l2domain',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'l2domains'
+                                              },
+                                              u'/licenses': {
+                                                u'RESTName': u'license',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'licenses'
+                                              },
+                                              u'/mirrordestinations': {
+                                                u'RESTName': u'mirrordestination',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'mirrordestinations'
+                                              },
+                                              u'/multicastchannelmaps': {
+                                                u'RESTName': u'multicastchannelmap',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'multicastchannelmaps'
+                                              },
+                                              u'/networklayout': {
+                                                u'RESTName': u'networklayout',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'networklayout'
+                                              },
+                                              u'/nsgateways': {
+                                                u'RESTName': u'nsgateway',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'nsgateways'
+                                              },
+                                              u'/nsgatewaytemplates': {
+                                                u'RESTName': u'nsgatewaytemplate',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'nsgatewaytemplates'
+                                              },
+                                              u'/patnatpools': {
+                                                u'RESTName': u'patnatpool',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'patnatpools'
+                                              },
+                                              u'/policygroups': {
+                                                u'RESTName': u'policygroup',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'policygroups'
+                                              },
+                                              u'/ratelimiters': {
+                                                u'RESTName': u'ratelimiter',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'ratelimiters'
+                                              },
+                                              u'/redirectiontargets': {
+                                                u'RESTName': u'redirectiontarget',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'redirectiontargets'
+                                              },
+                                              u'/redundancygroups': {
+                                                u'RESTName': u'redundancygroup',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'redundancygroups'
+                                              },
+                                              u'/sharednetworkresources': {
+                                                u'RESTName': u'sharednetworkresource',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'sharednetworkresources'
+                                              },
+                                              u'/staticroutes': {
+                                                u'RESTName': u'staticroute',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'staticroutes'
+                                              },
+                                              u'/statisticscollector': {
+                                                u'RESTName': u'statisticscollector',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'statisticscollector'
+                                              },
+                                              u'/subnets': {
+                                                u'RESTName': u'subnet',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'subnets'
+                                              },
+                                              u'/systemconfigs': {
+                                                u'RESTName': u'systemconfig',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'systemconfigs'
+                                              },
+                                              u'/tcas': {
+                                                u'RESTName': u'tca',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'tcas'
+                                              },
+                                              u'/vminterfaces': {
+                                                u'RESTName': u'vminterface',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'vminterfaces'
+                                              },
+                                              u'/vms': {
+                                                u'RESTName': u'vm',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'POST'
+                                                },
+                                                u'resourceName': u'vms'
+                                              },
+                                              u'/vsps': {
+                                                u'RESTName': u'vsp',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'vsps'
+                                              },
+                                              u'/zones': {
+                                                u'RESTName': u'zone',
+                                                u'operations': {
+                                                  u'availability': None,
+                                                  u'method': u'GET'
+                                                },
+                                                u'resourceName': u'zones'
+                                              }
+                                            },
+                                            u'parents': {},
+                                            u'self': {}
+                                          },
+                                          u'metadata': {
+                                            u'api_version': 3.1,
+                                            u'author': u'',
+                                            u'comments': u'',
+                                            u'date': '05-20-2015',
+                                            u'dev_backend': u'',
+                                            u'dev_frontend': u'',
+                                            u'dev_qd': u'',
+                                            u'plm': u'',
+                                            u'prd_url': u'http://',
+                                            u'revisions': []
+                                          },
+                                          u'model': {
+                                            u'RESTName': 'me',
+                                            u'attributes': {
+                                              u'avatarData': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              },
+                                              u'avatarType': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': [
+                                                  u'COMPUTEDURL',
+                                                  u'BASE64',
+                                                  u'URL'
+                                                ],
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              },
+                                              u'email': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              },
+                                              'enterpriseID': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': 'Identifier of the enterprise.',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'string',
+                                                u'uniqueItems': False
+                                              },
+                                              'enterpriseName': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': 'Name of the enterprise.',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'string',
+                                                u'uniqueItems': False
+                                              },
+                                              u'firstName': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              },
+                                              u'lastName': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              },
+                                              u'mobileNumber': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              },
+                                              u'password': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              },
+                                              'role': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': 'Role of the user.',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'string',
+                                                u'uniqueItems': False
+                                              },
+                                              u'userName': {
+                                                u'allowedChars': None,
+                                                u'allowedChoices': None,
+                                                u'autogenerated': False,
+                                                u'availability': None,
+                                                u'creationOnly': False,
+                                                u'defaultOrder': False,
+                                                u'defaultValue': None,
+                                                u'description': u'',
+                                                u'filterable': False,
+                                                u'format': None,
+                                                u'maxLength': None,
+                                                u'maxValue': None,
+                                                u'minLength': None,
+                                                u'minValue': None,
+                                                u'orderable': False,
+                                                u'readonly': False,
+                                                u'required': False,
+                                                u'type': 'str',
+                                                u'uniqueItems': False
+                                              }
+                                            },
+                                            u'description': u'Object that identifies the user functions',
+                                            u'entityName': 'RESTUser',
+                                            u'package': u'/usermgmt',
+                                            u'resourceName': u'me'
+                                          }
+                                        })
