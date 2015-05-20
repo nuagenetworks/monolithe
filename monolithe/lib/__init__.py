@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['SwaggerParser', 'SpecParser', 'CourgetteWriter', 'DocWriter', 'Printer', 'TaskManager', 'Utils', 'SDKWriter', 'GitManager', 'ModelsProcessor', 'SwaggerToSpecConverter', 'TestsRunner']
+__all__ = ['SwaggerParser', 'SpecificationParser', 'CourgetteWriter', 'DocWriter', 'Printer', 'TaskManager', 'Utils', 'SDKWriter', 'GitManager', 'ModelsProcessor', 'SwaggerToSpecConverter', 'TestsRunner']
 
-from .parsers import SwaggerParser, SpecParser
+from .parsers import SwaggerParser, SpecificationParser
 from monolithe.utils.printer import Printer
 from .managers import GitManager, TaskManager
 from .utils import Utils

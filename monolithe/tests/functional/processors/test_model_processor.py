@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import os
-
-from unittest import TestCase
-from monolithe.lib.parsers import SwaggerFileParser
+from monolithe.tests.functional import FunctionalTest
+from monolithe.lib.parsers import SwaggerParser
 from monolithe.lib.converters import SwaggerToSpecConverter
 from monolithe.lib.processors import ModelsProcessor
 
-def get_valid_path():
-    """ Returns swagger path """
 
-    return '%s/monolithe/tests/static/V3_1' % os.getcwd()
-
-
-class ModelsProcessorTests(TestCase):
+class ModelsProcessorTests(FunctionalTest):
     """ Tests for SwaggerParser using file option
 
     """
@@ -22,8 +15,8 @@ class ModelsProcessorTests(TestCase):
         """ Set up context
 
         """
-        parser = SwaggerFileParser(path=get_valid_path())
-        swagger_resources = parser.grab_all()
+        parser = SwaggerParser(path=cls.get_valid_path(), vsdurl=None, apiversion=None)
+        swagger_resources = parser.run()
 
         cls.resources = SwaggerToSpecConverter.convert(resources=swagger_resources)
 
@@ -36,7 +29,7 @@ class ModelsProcessorTests(TestCase):
         self.assertEquals(len(processed_resources), 96)
 
         # Normal resource
-        self.assertIn('enterprise', processed_resources) # Rest names
+        self.assertIn('enterprise', processed_resources)  # Rest names
         self.assertNotIn('Enterprise', processed_resources)
 
         # Mapped resources
@@ -67,4 +60,3 @@ class ModelsProcessorTests(TestCase):
 
         for attribute in attributes:
             self.assertIn(attribute.remote_name, resource_properies)
-

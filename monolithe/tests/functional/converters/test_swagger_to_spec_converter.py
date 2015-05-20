@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import os
-
-from unittest import TestCase
-from monolithe.lib.parsers import SwaggerFileParser
+from monolithe.tests.functional import FunctionalTest
+from monolithe.lib.parsers import SwaggerParser
 from monolithe.lib.converters import SwaggerToSpecConverter
 
 
-def get_valid_path():
-    """ Returns swagger path """
-
-    return '%s/monolithe/tests/static/V3_1' % os.getcwd()
-
-
-class SwaggerToSpecConverterTests(TestCase):
+class SwaggerToSpecConverterTests(FunctionalTest):
     """ Tests for SwaggerParser using file option
 
     """
@@ -21,8 +13,8 @@ class SwaggerToSpecConverterTests(TestCase):
         """ Set up context
 
         """
-        parser = SwaggerFileParser(path=get_valid_path())
-        cls.swagger_resources = parser.grab_all()
+        parser = SwaggerParser(path=cls.get_valid_path(), vsdurl=None, apiversion=None)
+        cls.swagger_resources = parser.run()
 
     def tearDown(cls):
         """ Clean up context

@@ -9,13 +9,11 @@ import json
 from .lib import SwaggerParser
 from .lib import SDKWriter, DocWriter, CourgetteWriter
 from .lib import ModelsProcessor
-from .lib import GitManager
 from .lib import SwaggerToSpecConverter
-from .lib import SpecParser
+from .lib import SpecificationParser
 from .lib import TestsRunner
 
 from monolithe.utils.printer import Printer
-from monolithe.utils.urls import URLUtils
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'
@@ -65,14 +63,11 @@ class Command(object):
         """
 
         """
-        path = URLUtils.remove_slash(path)
-        url = cls._get_api_url(vsdurl)
-
-        if url is None and path is None:
+        if vsdurl is None and path is None:
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
         # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        swagger_parser = SwaggerParser(vsdurl=vsdurl, path=path, apiversion=apiversion)
         resources = swagger_parser.run(filters=[rest_name])
 
         # Convert Swagger models
@@ -88,14 +83,11 @@ class Command(object):
         """ Generate specs
 
         """
-        path = URLUtils.remove_slash(path)
-        url = cls._get_api_url(vsdurl)
-
-        if url is None and path is None:
+        if vsdurl is None and path is None:
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
         # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        swagger_parser = SwaggerParser(vsdurl=vsdurl, path=path, apiversion=apiversion)
         resources = swagger_parser.run()
 
         # Convert Swagger models
@@ -131,21 +123,18 @@ class Command(object):
                 force: force removal of the existing codegen directory
 
         """
-        path = URLUtils.remove_slash(path)
-        url = cls._get_api_url(vsdurl)
-
-        if url is None and path is None:
+        if vsdurl is None and path is None:
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
         # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        swagger_parser = SwaggerParser(vsdurl=vsdurl, path=path, apiversion=apiversion)
         resources = swagger_parser.run()
 
         # Convert Swagger models
         specs = SwaggerToSpecConverter.convert(resources=resources)
 
         if specs_path is not None:
-            candidates = SpecParser.grab_all(specs_path)
+            candidates = SpecificationParser.run(specs_path)
             specs.update(candidates)
 
         # Process Swagger models
@@ -163,20 +152,9 @@ class Command(object):
         if force_removal and os.path.exists(directory):
             shutil.rmtree(directory)
 
-        # Grab existing sources
-        git_manager = None
-
-        if git_repository:
-            git_manager = GitManager(url=git_repository, branch=apiversion, directory=directory)
-
         # Write Python sources
         sdk_writer = SDKWriter(directory=directory)
         sdk_writer.write(resources=processed_resources, apiversion=apiversion, revision=revision)
-
-        if git_manager and push:
-            nb_diffs = git_manager.commit(message="Update from API %s" % apiversion)
-            Printer.log("Ready to push %s modification to branch %s of repistory %s" % (nb_diffs, apiversion, git_repository))
-            git_manager.push()
 
     @classmethod
     def generate_doc(cls, vsdurl, path, apiversion, output_path=None):
@@ -190,11 +168,8 @@ class Command(object):
                 output_path: the path to the output directory
 
         """
-        path = URLUtils.remove_slash(path)
-        url = cls._get_api_url(vsdurl)
-
         # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        swagger_parser = SwaggerParser(vsdurl=vsdurl, path=path, apiversion=apiversion)
         resources = swagger_parser.run()
 
         # Convert Swagger models
@@ -230,11 +205,8 @@ class Command(object):
         """
         directory = '%s' % output_path
 
-        path = URLUtils.remove_slash(path)
-        url = cls._get_api_url(vsdurl)
-
         # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=url, path=path, apiversion=apiversion)
+        swagger_parser = SwaggerParser(vsdurl=vsdurl, path=path, apiversion=apiversion)
         resources = swagger_parser.run()
 
         # Processed Swagger models
@@ -242,18 +214,3 @@ class Command(object):
 
         writer = CourgetteWriter(directory=directory)
         writer.write(resources=processed_resources)
-
-    @classmethod
-    def _get_api_url(cls, vsdurl=None):
-        """ Compute API Url according to vsdurl parameter
-
-            Args:
-                vsdurl: the vsd url given
-
-        """
-        url = URLUtils.remove_slash(vsdurl)
-
-        if url:
-            return '%s/%s' % (vsdurl, API_URL)
-
-        return None

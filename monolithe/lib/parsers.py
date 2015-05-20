@@ -181,11 +181,13 @@ class SwaggerParser(object):
         return ParsingUtils.parseJSON(filepath)
 
 
-class SpecParser(object):
-    """ Parse specifications directory """
+class SpecificationParser(object):
+    """ Parse specifications directory
+
+    """
 
     @classmethod
-    def grab_all(cls, directory):
+    def run(cls, directory):
         """ Grab all specification in given directory and return a dictionary of specs.
 
             Returns:
