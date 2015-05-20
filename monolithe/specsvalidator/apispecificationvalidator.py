@@ -139,7 +139,7 @@ class APISpecificationValidator:
                 candidate_methods     = ", ".join([operation["method"] for operation in sorted(candidate_api_declarations[api_path]["operations"])])
 
                 if candidate_methods != specification_methods:
-                    err = CharacteristicMismatchException(declaration_name="methods", expected_value=specification_methods, actual_value=candidate_methods)
+                    err = CharacteristicMismatchException(characteristic_name="methods", expected_value=specification_methods, actual_value=candidate_methods)
                     self._append_validation_error(target_report, api_path, "characteristic_mismatches", err)
 
         ## check for extra apis
