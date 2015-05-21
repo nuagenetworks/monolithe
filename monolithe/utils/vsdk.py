@@ -26,10 +26,6 @@ class VSDKUtils(object):
         rep = {
             "IPID": "IpID",
             "VCenter": "Vcenter",
-            "VCenterEAMConfig": "VcenterEAMConfig",
-            "VCenterHypervisor": "VcenterHypervisor",
-            "VCenterHypervisor": "VcenterHypervisor",
-            "VCenterVRSConfig": "VcenterVRSConfig",
             "VPort": "Vport",
         }
 

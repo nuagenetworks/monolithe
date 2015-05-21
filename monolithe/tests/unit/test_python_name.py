@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from monolithe.lib import Utils
+from monolithe.utils.vsdk import VSDKUtils
 
 
 class GetPythonNameTest(TestCase):
@@ -13,7 +13,7 @@ class GetPythonNameTest(TestCase):
             the python name
 
         """
-        self.assertEqual(Utils.get_python_name(remote_name), python_name)
+        self.assertEqual(VSDKUtils.get_python_name(remote_name), python_name)
 
     def test_get_python_name(self):
         """ Convert REST names to Python
@@ -38,3 +38,7 @@ class GetPythonNameTest(TestCase):
         self.assertPythonNameEquals('IDsTORemove', 'ids_to_remove')
         self.assertPythonNameEquals('MultiNICVPortsFetcher', 'multi_nic_vports_fetcher')
         self.assertPythonNameEquals('FloatingIPID', 'floating_ip_id')
+        self.assertPythonNameEquals('VCenter', 'vcenter')
+        self.assertPythonNameEquals('VCenterHypervisor', 'vcenter_hypervisor')
+        self.assertPythonNameEquals('VCenterEAMConfig', 'vcenter_eam_config')
+        

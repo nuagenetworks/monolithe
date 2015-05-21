@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from monolithe.lib import Utils
+from monolithe.utils.vsdk import VSDKUtils
 
 
 class GetSingularNameTest(TestCase):
@@ -13,7 +13,7 @@ class GetSingularNameTest(TestCase):
             the python name
 
         """
-        self.assertEqual(Utils.get_singular_name(plural_name), singular_name)
+        self.assertEqual(VSDKUtils.get_singular_name(plural_name), singular_name)
 
     def test_get_singular_name(self):
         """ Compute singular names properly

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from monolithe.lib import Utils
+from monolithe.utils.vsdk import VSDKUtils
 
 
 class GetPluralNameTest(TestCase):
@@ -13,7 +13,7 @@ class GetPluralNameTest(TestCase):
             the python name
 
         """
-        self.assertEqual(Utils.get_plural_name(singular_name), plural_name)
+        self.assertEqual(VSDKUtils.get_plural_name(singular_name), plural_name)
 
     def test_get_plural_name(self):
         """ Compute plural names properly
