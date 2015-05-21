@@ -83,7 +83,7 @@ class MonolitheObject(object):
             model_attribute = MonolitheObjectAttribute()
             model_attribute.from_specification_attribute(attribute_name, attribute_info)
 
-            if model_attribute.ignored:
+            if not model_attribute.ignored:
                 model_attributes.append(model_attribute)
 
         return model_attributes
