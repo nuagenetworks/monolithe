@@ -34,6 +34,22 @@ class ParsingUtils(object):
         return name
 
     @classmethod
+    def get_rest_name(cls, name):
+        """ Get the rest name of the entity
+
+            Args:
+                name: the remote name
+
+            Returns:
+                A beautiful python name
+
+        """
+        if name in Constants.REST_NAME_MAPPING:
+            return Constants.REST_NAME_MAPPING[name]
+
+        return name
+
+    @classmethod
     def get_correct_attribute_name(cls, name):
         """ Change local name according to the remote name
 
@@ -121,3 +137,18 @@ class ParsingUtils(object):
 
         """
         return OrderedDict(sorted(results.items(), key=lambda t: t[0]))
+
+    @classmethod
+    def order_by(cls, results, attribute_name, reverse=False):
+        """ Returns list of objects ordered by attribute_name
+
+            Args:
+                results (list): a list of python objects
+                attribute_name (string): the name of the attribute to sort
+                reverse (bool): order asc (default) or desc
+
+            Returns:
+                A new list of objects
+
+        """
+        return sorted(results, key=lambda x: getattr(x, attribute_name), reverse=reverse)

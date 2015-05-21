@@ -109,7 +109,14 @@ class SpecificationTransformer(object):
         """
         models = dict()
 
+        specifications = deepcopy(specifications)
+
         for rest_name, specification in specifications.iteritems():
+
+            # Pre-calculate children entityName
+            for path, api in specification['apis']['children'].iteritems():
+                rest_name = ParsingUtils.get_rest_name(api['RESTName'])
+                api['entityName'] = specifications[rest_name]['model']['entityName']
 
             model = MonolitheObject()
             model.from_specification(specification)

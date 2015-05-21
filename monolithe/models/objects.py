@@ -86,7 +86,7 @@ class MonolitheObject(object):
             if not model_attribute.ignored:
                 model_attributes.append(model_attribute)
 
-        return model_attributes
+        return ParsingUtils.order_by(model_attributes, 'local_name')
 
 
 class MonolitheObjectAttribute(object):
@@ -202,11 +202,16 @@ class MonolitheObjectAPI(object):
         self.resource_name = specification_api['resourceName']
         self.remote_name = specification_api['RESTName']
 
-        # TODO-CS : Add entity_name of the related entity
-        # TODO-CS : Compute plural_name and instance_plural_name
-        # entity_name = ???
-        # self.plural_name = VSDKUtils.get_plural_name(entity_name)
-        # self.instance_plural_name = VSDKUtils.get_python_name(model_api.plural_name)
+        if 'entityName' in specification_api:
+            # Only for children
+            # Used to create fetchers
+
+            entity_name = specification_api['entityName']
+            self.plural_name = VSDKUtils.get_plural_name(entity_name)
+            self.instance_plural_name = VSDKUtils.get_python_name(self.plural_name)
+
+            if self.remote_name == 'allalarm':
+                self.instance_plural_name = 'all_alarms'  # Differs from alarms
 
         for operation in specification_api['operations']:
             model_operation = MonolitheObjectAPIOperation()

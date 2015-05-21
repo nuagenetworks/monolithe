@@ -130,16 +130,16 @@ class SwaggerParser(object):
         global_metadata_info['apis'] = []
         aggregate_metadata_info['apis'] = []
 
-        metadata_info['models']['Metadata']['id'] = 'Metadata'
+        metadata_info['models']['Metadata']['id'] = u'Metadata'
 
         global_metadata_info['models']['GlobalMetadata'] = global_metadata_info['models']['Metadata']
         global_metadata_info['models'].pop('Metadata')
-        global_metadata_info['models']['GlobalMetadata']['id'] = 'GlobalMetadata'
+        global_metadata_info['models']['GlobalMetadata']['id'] = u'GlobalMetadata'
 
 
         aggregate_metadata_info['models']['AggregateMetadata'] = aggregate_metadata_info['models']['Metadata']
         aggregate_metadata_info['models'].pop('Metadata')
-        aggregate_metadata_info['models']['AggregateMetadata']['id'] = 'AggregateMetadata'
+        aggregate_metadata_info['models']['AggregateMetadata']['id'] = u'AggregateMetadata'
 
 
         for api in resource['apis']:

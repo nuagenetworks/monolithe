@@ -24,8 +24,13 @@ class VSDKUtils(object):
                 Returns a clean string
         """
         rep = {
+            "IPID": "IpID",
+            "VCenter": "Vcenter",
+            "VCenterEAMConfig": "VcenterEAMConfig",
+            "VCenterHypervisor": "VcenterHypervisor",
+            "VCenterHypervisor": "VcenterHypervisor",
+            "VCenterVRSConfig": "VcenterVRSConfig",
             "VPort": "Vport",
-            "IPID": "IpID"
         }
 
         rep = dict((re.escape(k), v) for k, v in rep.iteritems())

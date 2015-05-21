@@ -47,4 +47,8 @@ class Constants(object):
 
     ATTRIBUTE_MAPPING = {
         u'global': u'globalMetadata'
+    }
+
+    REST_NAME_MAPPING = {
+        u'allalarm': u'alarm'
     }    

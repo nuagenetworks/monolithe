@@ -98,25 +98,29 @@ class Specification(dict):
 
             if len(resource_names) == 2:
                 self['apis']['parents'][path] = specification_api
-                self._create_parent_relation(parent_rest_name, path, specification_api)
+                self._create_parent_relation(path, specification_api, parent_rest_name)
                 continue
 
             # Only API with operation of form /xxxx or /xxxx/{id}
             methods = [operation['method'] for operation in api['operations']]
 
             if URLUtils.is_root_url(path=path, methods=methods):
+                # specification_api['resourceName'] = Constants.RESTUSER_REST_NAME
+                # specification_api['RESTName'] = Constants.RESTUSER_REST_NAME
                 self['apis']['parents'][path] = specification_api
-                self._create_parent_relation(Constants.RESTUSER_REST_NAME, path, specification_api)
+                self._create_parent_relation(path, specification_api, Constants.RESTUSER_REST_NAME)
 
             else:
                 self['apis']['self'][path] = specification_api
 
-    def _create_parent_relation(self, parent_rest_name, path, specification_api):
+    def _create_parent_relation(self, path, specification_api, parent_rest_name):
         """ Create a relation that will be bind to the parent later
 
         """
         # Make a copy for the parent relation
         parent_specification_api = deepcopy(specification_api)
+        parent_specification_api['RESTName'] = self['model']['RESTName']
+        parent_specification_api['resourceName'] = self['model']['resourceName']
 
         if parent_rest_name not in self.parent_relations:
             self.parent_relations[parent_rest_name] = {}

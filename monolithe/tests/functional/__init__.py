@@ -15,6 +15,7 @@ class FunctionalTest(TestCase):
 
         """
         TestCase.__init__(self, methodName=methodName)
+        self.maxDiff = None
 
     @classmethod
     def get_valid_path(cls):
