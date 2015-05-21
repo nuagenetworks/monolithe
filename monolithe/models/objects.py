@@ -63,14 +63,14 @@ class MonolitheObject(object):
                 relations: dict containing all relations between resources
 
         """
-
         model_apis = {}
         for path, specification_api in apis[api_name].iteritems():
 
             model_api = MonolitheObjectAPI()
-            model_api.from_specification_api(path, specification_api)
 
-            model_apis[path] = model_api
+            if api_name != 'children' or 'entityName' in specification_api:
+                model_api.from_specification_api(path, specification_api)
+                model_apis[path] = model_api
 
         return ParsingUtils.order(model_apis)
 

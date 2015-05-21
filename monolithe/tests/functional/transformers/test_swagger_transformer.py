@@ -33,7 +33,6 @@ class SwaggerTransformerTests(FunctionalTest):
 
         resources = SwaggerTransformer.get_specifications(resources=self.swagger_resources)
 
-        self.assertEqual(len(resources), 99)
         self.assertEqual(resources.keys(), [u'addressrange',
                                             u'alarm',
                                             u'app',

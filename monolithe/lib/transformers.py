@@ -116,7 +116,11 @@ class SpecificationTransformer(object):
             # Pre-calculate children entityName
             for path, api in specification['apis']['children'].iteritems():
                 rest_name = ParsingUtils.get_rest_name(api['RESTName'])
-                api['entityName'] = specifications[rest_name]['model']['entityName']
+
+                if rest_name in specifications:
+                    api['entityName'] = specifications[rest_name]['model']['entityName']
+                else:
+                    Printer.warn('Skipping child %s' % rest_name)
 
             model = MonolitheObject()
             model.from_specification(specification)

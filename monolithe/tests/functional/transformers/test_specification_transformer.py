@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from monolithe.tests.functional import FunctionalTest
-from monolithe.lib.parsers import SwaggerParser
+from monolithe.lib.parsers import SwaggerParser, SpecificationParser
 from monolithe.lib.transformers import SwaggerTransformer, SpecificationTransformer
+
+from monolithe.utils.printer import Printer
 
 
 class SpecificationTransformerTests(FunctionalTest):
@@ -32,7 +34,6 @@ class SpecificationTransformerTests(FunctionalTest):
         """
         objects = SpecificationTransformer.get_objects(self.specifications)
 
-        self.assertEqual(len(objects), 99)
         self.assertEqual(objects.keys(), [u'addressrange',
                                           u'alarm',
                                           u'app',
@@ -146,7 +147,6 @@ class SpecificationTransformerTests(FunctionalTest):
         self.assertEqual(rest_user.plural_name, u'RESTUsers')
 
         # Attributes
-        self.assertEqual(len(rest_user.attributes), 11)
 
         local_names = [attribute.local_name for attribute in rest_user.attributes]
         remote_names = [attribute.remote_name for attribute in rest_user.attributes]
@@ -182,12 +182,20 @@ class SpecificationTransformerTests(FunctionalTest):
                                        u'str',
                                        u'str'])
 
-        # Apis
-        self.assertEqual(len(rest_user.apis['parents']), 0)
-        self.assertEqual(len(rest_user.apis['self']), 0)
+        # Parents apis
+        parents = rest_user.apis['parents']
+        paths = parents.keys()
 
+        self.assertEqual(paths, [])
+
+        # Self apis
+        self_apis = rest_user.apis['self']
+
+        paths = self_apis.keys()
+        self.assertEqual(paths, [])
+
+        # Children apis
         children = rest_user.apis['children']
-        self.assertEqual(len(children), 38)
 
         paths = children.keys()
 
@@ -405,8 +413,6 @@ class SpecificationTransformerTests(FunctionalTest):
         self.assertEqual(enterprise.plural_name, u'Enterprises')
 
         # Attributes
-        self.assertEqual(len(enterprise.attributes), 13)
-
         local_names = [attribute.local_name for attribute in enterprise.attributes]
         remote_names = [attribute.remote_name for attribute in enterprise.attributes]
         local_types = [attribute.local_type for attribute in enterprise.attributes]
@@ -453,24 +459,19 @@ class SpecificationTransformerTests(FunctionalTest):
                                        'int',
                                        'str'])
 
+
         # Parents apis
         parents = enterprise.apis['parents']
-        self.assertEqual(len(parents), 0)
-
         paths = parents.keys()
         self.assertEqual(paths, [])
 
         # Self apis
         self_apis = enterprise.apis['self']
-        self.assertEqual(len(self_apis), 1)
-
         paths = self_apis.keys()
         self.assertEqual(paths, [u'/enterprises/{id}'])
 
         # Children apis
         children = enterprise.apis['children']
-        self.assertEqual(len(children), 27)
-
         paths = children.keys()
 
         self.assertEqual(paths, [u'/enterprises/{id}/alarms',
@@ -618,3 +619,199 @@ class SpecificationTransformerTests(FunctionalTest):
                                                  u'redundancy_groups',
                                                  u'users',
                                                  u'vms'])
+
+
+class ManualSpecificationTransformerTests(FunctionalTest):
+    """ Tests for SwaggerParser using file option
+
+    """
+    @classmethod
+    def setUpClass(cls):
+        """ Set up context
+
+        """
+        path = cls.get_specificication_files_path()
+
+        cls.specifications = SpecificationParser.run(path)
+
+    @classmethod
+    def tearDownClass(cls):
+        """ Clean up context
+
+        """
+        cls.specifications = None
+
+    def test_transformer_returns_valid_vcenter(self):
+        """ SpecificationTransformer from manual specification returns a VCenter with all valid information
+
+        """
+        objects = SpecificationTransformer.get_objects(self.specifications)
+
+        vcenter = objects['vcenter']
+
+        self.assertEqual(vcenter.name, 'VCenter')
+        self.assertEqual(vcenter.remote_name, 'vcenter')
+        self.assertEqual(vcenter.plural_name, u'VCenters')
+
+        # Attributes
+        local_names = [attribute.local_name for attribute in vcenter.attributes]
+        remote_names = [attribute.remote_name for attribute in vcenter.attributes]
+        local_types = [attribute.local_type for attribute in vcenter.attributes]
+
+        self.assertEqual(local_names, [u'allow_data_dhcp',
+                                       u'allow_mgmt_dhcp',
+                                       u'customized_script_url',
+                                       u'data_dns1',
+                                       u'data_dns2',
+                                       u'data_gateway',
+                                       u'data_network_portgroup',
+                                       u'datapath_sync_timeout',
+                                       u'description',
+                                       u'dhcp_relay_server',
+                                       u'flow_eviction_threshold',
+                                       u'http_port',
+                                       u'https_port',
+                                       u'ip_address',
+                                       u'mgmt_dns1',
+                                       u'mgmt_dns2',
+                                       u'mgmt_gateway',
+                                       u'mgmt_network_portgroup',
+                                       u'mtu',
+                                       u'multi_vmssupport',
+                                       u'multicast_interface_ip',
+                                       u'multicast_interface_netmask',
+                                       u'multicast_range',
+                                       u'multicast_source_portgroup',
+                                       u'name',
+                                       u'nfs_log_server',
+                                       u'nfs_mount_path',
+                                       u'ntp_server1',
+                                       u'ntp_server2',
+                                       u'password',
+                                       u'personality',
+                                       u'portgroup_metadata',
+                                       u'primary_nuage_controller',
+                                       u'secondary_nuage_controller',
+                                       u'separate_data_network',
+                                       u'static_route',
+                                       u'static_route_gateway',
+                                       u'user_name',
+                                       u'v_require_nuage_metadata',
+                                       u'vm_network_portgroup',
+                                       u'vrs_config_id'])
+
+        self.assertEqual(remote_names, [u'allowDataDHCP',
+                                        u'allowMgmtDHCP',
+                                        u'customizedScriptURL',
+                                        u'dataDNS1',
+                                        u'dataDNS2',
+                                        u'dataGateway',
+                                        u'dataNetworkPortgroup',
+                                        u'datapathSyncTimeout',
+                                        u'description',
+                                        u'dhcpRelayServer',
+                                        u'flowEvictionThreshold',
+                                        u'httpPort',
+                                        u'httpsPort',
+                                        u'ipAddress',
+                                        u'mgmtDNS1',
+                                        u'mgmtDNS2',
+                                        u'mgmtGateway',
+                                        u'mgmtNetworkPortgroup',
+                                        u'mtu',
+                                        u'multiVMSsupport',
+                                        u'multicastInterfaceIP',
+                                        u'multicastInterfaceNetmask',
+                                        u'multicastRange',
+                                        u'multicastSourcePortgroup',
+                                        u'name',
+                                        u'nfsLogServer',
+                                        u'nfsMountPath',
+                                        u'ntpServer1',
+                                        u'ntpServer2',
+                                        u'password',
+                                        u'personality',
+                                        u'portgroupMetadata',
+                                        u'primaryNuageController',
+                                        u'secondaryNuageController',
+                                        u'separateDataNetwork',
+                                        u'staticRoute',
+                                        u'staticRouteGateway',
+                                        u'userName',
+                                        u'vRequireNuageMetadata',
+                                        u'vmNetworkPortgroup',
+                                        u'vrsConfigID'])
+
+        self.assertEqual(local_types, [u'bool',
+                                       u'bool',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'int',
+                                       u'str',
+                                       u'str',
+                                       u'int',
+                                       u'int',
+                                       u'int',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'int',
+                                       u'bool',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'bool',
+                                       u'str',
+                                       u'str',
+                                       u'bool',
+                                       u'str',
+                                       u'str',
+                                       u'str',
+                                       u'bool',
+                                       u'str',
+                                       u'str'])
+
+        # Parents apis
+        parents = vcenter.apis['parents']
+        paths = parents.keys()
+
+        self.assertEqual(paths, [])
+
+        # Self apis
+        self_apis = vcenter.apis['self']
+
+        paths = self_apis.keys()
+        self.assertEqual(paths, [u'/vcenters/{id}'])
+
+        # Children apis
+        children = vcenter.apis['children']
+        paths = children.keys()
+
+        self.assertEqual(paths, [])
+
+        child_info = children.values()
+        resource_names = [info.resource_name for info in child_info]
+        remote_names = [info.remote_name for info in child_info]
+        plural_names = [info.plural_name for info in child_info]
+        instance_plural_names = [info.instance_plural_name for info in child_info]
+
+        self.assertEqual(resource_names, [])
+
+        self.assertEqual(remote_names, [])
+
+        self.assertEqual(plural_names, [])
+
+        self.assertEqual(instance_plural_names, [])

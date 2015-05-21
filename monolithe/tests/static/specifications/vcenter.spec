@@ -102,10 +102,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "boolean", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "allowMgmtDHCP": {
                 "allowedChars": null, 
@@ -123,10 +123,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "boolean", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "customizedScriptURL": {
                 "allowedChars": null, 
@@ -144,10 +144,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "dataDNS1": {
                 "allowedChars": null, 
@@ -165,10 +165,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "dataDNS2": {
                 "allowedChars": null, 
@@ -186,10 +186,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "dataGateway": {
                 "allowedChars": null, 
@@ -207,10 +207,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "dataNetworkPortgroup": {
                 "allowedChars": null, 
@@ -228,10 +228,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "datapathSyncTimeout": {
                 "allowedChars": null, 
@@ -249,10 +249,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "int", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "description": {
                 "allowedChars": null, 
@@ -270,10 +270,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "dhcpRelayServer": {
                 "allowedChars": null, 
@@ -291,10 +291,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "flowEvictionThreshold": {
                 "allowedChars": null, 
@@ -312,10 +312,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "int", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "httpPort": {
                 "allowedChars": null, 
@@ -333,10 +333,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "int", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "httpsPort": {
                 "allowedChars": null, 
@@ -354,10 +354,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "int", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "ipAddress": {
                 "allowedChars": null, 
@@ -375,10 +375,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "mgmtDNS1": {
                 "allowedChars": null, 
@@ -396,10 +396,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "mgmtDNS2": {
                 "allowedChars": null, 
@@ -417,10 +417,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "mgmtGateway": {
                 "allowedChars": null, 
@@ -438,10 +438,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "mgmtNetworkPortgroup": {
                 "allowedChars": null, 
@@ -459,10 +459,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "mtu": {
                 "allowedChars": null, 
@@ -480,10 +480,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "int", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "multiVMSsupport": {
                 "allowedChars": null, 
@@ -501,10 +501,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "boolean", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "multicastInterfaceIP": {
                 "allowedChars": null, 
@@ -522,10 +522,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "multicastInterfaceNetmask": {
                 "allowedChars": null, 
@@ -543,10 +543,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "multicastRange": {
                 "allowedChars": null, 
@@ -564,10 +564,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "multicastSourcePortgroup": {
                 "allowedChars": null, 
@@ -585,10 +585,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "name": {
                 "allowedChars": null, 
@@ -606,10 +606,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "nfsLogServer": {
                 "allowedChars": null, 
@@ -627,10 +627,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "nfsMountPath": {
                 "allowedChars": null, 
@@ -648,10 +648,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "ntpServer1": {
                 "allowedChars": null, 
@@ -669,10 +669,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "ntpServer2": {
                 "allowedChars": null, 
@@ -690,10 +690,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "password": {
                 "allowedChars": null, 
@@ -711,10 +711,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "personality": {
                 "allowedChars": null, 
@@ -732,10 +732,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "portgroupMetadata": {
                 "allowedChars": null, 
@@ -753,10 +753,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "boolean", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "primaryNuageController": {
                 "allowedChars": null, 
@@ -774,10 +774,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "secondaryNuageController": {
                 "allowedChars": null, 
@@ -795,10 +795,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "separateDataNetwork": {
                 "allowedChars": null, 
@@ -816,10 +816,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "boolean", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "staticRoute": {
                 "allowedChars": null, 
@@ -837,10 +837,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "staticRouteGateway": {
                 "allowedChars": null, 
@@ -858,10 +858,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "userName": {
                 "allowedChars": null, 
@@ -879,10 +879,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "vRequireNuageMetadata": {
                 "allowedChars": null, 
@@ -900,10 +900,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "boolean", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "vmNetworkPortgroup": {
                 "allowedChars": null, 
@@ -921,10 +921,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }, 
             "vrsConfigID": {
                 "allowedChars": null, 
@@ -942,10 +942,10 @@
                 "minLength": null, 
                 "minValue": null, 
                 "orderable": false, 
-                "readonly": false, 
+                "readOnly": false, 
                 "required": false, 
                 "type": "string", 
-                "uniqueItems": false
+                "unique": false
             }
         }, 
         "description": "Represent a VCenter", 

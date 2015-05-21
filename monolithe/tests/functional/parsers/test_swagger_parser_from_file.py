@@ -16,7 +16,6 @@ class SwaggerFileParserTests(FunctionalTest):
         parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
         resources = parser.run()
 
-        self.assertEqual(len(resources), 109)
         self.assertEqual(parser.apiversion, 3.1)
         self.assertEqual(resources.keys(), [u'AddressRange',
                                             u'AggregateMetadata',
@@ -324,7 +323,7 @@ class SwaggerFileParserTests(FunctionalTest):
         parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
         resources = parser.run(filters=['enterprise'])
 
-        self.assertEqual(len(resources), 1)
+        self.assertIn('Enterprise', resources)
 
     def test_run_with_filter_on_complex_name(self):
         """ SwaggerParser run with filter should find entity with similar names
@@ -334,7 +333,6 @@ class SwaggerFileParserTests(FunctionalTest):
         parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
         resources = parser.run(filters=['ingressadvfwdentrytemplate'])
 
-        self.assertEqual(len(resources), 3)
         self.assertEqual(resources.keys(), [u'IngressACLEntryTemplate', u'IngressAdvFwdEntryTemplate', u'IngressAdvFwdTemplate'])
 
     def test_run_with_filter_with_unknown_name(self):

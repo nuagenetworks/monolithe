@@ -39,10 +39,10 @@ class SwaggerURLParserTests(FunctionalTest):
         resources = parser.run()
 
         # Verify principal entities
-        self.assertIn('Enterprise', resources.keys())
-        self.assertIn('Subnet', resources.keys())
-        self.assertIn('Alarm', resources.keys())
-        self.assertIn('Domain', resources.keys())
+        self.assertIn('Enterprise', resources)
+        self.assertIn('Subnet', resources)
+        self.assertIn('Alarm', resources)
+        self.assertIn('Domain', resources)
 
         # Verify Enterprise
         self.assertEqual(resources['Enterprise'], {u'apiVersion': u'V3_1',
