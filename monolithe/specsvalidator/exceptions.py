@@ -6,11 +6,6 @@ class CharacteristicMismatchException:
         self.actual_value        = actual_value
         self.characteristic_name = characteristic_name
 
-class MispelledDeclarationException:
-    def __init__(self, declaration_name, potential_declarations):
-        self.declaration_name       = declaration_name
-        self.potential_declarations = potential_declarations
-
 class CharacteristicMissingException:
     def __init__(self, characteristic_name):
         self.characteristic_name = characteristic_name
@@ -23,7 +18,7 @@ class ExtraDeclarationException:
     def __init__(self, declaration_name):
         self.declaration_name  = declaration_name
 
-class MethodMismatchException:
-    def __init__(self, expected_methods, actual_methods):
-        self.expected_methods = expected_methods
-        self.actual_methods   = actual_methods
+class MispelledDeclarationException:
+    def __init__(self, declaration_name, potential_declarations):
+        self.declaration_name       = declaration_name
+        self.potential_declarations = potential_declarations
