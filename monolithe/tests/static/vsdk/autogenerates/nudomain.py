@@ -61,7 +61,7 @@ class NUDomain(NURESTObject):
         super(NUDomain, self).__init__()
 
         # Read/Write Attributes
-
+        
         self._application_deployment_policy = None
         self._associated_multicast_channel_map_id = None
         self._back_haul_route_distinguisher = None
@@ -81,7 +81,7 @@ class NUDomain(NURESTObject):
         self._service_id = None
         self._template_id = None
         self._tunnel_type = None
-
+        
         self.expose_attribute(local_name=u"application_deployment_policy", remote_name=u"applicationDeploymentPolicy", attribute_type=str, is_required=False, is_unique=False, choices=[u'NONE', u'ZONE'])
         self.expose_attribute(local_name=u"associated_multicast_channel_map_id", remote_name=u"associatedMulticastChannelMapID", attribute_type=str, is_required=False, is_unique=False)
         self.expose_attribute(local_name=u"back_haul_route_distinguisher", remote_name=u"backHaulRouteDistinguisher", attribute_type=str, is_required=False, is_unique=False)
@@ -101,71 +101,71 @@ class NUDomain(NURESTObject):
         self.expose_attribute(local_name=u"service_id", remote_name=u"serviceID", attribute_type=long, is_required=False, is_unique=False)
         self.expose_attribute(local_name=u"template_id", remote_name=u"templateID", attribute_type=str, is_required=False, is_unique=False)
         self.expose_attribute(local_name=u"tunnel_type", remote_name=u"tunnelType", attribute_type=str, is_required=False, is_unique=False, choices=[u'DC_DEFAULT', u'GRE', u'VXLAN'])
-
+        
         # Fetchers
-
+        
         self.bridge_interfaces = NUBridgeInterfacesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.dhcp_options = NUDHCPOptionsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.egress_acl_templates = NUEgressACLTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.event_logs = NUEventLogsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.floating_ips = NUFloatingIpsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.groups = NUGroupsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.host_interfaces = NUHostInterfacesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.ingress_acl_templates = NUIngressACLTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.ingress_adv_fwd_templates = NUIngressAdvFwdTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.jobs = NUJobsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.permitted_actions = NUPermittedActionsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.policy_groups = NUPolicyGroupsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.qoss = NUQOSsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.redirection_targets = NURedirectionTargetsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.static_routes = NUStaticRoutesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.statistics = NUStatisticsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.statistics_policies = NUStatisticsPoliciesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.subnets = NUSubnetsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.tcas = NUTCAsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.vm_interfaces = NUVMInterfacesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.vms = NUVMsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.vpn_connections = NUVPNConnectionsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.vports = NUVPortsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.zones = NUZonesFetcher.fetcher_with_object(parent_object=self)
-
+        
 
         self._compute_args(**kwargs)
 
     # Properties
-
+    
     def _get_application_deployment_policy(self):
         """ Get application_deployment_policy value.
 
             Notes:
                 Application deployment policy. Possible values are NONE, ZONE, .
 
-
+                
                 This attribute is named `applicationDeploymentPolicy` in VSD API.
-
+                
         """
         return self._application_deployment_policy
 
@@ -175,23 +175,23 @@ class NUDomain(NURESTObject):
             Notes:
                 Application deployment policy. Possible values are NONE, ZONE, .
 
-
+                
                 This attribute is named `applicationDeploymentPolicy` in VSD API.
-
+                
         """
         self._application_deployment_policy = value
 
     application_deployment_policy = property(_get_application_deployment_policy, _set_application_deployment_policy)
-
+    
     def _get_associated_multicast_channel_map_id(self):
         """ Get associated_multicast_channel_map_id value.
 
             Notes:
                 The ID of the Multi Cast Channel Map  this domain is associated with. This has to be set when  enableMultiCast is set to ENABLED
 
-
+                
                 This attribute is named `associatedMulticastChannelMapID` in VSD API.
-
+                
         """
         return self._associated_multicast_channel_map_id
 
@@ -201,23 +201,23 @@ class NUDomain(NURESTObject):
             Notes:
                 The ID of the Multi Cast Channel Map  this domain is associated with. This has to be set when  enableMultiCast is set to ENABLED
 
-
+                
                 This attribute is named `associatedMulticastChannelMapID` in VSD API.
-
+                
         """
         self._associated_multicast_channel_map_id = value
 
     associated_multicast_channel_map_id = property(_get_associated_multicast_channel_map_id, _set_associated_multicast_channel_map_id)
-
+    
     def _get_back_haul_route_distinguisher(self):
         """ Get back_haul_route_distinguisher value.
 
             Notes:
                 Route distinguisher associated with the BackHaul Service in dVRS. It is an Read-Only parameter that cannot be provided by the user. System generates this identifier automatically
 
-
+                
                 This attribute is named `backHaulRouteDistinguisher` in VSD API.
-
+                
         """
         return self._back_haul_route_distinguisher
 
@@ -227,23 +227,23 @@ class NUDomain(NURESTObject):
             Notes:
                 Route distinguisher associated with the BackHaul Service in dVRS. It is an Read-Only parameter that cannot be provided by the user. System generates this identifier automatically
 
-
+                
                 This attribute is named `backHaulRouteDistinguisher` in VSD API.
-
+                
         """
         self._back_haul_route_distinguisher = value
 
     back_haul_route_distinguisher = property(_get_back_haul_route_distinguisher, _set_back_haul_route_distinguisher)
-
+    
     def _get_back_haul_route_target(self):
         """ Get back_haul_route_target value.
 
             Notes:
                 Route target associated with the BackHaul Service in dVRS. It is an Read-Only parameter that cannot be provided by the user. System generates this identifier automatically
 
-
+                
                 This attribute is named `backHaulRouteTarget` in VSD API.
-
+                
         """
         return self._back_haul_route_target
 
@@ -253,23 +253,23 @@ class NUDomain(NURESTObject):
             Notes:
                 Route target associated with the BackHaul Service in dVRS. It is an Read-Only parameter that cannot be provided by the user. System generates this identifier automatically
 
-
+                
                 This attribute is named `backHaulRouteTarget` in VSD API.
-
+                
         """
         self._back_haul_route_target = value
 
     back_haul_route_target = property(_get_back_haul_route_target, _set_back_haul_route_target)
-
+    
     def _get_back_haul_vnid(self):
         """ Get back_haul_vnid value.
 
             Notes:
                 Current BackHaul Network's  globally unique  VXLAN network identifier generated by VSD
 
-
+                
                 This attribute is named `backHaulVNID` in VSD API.
-
+                
         """
         return self._back_haul_vnid
 
@@ -279,23 +279,23 @@ class NUDomain(NURESTObject):
             Notes:
                 Current BackHaul Network's  globally unique  VXLAN network identifier generated by VSD
 
-
+                
                 This attribute is named `backHaulVNID` in VSD API.
-
+                
         """
         self._back_haul_vnid = value
 
     back_haul_vnid = property(_get_back_haul_vnid, _set_back_haul_vnid)
-
+    
     def _get_customer_id(self):
         """ Get customer_id value.
 
             Notes:
                 The customerID that is created in the VSC and identifies this dVRS. This is auto-generated by VSD
 
-
+                
                 This attribute is named `customerID` in VSD API.
-
+                
         """
         return self._customer_id
 
@@ -305,21 +305,21 @@ class NUDomain(NURESTObject):
             Notes:
                 The customerID that is created in the VSC and identifies this dVRS. This is auto-generated by VSD
 
-
+                
                 This attribute is named `customerID` in VSD API.
-
+                
         """
         self._customer_id = value
 
     customer_id = property(_get_customer_id, _set_customer_id)
-
+    
     def _get_description(self):
         """ Get description value.
 
             Notes:
                 A description string of the domain that is provided by the user
 
-
+                
         """
         return self._description
 
@@ -329,21 +329,21 @@ class NUDomain(NURESTObject):
             Notes:
                 A description string of the domain that is provided by the user
 
-
+                
         """
         self._description = value
 
     description = property(_get_description, _set_description)
-
+    
     def _get_dhcp_behavior(self):
         """ Get dhcp_behavior value.
 
             Notes:
                 DHCPBehaviorType is an enum that indicates DHCP Behavior of VRS having VM's under this domain. Possible values are FLOOD, CONSUME ,RELAY Possible values are CONSUME, FLOOD, RELAY, .
 
-
+                
                 This attribute is named `DHCPBehavior` in VSD API.
-
+                
         """
         return self._dhcp_behavior
 
@@ -353,23 +353,23 @@ class NUDomain(NURESTObject):
             Notes:
                 DHCPBehaviorType is an enum that indicates DHCP Behavior of VRS having VM's under this domain. Possible values are FLOOD, CONSUME ,RELAY Possible values are CONSUME, FLOOD, RELAY, .
 
-
+                
                 This attribute is named `DHCPBehavior` in VSD API.
-
+                
         """
         self._dhcp_behavior = value
 
     dhcp_behavior = property(_get_dhcp_behavior, _set_dhcp_behavior)
-
+    
     def _get_dhcp_server_address(self):
         """ Get dhcp_server_address value.
 
             Notes:
                 when DHCPBehaviorType is RELAY, then DHCP Server IP Address needs to be set
 
-
+                
                 This attribute is named `DHCPServerAddress` in VSD API.
-
+                
         """
         return self._dhcp_server_address
 
@@ -379,23 +379,23 @@ class NUDomain(NURESTObject):
             Notes:
                 when DHCPBehaviorType is RELAY, then DHCP Server IP Address needs to be set
 
-
+                
                 This attribute is named `DHCPServerAddress` in VSD API.
-
+                
         """
         self._dhcp_server_address = value
 
     dhcp_server_address = property(_get_dhcp_server_address, _set_dhcp_server_address)
-
+    
     def _get_label_id(self):
         """ Get label_id value.
 
             Notes:
                 The label associated with the dVRS. This is a read only attribute
 
-
+                
                 This attribute is named `labelID` in VSD API.
-
+                
         """
         return self._label_id
 
@@ -405,23 +405,23 @@ class NUDomain(NURESTObject):
             Notes:
                 The label associated with the dVRS. This is a read only attribute
 
-
+                
                 This attribute is named `labelID` in VSD API.
-
+                
         """
         self._label_id = value
 
     label_id = property(_get_label_id, _set_label_id)
-
+    
     def _get_maintenance_mode(self):
         """ Get maintenance_mode value.
 
             Notes:
                 maintenanceMode is an enum that indicates if the Domain is accepting VM activation requests. Possible values are DISABLED, ENABLED and ENABLED_INHERITED Possible values are DISABLED, ENABLED, ENABLED_INHERITED, .
 
-
+                
                 This attribute is named `maintenanceMode` in VSD API.
-
+                
         """
         return self._maintenance_mode
 
@@ -431,21 +431,21 @@ class NUDomain(NURESTObject):
             Notes:
                 maintenanceMode is an enum that indicates if the Domain is accepting VM activation requests. Possible values are DISABLED, ENABLED and ENABLED_INHERITED Possible values are DISABLED, ENABLED, ENABLED_INHERITED, .
 
-
+                
                 This attribute is named `maintenanceMode` in VSD API.
-
+                
         """
         self._maintenance_mode = value
 
     maintenance_mode = property(_get_maintenance_mode, _set_maintenance_mode)
-
+    
     def _get_multicast(self):
         """ Get multicast value.
 
             Notes:
                 multicast is enum that indicates multicast policy on domain. Possible values are ENABLED ,DISABLED  and INHERITED Possible values are INHERITED, ENABLED, DISABLED, .
 
-
+                
         """
         return self._multicast
 
@@ -455,19 +455,19 @@ class NUDomain(NURESTObject):
             Notes:
                 multicast is enum that indicates multicast policy on domain. Possible values are ENABLED ,DISABLED  and INHERITED Possible values are INHERITED, ENABLED, DISABLED, .
 
-
+                
         """
         self._multicast = value
 
     multicast = property(_get_multicast, _set_multicast)
-
+    
     def _get_name(self):
         """ Get name value.
 
             Notes:
                 The name of the domain. Valid characters are  alphabets, numbers, space and hyphen( - ).
 
-
+                
         """
         return self._name
 
@@ -477,21 +477,21 @@ class NUDomain(NURESTObject):
             Notes:
                 The name of the domain. Valid characters are  alphabets, numbers, space and hyphen( - ).
 
-
+                
         """
         self._name = value
 
     name = property(_get_name, _set_name)
-
+    
     def _get_pat_enabled(self):
         """ Get pat_enabled value.
 
             Notes:
                 Indicates whether PAT is enabled for the subnets in this domain - ENABLED/DISABLED Possible values are INHERITED, ENABLED, DISABLED, .
 
-
+                
                 This attribute is named `PATEnabled` in VSD API.
-
+                
         """
         return self._pat_enabled
 
@@ -501,23 +501,23 @@ class NUDomain(NURESTObject):
             Notes:
                 Indicates whether PAT is enabled for the subnets in this domain - ENABLED/DISABLED Possible values are INHERITED, ENABLED, DISABLED, .
 
-
+                
                 This attribute is named `PATEnabled` in VSD API.
-
+                
         """
         self._pat_enabled = value
 
     pat_enabled = property(_get_pat_enabled, _set_pat_enabled)
-
+    
     def _get_route_distinguisher(self):
         """ Get route_distinguisher value.
 
             Notes:
                 Route distinguisher associated with the dVRS. It is an optional parameter that can be provided by the user or auto-managed by VSD. System generates this identifier automatically, if not provided
 
-
+                
                 This attribute is named `routeDistinguisher` in VSD API.
-
+                
         """
         return self._route_distinguisher
 
@@ -527,23 +527,23 @@ class NUDomain(NURESTObject):
             Notes:
                 Route distinguisher associated with the dVRS. It is an optional parameter that can be provided by the user or auto-managed by VSD. System generates this identifier automatically, if not provided
 
-
+                
                 This attribute is named `routeDistinguisher` in VSD API.
-
+                
         """
         self._route_distinguisher = value
 
     route_distinguisher = property(_get_route_distinguisher, _set_route_distinguisher)
-
+    
     def _get_route_target(self):
         """ Get route_target value.
 
             Notes:
                 Route target associated with the dVRS. It is an optional parameterthat can be provided by the user or auto-managed by VSDSystem generates this identifier automatically, if not provided
 
-
+                
                 This attribute is named `routeTarget` in VSD API.
-
+                
         """
         return self._route_target
 
@@ -553,23 +553,23 @@ class NUDomain(NURESTObject):
             Notes:
                 Route target associated with the dVRS. It is an optional parameterthat can be provided by the user or auto-managed by VSDSystem generates this identifier automatically, if not provided
 
-
+                
                 This attribute is named `routeTarget` in VSD API.
-
+                
         """
         self._route_target = value
 
     route_target = property(_get_route_target, _set_route_target)
-
+    
     def _get_service_id(self):
         """ Get service_id value.
 
             Notes:
                 The serviceID of the Virtual Router created in VSC and is associated with this object. This is auto-generated by VSD
 
-
+                
                 This attribute is named `serviceID` in VSD API.
-
+                
         """
         return self._service_id
 
@@ -579,23 +579,23 @@ class NUDomain(NURESTObject):
             Notes:
                 The serviceID of the Virtual Router created in VSC and is associated with this object. This is auto-generated by VSD
 
-
+                
                 This attribute is named `serviceID` in VSD API.
-
+                
         """
         self._service_id = value
 
     service_id = property(_get_service_id, _set_service_id)
-
+    
     def _get_template_id(self):
         """ Get template_id value.
 
             Notes:
                 The ID of the template that this domain was created from. This should be set when instantiating a domain
 
-
+                
                 This attribute is named `templateID` in VSD API.
-
+                
         """
         return self._template_id
 
@@ -605,23 +605,23 @@ class NUDomain(NURESTObject):
             Notes:
                 The ID of the template that this domain was created from. This should be set when instantiating a domain
 
-
+                
                 This attribute is named `templateID` in VSD API.
-
+                
         """
         self._template_id = value
 
     template_id = property(_get_template_id, _set_template_id)
-
+    
     def _get_tunnel_type(self):
         """ Get tunnel_type value.
 
             Notes:
                 Default Domain Tunnel Type .Possible values are VXLAN,GRE Possible values are DC_DEFAULT, GRE, VXLAN, .
 
-
+                
                 This attribute is named `tunnelType` in VSD API.
-
+                
         """
         return self._tunnel_type
 
@@ -631,9 +631,9 @@ class NUDomain(NURESTObject):
             Notes:
                 Default Domain Tunnel Type .Possible values are VXLAN,GRE Possible values are DC_DEFAULT, GRE, VXLAN, .
 
-
+                
                 This attribute is named `tunnelType` in VSD API.
-
+                
         """
         self._tunnel_type = value
 

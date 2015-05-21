@@ -72,7 +72,7 @@ class NURESTUser(NURESTBasicUser):
         super(NURESTUser, self).__init__()
 
         # Read/Write Attributes
-
+        
         self._avatar_data = None
         self._avatar_type = None
         self._email = None
@@ -84,7 +84,7 @@ class NURESTUser(NURESTBasicUser):
         self._password = None
         self._role = None
         self._user_name = None
-
+        
         self.expose_attribute(local_name=u"avatar_data", remote_name=u"avatarData", attribute_type=str, is_required=False, is_unique=False)
         self.expose_attribute(local_name=u"avatar_type", remote_name=u"avatarType", attribute_type=str, is_required=False, is_unique=False, choices=[u'BASE64', u'COMPUTEDURL', u'URL'])
         self.expose_attribute(local_name=u"email", remote_name=u"email", attribute_type=str, is_required=False, is_unique=False)
@@ -96,99 +96,99 @@ class NURESTUser(NURESTBasicUser):
         self.expose_attribute(local_name=u"password", remote_name=u"password", attribute_type=str, is_required=False, is_unique=False)
         self.expose_attribute(local_name=u"role", remote_name=u"role", attribute_type=str, is_required=False, is_unique=False)
         self.expose_attribute(local_name=u"user_name", remote_name=u"userName", attribute_type=str, is_required=False, is_unique=False)
-
+        
         # Fetchers
-
+        
         self.application_services = NUApplicationServicesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.auto_discovered_gateways = NUAutoDiscoveredGatewaysFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.domains = NUDomainsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.egress_acl_entry_templates = NUEgressACLEntryTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.egress_acl_templates = NUEgressACLTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.egress_qos_policies = NUEgressQOSPoliciesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.enterprise_profiles = NUEnterpriseProfilesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.enterprises = NUEnterprisesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.floating_ips = NUFloatingIpsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.gateways = NUGatewaysFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.gateway_templates = NUGatewayTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.global_metadatas = NUGlobalMetadatasFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.infrastructure_gateway_profiles = NUInfrastructureGatewayProfilesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.infrastructure_port_profiles = NUInfrastructurePortProfilesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.ingress_acl_entry_templates = NUIngressACLEntryTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.ingress_acl_templates = NUIngressACLTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.l2_domains = NUL2DomainsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.licenses = NULicensesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.mirror_destinations = NUMirrorDestinationsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.multi_cast_channel_maps = NUMultiCastChannelMapsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.network_layouts = NUNetworkLayoutsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.ns_gateways = NUNSGatewaysFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.ns_gateway_templates = NUNSGatewayTemplatesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.patnat_pools = NUPATNATPoolsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.policy_groups = NUPolicyGroupsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.rate_limiters = NURateLimitersFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.redirection_targets = NURedirectionTargetsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.redundancy_groups = NURedundancyGroupsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.shared_network_resources = NUSharedNetworkResourcesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.static_routes = NUStaticRoutesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.stats_collector_infos = NUStatsCollectorInfosFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.subnets = NUSubnetsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.system_configs = NUSystemConfigsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.tcas = NUTCAsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.vm_interfaces = NUVMInterfacesFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.vms = NUVMsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.vsps = NUVSPsFetcher.fetcher_with_object(parent_object=self)
-
+        
         self.zones = NUZonesFetcher.fetcher_with_object(parent_object=self)
-
+        
 
         self._compute_args(**kwargs)
 
     # Properties
-
+    
     def _get_avatar_data(self):
         """ Get avatar_data value.
 
             Notes:
                 URL to the avatar data associated with the enterprise. If the avatarType is URL then value of avatarData should an URL of the image. If the avatarType BASE64 then avatarData should be BASE64 encoded value of the image
 
-
+                
                 This attribute is named `avatarData` in VSD API.
-
+                
         """
         return self._avatar_data
 
@@ -198,23 +198,23 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 URL to the avatar data associated with the enterprise. If the avatarType is URL then value of avatarData should an URL of the image. If the avatarType BASE64 then avatarData should be BASE64 encoded value of the image
 
-
+                
                 This attribute is named `avatarData` in VSD API.
-
+                
         """
         self._avatar_data = value
 
     avatar_data = property(_get_avatar_data, _set_avatar_data)
-
+    
     def _get_avatar_type(self):
         """ Get avatar_type value.
 
             Notes:
                 Avatar type - URL or BASE64 Possible values are URL, BASE64, COMPUTEDURL, .
 
-
+                
                 This attribute is named `avatarType` in VSD API.
-
+                
         """
         return self._avatar_type
 
@@ -224,21 +224,21 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Avatar type - URL or BASE64 Possible values are URL, BASE64, COMPUTEDURL, .
 
-
+                
                 This attribute is named `avatarType` in VSD API.
-
+                
         """
         self._avatar_type = value
 
     avatar_type = property(_get_avatar_type, _set_avatar_type)
-
+    
     def _get_email(self):
         """ Get email value.
 
             Notes:
                 Email address of the user
 
-
+                
         """
         return self._email
 
@@ -248,21 +248,21 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Email address of the user
 
-
+                
         """
         self._email = value
 
     email = property(_get_email, _set_email)
-
+    
     def _get_enterprise_id(self):
         """ Get enterprise_id value.
 
             Notes:
                 Identifier of the enterprise.
 
-
+                
                 This attribute is named `enterpriseID` in VSD API.
-
+                
         """
         return self._enterprise_id
 
@@ -272,23 +272,23 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Identifier of the enterprise.
 
-
+                
                 This attribute is named `enterpriseID` in VSD API.
-
+                
         """
         self._enterprise_id = value
 
     enterprise_id = property(_get_enterprise_id, _set_enterprise_id)
-
+    
     def _get_enterprise_name(self):
         """ Get enterprise_name value.
 
             Notes:
                 Name of the enterprise.
 
-
+                
                 This attribute is named `enterpriseName` in VSD API.
-
+                
         """
         return self._enterprise_name
 
@@ -298,23 +298,23 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Name of the enterprise.
 
-
+                
                 This attribute is named `enterpriseName` in VSD API.
-
+                
         """
         self._enterprise_name = value
 
     enterprise_name = property(_get_enterprise_name, _set_enterprise_name)
-
+    
     def _get_first_name(self):
         """ Get first_name value.
 
             Notes:
                 First name of the user
 
-
+                
                 This attribute is named `firstName` in VSD API.
-
+                
         """
         return self._first_name
 
@@ -324,23 +324,23 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 First name of the user
 
-
+                
                 This attribute is named `firstName` in VSD API.
-
+                
         """
         self._first_name = value
 
     first_name = property(_get_first_name, _set_first_name)
-
+    
     def _get_last_name(self):
         """ Get last_name value.
 
             Notes:
                 Last name of the user
 
-
+                
                 This attribute is named `lastName` in VSD API.
-
+                
         """
         return self._last_name
 
@@ -350,23 +350,23 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Last name of the user
 
-
+                
                 This attribute is named `lastName` in VSD API.
-
+                
         """
         self._last_name = value
 
     last_name = property(_get_last_name, _set_last_name)
-
+    
     def _get_mobile_number(self):
         """ Get mobile_number value.
 
             Notes:
                 Mobile Number of the user
 
-
+                
                 This attribute is named `mobileNumber` in VSD API.
-
+                
         """
         return self._mobile_number
 
@@ -376,21 +376,21 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Mobile Number of the user
 
-
+                
                 This attribute is named `mobileNumber` in VSD API.
-
+                
         """
         self._mobile_number = value
 
     mobile_number = property(_get_mobile_number, _set_mobile_number)
-
+    
     def _get_password(self):
         """ Get password value.
 
             Notes:
                 User password stored as a hash (SHA-1 encrpted)
 
-
+                
         """
         return self._password
 
@@ -400,19 +400,19 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 User password stored as a hash (SHA-1 encrpted)
 
-
+                
         """
         self._password = value
 
     password = property(_get_password, _set_password)
-
+    
     def _get_role(self):
         """ Get role value.
 
             Notes:
                 Role of the user.
 
-
+                
         """
         return self._role
 
@@ -422,21 +422,21 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Role of the user.
 
-
+                
         """
         self._role = value
 
     role = property(_get_role, _set_role)
-
+    
     def _get_user_name(self):
         """ Get user_name value.
 
             Notes:
                 Unique Username of the user. Valid characters are alphabets, numbers and hyphen( - ).
 
-
+                
                 This attribute is named `userName` in VSD API.
-
+                
         """
         return self._user_name
 
@@ -446,14 +446,14 @@ class NURESTUser(NURESTBasicUser):
             Notes:
                 Unique Username of the user. Valid characters are alphabets, numbers and hyphen( - ).
 
-
+                
                 This attribute is named `userName` in VSD API.
-
+                
         """
         self._user_name = value
 
     user_name = property(_get_user_name, _set_user_name)
-
+    
     # Methods
 
     @classmethod

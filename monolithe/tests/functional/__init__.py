@@ -2,8 +2,12 @@
 
 import os
 
+from difflib import Differ
+
 from unittest2 import TestCase
 from monolithe.utils.parse import ParsingUtils
+
+from pprint import pprint
 
 
 class FunctionalTest(TestCase):
@@ -72,7 +76,10 @@ class FunctionalTest(TestCase):
         valid_content = self._read_file(self.get_static_autogenerates_path(filename))
         expected_content = self._read_file(self.get_tmp_autogenerates_path(filename))
 
-        self.assertEquals(valid_content, expected_content, message)
+        d = Differ()
+        result = list(d.compare(valid_content, expected_content))
+        pprint(result)
+        self.assertEquals(valid_content, expected_content, '%s\n%s' % message)
 
     # Utilities
 
@@ -82,4 +89,4 @@ class FunctionalTest(TestCase):
         content = file.read()
         file.close()
 
-        return content
+        return content.splitlines(1)
