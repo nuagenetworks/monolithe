@@ -5,6 +5,11 @@
 # from .command import Command
 # from .specsvalidator.apivalidator import APIValidator
 
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+requests.packages.urllib3.disable_warnings()
+
 
 ## Monkey patch to use PROTOCOL_TLSv1 by default in requests
 from requests.packages.urllib3.poolmanager import PoolManager
