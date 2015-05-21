@@ -143,6 +143,9 @@ class Specification(dict):
 
             attribute = self.get_default_attribute()
 
+            if 'description' in attribute_info:
+                attribute['description'] = attribute_info['description']
+
             if 'required' in attribute_info and attribute_info['required'] == 'true':
                 attribute['required'] = True
 

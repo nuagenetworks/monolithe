@@ -10,6 +10,9 @@ class FunctionalTest(TestCase):
     """ Define a Functional Test Case
 
     """
+    TMP_PATH = './tmp'
+    _static_path = "%s/monolithe/tests" % os.getcwd()
+
     def __init__(self, methodName='runTest'):
         """ Initializes
 
@@ -29,6 +32,19 @@ class FunctionalTest(TestCase):
 
         return '%s/monolithe/tests/static/specifications' % os.getcwd()
 
+    @classmethod
+    def get_static_autogenerates_path(cls, filename):
+        """ Returns swagger path """
+
+        return '%s/monolithe/tests/static/vsdk/autogenerates/%s.py' % (os.getcwd(), filename)
+
+    @classmethod
+    def get_tmp_autogenerates_path(cls, filename):
+        """ Returns swagger path """
+
+        return '%s/3.1/vsdk/autogenerates/%s.py' % (cls.TMP_PATH, filename)
+
+    # Assertions
 
     def assertOutputEqual(self, d1, d2, parent_key=None):
         """ Compare two dictionaries
@@ -48,3 +64,22 @@ class FunctionalTest(TestCase):
                 self.assertEqual(value.sort(), value2.sort())
             else:
                 self.assertEqual(value, value2, '%s != %s for key %s of %s' % (value, value2, key, parent_key))
+
+    def assertFileOutputEqual(self, filename, message):
+        """
+
+        """
+        valid_content = self._read_file(self.get_static_autogenerates_path(filename))
+        expected_content = self._read_file(self.get_tmp_autogenerates_path(filename))
+
+        self.assertEquals(valid_content, expected_content, message)
+
+    # Utilities
+
+    def _read_file(self, path):
+        """ Read file at path and returns its content """
+        file = open(path, 'r')
+        content = file.read()
+        file.close()
+
+        return content

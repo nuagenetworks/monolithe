@@ -5,34 +5,34 @@
 # Definition of the enterprise object. This is the top level object that represents an enterprise or organization.
 
 
-from ..fetchers import NUDSCPForwardingClassTablesFetcher
-from ..fetchers import NUApplicationServicesFetcher
-from ..fetchers import NUNSGatewaysFetcher
-from ..fetchers import NUL2DomainTemplatesFetcher
-from ..fetchers import NUVMsFetcher
-from ..fetchers import NUDomainsFetcher
-from ..fetchers import NURedundancyGroupsFetcher
-from ..fetchers import NUEnterpriseNetworksFetcher
-from ..fetchers import NURateLimitersFetcher
-from ..fetchers import NUInfrastructurePortProfilesFetcher
+from ..fetchers import NUAlarmsFetcher
+from ..fetchers import NUAlarmsFetcher
 from ..fetchers import NUAppsFetcher
-from ..fetchers import NUAlarmsFetcher
-from ..fetchers import NUAlarmsFetcher
+from ..fetchers import NUApplicationServicesFetcher
+from ..fetchers import NUDomainsFetcher
+from ..fetchers import NUDomainTemplatesFetcher
+from ..fetchers import NUDSCPForwardingClassTablesFetcher
+from ..fetchers import NUEgressQOSPoliciesFetcher
+from ..fetchers import NUEnterpriseNetworksFetcher
+from ..fetchers import NUEventLogsFetcher
+from ..fetchers import NUGatewaysFetcher
+from ..fetchers import NUGatewayTemplatesFetcher
+from ..fetchers import NUGroupsFetcher
+from ..fetchers import NUInfrastructurePortProfilesFetcher
+from ..fetchers import NUJobsFetcher
+from ..fetchers import NUL2DomainsFetcher
+from ..fetchers import NUL2DomainTemplatesFetcher
+from ..fetchers import NULDAPConfigurationsFetcher
+from ..fetchers import NUMultiCastChannelMapsFetcher
+from ..fetchers import NUNSGatewaysFetcher
 from ..fetchers import NUNSGatewayTemplatesFetcher
 from ..fetchers import NUPATNATPoolsFetcher
-from ..fetchers import NUDomainTemplatesFetcher
-from ..fetchers import NUL2DomainsFetcher
-from ..fetchers import NUMultiCastChannelMapsFetcher
+from ..fetchers import NUPublicNetworkMacrosFetcher
+from ..fetchers import NURateLimitersFetcher
+from ..fetchers import NURedundancyGroupsFetcher
 from ..fetchers import NUUsersFetcher
-from ..fetchers import NULDAPConfigurationsFetcher
-from ..fetchers import NUEventLogsFetcher
-from ..fetchers import NUEgressQOSPoliciesFetcher
-from ..fetchers import NUJobsFetcher
-from ..fetchers import NUGatewaysFetcher
-from ..fetchers import NUGroupsFetcher
-from ..fetchers import NUGatewayTemplatesFetcher
+from ..fetchers import NUVMsFetcher
 from bambou import NURESTObject
-from time import time
 
 
 class NUEnterprise(NURESTObject):
@@ -65,92 +65,120 @@ class NUEnterprise(NURESTObject):
 
         # Read/Write Attributes
 
-        self._allow_gateway_management = None
-        self._dhcp_lease_interval = None
-        self._floating_ips_quota = None
-        self._enterprise_profile_id = None
-        self._description = None
-        self._avatar_type = None
-        self._allow_trusted_forwarding_class = None
-        self._customer_id = None
-        self._name = None
-        self._avatar_data = None
-        self._allowed_forwarding_classes = None
-        self._floating_ips_used = None
         self._allow_advanced_qos_configuration = None
+        self._allow_gateway_management = None
+        self._allow_trusted_forwarding_class = None
+        self._allowed_forwarding_classes = None
+        self._avatar_data = None
+        self._avatar_type = None
+        self._customer_id = None
+        self._description = None
+        self._dhcp_lease_interval = None
+        self._enterprise_profile_id = None
+        self._floating_ips_quota = None
+        self._floating_ips_used = None
+        self._name = None
 
-        self.expose_attribute(local_name=u"allow_gateway_management", remote_name=u"allowGatewayManagement", attribute_type=bool, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"dhcp_lease_interval", remote_name=u"DHCPLeaseInterval", attribute_type=int, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"floating_ips_quota", remote_name=u"floatingIPsQuota", attribute_type=int, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"enterprise_profile_id", remote_name=u"enterpriseProfileID", attribute_type=str, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"avatar_type", remote_name=u"avatarType", attribute_type=str, is_required=False, is_unique=False, choices=[u'BASE64', u'COMPUTEDURL', u'URL'])
-        self.expose_attribute(local_name=u"allow_trusted_forwarding_class", remote_name=u"allowTrustedForwardingClass", attribute_type=bool, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"customer_id", remote_name=u"customerID", attribute_type=long, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str, is_required=True, is_unique=False)
-        self.expose_attribute(local_name=u"avatar_data", remote_name=u"avatarData", attribute_type=str, is_required=False, is_unique=False)
-        self.expose_attribute(local_name=u"allowed_forwarding_classes", remote_name=u"allowedForwardingClasses", attribute_type=str, is_required=False, is_unique=False, choices=[u'A', u'B', u'C', u'D', u'E', u'F', u'G', u'H', u'NONE'])
-        self.expose_attribute(local_name=u"floating_ips_used", remote_name=u"floatingIPsUsed", attribute_type=int, is_required=False, is_unique=False)
         self.expose_attribute(local_name=u"allow_advanced_qos_configuration", remote_name=u"allowAdvancedQOSConfiguration", attribute_type=bool, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"allow_gateway_management", remote_name=u"allowGatewayManagement", attribute_type=bool, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"allow_trusted_forwarding_class", remote_name=u"allowTrustedForwardingClass", attribute_type=bool, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"allowed_forwarding_classes", remote_name=u"allowedForwardingClasses", attribute_type=str, is_required=False, is_unique=False, choices=[u'A', u'B', u'C', u'D', u'E', u'F', u'G', u'H', u'NONE'])
+        self.expose_attribute(local_name=u"avatar_data", remote_name=u"avatarData", attribute_type=str, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"avatar_type", remote_name=u"avatarType", attribute_type=str, is_required=False, is_unique=False, choices=[u'BASE64', u'COMPUTEDURL', u'URL'])
+        self.expose_attribute(local_name=u"customer_id", remote_name=u"customerID", attribute_type=long, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"description", remote_name=u"description", attribute_type=str, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"dhcp_lease_interval", remote_name=u"DHCPLeaseInterval", attribute_type=int, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"enterprise_profile_id", remote_name=u"enterpriseProfileID", attribute_type=str, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"floating_ips_quota", remote_name=u"floatingIPsQuota", attribute_type=int, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"floating_ips_used", remote_name=u"floatingIPsUsed", attribute_type=int, is_required=False, is_unique=False)
+        self.expose_attribute(local_name=u"name", remote_name=u"name", attribute_type=str, is_required=True, is_unique=False)
 
         # Fetchers
 
-        self.dscp_forwarding_class_tables = NUDSCPForwardingClassTablesFetcher.fetcher_with_object(parent_object=self)
+        self.alarms = NUAlarmsFetcher.fetcher_with_object(parent_object=self)
 
-        self.application_services = NUApplicationServicesFetcher.fetcher_with_object(parent_object=self)
-
-        self.ns_gateways = NUNSGatewaysFetcher.fetcher_with_object(parent_object=self)
-
-        self.l2_domain_templates = NUL2DomainTemplatesFetcher.fetcher_with_object(parent_object=self)
-
-        self.vms = NUVMsFetcher.fetcher_with_object(parent_object=self)
-
-        self.domains = NUDomainsFetcher.fetcher_with_object(parent_object=self)
-
-        self.redundancy_groups = NURedundancyGroupsFetcher.fetcher_with_object(parent_object=self)
-
-        self.enterprise_networks = NUEnterpriseNetworksFetcher.fetcher_with_object(parent_object=self)
-
-        self.rate_limiters = NURateLimitersFetcher.fetcher_with_object(parent_object=self)
-
-        self.infrastructure_port_profiles = NUInfrastructurePortProfilesFetcher.fetcher_with_object(parent_object=self)
+        self.all_alarms = NUAlarmsFetcher.fetcher_with_object(parent_object=self)
 
         self.apps = NUAppsFetcher.fetcher_with_object(parent_object=self)
 
-        self.alarms = NUAlarmsFetcher.fetcher_with_object(parent_object=self)
+        self.application_services = NUApplicationServicesFetcher.fetcher_with_object(parent_object=self)
 
-        self.alarms = NUAlarmsFetcher.fetcher_with_object(parent_object=self)
+        self.domains = NUDomainsFetcher.fetcher_with_object(parent_object=self)
+
+        self.domain_templates = NUDomainTemplatesFetcher.fetcher_with_object(parent_object=self)
+
+        self.dscp_forwarding_class_tables = NUDSCPForwardingClassTablesFetcher.fetcher_with_object(parent_object=self)
+
+        self.egress_qos_policies = NUEgressQOSPoliciesFetcher.fetcher_with_object(parent_object=self)
+
+        self.enterprise_networks = NUEnterpriseNetworksFetcher.fetcher_with_object(parent_object=self)
+
+        self.event_logs = NUEventLogsFetcher.fetcher_with_object(parent_object=self)
+
+        self.gateways = NUGatewaysFetcher.fetcher_with_object(parent_object=self)
+
+        self.gateway_templates = NUGatewayTemplatesFetcher.fetcher_with_object(parent_object=self)
+
+        self.groups = NUGroupsFetcher.fetcher_with_object(parent_object=self)
+
+        self.infrastructure_port_profiles = NUInfrastructurePortProfilesFetcher.fetcher_with_object(parent_object=self)
+
+        self.jobs = NUJobsFetcher.fetcher_with_object(parent_object=self)
+
+        self.l2_domains = NUL2DomainsFetcher.fetcher_with_object(parent_object=self)
+
+        self.l2_domain_templates = NUL2DomainTemplatesFetcher.fetcher_with_object(parent_object=self)
+
+        self.ldap_configurations = NULDAPConfigurationsFetcher.fetcher_with_object(parent_object=self)
+
+        self.multi_cast_channel_maps = NUMultiCastChannelMapsFetcher.fetcher_with_object(parent_object=self)
+
+        self.ns_gateways = NUNSGatewaysFetcher.fetcher_with_object(parent_object=self)
 
         self.ns_gateway_templates = NUNSGatewayTemplatesFetcher.fetcher_with_object(parent_object=self)
 
         self.patnat_pools = NUPATNATPoolsFetcher.fetcher_with_object(parent_object=self)
 
-        self.domain_templates = NUDomainTemplatesFetcher.fetcher_with_object(parent_object=self)
+        self.public_network_macros = NUPublicNetworkMacrosFetcher.fetcher_with_object(parent_object=self)
 
-        self.l2_domains = NUL2DomainsFetcher.fetcher_with_object(parent_object=self)
+        self.rate_limiters = NURateLimitersFetcher.fetcher_with_object(parent_object=self)
 
-        self.multi_cast_channel_maps = NUMultiCastChannelMapsFetcher.fetcher_with_object(parent_object=self)
+        self.redundancy_groups = NURedundancyGroupsFetcher.fetcher_with_object(parent_object=self)
 
         self.users = NUUsersFetcher.fetcher_with_object(parent_object=self)
 
-        self.ldap_configurations = NULDAPConfigurationsFetcher.fetcher_with_object(parent_object=self)
-
-        self.event_logs = NUEventLogsFetcher.fetcher_with_object(parent_object=self)
-
-        self.egress_qos_policies = NUEgressQOSPoliciesFetcher.fetcher_with_object(parent_object=self)
-
-        self.jobs = NUJobsFetcher.fetcher_with_object(parent_object=self)
-
-        self.gateways = NUGatewaysFetcher.fetcher_with_object(parent_object=self)
-
-        self.groups = NUGroupsFetcher.fetcher_with_object(parent_object=self)
-
-        self.gateway_templates = NUGatewayTemplatesFetcher.fetcher_with_object(parent_object=self)
+        self.vms = NUVMsFetcher.fetcher_with_object(parent_object=self)
 
 
         self._compute_args(**kwargs)
 
     # Properties
+
+    def _get_allow_advanced_qos_configuration(self):
+        """ Get allow_advanced_qos_configuration value.
+
+            Notes:
+                Controls whether this enterprise has access to advanced QoS settings
+
+
+                This attribute is named `allowAdvancedQOSConfiguration` in VSD API.
+
+        """
+        return self._allow_advanced_qos_configuration
+
+    def _set_allow_advanced_qos_configuration(self, value):
+        """ Set allow_advanced_qos_configuration value.
+
+            Notes:
+                Controls whether this enterprise has access to advanced QoS settings
+
+
+                This attribute is named `allowAdvancedQOSConfiguration` in VSD API.
+
+        """
+        self._allow_advanced_qos_configuration = value
+
+    allow_advanced_qos_configuration = property(_get_allow_advanced_qos_configuration, _set_allow_advanced_qos_configuration)
 
     def _get_allow_gateway_management(self):
         """ Get allow_gateway_management value.
@@ -178,132 +206,6 @@ class NUEnterprise(NURESTObject):
 
     allow_gateway_management = property(_get_allow_gateway_management, _set_allow_gateway_management)
 
-    def _get_dhcp_lease_interval(self):
-        """ Get dhcp_lease_interval value.
-
-            Notes:
-                DHCP Lease Interval (in hrs) to be used by an enterprise.
-
-
-                This attribute is named `DHCPLeaseInterval` in VSD API.
-
-        """
-        return self._dhcp_lease_interval
-
-    def _set_dhcp_lease_interval(self, value):
-        """ Set dhcp_lease_interval value.
-
-            Notes:
-                DHCP Lease Interval (in hrs) to be used by an enterprise.
-
-
-                This attribute is named `DHCPLeaseInterval` in VSD API.
-
-        """
-        self._dhcp_lease_interval = value
-
-    dhcp_lease_interval = property(_get_dhcp_lease_interval, _set_dhcp_lease_interval)
-
-    def _get_floating_ips_quota(self):
-        """ Get floating_ips_quota value.
-
-            Notes:
-                Quota set for the number of floating IPs to be used by an enterprise.
-
-
-                This attribute is named `floatingIPsQuota` in VSD API.
-
-        """
-        return self._floating_ips_quota
-
-    def _set_floating_ips_quota(self, value):
-        """ Set floating_ips_quota value.
-
-            Notes:
-                Quota set for the number of floating IPs to be used by an enterprise.
-
-
-                This attribute is named `floatingIPsQuota` in VSD API.
-
-        """
-        self._floating_ips_quota = value
-
-    floating_ips_quota = property(_get_floating_ips_quota, _set_floating_ips_quota)
-
-    def _get_enterprise_profile_id(self):
-        """ Get enterprise_profile_id value.
-
-            Notes:
-                Enterprise profile id for this enterprise
-
-
-                This attribute is named `enterpriseProfileID` in VSD API.
-
-        """
-        return self._enterprise_profile_id
-
-    def _set_enterprise_profile_id(self, value):
-        """ Set enterprise_profile_id value.
-
-            Notes:
-                Enterprise profile id for this enterprise
-
-
-                This attribute is named `enterpriseProfileID` in VSD API.
-
-        """
-        self._enterprise_profile_id = value
-
-    enterprise_profile_id = property(_get_enterprise_profile_id, _set_enterprise_profile_id)
-
-    def _get_description(self):
-        """ Get description value.
-
-            Notes:
-                A description of the enterprise
-
-
-        """
-        return self._description
-
-    def _set_description(self, value):
-        """ Set description value.
-
-            Notes:
-                A description of the enterprise
-
-
-        """
-        self._description = value
-
-    description = property(_get_description, _set_description)
-
-    def _get_avatar_type(self):
-        """ Get avatar_type value.
-
-            Notes:
-                Avatar type - URL or BASE64 Possible values are URL, BASE64, COMPUTEDURL, .
-
-
-                This attribute is named `avatarType` in VSD API.
-
-        """
-        return self._avatar_type
-
-    def _set_avatar_type(self, value):
-        """ Set avatar_type value.
-
-            Notes:
-                Avatar type - URL or BASE64 Possible values are URL, BASE64, COMPUTEDURL, .
-
-
-                This attribute is named `avatarType` in VSD API.
-
-        """
-        self._avatar_type = value
-
-    avatar_type = property(_get_avatar_type, _set_avatar_type)
-
     def _get_allow_trusted_forwarding_class(self):
         """ Get allow_trusted_forwarding_class value.
 
@@ -329,80 +231,6 @@ class NUEnterprise(NURESTObject):
         self._allow_trusted_forwarding_class = value
 
     allow_trusted_forwarding_class = property(_get_allow_trusted_forwarding_class, _set_allow_trusted_forwarding_class)
-
-    def _get_customer_id(self):
-        """ Get customer_id value.
-
-            Notes:
-                CustomerID that is used by VSC to identify this enterprise. This is a read only attribute.
-
-
-                This attribute is named `customerID` in VSD API.
-
-        """
-        return self._customer_id
-
-    def _set_customer_id(self, value):
-        """ Set customer_id value.
-
-            Notes:
-                CustomerID that is used by VSC to identify this enterprise. This is a read only attribute.
-
-
-                This attribute is named `customerID` in VSD API.
-
-        """
-        self._customer_id = value
-
-    customer_id = property(_get_customer_id, _set_customer_id)
-
-    def _get_name(self):
-        """ Get name value.
-
-            Notes:
-                The unique name of the enterprise. Valid characters are alphabets, numbers, space and hyphen( - ).
-
-
-        """
-        return self._name
-
-    def _set_name(self, value):
-        """ Set name value.
-
-            Notes:
-                The unique name of the enterprise. Valid characters are alphabets, numbers, space and hyphen( - ).
-
-
-        """
-        self._name = value
-
-    name = property(_get_name, _set_name)
-
-    def _get_avatar_data(self):
-        """ Get avatar_data value.
-
-            Notes:
-                URL to the avatar data associated with the enterprise. If the avatarType is URL then value of avatarData should an URL of the image. If the avatarType BASE64 then avatarData should be BASE64 encoded value of the image
-
-
-                This attribute is named `avatarData` in VSD API.
-
-        """
-        return self._avatar_data
-
-    def _set_avatar_data(self, value):
-        """ Set avatar_data value.
-
-            Notes:
-                URL to the avatar data associated with the enterprise. If the avatarType is URL then value of avatarData should an URL of the image. If the avatarType BASE64 then avatarData should be BASE64 encoded value of the image
-
-
-                This attribute is named `avatarData` in VSD API.
-
-        """
-        self._avatar_data = value
-
-    avatar_data = property(_get_avatar_data, _set_avatar_data)
 
     def _get_allowed_forwarding_classes(self):
         """ Get allowed_forwarding_classes value.
@@ -430,6 +258,184 @@ class NUEnterprise(NURESTObject):
 
     allowed_forwarding_classes = property(_get_allowed_forwarding_classes, _set_allowed_forwarding_classes)
 
+    def _get_avatar_data(self):
+        """ Get avatar_data value.
+
+            Notes:
+                URL to the avatar data associated with the enterprise. If the avatarType is URL then value of avatarData should an URL of the image. If the avatarType BASE64 then avatarData should be BASE64 encoded value of the image
+
+
+                This attribute is named `avatarData` in VSD API.
+
+        """
+        return self._avatar_data
+
+    def _set_avatar_data(self, value):
+        """ Set avatar_data value.
+
+            Notes:
+                URL to the avatar data associated with the enterprise. If the avatarType is URL then value of avatarData should an URL of the image. If the avatarType BASE64 then avatarData should be BASE64 encoded value of the image
+
+
+                This attribute is named `avatarData` in VSD API.
+
+        """
+        self._avatar_data = value
+
+    avatar_data = property(_get_avatar_data, _set_avatar_data)
+
+    def _get_avatar_type(self):
+        """ Get avatar_type value.
+
+            Notes:
+                Avatar type - URL or BASE64 Possible values are URL, BASE64, COMPUTEDURL, .
+
+
+                This attribute is named `avatarType` in VSD API.
+
+        """
+        return self._avatar_type
+
+    def _set_avatar_type(self, value):
+        """ Set avatar_type value.
+
+            Notes:
+                Avatar type - URL or BASE64 Possible values are URL, BASE64, COMPUTEDURL, .
+
+
+                This attribute is named `avatarType` in VSD API.
+
+        """
+        self._avatar_type = value
+
+    avatar_type = property(_get_avatar_type, _set_avatar_type)
+
+    def _get_customer_id(self):
+        """ Get customer_id value.
+
+            Notes:
+                CustomerID that is used by VSC to identify this enterprise. This is a read only attribute.
+
+
+                This attribute is named `customerID` in VSD API.
+
+        """
+        return self._customer_id
+
+    def _set_customer_id(self, value):
+        """ Set customer_id value.
+
+            Notes:
+                CustomerID that is used by VSC to identify this enterprise. This is a read only attribute.
+
+
+                This attribute is named `customerID` in VSD API.
+
+        """
+        self._customer_id = value
+
+    customer_id = property(_get_customer_id, _set_customer_id)
+
+    def _get_description(self):
+        """ Get description value.
+
+            Notes:
+                A description of the enterprise
+
+
+        """
+        return self._description
+
+    def _set_description(self, value):
+        """ Set description value.
+
+            Notes:
+                A description of the enterprise
+
+
+        """
+        self._description = value
+
+    description = property(_get_description, _set_description)
+
+    def _get_dhcp_lease_interval(self):
+        """ Get dhcp_lease_interval value.
+
+            Notes:
+                DHCP Lease Interval (in hrs) to be used by an enterprise.
+
+
+                This attribute is named `DHCPLeaseInterval` in VSD API.
+
+        """
+        return self._dhcp_lease_interval
+
+    def _set_dhcp_lease_interval(self, value):
+        """ Set dhcp_lease_interval value.
+
+            Notes:
+                DHCP Lease Interval (in hrs) to be used by an enterprise.
+
+
+                This attribute is named `DHCPLeaseInterval` in VSD API.
+
+        """
+        self._dhcp_lease_interval = value
+
+    dhcp_lease_interval = property(_get_dhcp_lease_interval, _set_dhcp_lease_interval)
+
+    def _get_enterprise_profile_id(self):
+        """ Get enterprise_profile_id value.
+
+            Notes:
+                Enterprise profile id for this enterprise
+
+
+                This attribute is named `enterpriseProfileID` in VSD API.
+
+        """
+        return self._enterprise_profile_id
+
+    def _set_enterprise_profile_id(self, value):
+        """ Set enterprise_profile_id value.
+
+            Notes:
+                Enterprise profile id for this enterprise
+
+
+                This attribute is named `enterpriseProfileID` in VSD API.
+
+        """
+        self._enterprise_profile_id = value
+
+    enterprise_profile_id = property(_get_enterprise_profile_id, _set_enterprise_profile_id)
+
+    def _get_floating_ips_quota(self):
+        """ Get floating_ips_quota value.
+
+            Notes:
+                Quota set for the number of floating IPs to be used by an enterprise.
+
+
+                This attribute is named `floatingIPsQuota` in VSD API.
+
+        """
+        return self._floating_ips_quota
+
+    def _set_floating_ips_quota(self, value):
+        """ Set floating_ips_quota value.
+
+            Notes:
+                Quota set for the number of floating IPs to be used by an enterprise.
+
+
+                This attribute is named `floatingIPsQuota` in VSD API.
+
+        """
+        self._floating_ips_quota = value
+
+    floating_ips_quota = property(_get_floating_ips_quota, _set_floating_ips_quota)
+
     def _get_floating_ips_used(self):
         """ Get floating_ips_used value.
 
@@ -456,28 +462,25 @@ class NUEnterprise(NURESTObject):
 
     floating_ips_used = property(_get_floating_ips_used, _set_floating_ips_used)
 
-    def _get_allow_advanced_qos_configuration(self):
-        """ Get allow_advanced_qos_configuration value.
+    def _get_name(self):
+        """ Get name value.
 
             Notes:
-                Controls whether this enterprise has access to advanced QoS settings
+                The unique name of the enterprise. Valid characters are alphabets, numbers, space and hyphen( - ).
 
-
-                This attribute is named `allowAdvancedQOSConfiguration` in VSD API.
 
         """
-        return self._allow_advanced_qos_configuration
+        return self._name
 
-    def _set_allow_advanced_qos_configuration(self, value):
-        """ Set allow_advanced_qos_configuration value.
+    def _set_name(self, value):
+        """ Set name value.
 
             Notes:
-                Controls whether this enterprise has access to advanced QoS settings
+                The unique name of the enterprise. Valid characters are alphabets, numbers, space and hyphen( - ).
 
-
-                This attribute is named `allowAdvancedQOSConfiguration` in VSD API.
 
         """
-        self._allow_advanced_qos_configuration = value
+        self._name = value
 
-    allow_advanced_qos_configuration = property(_get_allow_advanced_qos_configuration, _set_allow_advanced_qos_configuration)
+    name = property(_get_name, _set_name)
+    

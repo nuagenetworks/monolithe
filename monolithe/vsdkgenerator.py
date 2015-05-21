@@ -31,17 +31,6 @@ def main(argv=sys.argv):
                         default=1,
                         type=int)
 
-    parser.add_argument('-g', "--giturl",
-                        dest="giturl",
-                        help="GIT repository URL. If not specified, it will create an SDK from scratch.",
-                        # default='https://github.com/nuagenetworks/vsdk',
-                        type=str)
-
-    parser.add_argument('-p', "--push",
-                        dest='push',
-                        help="Push to the GIT repository when finished",
-                        action="store_true")
-
     parser.add_argument('-o', "--output",
                         dest='dest',
                         help="directory where the sources will be generated",
@@ -63,9 +52,9 @@ def main(argv=sys.argv):
 
     if args.versions:
         for version in args.versions:
-            Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=version, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push, force_removal=args.force_removal, specs_path=args.specs_path)
+            Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=version, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specs_path=args.specs_path)
     else:
-        Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=None, output_path=args.dest, revision=args.revision, git_repository=args.giturl, push=args.push, force_removal=args.force_removal, specs_path=args.specs_path)
+        Command.generate_sdk(vsdurl=args.vsdurl, path=args.path, apiversion=None, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specs_path=args.specs_path)
 
 if __name__ == '__main__':
     main()

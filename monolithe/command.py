@@ -108,7 +108,7 @@ class Command(object):
                 json.dump(spec, file, indent=4, sort_keys=True)
 
     @classmethod
-    def generate_sdk(cls, vsdurl, path, apiversion, revision, git_repository, output_path=None, push=False, force_removal=False, specs_path=None):
+    def generate_sdk(cls, vsdurl, path, apiversion, revision, output_path=None, force_removal=False, specs_path=None):
         """ Generate the Python SDK according to given parameters
 
             It will generate a new SDK from vanilla/vsdk sources or update the targeted repository.
@@ -117,9 +117,7 @@ class Command(object):
                 vsdurl: the url to the vsd api
                 apiversion: the version of the vsd api in a dotted notation (ex: 3.0)
                 revision: the revision number
-                git_repository: the GIT repository URL from where to start
                 output_path: the path to the output directory
-                push: boolean to ask for the push or not
                 force: force removal of the existing codegen directory
 
         """

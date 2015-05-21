@@ -6,7 +6,7 @@
     "creationOnly": false, 
     "defaultOrder": false, 
     "defaultValue": null, 
-    "description": "", 
+    "description": null, 
     "filterable": false, 
     "format": null, 
     "maxLength": null, 
