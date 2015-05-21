@@ -18,10 +18,17 @@ class FunctionalTest(TestCase):
         self.maxDiff = None
 
     @classmethod
-    def get_valid_path(cls):
+    def get_swagger_files_path(cls):
         """ Returns swagger path """
 
         return '%s/monolithe/tests/static/V3_1' % os.getcwd()
+
+    @classmethod
+    def get_specificication_files_path(cls):
+        """ Returns swagger path """
+
+        return '%s/monolithe/tests/static/specifications' % os.getcwd()
+
 
     def assertOutputEqual(self, d1, d2, parent_key=None):
         """ Compare two dictionaries

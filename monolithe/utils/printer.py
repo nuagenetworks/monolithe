@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
+
+from collections import OrderedDict
 from pprint import pprint
 
 from colorama import init
@@ -83,4 +85,7 @@ class Printer(object):
                 message: the message to print
         """
 
-        pprint(message)
+        if type(message) is OrderedDict:
+            pprint(dict(message))
+        else:
+            pprint(message)

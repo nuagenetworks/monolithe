@@ -9,7 +9,7 @@
 # OUTPUT_PATH = './tmp'
 #
 #
-# def get_valid_path():
+# def get_swagger_files_path():
 #     """ Returns swagger path """
 #
 #     return '%s/monolithe/tests/static/V3_1' % os.getcwd()
@@ -54,7 +54,7 @@
 #
 #         """
 #         os.makedirs(OUTPUT_PATH)
-#         Command.generate_sdk(vsdurl=None, path=get_valid_path(), apiversion=None, revision=None, git_repository=None, output_path=OUTPUT_PATH)
+#         Command.generate_sdk(vsdurl=None, path=get_swagger_files_path(), apiversion=None, revision=None, git_repository=None, output_path=OUTPUT_PATH)
 #
 #     @classmethod
 #     def tearDownClass(cls):

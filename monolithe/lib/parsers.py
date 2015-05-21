@@ -217,4 +217,4 @@ class SpecificationParser(object):
                 specs[name] = data
 
         Printer.success('Parsed %s specifications' % len(filenames))
-        return specs
+        return ParsingUtils.order(specs)

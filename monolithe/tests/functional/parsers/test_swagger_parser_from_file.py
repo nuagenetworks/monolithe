@@ -12,7 +12,7 @@ class SwaggerFileParserTests(FunctionalTest):
         """ SwaggerParser run on all swagger files and grab the correct version
 
         """
-        path = self.get_valid_path()
+        path = self.get_swagger_files_path()
         parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
         resources = parser.run()
 
@@ -320,7 +320,7 @@ class SwaggerFileParserTests(FunctionalTest):
         """ SwaggerParser run with filter should find direct entity
 
         """
-        path = self.get_valid_path()
+        path = self.get_swagger_files_path()
         parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
         resources = parser.run(filters=['enterprise'])
 
@@ -330,7 +330,7 @@ class SwaggerFileParserTests(FunctionalTest):
         """ SwaggerParser run with filter should find entity with similar names
 
         """
-        path = self.get_valid_path()
+        path = self.get_swagger_files_path()
         parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
         resources = parser.run(filters=['ingressadvfwdentrytemplate'])
 
@@ -341,7 +341,7 @@ class SwaggerFileParserTests(FunctionalTest):
         """ SwaggerParser run with unknown filter should not find any entity
 
         """
-        path = self.get_valid_path()
+        path = self.get_swagger_files_path()
         parser = SwaggerParser(vsdurl=None, path=path, apiversion=None)
         resources = parser.run(filters=['UnknownName'])
 

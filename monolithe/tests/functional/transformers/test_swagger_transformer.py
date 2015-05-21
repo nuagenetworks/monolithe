@@ -18,7 +18,7 @@ class SwaggerTransformerTests(FunctionalTest):
         """ Set up context
 
         """
-        parser = SwaggerParser(path=cls.get_valid_path(), vsdurl=None, apiversion=None)
+        parser = SwaggerParser(path=cls.get_swagger_files_path(), vsdurl=None, apiversion=None)
         cls.swagger_resources = parser.run()
 
     @classmethod
