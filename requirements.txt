@@ -6,3 +6,4 @@ requests
 bambou
 Sphinx
 sphinx_rtd_theme
+unittest2
