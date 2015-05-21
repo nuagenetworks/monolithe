@@ -126,7 +126,7 @@ class SwaggerFileParserTests(FunctionalTest):
                                             u'Zone',
                                             u'ZoneTemplate'])
 
-        self.assertEqual(resources['Enterprise'], {u'apiVersion': u'V3_1',
+        self.assertOutputEqual(resources['Enterprise'], {u'apiVersion': u'V3_1',
                                                     u'apis': [{u'operations': [{u'method': u'GET',
                                                                                 u'nickname': u'getEnterprises',
                                                                                 u'parameters': [{u'name': u'id',

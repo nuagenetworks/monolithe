@@ -5,32 +5,17 @@ import os
 import sys
 
 from collections import OrderedDict
+from difflib import SequenceMatcher
 
 from monolithe.utils.constants import Constants
 from monolithe.utils.printer import Printer
-from difflib import SequenceMatcher
+from monolithe.utils.vsdk import VSDKUtils
 
 
 class ParsingUtils(object):
     """ Parsing Utilities
 
     """
-
-    @classmethod
-    def get_package_name(cls, package_name):
-        """ Returns the package name
-
-            Args:
-                package_name (string): the package name
-
-            Returns:
-                Returns the corresponding name
-
-        """
-        if package_name in Constants.PACKAGE_MAPPING:
-            return Constants.PACKAGE_MAPPING[package_name]
-
-        return package_name
 
     @classmethod
     def get_correct_name(cls, name):
@@ -47,6 +32,22 @@ class ParsingUtils(object):
             return Constants.RESOURCE_MAPPING[name]
 
         return name
+
+    @classmethod
+    def get_correct_attribute_name(cls, name):
+        """ Change local name according to the remote name
+
+            Args:
+                name: the remote name
+
+            Returns:
+                A beautiful python name
+
+        """
+        if name in Constants.ATTRIBUTE_MAPPING:
+            return VSDKUtils.get_python_name(Constants.ATTRIBUTE_MAPPING[name])
+
+        return VSDKUtils.get_python_name(name)
 
     @classmethod
     def parseJSON(cls, filepath):

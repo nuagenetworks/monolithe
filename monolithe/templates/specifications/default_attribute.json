@@ -14,8 +14,8 @@
     "minLength": null, 
     "minValue": null, 
     "orderable": false, 
-    "readonly": false, 
+    "readOnly": false, 
     "required": false, 
     "type": "string", 
-    "uniqueItems": false
+    "unique": false
 }

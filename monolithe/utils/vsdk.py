@@ -54,7 +54,7 @@ class VSDKUtils(object):
         return all_cap_re.sub(r'\1_\2', s1).lower()
 
     @classmethod
-    def get_python_type_name(cls, type_name, attribute_name=None, object_name=None):
+    def get_python_type_name(cls, type_name):
         """ Returns a python type according to a java type
 
         """

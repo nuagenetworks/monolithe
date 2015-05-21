@@ -149,7 +149,7 @@ class Specification(dict):
                 attribute_info['type'] = attribute_info['$ref']
 
             if 'type' in attribute_info:
-                attribute['type'] = VSDKUtils.get_python_type_name(type_name=attribute_info['type'])
+                attribute['type'] = attribute_info['type']
 
             if 'enum' in attribute_info:
                 attribute['allowedChoices'] = attribute_info['enum']
@@ -175,7 +175,7 @@ class SpecificationApi(dict):
         self.update(self.get_default_api())
 
         for operation in swagger_api['operations']:
-            self['operations'] = {u'method': operation['method'], u'availability': None}
+            self['operations'].append({u'method': operation['method'], u'availability': None})
 
     @classmethod
     def get_default_api(cls):

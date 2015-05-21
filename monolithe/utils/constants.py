@@ -45,33 +45,6 @@ class Constants(object):
         u'VlanTemplate': u'VLANTemplate'
     }
 
-    PACKAGE_MAPPING = {
-        u'/alarm': u'Alarms',
-        u'/appd': u'Application Designer',
-        u'/common': u'Metadata',
-        u'/eventlog': u'Event Logs',
-        u'/gateway': u'Gateway Management',
-        u'/infrastructure': u'Infrastructure Profiles',
-        u'/job': u'Jobs',
-        u'/licensemgmt': u'Licensing',
-        u'/network': u'Core Networking',
-        u'/nsg': u'Gateway Management',
-        u'/policy': u'Policies',
-        u'/policy/acl': u'Security Policies',
-        u'/policy/qos': u'Policies',
-        u'/stats': u'Statistics',
-        u'/sysmon': u'System Monitoring',
-        u'/systemconfig': u'System Configuration',
-        u'/usermgmt': u'User Management',
-        u'/vm': u'Virtual Machines',
-        u'/vport': u'Core Networking',
-        u'/certificate': u'Certificate',
-        u'/cms': u'Cloud Management System',
-        u'/ipsec': u'IP Sec',
-        u'/keyserver': u'Key Server',
-        u'/vmware': u'VMware',
-    }
-
     ATTRIBUTE_MAPPING = {
         u'global': u'globalMetadata'
     }    

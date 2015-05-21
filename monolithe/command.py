@@ -8,7 +8,7 @@ import json
 
 from .lib import SwaggerParser
 from .lib import SDKWriter, DocWriter, CourgetteWriter
-from .lib import ModelsProcessor
+from .lib import SpecificationTransformer
 from .lib import SwaggerTransformer
 from .lib import SpecificationParser
 from .lib import TestsRunner
@@ -51,7 +51,7 @@ class Command(object):
         if spec is None or len(spec) == 0:
             spec = Command.get_spec(vsdurl=vsdurl, apiversion=version, rest_name=rest_name)
 
-        processed_spec = ModelsProcessor.process(resources={spec['model']['RESTName']: spec})
+        processed_spec = SpecificationTransformer.get_objects(specifications={spec['model']['RESTName']: spec})
         model = processed_spec[spec['model']['RESTName']]
 
         runner = TestsRunner(vsdurl=vsdurl, username=username, password=password, enterprise=enterprise, version=version, model=model, parent_resource=parent_object['resourceName'], parent_id=parent_object['id'], **default_values)
@@ -71,7 +71,7 @@ class Command(object):
         resources = swagger_parser.run(filters=[rest_name])
 
         # Convert Swagger models
-        specs = SwaggerTransformer.convert(resources=resources, filters=[rest_name])
+        specs = SwaggerTransformer.get_specifications(resources=resources, filters=[rest_name])
 
         if rest_name in specs:
             return specs[rest_name]
@@ -91,7 +91,7 @@ class Command(object):
         resources = swagger_parser.run()
 
         # Convert Swagger models
-        specs = SwaggerTransformer.convert(resources=resources)
+        specs = SwaggerTransformer.get_specifications(resources=resources)
 
         if not output_path:
             output_path = SPECGEN_DIRECTORY
@@ -131,14 +131,14 @@ class Command(object):
         resources = swagger_parser.run()
 
         # Convert Swagger models
-        specs = SwaggerTransformer.convert(resources=resources)
+        specs = SwaggerTransformer.get_specifications(resources=resources)
 
         if specs_path is not None:
             candidates = SpecificationParser.run(specs_path)
             specs.update(candidates)
 
         # Process Swagger models
-        processed_resources = ModelsProcessor.process(resources=specs)
+        processed_resources = SpecificationTransformer.get_objects(specifications=specs)
 
         # Compute output directory according to the version
         if apiversion is None:
@@ -173,10 +173,10 @@ class Command(object):
         resources = swagger_parser.run()
 
         # Convert Swagger models
-        specs = SwaggerTransformer.convert(resources=resources)
+        specs = SwaggerTransformer.get_specifications(resources=resources)
 
         # Process Swagger models
-        processed_resources = ModelsProcessor.process(resources=specs)
+        processed_resources = SpecificationTransformer.get_objects(specifications=specs)
 
         # Compute output directory according to the version
         if apiversion is None:
@@ -210,7 +210,7 @@ class Command(object):
         resources = swagger_parser.run()
 
         # Processed Swagger models
-        processed_resources = ModelsProcessor.process(resources=resources)
+        processed_resources = SpecificationTransformer.get_objects(specifications=resources)
 
         writer = CourgetteWriter(directory=directory)
         writer.write(resources=processed_resources)

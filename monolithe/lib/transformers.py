@@ -6,6 +6,7 @@ from monolithe.utils.printer import Printer
 from monolithe.utils.constants import Constants
 from monolithe.utils.parse import ParsingUtils
 from monolithe.models.specification import Specification
+from monolithe.models.objects import MonolitheObject
 
 
 class SwaggerTransformer(object):
@@ -14,7 +15,7 @@ class SwaggerTransformer(object):
     """
 
     @classmethod
-    def convert(cls, resources, filters=[]):
+    def get_specifications(cls, resources, filters=[]):
         """ Prepare all resources
 
             Args:
@@ -90,3 +91,31 @@ class SwaggerTransformer(object):
         rest_user_specification.add_attribute('enterpriseID', entreprise_id_attribute)
 
         return rest_user_specification
+
+
+class SpecificationTransformer(object):
+    """ Process all models information that will be send to the writer """
+
+    @classmethod
+    def get_objects(cls, specifications):
+        """ Transform specifications to objects
+
+            Args:
+                specifications: A list of all specification to transform
+
+            Returns:
+                A list of python objects
+
+        """
+        models = dict()
+
+        for rest_name, specification in specifications.iteritems():
+
+            model = MonolitheObject()
+            model.from_specification(specification)
+
+            models[model.remote_name] = model
+
+        Printer.success('Processed succeed for %s objects' % len(models))
+
+        return ParsingUtils.order(models)
