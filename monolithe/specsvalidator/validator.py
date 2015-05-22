@@ -94,4 +94,3 @@ class Validator:
         api_errors = "\033[92m0\033[0m"  if not attribute_validation_count else "\033[91m%d\033[0m" % attribute_validation_count
 
         print "missing apis: %s, api validation errors: %s, attribute validation errors: %s\n" % (missing_candidates, validation_errors, api_errors)
-

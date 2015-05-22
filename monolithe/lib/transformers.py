@@ -2,11 +2,11 @@
 
 from copy import deepcopy
 
-from monolithe.utils.printer import Printer
-from monolithe.utils.constants import Constants
-from monolithe.utils.parse import ParsingUtils
-from monolithe.models.specification import Specification
-from monolithe.models.objects import MonolitheObject
+from monolithe.lib.utils.printer import Printer
+from monolithe.lib.utils.constants import Constants
+from monolithe.lib.utils.parse import ParsingUtils
+from monolithe.lib.models.specification import Specification
+from monolithe.lib.models.objects import MonolitheObject
 
 
 class SwaggerTransformer(object):

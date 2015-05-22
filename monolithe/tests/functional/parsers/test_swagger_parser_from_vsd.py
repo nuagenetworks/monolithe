@@ -5,7 +5,7 @@ from mock import patch
 from monolithe.tests.functional import FunctionalTest
 from monolithe.tests.functional.utils import MockUtils
 from monolithe.lib.parsers import SwaggerParser
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.printer import Printer
 
 
 class SwaggerURLParserTests(FunctionalTest):

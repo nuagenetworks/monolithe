@@ -7,9 +7,9 @@ import sys
 from collections import OrderedDict
 from difflib import SequenceMatcher
 
-from monolithe.utils.constants import Constants
-from monolithe.utils.printer import Printer
-from monolithe.utils.vsdk import VSDKUtils
+from monolithe.lib.utils.constants import Constants
+from monolithe.lib.utils.printer import Printer
+from monolithe.lib.utils.vsdk import VSDKUtils
 
 
 class ParsingUtils(object):

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
 from validationerrors import APISpecAttributeCharacteristicError
 from validationerrors import APISpecAttributeCapitalizationError
 from validationerrors import APISpecAttributeMissingCharacteristicError
@@ -8,7 +7,7 @@ from validationerrors import APISpecAttributeMissingDefinitionError
 from validationerrors import APISpecAPIMissingError
 from validationerrors import APISpecAPIMissingMethodError
 
-IGNORED_ATTRIBUTES = ["parentType", "lastUpdatedBy", "externalID", "lastUpdatedDate", "parentID", "owner", "creationDate", "ID"]
+from monolithe.lib.utils.constants import IGNORED_ATTRIBUTES
 
 
 class APIValidator:
@@ -34,7 +33,6 @@ class APIValidator:
         self.validate_parent_apis_definition()
         self.validate_self_api_definition()
 
-
     def _append_validation_error(self, report, key, error_type, error):
 
         if not key in report:
@@ -44,7 +42,6 @@ class APIValidator:
             report[key][error_type] = []
 
         report[key][error_type].append(error)
-
 
     ## Attributes Validation
 
@@ -84,7 +81,6 @@ class APIValidator:
 
         return True
 
-
     def validate_attributes_definition(self):
         """ Validate a attributes definition
 
@@ -111,7 +107,6 @@ class APIValidator:
 
                 for characteristic in specification_attribute_definition:
                     self._validate_candidate_attribute(specification_attribute_definition, candidate_attribute_definition, attribute_name, characteristic)
-
 
     ## APIs Validation
 

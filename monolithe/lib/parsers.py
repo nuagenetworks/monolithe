@@ -4,12 +4,12 @@ import os
 import requests
 
 from copy import deepcopy
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.printer import Printer
 from .managers import TaskManager
 
-from monolithe.utils.vsdk import VSDKUtils
-from monolithe.utils.urls import URLUtils
-from monolithe.utils.parse import ParsingUtils
+from monolithe.lib.utils.vsdk import VSDKUtils
+from monolithe.lib.utils.urls import URLUtils
+from monolithe.lib.utils.parse import ParsingUtils
 
 
 API_DOCS = '/api-docs'

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from monolithe.utils.urls import URLUtils
+from monolithe.lib.utils.urls import URLUtils
 
 
 class IsURLTest(TestCase):

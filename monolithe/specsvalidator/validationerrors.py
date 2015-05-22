@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class APISpecAttributeCharacteristicError:
     """ Represents an API attribute definition validation error
 
@@ -17,6 +18,7 @@ class APISpecAttributeCharacteristicError:
 
     def __repr__(self):
             return "<%s> attribute '%s', characteristic: '%s', expected: '%s', actual: '%s'" % (self.__class__.__name__, self.attribute_name, self.characteristic, self.expected_value, self.actual_value)
+
 
 class APISpecAttributeCapitalizationError:
     """ Represents an API attribute capitalization error
@@ -65,7 +67,6 @@ class APISpecAttributeMissingDefinitionError:
 
     def __repr__(self):
         return "<%s> attribute '%s': is missing" % (self.__class__.__name__, self.attribute_name)
-
 
 
 class APISpecAPIMissingError:

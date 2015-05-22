@@ -2,7 +2,7 @@
 
 import re
 
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.printer import Printer
 from .constants import Constants
 
 

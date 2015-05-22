@@ -31,7 +31,7 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    from monolithe import Command
+    from monolithe.command import Command
 
     Command.generate_specs(vsdurl=args.vsdurl, path=args.path, apiversion=args.version, output_path=args.dest)
 

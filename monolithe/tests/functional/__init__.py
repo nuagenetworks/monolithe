@@ -5,7 +5,7 @@ import os
 from difflib import Differ
 
 from unittest2 import TestCase
-from monolithe.utils.parse import ParsingUtils
+from monolithe.lib.utils.parse import ParsingUtils
 
 from pprint import pprint
 

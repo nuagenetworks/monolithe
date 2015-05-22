@@ -1,331 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import re
-import requests
-import logging
-import time
-import sys
 
-from copy import deepcopy
+from unittest2 import TestSuite
 
-from monolithe.utils.printer import Printer
-from .factory import VSDKFactory
-from .utils import Utils
-from unittest import TestCase, TestSuite, TestResult
-from collections import OrderedDict
-
-from bambou.config import BambouConfig
-from bambou.exceptions import BambouHTTPError
-
-HTTP_METHOD_POST = 'POST'
-HTTP_METHOD_GET = 'GET'
-HTTP_METHOD_DELETE = 'DELETE'
-HTTP_METHOD_UPDATE = 'PUT'
-
-IGNORED_ATTRIBUTES = ['id', 'parent_id', 'parent_type', 'creation_date', 'owner', 'last_updated_date', 'last_updated_by', 'external_id']
-
-DEVELOPMENT_MODE = True
-
-
-class TestHelper(object):
-    """ Helper to make tests easier
-
-    """
-    _vsdk = None
-    _debug = False
-
-    @classmethod
-    def set_debug_mode(cls, debug=True):
-        """ Activate debug mode
-
-        """
-        cls._debug = debug
-
-        if cls._debug:
-            cls._vsdk.utils.set_log_level(logging.DEBUG)
-        else:
-            cls._vsdk.utils.set_log_level(logging.ERROR)
-
-    @classmethod
-    def trace(cls, connection):
-        """ Trace connection information
-
-        """
-        if not connection:
-            return
-
-        request = connection.request
-        response = connection.response
-
-        Printer.warn("%s %s [Response %s]" % (request.method, request.url, response.status_code))
-        Printer.log("Header")
-        Printer.json(request.headers)
-        Printer.log("Body")
-        Printer.json(request.data)
-        Printer.log("Response")
-        Printer.json(response.data)
-        if len(response.errors):
-            Printer.log("Errors")
-            Printer.json(response.errors)
-
-
-    @classmethod
-    def use_vsdk(cls, vsdk):
-        """ Retain used vsdk
-
-        """
-        cls._vsdk = vsdk
-
-    @classmethod
-    def current_push_center(cls):
-        """ Get current push center
-
-        """
-        session = cls._vsdk.NUVSDSession.get_current_session()
-        return session.push_center
-
-    @classmethod
-    def set_api_key(cls, api_key):
-        """ Change api key
-
-        """
-        session = cls._vsdk.NUVSDSession.get_current_session()
-        session.login_controller.api_key = api_key
-
-    @classmethod
-    def session_headers(cls):
-        """ Get headers
-
-        """
-        session = cls._vsdk.NUVSDSession.get_current_session()
-        controller = session.login_controller
-
-        headers = dict()
-        headers['Content-Type'] = u'application/json'
-        headers['X-Nuage-Organization'] = controller.enterprise
-        headers['Authorization'] = controller.get_authentication_header()
-
-        return headers
-
-    @classmethod
-    def send_request(cls, method, url, data=None, remove_header=None):
-        """ Send request with removed header
-
-        """
-        headers = cls.session_headers()
-
-        if remove_header:
-            headers.pop(remove_header)
-
-        return requests.request(method=method, url=url, data=data, verify=False, headers=headers)
-
-    @classmethod
-    def send_post(cls, url, data, remove_header=None):
-        """ Send a POST request
-
-        """
-        return cls.send_request(method='post', url=url, data=data, remove_header=remove_header)
-
-    @classmethod
-    def send_put(cls, url, data, remove_header=None):
-        """ Send a PUT request
-
-        """
-        return cls.send_request(method='put', url=url, data=data, remove_header=remove_header)
-
-    @classmethod
-    def send_delete(cls, url, data, remove_header=None):
-        """ Send a DELETE request
-
-        """
-        return cls.send_request(method='delete', url=url, data=data, remove_header=remove_header)
-
-    @classmethod
-    def send_get(cls, url, remove_header=None):
-        """ Send a GET request
-
-        """
-        return cls.send_request(method='get', url=url, remove_header=remove_header)
-
-
-class _MonolitheTestResult(TestResult):
-    """ A TestResult
-
-    """
-    def __init__(self):
-        """ Initialized a new result
-
-        """
-        TestResult.__init__(self)
-        self.tests = OrderedDict()
-
-    def getDescription(self, test):
-        """ Get test description
-
-        """
-        return str(test).split(' ')[0]  # Removing (package.name)
-
-    def addSuccess(self, test):
-        """ Add success to the result
-
-        """
-        TestResult.addSuccess(self, test)
-        self.tests[self.getDescription(test)] = {'status': 'SUCCESS'}
-
-        if DEVELOPMENT_MODE:
-            Printer.success('OK')
-
-    def addError(self, test, err, connection=None):
-        """ Add error to the result
-
-        """
-        TestResult.addError(self, test, err)
-        self.tests[self.getDescription(test)] = {'status': 'ERROR', 'stacktrace': err, 'connection': connection}
-
-        if DEVELOPMENT_MODE:
-            Printer.warn('ERROR')
-            Printer.warn(err[1])
-            TestHelper.trace(connection)
-
-
-    def addFailure(self, test, err, connection):
-        """ Add failure to the result
-
-        """
-        TestResult.addFailure(self, test, err)
-        self.tests[self.getDescription(test)] = {'status': 'FAILURE', 'stacktrace': err, 'connection': connection}
-
-        if DEVELOPMENT_MODE:
-            Printer.warn('Failure')
-            Printer.warn(err[1])
-            TestHelper.trace(connection)
-
-    def __repr__(self):
-        """ Representation
-
-        """
-        return "<%s testsRun=%i errors=%i failures=%i>" % \
-               (str(self.__class__), self.testsRun, len(self.errors), len(self.failures))
-
-
-class _MonolitheTestRunner(object):
-    """
-
-    """
-    def __init__(self):
-        """ Initialized """
-        pass
-
-    def _makeResult(self):
-        """ Return a TestResult implementation
-
-        """
-        return _MonolitheTestResult()
-
-    def run(self, test):
-        """ Run the given test case or test suite.
-
-        """
-        result = self._makeResult()
-        startTime = time.time()
-        test(result)
-        stopTime = time.time()
-        timeTaken = stopTime - startTime
-
-        run = result.testsRun
-        Printer.log("Ran %d test%s in %.3fs" %
-                            (run, run != 1 and "s" or "", timeTaken))
-
-        if not result.wasSuccessful():
-            Printer.warn("FAILED (failures=%i, errors=%i)" % (len(result.failures), len(result.errors)))
-        else:
-            Printer.success("OK")
-        return result
-
-
-class _MonolitheTestCase(TestCase):
-
-    _last_connection = None  # Last connection to present errors
-    parent = None  # Parent VSD object
-    vsdobject = None  # Current VSD object
-    user = None  # Current RESTUser
-
-    @property
-    def last_connection(self):
-        """ Returns last connection """
-        return self._last_connection
-
-    @last_connection.setter
-    def last_connection(self, connection):
-        """ set last_connection """
-        self._last_connection = deepcopy(connection)
-
-    # Very Dark Side of unittest... Maybe we should upgrade to unittest2 to do that.
-    # Will see that later !
-    # CS 05-13-2015
-    def run(self, result=None):
-        if result is None: result = self.defaultTestResult()
-        result.startTest(self)
-        testMethod = getattr(self, self._testMethodName)
-
-        try:
-            try:
-                self.setUp()
-                BambouConfig.set_should_raise_bambou_http_error(False)
-            except KeyboardInterrupt:
-                raise
-            except BambouHTTPError as error:
-                result.addError(self, [None, u'Test setUp has failed', None], error.connection)
-                return
-            except:
-                result.addError(self, sys.exc_info())
-                return
-            ok = False
-            try:
-                if DEVELOPMENT_MODE:
-                    Printer.log('%s...' % self._testMethodName)
-
-                testMethod()
-                BambouConfig.set_should_raise_bambou_http_error(True)
-                ok = True
-            except self.failureException:
-                result.addFailure(self, sys.exc_info(), self.last_connection)
-            except KeyboardInterrupt:
-                raise
-            except:
-                result.addError(self, sys.exc_info(), self.last_connection)
-            try:
-                self.tearDown()
-            except KeyboardInterrupt:
-                raise
-            except:
-                result.addError(self, sys.exc_info(), self.last_connection)
-                ok = False
-            if ok: result.addSuccess(self)
-        finally:
-            result.stopTest(self)
-
-    def assertErrorEqual(self, errors, title, description, remote_name=u'', index=0):
-        """ Check if errors received matches
-
-        """
-        self.assertEquals(errors[index]['descriptions'][0]['title'], title, 'Expected error title "%s" != "%s"' % (title, errors[index]['descriptions'][0]['title']))
-        self.assertEquals(errors[index]['descriptions'][0]['description'], description, 'Expected error description "%s" != "%s"' % (description, errors[index]['descriptions'][0]['description']))
-        self.assertEquals(errors[index]['property'], remote_name, 'Expected error property "%s" != "%s"' % (remote_name, errors[index]['property']))
-
-    def assertConnectionStatus(self, connection, expected_status):
-        """ Check if the connection has expected status
-
-        """
-        message = self._connection_failure_message(connection, expected_status)
-        self.assertEquals(connection.response.status_code, expected_status, message)
-
-    # Messages
-
-    def _connection_failure_message(cls, connection, expected_status):
-        """ Returns a message that explains the connection status failure """
-
-        return 'Expected status code %s != %s\n' % (expected_status, connection.response.status_code)
+from monolithe.lib.bladerunner.unittest import MonolitheTestCase
+from monolithe.lib.utils.constants import Constants
+from monolithe.lib.factory import VSDKFactory
+from monolithe.lib.bladerunner.helpers import TestHelper
 
 
 class TestMaker(object):
@@ -339,14 +21,14 @@ class TestMaker(object):
         self._object_registry = dict()
         self._attributes_registry = dict()
 
-    def register_method(self, function_name, **conditions):
+    def register_test(self, function_name, **conditions):
         """ Register test for all attributes
 
         """
         if function_name not in self._object_registry:
             self._object_registry[function_name] = conditions
 
-    def register_method_for_attribute(self, function_name, **conditions):
+    def register_test_for_attribute(self, function_name, **conditions):
         """ Register an attribute test for all given conditions
 
         """
@@ -373,7 +55,7 @@ class TestMaker(object):
 
         return True
 
-    def make_methods(self, vsdobject, testcase):
+    def make_tests(self, vsdobject, testcase):
         """ Make all tests that should be run for the given object in the specified testcase
 
             Args:
@@ -389,7 +71,7 @@ class TestMaker(object):
 
         for attribute in attributes:
 
-            if attribute.local_name in IGNORED_ATTRIBUTES:
+            if attribute.local_name in Constants.IGNORED_ATTRIBUTES:
                 continue
 
             for function_name, conditions in self._attributes_registry.iteritems():
@@ -464,13 +146,13 @@ class CreateTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_method('_test_create_object_with_all_valid_attributes_should_succeed')
-        self.register_method('_test_create_object_without_authentication_should_fail')
+        self.register_test('_test_create_object_with_all_valid_attributes_should_succeed')
+        self.register_test('_test_create_object_without_authentication_should_fail')
 
         # Attribute tests
-        self.register_method_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_method_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_method_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
+        self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
+        self.register_test_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
 
     def suite(self):
         """ Inject generated tests
@@ -480,20 +162,20 @@ class CreateTestMaker(TestMaker):
         CreateTestCase.vsdobject = self.vsdobject
         CreateTestCase.user = self.user
 
-        tests = self.make_methods(vsdobject=self.vsdobject, testcase=CreateTestCase)
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=CreateTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(CreateTestCase, test_name, test_func)
 
         return TestSuite(map(CreateTestCase, tests))
 
 
-class CreateTestCase(_MonolitheTestCase):
+class CreateTestCase(MonolitheTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        _MonolitheTestCase.__init__(self, methodName)
+        MonolitheTestCase.__init__(self, methodName)
         self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -581,15 +263,14 @@ class UpdateTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_method('_test_update_object_with_same_attributes_should_fail')
-        self.register_method('_test_update_object_without_authentication_should_fail')
+        self.register_test('_test_update_object_with_same_attributes_should_fail')
+        self.register_test('_test_update_object_without_authentication_should_fail')
 
         # Attribute tests
-        self.register_method_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_method_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_method_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
-        # self.register_method_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
-
+        self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
+        self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
+        self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
+        # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
 
     def suite(self):
         """ Inject generated tests
@@ -599,20 +280,20 @@ class UpdateTestMaker(TestMaker):
         UpdateTestCase.vsdobject = self.vsdobject
         UpdateTestCase.user = self.user
 
-        tests = self.make_methods(vsdobject=self.vsdobject, testcase=UpdateTestCase)
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=UpdateTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(UpdateTestCase, test_name, test_func)
 
         return TestSuite(map(UpdateTestCase, tests))
 
 
-class UpdateTestCase(_MonolitheTestCase):
+class UpdateTestCase(MonolitheTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        _MonolitheTestCase.__init__(self, methodName)
+        MonolitheTestCase.__init__(self, methodName)
         self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -710,10 +391,9 @@ class DeleteTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_method('_test_delete_object_without_authentication_should_fail')
-        self.register_method('_test_delete_object_with_valid_id_should_succeed')
-        self.register_method('_test_delete_object_with_wrong_id_should_succeed')
-
+        self.register_test('_test_delete_object_without_authentication_should_fail')
+        self.register_test('_test_delete_object_with_valid_id_should_succeed')
+        self.register_test('_test_delete_object_with_wrong_id_should_succeed')
 
         # No Attribute tests
 
@@ -725,20 +405,20 @@ class DeleteTestMaker(TestMaker):
         DeleteTestCase.vsdobject = self.vsdobject
         DeleteTestCase.user = self.user
 
-        tests = self.make_methods(vsdobject=self.vsdobject, testcase=DeleteTestCase)
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=DeleteTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(DeleteTestCase, test_name, test_func)
 
         return TestSuite(map(DeleteTestCase, tests))
 
 
-class DeleteTestCase(_MonolitheTestCase):
+class DeleteTestCase(MonolitheTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        _MonolitheTestCase.__init__(self, methodName)
+        MonolitheTestCase.__init__(self, methodName)
         self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -814,9 +494,9 @@ class GetTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_method('_test_get_object_without_authentication_should_fail')
-        self.register_method('_test_get_object_with_valid_id_should_succeed')
-        self.register_method('_test_get_object_with_wrong_id_should_succeed')
+        self.register_test('_test_get_object_without_authentication_should_fail')
+        self.register_test('_test_get_object_with_valid_id_should_succeed')
+        self.register_test('_test_get_object_with_wrong_id_should_succeed')
 
         # No Attribute tests
 
@@ -828,20 +508,20 @@ class GetTestMaker(TestMaker):
         GetTestCase.vsdobject = self.vsdobject
         GetTestCase.user = self.user
 
-        tests = self.make_methods(vsdobject=self.vsdobject, testcase=GetTestCase)
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(GetTestCase, test_name, test_func)
 
         return TestSuite(map(GetTestCase, tests))
 
 
-class GetTestCase(_MonolitheTestCase):
+class GetTestCase(MonolitheTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        _MonolitheTestCase.__init__(self, methodName)
+        MonolitheTestCase.__init__(self, methodName)
         self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -916,9 +596,9 @@ class GetAllTestMaker(TestMaker):
         self.user = user
 
         # Object tests
-        self.register_method('_test_get_all_objects_without_authentication_should_fail')
-        self.register_method('_test_get_all_objects_without_content_should_success')
-        self.register_method('_test_get_all_objects_with_content_should_success')
+        self.register_test('_test_get_all_objects_without_authentication_should_fail')
+        self.register_test('_test_get_all_objects_without_content_should_success')
+        self.register_test('_test_get_all_objects_with_content_should_success')
 
         # No Attribute tests
 
@@ -930,20 +610,20 @@ class GetAllTestMaker(TestMaker):
         GetAllTestCase.vsdobject = self.vsdobject
         GetAllTestCase.user = self.user
 
-        tests = self.make_methods(vsdobject=self.vsdobject, testcase=GetAllTestCase)
+        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetAllTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(GetAllTestCase, test_name, test_func)
 
         return TestSuite(map(GetAllTestCase, tests))
 
 
-class GetAllTestCase(_MonolitheTestCase):
+class GetAllTestCase(MonolitheTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        _MonolitheTestCase.__init__(self, methodName)
+        MonolitheTestCase.__init__(self, methodName)
         self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -1002,117 +682,3 @@ class GetAllTestCase(_MonolitheTestCase):
 
     # Attributes tests
     # Filter, Order, Page etc.
-
-
-class TestsRunner(object):
-    """ Runner for VSD Objects tests
-
-    """
-    def __init__(self, vsdurl, username, password, enterprise, version, model, parent_resource=None, parent_id=None, **default_values):
-        """ Initializes the TestsRunner.
-
-            Args:
-                vsdurl (string): the vsd url
-                username (string): the username to connect with
-                password (string): the password for the username
-                enterprise (string): the enterprise
-                version (float): the vsd api version (eg 3.2)
-                model (Model): the model representation of the object to test
-                parent_resource: the parent_resource if necessary
-                parent_id: the parent id if necessary
-                default_values: all default values to have a valid version of the model
-
-        """
-        VSDKFactory.init(version)
-        vsdk = VSDKFactory.get_vsdk_package()
-        TestHelper.use_vsdk(vsdk)
-
-        session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise, version=version)
-        session.start()
-
-        self.user = session.user
-        self.resource_name = model.resource_name
-
-        python_attributes = {Utils.get_python_name(name): value for name, value in default_values.iteritems()}
-        self.vsdobject = VSDKFactory.get_instance_from_model(model, **python_attributes)
-
-        self.parent = None
-
-        if parent_resource and parent_id:
-            try:
-                self.parent = VSDKFactory.get_instance(parent_resource, id=parent_id)
-                self.parent.fetch()
-            except:
-                raise AttributeError('Could not find parent %s with ID=%s' % (parent_resource, parent_id))
-
-        VSDKFactory.update_fetchers_for_object(self.parent, self.vsdobject, model)
-
-        self.is_create_allowed = False
-        self.is_delete_allowed = False
-        self.is_get_allowed = False
-        self.is_get_all_allowed = False
-        self.is_update_allowed = False
-
-        for path, api in model.apis['parents'].iteritems():
-            for operation in api.operations:
-                method = operation.method
-                # Printer.log('%s %s' % (method, path))
-                if method == HTTP_METHOD_POST:
-                    self.is_create_allowed = True
-                elif method == HTTP_METHOD_GET:
-                    self.is_get_all_allowed = True
-
-        for path, api in model.apis['self'].iteritems():
-            for operation in api.operations:
-                method = operation.method
-                # Printer.log('%s' % (method))
-                if method == HTTP_METHOD_UPDATE:
-                    self.is_update_allowed = True
-                elif method == HTTP_METHOD_DELETE:
-                    self.is_delete_allowed = True
-                elif method == HTTP_METHOD_GET:
-                    self.is_get_allowed = True
-
-    def suite(self):
-        """ Returns a TestSuite that can be run
-
-            TestSuite is computed according to what is defined in the model
-
-        """
-        all_suites = TestSuite()
-
-        if self.is_create_allowed:
-            maker = CreateTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.suite()
-            all_suites.addTests(suite)
-
-        if self.is_update_allowed:
-            maker = UpdateTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.suite()
-            all_suites.addTests(suite)
-
-        if self.is_delete_allowed:
-            maker = DeleteTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.suite()
-            all_suites.addTests(suite)
-
-        if self.is_get_allowed:
-            maker = GetTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.suite()
-            all_suites.addTests(suite)
-
-        if self.is_get_all_allowed:
-            maker = GetAllTestMaker(self.parent, self.vsdobject, self.user)
-            suite = maker.suite()
-            all_suites.addTests(suite)
-
-        return all_suites
-
-    def run(self):
-        """ Runs all tests on the specified VSD
-
-        """
-        suite = self.suite()
-        results = _MonolitheTestRunner().run(suite)
-
-        return results

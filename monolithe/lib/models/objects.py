@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from monolithe.utils.parse import ParsingUtils
-from monolithe.utils.vsdk import VSDKUtils
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.parse import ParsingUtils
+from monolithe.lib.utils.vsdk import VSDKUtils
+from monolithe.lib.utils.printer import Printer
 
 
 class MonolitheObject(object):

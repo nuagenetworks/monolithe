@@ -11,9 +11,9 @@ from .lib import SDKWriter, DocWriter
 from .lib import SpecificationTransformer
 from .lib import SwaggerTransformer
 from .lib import SpecificationParser
-from .lib import TestsRunner
+from .lib.bladerunner import TestsRunner
 
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.printer import Printer
 
 CODEGEN_DIRECTORY = './codegen'
 DOCS_DIRECTORY = './docgen'

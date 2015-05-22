@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from monolithe.utils.vsdk import VSDKUtils
+from monolithe.lib.utils.vsdk import VSDKUtils
 
 
 class GetPythonNameTest(TestCase):

@@ -5,7 +5,7 @@ import shutil
 import threading
 
 from git import Repo, GitCommandError
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.printer import Printer
 
 
 class TaskManager(object):

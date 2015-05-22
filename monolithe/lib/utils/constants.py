@@ -5,6 +5,8 @@ class Constants(object):
     """ List all constants and mapping information
 
     """
+    DEVELOPMENT_MODE = True
+
     # Constants
     INVARIANT_NAMES = ['qos', 'vrs', 'cms', 'statistics']
     VOWELS = ['a', 'e', 'i', 'o', 'u', 'y']
@@ -16,6 +18,11 @@ class Constants(object):
     DEFAULT_SPECIFICATION_PATH = u'/templates/specifications/default_specification.json'
     DEFAULT_ATTRIBUTE_PATH = u'/templates/specifications/default_attribute.json'
     DEFAULT_API_PATH = u'/templates/specifications/default_api.json'
+
+    HTTP_METHOD_POST = 'POST'
+    HTTP_METHOD_GET = 'GET'
+    HTTP_METHOD_DELETE = 'DELETE'
+    HTTP_METHOD_UPDATE = 'PUT'
 
     # Entities
     USER = u'User'

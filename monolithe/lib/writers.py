@@ -5,9 +5,9 @@ import shutil
 
 from jinja2 import Environment, PackageLoader
 
-from monolithe.utils.printer import Printer
-from monolithe.utils.constants import Constants
-from monolithe.utils.parse import ParsingUtils
+from monolithe.lib.utils.printer import Printer
+from monolithe.lib.utils.constants import Constants
+from monolithe.lib.utils.parse import ParsingUtils
 
 from monolithe.lib.managers import TaskManager
 

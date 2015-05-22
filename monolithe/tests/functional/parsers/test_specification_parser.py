@@ -2,7 +2,7 @@
 
 from monolithe.tests.functional import FunctionalTest
 from monolithe.lib.parsers import SpecificationParser
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.printer import Printer
 
 
 class SpecificationParserTests(FunctionalTest):

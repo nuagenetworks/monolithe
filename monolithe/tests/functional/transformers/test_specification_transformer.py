@@ -4,7 +4,7 @@ from monolithe.tests.functional import FunctionalTest
 from monolithe.lib.parsers import SwaggerParser, SpecificationParser
 from monolithe.lib.transformers import SwaggerTransformer, SpecificationTransformer
 
-from monolithe.utils.printer import Printer
+from monolithe.lib.utils.printer import Printer
 
 
 class SpecificationTransformerTests(FunctionalTest):
