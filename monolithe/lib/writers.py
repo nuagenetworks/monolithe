@@ -7,6 +7,7 @@ from jinja2 import Environment, PackageLoader
 
 from monolithe.utils.printer import Printer
 from monolithe.utils.constants import Constants
+from monolithe.utils.parse import ParsingUtils
 
 from monolithe.lib.managers import TaskManager
 
@@ -314,6 +315,8 @@ class SDKWriter(object):
 
         writer = VSDKFileWriter(directory=self.writer_directory)
         writer.write_setup_file(version=apiversion, revision=revision)
+
+        constants = ParsingUtils.order(constants)
 
         writer.write_constants_file(constants=constants)
 

@@ -37,16 +37,16 @@ class FunctionalTest(TestCase):
         return '%s/monolithe/tests/static/specifications' % os.getcwd()
 
     @classmethod
-    def get_static_autogenerates_path(cls, filename):
+    def get_vsdk_static_path(cls, directory, filename):
         """ Returns swagger path """
 
-        return '%s/monolithe/tests/static/vsdk/autogenerates/%s.py' % (os.getcwd(), filename)
+        return '%s/monolithe/tests/static/vsdk%s/%s.py' % (os.getcwd(), directory, filename)
 
     @classmethod
-    def get_tmp_autogenerates_path(cls, filename):
+    def get_vsdk_tmp_path(cls, directory, filename):
         """ Returns swagger path """
 
-        return '%s/3.1/vsdk/autogenerates/%s.py' % (cls.TMP_PATH, filename)
+        return '%s/3.1/vsdk%s/%s.py' % (cls.TMP_PATH, directory, filename)
 
     # Assertions
 
@@ -69,12 +69,12 @@ class FunctionalTest(TestCase):
             else:
                 self.assertEqual(value, value2, '%s != %s for key %s of %s' % (value, value2, key, parent_key))
 
-    def assertFileOutputEqual(self, filename, message):
-        """
+    def assertFileOutputEqual(self, directory, filename, message):
+        """ Validation that the generated output if valid for the given filename
 
         """
-        valid_content = self._read_file(self.get_static_autogenerates_path(filename))
-        expected_content = self._read_file(self.get_tmp_autogenerates_path(filename))
+        valid_content = self._read_file(self.get_vsdk_static_path(directory, filename))
+        expected_content = self._read_file(self.get_vsdk_tmp_path(directory, filename))
 
         d = Differ()
         result = list(d.compare(valid_content, expected_content))
