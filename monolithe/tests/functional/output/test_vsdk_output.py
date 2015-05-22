@@ -35,4 +35,5 @@ class VSDKOutputTests(FunctionalTest):
         self.assertFileOutputEqual('/autogenerates', 'nudomain', 'NUDomain is not correct')
         self.assertFileOutputEqual('/autogenerates', 'nuenterprise', 'NUEnterprise is not correct')
         self.assertFileOutputEqual('/autogenerates', 'nurestuser', 'NURESTUser is not correct')
-        self.assertFileOutputEqual('', 'constants', 'NURESTUser is not correct')
+        self.assertFileOutputEqual('', 'constants', 'Constants file is not correct')
+        self.assertFileOutputEqual('', 'nunsgateway', 'NUNSGateway file is not correct')
