@@ -17,7 +17,7 @@ class VSDKOutputTests(FunctionalTest):
 
         """
         os.makedirs(cls.TMP_PATH)
-        generator = VSDKGenerator(vsdurl=None, path=cls.get_swagger_files_path(), apiversion=None, revision=None, output_path=cls.TMP_PATH)
+        generator = VSDKGenerator(vsdurl=None, swagger_path=cls.get_swagger_files_path(), apiversion=None, revision=None, output_path=cls.TMP_PATH)
         generator.run()
 
     @classmethod
