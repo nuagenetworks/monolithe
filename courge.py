@@ -9,18 +9,20 @@ vsd_options = {
 data = {'parentObject' :
         {
             'resourceName': 'subnets',
-            'id': '1549ea69-c826-46a4-bbfc-d8913744ca09'
+            'id': '15de101d-1bfd-4365-b2e5-c4326eaafebd'
         },
-        'RESTName': 'addressrange', # Name to search for the specification (Temporary)
+        'RESTName': 'addressrange',  # Name to search for the specification (Temporary)
         'defaultValues' :
         {
             'DHCPPoolType' : 'HOST',
-            'maxAddress' : '10.34.17.10',
-            'minAddress' : '10.34.17.20'
+            'maxAddress' : '10.83.101.20',
+            'minAddress' : '10.83.101.10'
         },
-        'spec': {} # Should be the JSON spec. Empty for now
+        'spec': {}  # Should be the JSON spec. Empty for now
        }
 
 
-from monolithe.command import Command
-Command.run_tests(vsdurl='https://135.227.222.112:8443', username='csproot', password='csproot', enterprise='csp', version=3.2, data=data)
+from monolithe.validators import APIValidator
+
+validator = APIValidator(vsdurl='https://135.227.222.112:8443', swagger_path=None, username='csproot', password='csproot', enterprise='csp', apiversion=3.2, data=data)
+validator.run()

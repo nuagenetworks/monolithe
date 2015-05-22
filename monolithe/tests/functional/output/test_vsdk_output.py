@@ -4,7 +4,7 @@ import os
 import shutil
 
 from monolithe.tests.functional import FunctionalTest
-from monolithe.command import Command
+from monolithe.generators import VSDKGenerator
 
 
 class VSDKOutputTests(FunctionalTest):
@@ -17,7 +17,8 @@ class VSDKOutputTests(FunctionalTest):
 
         """
         os.makedirs(cls.TMP_PATH)
-        Command.generate_sdk(vsdurl=None, path=cls.get_swagger_files_path(), apiversion=None, revision=None, output_path=cls.TMP_PATH)
+        generator = VSDKGenerator(vsdurl=None, path=cls.get_swagger_files_path(), apiversion=None, revision=None, output_path=cls.TMP_PATH)
+        generator.run()
 
     @classmethod
     def tearDownClass(cls):

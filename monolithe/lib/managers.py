@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os
-import shutil
 import threading
-
-from git import Repo, GitCommandError
-from monolithe.lib.utils.printer import Printer
 
 
 class TaskManager(object):

@@ -5,7 +5,6 @@ import re
 from unittest2 import TestSuite
 
 from monolithe.lib.bladerunner.unittest import MonolitheTestCase
-from monolithe.lib.utils.constants import Constants
 from monolithe.lib.factory import VSDKFactory
 from monolithe.lib.bladerunner.helpers import TestHelper
 
@@ -14,6 +13,9 @@ class TestMaker(object):
     """ Make tests
 
     """
+
+    IGNORED_ATTRIBUTES = ['id', 'parent_id', 'parent_type', 'creation_date', 'owner', 'last_updated_date', 'last_updated_by', 'external_id']
+
     def __init__(self):
         """ Initializes a TestMaker
 
@@ -71,7 +73,7 @@ class TestMaker(object):
 
         for attribute in attributes:
 
-            if attribute.local_name in Constants.IGNORED_ATTRIBUTES:
+            if attribute.local_name in self.IGNORED_ATTRIBUTES:
                 continue
 
             for function_name, conditions in self._attributes_registry.iteritems():

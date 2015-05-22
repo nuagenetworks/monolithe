@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# __all__ = ['VSDKGenerator']
-#
-# from monolithe.generators.vsdkgenerator import VSDKGenerator
+__all__ = ['APIValidator']
+
+from monolithe.validators.apivalidator import APIValidator

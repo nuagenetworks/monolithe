@@ -1,6 +1,5 @@
 jinja2
 colorama
-gitpython
 argparse
 requests
 bambou
