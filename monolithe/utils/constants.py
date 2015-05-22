@@ -10,7 +10,7 @@ class Constants(object):
     VOWELS = ['a', 'e', 'i', 'o', 'u', 'y']
     HTTP_PROTOCOLS = ['http', 'https', 'ftp']
 
-    IGNORED_ATTRIBUTES = ["_fetchers", "creationDate", "parentID", "owner", "parentType", "lastUpdatedBy", "lastUpdatedDate", "externalID", "ID" ]
+    IGNORED_ATTRIBUTES = ["_fetchers", "creationDate", "parentID", "owner", "parentType", "lastUpdatedBy", "lastUpdatedDate", "externalID", "ID"]
     IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
 
     DEFAULT_SPECIFICATION_PATH = u'/templates/specifications/default_specification.json'
@@ -42,13 +42,24 @@ class Constants(object):
         u'AutoDiscGateway': u'AutoDiscoveredGateway',
         u'VirtualMachine': u'VM',
         u'Vlan': u'VLAN',
-        u'VlanTemplate': u'VLANTemplate'
+        u'VlanTemplate': u'VLANTemplate',
     }
 
     ATTRIBUTE_MAPPING = {
-        u'global': u'globalMetadata'
+        u'global': u'globalMetadata',
     }
 
     REST_NAME_MAPPING = {
-        u'allalarm': u'alarm'
-    }    
+        u'allalarm': u'alarm',
+    }
+
+    PROTOCOL_TYPES = {u'TCP': u'6',
+                      u'UDP': u'7',
+                      u'ICMP': u'1',
+                      u'IGMP': u'2',
+                      u'IGP': u'9',
+                      u'OSPF': u'9',
+                      u'ESP': u'0',
+                      u'AH': u'1',
+                      u'GRE': u'7',
+    }

@@ -7,7 +7,7 @@ import shutil
 import json
 
 from .lib import SwaggerParser
-from .lib import SDKWriter, DocWriter, CourgetteWriter
+from .lib import SDKWriter, DocWriter
 from .lib import SpecificationTransformer
 from .lib import SwaggerTransformer
 from .lib import SpecificationParser
@@ -188,27 +188,3 @@ class Command(object):
         # Write Python sources
         doc_writer = DocWriter(directory=directory)
         doc_writer.write(resources=processed_resources, apiversion=apiversion)
-
-    @classmethod
-    def generate_courgette(cls, vsdurl, apiversion, output_path, path=None):
-        """ Generate Courgette sources
-
-            It will generate all the environments and tests for the Courgette Framework.
-
-            Args:
-                vsdurl: the url to the vsd api
-                apiversion: the version of the vsd api in a dotted notation (ex: 3.0)
-                output_path: the path to the output directory
-
-        """
-        directory = '%s' % output_path
-
-        # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=vsdurl, path=path, apiversion=apiversion)
-        resources = swagger_parser.run()
-
-        # Processed Swagger models
-        processed_resources = SpecificationTransformer.get_objects(specifications=resources)
-
-        writer = CourgetteWriter(directory=directory)
-        writer.write(resources=processed_resources)

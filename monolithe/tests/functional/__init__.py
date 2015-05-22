@@ -78,8 +78,8 @@ class FunctionalTest(TestCase):
 
         d = Differ()
         result = list(d.compare(valid_content, expected_content))
-        pprint(result)
-        self.assertEquals(valid_content, expected_content, '%s\n%s' % message)
+        # pprint(result)
+        self.assertEquals(valid_content, expected_content, message)
 
     # Utilities
 
