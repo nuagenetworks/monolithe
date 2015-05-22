@@ -4,5 +4,5 @@
 import sys
 
 if __name__ == '__main__':
-    from monolithe.apidocgenerator import main
+    from monolithe.vsdapidocgenerator import main
     sys.exit(main(sys.argv))

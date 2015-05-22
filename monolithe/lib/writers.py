@@ -422,7 +422,7 @@ class DocWriter(object):
         writer = HTMLFileWriter(directory=self.writer_directory)
         writer.write_index(packages, resources)
 
-        Printer.success('Successfully generated documentation files for %s objects' % len(resources))
+        Printer.success('Successfully write documentation files for %s objects' % len(resources))
 
     def _write_model(self, model, filenames):
         """ Write the HTML file for the model

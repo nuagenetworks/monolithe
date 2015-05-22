@@ -15,10 +15,16 @@ class Constants(object):
     IGNORED_ATTRIBUTES = ["_fetchers", "creationDate", "parentID", "owner", "parentType", "lastUpdatedBy", "lastUpdatedDate", "externalID", "ID"]
     IGNORED_RESOURCES = ['PublicNetworkMacro', 'NetworkLayout', 'InfrastructureConfig']
 
+
     DEFAULT_SPECIFICATION_PATH = u'/templates/specifications/default_specification.json'
     DEFAULT_ATTRIBUTE_PATH = u'/templates/specifications/default_attribute.json'
     DEFAULT_API_PATH = u'/templates/specifications/default_api.json'
 
+    CODEGEN_DIRECTORY = './codegen'
+    DOCS_DIRECTORY = './docgen'
+    SPECGEN_DIRECTORY = './specgen'
+
+    # HTTP methods
     HTTP_METHOD_POST = 'POST'
     HTTP_METHOD_GET = 'GET'
     HTTP_METHOD_DELETE = 'DELETE'

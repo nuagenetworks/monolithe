@@ -18,7 +18,7 @@ def main(argv=sys.argv):
                         type=float)
 
     parser.add_argument('-f', "--file",
-                        dest="path",
+                        dest="swagger_path",
                         help="Path to a repository containing api-docs file ",
                         type=str)
 
@@ -30,8 +30,10 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    from monolithe.command import Command
-    Command.generate_doc(vsdurl=args.vsdurl, path=args.path, apiversion=args.apiversion, output_path=args.dest)
+    from monolithe.generators import VSDAPIDocumentationGenerator
+
+    generator = VSDAPIDocumentationGenerator(vsdurl=args.vsdurl, swagger_path=args.swagger_path, apiversion=args.apiversion, output_path=args.dest)
+    generator.run()
 
 if __name__ == '__main__':
     main()

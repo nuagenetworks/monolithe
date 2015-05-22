@@ -140,17 +140,19 @@ class SpecificationTransformerTests(FunctionalTest):
         """
         objects = SpecificationTransformer.get_objects(self.specifications)
 
-        rest_user = objects['me']
+        obj = objects['me']
 
-        self.assertEqual(rest_user.name, 'RESTUser')
-        self.assertEqual(rest_user.remote_name, 'me')
-        self.assertEqual(rest_user.plural_name, u'RESTUsers')
+        self.assertEqual(obj.name, 'RESTUser')
+        self.assertEqual(obj.remote_name, 'me')
+        self.assertEqual(obj.plural_name, u'RESTUsers')
+        self.assertEqual(obj.package, u'/usermgmt')
+        self.assertEqual(obj.description, u'Object that identifies the user functions')
 
         # Attributes
 
-        local_names = [attribute.local_name for attribute in rest_user.attributes]
-        remote_names = [attribute.remote_name for attribute in rest_user.attributes]
-        local_types = [attribute.local_type for attribute in rest_user.attributes]
+        local_names = [attribute.local_name for attribute in obj.attributes]
+        remote_names = [attribute.remote_name for attribute in obj.attributes]
+        local_types = [attribute.local_type for attribute in obj.attributes]
 
         self.assertEqual(local_names, [u'avatar_data',
                                        u'avatar_type',
@@ -183,19 +185,19 @@ class SpecificationTransformerTests(FunctionalTest):
                                        u'str'])
 
         # Parents apis
-        parents = rest_user.apis['parents']
+        parents = obj.apis['parents']
         paths = parents.keys()
 
         self.assertEqual(paths, [])
 
         # Self apis
-        self_apis = rest_user.apis['self']
+        self_apis = obj.apis['self']
 
         paths = self_apis.keys()
         self.assertEqual(paths, [])
 
         # Children apis
-        children = rest_user.apis['children']
+        children = obj.apis['children']
 
         paths = children.keys()
 
@@ -406,16 +408,19 @@ class SpecificationTransformerTests(FunctionalTest):
         """
         objects = SpecificationTransformer.get_objects(self.specifications)
 
-        enterprise = objects['enterprise']
+        obj = objects['enterprise']
 
-        self.assertEqual(enterprise.name, 'Enterprise')
-        self.assertEqual(enterprise.remote_name, 'enterprise')
-        self.assertEqual(enterprise.plural_name, u'Enterprises')
+        self.assertEqual(obj.name, 'Enterprise')
+        self.assertEqual(obj.remote_name, 'enterprise')
+        self.assertEqual(obj.plural_name, u'Enterprises')
+        self.assertEqual(obj.package, u'/usermgmt')
+        self.assertEqual(obj.description, u'Definition of the enterprise object. This is the top level object that represents an enterprise or organization.')
+
 
         # Attributes
-        local_names = [attribute.local_name for attribute in enterprise.attributes]
-        remote_names = [attribute.remote_name for attribute in enterprise.attributes]
-        local_types = [attribute.local_type for attribute in enterprise.attributes]
+        local_names = [attribute.local_name for attribute in obj.attributes]
+        remote_names = [attribute.remote_name for attribute in obj.attributes]
+        local_types = [attribute.local_type for attribute in obj.attributes]
 
         self.assertEqual(local_names, [u'allow_advanced_qos_configuration',
                                        u'allow_gateway_management',
@@ -461,17 +466,17 @@ class SpecificationTransformerTests(FunctionalTest):
 
 
         # Parents apis
-        parents = enterprise.apis['parents']
+        parents = obj.apis['parents']
         paths = parents.keys()
         self.assertEqual(paths, [])
 
         # Self apis
-        self_apis = enterprise.apis['self']
+        self_apis = obj.apis['self']
         paths = self_apis.keys()
         self.assertEqual(paths, [u'/enterprises/{id}'])
 
         # Children apis
-        children = enterprise.apis['children']
+        children = obj.apis['children']
         paths = children.keys()
 
         self.assertEqual(paths, [u'/enterprises/{id}/alarms',

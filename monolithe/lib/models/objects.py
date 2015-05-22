@@ -22,6 +22,7 @@ class MonolitheObject(object):
                 package: network
         """
         self.description = None
+        self.package = None
         self.name = None  # The original name of the object
         self.instance_name = None  # Name of the object as an instance
         self.plural_name = None  # the original name in plural
@@ -38,6 +39,7 @@ class MonolitheObject(object):
 
         """
         self.description = specification['model']['description']
+        self.package = specification['model']['package']
 
         entity_name = specification['model']['entityName']
 
