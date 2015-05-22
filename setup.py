@@ -17,7 +17,6 @@ setup(
             'vspkdoc-generator = monolithe.vspkdocgenerator:main',
             'vspk-generator = monolithe.vspkgenerator:main',
             'apidoc-generator = monolithe.apidocgenerator:main',
-            'spec-validator = monolithe.specvalidator:main',
             'spec-generator = monolithe.specgenerator:main']
     }
 )
