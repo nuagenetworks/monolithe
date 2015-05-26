@@ -108,7 +108,7 @@ class APIDocFileWriter(TemplateFileWriter):
         """ Initializes a VSDKFileWriter
 
         """
-        super(APIDocFileWriter, self).__init__(directory=directory, package='monolithe.generators.vsdapidoc')
+        super(APIDocFileWriter, self).__init__(directory=directory, package='monolithe.generators.apidoc')
 
         self._vanilla_path = '%s/../vanilla' % os.path.dirname(os.path.realpath(__file__))
 

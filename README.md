@@ -78,12 +78,12 @@ The generated documentation will be available in `docgen/vspkdoc`
 
 You can generate a  VSD Server ReST API documentation for a particular API version against a running version of VSD by doing:
 
-    $ vsdapidoc-generator -u VSD_SERVER_API_URL -v VERSION
+    $ apidoc-generator -u VSD_SERVER_API_URL -v VERSION
 
 For instance:
 
-    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.0
-    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.1
-    $ vsdapidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.2
+    $ apidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.0
+    $ apidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.1
+    $ apidoc-generator -u https://api.nuagenetworks.net:8443 -v 3.2
 
 The generated documentation will be available in `docgen/apidoc/{{version}}`

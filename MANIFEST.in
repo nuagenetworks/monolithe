@@ -1,7 +1,7 @@
 include README.md
 include requirements.txt
-recursive-include monolithe/generators/vsdapidoc/templates *
-recursive-include monolithe/generators/vsdapidoc/vanilla *
+recursive-include monolithe/generators/apidoc/templates *
+recursive-include monolithe/generators/apidoc/vanilla *
 recursive-include monolithe/generators/vsdk/templates *
 recursive-include monolithe/generators/vsdk/vanilla *
 recursive-include monolithe/generators/vspk/vanilla *
