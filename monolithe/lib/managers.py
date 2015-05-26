@@ -55,10 +55,10 @@ class SpecificationsRepositoryManager (object):
         self._github_specification_repo = self._github.get_organization(specification_organization).get_repo(github_specifications_repository)
 
     def available_specification_versions(self):
-        """ Returns the list of available API spec versions
+        """ Returns the list of available API spec versions (branches)
 
             Returns:
-                list of all available specification branches
+                list of all available specification versions (branches)
         """
 
         return [branch.name for branch in self._github_specification_repo.get_branches()]
@@ -89,10 +89,10 @@ class SpecificationsRepositoryManager (object):
 
             Args:
                 specification_version: the version (branch) where to find files (default: "master")
-                specification_file: file name
+                specification_file: the name of the specification file of which you want to get the content
 
             Returns:
-                JSON encoded data of the specification file.
+                JSON decoded structure of the specification file.
         """
         github_encoded_data = self._github_specification_repo.get_file_contents(specification_file, ref=specification_version).content
         return json.loads(base64.b64decode(github_encoded_data))
