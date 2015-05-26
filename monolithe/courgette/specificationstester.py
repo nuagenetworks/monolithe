@@ -39,11 +39,6 @@ class SpecificationsTester (object):
                 info["spec"]          = self._specifications_repository_manager.specification_contents(specification_version=specification_version, specification_file=specification_file)
                 info["defaultValues"] = json.loads(data["default_values"])
 
-                print "------"
-                print info["spec"]
-                print "------"
-
-
                 courgette = Courgette(vsdurl=vsd_server_url, username=vsd_user, password=vsd_password, enterprise=vsd_organization, apiversion=vsd_api_version, data=info, swagger_path=None)
                 result = courgette.run()
 
