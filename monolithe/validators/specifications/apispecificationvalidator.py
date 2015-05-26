@@ -145,7 +145,6 @@ class APISpecificationValidator:
         ## check for extra apis
         for api_path in candidate_api_declarations:
 
-            print mispellings
             if api_path in mispellings:
                 continue
 
