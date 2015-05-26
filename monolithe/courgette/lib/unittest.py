@@ -166,8 +166,11 @@ class MonolitheTestCase(TestCase):
                 self.tearDown()
             except KeyboardInterrupt:
                 raise
+            except BambouHTTPError as error:
+                result.addError(self, [None, u'Test tearDown has failed', None], error.connection)
+                return
             except:
-                result.addError(self, sys.exc_info(), self.last_connection)
+                result.addError(self, sys.exc_info())
                 ok = False
             if ok: result.addSuccess(self)
         finally:

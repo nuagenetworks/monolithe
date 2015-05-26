@@ -58,3 +58,5 @@ class VSDAPIDocumentationGenerator(object):
         # Write Python sources
         writer = APIDocWriter(directory=directory)
         writer.write(resources=processed_resources, apiversion=self.apiversion)
+
+        Printer.success('Generated %s documentation files for API version %s' % (len(processed_resources), self.apiversion))

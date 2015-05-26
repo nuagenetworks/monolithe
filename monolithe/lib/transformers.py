@@ -52,8 +52,6 @@ class SwaggerTransformer(object):
         if Constants.USER_REST_NAME in specifications and Constants.RESTUSER_REST_NAME in relations:
             specifications[Constants.RESTUSER_REST_NAME] = cls._get_rest_user_specification(specifications[Constants.USER_REST_NAME], relations[Constants.RESTUSER_REST_NAME])
 
-        Printer.success('Transformed %s objects from swagger description files' % len(specifications))
-
         return ParsingUtils.order(specifications)
 
     @classmethod
@@ -126,7 +124,5 @@ class SpecificationTransformer(object):
             model.from_specification(specification)
 
             models[model.remote_name] = model
-
-        Printer.success('Processed succeed for %s objects' % len(models))
 
         return ParsingUtils.order(models)

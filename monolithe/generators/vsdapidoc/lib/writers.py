@@ -60,8 +60,6 @@ class APIDocWriter(object):
         writer = self.get_writer()
         writer.write_index(packages, resources)
 
-        Printer.success('Successfully write documentation files for %s objects' % len(resources))
-
     def _write_model(self, model, filenames):
         """ Write the HTML file for the model
 

@@ -8,6 +8,8 @@ import re
 import inspect
 import subprocess
 
+from monolithe.lib.utils.printer import Printer
+
 
 class VSPKDocumentationGenerator(object):
     """ Create a VSPK Documentation
@@ -26,6 +28,7 @@ class VSPKDocumentationGenerator(object):
         """ Create the VSPK package
 
         """
+        Printer.log("Starting VSPK documentation generation")
         sys.path.append(os.path.abspath(self.vspk_path))
         python_path = sys.path
         python_path.append("%s/../../codegen/vspk" % os.path.dirname(os.path.realpath(__file__)))
@@ -86,6 +89,8 @@ class VSPKDocumentationGenerator(object):
         shutil.copytree("%s/_build/html/" % self.temp_doc_path, self.export_doc_path)
 
         os.system("rm -rf '%s'" % self.temp_doc_path)
+
+        Printer.success("Generated VSPK documentation")
 
     def _parse_module(self, module):
 

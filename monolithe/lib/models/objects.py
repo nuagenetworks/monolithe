@@ -170,7 +170,7 @@ class MonolitheObjectAttribute(object):
             # Ignoring attribute gateway of object InfrastructureGatewayProfile
             # Ignoring attribute enterprise of object InfrastructureGatewayProfile
             self.ignored = True
-            Printer.log("Deliberately ignoring attribute %s because of type %s" % (self.remote_name, self.type))
+            # Printer.log("Deliberately ignoring attribute %s because of type %s" % (self.remote_name, self.type))
 
 
 class MonolitheObjectAPI(object):

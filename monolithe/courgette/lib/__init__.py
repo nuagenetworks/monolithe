@@ -64,7 +64,7 @@ class TestsRunner(object):
         for path, api in model.apis['parents'].iteritems():
             for operation in api.operations:
                 method = operation.method
-                # Printer.log('%s %s' % (method, path))
+
                 if method == Constants.HTTP_METHOD_POST:
                     self.is_create_allowed = True
                 elif method == Constants.HTTP_METHOD_GET:
@@ -73,7 +73,7 @@ class TestsRunner(object):
         for path, api in model.apis['self'].iteritems():
             for operation in api.operations:
                 method = operation.method
-                # Printer.log('%s' % (method))
+
                 if method == Constants.HTTP_METHOD_UPDATE:
                     self.is_update_allowed = True
                 elif method == Constants.HTTP_METHOD_DELETE:

@@ -45,6 +45,7 @@ class VSDKGenerator(object):
         """ Start the VSDK generation
 
         """
+        Printer.log("Starting VSDK generation for API version %s" % self.apiversion)
         # Read Swagger
         swagger_parser = SwaggerParser(vsdurl=self.vsdurl, path=self.swagger_path, apiversion=self.apiversion)
         swagger_resources = swagger_parser.run()
@@ -74,3 +75,5 @@ class VSDKGenerator(object):
         # Write Python sources
         writer = SDKWriter(directory=directory)
         writer.write(resources=processed_resources, apiversion=self.apiversion, revision=self.revision)
+
+        Printer.success("Generated VSDK with %s objects for API version %s" % (len(processed_resources), self.apiversion))

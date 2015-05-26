@@ -66,8 +66,8 @@ class Specification(dict):
         self['model']['entityName'] = ParsingUtils.get_correct_name(entity_name)
         self['model']['description'] = swagger['models'][entity_name]['description']
 
-        if len(swagger['apis']) == 0:
-            Printer.warn('Swagger file %s has no apis defined' % entity_name)
+        # if len(swagger['apis']) == 0:
+        #     Printer.warn('Swagger file %s has no apis defined' % entity_name)
 
         self._process_apis(apis=swagger['apis'])
         self._process_attributes(swagger_properties=swagger['models'][entity_name]['properties'])

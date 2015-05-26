@@ -100,8 +100,6 @@ class SDKWriter(object):
 
         writer.write_constants_file(constants=constants)
 
-        Printer.success('Successfully generated files for %s objects' % len(resources))
-
     def _write_autogenerate_file(self, model, filenames):
         """ Write the autogenerate file for the model
 

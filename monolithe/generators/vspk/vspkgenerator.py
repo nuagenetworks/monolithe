@@ -47,6 +47,6 @@ class VSPKGenerator(object):
         source_sdk_path = "%s/%s/vsdk/" % (vsdk_base_path, vsdk_version)
         dest_sdk_path = "%s/vspk/vsdk/%s" % (vspk_path, parsed_version)
 
-        Printer.success(" * Packaging vsdk version %s to vspk" % vsdk_version)
+        Printer.success("Adding VSDK version %s to VSPK" % vsdk_version)
 
         shutil.copytree(source_sdk_path, dest_sdk_path)
