@@ -4,6 +4,7 @@ import argparse
 import sys
 import os
 
+
 def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="VSD Documentation Generator.")
 

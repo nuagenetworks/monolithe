@@ -4,8 +4,6 @@ import argparse
 import sys
 import os
 
-sys.path.append("../")
-
 
 def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="VSP SDK Generator.")
