@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='monolithe',
-    packages=['monolithe', 'monolithe.lib', 'monolithe.specsvalidator'],
+    packages=['monolithe', 'monolithe.lib', 'monolithe.generators', 'monolithe.validators', 'monolithe.courgette'],
     include_package_data=True,
     version='0.0.1',
     description='Monolithe is the generator of all documentation and SDK for Nuage Network VSP',
