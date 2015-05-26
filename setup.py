@@ -17,6 +17,6 @@ setup(
             'generate-specifications = monolithe.generators.specifications.cli:main',
             'generate-apidoc = monolithe.generators.apidoc.cli:main',
             'generate-vspkdoc = monolithe.generators.vspkdoc.cli:main',
-            'validate-specification = monolithe.validators.specifications.cli:main']
+            'validate-specifications = monolithe.validators.specifications.cli:main']
     }
 )

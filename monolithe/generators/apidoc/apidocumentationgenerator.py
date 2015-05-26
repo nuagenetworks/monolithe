@@ -8,7 +8,7 @@ from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransfor
 from monolithe.generators.apidoc.lib import APIDocWriter
 
 
-class VSDAPIDocumentationGenerator(object):
+class APIDocumentationGenerator(object):
     """ Generate VSD API Documentation
 
     """

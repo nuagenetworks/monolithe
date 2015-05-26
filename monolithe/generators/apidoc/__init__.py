@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['VSDAPIDocumentationGenerator']
+__all__ = ['APIDocumentationGenerator']
 
-from .apidocumentationgenerator import VSDAPIDocumentationGenerator
+from .apidocumentationgenerator import APIDocumentationGenerator
