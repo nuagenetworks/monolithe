@@ -6,3 +6,4 @@ bambou
 Sphinx
 sphinx_rtd_theme
 unittest2
+PyGithub

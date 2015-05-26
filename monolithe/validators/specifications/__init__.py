@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['SpecsValidator']
+__all__ = ['APISpecificationValidator', 'SpecificationsValidator']
 
-from .specsvalidator import SpecsValidator
+from .apispecificationvalidator import APISpecificationValidator
+from .specificationsvalidator import SpecificationsValidator
