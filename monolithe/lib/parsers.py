@@ -184,7 +184,7 @@ class SwaggerParser(object):
 
         """
         filepath = '%s%s' % (base_path, path)
-        return ParsingUtils.parseJSON(filepath)
+        return ParsingUtils.parseFile(filepath)
 
 
 class SpecificationParser(object):
@@ -211,7 +211,7 @@ class SpecificationParser(object):
                 filenames.append(filename)
                 filepath = '%s/%s' % (directory, filename)
 
-                data = ParsingUtils.parseJSON(filepath)
+                data = ParsingUtils.parseFile(filepath)
                 name = data['model']['entityName']
 
                 specs[name] = data

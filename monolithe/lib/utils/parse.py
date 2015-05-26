@@ -66,21 +66,30 @@ class ParsingUtils(object):
         return VSDKUtils.get_python_name(name)
 
     @classmethod
-    def parseJSON(cls, filepath):
+    def parseJSON(cls, content):
+        """
+
+        """
+        return json.loads(content)
+
+    @classmethod
+    def parseFile(cls, filepath):
         """
 
         """
         if not os.path.isfile(filepath):
             Printer.raiseError("[File Path] Could not access %s" % (filepath))
 
-        data = None
         try:
-            data = json.load(open(filepath))
+            f = open(filepath)
         except Exception:
             e = sys.exc_info()[1]
             Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (filepath, e.args[0]))
 
+        data = cls.parseJSON(f.read())
+        f.close()
         return data
+
 
     @classmethod
     def are_similar_strings(cls, string1, string2, ratio=0.8):
