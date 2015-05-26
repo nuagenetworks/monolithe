@@ -147,7 +147,7 @@ def main(argv=sys.argv):
     if not args.githubtoken and "GITHUB_TOKEN" in os.environ: args.githubtoken = os.environ["GITHUB_TOKEN"]
 
 
-    from monolithe.lib.specificationsrepositorymanager import SpecificationsRepositoryManager
+    from monolithe.lib.managers import SpecificationsRepositoryManager
     from monolithe.validators.specifications import SpecificationsValidator
 
     specifcations_repo_manager = SpecificationsRepositoryManager(github_api_url=args.githubapiurl, github_token=args.githubtoken, specification_organization=args.githuborganization, github_specifications_repository=args.githubrepo)

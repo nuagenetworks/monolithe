@@ -5,7 +5,6 @@ import json
 import base64
 from .apispecificationvalidator import APISpecificationValidator
 from monolithe.generators.specifications import SpecificationsGenerator
-from github import Github
 from requests.exceptions import ConnectionError
 
 
