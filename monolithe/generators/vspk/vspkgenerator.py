@@ -3,7 +3,8 @@
 import os
 import shutil
 
-from monolithe.lib.utils.vsdk import 
+from monolithe.lib.utils.vsdk import VSDKUtils
+from monolithe.lib.utils.printer import Printer
 
 
 class VSPKGenerator(object):
@@ -16,7 +17,7 @@ class VSPKGenerator(object):
         """
         self.versions = versions
 
-        self._path_vanilla_vspk = '%s/vanilla' % os.path.dirname(os.path.realpath(__file__))
+        self._path_vanilla_vspk = '%s/vanilla/vspk' % os.path.dirname(os.path.realpath(__file__))
         self._path_codegen = "./codegen"
         self._path_generated_vspk = "%s/vspk" % self._path_codegen
 
@@ -46,6 +47,6 @@ class VSPKGenerator(object):
         source_sdk_path = "%s/%s/vsdk/" % (vsdk_base_path, vsdk_version)
         dest_sdk_path = "%s/vspk/vsdk/%s" % (vspk_path, parsed_version)
 
-        print " * Packaging vsdk version %s to vspk" % vsdk_version
+        Printer.success(" * Packaging vsdk version %s to vspk" % vsdk_version)
 
         shutil.copytree(source_sdk_path, dest_sdk_path)

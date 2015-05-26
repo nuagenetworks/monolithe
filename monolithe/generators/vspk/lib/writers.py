@@ -165,9 +165,9 @@ class VSDKFileWriter(TemplateFileWriter):
         """ Initializes a VSDKFileWriter
 
         """
-        super(VSDKFileWriter, self).__init__(directory=directory, package=u'monolithe.generators.vsdk')
+        super(VSDKFileWriter, self).__init__(directory=directory, package=u'monolithe.generators.vspk')
 
-        self._vanilla_path = '%s/../vanilla' % os.path.dirname(os.path.realpath(__file__))
+        self._vanilla_path = '%s/../vanilla/vsdk' % os.path.dirname(os.path.realpath(__file__))
         self._override_path = '%s/overrides' % self._vanilla_path
 
         self._template_folder = 'templates'

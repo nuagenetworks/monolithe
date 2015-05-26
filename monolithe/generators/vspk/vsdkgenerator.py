@@ -8,7 +8,7 @@ from monolithe.lib.utils.constants import Constants
 
 from monolithe.lib.parsers import SpecificationParser, SwaggerParser
 from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
-from monolithe.generators.vsdk.lib import SDKWriter
+from monolithe.generators.vspk.lib import SDKWriter
 
 
 class VSDKGenerator(object):
