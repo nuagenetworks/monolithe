@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import os
 
 sys.path.append("../")
 
@@ -15,7 +16,7 @@ def main(argv=sys.argv):
                         type=str)
 
     parser.add_argument('-v', "--apiversions",
-                        dest="versions",
+                        dest="apiversions",
                         help="versions of the SDK to generate (examples: 1.0 3.0 3.1)",
                         nargs="*",
                         type=float)
@@ -53,11 +54,14 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
+    if not args.vsdurl and "VSD_API_URL" in os.environ: args.vsdurl = os.environ["VSD_API_URL"]
+    if not args.apiversions and "VSD_API_VERSION" in os.environ: args.apiversions = [os.environ["VSD_API_VERSION"]]
+
     from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
 
     # Generate VSDK
-    if args.versions:
-        for version in args.versions:
+    if args.apiversions:
+        for version in args.apiversions:
             vsdk_generator = VSDKGenerator(vsdurl=args.vsdurl, swagger_path=args.swagger_path, apiversion=version, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
             vsdk_generator.run()
     else:
@@ -65,7 +69,7 @@ def main(argv=sys.argv):
         vsdk_generator.run()
 
     # Packaging a VSPK
-    vspk_generator = VSPKGenerator(versions=args.versions)
+    vspk_generator = VSPKGenerator(versions=args.apiversions)
     vspk_generator.run()
 
     # Generate VSPK and VSDK documentation
