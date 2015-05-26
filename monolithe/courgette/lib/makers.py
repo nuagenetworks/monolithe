@@ -5,7 +5,7 @@ import re
 from unittest2 import TestSuite
 
 from monolithe.courgette.lib.helpers import TestHelper
-from monolithe.courgette.unittest import MonolitheTestCase
+from monolithe.courgette.lib.unittest import MonolitheTestCase
 from monolithe.lib.factory import VSDKFactory
 
 

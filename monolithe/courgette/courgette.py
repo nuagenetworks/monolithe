@@ -2,9 +2,9 @@
 
 from monolithe.lib.utils.printer import Printer
 
-from monolithe.lib.parsers import SwaggerParser
-from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
-from monolithe.validators.apivalidator.lib import TestsRunner
+from monolithe.courgette.lib import TestsRunner
+from monolithe.lib.transformers import SpecificationTransformer
+from monolithe.generators.specifications import SpecificationsGenerator
 
 
 class Courgette(object):
@@ -66,7 +66,8 @@ class Courgette(object):
             if 'RESTName' not in data:
                 Printer.raiseError('No RESTName information provided')
 
-            self.specification = self.get_specification(rest_name=data['RESTName'])
+            generator = SpecificationsGenerator(vsdurl=vsdurl, swagger_path=swagger_path, apiversion=apiversion)
+            self.specification = generator.get_specification(rest_name=data['RESTName'])
             self.rest_name = self.specification['model']['RESTName']
 
     def run(self):
