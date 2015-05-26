@@ -68,7 +68,8 @@ class Courgette(object):
 
             generator = SpecificationsGenerator(vsdurl=vsdurl, swagger_path=swagger_path, apiversion=apiversion)
             self.specification = generator.get_specification(rest_name=data['RESTName'])
-            self.rest_name = self.specification['model']['RESTName']
+
+        self.rest_name = self.specification['model']['RESTName']
 
     def run(self):
         """ Run all tests
