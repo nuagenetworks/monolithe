@@ -63,3 +63,19 @@ class SpecificationsGenerator(object):
                 json.dump(specification, file, indent=2, sort_keys=True)
 
         Printer.success("Created %s specification files" % len(specifications))
+
+    def get_specification(self, rest_name):
+        """ Retrieve a specification by its RESTName
+
+        """
+        # Read Swagger
+        swagger_parser = SwaggerParser(vsdurl=self.vsdurl, path=self.swagger_path, apiversion=self.apiversion)
+        swagger_resources = swagger_parser.run(filters=[rest_name])
+
+        # Convert Swagger models
+        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, filters=[rest_name])
+
+        if rest_name in specifications:
+            return specifications[rest_name]
+
+        return None
