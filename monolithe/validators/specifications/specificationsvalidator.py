@@ -10,52 +10,11 @@ from requests.exceptions import ConnectionError
 
 
 class SpecificationsValidator (object):
-    """ SpecificationsValidator is an object that allows to use monolithe.APISpecificationValidator
-        using a github repository for specifications and a running VSD for candidate specifications
+    """ SpecificationsValidator is an object that will validate multiple API specifications
     """
 
-    def __init__(self, github_api_url, github_token, specification_organization, github_specifications_repository):
-        """ Initialize FindACoolName
-
-            Args:
-                github_api_url: the API url for Github
-                github_token: the authentication token for Github
-                specification_organization: the organization where github_specifications_repository is
-                github_specifications_repository: the repository containing the specifications
-        """
-
-        self._github                    = Github(login_or_token=github_token, base_url=github_api_url)
-        self._github_specification_repo = self._github.get_organization(specification_organization).get_repo(github_specifications_repository)
-
-    def available_specification_versions(self):
-        """ Returns the list of available API spec versions
-
-            Returns:
-                list of all available specification branches
-        """
-
-        return [branch.name for branch in self._github_specification_repo.get_branches()]
-
-    def available_specification_files(self, specification_version="master"):
-        """ Returns the list of available specification files
-
-            Args:
-                specification_version: the version (branch) where to find files (default: "master")
-
-            Returns:
-                list of all available specification files in the given version
-        """
-
-        ret = []
-
-        for file in self._github_specification_repo.get_dir_contents("/", ref=specification_version):
-
-            if os.path.splitext(file.name)[1] != ".spec":
-                continue
-
-            ret.append(file.name)
-
-        return ret
+    def __init__(self, specification_repository_manager):
+        self._specification_repository_manager = specification_repository_manager
 
     def insert_reporting(self, reports, name, processing_error=None, contents=None):
         """ Insert a reporting in given report list
@@ -86,9 +45,8 @@ class SpecificationsValidator (object):
 
         for specification_file in specification_files:
 
-            github_encoded_data = self._github_specification_repo.get_file_contents(specification_file, ref=specification_version).content
-            specification_data  = json.loads(base64.b64decode(github_encoded_data))
-            rest_name           = specification_data["model"]["RESTName"]
+            specification_data = self._specification_repository_manager.specification_contents(specification_version=specification_version, specification_file=specification_file)
+            rest_name          = specification_data["model"]["RESTName"]
 
             ## Try to get the candidate specification from VSD
             try:

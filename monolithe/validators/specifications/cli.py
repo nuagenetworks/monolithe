@@ -147,17 +147,19 @@ def main(argv=sys.argv):
     if not args.githubtoken and "GITHUB_TOKEN" in os.environ: args.githubtoken = os.environ["GITHUB_TOKEN"]
 
 
+    from monolithe.lib.specificationsrepositorymanager import SpecificationsRepositoryManager
     from monolithe.validators.specifications import SpecificationsValidator
 
-    validator = SpecificationsValidator(github_api_url=args.githubapiurl, github_token=args.githubtoken, specification_organization=args.githuborganization, github_specifications_repository=args.githubrepo)
+    specifcations_repo_manager = SpecificationsRepositoryManager(github_api_url=args.githubapiurl, github_token=args.githubtoken, specification_organization=args.githuborganization, github_specifications_repository=args.githubrepo)
+    validator                  = SpecificationsValidator(specifcations_repo_manager)
 
     if args.command_list_branches:
-        for version in validator.available_specification_versions():
+        for version in specifcations_repo_manager.available_specification_versions():
             print " - %s" % version
         sys.exit(0)
 
     if args.command_list_specifications:
-        for spec in validator.available_specification_files(args.specifications_branch):
+        for spec in specifcations_repo_manager.available_specification_files(args.specifications_branch):
             print " - %s" % spec.replace(".spec", "")
         sys.exit(0)
 
