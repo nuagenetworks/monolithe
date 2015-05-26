@@ -37,7 +37,6 @@ def print_report(name, report):
     print_line()
     print " %s" % c(c(name, "blue"), "bold")
     print_line()
-    print
 
     for declaration_name, errors in report.iteritems():
 
@@ -73,7 +72,6 @@ def print_report(name, report):
 
             for error in errors["characteristic_mismatches"]:
                 print " %s is expected to be %s but it is %s" % (c(error.characteristic_name, "bold"), c(error.expected_value, "bold"), c(error.actual_value, "bold"))
-        print
 
 def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="Specifications Validators.")
@@ -166,13 +164,16 @@ def main(argv=sys.argv):
     if args.command_validate:
         result = validator.run_validation(specification_version=args.specifications_branch, specification_files=args.specification_files, vsd_server_url=args.vsdurl, vsd_api_version=args.apiversion)[0]
 
-        import pprint
-        # pprint.pprint(result)
+        print
         for report in result:
+            print_line('+')
+            print c("  VALIDATION REPORT FOR %s" % report["rest_name"].upper(), "bold")
+            print_line('+')
+
             print_report("Self API Validation Errors", report["contents"]["self_api_errors"])
             print_report("Parent API Validation Errors", report["contents"]["parent_api_errors"])
             print_report("Attributes Validation Errors", report["contents"]["attribute_errors"])
-
+        print
         sys.exit(0)
 
 if __name__ == '__main__':
