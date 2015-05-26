@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import pkgutil
 
 from datetime import date
 from copy import deepcopy
@@ -34,8 +35,8 @@ class Specification(dict):
 
         """
         if cls.__default_specification__ is None:
-            filepath = '%s%s' % (os.getcwd(), Constants.DEFAULT_SPECIFICATION_PATH)
-            cls.__default_specification__ = ParsingUtils.parseJSON(filepath)
+            data = pkgutil.get_data(__package__, '/data/default_specification.json')
+            cls.__default_specification__ = ParsingUtils.parseJSON(data)
 
         return deepcopy(cls.__default_specification__)
 
@@ -45,8 +46,8 @@ class Specification(dict):
 
         """
         if cls.__default_attribute__ is None:
-            filepath = '%s%s' % (os.getcwd(), Constants.DEFAULT_ATTRIBUTE_PATH)
-            cls.__default_attribute__ = ParsingUtils.parseJSON(filepath)
+            data = pkgutil.get_data(__package__, '/data/default_attribute.json')
+            cls.__default_attribute__ = ParsingUtils.parseJSON(data)
 
         return deepcopy(cls.__default_attribute__)
 
@@ -190,7 +191,7 @@ class SpecificationApi(dict):
 
         """
         if cls.__default_api__ is None:
-            filepath = '%s%s' % (os.getcwd(), Constants.DEFAULT_API_PATH)
-            cls.__default_api__ = ParsingUtils.parseJSON(filepath)
+            data = pkgutil.get_data(__package__, '/data/default_api.json')
+            cls.__default_api__ = ParsingUtils.parseJSON(data)
 
         return deepcopy(cls.__default_api__)
