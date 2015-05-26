@@ -60,7 +60,7 @@ class Courgette(object):
         self.default_values = data['defaultValues']
 
         if 'spec' in data:
-            self.specifications = data['spec']
+            self.specification = data['spec']
 
         if self.specification is None or len(self.specification) == 0:
             if 'RESTName' not in data:
