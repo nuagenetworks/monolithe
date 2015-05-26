@@ -4,7 +4,7 @@ from monolithe.lib.utils.printer import Printer
 
 from monolithe.lib.parsers import SwaggerParser
 from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
-from monolithe.lib.bladerunner import TestsRunner
+from monolithe.validators.apivalidator.lib import TestsRunner
 
 
 class APIValidator(object):

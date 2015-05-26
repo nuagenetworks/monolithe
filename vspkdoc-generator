@@ -4,5 +4,5 @@
 import sys
 
 if __name__ == '__main__':
-    from monolithe.vspkdocgenerator import main
+    from monolithe.generators.vspkdoc.cli import main
     sys.exit(main(sys.argv))

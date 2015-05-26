@@ -13,7 +13,7 @@ from bambou.exceptions import BambouHTTPError
 
 from monolithe.lib.utils.constants import Constants
 from monolithe.lib.utils.printer import Printer
-from monolithe.lib.bladerunner.helpers import TestHelper
+from monolithe.validators.apivalidator.lib.helpers import TestHelper
 
 
 class _MonolitheTestResult(TestResult):

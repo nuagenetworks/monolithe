@@ -61,3 +61,5 @@ class SpecificationsGenerator(object):
             file_path = '%s/%s.spec' % (destination, specification['model']['entityName'].lower())
             with open(file_path, 'wb') as file:
                 json.dump(specification, file, indent=2, sort_keys=True)
+
+        Printer.success("Created %s specification files" % len(specifications))

@@ -7,7 +7,7 @@ from validationerrors import APISpecAttributeMissingDefinitionError
 from validationerrors import APISpecAPIMissingError
 from validationerrors import APISpecAPIMissingMethodError
 
-from monolithe.lib.utils.constants import IGNORED_ATTRIBUTES
+from monolithe.lib.utils.constants import Constants
 
 
 class APIValidator:
@@ -34,6 +34,8 @@ class APIValidator:
         self.validate_self_api_definition()
 
     def _append_validation_error(self, report, key, error_type, error):
+        """
+        """
 
         if not key in report:
             report[key] = {}
@@ -90,7 +92,7 @@ class APIValidator:
 
         for attribute_name in specification_attributes_definition:
 
-            if attribute_name in IGNORED_ATTRIBUTES:
+            if attribute_name in Constants.IGNORED_ATTRIBUTES:
                 continue
 
             if not attribute_name in candidate_attributes_definition:
@@ -143,7 +145,6 @@ class APIValidator:
 
                 self._validate_candidate_api(api_path, specification_self_api_definition, candidate_self_api_definition, self.self_api_errors)
 
-
     def validate_parent_apis_definition(self):
         """ Validate Parent API information
 
@@ -162,4 +163,3 @@ class APIValidator:
                 candidate_parent_api_definition     = candidate_parent_apis_definition[api_path]
 
                 self._validate_candidate_api(api_path, specification_parent_api_definition, candidate_parent_api_definition, self.parent_api_errors)
-

@@ -5,7 +5,7 @@ import sys
 import os
 import shutil
 
-PATH_VANILLA_VSPK = '%s/vanilla/vspk' % os.path.dirname(os.path.realpath(__file__))
+PATH_VANILLA_VSPK = '%s/vanilla' % os.path.dirname(os.path.realpath(__file__))
 PATH_CODEGEN        = "./codegen"
 PATH_GENERATED_VSPK = "%s/vspk" % PATH_CODEGEN
 
@@ -33,7 +33,7 @@ def include_vsdk(vsdk_version, vsdk_base_path, vspk_path):
 
 def main(argv=sys.argv):
 
-    parser = argparse.ArgumentParser(description="vspk Package Generator.")
+    parser = argparse.ArgumentParser(description="VSPK Package Generator.")
     parser.add_argument('-v', "--versions", dest="versions", nargs='*', help="Specify all supported VSDK versions", required=True, type=str)
 
     args = parser.parse_args()

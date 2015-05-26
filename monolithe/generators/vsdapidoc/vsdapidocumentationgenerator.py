@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import os
-import shutil
-
 from monolithe.lib.utils.printer import Printer
 from monolithe.lib.utils.constants import Constants
 
-from monolithe.lib.parsers import SpecificationParser, SwaggerParser
+from monolithe.lib.parsers import SwaggerParser
 from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
-from monolithe.lib.writers import SDKWriter
+from monolithe.generators.vsdapidoc.lib import APIDocWriter
 
 
-class VSDKGenerator(object):
-    """ Generate VSDK
+class VSDAPIDocumentationGenerator(object):
+    """ Generate VSD API Documentation
 
     """
-    def __init__(self, vsdurl, swagger_path, apiversion, revision, output_path=None, force_removal=False, specifications_path=None):
+    def __init__(self, vsdurl, swagger_path, apiversion, output_path=None):
         """ Initializes a VSDKGenerator
 
             Can be used to generate a vsdk from a remote vsdurl or a local swagger_path.
@@ -24,25 +21,19 @@ class VSDKGenerator(object):
                 vsdurl (string): the url of the vsd with its port
                 swagger_path (string): the path to swagger description files
                 apiversion (float): the api version
-                revision (float): the revision to generate
                 output_path (string): the output path to put generated python files
-                force_removal (bool): set to True to force previous vsdk files
-                specifications_path (string): a path where to get additionnal specifications files
 
         """
         self.vsdurl = vsdurl
         self.swagger_path = swagger_path
         self.apiversion = apiversion
-        self.revision = revision
         self.output_path = output_path
-        self.force_removal = force_removal
-        self.specifications_path = specifications_path
 
         if self.vsdurl is None and self.swagger_path is None:
             Printer.raiseError("Please provide a vsd url or a path to swagger json file")
 
     def run(self):
-        """ Start the VSDK generation
+        """ Start generation ofthe API Documentation
 
         """
         # Read Swagger
@@ -51,10 +42,6 @@ class VSDKGenerator(object):
 
         # Convert Swagger models
         specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
-
-        if self.specifications_path is not None:
-            candidates = SpecificationParser.run(self.specifications_path)
-            specifications.update(candidates)
 
         # Process Swagger models
         processed_resources = SpecificationTransformer.get_objects(specifications=specifications)
@@ -66,11 +53,8 @@ class VSDKGenerator(object):
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.apiversion)
         else:
-            directory = '%s/%s' % (Constants.CODEGEN_DIRECTORY, self.apiversion)
-
-        if self.force_removal and os.path.exists(directory):
-            shutil.rmtree(directory)
+            directory = '%s/%s' % (Constants.DOCS_DIRECTORY, self.apiversion)
 
         # Write Python sources
-        writer = SDKWriter(directory=directory)
-        writer.write(resources=processed_resources, apiversion=self.apiversion, revision=self.revision)
+        writer = APIDocWriter(directory=directory)
+        writer.write(resources=processed_resources, apiversion=self.apiversion)

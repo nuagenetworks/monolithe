@@ -4,5 +4,5 @@
 import sys
 
 if __name__ == '__main__':
-    from monolithe.vsdapidocgenerator import main
+    from monolithe.generators.vsdapidoc.cli import main
     sys.exit(main(sys.argv))

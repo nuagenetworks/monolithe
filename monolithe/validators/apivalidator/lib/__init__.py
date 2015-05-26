@@ -3,12 +3,12 @@
 from unittest2 import TestSuite
 
 from monolithe.lib.factory import VSDKFactory
-from monolithe.lib.bladerunner.helpers import TestHelper
+from monolithe.validators.apivalidator.lib.helpers import TestHelper
 from monolithe.lib.utils.constants import Constants
 from monolithe.lib.utils.vsdk import VSDKUtils
 
-from monolithe.lib.bladerunner.makers import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
-from monolithe.lib.bladerunner.unittest import _MonolitheTestRunner
+from monolithe.validators.apivalidator.lib.makers import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
+from monolithe.validators.apivalidator.lib.unittest import _MonolitheTestRunner
 
 
 class TestsRunner(object):

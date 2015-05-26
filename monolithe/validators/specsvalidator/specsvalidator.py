@@ -4,7 +4,8 @@ import os
 import json
 from apivalidator import APIValidator
 
-class Validator:
+
+class SpecsValidator(object):
     """ Validates an entire spec candidate folder against an entire spec folder
 
     """
@@ -13,7 +14,7 @@ class Validator:
         """ Initialize the validator
 
         """
-        self._report            = {};
+        self._report            = {}
         self.specification_path = specification_path
         self.candidate_path     = candidate_path
 

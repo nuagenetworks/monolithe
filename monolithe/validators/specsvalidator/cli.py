@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
-import os
 import sys
 import argparse
-from pprint import pprint
 
-from specsvalidator.validator import Validator
+from monolithe.validators.specsvalidator import SpecsValidator
 
 
 def main(argv=sys.argv):
+    """ CLI main function
+
+    """
 
     parser = argparse.ArgumentParser(description="API Spec Validator.")
 
@@ -26,8 +27,7 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-
-    validator = Validator(args.specification_path, args.candidate_path)
+    validator = SpecsValidator(args.specification_path, args.candidate_path)
     validator.run()
     validator.print_console_report()
 

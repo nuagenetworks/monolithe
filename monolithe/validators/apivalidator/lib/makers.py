@@ -4,9 +4,9 @@ import re
 
 from unittest2 import TestSuite
 
-from monolithe.lib.bladerunner.unittest import MonolitheTestCase
+from monolithe.validators.apivalidator.lib.unittest import MonolitheTestCase
 from monolithe.lib.factory import VSDKFactory
-from monolithe.lib.bladerunner.helpers import TestHelper
+from monolithe.validators.apivalidator.lib.helpers import TestHelper
 
 
 class TestMaker(object):
