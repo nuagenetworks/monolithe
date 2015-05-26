@@ -30,9 +30,9 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    from monolithe.generators import VSDAPIDocumentationGenerator
+    from monolithe.generators import APIDocumentationGenerator
 
-    generator = VSDAPIDocumentationGenerator(vsdurl=args.vsdurl, swagger_path=args.swagger_path, apiversion=args.apiversion, output_path=args.dest)
+    generator = APIDocumentationGenerator(vsdurl=args.vsdurl, swagger_path=args.swagger_path, apiversion=args.apiversion, output_path=args.dest)
     generator.run()
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import sys
 import os
 import sphinx_rtd_theme
 
-extensions = [ 'sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinxcontrib.napoleon']
+extensions = [ 'sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon']
 add_module_names = False
 source_suffix = '.rst'
 master_doc = 'index'

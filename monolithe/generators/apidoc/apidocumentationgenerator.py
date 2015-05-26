@@ -5,10 +5,10 @@ from monolithe.lib.utils.constants import Constants
 
 from monolithe.lib.parsers import SwaggerParser
 from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
-from monolithe.generators.vsdapidoc.lib import APIDocWriter
+from monolithe.generators.apidoc.lib import APIDocWriter
 
 
-class VSDAPIDocumentationGenerator(object):
+class APIDocumentationGenerator(object):
     """ Generate VSD API Documentation
 
     """
