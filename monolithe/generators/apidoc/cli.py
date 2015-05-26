@@ -2,7 +2,7 @@
 
 import argparse
 import sys
-
+import os
 
 def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="VSD Documentation Generator.")
@@ -29,6 +29,9 @@ def main(argv=sys.argv):
                         type=str)
 
     args = parser.parse_args()
+
+    if not args.vsdurl and "VSD_API_URL" in os.environ: args.vsdurl = os.environ["VSD_API_URL"]
+    if not args.apiversion and "VSD_API_VERSION" in os.environ: args.apiversion = os.environ["VSD_API_VERSION"]
 
     from monolithe.generators import APIDocumentationGenerator
 

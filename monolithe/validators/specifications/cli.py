@@ -2,7 +2,7 @@
 
 import argparse
 import sys
-
+import os
 
 def generate_labels(errors):
     labels = ""
@@ -124,28 +124,12 @@ def main(argv=sys.argv):
                         nargs="*",
                         type=str)
 
-    # Commands
-    parser.add_argument("--list-branches",
-                        dest="command_list_branches",
-                        help="Final. prints the list of available specification branches",
-                        action="store_true")
-
-    parser.add_argument("--list-specifications",
-                        dest="command_list_specifications",
-                        help="Final. prints the list of available specification files in given branch",
-                        action="store_true")
-
-    parser.add_argument("--run-validation",
-                        dest="command_validate",
-                        help="Final. print the valdation reports",
-                        action="store_true")
-
     args = parser.parse_args()
-
-    if not args.vsdurl and "VSD_URL" in os.environ: args.vsdurl = os.environ["VSD_URL"]
+    if not args.vsdurl and "VSD_API_URL" in os.environ: args.vsdurl = os.environ["VSD_API_URL"]
     if not args.apiversion and "VSD_API_VERSION" in os.environ: args.apiversion = os.environ["VSD_API_VERSION"]
     if not args.githubtoken and "GITHUB_TOKEN" in os.environ: args.githubtoken = os.environ["GITHUB_TOKEN"]
 
+    args.specification_files = ["%s.spec" % specification_file for specification_file in args.specification_files]
 
     from monolithe.lib.managers import SpecificationsRepositoryManager
     from monolithe.validators.specifications import SpecificationsValidator
@@ -153,30 +137,20 @@ def main(argv=sys.argv):
     specifcations_repo_manager = SpecificationsRepositoryManager(github_api_url=args.githubapiurl, github_token=args.githubtoken, specification_organization=args.githuborganization, github_specifications_repository=args.githubrepo)
     validator                  = SpecificationsValidator(specifcations_repo_manager)
 
-    if args.command_list_branches:
-        for version in specifcations_repo_manager.available_specification_versions():
-            print " - %s" % version
-        sys.exit(0)
+    result = validator.run_validation(specification_version=args.specifications_branch, specification_files=args.specification_files, vsd_server_url=args.vsdurl, vsd_api_version=args.apiversion)[0]
 
-    if args.command_list_specifications:
-        for spec in specifcations_repo_manager.available_specification_files(args.specifications_branch):
-            print " - %s" % spec.replace(".spec", "")
-        sys.exit(0)
+    print
+    for report in result:
+        print_line('+')
+        print c("  VALIDATION REPORT FOR %s" % report["rest_name"].upper(), "bold")
+        print_line('+')
 
-    if args.command_validate:
-        result = validator.run_validation(specification_version=args.specifications_branch, specification_files=args.specification_files, vsd_server_url=args.vsdurl, vsd_api_version=args.apiversion)[0]
-
+        print_report("Self API Validation Errors", report["contents"]["self_api_errors"])
+        print_report("Parent API Validation Errors", report["contents"]["parent_api_errors"])
+        print_report("Attributes Validation Errors", report["contents"]["attribute_errors"])
         print
-        for report in result:
-            print_line('+')
-            print c("  VALIDATION REPORT FOR %s" % report["rest_name"].upper(), "bold")
-            print_line('+')
-
-            print_report("Self API Validation Errors", report["contents"]["self_api_errors"])
-            print_report("Parent API Validation Errors", report["contents"]["parent_api_errors"])
-            print_report("Attributes Validation Errors", report["contents"]["attribute_errors"])
         print
-        sys.exit(0)
+
 
 if __name__ == '__main__':
     main()
