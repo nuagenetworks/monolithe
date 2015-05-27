@@ -7,7 +7,7 @@ from monolithe.lib.utils.printer import Printer
 from monolithe.lib.utils.constants import Constants
 from monolithe.lib.managers import TaskManager
 from monolithe.lib.utils.parse import ParsingUtils
-from monolithe.lib.writers import TemplateFileWriter
+from monolithe.generators.lib.writers import TemplateFileWriter
 
 
 class SDKWriter(object):
