@@ -20,8 +20,9 @@ def main(argv=sys.argv):
                         type=float)
 
     parser.add_argument('-f', "--file",
-                        dest="swagger_path",
-                        help="Path to a repository containing swagger api-docs file ",
+                        dest="swagger_paths",
+                        help="Paths to a repository containing swagger api-docs file ",
+                        nargs="*",
                         type=str)
 
     parser.add_argument('-r', "--revision",
@@ -57,17 +58,22 @@ def main(argv=sys.argv):
 
     from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
 
+    versions = args.versions
+
     # Generate VSDK
-    if args.apiversions:
-        for version in args.apiversions:
-            vsdk_generator = VSDKGenerator(vsdurl=args.vsdurl, swagger_path=args.swagger_path, apiversion=version, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
+    if args.vsdurl:
+        for version in versions:
+            vsdk_generator = VSDKGenerator(vsdurl=args.vsdurl, swagger_path=None, apiversion=version, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
             vsdk_generator.run()
     else:
-        vsdk_generator = VSDKGenerator(vsdurl=args.vsdurl, swagger_path=args.swagger_path, apiversion=None, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
-        vsdk_generator.run()
+        versions = []
+        for swagger_path in args.swagger_paths
+            vsdk_generator = VSDKGenerator(vsdurl=None, swagger_path=swagger_path, apiversion=None, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
+            vsdk_generator.run()
+            versions.append(vsdk_generator.apiversion)
 
     # Packaging a VSPK
-    vspk_generator = VSPKGenerator(versions=args.apiversions)
+    vspk_generator = VSPKGenerator(versions=versions)
     vspk_generator.run()
 
     # Generate VSPK and VSDK documentation
