@@ -2,7 +2,8 @@
 
 import importlib
 
-from utils import Utils
+from monolithe.lib.utils.vsdk import VSDKUtils
+
 from bambou import NURESTFetcher, NURESTObject
 
 
@@ -20,7 +21,7 @@ class VSDKFactory(object):
             to its remote name.
 
         """
-        cls._version = Utils.get_vspk_version(version)
+        cls._version = VSDKUtils.get_string_version(version)
         vsdk = cls.get_vsdk_package()
         classnames = [name for name in dir(vsdk) if name.startswith('NU') and not name.endswith('Fetcher')]
 
@@ -190,7 +191,7 @@ class VSDKFactory(object):
         converted_attributes = dict()
 
         for attribute_name, attribute_value in attributes.iteritems():
-            python_name = Utils.get_python_name(attribute_name)
+            python_name = VSDKUtils.get_python_name(attribute_name)
             converted_attributes[python_name] = attribute_value
 
         return converted_attributes

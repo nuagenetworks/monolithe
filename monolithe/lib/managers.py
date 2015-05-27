@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import os
-import shutil
 import threading
-
-from git import Repo, GitCommandError
-from .printer import Printer
+import os
+import json
+import base64
+from github import Github
 
 
 class TaskManager(object):
@@ -38,85 +37,63 @@ class TaskManager(object):
         self.threads.append(thread)
 
 
-class GitManager(object):
-    """ Manager of git repository
-
+class SpecificationsRepositoryManager (object):
+    """ SpecificationsRepositoryManager is an object that allows to manipulate the API specification repository
     """
 
-    def __init__(self, url, branch, directory):
-        """ Initializes a GitManager
+    def __init__(self, github_api_url, github_token, specification_organization, github_specifications_repository):
+        """ Initialize SpecificationsRepositoryManager
 
             Args:
-                url: url of the git repository to clone
-                branch: name of the branch
-                directory: the directory name
-
+                github_api_url: the API url for Github
+                github_token: the authentication token for Github
+                specification_organization: the organization where github_specifications_repository is
+                github_specifications_repository: the repository containing the specifications
         """
-        self.url = url
-        self.directory = directory
-        self.branch = str(branch)
-        self.repo = None
-        self._nb_changes = 0
 
-        self.remove_directory()
-        self.repo = Repo.clone_from(url=self.url, to_path=self.directory)
+        self._github                    = Github(login_or_token=github_token, base_url=github_api_url)
+        self._github_specification_repo = self._github.get_organization(specification_organization).get_repo(github_specifications_repository)
 
-        try:
-            self.repo.git.checkout(self.branch)
-            Printer.log('Switching to branch %s' % self.branch)
-
-        except GitCommandError:
-            Printer.log('Branch %s does not exist yet. Creating it...' % self.branch)
-            branch = self.repo.create_head(self.branch)
-            self.repo.head.reference = branch
-            # remote = self.repo.remote()
-            # remote.push(self.repo.head)
-
-    def commit(self, message):
-        """ Add all modification and add a commit message
-
-            Args:
-                message: the message for the commit
+    def available_specification_versions(self):
+        """ Returns the list of available API spec versions (branches)
 
             Returns:
-                Returns the number of diffs affected by the commit
-                No commit are made if no diffs are found
-
+                list of all available specification versions (branches)
         """
-        diffs = self.repo.index.diff(None)
-        nb_diffs = len(diffs)
-        nb_untracked_files = len(self.repo.untracked_files)
 
-        if nb_diffs:
+        return [branch.name for branch in self._github_specification_repo.get_branches()]
 
-            for diff in diffs:
-                if diff.b_mode == 0 and diff.b_blob is None:
-                    self.repo.index.remove(items=[diff.a_blob.path])
-                else:
-                    self.repo.index.add(items=[diff.a_blob.path])
+    def available_specification_files(self, specification_version="master"):
+        """ Returns the list of available specification files
 
-        if nb_untracked_files > 0:
-            self.repo.index.add(items=self.repo.untracked_files)
+            Args:
+                specification_version: the version (branch) where to find files (default: "master")
 
-        self._nb_changes = nb_diffs + nb_untracked_files
-
-        if self._nb_changes > 0:
-            self.repo.index.commit(message)
-
-        return self._nb_changes
-
-    def push(self):
-        """ Push all modififcation to the repository
-
+            Returns:
+                list of all available specification files in the given version
         """
-        if self._nb_changes > 0:
-            remote = self.repo.remote()
-            remote.push(self.repo.head)
-            self._nb_changes = 0
 
-    def remove_directory(self):
-        """ Clean the clone repository
+        ret = []
 
+        for file in self._github_specification_repo.get_dir_contents("/", ref=specification_version):
+
+            if os.path.splitext(file.name)[1] != ".spec":
+                continue
+
+            ret.append(file.name)
+
+        return ret
+
+    def specification_contents(self, specification_file, specification_version="master"):
+        """ Returns the content of the specification_file in the given specification_version
+
+            Args:
+                specification_version: the version (branch) where to find files (default: "master")
+                specification_file: the name of the specification file of which you want to get the content
+
+            Returns:
+                JSON decoded structure of the specification file.
         """
-        if os.path.exists(self.directory):
-            shutil.rmtree(self.directory)
+        github_encoded_data = self._github_specification_repo.get_file_contents(specification_file, ref=specification_version).content
+        return json.loads(base64.b64decode(github_encoded_data))
+
