@@ -58,7 +58,7 @@ def main(argv=sys.argv):
 
     from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
 
-    versions = args.versions
+    versions = args.apiversions
 
     # Generate VSDK
     if args.vsdurl:
@@ -67,7 +67,7 @@ def main(argv=sys.argv):
             vsdk_generator.run()
     else:
         versions = []
-        for swagger_path in args.swagger_paths
+        for swagger_path in args.swagger_paths:
             vsdk_generator = VSDKGenerator(vsdurl=None, swagger_path=swagger_path, apiversion=None, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
             vsdk_generator.run()
             versions.append(vsdk_generator.apiversion)
