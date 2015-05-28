@@ -53,8 +53,8 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    if not args.vsdurl and "VSD_API_URL" in os.environ: args.vsdurl = os.environ["VSD_API_URL"]
-    if not args.apiversions and "VSD_API_VERSION" in os.environ: args.apiversions = [os.environ["VSD_API_VERSION"]]
+    if not args.vsdurl and not args.swagger_paths and "VSD_API_URL" in os.environ: args.vsdurl = os.environ["VSD_API_URL"]
+    if not args.apiversions and not args.swagger_paths and "VSD_API_VERSION" in os.environ: args.apiversions = [os.environ["VSD_API_VERSION"]]
 
     from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
 
