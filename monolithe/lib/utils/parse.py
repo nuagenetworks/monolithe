@@ -86,10 +86,14 @@ class ParsingUtils(object):
             e = sys.exc_info()[1]
             Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (filepath, e.args[0]))
 
-        data = cls.parseJSON(f.read())
-        f.close()
-        return data
+        try:
+            data = cls.parseJSON(f.read())
+        except Exception as error:
+            Printer.raiseError("[JSON Format] Unable to parse JSON for file %s\n%s" % (filepath, error.message))
+        finally:
+            f.close()
 
+        return data
 
     @classmethod
     def are_similar_strings(cls, string1, string2, ratio=0.8):
