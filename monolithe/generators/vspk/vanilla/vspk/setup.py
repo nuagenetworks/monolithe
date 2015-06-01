@@ -12,11 +12,13 @@ for item in os.listdir(vsdks_path):
     packages.append("vspk.vsdk.%s.fetchers" % item)
     packages.append("vspk.vsdk.%s.autogenerates" % item)
 
+print os.environ['VSPK_VERSION']
+
 setup(
     name='vspk',
-    version='0.0.1',
-    author='Antoine Mercadal',
-    author_email='antoine@nuagenetworks.net',
+    version=os.environ['VSPK_VERSION'] if 'VSPK_VERSION' in os.environ else '0.0.0.1',
+    author='Antoine Mercadal, Christophe Serafin',
+    author_email='antoine@nuagenetworks.net, christophe.serafin@nuagenetworks.net',
     packages=packages,
     description='Nuage Networks VSP Software Development Kit',
     long_description=open('README.md').read(),
