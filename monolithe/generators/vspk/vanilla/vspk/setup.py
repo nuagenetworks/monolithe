@@ -12,8 +12,6 @@ for item in os.listdir(vsdks_path):
     packages.append("vspk.vsdk.%s.fetchers" % item)
     packages.append("vspk.vsdk.%s.autogenerates" % item)
 
-print os.environ['VSPK_VERSION']
-
 setup(
     name='vspk',
     version=os.environ['VSPK_VERSION'] if 'VSPK_VERSION' in os.environ else '0.0.0.1',
