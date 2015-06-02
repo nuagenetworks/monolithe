@@ -85,6 +85,9 @@ class MonolitheObject(object):
             model_attribute = MonolitheObjectAttribute()
             model_attribute.from_specification_attribute(attribute_name, attribute_info)
 
+            if model_attribute.has_time_attribute:
+                self.has_time_attribute = True
+
             if not model_attribute.ignored:
                 model_attributes.append(model_attribute)
 
@@ -110,6 +113,7 @@ class MonolitheObjectAttribute(object):
         self.local_name = None
         self.remote_type = None
         self.local_type = None
+        self.has_time_attribute = False
 
         # Other attributes
         self.allowed_chars = None
