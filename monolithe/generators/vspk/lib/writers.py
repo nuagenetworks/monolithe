@@ -65,7 +65,12 @@ class SDKWriter(object):
         """ Create a dictionary for constants
 
         """
-        return {choice: choice for choice in choices}
+        results = dict()
+
+        for choice in choices:
+            results[choice] = choice
+
+        return results
 
     def write(self, resources, apiversion, revision):
         """ Write all files according to data
