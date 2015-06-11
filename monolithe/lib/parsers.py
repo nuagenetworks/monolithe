@@ -1,255 +1,219 @@
 # -*- coding: utf-8 -*-
 
 import os
-import json
 import requests
-import sys
 
 from copy import deepcopy
-from .printer import Printer
+from monolithe.lib.utils.printer import Printer
 from .managers import TaskManager
-from .utils import Utils
 
-ENTRY_POINT = '/api-docs'
+from monolithe.lib.utils.vsdk import VSDKUtils
+from monolithe.lib.utils.urls import URLUtils
+from monolithe.lib.utils.parse import ParsingUtils
+
+
+API_DOCS = '/api-docs'
 SCHEMA_FILEPATH = '/schema'
 SWAGGER_APIS = 'apis'
 SWAGGER_APIVERSION = 'apiVersion'
 SWAGGER_PATH = 'path'
+SPEC_EXTENSION = '.spec'
 
-## Monkey patch to use PROTOCOL_TLSv1 by default in requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.poolmanager import PoolManager
-import ssl
-
-from functools import wraps
-def sslwrap(func):
-    @wraps(func)
-    def bar(*args, **kw):
-        kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-        return func(*args, **kw)
-    return bar
-
-PoolManager.__init__ = sslwrap(PoolManager.__init__)
-## end of monkey patch
 
 class SwaggerParser(object):
-    """ Factory class
+    """ Parser for Swagger description file.
+
+        Works for both local and remote files depending on the option that are passed
 
     """
-    @classmethod
-    def factory(cls, url=None, path=None, apiversion=None):
-        """ Return the appropriate Parser according to the url or path given
 
-        """
-        if path:
-            return SwaggerFileParser(path=path, apiversion=apiversion)
-
-        return SwaggerURLParser(url=url, apiversion=apiversion)
-
-    def grab_all(self):
-        """ Ensure method name
-
-        """
-        raise Exception("Should be implemented by developer.")
-
-
-class SwaggerURLParser(object):
-    """ Swagger Parser grabs all information from a JSON File
-
-    """
-    def __init__(self, url, apiversion):
-        """ Initializes a new URL parser
-
-        """
-        self.url = url
-        self.apiversion = apiversion
-
-    def grab_all(self):
-        """ Read a JSON file and returns a dictionnary
+    def __init__(self, vsdurl, path, apiversion):
+        """ Initializes the parser
 
             Args:
-                url: the URL of to grab all swagger information
-
-            Returns:
-                Returns a dictionary containing all models definition
-
-            Example:
-                if url is set to http://host:port/V3_0, it will grab all information
-                described in http://host:port/V3_0/schema/api-docs according to swagger
-                specification
+                vsdurl (string): url to the vsd
+                path (string): path to a local schema folder
+                apiversion (float): api version to use
         """
+        self.vsdurl = vsdurl
+        self.path = path
+        self.apiversion = apiversion
+
+    def run(self, filters=[]):
+        """ Run the parser to grab all swagger resources
+
+        """
+        if URLUtils.is_url(self.vsdurl):
+            base_path = '%s%s' % (VSDKUtils.get_vsd_url(self.vsdurl, self.apiversion), SCHEMA_FILEPATH)
+            function_name = '_get_swagger_resource'
+        else:
+            base_path = self.path  # No need to compute a version here
+            function_name = '_read_swagger_resource'
+
+        models = self._run(base_path=base_path, function_name=function_name, filters=filters)
+
+        return ParsingUtils.order(models)
+
+    # Utilities
+
+    def _run(self, base_path, function_name, filters):
+        """ Run the server on the remote vsd
+
+        """
+        func = getattr(self, function_name)
+        api_docs = func(base_path=base_path, path=API_DOCS)
+
+        if SWAGGER_APIS not in api_docs or len(api_docs[SWAGGER_APIS]) == 0:
+            Printer.raiseError("No apis information found in api-docs")
+
+        if SWAGGER_APIVERSION not in api_docs:
+            Printer.raiseError("No api version found in api-docs")
 
         if self.apiversion is None:
-            Printer.raiseError("Please specify your apiversion using -v option")
+            self.apiversion = VSDKUtils.get_float_version(api_docs[SWAGGER_APIVERSION])
 
-        base_url = '%sV%s' % (self.url, str(self.apiversion).replace(".", "_"))
-        schema_url = '%s%s%s' % (base_url, SCHEMA_FILEPATH, ENTRY_POINT)
+        filters = ParsingUtils.reverse_filters(filters)
 
-        response = requests.get(schema_url, verify=False)
+        models = dict()
+        task_manager = TaskManager()
+
+        for api in api_docs[SWAGGER_APIS]:
+            path = api[SWAGGER_PATH]
+            task_manager.start_task(method=self._get_resource, base_path=base_path, path=path, function_name=function_name, results=models, filters=filters)
+
+        task_manager.wait_until_exit()
+
+        return models
+
+    def _get_resource(self, base_path, path, function_name, results=dict(), filters=[]):
+        """ Grab resource information
+
+            Args:
+                base_path: the base path where to grab information
+                path: the path where to grab information
+                results: the dictionary to fill with all information
+                filters: list of filters
+
+            Returns:
+                Fills result dictionary
+        """
+
+        (package, model_name) = URLUtils.split_package_path(path)
+
+        model_name = ParsingUtils.get_correct_name(model_name)
+        rest_name = VSDKUtils.get_singular_name(model_name.lower())
+
+        if len(filters) > 0 and not ParsingUtils.have_similar_strings(rest_name, filters):
+            return
+
+        func = getattr(self, function_name)
+        swagger_resource = func(base_path=base_path, path=path)
+        swagger_resource['package'] = package
+
+        if model_name == 'Metadata':
+            # Sadly I have to split this particular entity myself :(
+            self._add_metadata_copies(resource=swagger_resource, results=results)
+        else:
+            results[model_name] = swagger_resource
+
+    def _add_metadata_copies(self, resource, results):
+        """ Metadata is splitted into:
+            * Metadata
+            * Global Metadata
+            * Aggregate Metadata
+        """
+        metadata_info = deepcopy(resource)
+        global_metadata_info = deepcopy(resource)
+        aggregate_metadata_info = deepcopy(resource)
+
+        metadata_info['apis'] = []
+        global_metadata_info['apis'] = []
+        aggregate_metadata_info['apis'] = []
+
+        metadata_info['models']['Metadata']['id'] = u'Metadata'
+
+        global_metadata_info['models']['GlobalMetadata'] = global_metadata_info['models']['Metadata']
+        global_metadata_info['models'].pop('Metadata')
+        global_metadata_info['models']['GlobalMetadata']['id'] = u'GlobalMetadata'
+
+
+        aggregate_metadata_info['models']['AggregateMetadata'] = aggregate_metadata_info['models']['Metadata']
+        aggregate_metadata_info['models'].pop('Metadata')
+        aggregate_metadata_info['models']['AggregateMetadata']['id'] = u'AggregateMetadata'
+
+
+        for api in resource['apis']:
+            api_copy = deepcopy(api)
+            if 'aggregatemetadatas' in api['path']:
+                aggregate_metadata_info['apis'].append(api_copy)
+            elif 'globalmetadatas' in api['path']:
+                global_metadata_info['apis'].append(api_copy)
+            else:
+                metadata_info['apis'].append(api_copy)
+
+        results['Metadata'] = metadata_info
+        results['GlobalMetadata'] = global_metadata_info
+        results['AggregateMetadata'] = aggregate_metadata_info
+
+    # Specific methods
+
+    def _get_swagger_resource(self, base_path, path):
+        """ Make an HTTP request to retrieve information
+
+        """
+        url = '%s%s' % (base_path, path)
+
+        try:  # Ugly hack due to Java issue: http://mvjira.mv.usa.alcatel.com/browse/VSD-546
+            response = requests.get(url=url, verify=False)
+        except requests.exceptions.SSLError:
+            response = requests.get(url=url, verify=False)
 
         if response.status_code != 200:
-            Printer.raiseError("[HTTP %s] Could not access %s" % (response.status_code, schema_url))
+            Printer.raiseError("[HTTP %s] An error occured while trying to retrieve information at url: %s" % (response.status_code, url))
 
+        data = None
         try:
             data = response.json()
         except:
-            Printer.raiseError("Could not load properly json from %s" % schema_url)
+            Printer.raiseError("Could not load properly json from %s" % url)
 
-        if SWAGGER_APIS not in data:
-            Printer.raiseError("No apis information found at %s" % schema_url)
+        return data
 
-        task_manager = TaskManager()
+    def _read_swagger_resource(self, base_path, path):
+        """ Read the file to retrieve information
 
-        models = dict()
-        for api in data[SWAGGER_APIS]:
-            path = base_url + SCHEMA_FILEPATH + api[SWAGGER_PATH]
-            task_manager.start_task(method=self._grab_resource, resource_path=path, results=models)
-
-        task_manager.wait_until_exit()
-
-        return models
-
-    def _grab_resource(self, resource_path, results=dict()):
-        """ Grab resource information
-
-            Args:
-                resource_path: the path where to grab information
-                results: the dictionary to fill with all information
-
-            Returns:
-                Fills result dictionary
         """
-        names = resource_path.split(SCHEMA_FILEPATH)[1].rsplit('/', 1)
-        package = names[0]
-        resource_name = names[1]
-
-        try:  # Ugly hack due to Java issue: http://mvjira.mv.usa.alcatel.com/browse/VSD-546
-            response = requests.get(resource_path, verify=False)
-        except requests.exceptions.SSLError:
-            response = requests.get(resource_path, verify=False)
-
-        if response.status_code != 200:
-            Printer.raiseError("[HTTP %s] An error occured while retrieving %s at %s" % (response.status_code, resource_name, resource_path))
-
-        try:
-            results[resource_name] = response.json()
-        except:
-            Printer.raiseError("Could not load properly json from %s" % resource_path)
-
-        if resource_name == 'Metadata':
-            # Make copy for global metadata and aggregate
-            # Sad that I had to do that :(
-            info = results[resource_name]
-
-            metadata_info = deepcopy(info)
-            global_metadata_info = deepcopy(info)
-            aggregate_metadata_info = deepcopy(info)
-
-            metadata_info['apis'] = []
-            global_metadata_info['apis'] = []
-            aggregate_metadata_info['apis'] = []
-
-            metadata_info['models']['Metadata']['id'] = 'Metadata'
-            global_metadata_info['models']['Metadata']['id'] = 'GlobalMetadata'
-            aggregate_metadata_info['models']['Metadata']['id'] = 'AggregateMetadata'
+        filepath = '%s%s' % (base_path, path)
+        return ParsingUtils.parseFile(filepath)
 
 
-            for api in info['apis']:
-                api_copy = deepcopy(api)
-                if '/aggregatemetadatas' in api['path']:
-                    aggregate_metadata_info['apis'].append(api_copy)
-                elif '/globalmetadatas' in api['path']:
-                    global_metadata_info['apis'].append(api_copy)
-                else:
-                    metadata_info['apis'].append(api_copy)
-
-            results['Metadata'] = metadata_info
-            results['GlobalMetadata'] = global_metadata_info
-            results['AggregateMetadata'] = aggregate_metadata_info
-
-            results['Metadata']['package'] = package
-            results['GlobalMetadata']['package'] = package
-            results['AggregateMetadata']['package'] = package
-
-        else:
-            results[resource_name]['package'] = package
-
-
-class SwaggerFileParser(object):
-    """ Parse Swagger files
+class SpecificationParser(object):
+    """ Parse specifications directory
 
     """
-    def __init__(self, path, apiversion=None):
-        """ Initializes a File parser
 
-        """
-        self.path = path
-        self.apiversion = apiversion
-        self.extension = ''
-
-    def grab_all(self):
-        """ Read a JSON file and returns a dictionnary
-
-            Args:
-                path: the path where to find the schema/api-docs
+    @classmethod
+    def run(cls, directory):
+        """ Grab all specification in given directory and return a dictionary of specs.
 
             Returns:
-                Returns a dictionary containing all models definition
+                A dictionary of specification
+
         """
-        schema_path = '%s%s%s' % (self.path, ENTRY_POINT, self.extension)
 
-        if not os.path.isfile(schema_path):
-            Printer.raiseError("[File Path] Could not access %s" % (schema_path))
+        if not os.path.isdir(directory):
+            Printer.raiseError("[File Path] Not a directory %s" % (directory))
 
-        try:
-            data = json.load(open(schema_path))
-        except Exception:
-            e = sys.exc_info()[1]
-            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (schema_path, e.args[0]))
+        specs = dict()
+        filenames = []
+        for filename in os.listdir(directory):
+            if filename.endswith(SPEC_EXTENSION):
+                filenames.append(filename)
+                filepath = '%s/%s' % (directory, filename)
 
-        if SWAGGER_APIS not in data:
-            Printer.raiseError("No apis information found in %s" % schema_path)
+                data = ParsingUtils.parseFile(filepath)
+                name = data['model']['entityName']
 
-        if SWAGGER_APIVERSION not in data:
-            Printer.raiseError("No api version found in %s" % schema_path)
+                specs[name] = data
 
-        # Grab version from JSON file if not specified
-        if self.apiversion is None:
-            self.apiversion = Utils.get_version(data[SWAGGER_APIVERSION])
-
-        task_manager = TaskManager()
-
-        models = dict()
-        for api in data[SWAGGER_APIS]:
-            file_path = '%s%s%s' % (self.path, api[SWAGGER_PATH], self.extension)
-            task_manager.start_task(method=self._grab_resource, file_path=file_path, results=models)
-
-        task_manager.wait_until_exit()
-
-        return models
-
-    def _grab_resource(self, file_path, results=dict()):
-        """ Grab resource information
-
-            Args:
-                file_path: the path where to the file
-                results: the dictionary to fill with all information
-
-            Returns:
-                Fills result dictionary
-        """
-        names = file_path.split(self.path)[1].rsplit('/', 1)
-        package = names[0]
-        resource_name = names[1]
-
-        if not os.path.isfile(file_path):
-            Printer.raiseError("[File Path] Could not access %s" % (file_path))
-
-        try:
-            data = json.load(open(file_path))
-        except Exception:
-            e = sys.exc_info()[1]
-            Printer.raiseError("[File Path] Could load json file %s due to following error:\n%s" % (file_path, e.args[0]))
-
-        results[resource_name] = data
-        results[resource_name]['package'] = package
+        return ParsingUtils.order(specs)

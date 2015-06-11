@@ -1,0 +1,104 @@
+body {
+    position: relative;
+    padding-top: 40px;
+    overflow: auto;
+}
+
+section {
+    padding-top:40px;
+    margin-top:-40px;
+}
+
+.code {
+    white-space: pre;
+    font-family: Menlo, Courier;
+}
+
+.fixed-text {
+    font-family: Menlo, Courier;
+    font-size: 11px;
+}
+
+.enumvalues {
+    margin-top: 20px;
+}
+.enumvalues ul {
+    font-weight: normal;
+    font-family: 'Source Code Pro', Menlo, Courier;
+    list-style: none;
+    padding-left: 5px;
+    color: #444;
+}
+
+.type_int, .type_float {
+    color: #6E6FC5;
+}
+
+.type_string {
+    color: #B28B06;
+}
+
+.type_boolean {
+    color: #879B00;
+}
+
+.type_enum {
+    color: #C54C1D;
+}
+
+.type_date {
+    color: #3A89D2;
+}
+
+.type_list {
+    color: #71908e;
+}
+
+.wiki p {
+    line-height: 20px;
+}
+
+.wiki h3 {
+    margin-top: 30px;
+}
+.wiki ul {
+    font-size: 0.9em;
+}
+
+.wiki ul li {
+    margin-bottom: 10px;
+}
+
+.wiki code {
+    white-space: pre;
+    color: #333;
+    background-color: #f6f6f6;
+    border: 1px solid #f0f0f0;
+    padding: 2px;
+    display: block;
+}
+
+.bordered-row {
+    padding: 10px 0;
+    border-top: 1px solid #E7E7E7
+}
+
+.bordered-row:last-child {
+    border-bottom: 1px solid #E7E7E7
+}
+
+.float-right {
+    float: right;
+}
+
+.dropdown-menu {
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    .hide-xs {
+        display: none;
+    }
+}

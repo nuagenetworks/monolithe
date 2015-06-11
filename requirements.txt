@@ -1,9 +1,9 @@
 jinja2
 colorama
-gitpython
 argparse
 requests
 bambou
-Sphinx>=0.6,<1.3b
+Sphinx
 sphinx_rtd_theme
-sphinxcontrib-napoleon
+unittest2
+PyGithub
