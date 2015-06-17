@@ -31,12 +31,13 @@ class VSPKDocumentationGenerator(object):
         Printer.log("Starting VSPK documentation generation")
         sys.path.append(os.path.abspath(self.vspk_path))
         python_path = sys.path
-        python_path.append("%s/../../codegen/vspk" % os.path.dirname(os.path.realpath(__file__)))
+        python_path.append("%s/../../../codegen/vspk" % os.path.dirname(os.path.realpath(__file__)))
         subprocess_environ = {"PYTHONPATH": ":".join(python_path), "PATH": os.environ["PATH"]}
 
         ## Sphinx preprocess
         if os.path.exists(self.temp_doc_path):
             shutil.rmtree(self.temp_doc_path)
+
         shutil.copytree(self.vanilla_path, self.temp_doc_path)
         process = subprocess.Popen(['sphinx-apidoc', '-o', self.temp_doc_path, self.vspk_path], env=subprocess_environ)
         process.communicate()
