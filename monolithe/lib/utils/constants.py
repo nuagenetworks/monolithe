@@ -8,7 +8,7 @@ class Constants(object):
     DEVELOPMENT_MODE = True
 
     # Constants
-    INVARIANT_NAMES = ['qos', 'vrs', 'cms', 'statistics']
+    INVARIANT_NAMES = ['qos', 'vrs', 'cms']
     VOWELS = ['a', 'e', 'i', 'o', 'u', 'y']
     HTTP_PROTOCOLS = ['http', 'https', 'ftp']
 
@@ -33,24 +33,25 @@ class Constants(object):
 
     # Mapping
     RESOURCE_MAPPING = {
-        u'SubNetwork': u'Subnet',
-        u'SubNetworkTemplate': u'SubnetTemplate',
-        u'PortStatus': u'MonitoringPort',
-        u'EnterpriseNetworkMacro': u'EnterpriseNetwork',
-        u'RedundantGWGrp': u'RedundancyGroup',
-        u'Service': u'ApplicationService',
-        u'IPBinding': u'IPReservation',
-        u'VPNConnect': u'VPNConnection',
-        u'QosPrimitive': u'QOS',  # Not working because resource name is 'qos' instead of 'quoss'
-        u'EgressQosPrimitive': u'EgressQOSPolicy',
+        u'AutoDiscGateway': u'AutoDiscoveredGateway',
         u'EgressACLTemplateEntry': u'EgressACLEntryTemplate',
+        u'EgressQosPrimitive': u'EgressQOSPolicy',
+        u'EnterpriseNetworkMacro': u'EnterpriseNetwork',
         u'IngressACLTemplateEntry': u'IngressACLEntryTemplate',
         u'IngressAdvancedForwardingTemplate': u'IngressAdvFwdTemplate',
         u'IngressAdvancedForwardingTemplateEntry': u'IngressAdvFwdEntryTemplate',
-        u'AutoDiscGateway': u'AutoDiscoveredGateway',
+        u'IPBinding': u'IPReservation',
+        u'PortStatus': u'MonitoringPort',
+        u'QosPrimitive': u'QOS',  # Not working because resource name is 'qos' instead of 'quoss'
+        u'RedundantGWGrp': u'RedundancyGroup',
+        u'Service': u'ApplicationService',
+        u'Statistics': u'Statistic',
+        u'SubNetwork': u'Subnet',
+        u'SubNetworkTemplate': u'SubnetTemplate',
         u'VirtualMachine': u'VM',
         u'Vlan': u'VLAN',
         u'VlanTemplate': u'VLANTemplate',
+        u'VPNConnect': u'VPNConnection',
     }
 
     ATTRIBUTE_MAPPING = {
