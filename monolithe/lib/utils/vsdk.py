@@ -26,6 +26,7 @@ class VSDKUtils(object):
         rep = {
             "IPID": "IpID",
             "VCenter": "Vcenter",
+            "vCenter": "Vcenter",
             "VPort": "Vport",
         }
 
