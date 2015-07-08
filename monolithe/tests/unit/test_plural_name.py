@@ -28,3 +28,4 @@ class GetPluralNameTest(TestCase):
         self.assertPluralNameEquals('Gateway', 'Gateways')
         self.assertPluralNameEquals('qos', 'qos')
         self.assertPluralNameEquals('VCenterHypervisor', 'VCenterHypervisors')
+        self.assertPluralNameEquals('statistics', 'statistics')

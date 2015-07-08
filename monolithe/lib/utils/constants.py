@@ -8,7 +8,7 @@ class Constants(object):
     DEVELOPMENT_MODE = True
 
     # Constants
-    INVARIANT_NAMES = ['qos', 'vrs', 'cms']
+    INVARIANT_NAMES = ['qos', 'vrs', 'cms', 'statistics']
     VOWELS = ['a', 'e', 'i', 'o', 'u', 'y']
     HTTP_PROTOCOLS = ['http', 'https', 'ftp']
 
@@ -45,7 +45,6 @@ class Constants(object):
         u'QosPrimitive': u'QOS',  # Not working because resource name is 'qos' instead of 'quoss'
         u'RedundantGWGrp': u'RedundancyGroup',
         u'Service': u'ApplicationService',
-        u'Statistics': u'Statistic',
         u'SubNetwork': u'Subnet',
         u'SubNetworkTemplate': u'SubnetTemplate',
         u'VirtualMachine': u'VM',
