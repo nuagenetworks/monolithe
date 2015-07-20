@@ -21,13 +21,16 @@ def set_log_level(level, handler=None):
 
     """
 
-    from bambou import bambou_logger
+    from bambou import bambou_logger, pushcenter_logger
 
     if handler is None:
         handler = logging.StreamHandler()
 
     bambou_logger.setLevel(level)
     bambou_logger.addHandler(handler)
+
+    pushcenter_logger.setLevel(level)
+    pushcenter_logger.addHandler(handler)
 
     vsdk_logger.setLevel(level)
     vsdk_logger.addHandler(handler)
