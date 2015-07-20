@@ -101,9 +101,12 @@ class SDKWriter(object):
         writer = self.get_writer()
         writer.write_setup_file(version=apiversion, revision=revision)
 
+        # Constants
         constants = ParsingUtils.order(constants)
-
         writer.write_constants_file(constants=constants)
+
+        # VSD Session
+        writer.write_vsdsession_file(version=apiversion)
 
     def _write_autogenerate_file(self, model, filenames):
         """ Write the autogenerate file for the model
@@ -182,6 +185,7 @@ class VSDKFileWriter(TemplateFileWriter):
         self._model_template = 'nuobject_autogenerate.py.tpl'
         self._restuser_template = 'nurestuser.py.tpl'
         self._constants_template = 'constants.py.tpl'
+        self._vsdsession_template = 'nuvsdsession.py.tpl'
 
     def copy_default_files(self):
         """ Copy default sources to the output directory
@@ -218,6 +222,19 @@ class VSDKFileWriter(TemplateFileWriter):
         filename = 'constants.py'
 
         self.write(destination=destination, filename=filename, template_name=self._constants_template, constants=constants)
+
+    def write_vsdsession_file(self, version):
+        """ Write VSD session file
+
+            Args:
+                version (str): the version of the vsd
+
+        """
+        destination = self.directory
+        filename = 'nuvsdsession.py'
+
+        self.write(destination=destination, filename=filename, template_name=self._vsdsession_template, version=version)
+
 
     def write_model(self, model):
         """ Write autogenerate model file
