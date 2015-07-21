@@ -6,6 +6,7 @@
 
 {% for api in model.apis['children'].values() %}
 from ..fetchers import NU{{ api.plural_name }}Fetcher{% endfor %}
+from ..fetchers import NUMetadatasFetcher
 from bambou import NURESTObject{% if model.has_time_attribute %}
 from time import time{% endif %}
 
@@ -48,6 +49,9 @@ class NU{{ model.name }}(NURESTObject):
         {% for api in model.apis['children'].values() %}
         self.{{ api.instance_plural_name }} = NU{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
         {% endfor %}{% endif %}
+        {% if not model.remote_name.startswith('metadata') %}
+        self.metadata = NUMetadatasFetcher.fetcher_with_object(parent_object=self)
+        {% endif %}
 
         self._compute_args(**kwargs)
 
