@@ -12,7 +12,7 @@ class NUVSDSession(NURESTSession):
         Session can be started and stopped whenever its needed
     """
 
-    def __init__(self, username, password, enterprise, api_url):
+    def __init__(self, username, password, enterprise, api_url, certificate=None):
         """ Initializes a new sesssion
 
             Args:
@@ -26,7 +26,7 @@ class NUVSDSession(NURESTSession):
                 >>> session.start()
 
         """
-        super(NUVSDSession, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, version=str(self.version))
+        super(NUVSDSession, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, version=str(self.version), certificate=certificate)
 
     def create_rest_user(self):
         """ Creates a new user
