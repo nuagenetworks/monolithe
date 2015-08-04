@@ -13,13 +13,12 @@ Let's import a `vsdk` from the `vspk`, and configure logging so that we can visu
 
 Now we can start a session as `csproot` :
 
->>> session = vsdk.NUVSDSession(username='csproot', password='csproot', enterprise='csp', api_url='https://135.227.150.222:8443', version='3.2')
+>>> session = vsdk.NUVSDSession(username='csproot', password='csproot', enterprise='csp', api_url='https://135.227.150.222:8443')
 >>> session.start()
 Bambou Sending >>>>>>
 GET https://135.227.150.222:8443/nuage/api/v3_2/me with following data:
 null
-Bambou has been sent with user:csproot within enterprise:csp (Key=None)
-Bambou <<<<< Response for
+Bambou <<<<< Response [200] for
 GET https://135.227.150.222:8443/nuage/api/v3_2/me
 [
     {
@@ -118,8 +117,7 @@ POST https://135.227.150.222:8443/nuage/api/v3_2/enterprises with following data
     "customerID": null,
     "allowAdvancedQOSConfiguration": null
 }
-Bambou has been sent with user:csproot within enterprise:csp (Key=92790b4b-85e0-4f40-9835-2aa242f24a57)
-Bambou <<<<< Response for
+Bambou <<<<< Response [201] for
 POST https://135.227.150.222:8443/nuage/api/v3_2/enterprises
 [
     {
@@ -221,8 +219,7 @@ PUT https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd5-a
     "customerID": 10005,
     "allowAdvancedQOSConfiguration": true
 }
-Bambou has been sent with user:csproot within enterprise:csp (Key=92790b4b-85e0-4f40-9835-2aa242f24a57)
-Bambou <<<<< Response for
+Bambou <<<<< Response [200] for
 PUT https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd5-a03c-33660dfec10b
 null
 Out[29]:
@@ -235,8 +232,7 @@ If someone else made changes on this object, we can fetch it again :
 Bambou Sending >>>>>>
 GET https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd5-a03c-33660dfec10b with following data:
 null
-Bambou has been sent with user:csproot within enterprise:csp (Key=92790b4b-85e0-4f40-9835-2aa242f24a57)
-Bambou <<<<< Response for
+Bambou <<<<< Response [200] for
 GET https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd5-a03c-33660dfec10b
 [
     {
@@ -313,8 +309,7 @@ DELETE https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd
     "customerID": 10005,
     "allowAdvancedQOSConfiguration": true
 }
-Bambou has been sent with user:csproot within enterprise:csp (Key=92790b4b-85e0-4f40-9835-2aa242f24a57)
-Bambou <<<<< Response for
+Bambou <<<<< Response [409] for
 DELETE https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd5-a03c-33660dfec10b
 {
     "errors": [
@@ -379,8 +374,7 @@ DELETE https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd
     "customerID": 10005,
     "allowAdvancedQOSConfiguration": true
 }
-Bambou has been sent with user:csproot within enterprise:csp (Key=92790b4b-85e0-4f40-9835-2aa242f24a57)
-Bambou <<<<< Response for
+Bambou <<<<< Response [200] for
 DELETE https://135.227.150.222:8443/nuage/api/v3_2/enterprises/17afb19a-9cbc-4cd5-a03c-33660dfec10b?responseChoice=1
 null
 Out[56]:

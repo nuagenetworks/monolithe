@@ -91,9 +91,9 @@ class SDKWriter(object):
 
         for model_name, model in resources.iteritems():
             self._prepare_attributes(model=model, constants=constants)
-            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=filenames)
-            task_manager.start_task(method=self._write_override_file, model=model)
-            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=filenames)
+            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=filenames, version=apiversion)
+            task_manager.start_task(method=self._write_override_file, model=model, version=apiversion)
+            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=filenames, version=apiversion)
 
         task_manager.wait_until_exit()
         self._clean_files(except_files=filenames.keys())
@@ -108,7 +108,7 @@ class SDKWriter(object):
         # VSD Session
         writer.write_vsdsession_file(version=apiversion)
 
-    def _write_autogenerate_file(self, model, filenames):
+    def _write_autogenerate_file(self, model, filenames, version):
         """ Write the autogenerate file for the model
 
             Args:
@@ -119,13 +119,13 @@ class SDKWriter(object):
         writer = self.get_writer()
 
         if model.name != Constants.RESTUSER:
-            (filename, classname) = writer.write_model(model=model)
+            (filename, classname) = writer.write_model(model=model, version=version)
         else:
-            (filename, classname) = writer.write_restuser_model(model=model)
+            (filename, classname) = writer.write_restuser_model(model=model, version=version)
 
         filenames[filename] = classname
 
-    def _write_override_file(self, model):
+    def _write_override_file(self, model, version):
         """ Write the override file for the model
 
             Args:
@@ -133,9 +133,9 @@ class SDKWriter(object):
 
         """
         writer = self.get_writer()
-        writer.write_model_override(model=model)
+        writer.write_model_override(model=model, version=version)
 
-    def _write_fetcher_file(self, model, filenames):
+    def _write_fetcher_file(self, model, filenames, version):
         """ Write the fetcher file for the model
 
             Args:
@@ -146,7 +146,7 @@ class SDKWriter(object):
         writer = self.get_writer()
 
         if model.name != Constants.RESTUSER:
-            (filename, classname) = writer.write_fetcher(model=model)
+            (filename, classname) = writer.write_fetcher(model=model, version=version)
             filenames[filename] = classname
 
     def _clean_files(self, except_files):
@@ -236,29 +236,29 @@ class VSDKFileWriter(TemplateFileWriter):
         self.write(destination=destination, filename=filename, template_name=self._vsdsession_template, version=version)
 
 
-    def write_model(self, model):
+    def write_model(self, model, version):
         """ Write autogenerate model file
 
         """
         destination = '%s%s' % (self.directory, self._autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
-        self.write(destination=destination, filename=filename, template_name=self._model_template, model=model)
+        self.write(destination=destination, filename=filename, template_name=self._model_template, model=model, version=version)
 
         return (filename, model.name)
 
-    def write_restuser_model(self, model):
+    def write_restuser_model(self, model, version):
         """ Write autogenerate rest user model file
 
         """
         destination = '%s%s' % (self.directory, self._autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
-        self.write(destination=destination, filename=filename, template_name=self._restuser_template, model=model)
+        self.write(destination=destination, filename=filename, template_name=self._restuser_template, model=model, version=version)
 
         return (filename, model.name)
 
-    def write_model_override(self, model):
+    def write_model_override(self, model, version):
         """ Write model override
 
         """
@@ -274,14 +274,14 @@ class VSDKFileWriter(TemplateFileWriter):
         self.write(destination=destination, filename=filename, template_name=self._model_override_template, model=model, override_content=override_content)
         return (filename, model.name)
 
-    def write_fetcher(self, model):
+    def write_fetcher(self, model, version):
         """ Write fetcher
 
         """
         destination = '%s%s' % (self.directory, self._fetchers_path)
         filename = 'nu%s_fetcher.py' % model.name.lower()
 
-        self.write(destination=destination, filename=filename, template_name=self._fetcher_template, model=model)
+        self.write(destination=destination, filename=filename, template_name=self._fetcher_template, model=model, version=version)
 
         return (filename, model.name)
 

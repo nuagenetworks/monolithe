@@ -60,10 +60,12 @@ In `vsdk`, you use a class named :class:`vspk.vsdk.v3_2.NUVSDSession` which will
 .. code-block:: python
     :linenos:
 
-    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443", version="3.2")
+    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443")
     session.start()
 
     # your script
+
+.. note:: Since August 2015, it is no longer necessary to provide the API version parameter. `vpsk` will automatically grab it from the `vsdk` you are using.
 
 When you start the session, a ReST call will be sent to the API endpoint in order to get the VSD API key. If the credentials are valid, the attribute :attr:`vspk.vsdk.v3_2.NUVSDSession.user` will be populated with information such as your name, your phone number, your avatar, your enterprise name and ID etc. This `user` is the root object of everything as all subsequent calls need to be done in the context of your account (for instance, your `/enterprises` are different from another account's `/enterprises`)
 
@@ -72,8 +74,8 @@ It is also possible to create sub sessions with the python statement `with`:
 .. code-block:: python
     :linenos:
 
-    cspsession = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443", version="3.2")
-    adminsession = NUVSDSession(username="admin", password="secret", enterprise="My Enterprise", api_url="https://myvsd:8443", version="3.2")
+    cspsession = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443")
+    adminsession = NUVSDSession(username="admin", password="secret", enterprise="My Enterprise", api_url="https://myvsd:8443")
 
     cspsession.start()
 
@@ -264,7 +266,7 @@ A :class:`bambou.NURESTPushCenter` is automatically created with each :class:`ba
 .. code-block:: python
     :linenos:
 
-    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443", version="3.2")
+    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://myvsd:8443")
     session.start()
     session.push_center.start()
 
@@ -299,7 +301,7 @@ Here is a really simple code sample that will print the push data on every push:
     from pprint import pprint
     from time import sleep
 
-    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443", version="3.2")
+    session = NUVSDSession(username="csproot", password="secret", enterprise="csp", api_url="https://vsd:8443")
     session.start()
 
     def on_receive_push(data):

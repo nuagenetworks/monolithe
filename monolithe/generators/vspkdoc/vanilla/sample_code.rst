@@ -4,13 +4,54 @@ Code Snippets
 This section provides various code snippets and scripts you can use or get inspiration from to develop your own scripts or application using the `vsdk`.
 
 
-Enterprise Onboarding
----------------------
+Retrueve all enterprises
+------------------------
 
 .. code-block:: python
     :linenos:
 
-    # TODO :(
+    from vspk.vsdk.v3_2 import *
+
+    # Create a session for CSPRoot
+    session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.150.88:8443')
+
+    # Start using the CSPRoot session
+    session.start()
+    csproot = session.user
+
+    csproot.enterprises.fetch()
+
+    for enterprise in csproot.enterprises:
+        print enterprise.name
+
+
+Create an application and manage errors
+---------------------------------------
+
+.. code-block:: python
+    :linenos:
+
+    from bambou.exceptions import BambouHTTPError
+    from vspk.vsdk.v3_2 import *
+
+    session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.222.88:8443')
+    session.start()
+
+    # No need to fetch all value from the server
+    enterprise = NUEnterprise(id=u'd4ea408f-7253-4914-8b3a-36ebddc47bd8')
+
+    # Select the first domain
+    domain = enterprise.domains.get_first()
+
+    # Create an App and create it on the VSD side
+    app = NUApp(name='My App', associated_domain_id=domain.id, associated_domain_type="DOMAIN")
+
+    try:
+        (app, connection) = enterprise.create_child(app)
+    except BambouHTTPError as error:
+        # Retrieve the request and response information from the error
+        print error.connection.response.status_code
+        print error.connection.response.errors
 
 
 Generic Network Provisioning
@@ -78,7 +119,7 @@ This sample function will populate a given domain with a given number of zones, 
 
     if __name__ == "__main__":
 
-        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL)
         session.start()
 
         # get a domain
@@ -167,7 +208,7 @@ This sample function will create a gateway with ports, vlan and give some permis
     if __name__ == "__main__":
 
         # start the session
-        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL)
         session.start()
 
         # get an enterprise
@@ -178,26 +219,6 @@ This sample function will create a gateway with ports, vlan and give some permis
 
         # instantiate a gateway from the template and give USE permission to enterprise
         gw = create_datacenter_gateway("gateway 1", "id1", gw_tmpl, enterprise, session)
-
-
-Populating a test environment
------------------------------
-
-.. code-block:: python
-    :linenos:
-
-    # TODO :(
-
-
-
-Automatic Virtual Machine Provisioning
---------------------------------------
-
-.. code-block:: python
-    :linenos:
-
-    # TODO :(
-
 
 
 Populating Well-Known IANA Application Services
@@ -241,18 +262,9 @@ This function will fetch the latest known application services from IANA and cre
 
     if __name__ == "__main__":
 
-        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL, version=LOGIN_API_VERSION)
+        session = vsdk.NUVSDSession(username=LOGIN_USER, password=LOGIN_PASS, enterprise=LOGIN_ENTERPRISE, api_url=LOGIN_API_URL)
         session.start()
         import_known_application_services(session)
-
-
-Provisioning Default Security Policies
---------------------------------------
-
-.. code-block:: python
-    :linenos:
-
-    # TODO :(
 
 
 Working with Push Center
@@ -339,3 +351,72 @@ Working with Push Center
 
         while True:
             sleep(1000)
+
+
+Working with Push Center
+------------------------
+
+.. code-block:: python
+    :linenos:
+
+    # -*- coding: utf8 -*-
+
+    from vspk.vsdk.v3_1 import NUVSDSession as NUVSDSession_v3_1
+    from vspk.vsdk.v3_2 import NUVSDSession as NUVSDSession_v3_2
+    import os
+
+
+    def shell_variable(value_name):
+        value = os.environ.get(value_name)
+        if value:
+            return value
+        else:
+            print "Please have %s specified when executing this program." % value_name
+            exit(-1)
+
+
+    def itemize(item, name, description):
+        if name and description:
+            return str(item.name) + ', ' + str(item.description)
+        elif name:
+            return str(item.name)
+        elif description:
+            return str(item.description)
+        else:
+            exit(-1)
+
+
+    def print_items(header, item_list, name=False, description=False):
+        print header
+        print '\n'.join(itemize(item, name, description) for item in item_list)
+
+
+    def inspect_topology(username, password, enterprise, api_url, api_version):
+        if api_version == "3.1":
+            session = NUVSDSession_v3_1(
+                username=username, password=password, enterprise=enterprise, api_url=api_url)
+        elif api_version == "3.2":
+            session = NUVSDSession_v3_2(
+                username=username, password=password, enterprise=enterprise, api_url=api_url)
+        else:
+            return
+
+        session.start()
+        user = session.user
+        print "User:\n=====\nname: %s, role: %s" % (user.user_name, user.role)
+
+        print_items("\nEnterprises:\n============", user.enterprises.get(), name=True)
+        print_items("\nDomains:\n========", user.domains.get(), name=True, description=True)
+        print_items("\nL2Domains:\n==========", user.l2_domains.get(), name=True, description=True)
+
+
+    if __name__ == "__main__":
+
+        api_url     = shell_variable("VSD_API_URL")
+        api_version = shell_variable("VSD_API_VERSION")
+        username    = shell_variable("VSD_USERNAME")
+        password    = shell_variable("VSD_PASSWORD")
+        enterprise  = shell_variable("VSD_ENTERPRISE")
+
+        inspect_topology(username=username, password=password, enterprise=enterprise,
+                         api_url=api_url, api_version=api_version)

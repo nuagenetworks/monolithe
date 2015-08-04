@@ -20,8 +20,8 @@ class VSPKDocumentationGenerator(object):
 
         """
         self.vanilla_path = "%s/vanilla" % os.path.dirname(os.path.realpath(__file__))
-        self.vspk_path       = "codegen/vspk/vspk"
-        self.temp_doc_path   = "/tmp/docgen/vspkdoc"
+        self.vspk_path = "codegen/vspk/vspk"
+        self.temp_doc_path = "/tmp/docgen/vspkdoc"
         self.export_doc_path = "docgen/vspkdoc"
 
     def run(self):
@@ -29,10 +29,11 @@ class VSPKDocumentationGenerator(object):
 
         """
         Printer.log("Starting VSPK documentation generation")
-        sys.path.append(os.path.abspath(self.vspk_path))
-        python_path = sys.path
-        python_path.append("./codegen/vspk")
-        subprocess_environ = {"PYTHONPATH": ":".join(python_path), "PATH": os.environ["PATH"]}
+
+        origin_path = os.getcwd()
+
+        sys.path.append("%s/codegen/vspk/" % origin_path)
+        subprocess_environ = {"PYTHONPATH": ":".join(sys.path), "PATH": os.environ["PATH"]}
 
         ## Sphinx preprocess
         if os.path.exists(self.temp_doc_path):
@@ -56,7 +57,6 @@ class VSPKDocumentationGenerator(object):
         vsdks_path = "%s/vsdk" % self.vspk_path
 
         for item in os.listdir(vsdks_path):
-
             if os.path.isfile("%s/%s" % (vsdks_path, item)):
                 continue
 
@@ -79,7 +79,6 @@ class VSPKDocumentationGenerator(object):
         os.system("rm -rf %s/vspk.*.rst" % self.temp_doc_path)
         os.system("rm -rf %s/vspk.rst" % self.temp_doc_path)
 
-        origin_path = os.getcwd()
         os.chdir(self.temp_doc_path)
         process = subprocess.Popen(['make', 'html'], env=subprocess_environ)
         process.communicate()
