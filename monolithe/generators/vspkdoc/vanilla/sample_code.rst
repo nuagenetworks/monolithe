@@ -335,7 +335,7 @@ Working with Push Center
     if __name__ == "__main__":
 
         # we create a session
-        session = NUVSDSession("csproot", "csproot", "csp", "https://api.nuagenetworks.net:8443", "3.2")
+        session = NUVSDSession(username=u'csproot', password=u'csproot', enterprise=u'csp', api_url=u'https://135.227.150.88:8443')
         session.start()
 
         # we start the push center
