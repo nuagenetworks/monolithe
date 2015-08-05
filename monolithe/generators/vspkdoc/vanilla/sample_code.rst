@@ -4,7 +4,7 @@ Code Snippets
 This section provides various code snippets and scripts you can use or get inspiration from to develop your own scripts or application using the `vsdk`.
 
 
-Retrueve all enterprises
+Retrieve all enterprises
 ------------------------
 
 .. code-block:: python
