@@ -64,13 +64,13 @@ The session instance now have its :attr:`vspk.vsdk.v3_2.NUVSDSession.user` attri
  u'role': u'CSPROOT',
  u'userName': u'csproot'}
 
-.. note:: The session can also be started using a valid `certificate`. In this particular case, `password` argument is not mandatory.
+.. note:: The session can also be started using a valid `certificate`. In this particular case, `password` argument is not mandatory and the port will be `7443`
 
 .. code-block:: python
     :linenos:
 
     cert = ("/path/to/cert.pem", "/path/to/key.pem")
-    session = vsdk.NUVSDSession(username='csproot', enterprise='csp', api_url='https://135.227.150.222:8443', certificate=cert)
+    session = vsdk.NUVSDSession(username='csproot', enterprise='csp', api_url='https://135.227.150.222:7443', certificate=cert)
     session.start()
 
 
