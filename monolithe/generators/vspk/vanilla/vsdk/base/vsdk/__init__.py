@@ -5,6 +5,7 @@ import inspect
 import sys
 import pkg_resources
 
+from bambou import NURESTModelController
 from .utils import set_log_level
 classes = ['set_log_level']
 
@@ -20,6 +21,15 @@ for module in os.listdir(os.path.dirname(__file__)):
         __import__(import_name)
 
         members = inspect.getmembers(sys.modules[import_name], lambda member: inspect.isclass(member) and member.__module__.startswith(package_name))
+        print members
+
+        names = []
+        for member in members:
+            print member
+            print member[0]
+            names.append(member[0])
+            NURESTModelController.register_model(None)
+
         names = [member[0] for member in members]
 
         if len(names) > 0:

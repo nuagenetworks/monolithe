@@ -84,19 +84,23 @@ class SDKWriter(object):
                 Writes models and fetchers files
 
         """
-        filenames = dict()
+
+        autogenerate_filenames = dict()
+        fetcher_filenames = dict()
+        override_filenames = dict()
         constants = dict()
 
         task_manager = TaskManager()
 
         for model_name, model in resources.iteritems():
             self._prepare_attributes(model=model, constants=constants)
-            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=filenames, version=apiversion)
-            task_manager.start_task(method=self._write_override_file, model=model, version=apiversion)
-            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=filenames, version=apiversion)
+            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=autogenerate_filenames, version=apiversion)
+            task_manager.start_task(method=self._write_override_file, model=model, filenames=override_filenames, version=apiversion)
+            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=fetcher_filenames, version=apiversion)
 
         task_manager.wait_until_exit()
-        self._clean_files(except_files=filenames.keys())
+        except_files = autogenerate_filenames.keys() + fetcher_filenames.keys() + override_filenames.keys()
+        self._clean_files(except_files=except_files)
 
         writer = self.get_writer()
         writer.write_setup_file(version=apiversion, revision=revision)
@@ -107,6 +111,10 @@ class SDKWriter(object):
 
         # VSD Session
         writer.write_vsdsession_file(version=apiversion)
+
+        writer.write_init_autogenerate_files(filenames=autogenerate_filenames)
+        writer.write_init_fetcher_files(filenames=fetcher_filenames)
+        writer.write_init_override_files(filenames=override_filenames)
 
     def _write_autogenerate_file(self, model, filenames, version):
         """ Write the autogenerate file for the model
@@ -125,7 +133,7 @@ class SDKWriter(object):
 
         filenames[filename] = classname
 
-    def _write_override_file(self, model, version):
+    def _write_override_file(self, model, filenames, version):
         """ Write the override file for the model
 
             Args:
@@ -133,7 +141,9 @@ class SDKWriter(object):
 
         """
         writer = self.get_writer()
-        writer.write_model_override(model=model, version=version)
+        (filename, classname) = writer.write_model_override(model=model, version=version)
+
+        filenames[filename] = classname
 
     def _write_fetcher_file(self, model, filenames, version):
         """ Write the fetcher file for the model
@@ -186,6 +196,9 @@ class VSDKFileWriter(TemplateFileWriter):
         self._restuser_template = 'nurestuser.py.tpl'
         self._constants_template = 'constants.py.tpl'
         self._vsdsession_template = 'nuvsdsession.py.tpl'
+        self._autogenerate_init_template = '__autogenerate_init__.py.tpl'
+        self._fetcher_init_template = '__fetcher_init__.py.tpl'
+        self._override_init_template = '__override_init__.py.tpl'
 
     def copy_default_files(self):
         """ Copy default sources to the output directory
@@ -223,6 +236,42 @@ class VSDKFileWriter(TemplateFileWriter):
 
         self.write(destination=destination, filename=filename, template_name=self._constants_template, constants=constants)
 
+    def write_init_autogenerate_files(self, filenames):
+        """ Write constants file
+
+            Args:
+                filenames (dict): dict of filename and classes
+
+        """
+        destination = '%s%s' % (self.directory, self._autogenerate_path)
+        filename = '__init__.py'
+
+        self.write(destination=destination, filename=filename, template_name=self._autogenerate_init_template, filenames=filenames)
+
+    def write_init_fetcher_files(self, filenames):
+        """ Write constants file
+
+            Args:
+                filenames (dict): dict of filename and classes
+
+        """
+        destination = '%s%s' % (self.directory, self._fetchers_path)
+        filename = '__init__.py'
+
+        self.write(destination=destination, filename=filename, template_name=self._fetcher_init_template, filenames=filenames)
+
+    def write_init_override_files(self, filenames):
+        """ Write constants file
+
+            Args:
+                filenames (dict): dict of filename and classes
+
+        """
+        destination = self.directory
+        filename = '__init__.py'
+
+        self.write(destination=destination, filename=filename, template_name=self._override_init_template, filenames=filenames)
+
     def write_vsdsession_file(self, version):
         """ Write VSD session file
 
@@ -234,7 +283,6 @@ class VSDKFileWriter(TemplateFileWriter):
         filename = 'nuvsdsession.py'
 
         self.write(destination=destination, filename=filename, template_name=self._vsdsession_template, version=version)
-
 
     def write_model(self, model, version):
         """ Write autogenerate model file
@@ -283,7 +331,7 @@ class VSDKFileWriter(TemplateFileWriter):
 
         self.write(destination=destination, filename=filename, template_name=self._fetcher_template, model=model, version=version)
 
-        return (filename, model.name)
+        return (filename, model.plural_name)
 
     def clean(self, except_files):
         """ Clean folder to remove all files except those generated
