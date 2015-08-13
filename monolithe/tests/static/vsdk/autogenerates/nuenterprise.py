@@ -32,6 +32,7 @@ from ..fetchers import NURateLimitersFetcher
 from ..fetchers import NURedundancyGroupsFetcher
 from ..fetchers import NUUsersFetcher
 from ..fetchers import NUVMsFetcher
+
 from bambou import NURESTObject
 
 
@@ -148,6 +149,7 @@ class NUEnterprise(NURESTObject):
         self.users = NUUsersFetcher.fetcher_with_object(parent_object=self)
         
         self.vms = NUVMsFetcher.fetcher_with_object(parent_object=self)
+        
         
 
         self._compute_args(**kwargs)

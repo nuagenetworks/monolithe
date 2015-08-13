@@ -16,7 +16,7 @@ class SwaggerURLParserTests(FunctionalTest):
         """ SwaggerParser call correct /schema/api-docs URI
 
         """
-        parser = SwaggerParser(vsdurl='https://135.227.222.112:8443', path=None, apiversion=3.1)
+        parser = SwaggerParser(vsdurl='https://135.227.222.49:8443', path=None, apiversion=3.1)
 
         mock = MockUtils.create_swagger_response(status_code=400, filepath=None)
 
@@ -30,12 +30,12 @@ class SwaggerURLParserTests(FunctionalTest):
 
         url = MockUtils.get_mock_parameter(mock, 'url')
 
-        self.assertEqual(url, u'https://135.227.222.112:8443/web/docs/api/V3_1/schema/api-docs')
+        self.assertEqual(url, u'https://135.227.222.49:8443/web/docs/api/V3_1/schema/api-docs')
 
     def test_run(self):
         """ SwaggerParser retrieve all entities  """
 
-        parser = SwaggerParser(vsdurl='https://135.227.222.112:8443', path=None, apiversion=3.1)
+        parser = SwaggerParser(vsdurl='https://135.227.222.49:8443', path=None, apiversion=3.1)
         resources = parser.run()
 
         # Verify principal entities

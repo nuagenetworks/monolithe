@@ -29,6 +29,7 @@ from ..fetchers import NUVMsFetcher
 from ..fetchers import NUVPNConnectionsFetcher
 from ..fetchers import NUVPortsFetcher
 from ..fetchers import NUZonesFetcher
+
 from bambou import NURESTObject
 
 
@@ -151,6 +152,7 @@ class NUDomain(NURESTObject):
         self.vports = NUVPortsFetcher.fetcher_with_object(parent_object=self)
         
         self.zones = NUZonesFetcher.fetcher_with_object(parent_object=self)
+        
         
 
         self._compute_args(**kwargs)
