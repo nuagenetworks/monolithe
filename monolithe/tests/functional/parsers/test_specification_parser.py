@@ -18,9 +18,9 @@ class SpecificationParserTests(FunctionalTest):
 
         specifications = SpecificationParser.run(path)
 
-        self.assertIn('VCenter', specifications)
+        self.assertIn('vcenter', specifications)
 
-        self.assertOutputEqual(specifications, {u'VCenter': {u'apis': {u'children': {u'/vcenters/{id}/vcenterclusters': {u'RESTName': u'vcentercluster',
+        self.assertOutputEqual(specifications, {u'vcenter': {u'apis': {u'children': {u'/vcenters/{id}/vcenterclusters': {u'RESTName': u'vcentercluster',
                                                                           u'operations': [{u'availability': None,
                                                                                            u'method': u'GET'},
                                                                                           {u'availability': None,

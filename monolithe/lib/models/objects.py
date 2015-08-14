@@ -51,7 +51,7 @@ class MonolitheObject(object):
         self.resource_name = specification['model']['resourceName']
 
         self.apis['children'] = self._get_apis('children', specification['apis'])
-        self.apis['parent'] = self._get_apis('parents', specification['apis'])
+        self.apis['parents'] = self._get_apis('parents', specification['apis'])
         self.apis['self'] = self._get_apis('self', specification['apis'])
 
         self.attributes = self._get_attributes(specification['model']['attributes'])

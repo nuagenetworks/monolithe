@@ -55,7 +55,8 @@ class VSDKGenerator(object):
         specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
 
         if self.specifications_path is not None:
-            candidates = SpecificationParser.run(self.specifications_path)
+            candidates = SpecificationParser.run(self.specifications_path, specifications)
+
             specifications.update(candidates)
 
         # Process Swagger models
@@ -72,6 +73,8 @@ class VSDKGenerator(object):
 
         if self.force_removal and os.path.exists(directory):
             shutil.rmtree(directory)
+
+
 
         # Write Python sources
         writer = SDKWriter(directory=directory)
