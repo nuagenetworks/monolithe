@@ -37,8 +37,16 @@ setup(
     description='VSD Python SDK for API',
     long_description=open('README.md').read(),
     install_requires=[line for line in open('requirements.txt')],
+    license='BSD-3',
     include_package_data=True,
     data_files=[
         ('vsdk/resources', ['vsdk/resources/attrs_defaults.ini'])
+    ],
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Topic :: Utilities",
+        "License :: OSI Approved :: BSD License",
+        "Environment :: Console",
+        "Intended Audience :: Developers"
     ]
 )

@@ -14,20 +14,20 @@ for item in os.listdir(vsdks_path):
 
 setup(
     name='vspk',
-    version=os.environ['VSPK_VERSION'] if 'VSPK_VERSION' in os.environ else '0.0.0.1',
+    version=os.environ['VSPK_VERSION'] if 'VSPK_VERSION' in os.environ else '1.0.0.0',
     author='Antoine Mercadal, Christophe Serafin',
     author_email='antoine@nuagenetworks.net, christophe.serafin@nuagenetworks.net',
     packages=packages,
     description='Nuage Networks VSP Software Development Kit',
     long_description=open('README.md').read(),
     install_requires=[line for line in open('requirements.txt')],
-    license='TODO',
+    license='BSD-3',
     url='https://github.com/nuagenetworks',
     include_package_data=True,
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Topic :: Utilities",
-        "License :: Other/Proprietary License",
+        "License :: OSI Approved :: BSD License",
         "Environment :: Console",
         "Intended Audience :: Developers"
     ]
