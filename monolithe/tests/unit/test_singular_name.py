@@ -25,5 +25,6 @@ class GetSingularNameTest(TestCase):
         self.assertSingularNameEquals('Enterprise', 'Enterprise')
         self.assertSingularNameEquals('policies', 'policy')
         self.assertSingularNameEquals('qoss', 'qos')
+        self.assertSingularNameEquals('vrss', 'vrs')
         self.assertSingularNameEquals('gateways', 'gateway')
         self.assertSingularNameEquals('statistics', 'statistics')

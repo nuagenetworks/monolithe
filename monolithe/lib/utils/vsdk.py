@@ -132,7 +132,7 @@ class VSDKUtils(object):
         if singular_name[-1] == 'y' and singular_name[-2] not in Constants.VOWELS:
             return singular_name[:-1] + 'ies'
 
-        if singular_name[-1] != 's':
+        if singular_name[-1] != 's' or singular_name in Constants.PLURABLE_NAMES:
             return singular_name + 's'
 
         return singular_name

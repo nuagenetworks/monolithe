@@ -44,6 +44,7 @@ class NU{{ model.name }}(NURESTObject):
     """
 
     __rest_name__ = u"{{ model.remote_name }}"
+    __resource_name__ = u"{{model.resource_name}}"
 
     def __init__(self, **kwargs):
         """ Initializes a {{ model.name }} instance
