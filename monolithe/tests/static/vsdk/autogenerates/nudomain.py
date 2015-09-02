@@ -66,6 +66,7 @@ class NUDomain(NURESTObject):
     """
 
     __rest_name__ = u"domain"
+    __resource_name__ = u"domains"
 
     def __init__(self, **kwargs):
         """ Initializes a Domain instance

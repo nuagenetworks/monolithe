@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OriginVSDKDirectory=../../../codegen/3.1/vsdk
+OriginVSDKDirectory=codegen/3.1/vsdk
 DestinationVSDKDirectory=vsdk
 
 AutogeneratesDirectory=autogenerates
@@ -24,3 +24,5 @@ generate-vspk -f V3_1/
 copy_files AutogeneratesFiles[@] "$OriginVSDKDirectory/$AutogeneratesDirectory" "$DestinationVSDKDirectory/$AutogeneratesDirectory"
 copy_files FetchersFiles[@] "$OriginVSDKDirectory/$FetchersDirectory" "$DestinationVSDKDirectory/$FetchersDirectory"
 copy_files VSDKFiles[@] "$OriginVSDKDirectory" "$DestinationVSDKDirectory"
+
+rm -rf codegen

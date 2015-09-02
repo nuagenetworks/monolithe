@@ -69,6 +69,7 @@ class NUEnterprise(NURESTObject):
     """
 
     __rest_name__ = u"enterprise"
+    __resource_name__ = u"enterprises"
 
     def __init__(self, **kwargs):
         """ Initializes a Enterprise instance
