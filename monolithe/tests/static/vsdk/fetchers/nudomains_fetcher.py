@@ -24,48 +24,26 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+from bambou import NURESTFetcher
 
-from .autogenerates import NUNSGateway as AutoGenerate
 
+class NUDomainsFetcher(NURESTFetcher):
+    """ Represents a NUDomains fetcher
 
-class NUNSGateway(AutoGenerate):
-    """ Represents a NUNSGateway object in the VSD
+        Notes:
+            This fetcher enables to fetch NUDomain objects.
 
         See:
-            vsdk.autogenerates.NUNSGateway
+            bambou.NURESTFetcher
     """
 
-    def __init__(self, **kwargs):
-        """ Initializes a NUNSGateway instance
+    @classmethod
+    def managed_class(cls):
+        """ Return NUDomain class that is managed.
 
-            Notes:
-                You can specify all parameters while calling this methods.
-                A special argument named `data` will enable you to load the
-                object from a Python dictionary
-
-            Examples:
-                >>> nsgateway = NUNSGateway(id=u'xxxx-xxx-xxx-xxx', name=u'NSGateway')
-                >>> nsgateway = NUNSGateway(data=my_dict)
-        """
-
-        super(NUNSGateway, self).__init__(**kwargs)
-
-    def is_template(self):
-        """ Verify that the object is a template
-    
             Returns:
-                (bool): True if the object is a template
+                vsdk.NUDomain: the managed class
         """
-        return False
-    
-    def is_from_template(self):
-        """ Verify if the object has been instantiated from a template
-    
-            Note:
-                The object has to be fetched. Otherwise, it does not
-                have information from its parent
-    
-            Returns:
-                (bool): True if the object is a template
-        """
-        return self.template_id
+
+        from .. import NUDomain
+        return NUDomain
