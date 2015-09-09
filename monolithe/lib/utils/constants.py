@@ -8,7 +8,8 @@ class Constants(object):
     DEVELOPMENT_MODE = True
 
     # Constants
-    INVARIANT_NAMES = ['qos', 'vrs', 'cms', 'statistics']
+    INVARIANT_NAMES = ['qos', 'cms', 'statistics']
+    PLURABLE_NAMES = ['vrs']  # Plurable makes no sense. Hint: neither this code.
     VOWELS = ['a', 'e', 'i', 'o', 'u', 'y']
     HTTP_PROTOCOLS = ['http', 'https', 'ftp']
 

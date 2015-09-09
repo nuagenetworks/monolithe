@@ -327,7 +327,7 @@ class VSDKFileWriter(TemplateFileWriter):
 
         """
         destination = '%s%s' % (self.directory, self._fetchers_path)
-        filename = 'nu%s_fetcher.py' % model.name.lower()
+        filename = 'nu%s_fetcher.py' % model.plural_name.lower()
 
         self.write(destination=destination, filename=filename, template_name=self._fetcher_template, model=model, version=version)
 

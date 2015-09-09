@@ -87,6 +87,8 @@ class VSPKDocumentationGenerator(object):
         if os.path.exists(self.export_doc_path):
             shutil.rmtree(self.export_doc_path)
         shutil.copytree("%s/_build/html/" % self.temp_doc_path, self.export_doc_path)
+        shutil.rmtree('%s/_modules' % self.export_doc_path)
+        shutil.rmtree('%s/_sources' % self.export_doc_path)
 
         os.system("rm -rf '%s'" % self.temp_doc_path)
 

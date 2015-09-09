@@ -468,7 +468,7 @@ class SpecificationTransformerTests(FunctionalTest):
         # Parents apis
         parents = obj.apis['parents']
         paths = parents.keys()
-        self.assertEqual(paths, [])
+        self.assertEqual(paths, [u'/enterpriseprofiles/{id}/enterprises', u'/enterprises'])
 
         # Self apis
         self_apis = obj.apis['self']
@@ -793,7 +793,7 @@ class ManualSpecificationTransformerTests(FunctionalTest):
         parents = vcenter.apis['parents']
         paths = parents.keys()
 
-        self.assertEqual(paths, [])
+        self.assertEqual(paths, ['/vcenters'])
 
         # Self apis
         self_apis = vcenter.apis['self']

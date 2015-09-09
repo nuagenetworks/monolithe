@@ -24,47 +24,26 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-from bambou import NURESTSession
-from bambou.exceptions import InternalConsitencyError
-from .nurestuser import NURESTUser
+from bambou import NURESTFetcher
 
 
-class NUVSDSession(NURESTSession):
-    """ VSD User Session
+class NUDomainsFetcher(NURESTFetcher):
+    """ Represents a NUDomains fetcher
 
-        Session can be started and stopped whenever its needed
+        Notes:
+            This fetcher enables to fetch NUDomain objects.
+
+        See:
+            bambou.NURESTFetcher
     """
 
-    def __init__(self, username, enterprise, api_url, password=None, certificate=None):
-        """ Initializes a new sesssion
+    @classmethod
+    def managed_class(cls):
+        """ Return NUDomain class that is managed.
 
-            Args:
-                username (string): the username
-                password (string): the password
-                enterprise (string): the enterprise
-                api_url (string): the url to the api
-
-            Example:
-                >>> session =  NUVSDSession(username="csproot", password="csproot", enterprise="csp", api_url="https://vsd:8443")
-                >>> session.start()
-
+            Returns:
+                vsdk.NUDomain: the managed class
         """
 
-        if certificate is None and password is None:
-            raise InternalConsitencyError('NUVSDSession needs either a password or a certificate')
-
-        super(NUVSDSession, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, version=str(self.version), certificate=certificate)
-
-    def create_rest_user(self):
-        """ Creates a new user
-
-        """
-        return NURESTUser()
-
-    @property
-    def version(self):
-        """ Returns the current VSD version
-
-        """
-        return {{ version }}
+        from .. import NUDomain
+        return NUDomain

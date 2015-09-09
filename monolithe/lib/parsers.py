@@ -136,11 +136,9 @@ class SwaggerParser(object):
         global_metadata_info['models'].pop('Metadata')
         global_metadata_info['models']['GlobalMetadata']['id'] = u'GlobalMetadata'
 
-
         aggregate_metadata_info['models']['AggregateMetadata'] = aggregate_metadata_info['models']['Metadata']
         aggregate_metadata_info['models'].pop('Metadata')
         aggregate_metadata_info['models']['AggregateMetadata']['id'] = u'AggregateMetadata'
-
 
         for api in resource['apis']:
             api_copy = deepcopy(api)
@@ -193,7 +191,7 @@ class SpecificationParser(object):
     """
 
     @classmethod
-    def run(cls, directory):
+    def run(cls, directory, specifications=None):
         """ Grab all specification in given directory and return a dictionary of specs.
 
             Returns:
@@ -212,8 +210,32 @@ class SpecificationParser(object):
                 filepath = '%s/%s' % (directory, filename)
 
                 data = ParsingUtils.parseFile(filepath)
+                rest_name = data['model']['RESTName']
                 name = data['model']['entityName']
 
-                specs[name] = data
+                specs[rest_name] = data
+
+                if specifications is None:
+                    continue
+
+                for path, api in data['apis']['parents'].iteritems():
+                    rest_name = ParsingUtils.get_rest_name(api['RESTName'])
+
+                    if rest_name in specifications:
+                        specification_api = deepcopy(api)
+
+                        entity_name = data['model']['entityName']
+
+                        plural_name = VSDKUtils.get_plural_name(entity_name)
+                        instance_plural_name = VSDKUtils.get_python_name(plural_name)
+
+                        specification_api['entityName'] = entity_name
+                        specification_api['RESTName'] = data['model']['RESTName']
+                        specification_api['resourceName'] = data['model']['resourceName']
+                        specification_api['plural_name'] = plural_name
+                        specification_api['instance_plural_name'] = instance_plural_name
+
+                        specifications[rest_name]['apis']['children'][path] = specification_api
+
 
         return ParsingUtils.order(specs)
