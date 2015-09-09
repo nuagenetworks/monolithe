@@ -35,7 +35,7 @@ class TestsRunner(object):
         vsdk = VSDKFactory.get_vsdk_package()
         TestHelper.use_vsdk(vsdk)
 
-        session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise, version=version)
+        session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise)
         session.start()
 
         self.user = session.user
