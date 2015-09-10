@@ -59,9 +59,6 @@ class Specification(dict):
         entity_name = swagger['models'].keys()[0]
 
         # Default values
-        self['metadata']['api_version'] = VSDKUtils.get_float_version(swagger['apiVersion'])
-        self['metadata']['date'] = date.today().strftime("%m-%d-%Y")
-
         self['model']['package'] = swagger['package']
         self['model']['entityName'] = ParsingUtils.get_correct_name(entity_name)
         self['model']['description'] = swagger['models'][entity_name]['description']
