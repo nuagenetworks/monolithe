@@ -5,79 +5,58 @@ import shutil
 
 from monolithe.lib.utils.printer import Printer
 from monolithe.lib.utils.constants import Constants
+from monolithe.lib.managers import SpecificationsRepositoryManager
 
-from monolithe.lib.parsers import SpecificationParser, SwaggerParser
-from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
 from monolithe.generators.vspk.lib import SDKWriter
+
+SpecificationsRepositoryManager
 
 
 class VSDKGenerator(object):
     """ Generate VSDK
 
     """
-    def __init__(self, vsdurl, swagger_path, apiversion, revision, output_path=None, force_removal=False, specifications_path=None):
+    def __init__(self, github_api_url, github_token, specification_organization, github_specifications_repository, version=u'master', output_path=None, specifications_path=None, force_removal=False):
         """ Initializes a VSDKGenerator
 
             Can be used to generate a vsdk from a remote vsdurl or a local swagger_path.
 
             Args:
-                vsdurl (string): the url of the vsd with its port
-                swagger_path (string): the path to swagger description files
-                apiversion (float): the api version
-                revision (float): the revision to generate
-                output_path (string): the output path to put generated python files
-                force_removal (bool): set to True to force previous vsdk files
-                specifications_path (string): a path where to get additionnal specifications files
 
         """
-        self.vsdurl = vsdurl
-        self.swagger_path = swagger_path
-        self.apiversion = apiversion
-        self.revision = revision
+        self.version = version
         self.output_path = output_path
         self.force_removal = force_removal
         self.specifications_path = specifications_path
 
-        if self.vsdurl is None and self.swagger_path is None:
-            Printer.raiseError("Please provide a vsd url or a path to swagger json file")
+        self.specification_repository_manager = SpecificationsRepositoryManager(github_api_url=github_api_url, \
+                                                                                github_token=github_token, \
+                                                                                specification_organization=specification_organization, \
+                                                                                github_specifications_repository=github_specifications_repository)
 
     def run(self):
         """ Start the VSDK generation
 
         """
-        message = "API version %s" % self.apiversion if self.apiversion else "file %s" % self.swagger_path
-        Printer.log("Starting VSDK generation for %s" % message)
-        # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=self.vsdurl, path=self.swagger_path, apiversion=self.apiversion)
-        swagger_resources = swagger_parser.run()
+        Printer.log("Starting VSDK generation from branch %s of repository %s" % (self.version, self.specification_repository_manager.github_repository))
 
-        # Convert Swagger models
-        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
+        filenames = self.specification_repository_manager.available_specifications(specification_version=self.version)
 
-        if self.specifications_path is not None:
-            candidates = SpecificationParser.run(self.specifications_path, specifications)
-
-            specifications.update(candidates)
-
-        # Process Swagger models
-        processed_resources = SpecificationTransformer.get_objects(specifications=specifications)
-
-        # Compute output directory according to the version
-        if self.apiversion is None:
-            self.apiversion = swagger_parser.apiversion
+        specifications = {}
+        for filename in filenames:
+            specification = self.specification_repository_manager.get_specification(specification_file=filename, specification_version=self.version)
+            specifications[specification.remote_name] = specification
 
         if self.output_path:
-            directory = '%s/%s' % (self.output_path, self.apiversion)
+            directory = '%s/%s' % (self.output_path, self.version)
         else:
-            directory = '%s/%s' % (Constants.CODEGEN_DIRECTORY, self.apiversion)
+            directory = '%s/%s' % (Constants.CODEGEN_DIRECTORY, self.version)
 
         if self.force_removal and os.path.exists(directory):
             shutil.rmtree(directory)
 
-
-
         # Write Python sources
         writer = SDKWriter(directory=directory)
-        writer.write(resources=processed_resources, apiversion=self.apiversion, revision=self.revision)
+        writer.write(resources=specifications, apiversion=self.version, revision=1)
 
-        Printer.success("Generated VSDK with %s objects for API version %s" % (len(processed_resources), self.apiversion))
+        Printer.success("Generated VSDK with %s objects for API version %s" % (len(specifications), self.version))

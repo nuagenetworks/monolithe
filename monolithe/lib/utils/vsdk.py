@@ -181,6 +181,9 @@ class VSDKUtils(object):
                 >>> v3_1
 
         """
+        if version == 'master':
+            return version
+
         return ('v%s' % version).replace('.', '_')
 
     @classmethod

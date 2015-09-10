@@ -52,9 +52,16 @@ class SpecificationsRepositoryManager (object):
                 specification_organization: the organization where github_specifications_repository is
                 github_specifications_repository: the repository containing the specifications
         """
+        self._github_repository = github_specifications_repository
 
         self._github = Github(login_or_token=github_token, base_url=github_api_url)
         self._github_specification_repo = self._github.get_organization(specification_organization).get_repo(github_specifications_repository)
+
+    @property
+    def github_repository(self):
+        """
+        """
+        return self._github_repository
 
     def available_versions(self):
         """ Returns the list of available API spec versions (branches)

@@ -25,7 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-{% for api in model.apis['children'].values() %}
+{% for api in model.children_apis %}
 from ..fetchers import NU{{ api.plural_name }}Fetcher{% endfor %}
 from bambou import NURESTBasicUser{% if model.has_time_attribute %}
 from time import time{% endif %}
@@ -61,9 +61,9 @@ class NU{{ model.name }}(NURESTBasicUser):
         self._{{ attribute.local_name|lower }} = None{% endfor %}
         {% for attribute in model.attributes %}
         self.expose_attribute(local_name=u"{{ attribute.local_name|lower }}", remote_name=u"{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
-        {% if model.apis['children']|length > 0 %}
+        {% if model.children_apis|length > 0 %}
         # Fetchers
-        {% for api in model.apis['children'].values() %}
+        {% for api in model.children_apis %}
         self.{{ api.instance_plural_name }} = NU{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
         {% endfor %}{% endif %}
 

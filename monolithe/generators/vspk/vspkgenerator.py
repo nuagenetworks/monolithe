@@ -28,6 +28,10 @@ class VSPKGenerator(object):
         self._prepare_vspk_destination(self._path_vanilla_vspk, self._path_generated_vspk)
 
         for version in self.versions:
+
+            if version == 'master':
+                Printer.warning('master branch should be used for development purpose only.')
+
             self._include_vsdk(version, self._path_codegen, self._path_generated_vspk)
 
     def _prepare_vspk_destination(self, source_path, destination_path):

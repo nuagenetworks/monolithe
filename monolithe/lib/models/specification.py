@@ -111,17 +111,17 @@ class Specification(object):
                 relations: dict containing all relations between resources
 
         """
-        result_apis = {}
+        result_apis = []
         for path, data in apis[api_name].iteritems():
 
             api = SpecificationAPI()
 
             if api_name != 'children' or 'entityName' in data:
                 data['path'] = path
-                api.from_data(data)
+                api.from_dict(data)
                 result_apis.append(api)
 
-        return ParsingUtils.order(result_apis)
+        return result_apis
 
     def _get_attributes(self, attributes):
         """
@@ -129,7 +129,7 @@ class Specification(object):
         """
         model_attributes = []
 
-        for name, data in data.iteritems():
+        for name, data in attributes.iteritems():
             data['name'] = name
             model_attribute = SpecificationAttribute(data=data)
 

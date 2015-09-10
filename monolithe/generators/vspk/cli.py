@@ -6,45 +6,47 @@ import os
 
 
 def main(argv=sys.argv):
+    """
+
+    """
     parser = argparse.ArgumentParser(description="VSP SDK Generator.")
 
-    parser.add_argument('-u', "--vsdurl",
-                        dest="vsdurl",
-                        help="URL of your VSD API where to get the get JSON information without version (ex: https://host:port)",
+    parser.add_argument('-g', "--github",
+                        dest="github_api_url",
+                        help="Github API URL",
                         type=str)
 
-    parser.add_argument('-v', "--apiversions",
-                        dest="apiversions",
-                        help="versions of the SDK to generate (examples: 1.0 3.0 3.1)",
-                        nargs="*",
-                        type=float)
-
-    parser.add_argument('-f', "--file",
-                        dest="swagger_paths",
-                        help="Paths to a repository containing swagger api-docs file ",
-                        nargs="*",
+    parser.add_argument('-t', "--token",
+                        dest="github_token",
+                        help="Github Token to connect",
                         type=str)
 
-    parser.add_argument('-r', "--revision",
-                        dest="revision",
-                        help="Revision number of the SDK",
-                        default=1,
-                        type=int)
+    parser.add_argument('-o', "--organization",
+                        dest="specification_organization",
+                        help="Github organization name",
+                        type=str)
 
-    parser.add_argument('-o', "--output",
-                        dest='dest',
-                        help="directory where the sources will be generated",
+    parser.add_argument('-r', "--r",
+                        dest="github_specifications_repository",
+                        help="Github repository name",
+                        type=str)
+
+    parser.add_argument('-v', "--versions",
+                        dest="versions",
+                        help="versions of the SDK to generate (examples: master 3.0 3.1)",
+                        nargs="*",
+                        type=str,
+                        required=True)
+
+    parser.add_argument('-d', "--destination",
+                        dest='output_path',
+                        help="directory where the generated sources will be placed",
                         type=str)
 
     parser.add_argument("--force",
                         dest="force_removal",
                         help="Force removal of the existing generated code",
                         action="store_true")
-
-    parser.add_argument('-s', "--specs",
-                        dest='specifications_path',
-                        help="Path to directory that contains .spec files",
-                        type=str)
 
     parser.add_argument("--doc",
                         dest="generate_doc",
@@ -53,36 +55,48 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    if not args.vsdurl and not args.swagger_paths:
-        parser.error('Please specify either a vsdurl or a swagger_path')
+    # Use environment variable if necessary
+    if not args.github_api_url and "GITHUB_API_URL" in os.environ:
+        args.github_api_url = os.environ["GITHUB_API_URL"]
 
-    if not args.vsdurl and not args.swagger_paths and "VSD_API_URL" in os.environ: args.vsdurl = os.environ["VSD_API_URL"]
-    if not args.apiversions and not args.swagger_paths and "VSD_API_VERSION" in os.environ: args.apiversions = [os.environ["VSD_API_VERSION"]]
+    if not args.github_token and "GITHUB_TOKEN" in os.environ:
+        args.github_token = os.environ["GITHUB_TOKEN"]
+
+    if not args.specification_organization and "GITHUB_ORGANIZATION" in os.environ:
+        args.specification_organization = os.environ["GITHUB_ORGANIZATION"]
+
+    if not args.github_specifications_repository and "GITHUB_REPOSITORY" in os.environ:
+        args.github_specifications_repository = os.environ["GITHUB_REPOSITORY"]
+
+    # Additional validation
+    if not args.github_api_url:
+        parser.error('Please specify a Github API URL using -g or `GITHUB_API_URL` environment variable')
+
+    if not args.github_token:
+        parser.error('Please specify a Github Token using -t or `GITHUB_TOKEN` environment variable')
+
+    if not args.specification_organization:
+        parser.error('Please specify a Github Organization name using -o or `GITHUB_ORGANIZATION` environment variable')
+
+    if not args.github_specifications_repository:
+        parser.error('Please specify a Github Repository name using -r or `GITHUB_REPOSITORY` environment variable')
 
     from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
 
-    versions = args.apiversions
-
     # Generate VSDK
-    if args.vsdurl:
-        for version in versions:
-            vsdk_generator = VSDKGenerator(vsdurl=args.vsdurl, swagger_path=None, apiversion=version, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
-            vsdk_generator.run()
-    else:
-        versions = []
-        for swagger_path in args.swagger_paths:
-            vsdk_generator = VSDKGenerator(vsdurl=None, swagger_path=swagger_path, apiversion=None, output_path=args.dest, revision=args.revision, force_removal=args.force_removal, specifications_path=args.specifications_path)
-            vsdk_generator.run()
-            versions.append(vsdk_generator.apiversion)
+    for version in args.versions:
+        vsdk_generator = VSDKGenerator(github_api_url=args.github_api_url, github_token=args.github_token, specification_organization=args.specification_organization, github_specifications_repository=args.github_specifications_repository, version=version, output_path=args.output_path, force_removal=args.force_removal)
+        vsdk_generator.run()
 
     # Packaging a VSPK
-    vspk_generator = VSPKGenerator(versions=versions)
+    vspk_generator = VSPKGenerator(versions=args.versions)
     vspk_generator.run()
 
     # Generate VSPK and VSDK documentation
     if args.generate_doc:
         doc_generator = VSPKDocumentationGenerator()
         doc_generator.run()
+
 
 if __name__ == '__main__':
     main()
