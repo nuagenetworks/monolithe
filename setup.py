@@ -14,7 +14,6 @@ setup(
     entry_points={
         'console_scripts': [
             'generate-vspk = monolithe.generators.vspk.cli:main',
-            'generate-specifications = monolithe.generators.specifications.cli:main',
             'generate-apidoc = monolithe.generators.apidoc.cli:main',
             'generate-vspkdoc = monolithe.generators.vspkdoc.cli:main']
     }
