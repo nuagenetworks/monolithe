@@ -1,194 +1,131 @@
 # -*- coding: utf-8 -*-
 
-import os
 import pkgutil
 
-from datetime import date
 from copy import deepcopy
 
 from monolithe.lib.utils.parse import ParsingUtils
 from monolithe.lib.utils.vsdk import VSDKUtils
-from monolithe.lib.utils.urls import URLUtils
-from monolithe.lib.utils.constants import Constants
-from monolithe.lib.utils.printer import Printer
 
+from .specification_api import SpecificationAPI
+from .specification_attribute import SpecificationAttribute
 
-class Specification(dict):
+class Specification(object):
+    """ Defines a specification object
 
-    __default_specification__ = None
-    __default_attribute__ = None
+    """
 
-    parent_relations = {}  # Used to compute parent - child relation
+    def __init__(self, data=None):
+        """ Initializes a model object
 
-    def __init__(self, swagger):
-        """ Initializes a specification
+            Example:
+                name: EnterpriseNetwork
+                instance_name: enterprise_network
+                plural_name: EnterpriseNetworks
+                instance_plural_name: enterprise_networks
+                remote_name: enterprisenetwork
+                resource_name: enterprisenetworks
+                package: network
+        """
+        self.__default_specification__ = None
+
+        self.description = None
+        self.package = None
+        self.name = None  # The original name of the object
+        self.instance_name = None  # Name of the object as an instance
+        self.plural_name = None  # the original name in plural
+        self.instance_plural_name = None  # Name of the object as an instance of array or fetcher
+        self.remote_name = None  # The remote name of the object
+        self.resource_name = None  # The name of the resource used in URI
+        self.attributes = []  # A list of all properties of the object
+        self.children_apis = {}
+        self.parents_apis = {}
+        self.self_apis = {}
+
+        self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
+
+        if data:
+            self.from_dict(data=data)
+
+    def to_dict(self):
+        """ Transform the current specification to a dictionary
 
         """
-        super(Specification, self).__init__()
 
-        self.update(self.get_default_specification())
-        self._from_swagger(swagger)
+        if self.__default_specification__ is None:
+            default_data = pkgutil.get_data(__package__, '/data/default_specification.json')
+            self.__default_specification__ = ParsingUtils.parseJSON(default_data)
 
-    @classmethod
-    def get_default_specification(cls):
-        """ Get a default specification structure
+        data = deepcopy(self.__default_specification__)
 
-        """
-        if cls.__default_specification__ is None:
-            data = pkgutil.get_data(__package__, '/data/default_specification.json')
-            cls.__default_specification__ = ParsingUtils.parseJSON(data)
+        data['model']['description'] = self.description
+        data['model']['entityName'] = self.name
+        data['model']['package'] = self.package
+        data['model']['resourceName'] = self.resource_name
+        data['model']['RESTName'] = self.remote_name
 
-        return deepcopy(cls.__default_specification__)
+        for attribute in self.attributes:
+            data['model']['attributes'][attribute.name] = attribute.to_dict()
 
-    @classmethod
-    def get_default_attribute(cls):
-        """ Get a default attribute structure
+        return data
 
-        """
-        if cls.__default_attribute__ is None:
-            data = pkgutil.get_data(__package__, '/data/default_attribute.json')
-            cls.__default_attribute__ = ParsingUtils.parseJSON(data)
-
-        return deepcopy(cls.__default_attribute__)
-
-    def _from_swagger(self, swagger):
-        """ Complete specification with information from
-            the swagger structure
+    def from_dict(self, data):
+        """ Fill the current object with information from the specification
 
         """
-        entity_name = swagger['models'].keys()[0]
 
-        # Default values
-        self['model']['package'] = swagger['package']
-        self['model']['entityName'] = ParsingUtils.get_correct_name(entity_name)
-        self['model']['description'] = swagger['models'][entity_name]['description']
+        self.description = data['model']['description']
+        self.package = data['model']['package']
 
-        # if len(swagger['apis']) == 0:
-        #     Printer.warn('Swagger file %s has no apis defined' % entity_name)
+        entity_name = data['model']['entityName']
 
-        self._process_apis(apis=swagger['apis'])
-        self._process_attributes(swagger_properties=swagger['models'][entity_name]['properties'])
+        self.name = ParsingUtils.get_correct_name(entity_name)
+        self.instance_name = VSDKUtils.get_python_name(entity_name)
+        self.plural_name = VSDKUtils.get_plural_name(entity_name)
+        self.instance_plural_name = VSDKUtils.get_python_name(self.plural_name)
+        self.remote_name = data['model']['RESTName']
+        self.resource_name = data['model']['resourceName']
 
-    def _process_apis(self, apis):
-        """ Process apis from swagger structure
+        self.children_apis = self._get_apis('children', data['apis'])
+        self.parents_apis = self._get_apis('parents', data['apis'])
+        self.self_apis = self._get_apis('self', data['apis'])
+
+        self.attributes = self._get_attributes(data['model']['attributes'])
+
+    def _get_apis(self, api_name, apis):
+        """ Process apis for the given model
 
             Args:
-                apis: the apis from the swagger structure
+                model: the model processed
+                apis: the list of apis availble for the current swagger model
+                relations: dict containing all relations between resources
 
         """
+        model_apis = {}
+        for path, data in apis[api_name].iteritems():
 
-        for api in apis:
-            path = api['path']
+            model_api = SpecificationAPI()
 
-            specification_api = SpecificationApi(api)
+            if api_name != 'children' or 'entityName' in data:
+                model_api.from_data(path, data)
+                model_apis[path] = model_api
 
-            resource_names = URLUtils.resources_from_path(path)
+        return ParsingUtils.order(model_apis)
 
-            self['model']['resourceName'] = resource_names[-1]
-            self['model']['RESTName'] = VSDKUtils.get_singular_name(resource_names[-1])
-
-            # Parent relation
-            parent_resource_name = resource_names[0]
-            parent_rest_name = VSDKUtils.get_singular_name(resource_names[0])
-
-            specification_api['resourceName'] = parent_resource_name
-            specification_api['RESTName'] = parent_rest_name
-
-            if len(resource_names) == 2:
-                self['apis']['parents'][path] = specification_api
-                self._create_parent_relation(path, specification_api, parent_rest_name)
-                continue
-
-            # Only API with operation of form /xxxx or /xxxx/{id}
-            methods = [operation['method'] for operation in api['operations']]
-
-            if URLUtils.is_root_url(path=path, methods=methods):
-                # specification_api['resourceName'] = Constants.RESTUSER_REST_NAME
-                # specification_api['RESTName'] = Constants.RESTUSER_REST_NAME
-                self['apis']['parents'][path] = specification_api
-                self._create_parent_relation(path, specification_api, Constants.RESTUSER_REST_NAME)
-
-            else:
-                self['apis']['self'][path] = specification_api
-
-    def _create_parent_relation(self, path, specification_api, parent_rest_name):
-        """ Create a relation that will be bind to the parent later
-
-        """
-        # Make a copy for the parent relation
-        parent_specification_api = deepcopy(specification_api)
-        parent_specification_api['RESTName'] = self['model']['RESTName']
-        parent_specification_api['resourceName'] = self['model']['resourceName']
-
-        if parent_rest_name not in self.parent_relations:
-            self.parent_relations[parent_rest_name] = {}
-
-        self.parent_relations[parent_rest_name][path] = parent_specification_api
-
-    def _process_attributes(self, swagger_properties):
-        """ Removes ignored attributes and update attribute type / name
-
-            Args:
-                model: the processed model
-                properties: the list of properties to process
-
+    def _get_attributes(self, attributes):
         """
 
-        for attribute_name, attribute_info in swagger_properties.iteritems():
-
-            if attribute_name in Constants.IGNORED_ATTRIBUTES:
-                continue
-
-            attribute = self.get_default_attribute()
-
-            if 'description' in attribute_info:
-                attribute['description'] = attribute_info['description']
-
-            if 'required' in attribute_info and attribute_info['required'] == 'true':
-                attribute['required'] = True
-
-            if 'uniqueItems' in attribute_info and attribute_info['uniqueItems'] == 'true':
-                attribute['unique'] = True
-
-            if '$ref' in attribute_info:
-                attribute_info['type'] = attribute_info['$ref']
-
-            if 'type' in attribute_info:
-                attribute['type'] = attribute_info['type']
-
-            if 'enum' in attribute_info:
-                attribute['allowedChoices'] = attribute_info['enum']
-
-            self.add_attribute(attribute_name, attribute)
-
-    def add_attribute(self, attribute_name, attribute):
-        """ Add a new attribute to the specification
-
         """
-        self['model']['attributes'][attribute_name] = attribute
+        model_attributes = []
 
+        for name, data in data.iteritems():
+            data['name'] = name
+            model_attribute = SpecificationAttribute(data=data)
 
-class SpecificationApi(dict):
+            if model_attribute.has_time_attribute:
+                self.has_time_attribute = True
 
-    __default_api__ = None
+            if not model_attribute.ignored:
+                model_attributes.append(model_attribute)
 
-    def __init__(self, swagger_api):
-        """ Initializes a specification
-
-        """
-        super(SpecificationApi, self).__init__()
-        self.update(self.get_default_api())
-
-        for operation in swagger_api['operations']:
-            self['operations'].append({u'method': operation['method'], u'availability': None})
-
-    @classmethod
-    def get_default_api(cls):
-        """ Get default api structure
-
-        """
-        if cls.__default_api__ is None:
-            data = pkgutil.get_data(__package__, '/data/default_api.json')
-            cls.__default_api__ = ParsingUtils.parseJSON(data)
-
-        return deepcopy(cls.__default_api__)
+        return ParsingUtils.order_by(model_attributes, 'local_name')
