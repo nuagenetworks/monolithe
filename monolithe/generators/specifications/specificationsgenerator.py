@@ -62,7 +62,7 @@ class SpecificationsGenerator(object):
             with open(file_path, 'wb') as file:
                 json.dump(specification, file, indent=2, sort_keys=True)
 
-        Printer.success("Generated %s specifications for API version" % (len(specifications), self.apiversion))
+        Printer.success("Generated %s specifications for API version %s" % (len(specifications), self.apiversion))
 
     def get_specification(self, rest_name):
         """ Retrieve a specification by its RESTName
