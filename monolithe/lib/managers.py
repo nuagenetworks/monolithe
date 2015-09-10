@@ -6,6 +6,8 @@ import json
 import base64
 from github import Github
 
+from monolithe.lib.models import Specification
+
 
 class TaskManager(object):
     """ Multi threading manager """
