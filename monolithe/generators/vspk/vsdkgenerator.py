@@ -16,35 +16,30 @@ class VSDKGenerator(object):
     """ Generate VSDK
 
     """
-    def __init__(self, github_api_url, github_token, specification_organization, github_specifications_repository, version=u'master', output_path=None, specifications_path=None, force_removal=False):
-        """ Initializes a VSDKGenerator
-
-            Can be used to generate a vsdk from a remote vsdurl or a local swagger_path.
-
-            Args:
-
+    def __init__(self, api_url, login_or_token, organization, repository, version=u'master', output_path=None, specifications_path=None, force_removal=False):
+        """
         """
         self.version = version
         self.output_path = output_path
         self.force_removal = force_removal
         self.specifications_path = specifications_path
 
-        self.specification_repository_manager = SpecificationsRepositoryManager(github_api_url=github_api_url, \
-                                                                                github_token=github_token, \
-                                                                                specification_organization=specification_organization, \
-                                                                                github_specifications_repository=github_specifications_repository)
+        self.specification_repository_manager = SpecificationsRepositoryManager(api_url=api_url, \
+                                                                                login_or_token=login_or_token, \
+                                                                                organization=organization, \
+                                                                                repository=repository)
 
     def run(self):
         """ Start the VSDK generation
 
         """
-        Printer.log("Starting VSDK generation from branch %s of repository %s" % (self.version, self.specification_repository_manager.github_repository))
+        Printer.log("Starting VSDK generation from branch `%s` of repository `%s`" % (self.version, self.specification_repository_manager.github_repository))
 
-        filenames = self.specification_repository_manager.available_specifications(specification_version=self.version)
+        filenames = self.specification_repository_manager.available_specifications(version=self.version)
 
         specifications = {}
         for filename in filenames:
-            specification = self.specification_repository_manager.get_specification(specification_file=filename, specification_version=self.version)
+            specification = self.specification_repository_manager.get_specification(filename=filename, version=self.version)
             specifications[specification.remote_name] = specification
 
         if self.output_path:

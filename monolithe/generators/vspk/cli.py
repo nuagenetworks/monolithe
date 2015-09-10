@@ -12,22 +12,22 @@ def main(argv=sys.argv):
     parser = argparse.ArgumentParser(description="VSP SDK Generator.")
 
     parser.add_argument('-g', "--github",
-                        dest="github_api_url",
+                        dest="api_url",
                         help="Github API URL",
                         type=str)
 
     parser.add_argument('-t', "--token",
-                        dest="github_token",
-                        help="Github Token to connect",
+                        dest="login_or_token",
+                        help="Github Token to connect with",
                         type=str)
 
     parser.add_argument('-o', "--organization",
-                        dest="specification_organization",
+                        dest="organization",
                         help="Github organization name",
                         type=str)
 
     parser.add_argument('-r', "--r",
-                        dest="github_specifications_repository",
+                        dest="repository",
                         help="Github repository name",
                         type=str)
 
@@ -56,36 +56,42 @@ def main(argv=sys.argv):
     args = parser.parse_args()
 
     # Use environment variable if necessary
-    if not args.github_api_url and "GITHUB_API_URL" in os.environ:
-        args.github_api_url = os.environ["GITHUB_API_URL"]
+    if not args.api_url and "api_url" in os.environ:
+        args.api_url = os.environ["api_url"]
 
-    if not args.github_token and "GITHUB_TOKEN" in os.environ:
-        args.github_token = os.environ["GITHUB_TOKEN"]
+    if not args.login_or_token and "login_or_token" in os.environ:
+        args.login_or_token = os.environ["login_or_token"]
 
-    if not args.specification_organization and "GITHUB_ORGANIZATION" in os.environ:
-        args.specification_organization = os.environ["GITHUB_ORGANIZATION"]
+    if not args.organization and "GITHUB_ORGANIZATION" in os.environ:
+        args.organization = os.environ["GITHUB_ORGANIZATION"]
 
-    if not args.github_specifications_repository and "GITHUB_REPOSITORY" in os.environ:
-        args.github_specifications_repository = os.environ["GITHUB_REPOSITORY"]
+    if not args.repository and "GITHUB_REPOSITORY" in os.environ:
+        args.repository = os.environ["GITHUB_REPOSITORY"]
 
     # Additional validation
-    if not args.github_api_url:
-        parser.error('Please specify a Github API URL using -g or `GITHUB_API_URL` environment variable')
+    if not args.api_url:
+        parser.error('Please specify a Github API URL using -g or `api_url` environment variable')
 
-    if not args.github_token:
-        parser.error('Please specify a Github Token using -t or `GITHUB_TOKEN` environment variable')
+    if not args.login_or_token:
+        parser.error('Please specify a Github Token using -t or `login_or_token` environment variable')
 
-    if not args.specification_organization:
+    if not args.organization:
         parser.error('Please specify a Github Organization name using -o or `GITHUB_ORGANIZATION` environment variable')
 
-    if not args.github_specifications_repository:
+    if not args.repository:
         parser.error('Please specify a Github Repository name using -r or `GITHUB_REPOSITORY` environment variable')
 
     from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
 
     # Generate VSDK
     for version in args.versions:
-        vsdk_generator = VSDKGenerator(github_api_url=args.github_api_url, github_token=args.github_token, specification_organization=args.specification_organization, github_specifications_repository=args.github_specifications_repository, version=version, output_path=args.output_path, force_removal=args.force_removal)
+        vsdk_generator = VSDKGenerator(api_url=args.api_url, \
+                                       login_or_token=args.login_or_token, \
+                                       organization=args.organization, \
+                                       repository=args.repository, \
+                                       version=version, \
+                                       output_path=args.output_path, \
+                                       force_removal=args.force_removal)
         vsdk_generator.run()
 
     # Packaging a VSPK

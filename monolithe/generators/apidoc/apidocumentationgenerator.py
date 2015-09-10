@@ -3,8 +3,7 @@
 from monolithe.lib.utils.printer import Printer
 from monolithe.lib.utils.constants import Constants
 
-from monolithe.lib.parsers import SwaggerParser
-from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
+from monolithe.lib.managers import SpecificationsRepositoryManager
 from monolithe.generators.apidoc.lib import APIDocWriter
 
 
@@ -12,51 +11,41 @@ class APIDocumentationGenerator(object):
     """ Generate VSD API Documentation
 
     """
-    def __init__(self, vsdurl, swagger_path, apiversion, output_path=None):
-        """ Initializes a VSDKGenerator
-
-            Can be used to generate a vsdk from a remote vsdurl or a local swagger_path.
-
-            Args:
-                vsdurl (string): the url of the vsd with its port
-                swagger_path (string): the path to swagger description files
-                apiversion (float): the api version
-                output_path (string): the output path to put generated python files
-
+    def __init__(self, api_url, login_or_token, organization, repository, version=u'master', output_path=None, force_removal=False):
         """
-        self.vsdurl = vsdurl
-        self.swagger_path = swagger_path
-        self.apiversion = apiversion
+        """
+        self.version = version
         self.output_path = output_path
+        self.force_removal = force_removal
 
-        if self.vsdurl is None and self.swagger_path is None:
-            Printer.raiseError("Please provide a vsd url or a path to swagger json file")
+        self.specification_repository_manager = SpecificationsRepositoryManager(api_url=api_url, \
+                                                                                login_or_token=login_or_token, \
+                                                                                organization=organization, \
+                                                                                repository=repository)
 
     def run(self):
         """ Start generation ofthe API Documentation
 
         """
-        # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=self.vsdurl, path=self.swagger_path, apiversion=self.apiversion)
-        swagger_resources = swagger_parser.run()
+        Printer.log("Starting API documentation generation from branch `%s` of repository `%s`" % (self.version, self.specification_repository_manager.github_repository))
 
-        # Convert Swagger models
-        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
+        filenames = self.specification_repository_manager.available_specifications(version=self.version)
 
-        # Process Swagger models
-        processed_resources = SpecificationTransformer.get_objects(specifications=specifications)
-
-        # Compute output directory according to the version
-        if self.apiversion is None:
-            self.apiversion = swagger_parser.apiversion
+        specifications = {}
+        for filename in filenames:
+            specification = self.specification_repository_manager.get_specification(name=filename, version=self.version)
+            specifications[specification.remote_name] = specification
 
         if self.output_path:
-            directory = '%s/%s' % (self.output_path, self.apiversion)
+            directory = '%s/%s' % (self.output_path, self.version)
         else:
-            directory = '%s/%s' % (Constants.DOCS_DIRECTORY, self.apiversion)
+            directory = '%s/%s' % (Constants.DOCS_DIRECTORY, self.version)
+
+        if self.force_removal and os.path.exists(directory):
+            shutil.rmtree(directory)
 
         # Write Python sources
         writer = APIDocWriter(directory=directory)
-        writer.write(resources=processed_resources, apiversion=self.apiversion)
+        writer.write(resources=specifications, apiversion=self.version)
 
-        Printer.success('Generated %s documentation files for API version %s' % (len(processed_resources), self.apiversion))
+        Printer.success('Generated %s documentation files for API version %s' % (len(specifications), self.version))

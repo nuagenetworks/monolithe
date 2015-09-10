@@ -77,11 +77,11 @@
     {# macro to create api list #}
     {% macro make_api_list(apis, mode, nothing_string) %}
     {% if apis|count %}
-    {% for path, api in apis.iteritems()|sort %}
+    {% for api in apis|sort(attribute='path') %}
     <div class="row bordered-row">
         <div class="col-xs-7">
             {% if mode == "self" %}
-            <span class="fixed-text">{{path.replace("{id}", "<span class=\"text-muted\">id</span>")}}</span>
+            <span class="fixed-text">{{api.path.replace("{id}", "<span class=\"text-muted\">id</span>")}}</span>
             {% elif mode == "parents" %}
             <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/<span class="text-muted">id</span>/{{model.resource_name}}</span>
             {% else %}
@@ -129,17 +129,17 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {{make_api_list(model.apis.self, "self", "This object is not directly accessible.")}}
+            {{make_api_list(model.self_apis, "self", "This object is not directly accessible.")}}
         </section>
 
         <section id="parents">
             <h3>Parents</h3>
-            {{make_api_list(model.apis.parents, "parents", "This object has no parents.")}}
+            {{make_api_list(model.parents_apis, "parents", "This object has no parents.")}}
         </section>
 
         <section id="children">
             <h3>Children</h3>
-            {{make_api_list(model.apis.children, "children", "This object has no child.")}}
+            {{make_api_list(model.children_apis, "children", "This object has no child.")}}
         </section>
 
         <section id="attributes">
