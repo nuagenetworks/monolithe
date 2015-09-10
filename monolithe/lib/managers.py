@@ -54,7 +54,7 @@ class SpecificationsRepositoryManager (object):
         self._github                    = Github(login_or_token=github_token, base_url=github_api_url)
         self._github_specification_repo = self._github.get_organization(specification_organization).get_repo(github_specifications_repository)
 
-    def available_specification_versions(self):
+    def available_versions(self):
         """ Returns the list of available API spec versions (branches)
 
             Returns:
@@ -63,7 +63,7 @@ class SpecificationsRepositoryManager (object):
 
         return [branch.name for branch in self._github_specification_repo.get_branches()]
 
-    def available_specification_files(self, specification_version="master"):
+    def available_specifications(self, specification_version="master"):
         """ Returns the list of available specification files
 
             Args:
@@ -84,16 +84,41 @@ class SpecificationsRepositoryManager (object):
 
         return ret
 
-    def specification_contents(self, specification_file, specification_version="master"):
+    def get_specification_data(self, specification_file, specification_version="master"):
         """ Returns the content of the specification_file in the given specification_version
 
             Args:
-                specification_version: the version (branch) where to find files (default: "master")
                 specification_file: the name of the specification file of which you want to get the content
+                specification_version: the version (branch) where to find files (default: "master")
 
             Returns:
                 JSON decoded structure of the specification file.
         """
+        print specification_file
         github_encoded_data = self._github_specification_repo.get_file_contents(specification_file, ref=specification_version).content
         return json.loads(base64.b64decode(github_encoded_data))
 
+    def get_specification(self, specification_file, specification_version="master"):
+        """ Returns a Specification object from the given specification file name in the given specification_version
+
+            Args:
+                specification_file: the name of the specification file of which you want to get the content
+                specification_version: the version (branch) where to find files (default: "master")
+
+            Returns:
+                Specification object.
+        """
+
+        specification_data = self.get_specification_data(specification_file, specification_version)
+        return Specification(data=specification_data)
+
+    def save_specification(self, specification, version="master", commit_message="updated using monolithe"):
+        """ Saves (commit) a specification to the Github Repository
+
+            Args:
+                specification: the specification object to save
+                version: the version (branch) where to commit (default: "master")
+                commit_message: the commit message (default: "updated using monolithe")
+        """
+
+        pass
