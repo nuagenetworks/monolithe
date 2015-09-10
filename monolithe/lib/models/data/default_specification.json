@@ -1,30 +1,17 @@
 {
-    "model": 
+    "model":
     {
-        "RESTName": null, 
-        "attributes": {}, 
-        "description": null, 
-        "entityName": null, 
-        "package": null, 
+        "RESTName": null,
+        "attributes": {},
+        "description": null,
+        "entityName": null,
+        "package": null,
         "resourceName": null
     },
-    "apis": 
+    "apis":
     {
         "parents": {},
         "children": {},
         "self": {}
-    }, 
-    "metadata": 
-    {
-        "api_version": "3.2", 
-        "author": "", 
-        "comments": "", 
-        "date": "mm-dd-yyyy", 
-        "dev_backend": "", 
-        "dev_frontend": "", 
-        "dev_qd": "", 
-        "plm": "", 
-        "prd_url": "http://", 
-        "revisions": []
     }
 }
