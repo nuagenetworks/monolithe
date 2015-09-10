@@ -16,7 +16,7 @@ class VSDKGenerator(object):
     """ Generate VSDK
 
     """
-    def __init__(self, api_url, login_or_token, organization, repository, version=u'master', output_path=None, specifications_path=None, force_removal=False):
+    def __init__(self, api_url, login_or_token, password, organization, repository, version=u'master', output_path=None, specifications_path=None, force_removal=False):
         """
         """
         self.version = version
@@ -26,6 +26,7 @@ class VSDKGenerator(object):
 
         self.specification_repository_manager = SpecificationsRepositoryManager(api_url=api_url, \
                                                                                 login_or_token=login_or_token, \
+                                                                                password=password, \
                                                                                 organization=organization, \
                                                                                 repository=repository)
 
@@ -33,13 +34,13 @@ class VSDKGenerator(object):
         """ Start the VSDK generation
 
         """
-        Printer.log("Starting VSDK generation from branch `%s` of repository `%s`" % (self.version, self.specification_repository_manager.github_repository))
+        Printer.log("Starting VSDK generation from branch `%s` of repository `%s`" % (self.version, self.specification_repository_manager.repository))
 
         filenames = self.specification_repository_manager.available_specifications(version=self.version)
 
         specifications = {}
         for filename in filenames:
-            specification = self.specification_repository_manager.get_specification(filename=filename, version=self.version)
+            specification = self.specification_repository_manager.get_specification(name=filename, version=self.version)
             specifications[specification.remote_name] = specification
 
         if self.output_path:

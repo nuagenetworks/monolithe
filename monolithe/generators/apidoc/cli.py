@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import getpass
 import sys
 import os
 
@@ -13,8 +14,13 @@ def main(argv=sys.argv):
                         help="Github API URL",
                         type=str)
 
+    parser.add_argument('-l', "--login",
+                        dest="login",
+                        help="Github login to connect with",
+                        type=str)
+
     parser.add_argument('-t', "--token",
-                        dest="login_or_token",
+                        dest="token",
                         help="Github Token to connect with",
                         type=str)
 
@@ -49,36 +55,52 @@ def main(argv=sys.argv):
     args = parser.parse_args()
 
     # Use environment variable if necessary
-    if not args.api_url and "api_url" in os.environ:
-        args.api_url = os.environ["api_url"]
+    if not args.api_url and "GITHUB_API_URL" in os.environ:
+        args.api_url = os.environ["GITHUB_API_URL"]
 
-    if not args.login_or_token and "login_or_token" in os.environ:
-        args.login_or_token = os.environ["login_or_token"]
+    if not args.token and not args.login:
 
-    if not args.organization and "GITHUB_ORGANIZATION" in os.environ:
-        args.organization = os.environ["GITHUB_ORGANIZATION"]
+        if "GITHUB_TOKEN" in os.environ:
+            print 'bou'
+            args.token = os.environ["GITHUB_TOKEN"]
 
-    if not args.repository and "GITHUB_REPOSITORY" in os.environ:
-        args.repository = os.environ["GITHUB_REPOSITORY"]
+        elif "GITHUB_LOGIN" in os.environ:
+            print 'ok'
+            args.login = os.environ["GITHUB_LOGIN"]
+
+    if not args.organization and "SPECIFICATION_ORGANIZATION" in os.environ:
+        args.organization = os.environ["SPECIFICATION_ORGANIZATION"]
+
+    if not args.repository and "SPECIFICATION_REPOSITORY" in os.environ:
+        args.repository = os.environ["SPECIFICATION_REPOSITORY"]
 
     # Additional validation
     if not args.api_url:
-        parser.error('Please specify a Github API URL using -g or `api_url` environment variable')
+        parser.error('Please specify a Github API URL using -g or `GITHUB_API_URL` environment variable')
 
-    if not args.login_or_token:
-        parser.error('Please specify a Github Token using -t or `login_or_token` environment variable')
+    if not args.login and not args.token :
+        parser.error('Please specify a Github a token using -t or `GITHUB_TOKEN` environment variable OR specify a login using -l or `GITHUB_LOGIN` environment variable')
 
     if not args.organization:
-        parser.error('Please specify a Github Organization name using -o or `GITHUB_ORGANIZATION` environment variable')
+        parser.error('Please specify a Github Organization name using -o or `SPECIFICATION_ORGANIZATION` environment variable')
 
     if not args.repository:
-        parser.error('Please specify a Github Repository name using -r or `GITHUB_REPOSITORY` environment variable')
+        parser.error('Please specify a Github Repository name using -r or `SPECIFICATION_REPOSITORY` environment variable')
+
+    # Ask for password
+    if args.login:
+        password = getpass.getpass(prompt='Enter your Github password for %s: ' % args.login)
+        login_or_token = args.login
+    else:
+        password = None
+        login_or_token = args.token
 
     from monolithe.generators import APIDocumentationGenerator
 
     for version in args.versions:
         generator = APIDocumentationGenerator(api_url=args.api_url, \
-                                              login_or_token=args.login_or_token, \
+                                              login_or_token=login_or_token, \
+                                              password=password, \
                                               organization=args.organization, \
                                               repository=args.repository, \
                                               version=version, \
