@@ -10,6 +10,7 @@ from monolithe.lib.utils.vsdk import VSDKUtils
 from .specification_api import SpecificationAPI
 from .specification_attribute import SpecificationAttribute
 
+
 class Specification(object):
     """ Defines a specification object
 
@@ -67,6 +68,15 @@ class Specification(object):
         for attribute in self.attributes:
             data['model']['attributes'][attribute.name] = attribute.to_dict()
 
+        for api in self.children_apis:
+            data['apis']['children'] = api.to_dict()
+
+        for api in self.parent_apis:
+            data['apis']['parent'] = api.to_dict()
+
+        for api in self.self_apis:
+            data['apis']['self'] = api.to_dict()
+
         return data
 
     def from_dict(self, data):
@@ -101,16 +111,17 @@ class Specification(object):
                 relations: dict containing all relations between resources
 
         """
-        model_apis = {}
+        result_apis = {}
         for path, data in apis[api_name].iteritems():
 
-            model_api = SpecificationAPI()
+            api = SpecificationAPI()
 
             if api_name != 'children' or 'entityName' in data:
-                model_api.from_data(path, data)
-                model_apis[path] = model_api
+                data['path'] = path
+                api.from_data(data)
+                result_apis.append(api)
 
-        return ParsingUtils.order(model_apis)
+        return ParsingUtils.order(result_apis)
 
     def _get_attributes(self, attributes):
         """
