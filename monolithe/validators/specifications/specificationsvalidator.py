@@ -44,7 +44,7 @@ class SpecificationsValidator (object):
 
         for specification_file in specification_files:
 
-            specification_data = self._specification_repository_manager.get_specification_data(specification_version=specification_version, specification_file=specification_file)
+            specification_data = self._specification_repository_manager.get_specification_data(name=specification_file, version=specification_version)
             rest_name          = specification_data["model"]["RESTName"]
 
             ## Try to get the candidate specification from VSD

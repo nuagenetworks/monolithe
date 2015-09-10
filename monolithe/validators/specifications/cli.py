@@ -134,7 +134,7 @@ def main(argv=sys.argv):
     from monolithe.lib.managers import SpecificationsRepositoryManager
     from monolithe.validators.specifications import SpecificationsValidator
 
-    specifcations_repo_manager = SpecificationsRepositoryManager(github_api_url=args.githubapiurl, github_token=args.githubtoken, specification_organization=args.githuborganization, github_specifications_repository=args.githubrepo)
+    specifcations_repo_manager = SpecificationsRepositoryManager(api_url=args.githubapiurl, login_or_token=args.githubtoken, organization=args.githuborganization, repository=args.githubrepo)
     validator                  = SpecificationsValidator(specifcations_repo_manager)
 
     result = validator.run_validation(specification_version=args.specifications_branch, specification_files=args.specification_files, vsd_server_url=args.vsdurl, vsd_api_version=args.apiversion)[0]
