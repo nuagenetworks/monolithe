@@ -51,7 +51,7 @@ class SpecificationsRepositoryManager (object):
                 github_specifications_repository: the repository containing the specifications
         """
 
-        self._github                    = Github(login_or_token=github_token, base_url=github_api_url)
+        self._github = Github(login_or_token=github_token, base_url=github_api_url)
         self._github_specification_repo = self._github.get_organization(specification_organization).get_repo(github_specifications_repository)
 
     def available_versions(self):
