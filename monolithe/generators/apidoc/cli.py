@@ -7,6 +7,8 @@ import os
 
 
 def main(argv=sys.argv):
+    """
+    """
     parser = argparse.ArgumentParser(description="VSD Documentation Generator.")
 
     parser.add_argument('-g', "--github",
@@ -65,7 +67,6 @@ def main(argv=sys.argv):
             args.token = os.environ["GITHUB_TOKEN"]
 
         elif "GITHUB_LOGIN" in os.environ:
-            print 'ok'
             args.login = os.environ["GITHUB_LOGIN"]
 
     if not args.organization and "SPECIFICATION_ORGANIZATION" in os.environ:
@@ -76,16 +77,16 @@ def main(argv=sys.argv):
 
     # Additional validation
     if not args.api_url:
-        parser.error('Please specify a Github API URL using -g or `GITHUB_API_URL` environment variable')
+        args.api_url = raw_input('Enter your Github API URL: ')
 
-    if not args.login and not args.token :
-        parser.error('Please specify a Github a token using -t or `GITHUB_TOKEN` environment variable OR specify a login using -l or `GITHUB_LOGIN` environment variable')
+    if not args.login and not args.token:
+        args.login = raw_input('Enter your Github login: ')
 
     if not args.organization:
-        parser.error('Please specify a Github Organization name using -o or `SPECIFICATION_ORGANIZATION` environment variable')
+        args.organization = raw_input('Enter your Github organization: ')
 
     if not args.repository:
-        parser.error('Please specify a Github Repository name using -r or `SPECIFICATION_REPOSITORY` environment variable')
+        args.repository = raw_input('Enter your Github repository: ')
 
     # Ask for password
     if args.login:
