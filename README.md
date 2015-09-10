@@ -85,34 +85,6 @@ For instance:
 The generated documentation will be available in `docgen/apidoc/{{version}}`
 
 
-### Generate API specifications from a VSD server
-
-You can generate the specifications exposed by a running VSD server by doing:
-
-    $ generate-specifications -u VSD_SERVER_API_URL -v VERSION
-
-For instance:
-
-    $ generate-specifications -u https://api.nuagenetworks.net:8443 -v 3.0
-    $ generate-specifications -u https://api.nuagenetworks.net:8443 -v 3.1
-    $ generate-specifications -u https://api.nuagenetworks.net:8443 -v 3.2
-
-The generated documentation will be available in `specgen/{{version}}`
-
-
-### Validate VSD server specifications against pristine specifications
-
-You can validate the exposed specifications of a running VSD server against the pristing github version by doing:
-
-    $ validate-specifications -u VSD_SERVER_API_URL -v VERSION -t GITHUB_AUTH_TOKEN -s SPECIFICATION_NAMES [-g GITHUB_API_URL] [-o GITHUB_ORG] [-r GITHUB_SPEC_REPO]
-
-For instance:
-
-    $ validate-specifications -u https://api.nuagenetworks.net:8443 -v 3.2 -t xxxxxxxxxxxxxxxxx -s applicationservice group
-
-The validation report will be printed into the console.
-
-
 ## Note
 
 All commands that require to pass VSD informations such as vsd url, version, username, organization, etc can use environment variables
