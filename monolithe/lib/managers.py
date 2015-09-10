@@ -94,7 +94,7 @@ class SpecificationsRepositoryManager (object):
             Returns:
                 JSON decoded structure of the specification file.
         """
-        print specification_file
+
         github_encoded_data = self._github_specification_repo.get_file_contents(specification_file, ref=specification_version).content
         return json.loads(base64.b64decode(github_encoded_data))
 
