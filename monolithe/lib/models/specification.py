@@ -39,9 +39,9 @@ class Specification(object):
         self.remote_name = None  # The remote name of the object
         self.resource_name = None  # The name of the resource used in URI
         self.attributes = []  # A list of all properties of the object
-        self.children_apis = {}
-        self.parents_apis = {}
-        self.self_apis = {}
+        self.children_apis = []
+        self.parent_apis = []
+        self.self_apis = []
 
         self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
@@ -97,7 +97,7 @@ class Specification(object):
         self.resource_name = data['model']['resourceName']
 
         self.children_apis = self._get_apis('children', data['apis'])
-        self.parents_apis = self._get_apis('parents', data['apis'])
+        self.parent_apis = self._get_apis('parents', data['apis'])
         self.self_apis = self._get_apis('self', data['apis'])
 
         self.attributes = self._get_attributes(data['model']['attributes'])
@@ -111,17 +111,17 @@ class Specification(object):
                 relations: dict containing all relations between resources
 
         """
-        result_apis = {}
+        result_apis = []
         for path, data in apis[api_name].iteritems():
 
             api = SpecificationAPI()
 
             if api_name != 'children' or 'entityName' in data:
                 data['path'] = path
-                api.from_data(data)
+                api.from_dict(data)
                 result_apis.append(api)
 
-        return ParsingUtils.order(result_apis)
+        return result_apis
 
     def _get_attributes(self, attributes):
         """
@@ -129,7 +129,7 @@ class Specification(object):
         """
         model_attributes = []
 
-        for name, data in data.iteritems():
+        for name, data in attributes.iteritems():
             data['name'] = name
             model_attribute = SpecificationAttribute(data=data)
 
