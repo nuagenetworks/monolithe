@@ -6,6 +6,8 @@ import json
 import base64
 from github import Github
 
+from monolithe.lib.models import Specification
+
 
 class TaskManager(object):
     """ Multi threading manager """
@@ -51,7 +53,7 @@ class SpecificationsRepositoryManager (object):
                 github_specifications_repository: the repository containing the specifications
         """
 
-        self._github                    = Github(login_or_token=github_token, base_url=github_api_url)
+        self._github = Github(login_or_token=github_token, base_url=github_api_url)
         self._github_specification_repo = self._github.get_organization(specification_organization).get_repo(github_specifications_repository)
 
     def available_versions(self):
@@ -94,7 +96,7 @@ class SpecificationsRepositoryManager (object):
             Returns:
                 JSON decoded structure of the specification file.
         """
-        print specification_file
+
         github_encoded_data = self._github_specification_repo.get_file_contents(specification_file, ref=specification_version).content
         return json.loads(base64.b64decode(github_encoded_data))
 
