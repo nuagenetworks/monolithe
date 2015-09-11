@@ -101,13 +101,15 @@ class SpecificationsRepositoryManager (object):
         return ret
 
     def get_all_specifications(self, version="master"):
-        """ Returns all availables specifications
+        """ Returns all availables specifications using zipball feature of Github
+            This is extremely fast if you need to get a lot of Specifications in one
+            shot.
 
             Args:
-                name: the name of the specification file of which you want to get the content
+                version: the version (branch) where to find files (default: "master")
 
             Returns:
-                Specification objects.
+                list of Specification objects.
         """
         specifications = []
         archive_file, archive_path = tempfile.mkstemp("archive.zip")
@@ -169,7 +171,7 @@ class SpecificationsRepositoryManager (object):
                 version: the version (branch) where to find files (default: "master")
 
             Returns:
-                Specification object.
+                list of Specification objects.
         """
 
         func = partial(self.get_specification, version=version)
@@ -187,8 +189,6 @@ class SpecificationsRepositoryManager (object):
                 version: the version (branch) where to commit (default: "master")
                 commit_message: the commit message (default: "updated using monolithe")
 
-            Returns:
-                Specification objects.
         """
 
         pass
