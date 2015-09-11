@@ -30,7 +30,7 @@ class VSPKGenerator(object):
         for version in self.versions:
 
             if version == 'master':
-                Printer.warning('master branch should be used for development purpose only.')
+                Printer.warn('master branch should be used for development purpose only.')
 
             self._include_vsdk(version, self._path_codegen, self._path_generated_vspk)
 
