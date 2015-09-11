@@ -2,8 +2,8 @@
 
 from unittest2 import TestSuite
 
-from monolithe.lib import StarDKLoader
-from monolithe.lib import StarDKUtils
+from monolithe.lib import SDKLoader
+from monolithe.lib import SDKUtils
 
 from monolithe.courgette.lib.helpers import TestHelper
 from monolithe.courgette.lib.makers import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
@@ -30,8 +30,8 @@ class TestsRunner(object):
                 default_values: all default values to have a valid version of the model
 
         """
-        StarDKLoader.init(version)
-        vsdk = StarDKLoader.get_vsdk_package()
+        SDKLoader.init(version)
+        vsdk = SDKLoader.get_vsdk_package()
         TestHelper.use_vsdk(vsdk)
 
         session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise)
@@ -40,19 +40,19 @@ class TestsRunner(object):
         self.user = session.user
         self.resource_name = model.resource_name
 
-        python_attributes = {StarDKUtils.get_python_name(name): value for name, value in default_values.iteritems()}
-        self.vsdobject = StarDKLoader.get_instance_from_model(model, **python_attributes)
+        python_attributes = {SDKUtils.get_python_name(name): value for name, value in default_values.iteritems()}
+        self.vsdobject = SDKLoader.get_instance_from_model(model, **python_attributes)
 
         self.parent = None
 
         if parent_resource and parent_id:
             try:
-                self.parent = StarDKLoader.get_instance(parent_resource, id=parent_id)
+                self.parent = SDKLoader.get_instance(parent_resource, id=parent_id)
                 self.parent.fetch()
             except:
                 raise AttributeError('Could not find parent %s with ID=%s' % (parent_resource, parent_id))
 
-        StarDKLoader.update_fetchers_for_object(self.parent, self.vsdobject, model)
+        SDKLoader.update_fetchers_for_object(self.parent, self.vsdobject, model)
 
         self.is_create_allowed = False
         self.is_delete_allowed = False

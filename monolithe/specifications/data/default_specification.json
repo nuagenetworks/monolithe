@@ -1,0 +1,17 @@
+{
+    "model":
+    {
+        "RESTName": null,
+        "attributes": {},
+        "description": null,
+        "entityName": null,
+        "package": null,
+        "resourceName": null
+    },
+    "apis":
+    {
+        "parents": {},
+        "children": {},
+        "self": {}
+    }
+}

@@ -3,7 +3,7 @@
 from monolithe import monolithe_config
 from monolithe.lib import Printer
 
-from monolithe.lib import SpecificationsRepositoryManager
+from monolithe.specifications import RepositoryManager
 from monolithe.generators.apidoc.lib import APIDocWriter
 
 
@@ -18,19 +18,19 @@ class APIDocumentationGenerator(object):
         self.output_path = output_path
         self.force_removal = force_removal
 
-        self.specification_repository_manager = SpecificationsRepositoryManager(api_url=api_url, \
-                                                                                login_or_token=login_or_token, \
-                                                                                password=password, \
-                                                                                organization=organization, \
-                                                                                repository=repository)
+        self.repository_manager = RepositoryManager(api_url=api_url,
+                                                    login_or_token=login_or_token,
+                                                    password=password,
+                                                    organization=organization,
+                                                    repository=repository)
 
     def run(self):
         """ Start generation ofthe API Documentation
 
         """
-        Printer.log("Starting API documentation generation from branch `%s` of repository `%s`" % (self.version, self.specification_repository_manager.repository))
+        Printer.log("Starting API documentation generation from branch `%s` of repository `%s`" % (self.version, self.repository_manager.repository))
 
-        specifications = self.specification_repository_manager.get_all_specifications(version=self.version)
+        specifications = self.repository_manager.get_all_specifications(version=self.version)
 
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)

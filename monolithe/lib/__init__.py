@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['Printer', 'SpecificationsRepositoryManager', 'StarDKLoader', 'StarDKUtils', 'TaskManager']
+__all__ = ['Printer', 'SDKLoader', 'SDKUtils', 'TaskManager']
 
 from .printer import Printer
-from .specificationsrepositorymanager import SpecificationsRepositoryManager
-from .stardkloader import StarDKLoader
-from .stardkutils import StarDKUtils
+from .sdkloader import SDKLoader
+from .sdkutils import SDKUtils
 from .taskmanager import TaskManager
