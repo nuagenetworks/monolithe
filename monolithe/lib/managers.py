@@ -117,7 +117,7 @@ class SpecificationsRepositoryManager (object):
         req = requests.get(url, stream=True, verify=False)
 
         # retrieve and write the archive content to a temporary file
-        with open(archive_path, 'wb') as f:
+        with open(archive_path, "wb") as f:
             for chunk in req.iter_content(chunk_size=1024):
                 if not chunk: continue
                 f.write(chunk)
@@ -145,8 +145,7 @@ class SpecificationsRepositoryManager (object):
                 JSON decoded structure of the specification file.
         """
 
-        encoded_data = self._repo.get_file_contents(name, ref=version).content
-        return json.loads(base64.b64decode(encoded_data))
+        return json.loads(base64.b64decode(self._repo.get_file_contents(name, ref=version).content))
 
     def get_specification(self, name, version="master"):
         """ Returns a Specification object from the given specification file name in the given specification_version
@@ -158,10 +157,8 @@ class SpecificationsRepositoryManager (object):
             Returns:
                 Specification object.
         """
-        data = self.get_specification_data(name, version)
-        specification = Specification(data=data)
 
-        return specification
+        return Specification(data=self.get_specification_data(name, version))
 
     def get_specifications(self, names, version="master"):
         """ Returns a Specification object from the given specification file name in the given specification_version
@@ -174,12 +171,7 @@ class SpecificationsRepositoryManager (object):
                 list of Specification objects.
         """
 
-        func = partial(self.get_specification, version=version)
-
-        p = ThreadPool(20)
-        specifications = p.map(func, names)
-
-        return specifications
+        return ThreadPool(20).map(partial(self.get_specification, version=version), names)
 
     def save_specification(self, specification, version="master", commit_message="updated using monolithe"):
         """ Saves (commit) a specification to the Github Repository
