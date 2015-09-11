@@ -68,11 +68,9 @@ def main(argv=sys.argv):
     if not args.token and not args.login:
 
         if "GITHUB_TOKEN" in os.environ:
-            print 'bou'
             args.token = os.environ["GITHUB_TOKEN"]
 
         elif "GITHUB_LOGIN" in os.environ:
-            print 'ok'
             args.login = os.environ["GITHUB_LOGIN"]
 
     if not args.organization and "SPECIFICATION_ORGANIZATION" in os.environ:
