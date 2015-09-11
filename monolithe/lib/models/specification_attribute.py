@@ -5,6 +5,7 @@ import pkgutil
 
 from copy import deepcopy
 
+from monolithe import monolithe_mapping
 from monolithe.lib.utils.vsdk import VSDKUtils
 
 
@@ -12,7 +13,7 @@ class SpecificationAttribute(object):
     """ Define an attribute of an object
 
     """
-    def __init__(self, data=None):
+    def __init__(self, specification, data=None):
         """ Define an attribute
 
             Example:
@@ -22,6 +23,8 @@ class SpecificationAttribute(object):
                 local_type: str
         """
         self.__default_attribute__ = None
+
+        self.specification = specification
 
         # Main attributes
         self.description = None
@@ -62,7 +65,13 @@ class SpecificationAttribute(object):
 
         """
         self.remote_name = data['name']
-        self.local_name = self.remote_name  # TODO: Mapping
+
+        if monolithe_mapping.has_section(self.specification.remote_name) and monolithe_mapping.has_option(self.specification.remote_name, self.remote_name):
+            local_name = monolithe_mapping.get(self.specification.remote_name, self.remote_name)
+        else:
+            local_name = self.remote_name
+
+        self.local_name = VSDKUtils.get_python_name(local_name)
 
         self.allowed_chars = data['allowedChars']
         self.allowed_choices = data['allowedChoices']

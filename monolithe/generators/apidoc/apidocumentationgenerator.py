@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from monolithe import monolithe_config
 from monolithe.lib.utils.printer import Printer
 
 from monolithe.lib.managers import SpecificationsRepositoryManager
@@ -34,7 +35,7 @@ class APIDocumentationGenerator(object):
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)
         else:
-            directory = '%s/%s' % (Constants.DOCS_DIRECTORY, self.version)
+            directory = '%s/%s' % (monolithe_config.get('monolithe', 'docs_directory'), self.version)
 
         if self.force_removal and os.path.exists(directory):
             shutil.rmtree(directory)

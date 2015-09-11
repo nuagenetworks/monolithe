@@ -3,6 +3,7 @@
 import os
 import shutil
 
+from monolithe import monolithe_config
 from monolithe.lib.utils.printer import Printer
 from monolithe.lib.managers import TaskManager
 from monolithe.lib.utils.parse import ParsingUtils
@@ -101,7 +102,6 @@ class SDKWriter(object):
         writer = self.get_writer()
         writer.write_setup_file(version=apiversion, revision=revision)
 
-        # Constants
         constants = ParsingUtils.order(constants)
         writer.write_constants_file(constants=constants)
 
@@ -122,7 +122,7 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
 
-        if model.name != Constants.RESTUSER:
+        if model.name != monolithe_config.get('monolithe', 'rest_user_api'):
             (filename, classname) = writer.write_model(model=model, version=version)
         else:
             (filename, classname) = writer.write_restuser_model(model=model, version=version)
@@ -151,7 +151,7 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
 
-        if model.name != Constants.RESTUSER:
+        if model.name != monolithe_config.get('monolithe', 'rest_user_api'):
             (filename, classname) = writer.write_fetcher(model=model, version=version)
             filenames[filename] = classname
 

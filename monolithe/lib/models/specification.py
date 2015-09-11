@@ -131,7 +131,7 @@ class Specification(object):
 
         for name, data in attributes.iteritems():
             data['name'] = name
-            model_attribute = SpecificationAttribute(data=data)
+            model_attribute = SpecificationAttribute(specification=self, data=data)
 
             if model_attribute.has_time_attribute:
                 self.has_time_attribute = True
