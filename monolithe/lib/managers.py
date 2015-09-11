@@ -117,12 +117,11 @@ class SpecificationsRepositoryManager (object):
         req = requests.get(url, stream=True, verify=False)
 
         # retrieve and write the archive content to a temporary file
-        f = os.fdopen(archive_fd, "wb")
-        for chunk in req.iter_content(chunk_size=1024):
-            if not chunk: continue
-            f.write(chunk)
-            f.flush()
-        os.close(archive_fd)
+        with open(archive_path, "wb") as f:
+            for chunk in req.iter_content(chunk_size=1024):
+                if not chunk: continue
+                f.write(chunk)
+                f.flush()
 
         # reads the content of the archive and generate Specification objects
         with zipfile.ZipFile(archive_path, "r") as archive_content:
@@ -131,6 +130,7 @@ class SpecificationsRepositoryManager (object):
                 specifications.append(Specification(data=json.loads(archive_content.read(file_name))))
 
         # cleanup the temporary archive
+        os.close(archive_fd)
         os.remove(archive_path)
 
         return specifications
@@ -183,8 +183,7 @@ class SpecificationsRepositoryManager (object):
 
         func = partial(internal_get_specification, version=version, callback=callback)
 
-        p = ThreadPool(40)
-        return p.map(func, names)
+        return ThreadPool(40).map(func, names)
 
     def save_specification(self, specification, version="master", commit_message="updated using monolithe"):
         """ Saves (commit) a specification to the Github Repository
