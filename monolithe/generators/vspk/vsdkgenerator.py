@@ -37,26 +37,9 @@ class VSDKGenerator(object):
         """ Start the VSDK generation
 
         """
-        processed_specifications = []
-        nb_specifications = 0
-
-        def callback(spec):
-            """
-            """
-            processed_specifications.append(spec)
-            sys.stdout.write("\x1b[K\r[%d/%d] processing %s\x1b[K" % (len(processed_specifications), nb_specifications, spec.remote_name))
-            sys.stdout.flush()
-
         Printer.log("Starting VSDK generation from branch `%s` of repository `%s`" % (self.version, self.specification_repository_manager.repository))
 
-        filenames = self.specification_repository_manager.available_specifications(version=self.version)
-        nb_specifications = len(filenames)
-
-        Printer.log("%s specifications found" % nb_specifications)
-
-        specifications = self.specification_repository_manager.get_specifications(names=filenames, version=self.version, callback=callback)
-        sys.stdout.write("\x1b[K\r[%d/%d] complete\x1b[K\n" % (nb_specifications, nb_specifications))
-        sys.stdout.flush()
+        specifications = self.specification_repository_manager.get_all_specifications(version=self.version)
 
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)
