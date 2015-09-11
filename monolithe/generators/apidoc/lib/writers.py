@@ -46,19 +46,19 @@ class APIDocWriter(object):
                 Writes all html files into the directory
 
         """
-
         filenames = dict()
         task_manager = TaskManager()
 
-        for model_name, model in resources.iteritems():
+        for model in resources:
             task_manager.start_task(method=self._write_model, model=model, filenames=filenames)
 
         task_manager.wait_until_exit()
 
-        packages = self._extract_packages(resources)
+        # TOREMOVE
+        # packages = self._extract_packages(resources)
 
         writer = self.get_writer()
-        writer.write_index(packages, resources)
+        writer.write_index(resources)
 
     def _write_model(self, model, filenames):
         """ Write the HTML file for the model
@@ -73,25 +73,26 @@ class APIDocWriter(object):
             (filename, classname) = writer.write_model(model=model)
             filenames[filename] = classname
 
-    def _extract_packages(self, models):
-        """ Returns a dictionnary containing for each package
-            a list of models name
-
-        """
-        packages = dict()
-
-        for name, model in models.iteritems():
-            package = model.package
-
-            if package is None:
-                continue
-
-            if package not in packages:
-                packages[package] = list()
-
-            packages[package].append(name)
-
-        return packages
+    # TOREMOVE:
+    # def _extract_packages(self, models):
+    #     """ Returns a dictionnary containing for each package
+    #         a list of models name
+    #
+    #     """
+    #     packages = dict()
+    #
+    #     for model in models:
+    #         package = model.package
+    #
+    #         if package is None:
+    #             continue
+    #
+    #         if package not in packages:
+    #             packages[package] = list()
+    #
+    #         packages[package].append(model.remote_name)
+    #
+    #     return packages
 
 
 class APIDocFileWriter(TemplateFileWriter):
@@ -133,7 +134,7 @@ class APIDocFileWriter(TemplateFileWriter):
         self.write(destination=destination, filename=filename, template_name=self._model_template, model=model)
         return (filename, model.name)
 
-    def write_index(self, packages, models):
+    def write_index(self, models):
         """ Write HTML index to link all filenames
 
             Args:
@@ -143,4 +144,4 @@ class APIDocFileWriter(TemplateFileWriter):
         destination = self.directory
         filename = 'index.html'
 
-        self.write(destination=destination, filename=filename, template_name=self._index_template, packages=packages, models=models)
+        self.write(destination=destination, filename=filename, template_name=self._index_template, models=models)

@@ -92,7 +92,7 @@ class SDKWriter(object):
 
         task_manager = TaskManager()
 
-        for model_name, model in resources.iteritems():
+        for model in resources:
             self._prepare_attributes(model=model, constants=constants)
             task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=autogenerate_filenames, version=apiversion)
             task_manager.start_task(method=self._write_override_file, model=model, filenames=override_filenames, version=apiversion)

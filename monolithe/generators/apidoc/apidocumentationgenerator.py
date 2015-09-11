@@ -32,10 +32,7 @@ class APIDocumentationGenerator(object):
 
         filenames = self.specification_repository_manager.available_specifications(version=self.version)
 
-        specifications = {}
-        for filename in filenames:
-            specification = self.specification_repository_manager.get_specification(name=filename, version=self.version)
-            specifications[specification.remote_name] = specification
+        specifications = self.specification_repository_manager.get_specifications(names=filenames, version=self.version)
 
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)

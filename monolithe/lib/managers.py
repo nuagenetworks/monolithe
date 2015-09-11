@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import threading
-import os
-import json
 import base64
+import json
+import os
+import threading
+
+from functools import partial
 from github import Github
+from multiprocessing.pool import ThreadPool
 
 from monolithe.lib.models import Specification
 
@@ -118,9 +121,28 @@ class SpecificationsRepositoryManager (object):
             Returns:
                 Specification object.
         """
-
         data = self.get_specification_data(name, version)
-        return Specification(data=data)
+        specification = Specification(data=data)
+
+        return specification
+
+    def get_specifications(self, names, version="master"):
+        """ Returns a Specification object from the given specification file name in the given specification_version
+
+            Args:
+                name: the name of the specification file of which you want to get the content
+                version: the version (branch) where to find files (default: "master")
+
+            Returns:
+                Specification object.
+        """
+
+        func = partial(self.get_specification, version=version)
+
+        p = ThreadPool(20)
+        specifications = p.map(func, names)
+
+        return specifications
 
     def save_specification(self, specification, version="master", commit_message="updated using monolithe"):
         """ Saves (commit) a specification to the Github Repository
