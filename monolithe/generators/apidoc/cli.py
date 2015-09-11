@@ -57,22 +57,22 @@ def main(argv=sys.argv):
     args = parser.parse_args()
 
     # Use environment variable if necessary
-    if not args.api_url and "GITHUB_API_URL" in os.environ:
-        args.api_url = os.environ["GITHUB_API_URL"]
+    if not args.api_url and "MONOLITHE_GITHUB_API_URL" in os.environ:
+        args.api_url = os.environ["MONOLITHE_GITHUB_API_URL"]
 
     if not args.token and not args.login:
 
-        if "GITHUB_TOKEN" in os.environ:
-            args.token = os.environ["GITHUB_TOKEN"]
+        if "MONOLITHE_GITHUB_TOKEN" in os.environ:
+            args.token = os.environ["MONOLITHE_GITHUB_TOKEN"]
 
-        elif "GITHUB_LOGIN" in os.environ:
-            args.login = os.environ["GITHUB_LOGIN"]
+        elif "MONOLITHE_GITHUB_LOGIN" in os.environ:
+            args.login = os.environ["MONOLITHE_GITHUB_LOGIN"]
 
-    if not args.organization and "SPECIFICATION_ORGANIZATION" in os.environ:
-        args.organization = os.environ["SPECIFICATION_ORGANIZATION"]
+    if not args.organization and "MONOLITHE_GITHUB_ORGANIZATION" in os.environ:
+        args.organization = os.environ["MONOLITHE_GITHUB_ORGANIZATION"]
 
-    if not args.repository and "SPECIFICATION_REPOSITORY" in os.environ:
-        args.repository = os.environ["SPECIFICATION_REPOSITORY"]
+    if not args.repository and "MONOLITHE_GITHUB_REPOSITORY" in os.environ:
+        args.repository = os.environ["MONOLITHE_GITHUB_REPOSITORY"]
 
     # Additional validation
     if not args.api_url:
