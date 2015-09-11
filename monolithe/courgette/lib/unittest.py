@@ -12,7 +12,6 @@ from bambou.config import BambouConfig
 from bambou.exceptions import BambouHTTPError
 
 from monolithe.courgette.lib.helpers import TestHelper
-from monolithe.lib.utils.constants import Constants
 from monolithe.lib.utils.printer import Printer
 
 
@@ -40,8 +39,7 @@ class _MonolitheTestResult(TestResult):
         TestResult.addSuccess(self, test)
         self.tests[self.getDescription(test)] = {'status': 'SUCCESS'}
 
-        if Constants.DEVELOPMENT_MODE:
-            Printer.success('OK')
+        Printer.success('OK')
 
     def addError(self, test, err, connection=None):
         """ Add error to the result
@@ -50,10 +48,9 @@ class _MonolitheTestResult(TestResult):
         TestResult.addError(self, test, err)
         self.tests[self.getDescription(test)] = {'status': 'ERROR', 'stacktrace': err, 'connection': connection}
 
-        if Constants.DEVELOPMENT_MODE:
-            Printer.warn('ERROR')
-            Printer.warn(err[1])
-            TestHelper.trace(connection)
+        Printer.warn('ERROR')
+        Printer.warn(err[1])
+        TestHelper.trace(connection)
 
 
     def addFailure(self, test, err, connection):
@@ -63,10 +60,9 @@ class _MonolitheTestResult(TestResult):
         TestResult.addFailure(self, test, err)
         self.tests[self.getDescription(test)] = {'status': 'FAILURE', 'stacktrace': err, 'connection': connection}
 
-        if Constants.DEVELOPMENT_MODE:
-            Printer.warn('Failure')
-            Printer.warn(err[1])
-            TestHelper.trace(connection)
+        Printer.warn('Failure')
+        Printer.warn(err[1])
+        TestHelper.trace(connection)
 
     def __repr__(self):
         """ Representation
@@ -150,8 +146,7 @@ class MonolitheTestCase(TestCase):
                 return
             ok = False
             try:
-                if Constants.DEVELOPMENT_MODE:
-                    Printer.log('%s...' % self._testMethodName)
+                Printer.log('%s...' % self._testMethodName)
 
                 testMethod()
                 BambouConfig.set_should_raise_bambou_http_error(True)

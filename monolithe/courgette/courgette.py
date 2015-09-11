@@ -3,8 +3,6 @@
 from monolithe.lib.utils.printer import Printer
 
 from monolithe.courgette.lib import TestsRunner
-from monolithe.lib.transformers import SpecificationTransformer
-from monolithe.generators.specifications import SpecificationsGenerator
 
 
 class Courgette(object):
@@ -71,16 +69,13 @@ class Courgette(object):
 
         self.rest_name = self.specification['model']['RESTName']
 
-    def run(self):
+    def run(self, specification):
         """ Run all tests
 
             Returns:
                 A dictionnary containing tests' results.
 
         """
-        processed_spec = SpecificationTransformer.get_objects(specifications={self.rest_name: self.specification})
-        model = processed_spec[self.rest_name]
-
-        runner = TestsRunner(vsdurl=self.vsdurl, username=self.username, password=self.password, enterprise=self.enterprise, version=self.apiversion, model=model, parent_resource=self.parent_resource, parent_id=self.parent_id, **self.default_values)
+        runner = TestsRunner(vsdurl=self.vsdurl, username=self.username, password=self.password, enterprise=self.enterprise, version=self.apiversion, model=specification, parent_resource=self.parent_resource, parent_id=self.parent_id, **self.default_values)
 
         return runner.run()

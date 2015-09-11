@@ -3,7 +3,6 @@
 from unittest2 import TestSuite
 
 from monolithe.lib.factory import VSDKFactory
-from monolithe.lib.utils.constants import Constants
 from monolithe.lib.utils.vsdk import VSDKUtils
 
 from monolithe.courgette.lib.helpers import TestHelper
@@ -65,20 +64,20 @@ class TestsRunner(object):
             for operation in api.operations:
                 method = operation.method
 
-                if method == Constants.HTTP_METHOD_POST:
+                if method == 'POST':
                     self.is_create_allowed = True
-                elif method == Constants.HTTP_METHOD_GET:
+                elif method == 'GET':
                     self.is_get_all_allowed = True
 
         for path, api in model.apis['self'].iteritems():
             for operation in api.operations:
                 method = operation.method
 
-                if method == Constants.HTTP_METHOD_UPDATE:
+                if method == 'PUT':
                     self.is_update_allowed = True
-                elif method == Constants.HTTP_METHOD_DELETE:
+                elif method == 'DELETE':
                     self.is_delete_allowed = True
-                elif method == Constants.HTTP_METHOD_GET:
+                elif method == 'GET':
                     self.is_get_allowed = True
 
     def suite(self):

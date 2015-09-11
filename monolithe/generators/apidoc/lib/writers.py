@@ -4,7 +4,6 @@ import os
 import shutil
 
 from monolithe.lib.utils.printer import Printer
-from monolithe.lib.utils.constants import Constants
 from monolithe.lib.managers import TaskManager
 from monolithe.generators.lib.writers import TemplateFileWriter
 

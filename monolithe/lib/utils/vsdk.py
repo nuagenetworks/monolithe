@@ -3,7 +3,6 @@
 import re
 
 from monolithe.lib.utils.printer import Printer
-from .constants import Constants
 
 
 class VSDKUtils(object):
@@ -93,27 +92,6 @@ class VSDKUtils(object):
         return None
 
     @classmethod
-    def get_singular_name(cls, plural_name):
-        """ Returns the singular name of the plural name
-
-            Args:
-                plural_name (string): the plural name
-
-            Returns:
-                Return the singular of the plural name
-        """
-        if plural_name in Constants.INVARIANT_NAMES:
-            return plural_name
-
-        if plural_name[-3:] == 'ies':
-            return plural_name[:-3] + 'y'
-
-        if plural_name[-1] == 's' and plural_name not in Constants.PLURABLE_NAMES:
-            return plural_name[:-1]
-
-        return plural_name
-
-    @classmethod
     def get_plural_name(cls, singular_name):
         """ Returns the plural name of the singular name
 
@@ -126,13 +104,10 @@ class VSDKUtils(object):
                 The pluralized version of the singular name
 
         """
-        if singular_name in Constants.INVARIANT_NAMES:
-            return singular_name
-
-        if singular_name[-1] == 'y' and singular_name[-2] not in Constants.VOWELS:
+        if singular_name[-1] == 'y' and singular_name[-2] not in ['a', 'e', 'i', 'o', 'u', 'y']:
             return singular_name[:-1] + 'ies'
 
-        if singular_name[-1] != 's' or singular_name in Constants.PLURABLE_NAMES:
+        if singular_name[-1] != 's':
             return singular_name + 's'
 
         return singular_name

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from monolithe.lib.utils.printer import Printer
-from monolithe.lib.utils.constants import Constants
 
 from monolithe.lib.managers import SpecificationsRepositoryManager
 from monolithe.generators.apidoc.lib import APIDocWriter

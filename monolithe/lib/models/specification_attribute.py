@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import json
 import pkgutil
 
 from copy import deepcopy
 
-from monolithe.lib.utils.parse import ParsingUtils
 from monolithe.lib.utils.vsdk import VSDKUtils
 
 
@@ -62,7 +62,7 @@ class SpecificationAttribute(object):
 
         """
         self.remote_name = data['name']
-        self.local_name = ParsingUtils.get_correct_attribute_name(self.remote_name)
+        self.local_name = self.remote_name  # TODO: Mapping
 
         self.allowed_chars = data['allowedChars']
         self.allowed_choices = data['allowedChoices']
@@ -105,7 +105,7 @@ class SpecificationAttribute(object):
 
         if self.__default_attribute__ is None:
             default_data = pkgutil.get_data(__package__, '/data/default_attribute.json')
-            self.__default_attribute__ = ParsingUtils.parseJSON(default_data)
+            self.__default_attribute__ = json.loads(default_data)
 
         data = deepcopy(self.__default_attribute__)
 

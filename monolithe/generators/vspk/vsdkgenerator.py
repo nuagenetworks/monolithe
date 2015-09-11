@@ -7,7 +7,6 @@ import shutil
 from ConfigParser import ConfigParser
 
 from monolithe.lib.utils.printer import Printer
-from monolithe.lib.utils.constants import Constants
 from monolithe.lib.managers import SpecificationsRepositoryManager
 
 from monolithe.generators.vspk.lib import SDKWriter

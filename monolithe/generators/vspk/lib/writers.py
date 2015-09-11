@@ -4,7 +4,6 @@ import os
 import shutil
 
 from monolithe.lib.utils.printer import Printer
-from monolithe.lib.utils.constants import Constants
 from monolithe.lib.managers import TaskManager
 from monolithe.lib.utils.parse import ParsingUtils
 from monolithe.generators.lib.writers import TemplateFileWriter
@@ -55,9 +54,6 @@ class SDKWriter(object):
                     name = '%s%s' % (attribute.remote_name[0].upper(), attribute.remote_name[1:])
 
                 constants[name] = self._make_constants_value(attribute.allowed_choices)
-
-        # Another specific case... they really love this!
-        constants['ProtocolType'] = Constants.PROTOCOL_TYPES
 
         model.attributes = attributes
 

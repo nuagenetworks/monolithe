@@ -55,7 +55,7 @@ class Specification(object):
 
         if self.__default_specification__ is None:
             default_data = pkgutil.get_data(__package__, '/data/default_specification.json')
-            self.__default_specification__ = ParsingUtils.parseJSON(default_data)
+            self.__default_specification__ = json.loads(default_data)
 
         data = deepcopy(self.__default_specification__)
 
@@ -89,7 +89,7 @@ class Specification(object):
 
         entity_name = data['model']['entityName']
 
-        self.name = ParsingUtils.get_correct_name(entity_name)
+        self.name = entity_name
         self.instance_name = VSDKUtils.get_python_name(entity_name)
         self.plural_name = VSDKUtils.get_plural_name(entity_name)
         self.instance_plural_name = VSDKUtils.get_python_name(self.plural_name)
