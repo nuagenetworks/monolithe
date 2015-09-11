@@ -4,6 +4,9 @@ import base64
 import json
 import os
 import threading
+import tempfile
+import requests
+import zipfile
 
 from functools import partial
 from github import Github
@@ -97,6 +100,38 @@ class SpecificationsRepositoryManager (object):
 
         return ret
 
+    def get_all_specifications(self, version="master"):
+        """ Returns all availables specifications
+
+            Args:
+                name: the name of the specification file of which you want to get the content
+
+            Returns:
+                Specification objects.
+        """
+        specifications = []
+        archive_file, archive_path = tempfile.mkstemp("archive.zip")
+        url = self._repo.get_archive_link("zipball", ref=version)
+        req = requests.get(url, stream=True, verify=False)
+
+        # retrieve and write the archive content to a temporary file
+        with open(archive_path, 'wb') as f:
+            for chunk in req.iter_content(chunk_size=1024):
+                if not chunk: continue
+                f.write(chunk)
+                f.flush()
+
+        # reads the content of the archive and generate Specification objects
+        with zipfile.ZipFile(archive_path, "r") as archive_content:
+            for file_name in archive_content.namelist():
+                if os.path.splitext(file_name)[1] != ".spec": continue
+                specifications.append(Specification(data=json.loads(archive_content.read(file_name))))
+
+        # cleanup the temporary archive
+        os.remove(archive_path)
+
+        return specifications
+
     def get_specification_data(self, name, version="master"):
         """ Returns the content of the specification_file in the given specification_version
 
@@ -151,6 +186,9 @@ class SpecificationsRepositoryManager (object):
                 specification: the specification object to save
                 version: the version (branch) where to commit (default: "master")
                 commit_message: the commit message (default: "updated using monolithe")
+
+            Returns:
+                Specification objects.
         """
 
         pass
