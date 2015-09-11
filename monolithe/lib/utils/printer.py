@@ -40,7 +40,7 @@ class Printer(object):
             Args:
                 message: the message to print
         """
-        error_message = '[ERROR] %s' % message
+        error_message = '[error] %s' % message
         if cls.__raise_exception__:
             raise Exception(error_message)
 
@@ -55,7 +55,7 @@ class Printer(object):
                 message: the message to print
         """
 
-        cls.colorprint('[Success] %s' % message, Fore.GREEN)
+        cls.colorprint('[success] %s' % message, Fore.GREEN)
 
     @classmethod
     def warn(cls, message):
@@ -65,7 +65,7 @@ class Printer(object):
                 message: the message to print
         """
 
-        cls.colorprint('[WARNING] %s' % message, Fore.YELLOW)
+        cls.colorprint('[warning] %s' % message, Fore.YELLOW)
 
     @classmethod
     def log(cls, message):
@@ -75,7 +75,7 @@ class Printer(object):
                 message: the message to print
         """
 
-        cls.colorprint('[LOG] %s' % message, Fore.CYAN)
+        cls.colorprint('[log] %s' % message, Fore.CYAN)
 
     @classmethod
     def json(cls, message):
