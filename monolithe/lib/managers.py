@@ -117,11 +117,12 @@ class SpecificationsRepositoryManager (object):
         req = requests.get(url, stream=True, verify=False)
 
         # retrieve and write the archive content to a temporary file
-        with open(archive_path, "wb") as f:
-            for chunk in req.iter_content(chunk_size=1024):
-                if not chunk: continue
-                f.write(chunk)
-                f.flush()
+        f = os.fdopen(archive_fd, "wb")
+        for chunk in req.iter_content(chunk_size=1024):
+            if not chunk: continue
+            f.write(chunk)
+            f.flush()
+        os.close(archive_fd)
 
         # reads the content of the archive and generate Specification objects
         with zipfile.ZipFile(archive_path, "r") as archive_content:
@@ -130,7 +131,6 @@ class SpecificationsRepositoryManager (object):
                 specifications.append(Specification(data=json.loads(archive_content.read(file_name))))
 
         # cleanup the temporary archive
-        os.close(archive_fd)
         os.remove(archive_path)
 
         return specifications
