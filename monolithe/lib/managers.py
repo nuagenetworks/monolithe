@@ -126,7 +126,7 @@ class SpecificationsRepositoryManager (object):
 
         return specification
 
-    def get_specifications(self, names, version="master"):
+    def get_specifications(self, names, version="master", callback=None):
         """ Returns a Specification object from the given specification file name in the given specification_version
 
             Args:
@@ -137,9 +137,19 @@ class SpecificationsRepositoryManager (object):
                 Specification object.
         """
 
-        func = partial(self.get_specification, version=version)
+        def internal_get_specification(name, version, callback):
+            """
+            """
+            specification = self.get_specification(name=name, version=version)
 
-        p = ThreadPool(20)
+            if callback:
+                callback(specification)
+
+            return specification
+
+        func = partial(internal_get_specification, version=version, callback=callback)
+
+        p = ThreadPool(40)
         specifications = p.map(func, names)
 
         return specifications
