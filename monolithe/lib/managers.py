@@ -112,7 +112,7 @@ class SpecificationsRepositoryManager (object):
                 list of Specification objects.
         """
         specifications = []
-        archive_file, archive_path = tempfile.mkstemp("archive.zip")
+        archive_fd, archive_path = tempfile.mkstemp("archive.zip")
         url = self._repo.get_archive_link("zipball", ref=version)
         req = requests.get(url, stream=True, verify=False)
 
@@ -130,6 +130,7 @@ class SpecificationsRepositoryManager (object):
                 specifications.append(Specification(data=json.loads(archive_content.read(file_name))))
 
         # cleanup the temporary archive
+        os.close(archive_fd)
         os.remove(archive_path)
 
         return specifications
