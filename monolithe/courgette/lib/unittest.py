@@ -12,7 +12,7 @@ from bambou.config import BambouConfig
 from bambou.exceptions import BambouHTTPError
 
 from monolithe.courgette.lib.helpers import TestHelper
-from monolithe.lib.utils.printer import Printer
+from monolithe.lib import Printer
 
 
 class _MonolitheTestResult(TestResult):

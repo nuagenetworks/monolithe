@@ -3,8 +3,8 @@
 import os
 import shutil
 
-from monolithe.lib.utils.vsdk import VSDKUtils
-from monolithe.lib.utils.printer import Printer
+from monolithe.lib import StarDKUtils
+from monolithe.lib import Printer
 
 
 class VSPKGenerator(object):
@@ -47,7 +47,7 @@ class VSPKGenerator(object):
         """ Install Generated version of vsdk to vspk"
 
         """
-        parsed_version = VSDKUtils.get_string_version(vsdk_version)
+        parsed_version = StarDKUtils.get_string_version(vsdk_version)
         source_sdk_path = "%s/%s/vsdk/" % (vsdk_base_path, vsdk_version)
         dest_sdk_path = "%s/vspk/vsdk/%s" % (vspk_path, parsed_version)
 

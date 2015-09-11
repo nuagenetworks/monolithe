@@ -3,7 +3,7 @@
 import logging
 import requests
 
-from monolithe.lib.utils.printer import Printer
+from monolithe.lib import Printer
 
 
 class TestHelper(object):

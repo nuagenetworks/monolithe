@@ -6,7 +6,7 @@ from unittest2 import TestSuite
 
 from monolithe.courgette.lib.helpers import TestHelper
 from monolithe.courgette.lib.unittest import MonolitheTestCase
-from monolithe.lib.factory import VSDKFactory
+from monolithe.lib import StarDKLoader
 
 
 class TestMaker(object):
@@ -178,14 +178,14 @@ class CreateTestCase(MonolitheTestCase):
 
         """
         MonolitheTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+        self.pristine_vsdobject = StarDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+        self.vsdobject = StarDKLoader.get_instance_copy(self.pristine_vsdobject)
 
     def tearDown(self):
         """ Clean up environment
@@ -296,14 +296,14 @@ class UpdateTestCase(MonolitheTestCase):
 
         """
         MonolitheTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+        self.pristine_vsdobject = StarDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+        self.vsdobject = StarDKLoader.get_instance_copy(self.pristine_vsdobject)
 
         self.parent.create_child(self.vsdobject)
 
@@ -421,14 +421,14 @@ class DeleteTestCase(MonolitheTestCase):
 
         """
         MonolitheTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+        self.pristine_vsdobject = StarDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+        self.vsdobject = StarDKLoader.get_instance_copy(self.pristine_vsdobject)
 
         self.parent.create_child(self.vsdobject)
 
@@ -524,14 +524,14 @@ class GetTestCase(MonolitheTestCase):
 
         """
         MonolitheTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+        self.pristine_vsdobject = StarDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
         """ Setting up get test
 
         """
         self.last_connection = None
-        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+        self.vsdobject = StarDKLoader.get_instance_copy(self.pristine_vsdobject)
 
         self.parent.create_child(self.vsdobject)
 
@@ -626,14 +626,14 @@ class GetAllTestCase(MonolitheTestCase):
 
         """
         MonolitheTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = VSDKFactory.get_instance_copy(self.vsdobject)
+        self.pristine_vsdobject = StarDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
         """ Setting up get test
 
         """
         self.last_connection = None
-        self.vsdobject = VSDKFactory.get_instance_copy(self.pristine_vsdobject)
+        self.vsdobject = StarDKLoader.get_instance_copy(self.pristine_vsdobject)
 
     def tearDown(self):
         """ Clean up environment
@@ -646,7 +646,7 @@ class GetAllTestCase(MonolitheTestCase):
         """ Get all object without authentication """
 
         TestHelper.set_api_key(None)
-        fetcher = VSDKFactory.get_fetcher_instance(self.parent, self.vsdobject)
+        fetcher = StarDKLoader.get_fetcher_instance(self.parent, self.vsdobject)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
 
@@ -660,7 +660,7 @@ class GetAllTestCase(MonolitheTestCase):
         """ Get all object without content should succeed with 200 response
 
         """
-        fetcher = VSDKFactory.get_fetcher_instance(self.parent, self.vsdobject)
+        fetcher = StarDKLoader.get_fetcher_instance(self.parent, self.vsdobject)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
         self.last_connection = connection
@@ -673,7 +673,7 @@ class GetAllTestCase(MonolitheTestCase):
         """
         self.parent.create_child(self.vsdobject)
 
-        fetcher = VSDKFactory.get_fetcher_instance(self.parent, self.vsdobject)
+        fetcher = StarDKLoader.get_fetcher_instance(self.parent, self.vsdobject)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
 

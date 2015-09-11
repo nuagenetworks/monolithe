@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from monolithe import monolithe_config
-from monolithe.lib.utils.printer import Printer
+from monolithe.lib import Printer
 
-from monolithe.lib.managers import SpecificationsRepositoryManager
+from monolithe.lib import SpecificationsRepositoryManager
 from monolithe.generators.apidoc.lib import APIDocWriter
 
 

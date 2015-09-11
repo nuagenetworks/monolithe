@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from monolithe.lib.utils.printer import Printer
+from monolithe.lib import Printer
 
 from monolithe.courgette.lib import TestsRunner
 

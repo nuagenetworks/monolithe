@@ -4,9 +4,8 @@ import os
 import shutil
 
 from monolithe import monolithe_config
-from monolithe.lib.utils.printer import Printer
-from monolithe.lib.managers import TaskManager
-from monolithe.lib.utils.parse import ParsingUtils
+from monolithe.lib import Printer
+from monolithe.lib import TaskManager
 from monolithe.generators.lib.writers import TemplateFileWriter
 
 
@@ -102,7 +101,6 @@ class SDKWriter(object):
         writer = self.get_writer()
         writer.write_setup_file(version=apiversion, revision=revision)
 
-        constants = ParsingUtils.order(constants)
         writer.write_constants_file(constants=constants)
 
         # VSD Session

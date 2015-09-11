@@ -8,7 +8,7 @@ import re
 import inspect
 import subprocess
 
-from monolithe.lib.utils.printer import Printer
+from monolithe.lib import Printer
 
 
 class VSPKDocumentationGenerator(object):
