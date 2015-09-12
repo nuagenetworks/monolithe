@@ -105,7 +105,7 @@ class Specification(object):
 
             Args:
                 model: the model processed
-                apis: the list of apis availble for the current swagger model
+                apis: the list of apis availble for the current model
                 relations: dict containing all relations between resources
 
         """

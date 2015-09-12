@@ -9,10 +9,8 @@ class Courgette(object):
     """ Validates API by launching specification-generated tests
 
     """
-    def __init__(self, vsdurl, swagger_path, username, password, enterprise, apiversion, data):
-        """ Initializes a VSDKGenerator
-
-            Can be used to generate a vsdk from a remote vsdurl or a local swagger_path.
+    def __init__(self, vsdurl, username, password, enterprise, apiversion, configuration):
+        """ Initializes Courgette
 
             Args:
                 vsdurl (string): the url of the vsd with its port
@@ -28,54 +26,28 @@ class Courgette(object):
                     RESTName (string): Optionnally to avoid to provide the specification
 
         """
-        self.rest_name = None
-        self.specification = None
+        self.configuration = configuration
         self.vsdurl = vsdurl
-        self.swagger_path = swagger_path
         self.username = username
         self.password = password
         self.enterprise = enterprise
         self.apiversion = apiversion
 
-        if self.vsdurl is None and self.path is None:
-            Printer.raiseError("Please provide a vsd url or a path to swagger json file")
-
-        # Verify Parent information
-        if 'parentObject' not in data:
-            Printer.raiseError('No parentObject information provided')
-        elif 'resourceName' not in data['parentObject']:
-            Printer.raiseError('No parent resourceName information provided')
-        elif 'id' not in data['parentObject']:
-            Printer.raiseError('No parent id information provided')
-
-        self.parent_id = data['parentObject']['id']
-        self.parent_resource = data['parentObject']['resourceName']
-
-        # Verify default values
-        if 'defaultValues' not in data:
-            Printer.raiseError('No defaultValues information provided')
-
-        self.default_values = data['defaultValues']
-
-        if 'spec' in data:
-            self.specification = data['spec']
-
-        if self.specification is None or len(self.specification) == 0:
-            if 'RESTName' not in data:
-                Printer.raiseError('No RESTName information provided')
-
-            generator = SpecificationsGenerator(vsdurl=vsdurl, swagger_path=swagger_path, apiversion=apiversion)
-            self.specification = generator.get_specification(rest_name=data['RESTName'])
-
-        self.rest_name = self.specification['model']['RESTName']
-
-    def run(self, specification):
+    def run(self):
         """ Run all tests
 
             Returns:
                 A dictionnary containing tests' results.
 
         """
-        runner = TestsRunner(vsdurl=self.vsdurl, username=self.username, password=self.password, enterprise=self.enterprise, version=self.apiversion, model=specification, parent_resource=self.parent_resource, parent_id=self.parent_id, **self.default_values)
+        runner = TestsRunner(vsdurl=self.vsdurl,
+                             username=self.username,
+                             password=self.password,
+                             enterprise=self.enterprise,
+                             version=self.apiversion,
+                             model=self.configuration.specification,
+                             parent_resource=self.configuration.parent_resource_name,
+                             parent_id=self.configuration.parent_id,
+                             **self.configuration.default_values)
 
         return runner.run()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['Courgette', 'SpecificationsTester']
+__all__ = ['Courgette', 'CourgetteConfig']
 
 from .courgette import Courgette
-from .specificationstester import SpecificationsTester
+from .courgetteconfiguration import CourgetteConfiguration

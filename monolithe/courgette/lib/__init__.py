@@ -60,7 +60,7 @@ class TestsRunner(object):
         self.is_get_all_allowed = False
         self.is_update_allowed = False
 
-        for path, api in model.apis['parents'].iteritems():
+        for api in model.parent_apis:
             for operation in api.operations:
                 method = operation.method
 
@@ -69,7 +69,7 @@ class TestsRunner(object):
                 elif method == 'GET':
                     self.is_get_all_allowed = True
 
-        for path, api in model.apis['self'].iteritems():
+        for api in model.self_apis:
             for operation in api.operations:
                 method = operation.method
 
