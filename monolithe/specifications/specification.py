@@ -28,6 +28,7 @@ class Specification(object):
         """
         self.__default_specification__ = None
 
+        self.filename = None
         self.description = None
         self.package = None
         self.name = None  # The original name of the object
@@ -92,6 +93,7 @@ class Specification(object):
         self.plural_name = SDKUtils.get_plural_name(entity_name)
         self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
         self.remote_name = data['model']['RESTName']
+        self.filename = '%s.spec' % self.remote_name
         self.resource_name = data['model']['resourceName']
 
         self.children_apis = self._get_apis('children', data['apis'])
