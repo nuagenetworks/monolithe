@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from monolithe.lib import Printer
-
 from monolithe.courgette.lib import TestsRunner
+from .courgetteresult import CourgetteResult
 
 
 class Courgette(object):
     """ Validates API by launching specification-generated tests
 
     """
-    def __init__(self, vsdurl, username, password, enterprise, apiversion, configuration):
+    def __init__(self, vsdurl, username, password, enterprise, apiversion):
         """ Initializes Courgette
 
             Args:
@@ -26,28 +25,37 @@ class Courgette(object):
                     RESTName (string): Optionnally to avoid to provide the specification
 
         """
-        self.configuration = configuration
+
         self.vsdurl = vsdurl
         self.username = username
         self.password = password
         self.enterprise = enterprise
         self.apiversion = apiversion
 
-    def run(self):
+    def run(self, configurations):
         """ Run all tests
 
             Returns:
                 A dictionnary containing tests' results.
 
         """
-        runner = TestsRunner(vsdurl=self.vsdurl,
-                             username=self.username,
-                             password=self.password,
-                             enterprise=self.enterprise,
-                             version=self.apiversion,
-                             model=self.configuration.specification,
-                             parent_resource=self.configuration.parent_resource_name,
-                             parent_id=self.configuration.parent_id,
-                             **self.configuration.default_values)
 
-        return runner.run()
+        result = CourgetteResult()
+
+        for configuration in configurations:
+
+            runner = TestsRunner(vsdurl=self.vsdurl,
+                                 username=self.username,
+                                 password=self.password,
+                                 enterprise=self.enterprise,
+                                 version=self.apiversion,
+                                 model=configuration.specification,
+                                 parent_resource=configuration.parent_resource_name,
+                                 parent_id=configuration.parent_id,
+                                 **configuration.default_values)
+
+            result.add_report(configuration.specification.remote_name + ".spec", runner.run())
+
+        return result
+
+
