@@ -3,6 +3,7 @@
 import os
 import shutil
 
+from monolithe import monolithe_config
 from monolithe.lib import SDKUtils
 from monolithe.lib import Printer
 
@@ -11,19 +12,24 @@ class VSPKGenerator(object):
     """ Create a VSPK Package containing SDK versions
 
     """
-    def __init__(self, versions):
+    def __init__(self, versions, output_path=None):
         """ Initialize a VSPKGenerator
 
         """
         self.versions = versions
 
         self._path_vanilla_vspk = '%s/vanilla/vspk' % os.path.dirname(os.path.realpath(__file__))
-        self._path_codegen = "./codegen"
+        self._path_codegen = output_path if output_path else monolithe_config.get('monolithe', 'codegen_directory')
         self._path_generated_vspk = "%s/vspk" % self._path_codegen
 
     def run(self):
         """ Create the VSPK package
 
+        """
+        self.generate()
+
+    def generate(self):
+        """
         """
         self._prepare_vspk_destination(self._path_vanilla_vspk, self._path_generated_vspk)
 

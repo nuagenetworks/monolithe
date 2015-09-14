@@ -18,27 +18,34 @@ class VSDKGenerator(object):
     """ Generate VSDK
 
     """
-    def __init__(self, api_url, login_or_token, password, organization, repository, version=u'master', output_path=None, specifications_path=None, force_removal=False):
+    def __init__(self, version=u'master', output_path=None, specifications_path=None, force_removal=False):
         """
         """
         self.version = version
         self.output_path = output_path
         self.force_removal = force_removal
         self.specifications_path = specifications_path
+        self.repository_manager = None
 
+    def run(self, api_url, login_or_token, password, organization, repository):
+        """ Start the VSDK generation
+
+        """
         self.repository_manager = RepositoryManager(api_url=api_url,
                                                     login_or_token=login_or_token,
                                                     password=password,
                                                     organization=organization,
                                                     repository=repository)
-
-    def run(self):
-        """ Start the VSDK generation
-
-        """
-        Printer.log("Starting VSDK generation from branch `%s` of repository `%s`" % (self.version, self.repository_manager.repository))
+        Printer.log("Getting specifications from branch `%s` of repository `%s`" % (self.version, self.repository_manager.repository))
 
         specifications = self.repository_manager.get_all_specifications(version=self.version)
+
+        self.generate(specifications)
+
+    def generate(self, specifications):
+        """
+        """
+        Printer.log("Starting VSDK generation for %s files" % len(specifications))
 
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)

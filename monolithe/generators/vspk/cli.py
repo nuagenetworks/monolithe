@@ -103,15 +103,15 @@ def main(argv=sys.argv):
 
     # Generate VSDK
     for version in args.versions:
-        vsdk_generator = VSDKGenerator(api_url=args.api_url, \
-                                       login_or_token=login_or_token, \
-                                       password=password, \
-                                       organization=args.organization, \
-                                       repository=args.repository, \
-                                       version=version, \
+        vsdk_generator = VSDKGenerator(version=version, \
                                        output_path=args.output_path, \
                                        force_removal=args.force_removal)
-        vsdk_generator.run()
+
+        vsdk_generator.run(api_url=args.api_url, \
+                           login_or_token=login_or_token, \
+                           password=password, \
+                           organization=args.organization, \
+                           repository=args.repository)
 
     # Packaging a VSPK
     vspk_generator = VSPKGenerator(versions=args.versions)
