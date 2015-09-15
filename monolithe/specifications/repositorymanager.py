@@ -29,38 +29,35 @@ class RepositoryManager (object):
                 repository: the repository containing the specifications
         """
         self._repository = repository
-
         self._github = Github(login_or_token=login_or_token, password=password, base_url=api_url)
         self._repo = self._github.get_organization(organization).get_repo(repository)
 
     @property
     def repository(self):
-        """
-        """
         return self._repository
 
-    def available_versions(self):
-        """ Returns the list of available API spec versions (branches)
+    def get_available_branches(self):
+        """ Returns the list of available API spec branches
 
             Returns:
-                list of all available specification versions (branches)
+                list of all available specification branches
         """
 
         return [branch.name for branch in self._repo.get_branches()]
 
-    def available_specifications(self, version="master"):
+    def get_available_specifications(self, branch="master"):
         """ Returns the list of available specification files
 
             Args:
-                specification_version: the version (branch) where to find files (default: "master")
+                branch: the branch where to find files (default: "master")
 
             Returns:
-                list of all available specification files in the given version
+                list of all available specification files in the given branch
         """
 
         ret = []
 
-        for file in self._repo.get_dir_contents("/", ref=version):
+        for file in self._repo.get_dir_contents("/", ref=branch):
 
             if os.path.splitext(file.name)[1] != ".spec":
                 continue
@@ -69,20 +66,20 @@ class RepositoryManager (object):
 
         return ret
 
-    def get_all_specifications(self, version="master"):
+    def get_all_specifications(self, branch="master"):
         """ Returns all availables specifications using zipball feature of Github
             This is extremely fast if you need to get a lot of Specifications in one
             shot.
 
             Args:
-                version: the version (branch) where to find files (default: "master")
+                branch: the branch where to find files (default: "master")
 
             Returns:
                 list of Specification objects.
         """
         specifications = []
         archive_fd, archive_path = tempfile.mkstemp("archive.zip")
-        url = self._repo.get_archive_link("zipball", ref=version)
+        url = self._repo.get_archive_link("zipball", ref=branch)
         req = requests.get(url, stream=True, verify=False)
 
         # retrieve and write the archive content to a temporary file
@@ -96,8 +93,14 @@ class RepositoryManager (object):
         # reads the content of the archive and generate Specification objects
         with zipfile.ZipFile(archive_path, "r") as archive_content:
             for file_name in archive_content.namelist():
+
+                if file_name == "api.version":
+                    self._api_version = archive_content.read(file_name)
+                    continue
+
                 if os.path.splitext(file_name)[1] != ".spec":
                     continue
+
                 specifications.append(Specification(data=json.loads(archive_content.read(file_name))))
 
         # cleanup the temporary archive
@@ -106,62 +109,71 @@ class RepositoryManager (object):
 
         return specifications
 
-    def get_specification_data(self, name, version="master"):
-        """ Returns the content of the specification_file in the given specification_version
+    def get_api_version(self, branch="master"):
+        """
+            Returns the content of the api.version in the specification
+
+            Returns:
+                the server api version as a string (example: 3.2)
+        """
+        return base64.b64decode(self._repo.get_file_contents("api.version", ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
+
+    def get_specification_data(self, name, branch="master"):
+        """ Returns the content of the specification_file in the given branch
 
             Args:
                 name: the name of the specification file of which you want to get the content
-                version: the version (branch) where to find files (default: "master")
+                branch: the branch where to find files (default: "master")
 
             Returns:
                 JSON decoded structure of the specification file.
         """
 
-        return json.loads(base64.b64decode(self._repo.get_file_contents(name, ref=version).content))
+        return json.loads(base64.b64decode(self._repo.get_file_contents(name, ref=branch).content))
 
-    def get_specification(self, name, version="master"):
-        """ Returns a Specification object from the given specification file name in the given specification_version
+    def get_specification(self, name, branch="master"):
+        """ Returns a Specification object from the given specification file name in the given branch
 
             Args:
                 name: the name of the specification file of which you want to get the content
-                version: the version (branch) where to find files (default: "master")
+                branch: the branch where to find files (default: "master")
 
             Returns:
                 Specification object.
         """
 
-        return Specification(data=self.get_specification_data(name, version))
+        return Specification(data=self.get_specification_data(name, branch))
 
-    def get_specifications(self, names, version="master", callback=None):
-        """ Returns a Specification object from the given specification file name in the given specification_version
+    def get_specifications(self, names, branch="master", callback=None):
+        """ Returns a Specification object from the given specification file name in the given branch
 
             Args:
                 name: the name of the specification file of which you want to get the content
-                version: the version (branch) where to find files (default: "master")
+                branch: the branch where to find files (default: "master")
 
             Returns:
                 list of Specification objects.
         """
-        def internal_get_specification(name, version, callback):
+        def internal_get_specification(name, branch, callback):
             """
             """
-            specification = self.get_specification(name=name, version=version)
+            specification = self.get_specification(name=name, branch=branch)
 
             if callback:
                 callback(specification)
 
             return specification
 
-        func = partial(internal_get_specification, version=version, callback=callback)
+        func = partial(internal_get_specification, branch=branch, callback=callback)
 
         return ThreadPool(40).map(func, names)
 
-    def save_specification(self, specification, version="master", commit_message="updated using monolithe"):
+    def save_specification(self, specification, branch="master", commit_message="updated using monolithe"):
         """ Saves (commit) a specification to the Github Repository
 
             Args:
                 specification: the specification object to save
-                version: the version (branch) where to commit (default: "master")
+                branch: the branch where to commit (default: "master")
                 commit_message: the commit message (default: "updated using monolithe")
 
         """

@@ -38,7 +38,7 @@ class VSDKGenerator(object):
                                                     repository=repository)
         Printer.log("Getting specifications from branch `%s` of repository `%s`" % (self.version, self.repository_manager.repository))
 
-        specifications = self.repository_manager.get_all_specifications(version=self.version)
+        specifications = self.repository_manager.get_all_specifications(branch=self.version)
 
         self.generate(specifications)
 

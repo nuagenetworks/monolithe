@@ -30,7 +30,7 @@ class APIDocumentationGenerator(object):
         """
         Printer.log("Starting API documentation generation from branch `%s` of repository `%s`" % (self.version, self.repository_manager.repository))
 
-        specifications = self.repository_manager.get_all_specifications(version=self.version)
+        specifications = self.repository_manager.get_all_specifications(branch=self.version)
 
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)
