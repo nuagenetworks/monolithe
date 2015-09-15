@@ -8,7 +8,7 @@ class Courgette(object):
     """ Validates API by launching specification-generated tests
 
     """
-    def __init__(self, vsdurl, username, password, enterprise, apiversion):
+    def __init__(self, vsdurl, username, password, enterprise, apiversion, sdk_identifier):
         """ Initializes Courgette
 
             Args:
@@ -16,14 +16,8 @@ class Courgette(object):
                 username (string): the username to launch tests
                 password (string): the password to connect to the vsd
                 enterprise (string): the name of the enterprise to connect to the vsd
-                version (float): the version of the API to connect
-                data (dict): a dictionary containing following information:
-
-                    spec (dict): the specification
-                    parent (dict): the parent information (resourceName and ID)
-                    default_values: the default values for the object
-                    RESTName (string): Optionnally to avoid to provide the specification
-
+                apiversion (float): the version of the API to connect
+                sdk (string): the full name of the SDK to use
         """
 
         self.vsdurl = vsdurl
@@ -31,6 +25,7 @@ class Courgette(object):
         self.password = password
         self.enterprise = enterprise
         self.apiversion = apiversion
+        self.sdk_identifier = sdk_identifier
 
     def run(self, configurations):
         """ Run all tests
@@ -52,6 +47,7 @@ class Courgette(object):
                                  model=configuration.specification,
                                  parent_resource=configuration.parent_resource_name,
                                  parent_id=configuration.parent_id,
+                                 sdk_identifier=self.sdk_identifier,
                                  **configuration.default_values)
 
             result.add_report(configuration.specification.remote_name + ".spec", runner.run())
