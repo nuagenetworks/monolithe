@@ -15,7 +15,7 @@ class TestsRunner(object):
 
     """
 
-    def __init__(self, vsdurl, username, password, enterprise, version, model, parent_resource=None, parent_id=None, **default_values):
+    def __init__(self, vsdurl, username, password, enterprise, version, model, parent_resource=None, parent_id=None, sdk_identifier=None, **default_values):
         """ Initializes the TestsRunner.
 
             Args:
@@ -27,11 +27,12 @@ class TestsRunner(object):
                 model (Model): the model representation of the object to test
                 parent_resource: the parent_resource if necessary
                 parent_id: the parent id if necessary
+                sdk: the full name of the SDK to load to run the test suite
                 default_values: all default values to have a valid version of the model
 
         """
         SDKLoader.init(version)
-        vsdk = SDKLoader.get_vsdk_package()
+        vsdk = SDKLoader.get_vsdk_package(sdk_identifier=sdk_identifier)
         TestHelper.use_vsdk(vsdk)
 
         session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise)
