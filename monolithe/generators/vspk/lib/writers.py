@@ -120,10 +120,10 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
 
-        if model.name != monolithe_config.get('monolithe', 'rest_user_api'):
-            (filename, classname) = writer.write_model(model=model, version=version)
-        else:
+        if model.remote_name == monolithe_config.get('monolithe', 'rest_user_api'):
             (filename, classname) = writer.write_restuser_model(model=model, version=version)
+        else:
+            (filename, classname) = writer.write_model(model=model, version=version)
 
         filenames[filename] = classname
 

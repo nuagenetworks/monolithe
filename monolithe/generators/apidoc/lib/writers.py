@@ -68,7 +68,7 @@ class APIDocWriter(object):
                 filenames: list of generates filenames
 
         """
-        if model.name != monolithe_config.get('monolithe', 'rest_user_api'):
+        if model.remote_name != monolithe_config.get('monolithe', 'rest_user_api'):
             writer = self.get_writer()
             (filename, classname) = writer.write_model(model=model)
             filenames[filename] = classname

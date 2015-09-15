@@ -30,4 +30,4 @@ monolithe_config = ConfigParser()
 monolithe_config.read('%s/../config.ini' % current_directory)
 
 monolithe_mapping = ConfigParser()
-monolithe_mapping.read('%s./../mappings.ini' % current_directory)
+monolithe_mapping.read('%s/../mappings.ini' % current_directory)
