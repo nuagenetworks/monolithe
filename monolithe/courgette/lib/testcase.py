@@ -15,7 +15,7 @@ from monolithe.courgette.lib import TestHelper
 from monolithe.lib import Printer
 
 
-class MonolitheTestResult(TestResult):
+class CourgetteTestResult(TestResult):
     """ A TestResult
 
     """
@@ -72,7 +72,7 @@ class MonolitheTestResult(TestResult):
                (str(self.__class__), self.testsRun, len(self.errors), len(self.failures))
 
 
-class MonolitheTestRunner(object):
+class CourgetteCourgetteTestsRunner(object):
     """
 
     """
@@ -84,7 +84,7 @@ class MonolitheTestRunner(object):
         """ Return a TestResult implementation
 
         """
-        return MonolitheTestResult()
+        return CourgetteTestResult()
 
     def run(self, test):
         """ Run the given test case or test suite.
@@ -106,8 +106,7 @@ class MonolitheTestRunner(object):
             Printer.success("OK")
         return result
 
-
-class MonolitheTestCase(TestCase):
+class CourgetteTestCase(TestCase):
 
     _last_connection = None  # Last connection to present errors
     parent = None  # Parent VSD object

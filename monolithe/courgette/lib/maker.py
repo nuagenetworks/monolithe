@@ -7,7 +7,8 @@ from unittest2 import TestSuite
 from monolithe.lib import SDKLoader
 
 from .helpers import TestHelper
-from .testcase import MonolitheTestCase
+from .makers import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
+from .testcase import CourgetteTestCase
 
 
 
@@ -173,13 +174,13 @@ class CreateTestMaker(_TestMaker):
         return TestSuite(map(CreateTestCase, tests))
 
 
-class CreateTestCase(MonolitheTestCase):
+class CreateTestCase(CourgetteTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        MonolitheTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName)
         self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -291,13 +292,13 @@ class UpdateTestMaker(_TestMaker):
         return TestSuite(map(UpdateTestCase, tests))
 
 
-class UpdateTestCase(MonolitheTestCase):
+class UpdateTestCase(CourgetteTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        MonolitheTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName)
         self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -416,13 +417,13 @@ class DeleteTestMaker(_TestMaker):
         return TestSuite(map(DeleteTestCase, tests))
 
 
-class DeleteTestCase(MonolitheTestCase):
+class DeleteTestCase(CourgetteTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        MonolitheTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName)
         self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -518,13 +519,13 @@ class GetTestMaker(_TestMaker):
         return TestSuite(map(GetTestCase, tests))
 
 
-class GetTestCase(MonolitheTestCase):
+class GetTestCase(CourgetteTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        MonolitheTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName)
         self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):
@@ -621,13 +622,13 @@ class GetAllTestMaker(_TestMaker):
         return TestSuite(map(GetAllTestCase, tests))
 
 
-class GetAllTestCase(MonolitheTestCase):
+class GetAllTestCase(CourgetteTestCase):
 
     def __init__(self, methodName='runTest'):
         """ Initialize
 
         """
-        MonolitheTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName)
         self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
 
     def setUp(self):

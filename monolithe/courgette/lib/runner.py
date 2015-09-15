@@ -7,18 +7,18 @@ from monolithe.lib import SDKUtils
 
 from .makers import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
 from .helpers import TestHelper
-from .testcase import MonolitheTestRunner
+from .testcase import CourgetteCourgetteTestsRunner
 
 
 
 
-class TestRunner(object):
+class CourgetteTestsRunner(object):
     """ Runner for VSD Objects tests
 
     """
 
     def __init__(self, vsdurl, username, password, enterprise, version, model, parent_resource=None, parent_id=None, sdk_identifier=None, **default_values):
-        """ Initializes the TestRunner.
+        """ Initializes the CourgetteTestsRunner.
 
             Args:
                 vsdurl (string): the vsd url
@@ -123,6 +123,6 @@ class TestRunner(object):
 
         """
         suite = self.suite()
-        results = MonolitheTestRunner().run(suite)
+        results = CourgetteCourgetteTestsRunner().run(suite)
 
         return results

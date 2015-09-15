@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from monolithe.courgette.lib import TestRunner
-from .courgetteresult import CourgetteResult
+from monolithe.courgette.lib import CourgetteTestsRunner
+from .result import CourgetteResult
 
 
 class Courgette(object):
@@ -39,16 +39,16 @@ class Courgette(object):
 
         for configuration in configurations:
 
-            runner = TestRunner(vsdurl=self.vsdurl,
-                                 username=self.username,
-                                 password=self.password,
-                                 enterprise=self.enterprise,
-                                 version=self.apiversion,
-                                 model=configuration.specification,
-                                 parent_resource=configuration.parent_resource_name,
-                                 parent_id=configuration.parent_id,
-                                 sdk_identifier=self.sdk_identifier,
-                                 **configuration.default_values)
+            runner = CourgetteTestsRunner(  vsdurl=self.vsdurl,
+                                            username=self.username,
+                                            password=self.password,
+                                            enterprise=self.enterprise,
+                                            version=self.apiversion,
+                                            model=configuration.specification,
+                                            parent_resource=configuration.parent_resource_name,
+                                            parent_id=configuration.parent_id,
+                                            sdk_identifier=self.sdk_identifier,
+                                            **configuration.default_values)
 
             result.add_report(configuration.specification.remote_name + ".spec", runner.run())
 
