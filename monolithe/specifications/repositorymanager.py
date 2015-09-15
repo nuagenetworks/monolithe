@@ -66,6 +66,29 @@ class RepositoryManager (object):
 
         return ret
 
+    def get_api_version(self, branch="master"):
+        """
+            Returns the content of the api.version in the specification
+
+            Args:
+                branch: the branch where to the api version (default: "master")
+
+            Returns:
+                the server api version as a string (example: 3.2)
+        """
+        return base64.b64decode(self._repo.get_file_contents("api.version", ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
+
+    def get_last_commit(self, branch="master"):
+        """
+            Returns the last commit in the given branch
+
+            Args:
+                branch: the branch where to the commit (default: "master")
+        """
+
+        return self._repo.get_commits()[0]
+
+
     def get_all_specifications(self, branch="master"):
         """ Returns all availables specifications using zipball feature of Github
             This is extremely fast if you need to get a lot of Specifications in one
@@ -108,15 +131,6 @@ class RepositoryManager (object):
         os.remove(archive_path)
 
         return specifications
-
-    def get_api_version(self, branch="master"):
-        """
-            Returns the content of the api.version in the specification
-
-            Returns:
-                the server api version as a string (example: 3.2)
-        """
-        return base64.b64decode(self._repo.get_file_contents("api.version", ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
 
     def get_specification_data(self, name, branch="master"):
         """ Returns the content of the specification_file in the given branch
