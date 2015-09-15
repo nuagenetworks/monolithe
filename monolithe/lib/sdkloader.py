@@ -21,7 +21,30 @@ class SDKLoader(object):
 
         """
         cls._version = SDKUtils.get_string_version(version)
-        vsdk = cls.get_vsdk_package()
+
+
+    @classmethod
+    def get_vsdk_package(cls, sdk_identifier=None):
+        """ Returns vsdk package
+
+            Args:
+                sdk_identifier: optional identifier to load the sdk
+                Example:
+                    sdk_identifier="1234.vspk.vsdk"
+        """
+        vsdk = None
+
+        if sdk_identifier:
+            vsdk = importlib.import_module('%s.%s' % (sdk_identifier, cls._version))
+        else:
+            try:
+                vsdk = importlib.import_module('vspk.vsdk.%s' % cls._version)
+                print vsdk
+            except ImportError:
+                vsdk = importlib.import_module('vsdk')
+            except ImportError as error:
+                raise ImportError('Could not found vspk or vsdk library. Please install requirements using command line `pip install -r requirements.txt`.\n%s' % error)
+
         classnames = [name for name in dir(vsdk) if name.startswith('NU') and not name.endswith('Fetcher')]
 
         for classname in classnames:
@@ -30,19 +53,6 @@ class SDKLoader(object):
             if issubclass(klass, NURESTObject):
                 resource_name = klass.rest_resource_name
                 cls._resources[resource_name] = klass
-
-    @classmethod
-    def get_vsdk_package(cls):
-        """ Returns vsdk package
-
-        """
-        vsdk = None
-        try:
-            vsdk = importlib.import_module('vspk.vsdk.%s' % cls._version)
-        except ImportError:
-            vsdk = importlib.import_module('vsdk')
-        except ImportError as error:
-            raise ImportError('Could not found vspk or vsdk library. Please install requirements using command line `pip install -r requirements.txt`.\n%s' % error)
 
         return vsdk
 
