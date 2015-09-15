@@ -11,11 +11,11 @@ from unittest2 import TestCase, TestResult
 from bambou.config import BambouConfig
 from bambou.exceptions import BambouHTTPError
 
-from monolithe.courgette.lib.helpers import TestHelper
+from monolithe.courgette.lib import TestHelper
 from monolithe.lib import Printer
 
 
-class _MonolitheTestResult(TestResult):
+class MonolitheTestResult(TestResult):
     """ A TestResult
 
     """
@@ -72,7 +72,7 @@ class _MonolitheTestResult(TestResult):
                (str(self.__class__), self.testsRun, len(self.errors), len(self.failures))
 
 
-class _MonolitheTestRunner(object):
+class MonolitheTestRunner(object):
     """
 
     """
@@ -84,7 +84,7 @@ class _MonolitheTestRunner(object):
         """ Return a TestResult implementation
 
         """
-        return _MonolitheTestResult()
+        return MonolitheTestResult()
 
     def run(self, test):
         """ Run the given test case or test suite.

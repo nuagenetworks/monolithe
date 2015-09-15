@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from monolithe.courgette.lib import TestsRunner
+from monolithe.courgette.lib import TestRunner
 from .courgetteresult import CourgetteResult
 
 
@@ -39,7 +39,7 @@ class Courgette(object):
 
         for configuration in configurations:
 
-            runner = TestsRunner(vsdurl=self.vsdurl,
+            runner = TestRunner(vsdurl=self.vsdurl,
                                  username=self.username,
                                  password=self.password,
                                  enterprise=self.enterprise,

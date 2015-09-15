@@ -4,12 +4,14 @@ import re
 
 from unittest2 import TestSuite
 
-from monolithe.courgette.lib.helpers import TestHelper
-from monolithe.courgette.lib.unittest import MonolitheTestCase
 from monolithe.lib import SDKLoader
 
+from .helpers import TestHelper
+from .testcase import MonolitheTestCase
 
-class TestMaker(object):
+
+
+class _TestMaker(object):
     """ Make tests
 
     """
@@ -132,9 +134,9 @@ class TestMaker(object):
         return (test_name, test_func)
 
 
-##### CREATE TESTS
 
-class CreateTestMaker(TestMaker):
+##### CREATE TESTS
+class CreateTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
@@ -249,9 +251,9 @@ class CreateTestCase(MonolitheTestCase):
         self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
 
 
-##### UPDATE TESTS
 
-class UpdateTestMaker(TestMaker):
+##### UPDATE TESTS
+class UpdateTestMaker(_TestMaker):
     """ TestCase for updating objects
 
     """
@@ -376,10 +378,10 @@ class UpdateTestCase(MonolitheTestCase):
         self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
 
 
+
+
 ##### DELETE TESTS
-
-
-class DeleteTestMaker(TestMaker):
+class DeleteTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
@@ -479,10 +481,9 @@ class DeleteTestCase(MonolitheTestCase):
     # No Attributes tests
 
 
+
 ##### GET TESTS
-
-
-class GetTestMaker(TestMaker):
+class GetTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
@@ -581,10 +582,11 @@ class GetTestCase(MonolitheTestCase):
     # No Attributes tests
 
 
+
+
+
 ##### GETALL TESTS
-
-
-class GetAllTestMaker(TestMaker):
+class GetAllTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
