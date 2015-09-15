@@ -23,9 +23,11 @@ PoolManager.__init__ = sslwrap(PoolManager.__init__)
 ## end of monkey patch
 
 from ConfigParser import ConfigParser
+import os
 
+current_directory = os.path.dirname(os.path.realpath(__file__))
 monolithe_config = ConfigParser()
-monolithe_config.read('./config.ini')
+monolithe_config.read('%s/../config.ini' % current_directory)
 
 monolithe_mapping = ConfigParser()
-monolithe_mapping.read('./mappings.ini')
+monolithe_mapping.read('%s./../mappings.ini' % current_directory)
