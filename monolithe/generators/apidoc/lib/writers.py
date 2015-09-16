@@ -23,12 +23,6 @@ class APIDocWriter(object):
         """
         self.writer_directory = directory
 
-        if os.path.exists(self.writer_directory):
-            shutil.rmtree(self.writer_directory)
-
-        writer = self.get_writer()
-        writer.copy_default_files()
-
     def get_writer(self):
         """ Get a writer to write content
 
@@ -54,9 +48,6 @@ class APIDocWriter(object):
 
         task_manager.wait_until_exit()
 
-        # TOREMOVE
-        # packages = self._extract_packages(resources)
-
         writer = self.get_writer()
         writer.write_index(resources)
 
@@ -73,27 +64,6 @@ class APIDocWriter(object):
             (filename, classname) = writer.write_model(model=model)
             filenames[filename] = classname
 
-    # TOREMOVE:
-    # def _extract_packages(self, models):
-    #     """ Returns a dictionnary containing for each package
-    #         a list of models name
-    #
-    #     """
-    #     packages = dict()
-    #
-    #     for model in models:
-    #         package = model.package
-    #
-    #         if package is None:
-    #             continue
-    #
-    #         if package not in packages:
-    #             packages[package] = list()
-    #
-    #         packages[package].append(model.remote_name)
-    #
-    #     return packages
-
 
 class APIDocFileWriter(TemplateFileWriter):
     """ Provides usefull method for generating
@@ -109,18 +79,6 @@ class APIDocFileWriter(TemplateFileWriter):
         """
         super(APIDocFileWriter, self).__init__(directory=directory, package='monolithe.generators.apidoc')
 
-        self._vanilla_path = '%s/../vanilla' % os.path.dirname(os.path.realpath(__file__))
-
-        self._template_folder = 'templates'
-        self._model_template = 'object.html.tpl'
-        self._index_template = 'index.html.tpl'
-
-    def copy_default_files(self):
-        """ Copy default sources to the output directory
-
-        """
-        shutil.copytree(self._vanilla_path, self.directory)
-
     def write_model(self, model):
         """ Write the HTML file for the given model
 
@@ -131,7 +89,10 @@ class APIDocFileWriter(TemplateFileWriter):
         destination = self.directory
         filename = '%s.html' % model.remote_name.lower()
 
-        self.write(destination=destination, filename=filename, template_name=self._model_template, model=model)
+        self.write( destination=destination, filename=filename, template_name="object.html.tpl",
+                    model=model,
+                    product_name=MonolitheConfig.get_option("product_name"))
+
         return (filename, model.name)
 
     def write_index(self, models):
@@ -144,4 +105,6 @@ class APIDocFileWriter(TemplateFileWriter):
         destination = self.directory
         filename = 'index.html'
 
-        self.write(destination=destination, filename=filename, template_name=self._index_template, models=models)
+        self.write( destination=destination, filename=filename, template_name="index.html.tpl",
+                    models=models,
+                    product_name=MonolitheConfig.get_option("product_name"))

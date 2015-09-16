@@ -37,22 +37,11 @@ def main(argv=sys.argv):
                         type=str)
 
     parser.add_argument('-v', "--versions",
-                        dest="versions",
+                        dest="apiversions",
                         help="versions of the SDK to generate (examples: master 3.0 3.1)",
                         nargs="*",
                         type=str,
                         required=True)
-
-    parser.add_argument('-d', "--destination",
-                        dest='output_path',
-                        default="docgen/apidoc",
-                        help="directory where the generated sources will be placed",
-                        type=str)
-
-    parser.add_argument("--force",
-                        dest="force_removal",
-                        help="Force removal of the existing generated code",
-                        action="store_true")
 
     parser.add_argument("--config",
                         dest="config_path",
@@ -111,16 +100,13 @@ def main(argv=sys.argv):
 
     MonolitheConfig.set_config_path(args.config_path)
 
-    for version in args.versions:
-        generator = APIDocumentationGenerator(api_url=args.api_url, \
-                                              login_or_token=login_or_token, \
-                                              password=password, \
-                                              organization=args.organization, \
-                                              repository=args.repository, \
-                                              version=version, \
-                                              output_path=args.output_path, \
-                                              force_removal=args.force_removal)
-        generator.run()
+
+    generator = APIDocumentationGenerator(apiversions=args.apiversions)
+    generator.run(  api_url=args.api_url,
+                    login_or_token=login_or_token,
+                    password=password,
+                    organization=args.organization,
+                    repository=args.repository)
 
 if __name__ == '__main__':
     main()

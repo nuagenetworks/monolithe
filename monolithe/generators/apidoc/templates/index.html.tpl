@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>VSD API Reference</title>
+    <title>{{product_name}} API Reference</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">VSD API Documentation</a>
+                <a class="navbar-brand" href="index.html">{{product_name}} API Documentation</a>
 
             </div>
             <div class="collapse navbar-collapse" id="navbar">
