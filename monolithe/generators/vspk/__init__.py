@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['VSDKGenerator', 'VSPKGenerator']
+__all__ = ['SDKAPIVersionGenerator', 'SDKGenerator']
 
-from .vsdkgenerator import VSDKGenerator
-from .vspkgenerator import VSPKGenerator
+from .sdkapiversiongenerator import SDKAPIVersionGenerator
+from .sdkgenerator import SDKGenerator

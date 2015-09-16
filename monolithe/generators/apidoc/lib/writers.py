@@ -104,7 +104,7 @@ class APIDocFileWriter(TemplateFileWriter):
     """
 
     def __init__(self, directory):
-        """ Initializes a VSDKFileWriter
+        """ Initializes a APIDocFileWriter
 
         """
         super(APIDocFileWriter, self).__init__(directory=directory, package='monolithe.generators.apidoc')

@@ -16,7 +16,7 @@ class VSPKDocumentationGenerator(object):
 
     """
     def __init__(self):
-        """ Initialize a VSPKGenerator
+        """ Initialize a SDKGenerator
 
         """
         self.vanilla_path = "%s/vanilla" % os.path.dirname(os.path.realpath(__file__))

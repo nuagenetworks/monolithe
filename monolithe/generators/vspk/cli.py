@@ -38,7 +38,7 @@ def main(argv=sys.argv):
                         type=str)
 
     parser.add_argument('-v', "--versions",
-                        dest="versions",
+                        dest="apiversions",
                         help="versions of the SDK to generate (examples: master 3.0 3.1)",
                         nargs="*",
                         type=str,
@@ -48,11 +48,6 @@ def main(argv=sys.argv):
                         dest='output_path',
                         help="directory where the generated sources will be placed",
                         type=str)
-
-    parser.add_argument("--force",
-                        dest="force_removal",
-                        help="Force removal of the existing generated code",
-                        action="store_true")
 
     parser.add_argument("--doc",
                         dest="generate_doc",
@@ -112,25 +107,22 @@ def main(argv=sys.argv):
         login_or_token = args.token
 
     from monolithe import MonolitheConfig
-    from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
+    from monolithe.generators import SDKGenerator, VSPKDocumentationGenerator
 
     MonolitheConfig.set_config_path(args.config_path)
 
     # Generate VSDK
-    for version in args.versions:
-        vsdk_generator = VSDKGenerator(version=version, \
-                                       output_path=args.output_path, \
-                                       force_removal=args.force_removal)
+    generator = SDKGenerator( sdk_name=MonolitheConfig.get_config("sdk_name"),
+                              codegen_directory=MonolitheConfig.get_config("codegen_directory"),
+                              sdk_vanilla_path=MonolitheConfig.get_config("sdk_vanilla_path"),
+                              sdk_api_output_path=MonolitheConfig.get_config("sdk_api_output_path"),
+                              apiversions=args.apiversions)
 
-        vsdk_generator.run(api_url=args.api_url, \
-                           login_or_token=login_or_token, \
-                           password=password, \
-                           organization=args.organization, \
-                           repository=args.repository)
-
-    # Packaging a VSPK
-    vspk_generator = VSPKGenerator(versions=args.versions)
-    vspk_generator.run()
+    generator.run(  api_url=args.api_url,
+                    login_or_token=login_or_token,
+                    password=password,
+                    organization=args.organization,
+                    repository=args.repository)
 
     # Generate VSPK and VSDK documentation
     if args.generate_doc:

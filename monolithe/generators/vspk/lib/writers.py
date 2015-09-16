@@ -4,8 +4,7 @@ import os
 import shutil
 
 from monolithe import MonolitheConfig
-from monolithe.lib import Printer
-from monolithe.lib import TaskManager
+from monolithe.lib import Printer, SDKUtils, TaskManager
 from monolithe.generators.lib.writers import TemplateFileWriter
 
 
@@ -16,26 +15,21 @@ class SDKWriter(object):
     IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
     COMMON_ATTRIBUTES = ['multicast', 'iptype', 'maintenancemode', 'permittedaction', 'connectionstate', 'forwardingclasses']
 
-    def __init__(self, directory):
+    def __init__(self, directory, apiversion):
         """ Initializes a writer to the specific directory
 
             Args:
                 directory: directory where to copy sources
 
         """
-        if not os.path.exists(directory):
-            Printer.log("Copying default sources...")
-            self.writer_directory = directory
-            writer = self.get_writer()
-            writer.copy_default_files()
-
-        self.writer_directory = '%s/vsdk' % directory
+        self.writer_directory = directory
+        self.apiversion = apiversion
 
     def get_writer(self):
         """ Get a writer to write content
 
         """
-        return VSDKFileWriter(directory=self.writer_directory)
+        return _VSDKFileWriter(directory=self.writer_directory, apiversion=self.apiversion)
 
     def _prepare_attributes(self, model, constants):
         """ Removes attributes and computes constants
@@ -167,17 +161,19 @@ class SDKWriter(object):
         writer.clean(except_files=except_files)
 
 
-class VSDKFileWriter(TemplateFileWriter):
+class _VSDKFileWriter(TemplateFileWriter):
     """ Provide usefull method to write Python files.
 
     """
-    def __init__(self, directory):
-        """ Initializes a VSDKFileWriter
+    def __init__(self, directory, apiversion):
+        """ Initializes a _VSDKFileWriter
 
         """
-        super(VSDKFileWriter, self).__init__(directory=directory, package=u'monolithe.generators.vspk')
+        self._final_path = '%s/%s' % (directory, SDKUtils.get_string_version(apiversion))
 
-        self._vanilla_path = '%s/../vanilla/vsdk' % os.path.dirname(os.path.realpath(__file__))
+        super(_VSDKFileWriter, self).__init__(directory=self._final_path, package=u'monolithe.generators.vspk')
+
+        self._vanilla_path = '%s/__base__' % directory
         self._override_path = '%s/overrides' % self._vanilla_path
 
         self._template_folder = 'templates'
@@ -194,12 +190,6 @@ class VSDKFileWriter(TemplateFileWriter):
         self._fetcher_init_template = '__fetcher_init__.py.tpl'
         self._override_init_template = '__override_init__.py.tpl'
 
-    def copy_default_files(self):
-        """ Copy default sources to the output directory
-
-        """
-        shutil.copytree('%s/base' % self._vanilla_path, self.directory)
-
     def write_setup_file(self, version, revision):
         """ Write setup.py file
 
@@ -213,7 +203,7 @@ class VSDKFileWriter(TemplateFileWriter):
                 setup.py with version 3.0-1
 
         """
-        destination = '%s/../' % self.directory
+        destination = '%s/../' % self._final_path
         filename = 'setup.py'
 
         self.write(destination=destination, filename=filename, template_name=self._setup_template,  apiversion=version, revisionnumber=revision)
@@ -225,7 +215,7 @@ class VSDKFileWriter(TemplateFileWriter):
                 constants (dict): dict of constants
 
         """
-        destination = self.directory
+        destination = self._final_path
         filename = 'constants.py'
 
         self.write(destination=destination, filename=filename, template_name=self._constants_template, constants=constants)
@@ -237,7 +227,7 @@ class VSDKFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self.directory, self._autogenerate_path)
+        destination = '%s%s' % (self._final_path, self._autogenerate_path)
         filename = '__init__.py'
 
         self.write(destination=destination, filename=filename, template_name=self._autogenerate_init_template, filenames=filenames)
@@ -249,7 +239,7 @@ class VSDKFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self.directory, self._fetchers_path)
+        destination = '%s%s' % (self._final_path, self._fetchers_path)
         filename = '__init__.py'
 
         self.write(destination=destination, filename=filename, template_name=self._fetcher_init_template, filenames=filenames)
@@ -261,7 +251,7 @@ class VSDKFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = self.directory
+        destination = self._final_path
         filename = '__init__.py'
 
         self.write(destination=destination, filename=filename, template_name=self._override_init_template, filenames=filenames)
@@ -273,7 +263,7 @@ class VSDKFileWriter(TemplateFileWriter):
                 version (str): the version of the vsd
 
         """
-        destination = self.directory
+        destination = self._final_path
         filename = 'nuvsdsession.py'
 
         self.write(destination=destination, filename=filename, template_name=self._vsdsession_template, version=version)
@@ -282,7 +272,7 @@ class VSDKFileWriter(TemplateFileWriter):
         """ Write autogenerate model file
 
         """
-        destination = '%s%s' % (self.directory, self._autogenerate_path)
+        destination = '%s%s' % (self._final_path, self._autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
         self.write(destination=destination, filename=filename, template_name=self._model_template, model=model, version=version)
@@ -293,7 +283,7 @@ class VSDKFileWriter(TemplateFileWriter):
         """ Write autogenerate rest user model file
 
         """
-        destination = '%s%s' % (self.directory, self._autogenerate_path)
+        destination = '%s%s' % (self._final_path, self._autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
         self.write(destination=destination, filename=filename, template_name=self._restuser_template, model=model, version=version)
@@ -304,7 +294,7 @@ class VSDKFileWriter(TemplateFileWriter):
         """ Write model override
 
         """
-        destination = self.directory
+        destination = self._final_path
         filename = 'nu%s.py' % model.name.lower()
 
         # Read override from file
@@ -320,7 +310,7 @@ class VSDKFileWriter(TemplateFileWriter):
         """ Write fetcher
 
         """
-        destination = '%s%s' % (self.directory, self._fetchers_path)
+        destination = '%s%s' % (self._final_path, self._fetchers_path)
         filename = 'nu%s_fetcher.py' % model.plural_name.lower()
 
         self.write(destination=destination, filename=filename, template_name=self._fetcher_template, model=model, version=version)
@@ -346,7 +336,7 @@ class VSDKFileWriter(TemplateFileWriter):
                 except_files: dictionary of filenames to avoid removing
 
         """
-        path = self.directory + folder
+        path = self._final_path + folder
 
         for file in os.listdir(path):
             file_path = os.path.join(path, file)
