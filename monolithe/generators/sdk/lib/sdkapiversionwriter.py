@@ -25,7 +25,7 @@ class SDKAPIVersionWriter(object):
         self.writer_directory = directory
         self.apiversion = apiversion
 
-        shutil.copytree("%s/__sdk_api_version__" % directory, "%s/%s" % (directory, SDKUtils.get_string_version(self.apiversion)))
+        shutil.copytree("%s/__sdkapiversion" % directory, "%s/%s" % (directory, SDKUtils.get_string_version(self.apiversion)))
 
     def get_writer(self):
         """ Get a writer to write content
@@ -159,8 +159,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         super(_SDKAPIVersionFileWriter, self).__init__(directory=self._final_path, package=u'monolithe.generators.sdk')
 
-        self._vanilla_path = '%s/__sdk_api_version__' % directory
-        self._override_path = '%s/___overrides__' % directory
+        self._vanilla_path = '%s/__sdkapiversion' % directory
+        self._override_path = '%s/__overrides' % directory
 
         self._autogenerate_path = '/autogenerates/'
         self._fetchers_path = '/fetchers/'
