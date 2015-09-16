@@ -74,7 +74,7 @@ class SDKAPIVersionWriter(object):
                 Writes models and fetchers files
 
         """
-        shutil.copytree("%s/__sdkapiversion" % self.writer_directory, "%s/%s" % (self.writer_directory, SDKUtils.get_string_version(self.apiversion)))
+        os.makedirs("%s/%s" % (self.writer_directory, SDKUtils.get_string_version(self.apiversion)))
 
         autogenerate_filenames = dict()
         fetcher_filenames = dict()

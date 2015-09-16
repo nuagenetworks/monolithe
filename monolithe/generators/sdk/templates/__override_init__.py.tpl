@@ -27,10 +27,9 @@
 {% set classnames = [] %}
 {% for filename, classname in filenames.iteritems() %}
 {% do classnames.append('"NU' + classname + '"') %}from .{{filename[:-3]}} import NU{{classname}}{% endfor %}
-from .utils import set_log_level
 from .nuvsdsession import NUVSDSession
 
-__all__ = [{{ ', '.join(classnames)}}, 'set_log_level', 'NUVSDSession']
+__all__ = [{{ ', '.join(classnames)}}, 'NUVSDSession']
 
 import pkg_resources
 from bambou import BambouConfig, NURESTModelController

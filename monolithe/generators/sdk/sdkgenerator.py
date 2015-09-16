@@ -29,8 +29,8 @@ class SDKGenerator(object):
         if os.path.exists(self.sdk_output):
             shutil.rmtree(self.sdk_output)
 
-        static_sdk_path = os.path.join(os.path.dirname(__file__), 'static');
-        shutil.copytree(static_sdk_path, self.sdk_output)
+        system_vanilla_path = os.path.join(os.path.dirname(__file__), "vanilla");
+        shutil.copytree(system_vanilla_path, self.sdk_output)
 
     def _install_user_vanilla(self):
         """
@@ -49,11 +49,9 @@ class SDKGenerator(object):
     def _cleanup(self):
         """
         """
-        sdkapiversion_path = "%s/%s/__sdkapiversion" % (self.sdk_output, self.sdk_name)
         overrides_path = "%s/__overrides" % self.sdk_output
         attrs_defaults_path = "%s/__attributes_defaults" % self.sdk_output
 
-        if os.path.exists(sdkapiversion_path): shutil.rmtree(sdkapiversion_path)
         if os.path.exists(overrides_path): shutil.rmtree(overrides_path)
         if os.path.exists(attrs_defaults_path): shutil.rmtree(attrs_defaults_path)
 
