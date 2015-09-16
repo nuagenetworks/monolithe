@@ -18,32 +18,32 @@ class SDKGenerator(object):
     def __init__(self, apiversions):
         """
         """
-        self.sdk_name = MonolitheConfig.get_option("sdk_name")
-        self.codegen_directory = MonolitheConfig.get_option("codegen_directory")
-        self.sdk_vanilla_path = MonolitheConfig.get_option("sdk_vanilla_path")
+        self.sdk_name = MonolitheConfig.get_option("sdk_name", "sdk")
+        self.sdk_output = MonolitheConfig.get_option("sdk_output", "sdk")
+        self.sdk_user_vanilla = MonolitheConfig.get_option("sdk_user_vanilla", "sdk")
         self.apiversions = apiversions
 
     def _install_static(self):
         """
         """
-        if os.path.exists(self.codegen_directory):
-            shutil.rmtree(self.codegen_directory)
+        if os.path.exists(self.sdk_output):
+            shutil.rmtree(self.sdk_output)
 
         static_sdk_path = os.path.join(os.path.dirname(__file__), 'static');
-        shutil.copytree(static_sdk_path, self.codegen_directory)
+        shutil.copytree(static_sdk_path, self.sdk_output)
 
     def _install_vanilla(self):
         """
         """
-        for item in os.listdir(self.sdk_vanilla_path):
-            s = os.path.join(self.sdk_vanilla_path, item)
-            d = os.path.join(self.codegen_directory, item)
+        for item in os.listdir(self.sdk_user_vanilla):
+            s = os.path.join(self.sdk_user_vanilla, item)
+            d = os.path.join(self.sdk_output, item)
             if os.path.isdir(s):
                 shutil.copytree(s, d, False, None)
             else:
                 shutil.copy2(s, d)
 
-        shutil.move('%s/%s' % (self.codegen_directory, '__sdk'), '%s/%s' % (self.codegen_directory, self.sdk_name))
+        shutil.move('%s/%s' % (self.sdk_output, '__sdk'), '%s/%s' % (self.sdk_output, self.sdk_name))
 
     def run(self, api_url, login_or_token, password, organization, repository):
         """
@@ -66,8 +66,8 @@ class SDKGenerator(object):
 
             generator.run(api_url, login_or_token, password, organization, repository)
 
-        sdk_writer = SDKWriter(self.codegen_directory, self.apiversions)
+        sdk_writer = SDKWriter(self.sdk_output, self.apiversions)
         sdk_writer.write()
 
-        shutil.rmtree("%s/%s/__sdkapiversion" % (self.codegen_directory, self.sdk_name))
-        shutil.rmtree("%s/__overrides" % self.codegen_directory)
+        shutil.rmtree("%s/%s/__sdkapiversion" % (self.sdk_output, self.sdk_name))
+        shutil.rmtree("%s/__overrides" % self.sdk_output)

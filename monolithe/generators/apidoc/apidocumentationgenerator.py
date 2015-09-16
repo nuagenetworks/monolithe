@@ -35,7 +35,7 @@ class APIDocumentationGenerator(object):
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)
         else:
-            directory = '%s/%s' % (MonolitheConfig.get_option('docs_directory'), self.version)
+            directory = '%s/%s' % (MonolitheConfig.get_option('apidoc_output', 'apidoc'), self.version)
 
         if self.force_removal and os.path.exists(directory):
             shutil.rmtree(directory)

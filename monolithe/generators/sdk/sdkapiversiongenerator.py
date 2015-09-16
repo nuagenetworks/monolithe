@@ -19,9 +19,9 @@ class SDKAPIVersionGenerator(object):
     def __init__(self, apiversion=u'master'):
         """
         """
-        self.sdk_name = MonolitheConfig.get_option("sdk_name")
-        self.codegen_directory = MonolitheConfig.get_option("codegen_directory")
-        self.sdk_vanilla_path = MonolitheConfig.get_option("sdk_vanilla_path")
+        self.sdk_name = MonolitheConfig.get_option("sdk_name", "sdk")
+        self.sdk_output = MonolitheConfig.get_option("sdk_output", "sdk")
+        self.sdk_user_vanilla = MonolitheConfig.get_option("sdk_user_vanilla", "sdk")
         self.apiversion = apiversion
         self.repository_manager = None
 
@@ -44,7 +44,7 @@ class SDKAPIVersionGenerator(object):
         """
         """
         Printer.log("Starting %s generation for %s files" % (self.sdk_name, len(specifications)))
-        writer = SDKAPIVersionWriter(directory="%s/%s" % (self.codegen_directory, self.sdk_name), apiversion=self.apiversion)
+        writer = SDKAPIVersionWriter(directory="%s/%s" % (self.sdk_output, self.sdk_name), apiversion=self.apiversion)
         writer.write(resources=specifications, apiversion=self.apiversion, revision=1)
         Printer.success("Generated %s with %s objects for API version %s" % (self.sdk_name, len(specifications), self.apiversion))
 

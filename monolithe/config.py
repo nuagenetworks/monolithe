@@ -7,9 +7,9 @@ class MonolitheConfig(object):
 
     config = None
     mapping = None
-    sdk_vanilla_path = None
-    apidoc_vanilla_path = None
-    sdkdoc_vanilla_path = None
+    sdk_user_vanilla = None
+    apidoc_user_vanilla = None
+    sdkdoc_user_vanilla = None
 
 
     @classmethod
@@ -35,9 +35,9 @@ class MonolitheConfig(object):
         cls.mapping.read(mapping_path)
 
         # vanilla
-        cls.sdk_vanilla_path = cls.get_option("sdk_vanilla_path")
-        cls.apidoc_vanilla_path = cls.get_option("apidoc_vanilla_path")
-        cls.sdkdoc_vanilla_path = cls.get_option("sdkdoc_vanilla_path")
+        cls.sdk_user_vanilla = cls.get_option("sdk_user_vanilla", "sdk")
+        cls.apidoc_user_vanilla = cls.get_option("apidoc_user_vanilla", "apidoc")
+        cls.sdkdoc_user_vanilla = cls.get_option("sdkdoc_user_vanilla", "sdkdoc")
 
 
     @classmethod
