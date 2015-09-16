@@ -57,20 +57,7 @@ def main(argv=sys.argv):
     parser.add_argument("--config",
                         dest="config_path",
                         help="Path the monolithe configuration file",
-                        type=str,
-                        required=True)
-
-    parser.add_argument("--mapping",
-                        dest="mapping_path",
-                        help="Path the monolithe mapping file",
-                        type=str,
-                        required=True)
-
-    parser.add_argument("--vanilla",
-                        dest="vanilla_path",
-                        help="Path the monolithe vanilla folders",
-                        type=str,
-                        required=True)
+                        type=str)
 
     args = parser.parse_args()
 
@@ -92,6 +79,9 @@ def main(argv=sys.argv):
     if not args.repository and "MONOLITHE_GITHUB_REPOSITORY" in os.environ:
         args.repository = os.environ["MONOLITHE_GITHUB_REPOSITORY"]
 
+    if not args.config_path and "MONOLITHE_CONFIG_PATH" in os.environ:
+        args.config_path = os.environ["MONOLITHE_CONFIG_PATH"]
+
     # Additional validation
     if not args.api_url:
         args.api_url = raw_input('Enter your Github API URL: ')
@@ -105,6 +95,9 @@ def main(argv=sys.argv):
     if not args.repository:
         args.repository = raw_input('Enter your Github repository: ')
 
+    if not args.config_path:
+        args.config_path = raw_input('Enter the path of the monolithe config file: ')
+
     # Ask for password
     if args.login:
         password = getpass.getpass(prompt='Enter your Github password for %s: ' % args.login)
@@ -117,8 +110,6 @@ def main(argv=sys.argv):
     from monolithe.generators import APIDocumentationGenerator
 
     MonolitheConfig.set_config_path(args.config_path)
-    MonolitheConfig.set_mapping_path(args.mapping_path)
-    MonolitheConfig.set_vanilla_path(args.vanilla_path)
 
     for version in args.versions:
         generator = APIDocumentationGenerator(api_url=args.api_url, \

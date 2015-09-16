@@ -7,7 +7,10 @@ class MonolitheConfig(object):
 
     config = None
     mapping = None
-    vanilla = None
+    sdk_vanilla_path = None
+    apidoc_vanilla_path = None
+    sdkdoc_vanilla_path = None
+
 
     @classmethod
     def _check_path_exists(self, path):
@@ -25,22 +28,16 @@ class MonolitheConfig(object):
         cls.config = ConfigParser()
         cls.config.read(path)
 
-    @classmethod
-    def set_mapping_path(cls, path):
-        """
-
-        """
-        cls._check_path_exists(path)
+        # mapping
+        mapping_path = cls.get_config("mapping_path")
+        cls._check_path_exists(mapping_path)
         cls.mapping = ConfigParser()
-        cls.mapping.read(path)
+        cls.mapping.read(mapping_path)
 
-    @classmethod
-    def set_vanilla_path(cls, path):
-        """
-
-        """
-        cls._check_path_exists(path)
-        cls.vanilla = path
+        # vanilla
+        cls.sdk_vanilla_path = cls.get_config("sdk_vanilla_path")
+        cls.apidoc_vanilla_path = cls.get_config("apidoc_vanilla_path")
+        cls.sdkdoc_vanilla_path = cls.get_config("sdkdoc_vanilla_path")
 
 
     @classmethod
