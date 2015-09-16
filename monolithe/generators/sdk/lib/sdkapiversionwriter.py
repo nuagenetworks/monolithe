@@ -25,8 +25,6 @@ class SDKAPIVersionWriter(object):
         self.writer_directory = directory
         self.apiversion = apiversion
 
-        shutil.copytree("%s/__sdkapiversion" % directory, "%s/%s" % (directory, SDKUtils.get_string_version(self.apiversion)))
-
     def get_writer(self):
         """ Get a writer to write content
 
@@ -76,6 +74,7 @@ class SDKAPIVersionWriter(object):
                 Writes models and fetchers files
 
         """
+        shutil.copytree("%s/__sdkapiversion" % self.writer_directory, "%s/%s" % (self.writer_directory, SDKUtils.get_string_version(self.apiversion)))
 
         autogenerate_filenames = dict()
         fetcher_filenames = dict()
@@ -95,13 +94,11 @@ class SDKAPIVersionWriter(object):
         writer = self.get_writer()
 
         writer.write_constants_file(constants=constants)
-
-        # VSD Session
         writer.write_vsdsession_file(version=apiversion)
-
         writer.write_init_autogenerate_files(filenames=autogenerate_filenames)
         writer.write_init_fetcher_files(filenames=fetcher_filenames)
         writer.write_init_override_files(filenames=override_filenames)
+        writer.copy_attrs_defaults()
 
     def _write_autogenerate_file(self, model, filenames, version):
         """ Write the autogenerate file for the model
@@ -155,12 +152,16 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Initializes a _SDKAPIVersionFileWriter
 
         """
-        self._final_path = '%s/%s' % (directory, SDKUtils.get_string_version(apiversion))
+        self._output_path = directory
+        self._apiversion = apiversion
+        self._string_apiversion = SDKUtils.get_string_version(self._apiversion)
+        self._apiversion_output_path = '%s/%s' % (self._output_path, self._string_apiversion)
 
-        super(_SDKAPIVersionFileWriter, self).__init__(directory=self._final_path, package=u'monolithe.generators.sdk')
+        super(_SDKAPIVersionFileWriter, self).__init__(directory=self._apiversion_output_path, package=u'monolithe.generators.sdk')
 
-        self._vanilla_path = '%s/__sdkapiversion' % directory
-        self._override_path = '%s/__overrides' % directory
+        self._vanilla_path = '%s/__sdkapiversion' % self._output_path
+        self._override_folder = '%s/../__overrides' % self._output_path
+        self._attrs_defaults_path = '%s/../__attributes_defaults' % self._output_path
 
         self._autogenerate_path = '/autogenerates/'
         self._fetchers_path = '/fetchers/'
@@ -175,6 +176,25 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self._fetcher_init_template = '__fetcher_init__.py.tpl'
         self._override_init_template = '__override_init__.py.tpl'
 
+
+    def _attr_defaults_file(self):
+        """
+        """
+        if not os.path.exists(self._attrs_defaults_path):
+            return None
+
+        defaults_name           = "attrs_defaults.ini"
+        specific_defaults_name  = "%s_attrs_defaults.ini" % self._apiversion
+        target_folder           = "%s/resources" % self._apiversion_output_path
+
+        specific_defaults_path = "%s/%s" % (self._attrs_defaults_path, specific_defaults_name)
+        if os.path.exists(specific_defaults_path):
+            return (specific_defaults_path, "%s/%s" % (target_folder, defaults_name), target_folder)
+
+        general_defaults_path  = "%s/%s" % (self._attrs_defaults_path, defaults_name)
+        if os.path.exists(general_defaults_path):
+            return (general_defaults_path, "%s/%s" % (target_folder, defaults_name), target_folder)
+
     def write_constants_file(self, constants):
         """ Write constants file
 
@@ -182,7 +202,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 constants (dict): dict of constants
 
         """
-        destination = self._final_path
+        destination = self._apiversion_output_path
         filename = 'constants.py'
 
         self.write(destination=destination, filename=filename, template_name=self._constants_template, constants=constants)
@@ -194,7 +214,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self._final_path, self._autogenerate_path)
+        destination = '%s%s' % (self._apiversion_output_path, self._autogenerate_path)
         filename = '__init__.py'
 
         self.write(destination=destination, filename=filename, template_name=self._autogenerate_init_template, filenames=filenames)
@@ -206,7 +226,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self._final_path, self._fetchers_path)
+        destination = '%s%s' % (self._apiversion_output_path, self._fetchers_path)
         filename = '__init__.py'
 
         self.write(destination=destination, filename=filename, template_name=self._fetcher_init_template, filenames=filenames)
@@ -218,7 +238,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = self._final_path
+        destination = self._apiversion_output_path
         filename = '__init__.py'
 
         self.write(destination=destination, filename=filename, template_name=self._override_init_template, filenames=filenames)
@@ -230,7 +250,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 version (str): the version of the vsd
 
         """
-        destination = self._final_path
+        destination = self._apiversion_output_path
         filename = 'nuvsdsession.py'
 
         self.write(destination=destination, filename=filename, template_name=self._vsdsession_template, version=version)
@@ -239,7 +259,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write autogenerate model file
 
         """
-        destination = '%s%s' % (self._final_path, self._autogenerate_path)
+        destination = '%s%s' % (self._apiversion_output_path, self._autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
         self.write(destination=destination, filename=filename, template_name=self._model_template, model=model, version=version)
@@ -250,7 +270,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write autogenerate rest user model file
 
         """
-        destination = '%s%s' % (self._final_path, self._autogenerate_path)
+        destination = '%s%s' % (self._apiversion_output_path, self._autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
         self.write(destination=destination, filename=filename, template_name=self._restuser_template, model=model, version=version)
@@ -261,14 +281,18 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write model override
 
         """
-        destination = self._final_path
+        destination = self._apiversion_output_path
         filename = 'nu%s.py' % model.name.lower()
 
+        # find override file
+        specific_override_path = "%s/%s_nu%s.override.py" % (self._override_folder, self._apiversion, model.name.lower())
+        generic_override_path = "%s/nu%s.override.py" % (self._override_folder, model.name.lower())
+        final_path = specific_override_path if os.path.exists(specific_override_path) else generic_override_path
+
         # Read override from file
-        override_path = '%s/%s' % (self._override_path, 'nu%s.override.py' % model.name.lower())
         override_content = None
-        if os.path.isfile(override_path):
-            override_content = open(override_path).read()
+        if os.path.isfile(final_path):
+            override_content = open(final_path).read()
 
         self.write(destination=destination, filename=filename, template_name=self._model_override_template, model=model, override_content=override_content)
         return (filename, model.name)
@@ -277,10 +301,24 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write fetcher
 
         """
-        destination = '%s%s' % (self._final_path, self._fetchers_path)
+        destination = '%s%s' % (self._apiversion_output_path, self._fetchers_path)
         filename = 'nu%s_fetcher.py' % model.plural_name.lower()
 
         self.write(destination=destination, filename=filename, template_name=self._fetcher_template, model=model, version=version)
 
         return (filename, model.plural_name)
 
+    def copy_attrs_defaults(self):
+        """
+        """
+        attributes_file = self._attr_defaults_file()
+
+        if not attributes_file:
+            return
+
+        src, dst, target = attributes_file
+
+        if not os.path.exists(target):
+            os.makedirs(target)
+
+        shutil.copyfile(src, dst)

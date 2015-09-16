@@ -59,7 +59,7 @@ class _SDKFileWriter(TemplateFileWriter):
         """
         """
         self.write( destination=self.directory, filename='MANIFEST.in', template_name='MANIFEST.in.tpl',
-                    sdk_name=MonolitheConfig.get_option("sdk_name"),
+                    sdk_name=MonolitheConfig.get_option("sdk_name", "sdk"),
                     apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
 
     def write_requirements_file(self):

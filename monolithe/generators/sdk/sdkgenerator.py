@@ -45,6 +45,18 @@ class SDKGenerator(object):
 
         shutil.move('%s/%s' % (self.sdk_output, '__sdk'), '%s/%s' % (self.sdk_output, self.sdk_name))
 
+    def _cleanup(self):
+        """
+        """
+        sdkapiversion_path = "%s/%s/__sdkapiversion" % (self.sdk_output, self.sdk_name)
+        overrides_path = "%s/__overrides" % self.sdk_output
+        attrs_defaults_path = "%s/__attributes_defaults" % self.sdk_output
+
+        shutil.rmtree(sdkapiversion_path)
+        shutil.rmtree(overrides_path)
+        shutil.rmtree(attrs_defaults_path)
+
+
     def run(self, api_url, login_or_token, password, organization, repository):
         """
         """
@@ -58,16 +70,9 @@ class SDKGenerator(object):
         self._install_vanilla()
 
         for apiversion in self.apiversions:
-
-            if apiversion == 'master':
-                Printer.warn('master branch should be used for development purpose only.')
-
-            generator = SDKAPIVersionGenerator(apiversion=apiversion)
-
-            generator.run(api_url, login_or_token, password, organization, repository)
+            SDKAPIVersionGenerator(apiversion=apiversion).run(api_url, login_or_token, password, organization, repository)
 
         sdk_writer = SDKWriter(self.sdk_output, self.apiversions)
         sdk_writer.write()
 
-        shutil.rmtree("%s/%s/__sdkapiversion" % (self.sdk_output, self.sdk_name))
-        shutil.rmtree("%s/__overrides" % self.sdk_output)
+        self._cleanup()
