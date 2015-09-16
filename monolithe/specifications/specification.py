@@ -115,11 +115,9 @@ class Specification(object):
         for path, data in apis[api_name].iteritems():
 
             api = SpecificationAPI()
-
-            if api_name != 'children' or 'entityName' in data:
-                data['path'] = path
-                api.from_dict(data)
-                result_apis.append(api)
+            data['path'] = path
+            api.from_dict(data)
+            result_apis.append(api)
 
         return result_apis
 
