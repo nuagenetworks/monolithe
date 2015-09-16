@@ -37,9 +37,6 @@ class SDKGenerator(object):
         shutil.copytree(self.sdk_vanilla_path, self.codegen_directory)
         shutil.move('%s/%s' % (self.codegen_directory, '__sdk_name__'), '%s/%s' % (self.codegen_directory, self.sdk_name))
 
-        sdk_writer = SDKWriter(self.codegen_directory)
-        sdk_writer.write()
-
         for apiversion in self.apiversions:
 
             if apiversion == 'master':
@@ -49,6 +46,8 @@ class SDKGenerator(object):
 
             generator.run(api_url, login_or_token, password, organization, repository)
 
+        sdk_writer = SDKWriter(self.codegen_directory, self.apiversions)
+        sdk_writer.write()
 
         shutil.rmtree("%s/%s/__sdk_api_version__" % (self.codegen_directory, self.sdk_name))
         shutil.rmtree("%s/%s/__overrides__" % (self.codegen_directory, self.sdk_name))

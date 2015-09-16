@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from monolithe import MonolitheConfig
+from monolithe.lib import SDKUtils
 from monolithe.generators.lib.writers import TemplateFileWriter
 
 
@@ -8,10 +9,11 @@ class SDKWriter(object):
     """
     """
 
-    def __init__(self, directory):
+    def __init__(self, directory, apiversions):
         """
         """
         self.writer_directory = directory
+        self.apiversions = apiversions
 
 
     def get_writer(self):
@@ -25,6 +27,7 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
         writer.write_setup_file()
+        writer.write_manifest_file(self.apiversions)
 
 
 
@@ -50,3 +53,10 @@ class _SDKFileWriter(TemplateFileWriter):
                     sdk_email=MonolitheConfig.get_option("sdk_email"),
                     sdk_description=MonolitheConfig.get_option("sdk_description"),
                     sdk_license_name=MonolitheConfig.get_option("sdk_license_name"))
+
+    def write_manifest_file(self, apiversions):
+        """
+        """
+        self.write( destination=self.directory, filename='MANIFEST.in', template_name='MANIFEST.in.tpl',
+                    sdk_name=MonolitheConfig.get_option("sdk_name"),
+                    apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
