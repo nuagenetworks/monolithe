@@ -28,6 +28,7 @@ class SDKWriter(object):
         writer = self.get_writer()
         writer.write_setup_file()
         writer.write_manifest_file(self.apiversions)
+        writer.write_requirements_file()
 
 
 
@@ -60,3 +61,8 @@ class _SDKFileWriter(TemplateFileWriter):
         self.write( destination=self.directory, filename='MANIFEST.in', template_name='MANIFEST.in.tpl',
                     sdk_name=MonolitheConfig.get_option("sdk_name"),
                     apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
+
+    def write_requirements_file(self):
+        """
+        """
+        self.write( destination=self.directory, filename='requirements.txt', template_name='requirements.txt.tpl')

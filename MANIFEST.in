@@ -2,4 +2,5 @@ include README.md
 include requirements.txt
 recursive-include monolithe/generators/apidoc/templates *
 recursive-include monolithe/generators/sdk/templates *
+recursive-include monolithe/generators/sdk/static *
 recursive-include monolithe/lib/models/data *
