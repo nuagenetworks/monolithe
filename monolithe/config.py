@@ -29,19 +29,19 @@ class MonolitheConfig(object):
         cls.config.read(path)
 
         # mapping
-        mapping_path = cls.get_config("mapping_path")
+        mapping_path = cls.get_option("mapping_path")
         cls._check_path_exists(mapping_path)
         cls.mapping = ConfigParser()
         cls.mapping.read(mapping_path)
 
         # vanilla
-        cls.sdk_vanilla_path = cls.get_config("sdk_vanilla_path")
-        cls.apidoc_vanilla_path = cls.get_config("apidoc_vanilla_path")
-        cls.sdkdoc_vanilla_path = cls.get_config("sdkdoc_vanilla_path")
+        cls.sdk_vanilla_path = cls.get_option("sdk_vanilla_path")
+        cls.apidoc_vanilla_path = cls.get_option("apidoc_vanilla_path")
+        cls.sdkdoc_vanilla_path = cls.get_option("sdkdoc_vanilla_path")
 
 
     @classmethod
-    def get_config(cls, option, section="monolithe"):
+    def get_option(cls, option, section="monolithe"):
         """
         """
 

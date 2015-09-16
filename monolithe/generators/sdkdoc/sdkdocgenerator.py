@@ -11,9 +11,8 @@ import subprocess
 from monolithe.lib import Printer
 
 
-class VSPKDocumentationGenerator(object):
-    """ Create a VSPK Documentation
-
+class SDKDocGenerator(object):
+    """
     """
     def __init__(self):
         """ Initialize a SDKGenerator
@@ -25,10 +24,9 @@ class VSPKDocumentationGenerator(object):
         self.export_doc_path = "docgen/sdkdoc"
 
     def run(self):
-        """ Create the VSPK package
-
         """
-        Printer.log("Starting VSPK documentation generation")
+        """
+        Printer.log("Starting SDK documentation generation")
 
         origin_path = os.getcwd()
 
@@ -52,12 +50,12 @@ class VSPKDocumentationGenerator(object):
         bambou_module = importlib.import_module("bambou")
         self._generate_classes_doc(bambou_doc_path, self._parse_module(bambou_module), "bambou", "bambou")
 
-        ## VSPK
-        vspk_doc_path = "%s/vspk" % self.temp_doc_path
-        vsdks_path = "%s/vsdk" % self.sdk_path
+        ## SDK
+        spk_doc_path = "%s/%s" % (self.temp_doc_path, self.sdk_name)
+        sdks_path = "%s/%s" % (self.sdk_path, self.sdk_name)
 
-        for item in os.listdir(vsdks_path):
-            if os.path.isfile("%s/%s" % (vsdks_path, item)):
+        for item in os.listdir(sdks_path):
+            if os.path.isfile("%s/%s" % (sdks_path, item)):
                 continue
 
             version = item.replace("v", "").replace("_", ".")
@@ -67,13 +65,13 @@ class VSPKDocumentationGenerator(object):
                 shutil.rmtree(version_doc_path)
             os.makedirs(version_doc_path)
 
-            self._write_vsdk_reference(self.temp_doc_path, version)
+            self._write_sdk_reference(self.temp_doc_path, version)
 
-            vsdk_model_module = importlib.import_module("vspk.vsdk.%s" % item)
-            self._generate_classes_doc(version_doc_path, self._parse_module(vsdk_model_module), "vspk.vsdk.%s" % item, "models")
+            sdk_model_module = importlib.import_module("%s.%s" % (self.sdk_name, item))
+            self._generate_classes_doc(version_doc_path, self._parse_module(sdk_model_module), "%s.%s" % (self.sdk_name, item), "models")
 
-            vsdk_fetchers_module = importlib.import_module("vspk.vsdk.%s.fetchers" % item)
-            self._generate_classes_doc(version_doc_path, self._parse_module(vsdk_fetchers_module), "vspk.vsdk.%s.fetchers" % item, "fetchers")
+            sdk_fetchers_module = importlib.import_module("%s.%s.fetchers" % (self.sdk_name, item))
+            self._generate_classes_doc(version_doc_path, self._parse_module(sdk_fetchers_module), "%s.%s.fetchers" % (self.sdk_name, item), "fetchers")
 
         ## Sphinx postproccess
         os.system("rm -rf %s/vspk.*.rst" % self.temp_doc_path)
@@ -92,7 +90,7 @@ class VSPKDocumentationGenerator(object):
 
         os.system("rm -rf '%s'" % self.temp_doc_path)
 
-        Printer.success("Generated VSPK documentation")
+        Printer.success("Generated SDK documentation")
 
     def _parse_module(self, module):
 
@@ -188,17 +186,17 @@ class VSPKDocumentationGenerator(object):
         f.write("    bambou/*\n\n")
         f.close()
 
-    def _write_vsdk_reference(self, base_doc_path, version):
-        model_api_file = open("%s/vsdk_%s_reference.rst" % (base_doc_path, version), "w")
-        model_api_file.write("VSDK API %s Reference\n" % version)
+    def _write_sdk_reference(self, base_doc_path, version):
+        model_api_file = open("%s/sdk_%s_reference.rst" % (base_doc_path, version), "w")
+        model_api_file.write("SDK API %s Reference\n" % version)
         model_api_file.write("=======================\n\n")
         model_api_file.write("**Models**\n\n")
         model_api_file.write(".. toctree::\n")
         model_api_file.write("    :maxdepth: 1\n")
         model_api_file.write("    :glob:\n\n")
-        model_api_file.write("    vspk/%s/models.*\n\n\n" % version)
+        model_api_file.write("    sdk/%s/models.*\n\n\n" % version)
         model_api_file.write("**Fetchers**\n\n")
         model_api_file.write(".. toctree::\n")
         model_api_file.write("    :maxdepth: 1\n")
         model_api_file.write("    :glob:\n\n")
-        model_api_file.write("    vspk/%s/fetchers.*\n\n\n" % version)
+        model_api_file.write("    sdk/%s/fetchers.*\n\n\n" % version)

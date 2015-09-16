@@ -7,7 +7,7 @@ from bambou import NURESTFetcher, NURESTObject
 
 
 class SDKLoader(object):
-    """ Deals with VSDK Object models
+    """ Deals with SDK Object models
 
     """
     _resources = dict()
@@ -15,7 +15,7 @@ class SDKLoader(object):
 
     @classmethod
     def init(cls, version):
-        """ Loads all VSDK objects in memory to
+        """ Loads all SDK objects in memory to
             enable retrieve each class according
             to its remote name.
 
@@ -24,27 +24,27 @@ class SDKLoader(object):
 
 
     @classmethod
-    def get_vsdk_package(cls, sdk_identifier):
-        """ Returns vsdk package
+    def get_sdk_package(cls, sdk_identifier):
+        """ Returns sdk package
 
             Args:
                 sdk_identifier: optional identifier to load the sdk
 
                 Example:
-                    sdk_identifier="1234.sdk.vsdk"
+                    sdk_identifier="1234.sdk"
         """
-        vsdk = importlib.import_module('%s.%s' % (sdk_identifier, cls._version))
+        sdk = importlib.import_module('%s.%s' % (sdk_identifier, cls._version))
 
-        classnames = [name for name in dir(vsdk) if name.startswith('NU') and not name.endswith('Fetcher')]
+        classnames = [name for name in dir(sdk) if name.startswith('NU') and not name.endswith('Fetcher')]
 
         for classname in classnames:
-            klass = getattr(vsdk, classname)
+            klass = getattr(sdk, classname)
 
             if issubclass(klass, NURESTObject):
                 resource_name = klass.rest_resource_name
                 cls._resources[resource_name] = klass
 
-        return vsdk
+        return sdk
 
     @classmethod
     def has_resource(cls, name):

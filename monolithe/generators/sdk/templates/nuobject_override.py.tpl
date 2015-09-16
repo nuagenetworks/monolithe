@@ -32,7 +32,7 @@ class NU{{ model.name }}(AutoGenerate):
     """ Represents a NU{{ model.name }} object in the VSD
 
         See:
-            vsdk.autogenerates.NU{{ model.name }}
+            {{sdk_name}}.autogenerates.NU{{ model.name }}
     """
 
     def __init__(self, **kwargs):

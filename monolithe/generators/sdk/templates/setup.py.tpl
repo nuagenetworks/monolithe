@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2015, Alcatel-Lucent Inc
+# {{sdk_copyright}}
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,27 +26,35 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from setuptools import setup
+import os
+
+packages = ['{{sdk_name}}']
+resources = []
+sdk_api_version_path = "./{{sdk_name}}"
+
+for version_folder in os.listdir(sdk_api_version_path):
+    if os.path.isfile("%s/%s" % (sdk_api_version_path, version_folder)):
+        continue
+
+    packages.append("{{sdk_name}}.%s" % version_folder)
+    packages.append("{{sdk_name}}.%s.fetchers" % version_folder)
+    packages.append("{{sdk_name}}.%s.autogenerates" % version_folder)
+
+    resources.append(('{{sdk_name}}/%s/resources' % version_folder, ['{{sdk_name}}/%s/resources/attrs_defaults.ini' % version_folder]))
+
+sdk_name_upper = "{{sdk_name}}_VERSION".upper()
 
 setup(
-    name='vsdk',
-    version='{{apiversion}}-{{revisionnumber}}',
-    url='http://www.nuagenetworks.net/',
-    author='NuageNetworks',
-    author_email='christophe.serafin@nuagenetworks.net',
-    packages=['vsdk', 'vsdk.autogenerates', 'vsdk.fetchers'],
-    description='VSD Python SDK for API',
+    name='{{sdk_name}}',
+    version=os.environ[sdk_name_upper] if sdk_name_upper in os.environ else {{sdk_version}},
+    url='{{sdk_url}}',
+    author='{{sdk_author}}',
+    author_email='{{sdk_email}}',
+    packages=packages,
+    description='{{sdk_description}}',
     long_description=open('README.md').read(),
     install_requires=[line for line in open('requirements.txt')],
-    license='BSD-3',
+    license='{{sdk_license_name}}',
     include_package_data=True,
-    data_files=[
-        ('vsdk/resources', ['vsdk/resources/attrs_defaults.ini'])
-    ],
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Topic :: Utilities",
-        "License :: OSI Approved :: BSD License",
-        "Environment :: Console",
-        "Intended Audience :: Developers"
-    ]
+    data_files=resources
 )

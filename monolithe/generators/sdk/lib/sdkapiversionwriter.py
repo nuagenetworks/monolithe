@@ -8,7 +8,7 @@ from monolithe.lib import Printer, SDKUtils, TaskManager
 from monolithe.generators.lib.writers import TemplateFileWriter
 
 
-class SDKWriter(object):
+class SDKAPIVersionWriter(object):
     """ Writer of the Python VSD SDK
 
     """
@@ -25,11 +25,13 @@ class SDKWriter(object):
         self.writer_directory = directory
         self.apiversion = apiversion
 
+        shutil.copytree("%s/__sdk_api_version__" % directory, "%s/%s" % (directory, SDKUtils.get_string_version(self.apiversion)))
+
     def get_writer(self):
         """ Get a writer to write content
 
         """
-        return _VSDKFileWriter(directory=self.writer_directory, apiversion=self.apiversion)
+        return _SDKAPIVersionFileWriter(directory=self.writer_directory, apiversion=self.apiversion)
 
     def _prepare_attributes(self, model, constants):
         """ Removes attributes and computes constants
@@ -42,7 +44,7 @@ class SDKWriter(object):
 
             if attribute.allowed_choices and len(attribute.allowed_choices) > 0:
 
-                if attribute.remote_name.lower() not in SDKWriter.COMMON_ATTRIBUTES:
+                if attribute.remote_name.lower() not in SDKAPIVersionWriter.COMMON_ATTRIBUTES:
                     name = '%s%s%s' % (model.name, attribute.remote_name[0].upper(), attribute.remote_name[1:])
                 else:
                     name = '%s%s' % (attribute.remote_name[0].upper(), attribute.remote_name[1:])
@@ -89,11 +91,8 @@ class SDKWriter(object):
             task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=fetcher_filenames, version=apiversion)
 
         task_manager.wait_until_exit()
-        except_files = autogenerate_filenames.keys() + fetcher_filenames.keys() + override_filenames.keys()
-        self._clean_files(except_files=except_files)
 
         writer = self.get_writer()
-        writer.write_setup_file(version=apiversion, revision=revision)
 
         writer.write_constants_file(constants=constants)
 
@@ -114,7 +113,7 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
 
-        if model.remote_name == MonolitheConfig.get_config('rest_user_api'):
+        if model.remote_name == MonolitheConfig.get_option('rest_user_api'):
             (filename, classname) = writer.write_restuser_model(model=model, version=version)
         else:
             (filename, classname) = writer.write_model(model=model, version=version)
@@ -143,40 +142,26 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
 
-        if model.name != MonolitheConfig.get_config('rest_user_api'):
+        if model.name != MonolitheConfig.get_option('rest_user_api'):
             (filename, classname) = writer.write_fetcher(model=model, version=version)
             filenames[filename] = classname
 
-    def _clean_files(self, except_files):
-        """ Removes not generated files
 
-            Args:
-                except_files: dictionary of filenames to avoid removing
-
-        """
-
-        except_files = list(set(except_files + SDKWriter.IGNORED_FILES))
-
-        writer = self.get_writer()
-        writer.clean(except_files=except_files)
-
-
-class _VSDKFileWriter(TemplateFileWriter):
+class _SDKAPIVersionFileWriter(TemplateFileWriter):
     """ Provide usefull method to write Python files.
 
     """
     def __init__(self, directory, apiversion):
-        """ Initializes a _VSDKFileWriter
+        """ Initializes a _SDKAPIVersionFileWriter
 
         """
         self._final_path = '%s/%s' % (directory, SDKUtils.get_string_version(apiversion))
 
-        super(_VSDKFileWriter, self).__init__(directory=self._final_path, package=u'monolithe.generators.sdk')
+        super(_SDKAPIVersionFileWriter, self).__init__(directory=self._final_path, package=u'monolithe.generators.sdk')
 
-        self._vanilla_path = '%s/__base__' % directory
-        self._override_path = '%s/overrides' % self._vanilla_path
+        self._vanilla_path = '%s/__sdk_api_version__' % directory
+        self._override_path = '%s/___overrides__' % directory
 
-        self._template_folder = 'templates'
         self._autogenerate_path = '/autogenerates/'
         self._fetchers_path = '/fetchers/'
         self._setup_template = 'setup.py.tpl'
@@ -189,24 +174,6 @@ class _VSDKFileWriter(TemplateFileWriter):
         self._autogenerate_init_template = '__autogenerate_init__.py.tpl'
         self._fetcher_init_template = '__fetcher_init__.py.tpl'
         self._override_init_template = '__override_init__.py.tpl'
-
-    def write_setup_file(self, version, revision):
-        """ Write setup.py file
-
-            Will generate a setup.py with version set to version-revision
-
-            Args:
-                version: version of the package
-                revision: number of the revision
-
-            Example:
-                setup.py with version 3.0-1
-
-        """
-        destination = '%s/../' % self._final_path
-        filename = 'setup.py'
-
-        self.write(destination=destination, filename=filename, template_name=self._setup_template,  apiversion=version, revisionnumber=revision)
 
     def write_constants_file(self, constants):
         """ Write constants file
@@ -317,33 +284,3 @@ class _VSDKFileWriter(TemplateFileWriter):
 
         return (filename, model.plural_name)
 
-    def clean(self, except_files):
-        """ Clean folder to remove all files except those generated
-
-            Args:
-                except_files: list of generated files to avoid removing
-        """
-        self._clean_folder(folder=self._autogenerate_path, except_files=except_files)
-        self._clean_folder(folder=self._fetchers_path, except_files=except_files)
-        self._clean_folder(folder='', except_files=except_files)
-
-    def _clean_folder(self, folder, except_files):
-        """ Removes all files of directory except when file name
-            is in except dictionary
-
-            Args:
-                folder: the folder
-                except_files: dictionary of filenames to avoid removing
-
-        """
-        path = self._final_path + folder
-
-        for file in os.listdir(path):
-            file_path = os.path.join(path, file)
-
-            try:
-                if os.path.isfile(file_path) and file not in except_files:
-                    Printer.log("Removing file `%s` with path `%s`" % (file, file_path))
-                    os.unlink(file_path)
-            except:
-                Printer.raiseError("An error has been raised on file %s with path %s" % (file, file_path))

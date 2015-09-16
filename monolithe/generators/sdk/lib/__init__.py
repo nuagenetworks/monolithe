@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['SDKWriter']
+__all__ = ['SDKAPIVersionWriter', 'SDKWriter']
 
-from .writers import SDKWriter
+from .sdkapiversionwriter import SDKAPIVersionWriter
+from .sdkwriter import SDKWriter

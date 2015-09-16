@@ -51,7 +51,7 @@ def main(argv=sys.argv):
 
     parser.add_argument("--doc",
                         dest="generate_doc",
-                        help="Flag to generate documentation of the VSPK",
+                        help="generate documentation of the SDK",
                         action="store_true")
 
     parser.add_argument("--config",
@@ -107,16 +107,12 @@ def main(argv=sys.argv):
         login_or_token = args.token
 
     from monolithe import MonolitheConfig
-    from monolithe.generators import SDKGenerator, VSPKDocumentationGenerator
+    from monolithe.generators import SDKGenerator, SDKDocGenerator
 
     MonolitheConfig.set_config_path(args.config_path)
 
-    # Generate VSDK
-    generator = SDKGenerator( sdk_name=MonolitheConfig.get_config("sdk_name"),
-                              codegen_directory=MonolitheConfig.get_config("codegen_directory"),
-                              sdk_vanilla_path=MonolitheConfig.get_config("sdk_vanilla_path"),
-                              sdk_api_output_path=MonolitheConfig.get_config("sdk_api_output_path"),
-                              apiversions=args.apiversions)
+    # Generate SDK
+    generator = SDKGenerator(apiversions=args.apiversions)
 
     generator.run(  api_url=args.api_url,
                     login_or_token=login_or_token,
@@ -124,9 +120,9 @@ def main(argv=sys.argv):
                     organization=args.organization,
                     repository=args.repository)
 
-    # Generate VSPK and VSDK documentation
+    # Generate SDK documentation
     if args.generate_doc:
-        doc_generator = VSPKDocumentationGenerator()
+        doc_generator = SDKDocGenerator()
         doc_generator.run()
 
 

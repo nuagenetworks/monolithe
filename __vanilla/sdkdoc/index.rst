@@ -28,7 +28,7 @@ This section show sample scripts you can reuse for a variety of day to day opera
     sample_code
 
 
-VSDK API Reference
+SDK API Reference
 ------------------
 
 This section describes all models and fetchers from the `vsdk`.

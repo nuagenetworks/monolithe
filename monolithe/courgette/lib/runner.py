@@ -34,10 +34,10 @@ class CourgetteTestsRunner(object):
 
         """
         SDKLoader.init(version)
-        vsdk = SDKLoader.get_vsdk_package(sdk_identifier=sdk_identifier)
-        TestHelper.use_vsdk(vsdk)
+        sdk = SDKLoader.get_sdk_package(sdk_identifier=sdk_identifier)
+        TestHelper.use_sdk(sdk)
 
-        session = vsdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise)
+        session = sdk.NUVSDSession(api_url=vsdurl, username=username, password=password, enterprise=enterprise)
         session.start()
 
         self.user = session.user

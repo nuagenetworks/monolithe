@@ -42,7 +42,7 @@ class NU{{ model.plural_name }}Fetcher(NURESTFetcher):
         """ Return NU{{ model.name }} class that is managed.
 
             Returns:
-                vsdk.NU{{ model.name }}: the managed class
+                {{sdk_name}}.NU{{ model.name }}: the managed class
         """
 
         from .. import NU{{ model.name }}

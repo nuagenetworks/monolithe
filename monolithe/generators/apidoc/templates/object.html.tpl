@@ -173,7 +173,7 @@
                         </div>
                         {% endif %}
 
-                        <p><b>vsdk attribute</b></p>
+                        <p><b>sdk attribute</b></p>
                         <p class="fixed-text">{{attribute.local_name}}</p>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ from monolithe.lib import Printer
 
 
 class SDKUtils(object):
-    """ VSDK Utilities
+    """ SDK Utilities
 
     """
     @classmethod

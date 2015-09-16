@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import logging
-vsdk_logger = logging.getLogger('vsdk')
+sdk_logger = logging.getLogger('sdk')
 
 
 def set_log_level(level, handler=None):
-    """ Set both vsdk and Bambou log level to the given level
+    """ Set both sdk and Bambou log level to the given level
 
         Args:
             level (logging.level): a logging level
@@ -32,5 +32,5 @@ def set_log_level(level, handler=None):
     pushcenter_logger.setLevel(level)
     pushcenter_logger.addHandler(handler)
 
-    vsdk_logger.setLevel(level)
-    vsdk_logger.addHandler(handler)
+    sdk_logger.setLevel(level)
+    sdk_logger.addHandler(handler)

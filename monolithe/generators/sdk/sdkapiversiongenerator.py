@@ -7,7 +7,7 @@ import shutil
 from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from monolithe.specifications import RepositoryManager
-from monolithe.generators.sdk.lib import SDKWriter
+from monolithe.generators.sdk.lib import SDKAPIVersionWriter
 
 RepositoryManager
 
@@ -16,14 +16,13 @@ class SDKAPIVersionGenerator(object):
     """ Generate SDK
 
     """
-    def __init__(self, sdk_name, codegen_directory, sdk_vanilla_path, sdk_api_output_path, apiversion=u'master'):
+    def __init__(self, apiversion=u'master'):
         """
         """
-        self.sdk_name = sdk_name
-        self.codegen_directory = codegen_directory
-        self.sdk_vanilla_path = sdk_vanilla_path
+        self.sdk_name = MonolitheConfig.get_option("sdk_name")
+        self.codegen_directory = MonolitheConfig.get_option("codegen_directory")
+        self.sdk_vanilla_path = MonolitheConfig.get_option("sdk_vanilla_path")
         self.apiversion = apiversion
-        self.sdk_api_output_path = sdk_api_output_path
         self.repository_manager = None
 
     def run(self, api_url, login_or_token, password, organization, repository):
@@ -45,6 +44,7 @@ class SDKAPIVersionGenerator(object):
         """
         """
         Printer.log("Starting %s generation for %s files" % (self.sdk_name, len(specifications)))
-        writer = SDKWriter(directory="%s/%s" % (self.codegen_directory, self.sdk_api_output_path), apiversion=self.apiversion)
+        writer = SDKAPIVersionWriter(directory="%s/%s" % (self.codegen_directory, self.sdk_name), apiversion=self.apiversion)
         writer.write(resources=specifications, apiversion=self.apiversion, revision=1)
         Printer.success("Generated %s with %s objects for API version %s" % (self.sdk_name, len(specifications), self.apiversion))
+

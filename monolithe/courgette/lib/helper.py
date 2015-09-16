@@ -10,7 +10,7 @@ class TestHelper(object):
     """ Helper to make tests easier
 
     """
-    _vsdk = None
+    _sdk = None
     _debug = False
 
     @classmethod
@@ -21,9 +21,9 @@ class TestHelper(object):
         cls._debug = debug
 
         if cls._debug:
-            cls._vsdk.utils.set_log_level(logging.DEBUG)
+            cls._sdk.utils.set_log_level(logging.DEBUG)
         else:
-            cls._vsdk.utils.set_log_level(logging.ERROR)
+            cls._sdk.utils.set_log_level(logging.ERROR)
 
     @classmethod
     def trace(cls, connection):
@@ -48,18 +48,18 @@ class TestHelper(object):
             Printer.json(response.errors)
 
     @classmethod
-    def use_vsdk(cls, vsdk):
-        """ Retain used vsdk
+    def use_sdk(cls, sdk):
+        """ Retain used sdk
 
         """
-        cls._vsdk = vsdk
+        cls._sdk = sdk
 
     @classmethod
     def current_push_center(cls):
         """ Get current push center
 
         """
-        session = cls._vsdk.NUVSDSession.get_current_session()
+        session = cls._sdk.NUVSDSession.get_current_session()
         return session.push_center
 
     @classmethod
@@ -67,7 +67,7 @@ class TestHelper(object):
         """ Change api key
 
         """
-        session = cls._vsdk.NUVSDSession.get_current_session()
+        session = cls._sdk.NUVSDSession.get_current_session()
         session.login_controller.api_key = api_key
 
     @classmethod
@@ -75,7 +75,7 @@ class TestHelper(object):
         """ Get headers
 
         """
-        session = cls._vsdk.NUVSDSession.get_current_session()
+        session = cls._sdk.NUVSDSession.get_current_session()
         controller = session.login_controller
 
         headers = dict()
