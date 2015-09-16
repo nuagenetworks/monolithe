@@ -6,5 +6,5 @@ import sys
 sys.path.append("../monolithe")
 
 if __name__ == '__main__':
-    from monolithe.generators.vspk.cli import main
+    from monolithe.generators.sdkdoc.cli import main
     sys.exit(main(sys.argv))

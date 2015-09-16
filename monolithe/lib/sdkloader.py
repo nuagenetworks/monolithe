@@ -24,26 +24,16 @@ class SDKLoader(object):
 
 
     @classmethod
-    def get_vsdk_package(cls, sdk_identifier=None):
+    def get_vsdk_package(cls, sdk_identifier):
         """ Returns vsdk package
 
             Args:
                 sdk_identifier: optional identifier to load the sdk
-                Example:
-                    sdk_identifier="1234.vspk.vsdk"
-        """
-        vsdk = None
 
-        if sdk_identifier:
-            vsdk = importlib.import_module('%s.%s' % (sdk_identifier, cls._version))
-        else:
-            try:
-                vsdk = importlib.import_module('vspk.vsdk.%s' % cls._version)
-                print vsdk
-            except ImportError:
-                vsdk = importlib.import_module('vsdk')
-            except ImportError as error:
-                raise ImportError('Could not found vspk or vsdk library. Please install requirements using command line `pip install -r requirements.txt`.\n%s' % error)
+                Example:
+                    sdk_identifier="1234.sdk.vsdk"
+        """
+        vsdk = importlib.import_module('%s.%s' % (sdk_identifier, cls._version))
 
         classnames = [name for name in dir(vsdk) if name.startswith('NU') and not name.endswith('Fetcher')]
 

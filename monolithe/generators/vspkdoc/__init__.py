@@ -2,4 +2,4 @@
 
 __all__ = ['VSPKDocumentationGenerator']
 
-from .vspkdocumentationgenerator import VSPKDocumentationGenerator
+from .sdkdocumentationgenerator import VSPKDocumentationGenerator

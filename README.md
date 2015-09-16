@@ -65,9 +65,9 @@ The source code for the generated `vsdp` package will be available in `codegen/v
 
 To generate the `vspk` API Documentation, run the following command (after having generated a `vspk`):
 
-    $ generate-vspkdoc
+    $ generate-sdkdoc
 
-The generated documentation will be available in `docgen/vspkdoc`
+The generated documentation will be available in `docgen/sdkdoc`
 
 
 ### Generate VSD Server ReST API documentation

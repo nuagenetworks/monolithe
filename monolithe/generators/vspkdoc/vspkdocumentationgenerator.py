@@ -20,9 +20,9 @@ class VSPKDocumentationGenerator(object):
 
         """
         self.vanilla_path = "%s/vanilla" % os.path.dirname(os.path.realpath(__file__))
-        self.vspk_path = "codegen/vspk/vspk"
-        self.temp_doc_path = "/tmp/docgen/vspkdoc"
-        self.export_doc_path = "docgen/vspkdoc"
+        self.sdk_path = "codegen/vspk/vspk"
+        self.temp_doc_path = "/tmp/docgen/sdkdoc"
+        self.export_doc_path = "docgen/sdkdoc"
 
     def run(self):
         """ Create the VSPK package
@@ -40,7 +40,7 @@ class VSPKDocumentationGenerator(object):
             shutil.rmtree(self.temp_doc_path)
 
         shutil.copytree(self.vanilla_path, self.temp_doc_path)
-        process = subprocess.Popen(['sphinx-apidoc', '-o', self.temp_doc_path, self.vspk_path], env=subprocess_environ)
+        process = subprocess.Popen(['sphinx-apidoc', '-o', self.temp_doc_path, self.sdk_path], env=subprocess_environ)
         process.communicate()
 
         ## Bambou
@@ -54,7 +54,7 @@ class VSPKDocumentationGenerator(object):
 
         ## VSPK
         vspk_doc_path = "%s/vspk" % self.temp_doc_path
-        vsdks_path = "%s/vsdk" % self.vspk_path
+        vsdks_path = "%s/vsdk" % self.sdk_path
 
         for item in os.listdir(vsdks_path):
             if os.path.isfile("%s/%s" % (vsdks_path, item)):

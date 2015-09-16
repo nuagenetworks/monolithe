@@ -99,7 +99,7 @@ class SDKUtils(object):
 
     @classmethod
     def get_string_version(cls, version):
-        """ Get the vspk version according to the given version
+        """ Get the sdk version according to the given version
 
             Args:
                 version (float): the version

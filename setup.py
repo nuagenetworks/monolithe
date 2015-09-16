@@ -13,8 +13,8 @@ setup(
     install_requires=[line for line in open('requirements.txt')],
     entry_points={
         'console_scripts': [
-            'generate-vspk = monolithe.generators.vspk.cli:main',
+            'generate-sdk = monolithe.generators.sdk.cli:main',
             'generate-apidoc = monolithe.generators.apidoc.cli:main',
-            'generate-vspkdoc = monolithe.generators.vspkdoc.cli:main']
+            'generate-sdkdoc = monolithe.generators.sdkdoc.cli:main']
     }
 )

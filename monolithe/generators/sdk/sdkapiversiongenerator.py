@@ -7,7 +7,7 @@ import shutil
 from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from monolithe.specifications import RepositoryManager
-from monolithe.generators.vspk.lib import SDKWriter
+from monolithe.generators.sdk.lib import SDKWriter
 
 RepositoryManager
 

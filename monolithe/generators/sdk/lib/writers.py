@@ -171,7 +171,7 @@ class _VSDKFileWriter(TemplateFileWriter):
         """
         self._final_path = '%s/%s' % (directory, SDKUtils.get_string_version(apiversion))
 
-        super(_VSDKFileWriter, self).__init__(directory=self._final_path, package=u'monolithe.generators.vspk')
+        super(_VSDKFileWriter, self).__init__(directory=self._final_path, package=u'monolithe.generators.sdk')
 
         self._vanilla_path = '%s/__base__' % directory
         self._override_path = '%s/overrides' % self._vanilla_path
