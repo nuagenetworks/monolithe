@@ -54,6 +54,24 @@ def main(argv=sys.argv):
                         help="Force removal of the existing generated code",
                         action="store_true")
 
+    parser.add_argument("--config",
+                        dest="config_path",
+                        help="Path the monolithe configuration file",
+                        type=str,
+                        required=True)
+
+    parser.add_argument("--mapping",
+                        dest="mapping_path",
+                        help="Path the monolithe mapping file",
+                        type=str,
+                        required=True)
+
+    parser.add_argument("--vanilla",
+                        dest="vanilla_path",
+                        help="Path the monolithe vanilla folders",
+                        type=str,
+                        required=True)
+
     args = parser.parse_args()
 
     # Use environment variable if necessary
@@ -95,7 +113,12 @@ def main(argv=sys.argv):
         password = None
         login_or_token = args.token
 
+    from monolithe import MonolitheConfig
     from monolithe.generators import APIDocumentationGenerator
+
+    MonolitheConfig.set_config_path(args.config_path)
+    MonolitheConfig.set_mapping_path(args.mapping_path)
+    MonolitheConfig.set_vanilla_path(args.vanilla_path)
 
     for version in args.versions:
         generator = APIDocumentationGenerator(api_url=args.api_url, \

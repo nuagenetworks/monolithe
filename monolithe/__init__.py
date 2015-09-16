@@ -5,7 +5,6 @@ import requests.packages.urllib3.exceptions as exceptions
 requests.packages.urllib3.disable_warnings(exceptions.InsecureRequestWarning)
 requests.packages.urllib3.disable_warnings()
 
-
 ## Monkey patch to use PROTOCOL_TLSv1 by default in requests
 from requests.packages.urllib3.poolmanager import PoolManager
 import ssl
@@ -22,12 +21,7 @@ def sslwrap(func):
 PoolManager.__init__ = sslwrap(PoolManager.__init__)
 ## end of monkey patch
 
-from ConfigParser import ConfigParser
-import os
 
-current_directory = os.path.dirname(os.path.realpath(__file__))
-monolithe_config = ConfigParser()
-monolithe_config.read('%s/../config.ini' % current_directory)
+from monolithe.config import MonolitheConfig
 
-monolithe_mapping = ConfigParser()
-monolithe_mapping.read('%s/../mappings.ini' % current_directory)
+__all__ = ['MonolitheConfig']

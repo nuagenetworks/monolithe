@@ -3,7 +3,7 @@
 import os
 import shutil
 
-from monolithe import monolithe_config
+from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from monolithe.lib import TaskManager
 from monolithe.generators.lib.writers import TemplateFileWriter
@@ -120,7 +120,7 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
 
-        if model.remote_name == monolithe_config.get('monolithe', 'rest_user_api'):
+        if model.remote_name == MonolitheConfig.get_config('rest_user_api'):
             (filename, classname) = writer.write_restuser_model(model=model, version=version)
         else:
             (filename, classname) = writer.write_model(model=model, version=version)
@@ -149,7 +149,7 @@ class SDKWriter(object):
         """
         writer = self.get_writer()
 
-        if model.name != monolithe_config.get('monolithe', 'rest_user_api'):
+        if model.name != MonolitheConfig.get_config('rest_user_api'):
             (filename, classname) = writer.write_fetcher(model=model, version=version)
             filenames[filename] = classname
 

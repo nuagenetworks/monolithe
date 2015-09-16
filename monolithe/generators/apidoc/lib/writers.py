@@ -3,7 +3,7 @@
 import os
 import shutil
 
-from monolithe import monolithe_config
+from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from monolithe.lib import TaskManager
 from monolithe.generators.lib.writers import TemplateFileWriter
@@ -68,7 +68,7 @@ class APIDocWriter(object):
                 filenames: list of generates filenames
 
         """
-        if model.remote_name != monolithe_config.get('monolithe', 'rest_user_api'):
+        if model.remote_name != MonolitheConfig.get_config('rest_user_api'):
             writer = self.get_writer()
             (filename, classname) = writer.write_model(model=model)
             filenames[filename] = classname

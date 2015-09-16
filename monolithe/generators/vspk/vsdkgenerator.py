@@ -4,9 +4,7 @@ import os
 import sys
 import shutil
 
-from ConfigParser import ConfigParser
-
-from monolithe import monolithe_config
+from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from monolithe.specifications import RepositoryManager
 from monolithe.generators.vspk.lib import SDKWriter
@@ -50,7 +48,7 @@ class VSDKGenerator(object):
         if self.output_path:
             directory = '%s/%s' % (self.output_path, self.version)
         else:
-            directory = '%s/%s' % (monolithe_config.get('monolithe', 'codegen_directory'), self.version)
+            directory = '%s/%s' % (MonolitheConfig.get_config('codegen_directory'), self.version)
 
         if self.force_removal and os.path.exists(directory):
             shutil.rmtree(directory)

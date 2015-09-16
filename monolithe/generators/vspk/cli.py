@@ -59,6 +59,24 @@ def main(argv=sys.argv):
                         help="Flag to generate documentation of the VSPK",
                         action="store_true")
 
+    parser.add_argument("--config",
+                        dest="config_path",
+                        help="Path the monolithe configuration file",
+                        type=str,
+                        required=True)
+
+    parser.add_argument("--mapping",
+                        dest="mapping_path",
+                        help="Path the monolithe mapping file",
+                        type=str,
+                        required=True)
+
+    parser.add_argument("--vanilla",
+                        dest="vanilla_path",
+                        help="Path the monolithe vanilla folders",
+                        type=str,
+                        required=True)
+
     args = parser.parse_args()
 
     # Use environment variable if necessary
@@ -91,6 +109,7 @@ def main(argv=sys.argv):
 
     if not args.repository:
         args.repository = raw_input('Enter your Github repository: ')
+
     # Ask for password
     if args.login:
         password = getpass.getpass(prompt='Enter your Github password for %s: ' % args.login)
@@ -99,7 +118,12 @@ def main(argv=sys.argv):
         password = None
         login_or_token = args.token
 
+    from monolithe import MonolitheConfig
     from monolithe.generators import VSDKGenerator, VSPKGenerator, VSPKDocumentationGenerator
+
+    MonolitheConfig.set_config_path(args.config_path)
+    MonolitheConfig.set_mapping_path(args.mapping_path)
+    MonolitheConfig.set_vanilla_path(args.vanilla_path)
 
     # Generate VSDK
     for version in args.versions:
