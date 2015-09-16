@@ -23,7 +23,7 @@ class SDKGenerator(object):
         self.sdk_user_vanilla = MonolitheConfig.get_option("sdk_user_vanilla", "sdk")
         self.apiversions = apiversions
 
-    def _install_static(self):
+    def _install_system_vanilla(self):
         """
         """
         if os.path.exists(self.sdk_output):
@@ -32,16 +32,17 @@ class SDKGenerator(object):
         static_sdk_path = os.path.join(os.path.dirname(__file__), 'static');
         shutil.copytree(static_sdk_path, self.sdk_output)
 
-    def _install_vanilla(self):
+    def _install_user_vanilla(self):
         """
         """
-        for item in os.listdir(self.sdk_user_vanilla):
-            s = os.path.join(self.sdk_user_vanilla, item)
-            d = os.path.join(self.sdk_output, item)
-            if os.path.isdir(s):
-                shutil.copytree(s, d, False, None)
-            else:
-                shutil.copy2(s, d)
+        if os.path.exists(self.sdk_user_vanilla):
+            for item in os.listdir(self.sdk_user_vanilla):
+                s = os.path.join(self.sdk_user_vanilla, item)
+                d = os.path.join(self.sdk_output, item)
+                if os.path.isdir(s):
+                    shutil.copytree(s, d, False, None)
+                else:
+                    shutil.copy2(s, d)
 
         shutil.move('%s/%s' % (self.sdk_output, '__sdk'), '%s/%s' % (self.sdk_output, self.sdk_name))
 
@@ -52,9 +53,9 @@ class SDKGenerator(object):
         overrides_path = "%s/__overrides" % self.sdk_output
         attrs_defaults_path = "%s/__attributes_defaults" % self.sdk_output
 
-        shutil.rmtree(sdkapiversion_path)
-        shutil.rmtree(overrides_path)
-        shutil.rmtree(attrs_defaults_path)
+        if os.path.exists(sdkapiversion_path): shutil.rmtree(sdkapiversion_path)
+        if os.path.exists(overrides_path): shutil.rmtree(overrides_path)
+        if os.path.exists(attrs_defaults_path): shutil.rmtree(attrs_defaults_path)
 
 
     def run(self, api_url, login_or_token, password, organization, repository):
@@ -66,8 +67,8 @@ class SDKGenerator(object):
         """
         """
 
-        self._install_static()
-        self._install_vanilla()
+        self._install_system_vanilla()
+        self._install_user_vanilla()
 
         for apiversion in self.apiversions:
             SDKAPIVersionGenerator(apiversion=apiversion).run(api_url, login_or_token, password, organization, repository)
