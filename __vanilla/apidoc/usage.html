@@ -1,0 +1,584 @@
+<html>
+<header>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</header>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="navbarmain">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">VSD API Documentation</a>
+            </div>
+
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="usage.html">API Usage</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <section>
+
+        <h2>ReST API usage</h2>
+
+        <p>This document describes usage of the Nuage Virtualized Services Directory (VSD) northbound ReST API. Topics covered include:</p>
+
+        <ul>
+            <li>HTTP Headers</li>
+            <li>Managing Objects</li>
+            <li>Push Channel</li>
+            <li>Server Response Codes</li>
+            <li>HTTP Headers</li>
+        </ul>
+
+        <p>The Nuage VSD ReST API request uses HTTP headers for various purposes like authentication, filtering, ordering, pagination etc. HTTP headers are used instead of query parameters for several reasons, mostly because it keeps the resource URI clean, short and easy to read. Use of HTTP headers also allows the server to reply with useful metadata, like the current page number and the total number of objects, without affecting the JSON or XML objects that is sent to clients.</p>
+
+        <h2>Request Headers</h2>
+
+        <h3>Content-type</h3>
+
+        <p>The server response will be formatted in JSON. Content-Type is a required header field for HTTP POST and PUT as mentioned below to either create or modify an entity:</p>
+
+        <div class="well well-sm code">
+        GET /whatever HTTP/1.1
+        Content-Type: application/json
+        </div>
+
+
+        <h3>Authorization (required)</h3>
+
+        <p>Each API call must be authenticated, so the Authorization header must be sent with each request:</p>
+
+        <div class="well well-sm code">
+        GET /whatever HTTP/1.1
+        Authorization: $AUTHORIZATION_STRING
+        </div>
+
+        <p>$AUTHORIZATION_STRING is defined below.</p>
+
+
+        <h3>X-Nuage-Organization (required)</h3>
+
+        <p>For all API calls, this Nuage custom HTTP header is used to indicate the associated enterprise (CSP — the data center administrative enterprise — is also a standard enterprise) for the request:</p>
+
+        <div class="well well-sm code">
+        GET /whatever HTTP/1.1
+        X-Nuage-Organization: $ENTERPRISE_NAME
+        </div>
+
+
+        <h3>X-Nuage-Page (optional)</h3>
+
+        <p>For a GET request, this header allows the client to ask for a given page number as all object lists are paginated:</p>
+
+        <div class="well well-sm code">
+        GET /whatever HTTP/1.1
+        X-Nuage-Page: $PAGE_NUMBER
+        </div>
+
+
+        <h3>X-Nuage-Filter (optional)</h3>
+
+        <p>For a GET request, this allows the client to ask for a filtered list of objects:</p>
+
+        <div class="well well-sm code">
+        GET /whatever HTTP/1.1
+        X-Nuage-Filter: $FILTER
+        </div>
+
+        <p>The filter can be either plain text, or a predicate. How predicates work later is explained later.</p>
+
+        <h3>X-Nuage-OrderBy (optional)</h3>
+
+        <p>This optional header instructs the server on how to order the results:</p>
+
+        <div class="well well-sm code">
+        GET /whatever HTTP/1.1
+        X-Nuage-OrderBy: $ORDERING
+        </div>
+
+        <p>Ordering follows the basic SQL Order By statement. For example, the X-Nuage-OrderBy: name DESC, login ASC header will result in entities ordered first by descending name, then by ascending login.</p>
+
+
+
+        <h2>Response Headers</h2>
+
+        <h3>X-Nuage-Count</h3>
+
+        <p>X-Nuage-Count indicates the total count of objects requested.</p>
+
+        <h3>X-Nuage-Page</h3>
+
+        <p>X-Nuage-Page indicates the actual page number just received.</p>
+
+        <h3>X-Nuage-PageSize</h3>
+
+        <p>X-Nuage-PageSize indicates the internal page size. The page size can be configured on the server. By default, it is 50 objects.</p>
+
+        <h3>X-Nuage-Filter</h3>
+
+        <p>X-Nuage-Filter is an echo of the filter in the request, if any</p>
+
+        <h3>X-Nuage-FilterType</h3>
+
+        <p>X-Nuage-FilterType indicates how the server has interpreted your filter. Return values are plain or predicate.</p>
+
+        <h3>X-Nuage-OrderBy</h3>
+
+        <p>X-Nuage-OrderBy indicates how the objects in the reply are ordered.</p>
+
+        <h2>Authentication</h2>
+
+        <p>There is no "authentication" in the sense of a strong server-side session, the VSD uses an API key that serves as an authenticated password for all subsequent calls.</p>
+
+        This section describes how to get and use an API key.
+
+        <h3>Getting the API key</h3>
+
+        <p>To obtain and API key, the first step is to make a /me API call. This API call returns information about the account being used.</p>
+
+        <div class="well well-sm code">
+        GET /me HTTP/1.1
+        X-Nuage-Organization: my company
+        Content-Type: application/json
+        Authorization: $AUTHORIZATION_STRING
+        </div>
+
+        <p>The authorization string for the /me API MUST be formatted like the following:</p>
+
+        <div class="well well-sm code">
+        $AUTHORIZATION_STRING = Basic base64($LOGIN:$PASSWORD)
+        </div>
+
+        <p>Note that with Basic authentication, the password is not encrypted before transfer. This is part of the HTTP standard for Basic authentication, and is also required in order to support an LDAP internal authentication mechanism. However, all communication is over a secure channel (SSL/TLS).</p>
+
+
+        <p>NOTE: Many web browsers display Basic authentication requests and error responses in dialog boxes. Depending on the API client being developed, this may not be desirable. Instead of using the Basic authentication method, the XREST authentication method can be specified to prevent the browser from displaying a login dialog box or error dialog. The semantics are identical, but the keyword "Basic" is replaced with "XREST" in the AUTHORIZATION_STRING</p>
+
+        <p>The server will answer the request with:</p>
+
+        <div class="well well-sm code">
+        HTTP/1.1 200 OK
+
+
+        [
+            {
+                "APIKey": "63448e28-a539-45fd-a295-639111bfc96b",
+                "APIKeyExpiry": 1365701720072,
+                "ID": "57526632-faba-4306-b8f2-6dde09156106",
+                "email": "login@mycompany.com",
+                "enterpriseID": "d43f29f5-1b61-4b51-9460-bd59394933b6",
+                "firstName": "csproot",
+                "lastName": "csproot",
+                "role": "CSPROOT",
+                "userName": "csproot"
+            }
+        ]
+        </div>
+
+        <p>The APIKey value should be used for all subsequent API calls. The APIKey is valid until APIKeyExpiry. APIKeyExpiry is specified as a POSIX time (seconds since the epoch: 00:00:00 Coordinated Universal Time (UTC), Thursday, 1 January 1970), and is provided as a convenience, to allow the client application to renew its API key before expiry rather than waiting for a request to fail due to API key timeout.</p>
+
+        <h2>Using the API key</h2>
+
+        <p>Once an API key has been obtained, the key acts like a password for all subsequent requests. For example, to get all enterprises:</p>
+
+        <div class="well well-sm code">
+        GET /enterprises HTTP/1.1
+        X-Nuage-Organization: my company
+        Content-Type: application/json
+        Authorization: $AUTHORIZATION_STRING
+        </div>
+
+        <p>where the authorization string must be formatted like the following:</p>
+
+        <div class="well well-sm code">
+        $AUTHORIZATION_STRING = Basic base64($LOGIN:$APIKEY)
+        </div>
+
+
+        <h2>Managing Objects</h2>
+
+        <p>The main philosophy of the API is to allow users to develop a simple and consistent model and feed it with the server replies without having to deal with complexities like sending only modified values, etc. For example, when requesting an enterprise, a JSON object is returned. To change an object.name, you can send only the modified attribute and its value or the entire object including the modified value to the server.</p>
+
+        <p>Note that the server can deal with null values. For example, when creating an enterprise, the request can have only the name and description properties with all other object attributes like ID, creationDate, owner, etc., set to null. Alternatively, the request may only send the name and description depending on preference. The main advantage is that the object model can easily be mirrored in the client.</p>
+
+        <p>Note that in the following examples, not all required the HTTP headers are displayed to improve readability, but those headers are still required in a properly formed request.</p>
+
+        <h2>Fetching Objects</h2>
+
+        <p>To get list of objects, one uses the GET request. For example, to get all enterprises:</p>
+
+        <div class="well well-sm code">
+        GET /enterprises HTTP/1.1
+        HTTP/1.1 200 OK
+        X-Nuage-Count: 2
+        X-Nuage-OrderBy: name ASC
+        X-Nuage-Page: 0
+        X-Nuage-PageSize: 50
+
+
+        [
+            {
+                "ID": "cadb679c-26aa-4c5b-bf00-5f7b3f84954f",
+                "creationDate": 1364937936000,
+                "customerID": 1003,
+                "description": "Alcatel Lucent enterprise",
+                "lastUpdatedBy": "57526632-faba-4306-b8f2-6dde09156106",
+                "lastUpdatedDate": 1365551832000,
+                "name": "Alcatel Lucent",
+                "owner": "57526632-faba-4306-b8f2-6dde09156106",
+                "parentID": null,
+                "parentType": null
+            },
+            {
+                "ID": "25149097-1e23-47f3-ae5e-589b4c27a158",
+                "creationDate": 1365308033000,
+                "customerID": 7667,
+                "description": "Awesome stuff there",
+                "lastUpdatedBy": "57526632-faba-4306-b8f2-6dde09156106",
+                "lastUpdatedDate": 1365308033000,
+                "name": "Nuage Networks",
+                "owner": "57526632-faba-4306-b8f2-6dde09156106",
+                "parentID": null,
+                "parentType": null
+            }
+        ]
+        </div>
+
+
+        <p>To get all groups in the company named Nuage Networks (ID: 25149097-1e23-47f3-ae5e-589b4c27a158):</p>
+
+        <div class="well well-sm code">
+        GET /enterprises/25149097-1e23-47f3-ae5e-589b4c27a158/groups HTTP/1.1
+        HTTP/1.1 200 OK
+        X-Nuage-Count: 3
+        X-Nuage-OrderBy: name ASC
+        X-Nuage-Page: 0
+        X-Nuage-PageSize: 50
+
+
+        [
+            {
+                "ID": "a296bef5-ff10-46ab-acbb-650281edbcf4",
+                "creationDate": 1365637416000,
+                "description": "Administrator group for enterprise Nuage Networks",
+                "lastUpdatedBy": "57526632-faba-4306-b8f2-6dde09156106",
+                "lastUpdatedDate": 1365637416000,
+                "name": "Administrators",
+                "owner": "57526632-faba-4306-b8f2-6dde09156106",
+                "parentID": "83f56932-d2b3-4951-aca9-15bc40961370",
+                "parentType": "enterprise",
+                "private": true,
+                "role": "ORGADMIN"
+            },
+            {
+                "ID": "64ddb498-bff8-4746-a8f1-27f7262f2469",
+                "creationDate": 1365637416000,
+                "description": "Default enterprise group that contains all its user.",
+                "lastUpdatedBy": "57526632-faba-4306-b8f2-6dde09156106",
+                "lastUpdatedDate": 1365637416000,
+                "name": "Everybody",
+                "owner": "57526632-faba-4306-b8f2-6dde09156106",
+                "parentID": "83f56932-d2b3-4951-aca9-15bc40961370",
+                "parentType": "enterprise",
+                "private": false,
+                "role": "ORGUSER"
+            },
+            {
+                "ID": "02420543-6f65-44e4-9556-5ef5002b3ede",
+                "creationDate": 1365637416000,
+                "description": "Network designer group",
+                "lastUpdatedBy": "57526632-faba-4306-b8f2-6dde09156106",
+                "lastUpdatedDate": 1365637416000,
+                "name": "Network Designer",
+                "owner": "57526632-faba-4306-b8f2-6dde09156106",
+                "parentID": "83f56932-d2b3-4951-aca9-15bc40961370",
+                "parentType": "enterprise",
+                "private": true,
+                "role": "ORGNETWORKDESIGNER"
+            }
+        ]
+        </div>
+
+        <p>Querying deeper in the example above, a request to get all users in the group Administrators by issuing a request for /enterprises/$ID/groups/$ID will fail because the API only supports three levels of depth, for example,</p>
+
+        <div class="well well-sm code">
+        /parents
+        /parents/ID
+        /parents/ID/children
+        </div>
+
+
+        <p>To query deeper into the hierarchy, one can request:</p>
+
+        <div class="well well-sm code">
+        /children
+        /children/ID
+        /children/ID/grandchildren
+        </div>
+
+        <p>So to get all users in Nuage Networks' group named Administrators (ID: a296bef5-ff10-46ab-acbb-650281edbcf4), the request would be:</p>
+
+        <div class="well well-sm code">
+        GET /groups/a296bef5-ff10-46ab-acbb-650281edbcf4/users HTTP/1.1
+        </div>
+
+        <p>Note that not all objects can be queried directly. For example, one cannot ask for /users or /groups.</p>
+
+        <h2>Creating Objects</h2>
+
+        <p>To create an object, use a POST request.</p>
+
+        <p>For example, to create a new enterprise:</p>
+
+        <div class="well well-sm code">
+        POST /enterprises HTTP/1.1
+
+
+        {
+            "name": "My Enterprise",
+            "description": "Awesome new enterprise",
+        }
+        </div>
+
+        <p>To create a child object, like a group inside an enterprise:</p>
+
+        <div class="well well-sm code">
+        POST /enterprises/$ENTERPRISE_ID/groups HTTP/1.1
+
+
+        {
+            "name": "My Group",
+            "description": "Super group"
+        }
+        </div>
+
+        <h2>Updating Objects</h2>
+
+        <p>To update an object, use a PUT request.</p>
+
+        <p>The example below updates the enterprise description:</p>
+
+        <div class="well well-sm code">
+        PUT /enterprises/$ENTERPRISE_ID HTTP/1.1
+
+
+        {
+            "name": "My Enterprise",
+            "description": "This is a new description"
+        }
+        </div>
+
+
+        <h2>Deleting objects</h2>
+
+        <p>To delete an object use a DELETE request.</p>
+
+        <p>The example below will delete the enterprise $ENTERPRISE_ID:</p>
+
+        <div class="well well-sm code">
+        DELETE /enterprises/$ENTERPRISE_ID HTTP/1.1
+        </div>
+
+        <h2>Push Channel</h2>
+
+        <p>Each request you or other users send to the server are actually pushed back to all other users (filtered by permissions) via HTTP Server Push using Long Polling. Use of the push channel is optional.</p>
+
+        <p>To start listening to the Push channel, send an /events call:</p>
+
+        <div class="well well-sm code">
+        GET /events HTTP/1.1
+        </div>
+
+        <p>This is a long polling request, with a timeout set to a certain amount of time (about 1 min). If something happens during this period, the server will send you back a push. A push can contains several events. Pushes are always grouped by events type (CREATE, DELETE, UPDATE, GRANT, REVOKE) and by entity type (enterprise, group, etc).</p>
+
+        <div class="well well-sm code">
+        HTTP/1.1 200 OK
+
+
+        {
+            "events": [
+                {
+                    "entities": [
+                        {
+                            "ID": "83f56932-d2b3-4951-aca9-15bc40961370",
+                            "creationDate": 1365637416599,
+                            "customerID": 7669,
+                            "description": "The Company",
+                            "lastUpdatedBy": "57526632-faba-4306-b8f2-6dde09156106",
+                            "lastUpdatedDate": 1365637416599,
+                            "name": "The Company",
+                            "owner": "57526632-faba-4306-b8f2-6dde09156106",
+                        }
+                    ],
+                    "entityType": "enterprise",
+                    "eventReceivedTime": 1365637416620,
+                    "type": "CREATE",
+                    "userName": "Bob"
+                }
+            ],
+            "uuid": "33164796-0dab-45fd-8c21-6d1c4955b461"
+        }
+        </div>
+
+        <p>The output above indicates Bob has created a new enterprise named The Company.</p>
+
+        <p>If nothing happened during the timeout period, the following is returned:</p>
+
+        <div class="well well-sm code">
+        HTTP/1.1 200 OK
+
+
+        {
+            "events": [],
+            "uuid": "33164796-0dab-45fd-8c21-6d1c4955b461"
+        }
+        </div>
+
+
+        <p>Whether something happened or not, one can ask for the next event by simply resending the /event request, with the last push uuid as query parameter as follows:</p>
+
+        <div class="well well-sm code">
+        GET /events?uuid=$LAST_EVENT_UUID HTTP/1.1
+        </div>
+
+        <p>This UUID ensures that events are not lost if something else happened during the time between the response and the next request.</p>
+
+        <h2>Filtering</h2>
+
+        <p>VSD provides a very simple, yet very advanced way to filter entities. Filter can be defined using plain text or using a predicate. The server is able to determine by itself the type of filter requested: a plain text filter or a predicate.</p>
+
+        <h3>Plain Text Filtering</h3>
+
+        <p>Plain text filtering is simple and only requires setting the X-Nuage-Filter: the filter. The server will return only entities that have any of their properties containing the text the filter.</p>
+
+        <h3>Predicate Filtering</h3>
+
+        <p>Predicate is a more advance way to use filters. The syntax is based on the Cocoa Predicate, and allows to build complex queries.</p>
+
+        <p>For example, one can send complex filters like:</p>
+
+        <div class="well well-sm code">
+        X-Nuage-Filter: firstName beginswith 'john' and login contains 'admin'
+        X-Nuage-Filter: description contains 'hello' or name contains 'world'
+        X-Nuage-Filter: protocol >= '1024'
+        </div>
+
+        <p>See Filtering, Sorting and Paging for more information on what is supported on VSD</p>
+
+        <p>More information about predicate syntax is available from (Apple Cocoa documentation)[https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/Predicates/predicates.html#//apple_ref/doc/uid/TP40001789]</p>
+
+        <h2>Server Response Codes</h2>
+
+        <p>The server replies using standard HTTP response codes.</p>
+
+        <h3>2XX codes</h3>
+
+        <p>2XX codes indicate that the request was processed:</p>
+
+        <ul>
+            <li>200: Everything is ok, content is in the body</li>
+            <li>204: Everything is ok, but there is no content in the body (this is the standard reply for an update or a deletion)</li>
+        </ul>
+
+        <h3>3XX codes</h3>
+
+        <p>3XX codes indicate the server needs more information from the client and will be offer different choices:</p>
+
+        <ul>
+            <li>300: Multiple choices: The server needs to ask something to you before proceeding.</li>
+        </ul>
+
+        <p>For example, sending a request to delete a parent object with children under it:</p>
+
+        <div class="well well-sm code">
+        DELETE /domaintemplates/20a338bb-a759-4de0-bbf8-ddf76910bd32/ HTTP/1.1
+        Authorization: Basic Y3Nwcm9vdDo2MzQ0OGUyOC1hNTM5LTQ1ZmQtYTI5NS02MzkxMTFiZmM5NmI=
+        X-Nuage-Organization: csp
+        </div>
+
+
+        <p[>The server will reply:</p>
+
+        <div class="well well-sm code">
+        HTTP/1.1 300 Multiple Choices
+        Content-Type: application/json
+
+
+        {
+            "choices": [
+                {
+                    "id": 1,
+                    "label": "OK"
+                },
+                {
+                    "id": 0,
+                    "label": "Cancel"
+                }
+            ],
+            "errors": [
+                {
+                    "descriptions": [
+                        {
+                            "description": "Removing/Changing the domaintemplate will affect associated instances",
+                            "title": "This domaintemplate template is in use"
+                        }
+                    ],
+                    "property": ""
+                }
+            ]
+        }
+        </div>
+
+        <p>The server is presenting two choices:</p>
+
+        <ul>
+            <li>1: "OK"</li>
+            <li>2: "Cancel"</li>
+        </ul>
+
+        <p>To validate, resend the same request, with an HTTP query parameter set to the selected choice:</p>
+
+        <div class="well well-sm code">
+        DELETE /nuage/api/v1_0/domaintemplates/20a338bb-a759-4de0-bbf8-ddf76910bd32/?responseChoice=1 HTTP/1.1
+        Authorization: Basic Y3Nwcm9vdDo2MzQ0OGUyOC1hNTM5LTQ1ZmQtYTI5NS02MzkxMTFiZmM5NmI=
+        X-Nuage-Organization: csp
+        </div>
+
+
+        <h3>4XX codes</h3>
+
+        <ul>
+            <li>400: Bad request: something is wrong in the request.</li>
+            <li>401: Not authenticated (wrong password or wrong API Key).</li>
+            <li>403: Not authorized (request for something to which you do not have rights).</li>
+            <li>404: Not found (request something that does not exist).</li>
+            <li>409: Conflict (the requested change conflicts with existing configuration)</li>
+            <li>412: Precondition Failed (additional information is required before this request can succeed)</li>
+        </ul>
+
+        <h3>5XX codes</h3>
+
+        <ul>
+            <li>500: Internal server error. Error is explained in the body.</li>
+        </ul>
+
+    </section>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+</html>
