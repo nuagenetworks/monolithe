@@ -119,6 +119,7 @@ class Specification(dict):
         parent_specification_api = deepcopy(specification_api)
         parent_specification_api['RESTName'] = self['model']['RESTName']
         parent_specification_api['resourceName'] = self['model']['resourceName']
+        parent_specification_api['entityName'] = self['model']['entityName']
 
         if parent_rest_name not in self.parent_relations:
             self.parent_relations[parent_rest_name] = {}
