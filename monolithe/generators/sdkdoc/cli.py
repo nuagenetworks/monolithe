@@ -20,8 +20,9 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    MonolitheConfig.set_config_path(args.config_path)
-    generator = SDKDocGenerator()
+    monolithe_config = MonolitheConfig.config_with_path(args.config_path)
+
+    generator = SDKDocGenerator(monolithe_config=monolithe_config)
     generator.run()
 
 if __name__ == '__main__':

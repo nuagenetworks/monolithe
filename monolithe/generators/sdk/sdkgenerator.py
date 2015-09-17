@@ -9,19 +9,21 @@ from monolithe.lib import Printer
 
 from .lib import SDKWriter
 from .sdkapiversiongenerator import SDKAPIVersionGenerator
+from monolithe.specifications import RepositoryManager
 
 
 class SDKGenerator(object):
-    """ Create a SDK Package containing SDK versions
-
     """
-    def __init__(self, apiversions):
+    """
+
+    def __init__(self, monolithe_config):
         """
         """
-        self.sdk_name = MonolitheConfig.get_option("sdk_name", "sdk")
-        self.sdk_output = MonolitheConfig.get_option("sdk_output", "sdk")
-        self.sdk_user_vanilla = MonolitheConfig.get_option("sdk_user_vanilla", "sdk")
-        self.apiversions = apiversions
+        self.monolithe_config = monolithe_config
+        self.sdk_user_vanilla = self.monolithe_config.get_option("sdk_user_vanilla", "sdk")
+        self.sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+        self.sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+
 
     def _install_system_vanilla(self):
         """
@@ -35,6 +37,7 @@ class SDKGenerator(object):
     def _install_user_vanilla(self):
         """
         """
+
         if os.path.exists(self.sdk_user_vanilla):
             for item in os.listdir(self.sdk_user_vanilla):
                 s = os.path.join(self.sdk_user_vanilla, item)
@@ -56,22 +59,40 @@ class SDKGenerator(object):
         if os.path.exists(attrs_defaults_path): shutil.rmtree(attrs_defaults_path)
 
 
-    def run(self, api_url, login_or_token, password, organization, repository):
+    def run(self, api_url, login_or_token, password, organization, repository, apiversions):
         """
         """
-        self.generate(api_url, login_or_token, password, organization, repository)
+        self.generate(api_url=api_url, login_or_token=login_or_token, password=password, organization=organization, repository=repository, apiversions=apiversions)
 
-    def generate(self, api_url, login_or_token, password, organization, repository):
+    def generate(self, specification_info=None, api_url=None, login_or_token=None, password=None, organization=None, repository=None, apiversions=None):
         """
         """
-
         self._install_system_vanilla()
         self._install_user_vanilla()
 
-        for apiversion in self.apiversions:
-            SDKAPIVersionGenerator(apiversion=apiversion).run(api_url, login_or_token, password, organization, repository)
+        # if specification_info:
+        #
+        #     apiversions = []
+        #
+        #     for apiversion, specifications in specification_info.iteritems():
+        #
+        #         apiversions.append(apiversion)
+        #
+        #         generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
+        #         generator.generate(specifications=specifications, apiversion=apiversion)
+        #
+        # elif api_url and login_or_token and password and organization and repository and apiversions:
+        for apiversion in apiversions:
+            generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
+            generator.run(  api_url=api_url,
+                            login_or_token=login_or_token,
+                            password=password,
+                            organization=organization,
+                            repository=repository,
+                            apiversion=apiversion)
 
-        sdk_writer = SDKWriter(self.sdk_output, self.apiversions)
-        sdk_writer.write()
+
+        sdk_writer = SDKWriter(monolithe_config=self.monolithe_config)
+        sdk_writer.write(apiversions=apiversions)
 
         self._cleanup()

@@ -2,4 +2,4 @@
 
 __all__ = ['APIDocWriter']
 
-from .writers import APIDocWriter
+from .apidocwriter import APIDocWriter

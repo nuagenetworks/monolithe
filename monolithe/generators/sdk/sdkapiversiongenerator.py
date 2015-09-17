@@ -16,35 +16,39 @@ class SDKAPIVersionGenerator(object):
     """ Generate SDK
 
     """
-    def __init__(self, apiversion=u'master'):
+    def __init__(self, monolithe_config, branch="master"):
         """
         """
-        self.sdk_name = MonolitheConfig.get_option("sdk_name", "sdk")
-        self.sdk_output = MonolitheConfig.get_option("sdk_output", "sdk")
-        self.sdk_user_vanilla = MonolitheConfig.get_option("sdk_user_vanilla", "sdk")
-        self.apiversion = apiversion
+        self.monolithe_config = monolithe_config
+        self.branch = branch
         self.repository_manager = None
 
-    def run(self, api_url, login_or_token, password, organization, repository):
+        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+
+    def run(self, api_url, login_or_token, password, organization, repository, apiversion):
         """ Start the SDK generation
 
         """
-        self.repository_manager = RepositoryManager(api_url=api_url,
+        self.repository_manager = RepositoryManager(monolithe_config=self.monolithe_config,
+                                                    api_url=api_url,
                                                     login_or_token=login_or_token,
                                                     password=password,
                                                     organization=organization,
                                                     repository=repository)
-        Printer.log("Getting specifications from branch `%s` of repository `%s`" % (self.apiversion, self.repository_manager.repository))
 
-        specifications = self.repository_manager.get_all_specifications(branch=self.apiversion)
+        Printer.log("Getting specifications from branch `%s` of repository `%s`" % (self.branch, self.repository_manager.repository))
 
-        self.generate(specifications)
+        specifications = self.repository_manager.get_all_specifications(branch=self.branch)
 
-    def generate(self, specifications):
+        self.generate(specifications=specifications, apiversion=apiversion)
+
+    def generate(self, specifications, apiversion):
         """
         """
-        Printer.log("Generating %s from %s specifications..." % (self.sdk_name, len(specifications)))
-        writer = SDKAPIVersionWriter(directory="%s/%s" % (self.sdk_output, self.sdk_name), apiversion=self.apiversion)
-        writer.write(resources=specifications, apiversion=self.apiversion, revision=1)
-        Printer.success("Generated %s with %s objects for API version %s" % (self.sdk_name, len(specifications), self.apiversion))
+        Printer.log("Generating %s v%s from %s specifications..." % (self._sdk_name, apiversion, len(specifications)))
+
+        writer = SDKAPIVersionWriter(monolithe_config=self.monolithe_config)
+        writer.write(resources=specifications, apiversion=apiversion)
+
+        Printer.success("Done")
 
