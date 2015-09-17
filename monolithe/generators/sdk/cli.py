@@ -10,7 +10,7 @@ def main(argv=sys.argv):
     """
 
     """
-    parser = argparse.ArgumentParser(description="VSP SDK Generator.")
+    parser = argparse.ArgumentParser(description="SDK Generator.")
 
     parser.add_argument('-g', "--github",
                         dest="api_url",
