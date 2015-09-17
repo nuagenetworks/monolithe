@@ -11,16 +11,20 @@ class MonolitheConfig(object):
         """
         return MonolitheConfig(path)
 
-    def __init__(self, path):
+    def __init__(self, path=None):
         """
         """
+        self.path = path
         self.config = None
         self.mapping = None
-        self.sdk_user_vanilla = None
-        self.apidoc_user_vanilla = None
-        self.sdkdoc_user_vanilla = None
 
-        self.set_config_path(path)
+        if self.path:
+            self.set_config_path(self.path)
+
+    def copy(self):
+        """
+        """
+        return MonolitheConfig(path=self.path)
 
     def _check_path_exists(self, path):
         """
@@ -49,30 +53,15 @@ class MonolitheConfig(object):
         self.mapping = ConfigParser()
         self.mapping.read(mapping_path)
 
-
-    def get_sdk_config(self):
-        """
-        """
-        return {
-            "sdk_name" : self.get_option("sdk_name", "sdk"),
-            "sdk_output" : self.get_option("sdk_output", "sdk"),
-            "sdk_user_vanilla" : self.get_option("sdk_user_vanilla", "sdk"),
-            "sdk_output" : self.get_option("sdk_output", "sdk"),
-            "sdk_user_vanilla" : self.get_option("sdk_user_vanilla", "sdk"),
-            "sdk_name" : self.get_option("sdk_name", "sdk"),
-            "sdk_version" : self.get_option("sdk_version", "sdk"),
-            "sdk_revision_number" : self.get_option("sdk_revision_number", "sdk"),
-            "sdk_url" : self.get_option("sdk_url", "sdk"),
-            "sdk_author" : self.get_option("sdk_author", "sdk"),
-            "sdk_email" : self.get_option("sdk_email", "sdk"),
-            "sdk_description" : self.get_option("sdk_description", "sdk"),
-            "sdk_license_name" : self.get_option("sdk_license_name", "sdk")
-        }
-
     def get_option(self, option, section="monolithe"):
         """
         """
         return self.config.get(section, option)
+
+    def set_option(self, option, value, section="monolithe"):
+        """
+        """
+        return self.config.set(section, option, value)
 
 
     def map_attribute(self, remote_name, attribute_name):

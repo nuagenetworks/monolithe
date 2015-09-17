@@ -105,3 +105,4 @@ class NU{{ model.name }}(NURESTObject):
 
     {{ attribute.local_name }} = property(_get_{{ attribute.local_name }}, _set_{{ attribute.local_name }})
     {% endfor %}
+
