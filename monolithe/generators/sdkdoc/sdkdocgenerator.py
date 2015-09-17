@@ -62,10 +62,10 @@ class SDKDocGenerator(object):
         shutil.rmtree('%s/_sources' % self._sdkdoc_output)
         shutil.rmtree(self._sdkdoc_tmp_path)
 
-    def run(self):
+    def generate(self):
         """
         """
-        Printer.log("Generating %s documentation..." % self._sdk_name)
+        Printer.log("generating %s documentation..." % self._sdk_name)
 
         sys.path.append(self._sdk_output)
         subprocess_environ = {"PYTHONPATH": ":".join(sys.path), "PATH": os.environ["PATH"]}
@@ -89,4 +89,4 @@ class SDKDocGenerator(object):
 
         self._cleanup()
 
-        Printer.success("Generated SDK documentation")
+        Printer.success("done")

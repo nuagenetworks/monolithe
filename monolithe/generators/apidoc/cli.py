@@ -36,9 +36,9 @@ def main(argv=sys.argv):
                         help="Github repository name",
                         type=str)
 
-    parser.add_argument('-v', "--versions",
-                        dest="apiversions",
-                        help="versions of the SDK to generate (examples: master 3.0 3.1)",
+    parser.add_argument('-b', "--branches",
+                        dest="branches",
+                        help="branches of the SDK to generate (examples: master 3.0 3.1)",
                         nargs="*",
                         type=str,
                         required=True)
@@ -101,12 +101,12 @@ def main(argv=sys.argv):
     monolithe_config = MonolitheConfig.config_with_path(args.config_path)
 
     generator = APIDocumentationGenerator(monolithe_config=monolithe_config)
-    generator.run(  api_url=args.api_url,
-                    login_or_token=login_or_token,
-                    password=password,
-                    organization=args.organization,
-                    repository=args.repository,
-                    apiversions=args.apiversions)
+    generator.generate( api_url=args.api_url,
+                        login_or_token=login_or_token,
+                        password=password,
+                        organization=args.organization,
+                        repository=args.repository,
+                        branches=args.branches)
 
 if __name__ == '__main__':
     main()
