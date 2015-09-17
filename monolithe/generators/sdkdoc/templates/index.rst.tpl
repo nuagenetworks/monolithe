@@ -2,29 +2,18 @@
 {{title}}
 {{"=" * title|length}}
 
-Getting Started
----------------
 
-This section contains all the concepts to use `{{sdk_name}}` and a lot of tutorials and examples.
-
+{% for section in pages_info %}
+{{section["name"]}}
+{{"=" * section["name"]|length}}
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: {{section["toc_depth"]}}
     :glob:
 
-    license
-    general_concepts
-    installation
-    getting_started
-
-
-Sample Code
------------
-
-.. toctree::
-    :maxdepth: 2
-    :glob:
-
-    sample_code
+{% for page in section["pages"] %}
+    {{page}}
+{% endfor %}
+{% endfor %}
 
 
 {% set title= "%s API Reference" % sdk_name.upper() %}

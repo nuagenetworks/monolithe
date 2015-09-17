@@ -1,0 +1,21 @@
+[
+    {
+        "name": "Getting Started",
+        "toc_depth": 1,
+        "description": "This section contains all the concepts to use vspk and a lot of tutorials and examples.",
+        "pages": [
+            "license",
+            "general_concepts",
+            "installation",
+            "getting_started"
+        ]
+    },
+    {
+        "name": "Sample Code",
+        "toc_depth": 2,
+        "description": "",
+        "pages": [
+            "code_snippets"
+        ]
+    }
+]

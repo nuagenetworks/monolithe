@@ -4,6 +4,7 @@ import os
 import shutil
 import importlib
 import inspect
+import json
 
 from monolithe import MonolitheConfig
 from monolithe.lib import Printer, SDKUtils, TaskManager
@@ -150,17 +151,13 @@ class SDKDocFileWriter(TemplateFileWriter):
     def write_index(self):
         """
         """
-        pages = []
-        for item in os.listdir(self.directory):
-            if os.path.isdir(item) or os.path.splitext(item)[1] != ".rst":
-                continue
-            pages.append({"name": item.replace(".rst", ""), "title": "Todo", "description": "todo"})
-
+        with open("%s/pages.json" % self.directory) as f:
+            pages_info = json.loads(f.read())
 
         self.write( destination=self.directory, filename="index.rst", template_name="index.rst.tpl",
                     sdk_name=self._sdk_name,
                     product_name=self._product_name,
-                    pages=pages)
+                    pages_info=pages_info)
 
     def write_general_concepts(self):
         """
