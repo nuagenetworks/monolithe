@@ -11,8 +11,9 @@ from unittest2 import TestCase, TestResult
 from bambou.config import BambouConfig
 from bambou.exceptions import BambouHTTPError
 
-from monolithe.courgette.lib import TestHelper
 from monolithe.lib import Printer
+from .helper import TestHelper
+
 
 
 class CourgetteTestResult(TestResult):

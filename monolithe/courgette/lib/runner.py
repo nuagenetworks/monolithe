@@ -5,8 +5,8 @@ from unittest2 import TestSuite
 from monolithe.lib import SDKLoader
 from monolithe.lib import SDKUtils
 
-from .makers import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
-from .helpers import TestHelper
+from .maker import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
+from .helper import TestHelper
 from .testcase import CourgetteCourgetteTestsRunner
 
 
