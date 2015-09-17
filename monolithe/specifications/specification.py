@@ -14,7 +14,7 @@ class Specification(object):
 
     """
 
-    def __init__(self, data=None):
+    def __init__(self, monolithe_config,  data=None):
         """ Initializes a model object
 
             Example:
@@ -28,6 +28,7 @@ class Specification(object):
         """
         self.__default_specification__ = None
 
+        self.monolithe_config = monolithe_config
         self.filename = None
         self.description = None
         self.package = None

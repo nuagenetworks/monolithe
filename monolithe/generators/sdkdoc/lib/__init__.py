@@ -2,4 +2,4 @@
 
 __all__ = ['SDKDocWriter']
 
-from .writers import SDKDocWriter
+from .sdkdocwriter import SDKDocWriter

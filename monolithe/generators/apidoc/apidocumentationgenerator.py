@@ -2,10 +2,7 @@
 import os
 import shutil
 
-from monolithe import MonolitheConfig
 from monolithe.lib import Printer
-
-from monolithe import MonolitheConfig
 from monolithe.specifications import RepositoryManager
 from monolithe.generators.apidoc.lib import APIDocWriter
 
@@ -14,17 +11,18 @@ class APIDocumentationGenerator(object):
     """ Generate VSD API Documentation
 
     """
-    def __init__(self, apiversions=[]):
+    def __init__(self, monolithe_config):
         """
         """
-        self.apiversions = apiversions
-        self.apidoc_output = MonolitheConfig.get_option("apidoc_output", "apidoc")
-        self.apidoc_user_vanilla = MonolitheConfig.get_option("apidoc_user_vanilla", "apidoc")
+        self.monolithe_config = monolithe_config
+        self._apidoc_output = self.monolithe_config.get_option("apidoc_output", "apidoc")
+        self._apidoc_user_vanilla = self.monolithe_config.get_option("apidoc_user_vanilla", "apidoc")
+        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
 
     def _install_system_vanilla(self, apiversion):
         """
         """
-        apidocversion_output = "%s/%s" % (self.apidoc_output, apiversion)
+        apidocversion_output = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, apiversion)
 
         if os.path.exists(apidocversion_output):
             shutil.rmtree(apidocversion_output)
@@ -35,29 +33,30 @@ class APIDocumentationGenerator(object):
     def _install_user_vanilla(self, apiversion):
         """
         """
-        if not os.path.exists(self.apidoc_user_vanilla):
+        if not os.path.exists(self._apidoc_user_vanilla):
             return
 
-        apidocversion_output = "%s/%s" % (self.apidoc_output, apiversion)
+        apidocversion_output = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, apiversion)
 
-        for item in os.listdir(self.apidoc_user_vanilla):
-            s = os.path.join(self.apidoc_user_vanilla, item)
+        for item in os.listdir(self._apidoc_user_vanilla):
+            s = os.path.join(self._apidoc_user_vanilla, item)
             d = os.path.join("%s/%s" % (apidocversion_output, item))
             if os.path.isdir(s):
                 shutil.copytree(s, d, False, None)
             else:
                 shutil.copy2(s, d)
 
-    def run(self, api_url, login_or_token, password, organization, repository):
+    def run(self, api_url, login_or_token, password, organization, repository, apiversions):
         """
         """
 
-        self.repository_manager = RepositoryManager(api_url=api_url,
+        self.repository_manager = RepositoryManager(monolithe_config=self.monolithe_config,
+                                                    api_url=api_url,
                                                     login_or_token=login_or_token,
                                                     password=password,
                                                     organization=organization,
                                                     repository=repository)
-        for apiversion in self.apiversions:
+        for apiversion in apiversions:
             Printer.log("Getting specifications from branch `%s` of repository `%s`" % (apiversion, self.repository_manager.repository))
             specifications = self.repository_manager.get_all_specifications(branch=apiversion)
             self.generate(specifications, apiversion)
@@ -72,7 +71,9 @@ class APIDocumentationGenerator(object):
         self._install_system_vanilla(apiversion=apiversion)
         self._install_user_vanilla(apiversion=apiversion)
 
-        directory = '%s/%s' % (self.apidoc_output, apiversion)
-        APIDocWriter(directory=directory).write(resources=specifications, apiversion=apiversion)
+        directory = '%s/%s' % (self._apidoc_output, apiversion)
+
+        writer = APIDocWriter(self.monolithe_config)
+        writer.write(resources=specifications, apiversion=apiversion)
 
         Printer.success("Generated %s documentation files for API version %s" % (len(specifications), apiversion))

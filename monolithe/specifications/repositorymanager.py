@@ -18,7 +18,7 @@ class RepositoryManager (object):
     """ RepositoryManager is an object that allows to manipulate the API specification repository
     """
 
-    def __init__(self, api_url, login_or_token, password, organization, repository):
+    def __init__(self, monolithe_config, api_url, login_or_token, password, organization, repository):
         """ Initialize RepositoryManager
 
             Args:
@@ -28,6 +28,7 @@ class RepositoryManager (object):
                 organization: the organization where specifications_repository is
                 repository: the repository containing the specifications
         """
+        self._monolithe_config = monolithe_config;
         self._repository = repository
         self._github = Github(login_or_token=login_or_token, password=password, base_url=api_url)
         self._repo = self._github.get_organization(organization).get_repo(repository)
@@ -124,7 +125,7 @@ class RepositoryManager (object):
                 if os.path.splitext(file_name)[1] != ".spec":
                     continue
 
-                specifications.append(Specification(data=json.loads(archive_content.read(file_name))))
+                specifications.append(Specification(data=json.loads(archive_content.read(file_name)), monolithe_config=self._monolithe_config))
 
         # cleanup the temporary archive
         os.close(archive_fd)
@@ -156,7 +157,7 @@ class RepositoryManager (object):
                 Specification object.
         """
 
-        return Specification(data=self.get_specification_data(name, branch))
+        return Specification(data=self.get_specification_data(name, branch), monolithe_config=self._monolithe_config)
 
     def get_specifications(self, names, branch="master", callback=None):
         """ Returns a Specification object from the given specification file name in the given branch

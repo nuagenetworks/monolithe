@@ -9,60 +9,68 @@ class SDKWriter(object):
     """
     """
 
-    def __init__(self, directory, apiversions):
+    def __init__(self, monolithe_config):
         """
         """
-        self.writer_directory = directory
-        self.apiversions = apiversions
+        self.writer = None
+
+        self.monolithe_config = monolithe_config
 
 
-    def get_writer(self):
-        """ Get a writer to write content
-
-        """
-        return _SDKFileWriter(directory=self.writer_directory)
-
-    def write(self):
+    def write(self, apiversions):
         """
         """
-        writer = self.get_writer()
-        writer.write_setup_file()
-        writer.write_manifest_file(self.apiversions)
-        writer.write_requirements_file()
+        self.writer = _SDKFileWriter(monolithe_config=self.monolithe_config)
+        self.writer.write_setup_file()
+        self.writer.write_manifest_file(apiversions)
+        self.writer.write_requirements_file()
 
 
 
 class _SDKFileWriter(TemplateFileWriter):
     """
     """
-    def __init__(self, directory):
-        """
-        """
-        super(_SDKFileWriter, self).__init__(directory=directory, package='monolithe.generators.sdk')
 
+    def __init__(self, monolithe_config):
+        """
+        """
+        super(_SDKFileWriter, self).__init__(package='monolithe.generators.sdk')
+
+        self.monolithe_config = monolithe_config
+        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+        self._sdk_version = self.monolithe_config.get_option("sdk_version", "sdk")
+        self._sdk_revision_number = self.monolithe_config.get_option("sdk_revision_number", "sdk")
+        self._sdk_url = self.monolithe_config.get_option("sdk_url", "sdk")
+        self._sdk_author = self.monolithe_config.get_option("sdk_author", "sdk")
+        self._sdk_email = self.monolithe_config.get_option("sdk_email", "sdk")
+        self._sdk_description = self.monolithe_config.get_option("sdk_description", "sdk")
+        self._sdk_license_name = self.monolithe_config.get_option("sdk_license_name", "sdk")
+        self._copyright = self.monolithe_config.get_option("copyright")
+
+        self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
 
     def write_setup_file(self):
         """
         """
-        self.write( destination=self.directory, filename='setup.py', template_name='setup.py.tpl',
-                    copyright=MonolitheConfig.get_option("copyright"),
-                    sdk_name=MonolitheConfig.get_option("sdk_name", "sdk"),
-                    sdk_version=MonolitheConfig.get_option("sdk_version", "sdk"),
-                    sdk_revision_number=MonolitheConfig.get_option("sdk_revision_number", "sdk"),
-                    sdk_url=MonolitheConfig.get_option("sdk_url", "sdk"),
-                    sdk_author=MonolitheConfig.get_option("sdk_author", "sdk"),
-                    sdk_email=MonolitheConfig.get_option("sdk_email", "sdk"),
-                    sdk_description=MonolitheConfig.get_option("sdk_description", "sdk"),
-                    sdk_license_name=MonolitheConfig.get_option("sdk_license_name", "sdk"))
+        self.write( destination=self.output_directory, filename='setup.py', template_name='setup.py.tpl',
+                    sdk_name=self._sdk_name,
+                    sdk_version=self._sdk_version,
+                    sdk_revision_number=self._sdk_revision_number,
+                    sdk_url=self._sdk_url,
+                    sdk_author=self._sdk_author,
+                    sdk_email=self._sdk_email,
+                    sdk_description=self._sdk_description,
+                    sdk_license_name=self._sdk_license_name,
+                    copyright=self._copyright)
 
     def write_manifest_file(self, apiversions):
         """
         """
-        self.write( destination=self.directory, filename='MANIFEST.in', template_name='MANIFEST.in.tpl',
-                    sdk_name=MonolitheConfig.get_option("sdk_name", "sdk"),
+        self.write( destination=self.output_directory, filename='MANIFEST.in', template_name='MANIFEST.in.tpl',
+                    sdk_name=self._sdk_name,
                     apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
 
     def write_requirements_file(self):
         """
         """
-        self.write( destination=self.directory, filename='requirements.txt', template_name='requirements.txt.tpl')
+        self.write( destination=self.output_directory, filename='requirements.txt', template_name='requirements.txt.tpl')

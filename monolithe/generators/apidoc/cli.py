@@ -98,15 +98,15 @@ def main(argv=sys.argv):
     from monolithe import MonolitheConfig
     from monolithe.generators import APIDocumentationGenerator
 
-    MonolitheConfig.set_config_path(args.config_path)
+    monolithe_config = MonolitheConfig.config_with_path(args.config_path)
 
-
-    generator = APIDocumentationGenerator(apiversions=args.apiversions)
+    generator = APIDocumentationGenerator(monolithe_config=monolithe_config)
     generator.run(  api_url=args.api_url,
                     login_or_token=login_or_token,
                     password=password,
                     organization=args.organization,
-                    repository=args.repository)
+                    repository=args.repository,
+                    apiversions=args.apiversions)
 
 if __name__ == '__main__':
     main()

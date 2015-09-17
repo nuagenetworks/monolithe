@@ -3,7 +3,6 @@
 import os
 import shutil
 
-from monolithe import MonolitheConfig
 from monolithe.lib import Printer, SDKUtils, TaskManager
 from monolithe.generators.lib.writers import TemplateFileWriter
 
@@ -12,24 +11,16 @@ class SDKAPIVersionWriter(object):
     """ Writer of the Python VSD SDK
 
     """
-    IGNORED_FILES = ['__init__.py', 'nuvsdsession.py', 'utils.py', 'nurestuser.py', 'constants.py']
     COMMON_ATTRIBUTES = ['multicast', 'iptype', 'maintenancemode', 'permittedaction', 'connectionstate', 'forwardingclasses']
 
-    def __init__(self, directory, apiversion):
-        """ Initializes a writer to the specific directory
-
-            Args:
-                directory: directory where to copy sources
-
+    def __init__(self, monolithe_config):
         """
-        self.writer_directory = directory
-        self.apiversion = apiversion
-
-    def get_writer(self):
-        """ Get a writer to write content
-
         """
-        return _SDKAPIVersionFileWriter(directory=self.writer_directory, apiversion=self.apiversion)
+        self.writer = None
+
+        self.monolithe_config = monolithe_config
+        self._rest_user_api = self.monolithe_config.get_option("rest_user_api")
+
 
     def _prepare_attributes(self, model, constants):
         """ Removes attributes and computes constants
@@ -62,45 +53,42 @@ class SDKAPIVersionWriter(object):
 
         return results
 
-    def write(self, resources, apiversion, revision):
+    def write(self, resources, apiversion):
         """ Write all files according to data
 
             Args:
                 resources: A list of all resources to manage
                 apiversion: the version of the api
-                revision: the revision number of the api
 
             Returns:
                 Writes models and fetchers files
 
         """
-        os.makedirs("%s/%s" % (self.writer_directory, SDKUtils.get_string_version(self.apiversion)))
-
         autogenerate_filenames = dict()
         fetcher_filenames = dict()
         override_filenames = dict()
         constants = dict()
 
+        self.writer = _SDKAPIVersionFileWriter(monolithe_config=self.monolithe_config, apiversion=apiversion)
+
         task_manager = TaskManager()
 
         for model in resources:
             self._prepare_attributes(model=model, constants=constants)
-            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=autogenerate_filenames, version=apiversion)
-            task_manager.start_task(method=self._write_override_file, model=model, filenames=override_filenames, version=apiversion)
-            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=fetcher_filenames, version=apiversion)
+            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=autogenerate_filenames)
+            task_manager.start_task(method=self._write_override_file, model=model, filenames=override_filenames)
+            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=fetcher_filenames)
 
         task_manager.wait_until_exit()
 
-        writer = self.get_writer()
+        self.writer.write_constants_file(constants=constants)
+        self.writer.write_vsdsession_file()
+        self.writer.write_init_autogenerate_files(filenames=autogenerate_filenames)
+        self.writer.write_init_fetcher_files(filenames=fetcher_filenames)
+        self.writer.write_init_override_files(filenames=override_filenames)
+        self.writer.copy_attrs_defaults()
 
-        writer.write_constants_file(constants=constants)
-        writer.write_vsdsession_file(version=apiversion)
-        writer.write_init_autogenerate_files(filenames=autogenerate_filenames)
-        writer.write_init_fetcher_files(filenames=fetcher_filenames)
-        writer.write_init_override_files(filenames=override_filenames)
-        writer.copy_attrs_defaults()
-
-    def _write_autogenerate_file(self, model, filenames, version):
+    def _write_autogenerate_file(self, model, filenames):
         """ Write the autogenerate file for the model
 
             Args:
@@ -108,28 +96,25 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
-        writer = self.get_writer()
-
-        if model.remote_name == MonolitheConfig.get_option('rest_user_api'):
-            (filename, classname) = writer.write_restuser_model(model=model, version=version)
+        if model.remote_name == self._rest_user_api:
+            (filename, classname) = self.writer.write_restuser_model(model=model)
         else:
-            (filename, classname) = writer.write_model(model=model, version=version)
+            (filename, classname) = self.writer.write_model(model=model)
 
         filenames[filename] = classname
 
-    def _write_override_file(self, model, filenames, version):
+    def _write_override_file(self, model, filenames):
         """ Write the override file for the model
 
             Args:
                 model: the model to write
 
         """
-        writer = self.get_writer()
-        (filename, classname) = writer.write_model_override(model=model, version=version)
+        (filename, classname) = self.writer.write_model_override(model=model)
 
         filenames[filename] = classname
 
-    def _write_fetcher_file(self, model, filenames, version):
+    def _write_fetcher_file(self, model, filenames):
         """ Write the fetcher file for the model
 
             Args:
@@ -137,10 +122,8 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
-        writer = self.get_writer()
-
-        if model.name != MonolitheConfig.get_option('rest_user_api'):
-            (filename, classname) = writer.write_fetcher(model=model, version=version)
+        if model.name != self._rest_user_api:
+            (filename, classname) = self.writer.write_fetcher(model=model)
             filenames[filename] = classname
 
 
@@ -148,50 +131,39 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
     """ Provide usefull method to write Python files.
 
     """
-    def __init__(self, directory, apiversion):
+    def __init__(self, monolithe_config, apiversion):
         """ Initializes a _SDKAPIVersionFileWriter
 
         """
-        self._output_path = directory
-        self._apiversion = apiversion
-        self._string_apiversion = SDKUtils.get_string_version(self._apiversion)
-        self._apiversion_output_path = '%s/%s' % (self._output_path, self._string_apiversion)
+        super(_SDKAPIVersionFileWriter, self).__init__(package=u'monolithe.generators.sdk')
 
-        super(_SDKAPIVersionFileWriter, self).__init__(directory=self._apiversion_output_path, package=u'monolithe.generators.sdk')
+        self.monolithe_config = monolithe_config
+        self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
 
-        self._vanilla_path = '%s/__sdkapiversion' % self._output_path
-        self._override_folder = '%s/../__overrides' % self._output_path
-        self._attrs_defaults_path = '%s/../__attributes_defaults' % self._output_path
-
-        self._autogenerate_path = '/autogenerates/'
-        self._fetchers_path = '/fetchers/'
-        self._setup_template = 'setup.py.tpl'
-        self._fetcher_template = 'nuobject_fetcher.py.tpl'
-        self._model_override_template = 'nuobject_override.py.tpl'
-        self._model_template = 'nuobject_autogenerate.py.tpl'
-        self._restuser_template = 'nurestuser.py.tpl'
-        self._constants_template = 'constants.py.tpl'
-        self._vsdsession_template = 'nuvsdsession.py.tpl'
-        self._autogenerate_init_template = '__autogenerate_init__.py.tpl'
-        self._fetcher_init_template = '__fetcher_init__.py.tpl'
-        self._override_init_template = '__override_init__.py.tpl'
-
+        self.apiversion = apiversion
+        self.output_directory = "%s/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(apiversion))
+        self.override_folder = '%s/../../__overrides' % self.output_directory
+        self.autogenerate_path = '/autogenerates/'
+        self.fetchers_path = '/fetchers/'
 
     def _attr_defaults_file(self):
         """
         """
-        if not os.path.exists(self._attrs_defaults_path):
+        attrs_defaults_path = "%s/../../__attributes_defaults" % self.output_directory
+
+        if not os.path.exists(attrs_defaults_path):
             return None
 
-        defaults_name           = "attrs_defaults.ini"
-        specific_defaults_name  = "%s_attrs_defaults.ini" % self._apiversion
-        target_folder           = "%s/resources" % self._apiversion_output_path
+        defaults_name = "attrs_defaults.ini"
+        specific_defaults_name = "%s_attrs_defaults.ini" % self.apiversion
+        target_folder = "%s/resources" % self.output_directory
 
-        specific_defaults_path = "%s/%s" % (self._attrs_defaults_path, specific_defaults_name)
+        specific_defaults_path = "%s/%s" % (attrs_defaults_path, specific_defaults_name)
         if os.path.exists(specific_defaults_path):
             return (specific_defaults_path, "%s/%s" % (target_folder, defaults_name), target_folder)
 
-        general_defaults_path  = "%s/%s" % (self._attrs_defaults_path, defaults_name)
+        general_defaults_path  = "%s/%s" % (attrs_defaults_path, defaults_name)
         if os.path.exists(general_defaults_path):
             return (general_defaults_path, "%s/%s" % (target_folder, defaults_name), target_folder)
 
@@ -202,10 +174,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 constants (dict): dict of constants
 
         """
-        destination = self._apiversion_output_path
-        filename = 'constants.py'
-
-        self.write(destination=destination, filename=filename, template_name=self._constants_template, constants=constants)
+        self.write(destination=self.output_directory, filename='constants.py', template_name='constants.py.tpl', constants=constants)
 
     def write_init_autogenerate_files(self, filenames):
         """ Write constants file
@@ -214,10 +183,9 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self._apiversion_output_path, self._autogenerate_path)
-        filename = '__init__.py'
+        destination = '%s%s' % (self.output_directory, self.autogenerate_path)
 
-        self.write(destination=destination, filename=filename, template_name=self._autogenerate_init_template, filenames=filenames)
+        self.write(destination=destination, filename='__init__.py', template_name='__autogenerate_init__.py.tpl', filenames=filenames)
 
     def write_init_fetcher_files(self, filenames):
         """ Write constants file
@@ -226,10 +194,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self._apiversion_output_path, self._fetchers_path)
-        filename = '__init__.py'
-
-        self.write(destination=destination, filename=filename, template_name=self._fetcher_init_template, filenames=filenames)
+        destination = '%s%s' % (self.output_directory, self.fetchers_path)
+        self.write(destination=destination, filename='__init__.py', template_name='__fetcher_init__.py.tpl', filenames=filenames)
 
     def write_init_override_files(self, filenames):
         """ Write constants file
@@ -238,55 +204,49 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = self._apiversion_output_path
-        filename = '__init__.py'
+        self.write(destination=self.output_directory, filename='__init__.py', template_name='__override_init__.py.tpl', filenames=filenames)
 
-        self.write(destination=destination, filename=filename, template_name=self._override_init_template, filenames=filenames)
-
-    def write_vsdsession_file(self, version):
+    def write_vsdsession_file(self):
         """ Write VSD session file
 
             Args:
                 version (str): the version of the vsd
 
         """
-        destination = self._apiversion_output_path
-        filename = 'nuvsdsession.py'
+        self.write(destination=self.output_directory, filename='nuvsdsession.py', template_name='nuvsdsession.py.tpl', version=self.apiversion)
 
-        self.write(destination=destination, filename=filename, template_name=self._vsdsession_template, version=version)
-
-    def write_model(self, model, version):
+    def write_model(self, model):
         """ Write autogenerate model file
 
         """
-        destination = '%s%s' % (self._apiversion_output_path, self._autogenerate_path)
+        destination = '%s%s' % (self.output_directory, self.autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
-        self.write(destination=destination, filename=filename, template_name=self._model_template, model=model, version=version)
+        self.write(destination=destination, filename=filename, template_name='nuobject_autogenerate.py.tpl', model=model, version=self.apiversion)
 
         return (filename, model.name)
 
-    def write_restuser_model(self, model, version):
+    def write_restuser_model(self, model):
         """ Write autogenerate rest user model file
 
         """
-        destination = '%s%s' % (self._apiversion_output_path, self._autogenerate_path)
+        destination = '%s%s' % (self.output_directory, self.autogenerate_path)
         filename = 'nu%s.py' % model.name.lower()
 
-        self.write(destination=destination, filename=filename, template_name=self._restuser_template, model=model, version=version)
+        self.write(destination=destination, filename=filename, template_name='nurestuser.py.tpl', model=model, version=self.apiversion)
 
         return (filename, model.name)
 
-    def write_model_override(self, model, version):
+    def write_model_override(self, model):
         """ Write model override
 
         """
-        destination = self._apiversion_output_path
+        destination = self.output_directory
         filename = 'nu%s.py' % model.name.lower()
 
         # find override file
-        specific_override_path = "%s/%s_nu%s.override.py" % (self._override_folder, self._apiversion, model.name.lower())
-        generic_override_path = "%s/nu%s.override.py" % (self._override_folder, model.name.lower())
+        specific_override_path = "%s/%s_nu%s.override.py" % (self.override_folder, self.apiversion, model.name.lower())
+        generic_override_path = "%s/nu%s.override.py" % (self.override_folder, model.name.lower())
         final_path = specific_override_path if os.path.exists(specific_override_path) else generic_override_path
 
         # Read override from file
@@ -294,17 +254,17 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         if os.path.isfile(final_path):
             override_content = open(final_path).read()
 
-        self.write(destination=destination, filename=filename, template_name=self._model_override_template, model=model, override_content=override_content)
+        self.write(destination=destination, filename=filename, template_name='nuobject_override.py.tpl', model=model, override_content=override_content)
         return (filename, model.name)
 
-    def write_fetcher(self, model, version):
+    def write_fetcher(self, model):
         """ Write fetcher
 
         """
-        destination = '%s%s' % (self._apiversion_output_path, self._fetchers_path)
+        destination = '%s%s' % (self.output_directory, self.fetchers_path)
         filename = 'nu%s_fetcher.py' % model.plural_name.lower()
 
-        self.write(destination=destination, filename=filename, template_name=self._fetcher_template, model=model, version=version)
+        self.write(destination=destination, filename=filename, template_name='nuobject_fetcher.py.tpl', model=model)
 
         return (filename, model.plural_name)
 
