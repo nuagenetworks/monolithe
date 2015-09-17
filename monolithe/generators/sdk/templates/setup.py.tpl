@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# {{sdk_copyright}}
+# {{copyright}}
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

@@ -146,7 +146,7 @@ class SDKDocFileWriter(TemplateFileWriter):
         """
         self.write( destination=self.directory, filename="conf.py", template_name="conf.py.tpl",
                     sdk_name=self._sdk_name,
-                    sdk_copyright=MonolitheConfig.get_option("sdk_copyright", "sdk"))
+                    copyright=MonolitheConfig.get_option("copyright"))
 
     def write_index(self):
         """

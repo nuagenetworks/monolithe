@@ -45,8 +45,8 @@ class _SDKFileWriter(TemplateFileWriter):
         """
         """
         self.write( destination=self.directory, filename='setup.py', template_name='setup.py.tpl',
+                    copyright=MonolitheConfig.get_option("copyright"),
                     sdk_name=MonolitheConfig.get_option("sdk_name", "sdk"),
-                    sdk_copyright=MonolitheConfig.get_option("sdk_copyright", "sdk"),
                     sdk_version=MonolitheConfig.get_option("sdk_version", "sdk"),
                     sdk_revision_number=MonolitheConfig.get_option("sdk_revision_number", "sdk"),
                     sdk_url=MonolitheConfig.get_option("sdk_url", "sdk"),
