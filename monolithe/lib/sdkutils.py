@@ -116,3 +116,23 @@ class SDKUtils(object):
             return version
 
         return ('v%s' % version).replace('.', '_')
+
+    @classmethod
+    def get_float_version(cls, string_version):
+        """ Get the sdk version as float according to the given string version
+
+            Args:
+                string_version (stirng): the version
+
+            Returns:
+                version as float
+
+            Example:
+                get_float_version("v3_1")
+                >>> 3.1
+
+        """
+        if string_version == 'master':
+            return string_version
+
+        return float(string_version.replace("v", "").replace("_", "."))

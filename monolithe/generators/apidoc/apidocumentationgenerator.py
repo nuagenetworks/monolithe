@@ -67,7 +67,7 @@ class APIDocumentationGenerator(object):
         """ Start generation ofthe API Documentation
 
         """
-        Printer.log("Starting API documentation generation from branch `%s` of repository `%s`" % (apiversion, self.repository_manager.repository))
+        Printer.log("Generating API documentation from branch `%s` of repository `%s`" % (apiversion, self.repository_manager.repository))
 
         self._install_system_vanilla(apiversion=apiversion)
         self._install_user_vanilla(apiversion=apiversion)

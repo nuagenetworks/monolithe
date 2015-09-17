@@ -4,4 +4,6 @@ recursive-include monolithe/generators/apidoc/templates *
 recursive-include monolithe/generators/apidoc/vanilla *
 recursive-include monolithe/generators/sdk/templates *
 recursive-include monolithe/generators/sdk/vanilla *
+recursive-include monolithe/generators/sdkdoc/templates *
+recursive-include monolithe/generators/sdkdoc/vanilla *
 recursive-include monolithe/lib/models/data *

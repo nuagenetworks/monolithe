@@ -43,7 +43,7 @@ class SDKAPIVersionGenerator(object):
     def generate(self, specifications):
         """
         """
-        Printer.log("Starting %s generation for %s files" % (self.sdk_name, len(specifications)))
+        Printer.log("Generating %s from %s specifications..." % (self.sdk_name, len(specifications)))
         writer = SDKAPIVersionWriter(directory="%s/%s" % (self.sdk_output, self.sdk_name), apiversion=self.apiversion)
         writer.write(resources=specifications, apiversion=self.apiversion, revision=1)
         Printer.success("Generated %s with %s objects for API version %s" % (self.sdk_name, len(specifications), self.apiversion))

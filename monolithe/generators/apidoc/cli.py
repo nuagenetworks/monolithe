@@ -9,7 +9,7 @@ import os
 def main(argv=sys.argv):
     """
     """
-    parser = argparse.ArgumentParser(description="VSD Documentation Generator.")
+    parser = argparse.ArgumentParser(description="API Documentation Generator.")
 
     parser.add_argument('-g', "--github",
                         dest="api_url",

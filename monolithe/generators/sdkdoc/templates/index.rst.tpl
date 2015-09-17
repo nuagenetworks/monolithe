@@ -1,10 +1,11 @@
-VSPK Documentation
-==================
+{% set title= "%s Documentation" % sdk_name.upper() %}
+{{title}}
+{{"=" * title|length}}
 
 Getting Started
 ---------------
 
-This section contains all the concepts to use `vsdk` and a lot of tutorials and examples.
+This section contains all the concepts to use `{{sdk_name}}` and a lot of tutorials and examples.
 
 .. toctree::
     :maxdepth: 1
@@ -16,10 +17,8 @@ This section contains all the concepts to use `vsdk` and a lot of tutorials and 
     getting_started
 
 
-Sample Scripts
---------------
-
-This section show sample scripts you can reuse for a variety of day to day operations.
+Sample Code
+-----------
 
 .. toctree::
     :maxdepth: 2
@@ -28,16 +27,18 @@ This section show sample scripts you can reuse for a variety of day to day opera
     sample_code
 
 
-SDK API Reference
-------------------
+{% set title= "%s API Reference" % sdk_name.upper() %}
+{{title}}
+{{"=" * title|length}}
 
-This section describes all models and fetchers from the `vsdk`.
+This section describes all models and fetchers from the `{{sdk_name}}`.
 
 .. toctree::
     :maxdepth: 1
     :glob:
 
-    vsdk_*_reference
+    {{sdk_name}}_*_reference
+
 
 
 Bambou API Reference
