@@ -43,7 +43,7 @@ class SpecificationsGenerator(object):
         swagger_resources = swagger_parser.run()
 
         # Convert Swagger models
-        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
+        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, version=self.apiversion)
 
         if not self.output_path:
             self.output_path = Constants.SPECGEN_DIRECTORY
@@ -73,7 +73,7 @@ class SpecificationsGenerator(object):
         swagger_resources = swagger_parser.run(filters=[rest_name])
 
         # Convert Swagger models
-        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, filters=[rest_name])
+        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, version=self.apiversion, filters=[rest_name])
 
         if rest_name in specifications:
             return specifications[rest_name]

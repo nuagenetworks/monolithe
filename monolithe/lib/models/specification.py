@@ -24,8 +24,8 @@ class Specification(dict):
         """ Initializes a specification
 
         """
-        super(Specification, self).__init__()
 
+        super(Specification, self).__init__()
         self.update(self.get_default_specification())
         self._from_swagger(swagger)
 
@@ -76,6 +76,7 @@ class Specification(dict):
                 apis: the apis from the swagger structure
 
         """
+
 
         for api in apis:
             path = api['path']

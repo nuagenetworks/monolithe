@@ -15,7 +15,7 @@ class SwaggerTransformer(object):
     """
 
     @classmethod
-    def get_specifications(cls, resources, filters=[]):
+    def get_specifications(cls, resources, version, filters=[]):
         """ Prepare all resources
 
             Args:
@@ -48,6 +48,26 @@ class SwaggerTransformer(object):
             # Attach children relation to its parent
             if rest_name in relations:
                 specification['apis']['children'] = relations[rest_name]
+
+                metadata_path = '/%s/id/metadatas' % specification['model']['resourceName']
+                add_metadata_api = 'metadata' not in rest_name
+
+                if add_metadata_api and metadata_path not in specification['apis']['children'] and version > 3.1:
+                    metadata_api = {}
+                    metadata_api['RESTName'] = 'metadata'
+                    metadata_api['resourceName'] = 'metadatas'
+                    metadata_api['entityName'] = 'Metadata'
+                    metadata_api['operations'] = [{
+                                                    "availability": None,
+                                                    "method": "GET"
+                                                  },
+                                                  {
+                                                    "availability": None,
+                                                    "method": "POST"
+                                                  }]
+
+                    specification['apis']['children'][metadata_path] = metadata_api
+
 
         if Constants.USER_REST_NAME in specifications and Constants.RESTUSER_REST_NAME in relations:
             specifications[Constants.RESTUSER_REST_NAME] = cls._get_rest_user_specification(specifications[Constants.USER_REST_NAME], relations[Constants.RESTUSER_REST_NAME])

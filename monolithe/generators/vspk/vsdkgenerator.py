@@ -52,7 +52,7 @@ class VSDKGenerator(object):
         swagger_resources = swagger_parser.run()
 
         # Convert Swagger models
-        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
+        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, version=self.apiversion)
 
         if self.specifications_path is not None:
             candidates = SpecificationParser.run(self.specifications_path, specifications)
