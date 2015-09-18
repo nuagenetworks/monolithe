@@ -5,7 +5,7 @@ setup(
     packages=find_packages(exclude=['*tests*']),
     include_package_data=True,
     version='0.0.2',
-    description='Monolithe is the generator of all documentation and SDK for Nuage Network VSP',
+    description='Monolithe is the basis of the universe',
     author='Christophe Serafin, Antoine Mercadal',
     author_email='christophe.serafin@nuagenetworks.net, antoine@nuagenetworks.net',
     url="https://github.com/nuagenetworks/monolithe",
