@@ -12,6 +12,7 @@ class TestHelper(object):
     """
     _sdk = None
     _debug = False
+    _session_class_name = None
 
     @classmethod
     def set_debug_mode(cls, debug=True):
@@ -48,18 +49,20 @@ class TestHelper(object):
             Printer.json(response.errors)
 
     @classmethod
-    def use_sdk(cls, sdk):
+    def use_sdk(cls, sdk, session_class_name):
         """ Retain used sdk
 
         """
+        cls._session_class_name = session_class_name
         cls._sdk = sdk
 
     @classmethod
-    def current_push_center(cls):
+    def current_push_center(cls, session_class_name):
         """ Get current push center
 
         """
-        session = cls._sdk.NUVSDSession.get_current_session()
+
+        session = getattr(cls._sdk, cls._session_class_name).get_current_session()
         return session.push_center
 
     @classmethod
@@ -67,7 +70,7 @@ class TestHelper(object):
         """ Change api key
 
         """
-        session = cls._sdk.NUVSDSession.get_current_session()
+        session = getattr(cls._sdk, cls._session_class_name).get_current_session()
         session.login_controller.api_key = api_key
 
     @classmethod
@@ -75,7 +78,7 @@ class TestHelper(object):
         """ Get headers
 
         """
-        session = cls._sdk.NUVSDSession.get_current_session()
+        session = getattr(cls._sdk, cls._session_class_name).get_current_session()
         controller = session.login_controller
 
         headers = dict()

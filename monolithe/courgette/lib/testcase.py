@@ -73,7 +73,7 @@ class CourgetteTestResult(TestResult):
                (str(self.__class__), self.testsRun, len(self.errors), len(self.failures))
 
 
-class CourgetteCourgetteTestsRunner(object):
+class CourgetteTestRunner(object):
     """
 
     """
@@ -110,8 +110,8 @@ class CourgetteCourgetteTestsRunner(object):
 class CourgetteTestCase(TestCase):
 
     _last_connection = None  # Last connection to present errors
-    parent = None  # Parent VSD object
-    vsdobject = None  # Current VSD object
+    parent = None  # Parent SDK object
+    sdkobject = None  # Current SDK object
     user = None  # Current RESTUser
 
     @property

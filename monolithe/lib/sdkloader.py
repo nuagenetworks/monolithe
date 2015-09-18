@@ -22,9 +22,8 @@ class SDKLoader(object):
         """
         cls._version = SDKUtils.get_string_version(version)
 
-
     @classmethod
-    def get_sdk_package(cls, sdk_identifier):
+    def get_sdk_package(cls, sdk_identifier, sdk_class_prefix):
         """ Returns sdk package
 
             Args:
@@ -35,7 +34,7 @@ class SDKLoader(object):
         """
         sdk = importlib.import_module('%s.%s' % (sdk_identifier, cls._version))
 
-        classnames = [name for name in dir(sdk) if name.startswith('NU') and not name.endswith('Fetcher')]
+        classnames = [name for name in dir(sdk) if name.startswith(sdk_class_prefix) and not name.endswith('Fetcher')]
 
         for classname in classnames:
             klass = getattr(sdk, classname)
@@ -76,7 +75,7 @@ class SDKLoader(object):
         return None
 
     @classmethod
-    def class_from_model(cls, model):
+    def class_from_model(cls, model, sdk_class_prefix):
         """ Create a NURESTObject from the given specification
 
             Args:
@@ -95,7 +94,7 @@ class SDKLoader(object):
 
             self._compute_args(**kwargs)
 
-        classname = "NU%s" % model.name
+        classname = "%s%s" % (sdk_class_prefix, model.name)
         klass = type(str(classname), (NURESTObject, ), {"__init__": init})
         klass.__rest_name__ = model.remote_name
 
@@ -104,7 +103,7 @@ class SDKLoader(object):
         return klass
 
     @classmethod
-    def update_fetchers_for_object(cls, parent, child, model):
+    def update_fetchers_for_object(cls, parent, child, sdk_class_prefix,  model):
         """
 
         """
@@ -112,7 +111,7 @@ class SDKLoader(object):
             """"""
             NURESTFetcher.__init__(self)
 
-        fetcher_classname = 'NU%sFetcher' % model.plural_name
+        fetcher_classname = '%s%sFetcher' % (sdk_class_prefix, model.plural_name)
         fetcher_klass = type(str(fetcher_classname), (NURESTFetcher, ), {"__init__": fetcher_init})
 
         def managed_class(cls):
@@ -152,7 +151,7 @@ class SDKLoader(object):
         return None
 
     @classmethod
-    def get_instance_from_model(cls, model, **attributes):
+    def get_instance_from_model(cls, model, sdk_class_prefix,  **attributes):
         """ Get instance of a object related to its resource name
 
             Args:
@@ -163,7 +162,7 @@ class SDKLoader(object):
                 Returns the instance or None if
                 no resource name matches.
         """
-        klass = cls.class_from_model(model)
+        klass = cls.class_from_model(model, sdk_class_prefix)
 
         if klass:
             python_attributes = cls._convert_attributes(attributes)

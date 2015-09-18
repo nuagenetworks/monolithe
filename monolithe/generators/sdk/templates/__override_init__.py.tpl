@@ -26,10 +26,10 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 {% set classnames = [] %}
 {% for filename, classname in filenames.iteritems() %}
-{% do classnames.append('"NU' + classname + '"') %}from .{{filename[:-3]}} import NU{{classname}}{% endfor %}
-from .nuvsdsession import NUVSDSession
+{% do classnames.append('"' + sdk_class_prefix + classname + '"') %}from .{{filename[:-3]}} import {{sdk_class_prefix}}{{classname}}{% endfor %}
+from .{{sdk_class_prefix|lower}}{{product_accronym|lower}}session import {{sdk_class_prefix}}{{product_accronym}}Session
 
-__all__ = [{{ ', '.join(classnames)}}, 'NUVSDSession']
+__all__ = [{{ ', '.join(classnames)}}, '{{sdk_class_prefix}}{{product_accronym}}Session']
 
 import pkg_resources
 from bambou import BambouConfig, NURESTModelController
@@ -37,5 +37,5 @@ from bambou import BambouConfig, NURESTModelController
 default_attrs = pkg_resources.resource_filename(__name__, '/resources/attrs_defaults.ini')
 BambouConfig.set_default_values_config_file(default_attrs)
 
-{% for filename, classname in filenames.iteritems() %}NURESTModelController.register_model(NU{{classname}})
+{% for filename, classname in filenames.iteritems() %}NURESTModelController.register_model({{sdk_class_prefix}}{{classname}})
 {% endfor %}

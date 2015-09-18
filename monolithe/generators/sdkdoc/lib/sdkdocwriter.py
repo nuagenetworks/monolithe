@@ -11,7 +11,7 @@ from monolithe.generators.lib.writers import TemplateFileWriter
 
 
 class SDKDocWriter(object):
-    """ Writer of the Python VSD Documentation
+    """ Writer of the Python SDK Documentation
 
     """
 

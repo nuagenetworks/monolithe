@@ -8,7 +8,7 @@ from monolithe.generators.lib.writers import TemplateFileWriter
 
 
 class APIDocWriter(object):
-    """ Writer of the Python VSD Documentation
+    """ Writer of the Python SDK Documentation
 
     """
 

@@ -32,28 +32,28 @@ NURESTSession
 
 The :class:`bambou.NURESTSession` represents some user credentials coupled with an API URL. All ReST calls are done using the current active session. :class:`bambou.NURESTSession` is an abstract class that must be reimplemented by anything using `Bambou`.
 
-In `{{sdk_name}}`, you use a class named :class:`{sdk_name}}.v3_2.NU{{product_name}}Session` which will be used in the following examples.
+In `{{sdk_name}}`, you use a class named :class:`{sdk_name}}.v3_2.{{sdk_class_prefix}}{{product_accronym}}Session` which will be used in the following examples.
 
 
 .. code-block:: python
     :linenos:
 
-    session = NU{{product_name}}Session(username="user", password="secret", enterprise="organization", api_url="https://{{product_name|lower}}:8443")
+    session = {{sdk_class_prefix}}{{product_accronym}}Session(username="user", password="secret", enterprise="organization", api_url="https://{{product_name|lower}}:8443")
     session.start()
 
     # your script
 
 .. note:: Since August 2015, it is no longer necessary to provide the API version parameter. `vpsk` will automatically grab it from the `{{sdk_name}}` you are using.
 
-When you start the session, a ReST call will be sent to the API endpoint in order to get the {{product_name}} API key. If the credentials are valid, the attribute :attr:`{{sdk_name}}.v3_2.NU{{product_name}}Session.user` will be populated with information such as your name, your phone number, your avatar, your enterprise name and ID etc. This `user` is the root object of everything as all subsequent calls need to be done in the context of your account (for instance, your `/enterprises` are different from another account's `/enterprises`)
+When you start the session, a ReST call will be sent to the API endpoint in order to get the {{product_name}} API key. If the credentials are valid, the attribute :attr:`{{sdk_name}}.v3_2.{{sdk_class_prefix}}{{product_accronym}}Session.user` will be populated with information such as your name, your phone number, your avatar, your enterprise name and ID etc. This `user` is the root object of everything as all subsequent calls need to be done in the context of your account (for instance, your `/enterprises` are different from another account's `/enterprises`)
 
 It is also possible to create sub sessions with the python statement `with`:
 
 .. code-block:: python
     :linenos:
 
-    cspsession = NU{{product_name}}Session(username="user", password="secret", enterprise="organization", api_url="https://{{product_name|lower}}:8443")
-    adminsession = NU{{product_name}}Session(username="admin", password="secret", enterprise="enterprise", api_url="https://{{product_name|lower}}:8443")
+    cspsession = {{sdk_class_prefix}}{{product_accronym}}Session(username="user", password="secret", enterprise="organization", api_url="https://{{product_name|lower}}:8443")
+    adminsession = {{sdk_class_prefix}}{{product_accronym}}Session(username="admin", password="secret", enterprise="enterprise", api_url="https://{{product_name|lower}}:8443")
 
     cspsession.start()
 
@@ -204,7 +204,7 @@ Fetcher is a powerfull concept that makes the process of getting child objects c
 
 This allows complete abstract programatic operations on any objects.
 
-For instance, the following function will create a new :class:`{{sdk_name}}.v3_2.NUMetadata` to the entire hierarchy of children from a given object that has been created after a certain date:
+For instance, the following function will create a new :class:`{{sdk_name}}.v3_2.{{sdk_class_prefix}}Metadata` to the entire hierarchy of children from a given object that has been created after a certain date:
 
 .. code-block:: python
     :linenos:
@@ -227,8 +227,8 @@ For instance, the following function will create a new :class:`{{sdk_name}}.v3_2
                 apply_metadata_to_all_children(child, metadata)
 
 
-    enterprise = NUEnterprise(id="xxxx-xxxx-xxx-xxxx")
-    metadata = NUMetadata(name="my metadata", blob="hello world!")
+    enterprise = {{sdk_class_prefix}}Enterprise(id="xxxx-xxxx-xxx-xxxx")
+    metadata = {{sdk_class_prefix}}Metadata(name="my metadata", blob="hello world!")
 
     apply_metadata_to_all_children(enterprise, metadata, filter="creationDate > '01-01-2015'")
 
@@ -244,7 +244,7 @@ A :class:`bambou.NURESTPushCenter` is automatically created with each :class:`ba
 .. code-block:: python
     :linenos:
 
-    session = NU{{product_name}}Session(username="user", password="secret", enterprise="organization", api_url="https://{{product_name|lower}}:8443")
+    session = {{sdk_class_prefix}}{{product_accronym}}Session(username="user", password="secret", enterprise="organization", api_url="https://{{product_name|lower}}:8443")
     session.start()
     session.push_center.start()
 
@@ -279,7 +279,7 @@ Here is a really simple code sample that will print the push data on every push:
     from pprint import pprint
     from time import sleep
 
-    session = NU{{product_name}}Session(username="csproot", password="secret", enterprise="csp", api_url="https://{{product_name|lower}}:8443")
+    session = {{sdk_class_prefix}}{{product_accronym}}Session(username="csproot", password="secret", enterprise="csp", api_url="https://{{product_name|lower}}:8443")
     session.start()
 
     def on_receive_push(data):

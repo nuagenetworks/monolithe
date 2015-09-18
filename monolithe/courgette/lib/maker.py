@@ -6,8 +6,7 @@ from unittest2 import TestSuite
 
 from monolithe.lib import SDKLoader
 
-from .helpers import TestHelper
-from .makers import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
+from .helper import TestHelper
 from .testcase import CourgetteTestCase
 
 
@@ -60,11 +59,11 @@ class _TestMaker(object):
 
         return True
 
-    def make_tests(self, vsdobject, testcase):
+    def make_tests(self, sdkobject, testcase):
         """ Make all tests that should be run for the given object in the specified testcase
 
             Args:
-                vsdobject: the vsd object
+                sdkobject: the sdk object
                 testcase: the test case
 
             Returns:
@@ -72,7 +71,7 @@ class _TestMaker(object):
 
         """
         tests = dict()
-        attributes = vsdobject.get_attributes()
+        attributes = sdkobject.get_attributes()
 
         for attribute in attributes:
 
@@ -81,22 +80,22 @@ class _TestMaker(object):
 
             for function_name, conditions in self._attributes_registry.iteritems():
                 if self.does_attribute_meet_condition(attribute, conditions):
-                    (test_name, test_func) = self._create_test(testcase=testcase, vsdobject=vsdobject, function_name=function_name, attribute=attribute)
+                    (test_name, test_func) = self._create_test(testcase=testcase, sdkobject=sdkobject, function_name=function_name, attribute=attribute)
                     tests[test_name] = test_func
 
         for function_name, infos in self._object_registry.iteritems():
-            (test_name, test_func) = self._create_test(testcase=testcase, vsdobject=vsdobject, function_name=function_name)
+            (test_name, test_func) = self._create_test(testcase=testcase, sdkobject=sdkobject, function_name=function_name)
             tests[test_name] = test_func
 
         return tests
 
-    def _create_test(self, testcase, function_name, vsdobject, attribute=None):
-        """ Create a test method for the vsdoject
+    def _create_test(self, testcase, function_name, sdkobject, attribute=None):
+        """ Create a test method for the sdkoject
 
             Args:
                 testcase: the testcase to that should manage the method
                 function_name: the name of the method in the testcase
-                vsdobject: the object that should be tested
+                sdkobject: the object that should be tested
                 attribute: the attribute information if necessary
 
             Returns:
@@ -104,7 +103,7 @@ class _TestMaker(object):
 
         """
         func = getattr(testcase, function_name)
-        object_name = vsdobject.rest_name
+        object_name = sdkobject.rest_name
 
         # Name that will be displayed
         test_name = ''
@@ -141,13 +140,13 @@ class CreateTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, vsdobject, user):
+    def __init__(self, parent, sdkobject, user):
         """ Initializes a test case for creating objects
 
         """
         super(CreateTestMaker, self).__init__()
         self.parent = parent
-        self.vsdobject = vsdobject
+        self.sdkobject = sdkobject
         self.user = user
 
         # Object tests
@@ -164,10 +163,10 @@ class CreateTestMaker(_TestMaker):
 
         """
         CreateTestCase.parent = self.parent
-        CreateTestCase.vsdobject = self.vsdobject
+        CreateTestCase.sdkobject = self.sdkobject
         CreateTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=CreateTestCase)
+        tests = self.make_tests(sdkobject=self.sdkobject, testcase=CreateTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(CreateTestCase, test_name, test_func)
 
@@ -181,31 +180,30 @@ class CreateTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
+        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.vsdobject = SDKLoader.get_instance_copy(self.pristine_vsdobject)
+        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
 
     def tearDown(self):
         """ Clean up environment
 
         """
-        if self.vsdobject and self.vsdobject.id:
-            self.vsdobject.delete()
-            self.vsdobject.id = None
+        if self.sdkobject and self.sdkobject.id:
+            self.sdkobject.delete()
+            self.sdkobject.id = None
 
     # Objects tests
     def _test_create_object_without_authentication_should_fail(self):
         """ Create an object without authentication """
 
         TestHelper.set_api_key(None)
-        (obj, connection) = self.parent.create_child(self.vsdobject)
+        (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
-
         TestHelper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
@@ -214,18 +212,18 @@ class CreateTestCase(CourgetteTestCase):
         """ Create an object with all its valid attributes should always succeed with 201 response
 
         """
-        (obj, connection) = self.parent.create_child(self.vsdobject)
+        (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 201)
-        self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
+        self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
 
     # Attributes tests
     def _test_create_object_with_required_attribute_as_none_should_fail(self, attribute):
         """ Create an object with a required attribute as None """
 
-        setattr(self.vsdobject, attribute.local_name, None)
-        (obj, connection) = self.parent.create_child(self.vsdobject)
+        setattr(self.sdkobject, attribute.local_name, None)
+        (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
@@ -234,8 +232,8 @@ class CreateTestCase(CourgetteTestCase):
     def _test_create_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Create an objet with an attribute as none """
 
-        setattr(self.vsdobject, attribute.local_name, None)
-        (obj, connection) = self.parent.create_child(self.vsdobject)
+        setattr(self.sdkobject, attribute.local_name, None)
+        (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 201)
@@ -244,8 +242,8 @@ class CreateTestCase(CourgetteTestCase):
     def _test_create_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Create an object with a wrong choice attribute """
 
-        setattr(self.vsdobject, attribute.local_name, u'A random value')
-        (obj, connection) = self.parent.create_child(self.vsdobject)
+        setattr(self.sdkobject, attribute.local_name, u'A random value')
+        (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
@@ -258,13 +256,13 @@ class UpdateTestMaker(_TestMaker):
     """ TestCase for updating objects
 
     """
-    def __init__(self, parent, vsdobject, user):
+    def __init__(self, parent, sdkobject, user):
         """ Initializes a test case for updating objects
 
         """
         super(UpdateTestMaker, self).__init__()
         self.parent = parent
-        self.vsdobject = vsdobject
+        self.sdkobject = sdkobject
         self.user = user
 
         # Object tests
@@ -282,10 +280,10 @@ class UpdateTestMaker(_TestMaker):
 
         """
         UpdateTestCase.parent = self.parent
-        UpdateTestCase.vsdobject = self.vsdobject
+        UpdateTestCase.sdkobject = self.sdkobject
         UpdateTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=UpdateTestCase)
+        tests = self.make_tests(sdkobject=self.sdkobject, testcase=UpdateTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(UpdateTestCase, test_name, test_func)
 
@@ -299,29 +297,29 @@ class UpdateTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
+        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.vsdobject = SDKLoader.get_instance_copy(self.pristine_vsdobject)
+        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
 
-        self.parent.create_child(self.vsdobject)
+        self.parent.create_child(self.sdkobject)
 
     def tearDown(self):
         """ Clean up environment
 
         """
-        self.vsdobject.delete()
+        self.sdkobject.delete()
 
     # Objects tests
     def _test_update_object_without_authentication_should_fail(self):
         """ Update an object without authentication """
 
         TestHelper.set_api_key(None)
-        (obj, connection) = self.vsdobject.save()
+        (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
         TestHelper.set_api_key(self.user.api_key)
 
@@ -331,7 +329,7 @@ class UpdateTestCase(CourgetteTestCase):
         """ Update an object with same attributes should always fail with 409 error
 
         """
-        (obj, connection) = self.vsdobject.save()
+        (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
@@ -341,8 +339,8 @@ class UpdateTestCase(CourgetteTestCase):
     def _test_update_object_with_required_attribute_as_none_should_fail(self, attribute):
         """ Update an object with a required attribute as None """
 
-        setattr(self.vsdobject, attribute.local_name, None)
-        (obj, connection) = self.vsdobject.save()
+        setattr(self.sdkobject, attribute.local_name, None)
+        (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
@@ -351,8 +349,8 @@ class UpdateTestCase(CourgetteTestCase):
     def _test_update_object_with_attribute_with_choices_as_none_should_fail(self, attribute):
         """ Update an objet with an attribute with choices as none should fail """
 
-        setattr(self.vsdobject, attribute.local_name, None)
-        (obj, connection) = self.vsdobject.save()
+        setattr(self.sdkobject, attribute.local_name, None)
+        (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
@@ -361,8 +359,8 @@ class UpdateTestCase(CourgetteTestCase):
     def _test_update_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Update an object with a wrong choice attribute """
 
-        setattr(self.vsdobject, attribute.local_name, u'A random value')
-        (obj, connection) = self.vsdobject.save()
+        setattr(self.sdkobject, attribute.local_name, u'A random value')
+        (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
@@ -371,8 +369,8 @@ class UpdateTestCase(CourgetteTestCase):
     def _test_update_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Update an objet with an attribute as none """
 
-        setattr(self.vsdobject, attribute.local_name, None)
-        (obj, connection) = self.vsdobject.save()
+        setattr(self.sdkobject, attribute.local_name, None)
+        (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 200)
@@ -386,13 +384,13 @@ class DeleteTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, vsdobject, user):
+    def __init__(self, parent, sdkobject, user):
         """ Initializes a test case for creating objects
 
         """
         super(DeleteTestMaker, self).__init__()
         self.parent = parent
-        self.vsdobject = vsdobject
+        self.sdkobject = sdkobject
         self.user = user
 
         # Object tests
@@ -407,10 +405,10 @@ class DeleteTestMaker(_TestMaker):
 
         """
         DeleteTestCase.parent = self.parent
-        DeleteTestCase.vsdobject = self.vsdobject
+        DeleteTestCase.sdkobject = self.sdkobject
         DeleteTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=DeleteTestCase)
+        tests = self.make_tests(sdkobject=self.sdkobject, testcase=DeleteTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(DeleteTestCase, test_name, test_func)
 
@@ -424,30 +422,30 @@ class DeleteTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
+        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.vsdobject = SDKLoader.get_instance_copy(self.pristine_vsdobject)
+        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
 
-        self.parent.create_child(self.vsdobject)
+        self.parent.create_child(self.sdkobject)
 
     def tearDown(self):
         """ Clean up environment
 
         """
-        if self.vsdobject.id is not None:
-            self.vsdobject.delete()
+        if self.sdkobject.id is not None:
+            self.sdkobject.delete()
 
     # Objects tests
     def _test_delete_object_without_authentication_should_fail(self):
         """ Delete an object without authentication """
 
         TestHelper.set_api_key(None)
-        (obj, connection) = self.vsdobject.delete()
+        (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
         TestHelper.set_api_key(self.user.api_key)
@@ -458,26 +456,26 @@ class DeleteTestCase(CourgetteTestCase):
         """ Delete an object with its id should always succeed with 204 response
 
         """
-        (obj, connection) = self.vsdobject.delete()
+        (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 204)
-        self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
+        self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
 
     def _test_delete_object_with_wrong_id_should_succeed(self):
         """ Delete an object with a wrong id should fail with 404 error
 
         """
-        default_id = self.vsdobject.id
+        default_id = self.sdkobject.id
         invalid_id = u'Unknown ID'
-        self.vsdobject.id = invalid_id
-        (obj, connection) = self.vsdobject.delete()
+        self.sdkobject.id = invalid_id
+        (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
-        self.vsdobject.id = default_id
+        self.sdkobject.id = default_id
 
         self.assertConnectionStatus(connection, 404)
-        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.vsdobject.rest_name, description=u'Cannot find %s with ID %s' % (self.vsdobject.rest_name, invalid_id))
+        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.sdkobject.rest_name, description=u'Cannot find %s with ID %s' % (self.sdkobject.rest_name, invalid_id))
 
     # No Attributes tests
 
@@ -488,13 +486,13 @@ class GetTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, vsdobject, user):
+    def __init__(self, parent, sdkobject, user):
         """ Initializes a test case for creating objects
 
         """
         super(GetTestMaker, self).__init__()
         self.parent = parent
-        self.vsdobject = vsdobject
+        self.sdkobject = sdkobject
         self.user = user
 
         # Object tests
@@ -509,10 +507,10 @@ class GetTestMaker(_TestMaker):
 
         """
         GetTestCase.parent = self.parent
-        GetTestCase.vsdobject = self.vsdobject
+        GetTestCase.sdkobject = self.sdkobject
         GetTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetTestCase)
+        tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(GetTestCase, test_name, test_func)
 
@@ -526,29 +524,29 @@ class GetTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
+        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
         """ Setting up get test
 
         """
         self.last_connection = None
-        self.vsdobject = SDKLoader.get_instance_copy(self.pristine_vsdobject)
+        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
 
-        self.parent.create_child(self.vsdobject)
+        self.parent.create_child(self.sdkobject)
 
     def tearDown(self):
         """ Clean up environment
 
         """
-        self.vsdobject.delete()
+        self.sdkobject.delete()
 
     # Objects tests
     def _test_get_object_without_authentication_should_fail(self):
         """ Get an object without authentication """
 
         TestHelper.set_api_key(None)
-        (obj, connection) = self.vsdobject.fetch()
+        (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
 
         TestHelper.set_api_key(self.user.api_key)
@@ -559,26 +557,26 @@ class GetTestCase(CourgetteTestCase):
         """ Get an object with its id should always succeed with 204 response
 
         """
-        (obj, connection) = self.vsdobject.fetch()
+        (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 200)
-        self.assertEquals(obj.to_dict(), self.vsdobject.to_dict())
+        self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
 
     def _test_get_object_with_wrong_id_should_succeed(self):
         """ Get an object with a wrong id should fail with 404 error
 
         """
-        default_id = self.vsdobject.id
+        default_id = self.sdkobject.id
         invalid_id = u'Unknown ID'
-        self.vsdobject.id = invalid_id
-        (obj, connection) = self.vsdobject.fetch()
+        self.sdkobject.id = invalid_id
+        (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
 
-        self.vsdobject.id = default_id
+        self.sdkobject.id = default_id
 
         self.assertConnectionStatus(connection, 404)
-        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.vsdobject.rest_name, description=u'Cannot find %s with ID %s' % (self.vsdobject.rest_name, invalid_id))
+        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.sdkobject.rest_name, description=u'Cannot find %s with ID %s' % (self.sdkobject.rest_name, invalid_id))
 
     # No Attributes tests
 
@@ -591,13 +589,13 @@ class GetAllTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, vsdobject, user):
+    def __init__(self, parent, sdkobject, user):
         """ Initializes a test case for creating objects
 
         """
         super(GetAllTestMaker, self).__init__()
         self.parent = parent
-        self.vsdobject = vsdobject
+        self.sdkobject = sdkobject
         self.user = user
 
         # Object tests
@@ -612,10 +610,10 @@ class GetAllTestMaker(_TestMaker):
 
         """
         GetAllTestCase.parent = self.parent
-        GetAllTestCase.vsdobject = self.vsdobject
+        GetAllTestCase.sdkobject = self.sdkobject
         GetAllTestCase.user = self.user
 
-        tests = self.make_tests(vsdobject=self.vsdobject, testcase=GetAllTestCase)
+        tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetAllTestCase)
         for test_name, test_func in tests.iteritems():
             setattr(GetAllTestCase, test_name, test_func)
 
@@ -629,14 +627,14 @@ class GetAllTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName)
-        self.pristine_vsdobject = SDKLoader.get_instance_copy(self.vsdobject)
+        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
         """ Setting up get test
 
         """
         self.last_connection = None
-        self.vsdobject = SDKLoader.get_instance_copy(self.pristine_vsdobject)
+        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
 
     def tearDown(self):
         """ Clean up environment
@@ -649,7 +647,7 @@ class GetAllTestCase(CourgetteTestCase):
         """ Get all object without authentication """
 
         TestHelper.set_api_key(None)
-        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.vsdobject)
+        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.sdkobject)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
 
@@ -663,7 +661,7 @@ class GetAllTestCase(CourgetteTestCase):
         """ Get all object without content should succeed with 200 response
 
         """
-        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.vsdobject)
+        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.sdkobject)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
         self.last_connection = connection
@@ -674,14 +672,14 @@ class GetAllTestCase(CourgetteTestCase):
         """ Get all object with content should succeed with 200 response
 
         """
-        self.parent.create_child(self.vsdobject)
+        self.parent.create_child(self.sdkobject)
 
-        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.vsdobject)
+        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.sdkobject)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
 
         self.last_connection = connection
-        self.vsdobject.delete()
+        self.sdkobject.delete()
 
         self.assertConnectionStatus(connection, 200)
 

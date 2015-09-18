@@ -8,7 +8,7 @@ from monolithe.generators.apidoc.lib import APIDocWriter
 
 
 class APIDocumentationGenerator(object):
-    """ Generate VSD API Documentation
+    """ Generate SDK API Documentation
 
     """
     def __init__(self, monolithe_config):
