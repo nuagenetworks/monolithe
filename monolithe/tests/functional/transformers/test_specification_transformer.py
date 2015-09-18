@@ -19,7 +19,7 @@ class SpecificationTransformerTests(FunctionalTest):
         parser = SwaggerParser(path=cls.get_swagger_files_path(), vsdurl=None, apiversion=None)
         swagger_resources = parser.run()
 
-        cls.specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
+        cls.specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, version=None)
 
     @classmethod
     def tearDownClass(cls):

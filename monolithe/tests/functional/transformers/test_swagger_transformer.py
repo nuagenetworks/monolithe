@@ -31,7 +31,7 @@ class SwaggerTransformerTests(FunctionalTest):
         """ SwaggerTransformer returns a dictionary with all rest names
         """
 
-        resources = SwaggerTransformer.get_specifications(resources=self.swagger_resources)
+        resources = SwaggerTransformer.get_specifications(resources=self.swagger_resources, version=None)
 
         self.assertEqual(resources.keys(), [u'addressrange',
                                             u'alarm',
@@ -137,7 +137,7 @@ class SwaggerTransformerTests(FunctionalTest):
         """ SwaggerTransformer returns a Domain with all information
 
         """
-        resources = SwaggerTransformer.get_specifications(resources=self.swagger_resources)
+        resources = SwaggerTransformer.get_specifications(resources=self.swagger_resources, version=None)
 
         self.assertIn('domain', resources)
         self.assertOutputEqual(resources['domain'], {u'apis': {u'children': {u'/domains/{id}/bridgeinterfaces': {u'RESTName': u'bridgeinterface',
@@ -671,7 +671,7 @@ class SwaggerTransformerTests(FunctionalTest):
 
         """
 
-        resources = SwaggerTransformer.get_specifications(resources=self.swagger_resources)
+        resources = SwaggerTransformer.get_specifications(resources=self.swagger_resources, version=None)
 
         self.assertIn('me', resources)
         self.assertOutputEqual(resources['me'], {u'apis': {u'children': {u'/applicationservices': {u'RESTName': u'applicationservice',

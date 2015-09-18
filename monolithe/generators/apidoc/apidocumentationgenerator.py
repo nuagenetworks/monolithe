@@ -41,7 +41,7 @@ class APIDocumentationGenerator(object):
         swagger_resources = swagger_parser.run()
 
         # Convert Swagger models
-        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources)
+        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, version=self.apiversion)
 
         # Process Swagger models
         processed_resources = SpecificationTransformer.get_objects(specifications=specifications)
