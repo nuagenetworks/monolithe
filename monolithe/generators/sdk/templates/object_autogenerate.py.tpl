@@ -27,7 +27,6 @@
 
 {% for api in model.children_apis %}
 from ..fetchers import {{sdk_class_prefix}}{{ api.plural_name }}Fetcher{% endfor %}
-{%if version > 3.1 %}from ..fetchers import {{sdk_class_prefix}}MetadatasFetcher{% endif %}
 from bambou import NURESTObject{% if model.has_time_attribute %}
 from time import time{% endif %}
 
