@@ -118,7 +118,7 @@ def main(argv=sys.argv):
     # Generate SDK documentation
     if args.generate_doc:
         doc_generator = SDKDocGenerator(monolithe_config=monolithe_config)
-        doc_generator.run()
+        doc_generator.generate()
 
 
 if __name__ == '__main__':
