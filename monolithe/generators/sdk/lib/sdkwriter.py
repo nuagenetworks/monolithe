@@ -45,8 +45,8 @@ class _SDKFileWriter(TemplateFileWriter):
         self._sdk_email = self.monolithe_config.get_option("sdk_email", "sdk")
         self._sdk_description = self.monolithe_config.get_option("sdk_description", "sdk")
         self._sdk_license_name = self.monolithe_config.get_option("sdk_license_name", "sdk")
+        self._sdk_bambou_version = self.monolithe_config.get_option("sdk_bambou_version", "sdk")
         self._copyright = self.monolithe_config.get_option("copyright")
-
         self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
 
     def write_setup_file(self):
@@ -73,4 +73,5 @@ class _SDKFileWriter(TemplateFileWriter):
     def write_requirements_file(self):
         """
         """
-        self.write( destination=self.output_directory, filename='requirements.txt', template_name='requirements.txt.tpl')
+        self.write( destination=self.output_directory, filename='requirements.txt', template_name='requirements.txt.tpl',
+                    sdk_bambou_version=self._sdk_bambou_version)
