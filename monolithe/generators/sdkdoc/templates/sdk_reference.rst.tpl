@@ -1,6 +1,6 @@
 {% set title = "%s API %s Reference" % (sdk_name.upper(),  version) %}
-{{title}}
-{{"=" * title|length}}
+{{ title }}
+{{"=" * title|length }}
 
 **Models**
 
@@ -8,7 +8,7 @@
     :maxdepth: 1
     :glob:
 
-    {{sdk_name}}/{{version}}/models.*
+    {{ sdk_name }}/{{ version }}/models.*
 
 **Fetchers**
 
@@ -16,5 +16,5 @@
     :maxdepth: 1
     :glob:
 
-    {{sdk_name}}/{{version}}/fetchers.*
+    {{ sdk_name }}/{{ version }}/fetchers.*
 

@@ -26,6 +26,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 {% set classnames = [] %}
 {% for filename, classname in filenames.iteritems() %}
-{% do classnames.append('"' + sdk_class_prefix + classname + 'Fetcher"') %}from .{{filename[:-3]}} import {{sdk_class_prefix}}{{classname}}Fetcher{% endfor %}
+{% do classnames.append('"' + sdk_class_prefix + classname + 'Fetcher"') %}from .{{ filename[:-3]}} import {{ sdk_class_prefix }}{{ classname }}Fetcher{% endfor %}
 
 __all__ = [{{ ', '.join(classnames)}}]

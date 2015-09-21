@@ -29,6 +29,6 @@
 class {{ name }}(object):
     """ {{ name }} """
 
-    {% for key, value in constant_values.iteritems() %}{{key.upper()}} = u"{{value.upper()}}"
+    {% for key, value in constant_values.iteritems() %}{{ key.upper()}} = u"{{ value.upper()}}"
     {% endfor %}
 {% endfor %}

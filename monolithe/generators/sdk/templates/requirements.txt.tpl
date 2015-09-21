@@ -1,1 +1,1 @@
-bambou=={{sdk_bambou_version}}
+bambou=={{ sdk_bambou_version }}

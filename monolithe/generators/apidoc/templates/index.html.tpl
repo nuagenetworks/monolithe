@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{product_name}} API Reference</title>
+    <title>{{ product_name }} API Reference</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">{{product_name}} API Documentation</a>
+                <a class="navbar-brand" href="index.html">{{ product_name }} API Documentation</a>
 
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -31,7 +31,7 @@
                                 {% if package_name != model.package %}
                                     {% set package_name = model.package %}
                                     <li class="divider"></li>
-                                    <li><a data-id="section-{{package_name| replace(" ", "_")}}" href="#section-{{package_name | replace(" ", "_")}}">{{package_name}}</a></li>
+                                    <li><a data-id="section-{{ package_name| replace(" ", "_")}}" href="#section-{{ package_name | replace(" ", "_")}}">{{ package_name }}</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
@@ -56,13 +56,13 @@
                     </section>
                 {% endif %}
                 {% set package_name = model.package %}
-                <section id="section-{{package_name | replace(" ", "_")}}">
-                <h3>{{package_name}}</h3>
+                <section id="section-{{ package_name | replace(" ", "_")}}">
+                <h3>{{ package_name }}</h3>
             {% endif %}
 
             <div class="row bordered-row">
                 <div class="col-xs-12">
-                    <a class="filterable" data-filter-keyword="{{model.resource_name}}" id="{{model.resource_name}}" href="{{model.remote_name}}.html" title="API reference for {{model.name}}">{{model.resource_name}}</a>
+                    <a class="filterable" data-filter-keyword="{{ model.resource_name }}" id="{{ model.resource_name }}" href="{{ model.remote_name }}.html" title="API reference for {{ model.name }}">{{ model.resource_name }}</a>
                 </div>
             </div>
         {% endfor %}
