@@ -33,22 +33,22 @@ class SpecificationAPI(object):
         """
 
         """
-        self.path = data['path']
-        self.resource_name = data['resourceName']
-        self.remote_name = data['RESTName']
+        self.path = data["path"]
+        self.resource_name = data["resourceName"]
+        self.remote_name = data["RESTName"]
 
-        if 'entityName' in data:
+        if "entityName" in data:
             # Only for children
             # Used to create fetchers
 
-            entity_name = data['entityName']
+            entity_name = data["entityName"]
             self.plural_name = SDKUtils.get_plural_name(entity_name)
             self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
 
-            if self.remote_name == 'allalarm':
-                self.instance_plural_name = 'all_alarms'  # Differs from alarms
+            if self.remote_name == "allalarm":
+                self.instance_plural_name = "all_alarms"  # Differs from alarms
 
-        for operation in data['operations']:
+        for operation in data["operations"]:
             model_operation = SpecificationAPIOperation(data=operation)
             self.operations.append(model_operation)
 
@@ -58,13 +58,13 @@ class SpecificationAPI(object):
 
         data = {}
 
-        data['path'] = self.path
-        data['resourceName'] = self.resource_name
-        data['RESTName'] = self.remote_name
-        data['operations'] = []
+        data["path"] = self.path
+        data["resourceName"] = self.resource_name
+        data["RESTName"] = self.remote_name
+        data["operations"] = []
 
         for operation in self.operations:
-            data['operations'].append(operation.to_dict())
+            data["operations"].append(operation.to_dict())
 
         return data
 
@@ -90,8 +90,8 @@ class SpecificationAPIOperation(object):
         """
 
         """
-        self.method = data['method']
-        self.availability = data['availability']
+        self.method = data["method"]
+        self.availability = data["availability"]
 
     def to_dict(self):
         """
@@ -99,7 +99,7 @@ class SpecificationAPIOperation(object):
 
         data = {}
 
-        data['method'] = self.method
-        data['availability'] = self.availability
+        data["method"] = self.method
+        data["availability"] = self.availability
 
         return data

@@ -45,7 +45,7 @@ class CourgetteResult(object):
             and errors
 
             Args:
-                specification_name: string representing the specification (with '.spec')
+                specification_name: string representing the specification (with ".spec")
                 report: The
         """
         self._reports[specification_name] = report

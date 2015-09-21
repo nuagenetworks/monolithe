@@ -16,7 +16,7 @@ class _TestMaker(object):
 
     """
 
-    IGNORED_ATTRIBUTES = ['id', 'parent_id', 'parent_type', 'creation_date', 'owner', 'last_updated_date', 'last_updated_by', 'external_id']
+    IGNORED_ATTRIBUTES = ["id", "parent_id", "parent_type", "creation_date", "owner", "last_updated_date", "last_updated_by", "external_id"]
 
     def __init__(self):
         """ Initializes a TestMaker
@@ -106,7 +106,7 @@ class _TestMaker(object):
         object_name = sdkobject.rest_name
 
         # Name that will be displayed
-        test_name = ''
+        test_name = ""
         rep = dict()
         rep["object"] = object_name
 
@@ -116,7 +116,7 @@ class _TestMaker(object):
         rep = dict((re.escape(k), v) for k, v in rep.iteritems())
         pattern = re.compile("|".join(rep.keys()))
 
-        if function_name.startswith('_'):
+        if function_name.startswith("_"):
             function_name = function_name[1:]
 
         test_name = pattern.sub(lambda m: rep[re.escape(m.group(0))], function_name)
@@ -150,13 +150,13 @@ class CreateTestMaker(_TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_create_object_with_all_valid_attributes_should_succeed')
-        self.register_test('_test_create_object_without_authentication_should_fail')
+        self.register_test("_test_create_object_with_all_valid_attributes_should_succeed")
+        self.register_test("_test_create_object_without_authentication_should_fail")
 
         # Attribute tests
-        self.register_test_for_attribute('_test_create_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_test_for_attribute('_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_create_object_with_attribute_as_none_should_succeed', is_required=False)
+        self.register_test_for_attribute("_test_create_object_with_required_attribute_as_none_should_fail", is_required=True)
+        self.register_test_for_attribute("_test_create_object_with_attribute_not_in_allowed_choices_list_should_fail", has_choices=True)
+        self.register_test_for_attribute("_test_create_object_with_attribute_as_none_should_succeed", is_required=False)
 
     def suite(self):
         """ Inject generated tests
@@ -175,7 +175,7 @@ class CreateTestMaker(_TestMaker):
 
 class CreateTestCase(CourgetteTestCase):
 
-    def __init__(self, methodName='runTest'):
+    def __init__(self, methodName="runTest"):
         """ Initialize
 
         """
@@ -227,7 +227,7 @@ class CreateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'This value is mandatory.', remote_name=attribute.remote_name)
+        self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", remote_name=attribute.remote_name)
 
     def _test_create_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Create an objet with an attribute as none """
@@ -237,17 +237,17 @@ class CreateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 201)
-        # self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+        # self.assertIsNone(getattr(obj, attribute.local_name), "%s should be none but was %s instead" % (attribute.local_name, getattr(obj, attribute.local_name)))
 
     def _test_create_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Create an object with a wrong choice attribute """
 
-        setattr(self.sdkobject, attribute.local_name, u'A random value')
+        setattr(self.sdkobject, attribute.local_name, "A random value")
         (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
+        self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", remote_name=attribute.remote_name)
 
 
 
@@ -266,14 +266,14 @@ class UpdateTestMaker(_TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_update_object_with_same_attributes_should_fail')
-        self.register_test('_test_update_object_without_authentication_should_fail')
+        self.register_test("_test_update_object_with_same_attributes_should_fail")
+        self.register_test("_test_update_object_without_authentication_should_fail")
 
         # Attribute tests
-        self.register_test_for_attribute('_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail', has_choices=True)
-        self.register_test_for_attribute('_test_update_object_with_required_attribute_as_none_should_fail', is_required=True)
-        self.register_test_for_attribute('_test_update_object_with_attribute_as_none_should_succeed', is_required=False)
-        # self.register_test_for_attribute('_test_update_object_with_attribute_with_choices_as_none_should_fail', has_choices=True)
+        self.register_test_for_attribute("_test_update_object_with_attribute_not_in_allowed_choices_list_should_fail", has_choices=True)
+        self.register_test_for_attribute("_test_update_object_with_required_attribute_as_none_should_fail", is_required=True)
+        self.register_test_for_attribute("_test_update_object_with_attribute_as_none_should_succeed", is_required=False)
+        # self.register_test_for_attribute("_test_update_object_with_attribute_with_choices_as_none_should_fail", has_choices=True)
 
     def suite(self):
         """ Inject generated tests
@@ -292,7 +292,7 @@ class UpdateTestMaker(_TestMaker):
 
 class UpdateTestCase(CourgetteTestCase):
 
-    def __init__(self, methodName='runTest'):
+    def __init__(self, methodName="runTest"):
         """ Initialize
 
         """
@@ -333,7 +333,7 @@ class UpdateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        self.assertErrorEqual(connection.response.errors, title=u'No changes to modify the entity', description=u'There are no attribute changes to modify the entity.')
+        self.assertErrorEqual(connection.response.errors, title="No changes to modify the entity", description="There are no attribute changes to modify the entity.")
 
     # Attributes tests
     def _test_update_object_with_required_attribute_as_none_should_fail(self, attribute):
@@ -344,7 +344,7 @@ class UpdateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'This value is mandatory.', remote_name=attribute.remote_name)
+        self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", remote_name=attribute.remote_name)
 
     def _test_update_object_with_attribute_with_choices_as_none_should_fail(self, attribute):
         """ Update an objet with an attribute with choices as none should fail """
@@ -354,17 +354,17 @@ class UpdateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        # self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+        # self.assertIsNone(getattr(obj, attribute.local_name), "%s should be none but was %s instead" % (attribute.local_name, getattr(obj, attribute.local_name)))
 
     def _test_update_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
         """ Update an object with a wrong choice attribute """
 
-        setattr(self.sdkobject, attribute.local_name, u'A random value')
+        setattr(self.sdkobject, attribute.local_name, "A random value")
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        self.assertErrorEqual(connection.response.errors, title=u'Invalid input', description=u'Invalid input', remote_name=attribute.remote_name)
+        self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", remote_name=attribute.remote_name)
 
     def _test_update_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Update an objet with an attribute as none """
@@ -374,7 +374,7 @@ class UpdateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 200)
-        self.assertIsNone(getattr(obj, attribute.local_name), '%s should be none but was %s instead' % (attribute.local_name, getattr(obj, attribute.local_name)))
+        self.assertIsNone(getattr(obj, attribute.local_name), "%s should be none but was %s instead" % (attribute.local_name, getattr(obj, attribute.local_name)))
 
 
 
@@ -394,9 +394,9 @@ class DeleteTestMaker(_TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_delete_object_without_authentication_should_fail')
-        self.register_test('_test_delete_object_with_valid_id_should_succeed')
-        self.register_test('_test_delete_object_with_wrong_id_should_succeed')
+        self.register_test("_test_delete_object_without_authentication_should_fail")
+        self.register_test("_test_delete_object_with_valid_id_should_succeed")
+        self.register_test("_test_delete_object_with_wrong_id_should_succeed")
 
         # No Attribute tests
 
@@ -417,7 +417,7 @@ class DeleteTestMaker(_TestMaker):
 
 class DeleteTestCase(CourgetteTestCase):
 
-    def __init__(self, methodName='runTest'):
+    def __init__(self, methodName="runTest"):
         """ Initialize
 
         """
@@ -467,7 +467,7 @@ class DeleteTestCase(CourgetteTestCase):
 
         """
         default_id = self.sdkobject.id
-        invalid_id = u'Unknown ID'
+        invalid_id = "Unknown ID"
         self.sdkobject.id = invalid_id
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
@@ -475,7 +475,7 @@ class DeleteTestCase(CourgetteTestCase):
         self.sdkobject.id = default_id
 
         self.assertConnectionStatus(connection, 404)
-        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.sdkobject.rest_name, description=u'Cannot find %s with ID %s' % (self.sdkobject.rest_name, invalid_id))
+        self.assertErrorEqual(connection.response.errors, title="%s not found" % self.sdkobject.rest_name, description="Cannot find %s with ID %s" % (self.sdkobject.rest_name, invalid_id))
 
     # No Attributes tests
 
@@ -496,9 +496,9 @@ class GetTestMaker(_TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_get_object_without_authentication_should_fail')
-        self.register_test('_test_get_object_with_valid_id_should_succeed')
-        self.register_test('_test_get_object_with_wrong_id_should_succeed')
+        self.register_test("_test_get_object_without_authentication_should_fail")
+        self.register_test("_test_get_object_with_valid_id_should_succeed")
+        self.register_test("_test_get_object_with_wrong_id_should_succeed")
 
         # No Attribute tests
 
@@ -519,7 +519,7 @@ class GetTestMaker(_TestMaker):
 
 class GetTestCase(CourgetteTestCase):
 
-    def __init__(self, methodName='runTest'):
+    def __init__(self, methodName="runTest"):
         """ Initialize
 
         """
@@ -568,7 +568,7 @@ class GetTestCase(CourgetteTestCase):
 
         """
         default_id = self.sdkobject.id
-        invalid_id = u'Unknown ID'
+        invalid_id = "Unknown ID"
         self.sdkobject.id = invalid_id
         (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
@@ -576,7 +576,7 @@ class GetTestCase(CourgetteTestCase):
         self.sdkobject.id = default_id
 
         self.assertConnectionStatus(connection, 404)
-        self.assertErrorEqual(connection.response.errors, title=u'%s not found' % self.sdkobject.rest_name, description=u'Cannot find %s with ID %s' % (self.sdkobject.rest_name, invalid_id))
+        self.assertErrorEqual(connection.response.errors, title="%s not found" % self.sdkobject.rest_name, description="Cannot find %s with ID %s" % (self.sdkobject.rest_name, invalid_id))
 
     # No Attributes tests
 
@@ -599,9 +599,9 @@ class GetAllTestMaker(_TestMaker):
         self.user = user
 
         # Object tests
-        self.register_test('_test_get_all_objects_without_authentication_should_fail')
-        self.register_test('_test_get_all_objects_without_content_should_success')
-        self.register_test('_test_get_all_objects_with_content_should_success')
+        self.register_test("_test_get_all_objects_without_authentication_should_fail")
+        self.register_test("_test_get_all_objects_without_content_should_success")
+        self.register_test("_test_get_all_objects_with_content_should_success")
 
         # No Attribute tests
 
@@ -622,7 +622,7 @@ class GetAllTestMaker(_TestMaker):
 
 class GetAllTestCase(CourgetteTestCase):
 
-    def __init__(self, methodName='runTest'):
+    def __init__(self, methodName="runTest"):
         """ Initialize
 
         """

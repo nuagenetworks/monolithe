@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['APIDocWriter']
+__all__ = ["APIDocWriter"]
 
 from .apidocwriter import APIDocWriter

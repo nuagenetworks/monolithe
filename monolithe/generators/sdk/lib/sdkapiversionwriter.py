@@ -11,7 +11,7 @@ class SDKAPIVersionWriter(object):
     """ Writer of the Python SDK SDK
 
     """
-    COMMON_ATTRIBUTES = ['multicast', 'iptype', 'maintenancemode', 'permittedaction', 'connectionstate', 'forwardingclasses']
+    COMMON_ATTRIBUTES = ["multicast", "iptype", "maintenancemode", "permittedaction", "connectionstate", "forwardingclasses"]
 
     def __init__(self, monolithe_config):
         """
@@ -34,9 +34,9 @@ class SDKAPIVersionWriter(object):
             if attribute.allowed_choices and len(attribute.allowed_choices) > 0:
 
                 if attribute.remote_name.lower() not in SDKAPIVersionWriter.COMMON_ATTRIBUTES:
-                    name = '%s%s%s' % (model.name, attribute.remote_name[0].upper(), attribute.remote_name[1:])
+                    name = "%s%s%s" % (model.name, attribute.remote_name[0].upper(), attribute.remote_name[1:])
                 else:
-                    name = '%s%s' % (attribute.remote_name[0].upper(), attribute.remote_name[1:])
+                    name = "%s%s" % (attribute.remote_name[0].upper(), attribute.remote_name[1:])
 
                 constants[name] = self._make_constants_value(attribute.allowed_choices)
 
@@ -135,7 +135,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Initializes a _SDKAPIVersionFileWriter
 
         """
-        super(_SDKAPIVersionFileWriter, self).__init__(package=u'monolithe.generators.sdk')
+        super(_SDKAPIVersionFileWriter, self).__init__(package="monolithe.generators.sdk")
 
         self.monolithe_config = monolithe_config
         self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
@@ -145,9 +145,9 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         self.apiversion = apiversion
         self.output_directory = "%s/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(apiversion))
-        self.override_folder = '%s/../../__overrides' % self.output_directory
-        self.autogenerate_path = '/autogenerates/'
-        self.fetchers_path = '/fetchers/'
+        self.override_folder = "%s/../../__overrides" % self.output_directory
+        self.autogenerate_path = "/autogenerates/"
+        self.fetchers_path = "/fetchers/"
 
     def _attr_defaults_file(self):
         """
@@ -176,7 +176,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 constants (dict): dict of constants
 
         """
-        self.write(destination=self.output_directory, filename='constants.py', template_name='constants.py.tpl',
+        self.write(destination=self.output_directory, filename="constants.py", template_name="constants.py.tpl",
                     constants=constants,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
@@ -188,9 +188,9 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self.output_directory, self.autogenerate_path)
+        destination = "%s%s" % (self.output_directory, self.autogenerate_path)
 
-        self.write(destination=destination, filename='__init__.py', template_name='__autogenerate_init__.py.tpl',
+        self.write(destination=destination, filename="__init__.py", template_name="__autogenerate_init__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
@@ -202,8 +202,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        destination = '%s%s' % (self.output_directory, self.fetchers_path)
-        self.write(destination=destination, filename='__init__.py', template_name='__fetcher_init__.py.tpl',
+        destination = "%s%s" % (self.output_directory, self.fetchers_path)
+        self.write(destination=destination, filename="__init__.py", template_name="__fetcher_init__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
@@ -215,7 +215,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        self.write(destination=self.output_directory, filename='__init__.py', template_name='__override_init__.py.tpl',
+        self.write(destination=self.output_directory, filename="__init__.py", template_name="__override_init__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
@@ -228,7 +228,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         """
         filename = "%s%ssession.py" % (self._sdk_class_prefix.lower(),  self._product_accronym.lower())
-        self.write(destination=self.output_directory, filename=filename, template_name='session.py.tpl',
+        self.write(destination=self.output_directory, filename=filename, template_name="session.py.tpl",
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
@@ -237,10 +237,10 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write autogenerate model file
 
         """
-        destination = '%s%s' % (self.output_directory, self.autogenerate_path)
-        filename = '%s%s.py' % (self._sdk_class_prefix.lower(), model.name.lower())
+        destination = "%s%s" % (self.output_directory, self.autogenerate_path)
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
 
-        self.write(destination=destination, filename=filename, template_name='object_autogenerate.py.tpl',
+        self.write(destination=destination, filename=filename, template_name="object_autogenerate.py.tpl",
                     model=model,
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
@@ -252,10 +252,10 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write autogenerate rest user model file
 
         """
-        destination = '%s%s' % (self.output_directory, self.autogenerate_path)
-        filename = '%s%s.py' % (self._sdk_class_prefix.lower(), model.name.lower())
+        destination = "%s%s" % (self.output_directory, self.autogenerate_path)
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
 
-        self.write(destination=destination, filename=filename, template_name='restuser.py.tpl',
+        self.write(destination=destination, filename=filename, template_name="restuser.py.tpl",
                     model=model,
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
@@ -268,7 +268,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         """
         destination = self.output_directory
-        filename = '%s%s.py' % (self._sdk_class_prefix.lower(), model.name.lower())
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
 
         # find override file
         specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.apiversion, self._sdk_class_prefix.lower(), model.name.lower())
@@ -280,7 +280,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         if os.path.isfile(final_path):
             override_content = open(final_path).read()
 
-        self.write(destination=destination, filename=filename, template_name='object_override.py.tpl',
+        self.write(destination=destination, filename=filename, template_name="object_override.py.tpl",
                     model=model,
                     override_content=override_content,
                     sdk_class_prefix=self._sdk_class_prefix,
@@ -292,10 +292,10 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write fetcher
 
         """
-        destination = '%s%s' % (self.output_directory, self.fetchers_path)
-        filename = '%s%s_fetcher.py' % (self._sdk_class_prefix.lower(), model.plural_name.lower())
+        destination = "%s%s" % (self.output_directory, self.fetchers_path)
+        filename = "%s%s_fetcher.py" % (self._sdk_class_prefix.lower(), model.plural_name.lower())
 
-        self.write(destination=destination, filename=filename, template_name='object_fetcher.py.tpl',
+        self.write(destination=destination, filename=filename, template_name="object_fetcher.py.tpl",
                     model=model,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)

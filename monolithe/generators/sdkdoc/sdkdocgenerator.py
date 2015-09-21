@@ -58,8 +58,8 @@ class SDKDocGenerator(object):
     def _cleanup(self):
         """
         """
-        shutil.rmtree('%s/_modules' % self._sdkdoc_output)
-        shutil.rmtree('%s/_sources' % self._sdkdoc_output)
+        shutil.rmtree("%s/_modules" % self._sdkdoc_output)
+        shutil.rmtree("%s/_sources" % self._sdkdoc_output)
         shutil.rmtree(self._sdkdoc_tmp_path)
 
     def generate(self):
@@ -78,7 +78,7 @@ class SDKDocGenerator(object):
 
         origin_path = os.getcwd()
         os.chdir(self._sdkdoc_tmp_path)
-        process = subprocess.Popen(['make', 'html'], env=subprocess_environ)
+        process = subprocess.Popen(["make", "html"], env=subprocess_environ)
         process.communicate()
         os.chdir(origin_path)
 

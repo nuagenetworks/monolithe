@@ -57,7 +57,7 @@ class CourgetteTestsRunner(object):
                 self.parent = SDKLoader.get_instance(parent_resource, id=parent_id)
                 self.parent.fetch()
             except:
-                raise AttributeError('Could not find parent %s with ID=%s' % (parent_resource, parent_id))
+                raise AttributeError("Could not find parent %s with ID=%s" % (parent_resource, parent_id))
 
         SDKLoader.update_fetchers_for_object(self.parent, self.sdkobject, self._sdk_class_prefix, model)
 
@@ -71,20 +71,20 @@ class CourgetteTestsRunner(object):
             for operation in api.operations:
                 method = operation.method
 
-                if method == 'POST':
+                if method == "POST":
                     self.is_create_allowed = True
-                elif method == 'GET':
+                elif method == "GET":
                     self.is_get_all_allowed = True
 
         for api in model.self_apis:
             for operation in api.operations:
                 method = operation.method
 
-                if method == 'PUT':
+                if method == "PUT":
                     self.is_update_allowed = True
-                elif method == 'DELETE':
+                elif method == "DELETE":
                     self.is_delete_allowed = True
-                elif method == 'GET':
+                elif method == "GET":
                     self.is_get_allowed = True
 
     def suite(self):

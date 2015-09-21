@@ -67,11 +67,11 @@ class APIDocumentationGenerator(object):
 
 
             for branch in branches:
-                Printer.log("retrieving specifications from github '%s/%s@%s'" % (organization.lower(), repository.lower(), branch))
+                Printer.log("retrieving specifications from github \"%s/%s@%s\"" % (organization.lower(), repository.lower(), branch))
                 apiversion = self.repository_manager.get_api_version(branch=branch)
                 specifications = self.repository_manager.get_all_specifications(branch=branch)
                 specification_info[apiversion] = specifications
-                Printer.log("%d specifications retrieved from branch '%s' (api version: %s)" % (len(specifications), branch, apiversion))
+                Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, apiversion))
 
         for apiversion, specifications in specification_info.iteritems():
             self._install_system_vanilla(apiversion=apiversion)
@@ -79,4 +79,4 @@ class APIDocumentationGenerator(object):
             Printer.log("generating %s api documentation for api version: %s" % (self._product_name, apiversion))
             writer.write(resources=specifications, apiversion=apiversion)
 
-        Printer.success("%s api documentation generation complete and available at '%s'" % (self._product_name, self._apidoc_output))
+        Printer.success("%s api documentation generation complete and available at \"%s\"" % (self._product_name, self._apidoc_output))

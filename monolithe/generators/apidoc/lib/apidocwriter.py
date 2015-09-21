@@ -49,7 +49,7 @@ class APIDocFileWriter(TemplateFileWriter):
     def __init__(self, monolithe_config, apiversion):
         """
         """
-        super(APIDocFileWriter, self).__init__(package='monolithe.generators.apidoc')
+        super(APIDocFileWriter, self).__init__(package="monolithe.generators.apidoc")
 
         self.monolithe_config = monolithe_config
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
@@ -62,7 +62,7 @@ class APIDocFileWriter(TemplateFileWriter):
     def write_model(self, model):
         """
         """
-        filename = '%s.html' % model.remote_name.lower()
+        filename = "%s.html" % model.remote_name.lower()
 
         self.write( destination=self.output_directory, filename=filename, template_name="object.html.tpl",
                     model=model,
@@ -73,8 +73,7 @@ class APIDocFileWriter(TemplateFileWriter):
     def write_index(self, models):
         """
         """
-        filename = 'index.html'
 
-        self.write( destination=self.output_directory, filename=filename, template_name="index.html.tpl",
+        self.write( destination=self.output_directory, filename="index.html", template_name="index.html.tpl",
                     models=models,
                     product_name=self._product_name)

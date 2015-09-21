@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-sdk_logger = logging.getLogger('sdk')
+sdk_logger = logging.getLogger("sdk")
 
 
 def set_log_level(level, handler=None):

@@ -130,7 +130,7 @@ class SDKDocFileWriter(TemplateFileWriter):
     def __init__(self, monolithe_config):
         """
         """
-        super(SDKDocFileWriter, self).__init__(package='monolithe.generators.sdkdoc')
+        super(SDKDocFileWriter, self).__init__(package="monolithe.generators.sdkdoc")
 
         self.monolithe_config = monolithe_config
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")

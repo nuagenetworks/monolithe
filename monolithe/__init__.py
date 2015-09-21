@@ -14,7 +14,7 @@ from functools import wraps
 def sslwrap(func):
     @wraps(func)
     def bar(*args, **kw):
-        kw['ssl_version'] = ssl.PROTOCOL_TLSv1
+        kw["ssl_version"] = ssl.PROTOCOL_TLSv1
         return func(*args, **kw)
     return bar
 
@@ -24,4 +24,4 @@ PoolManager.__init__ = sslwrap(PoolManager.__init__)
 
 from monolithe.config import MonolitheConfig
 
-__all__ = ['MonolitheConfig']
+__all__ = ["MonolitheConfig"]

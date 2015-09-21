@@ -5,7 +5,7 @@ import os
 from jinja2 import Environment, PackageLoader
 
 
-__all__ = ['TemplateFileWriter']
+__all__ = ["TemplateFileWriter"]
 
 
 class FileWriter(object):
@@ -27,9 +27,9 @@ class FileWriter(object):
             except:  # The directory can be created while creating it.
                 pass
 
-        filepath = '%s/%s' % (destination, filename)
+        filepath = "%s/%s" % (destination, filename)
 
-        f = open(filepath, 'w+')
+        f = open(filepath, "w+")
         f.write(content)
         f.close()
 
@@ -45,7 +45,7 @@ class TemplateFileWriter(FileWriter):
         """
         super(TemplateFileWriter, self).__init__()
 
-        self.env = Environment(loader=PackageLoader(package, 'templates'), extensions=["jinja2.ext.do"])
+        self.env = Environment(loader=PackageLoader(package, "templates"), extensions=["jinja2.ext.do"])
 
     def write(self, destination, filename, template_name, **kwargs):
         """ Write a file according to the template name

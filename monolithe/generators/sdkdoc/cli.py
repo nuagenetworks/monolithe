@@ -13,7 +13,7 @@ def main(argv=sys.argv):
 
     parser = argparse.ArgumentParser(description="SDK Documentation Generator")
 
-    parser.add_argument("--config",
+    parser.add_argument("-c", "--config",
                         dest="config_path",
                         help="Path the monolithe configuration file",
                         type=str)
@@ -25,5 +25,5 @@ def main(argv=sys.argv):
     generator = SDKDocGenerator(monolithe_config=monolithe_config)
     generator.generate()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

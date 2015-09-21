@@ -34,7 +34,7 @@ class _SDKFileWriter(TemplateFileWriter):
     def __init__(self, monolithe_config):
         """
         """
-        super(_SDKFileWriter, self).__init__(package='monolithe.generators.sdk')
+        super(_SDKFileWriter, self).__init__(package="monolithe.generators.sdk")
 
         self.monolithe_config = monolithe_config
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
@@ -52,7 +52,7 @@ class _SDKFileWriter(TemplateFileWriter):
     def write_setup_file(self):
         """
         """
-        self.write( destination=self.output_directory, filename='setup.py', template_name='setup.py.tpl',
+        self.write( destination=self.output_directory, filename="setup.py", template_name="setup.py.tpl",
                     sdk_name=self._sdk_name,
                     sdk_version=self._sdk_version,
                     sdk_revision_number=self._sdk_revision_number,
@@ -66,12 +66,12 @@ class _SDKFileWriter(TemplateFileWriter):
     def write_manifest_file(self, apiversions):
         """
         """
-        self.write( destination=self.output_directory, filename='MANIFEST.in', template_name='MANIFEST.in.tpl',
+        self.write( destination=self.output_directory, filename="MANIFEST.in", template_name="MANIFEST.in.tpl",
                     sdk_name=self._sdk_name,
                     apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
 
     def write_requirements_file(self):
         """
         """
-        self.write( destination=self.output_directory, filename='requirements.txt', template_name='requirements.txt.tpl',
+        self.write( destination=self.output_directory, filename="requirements.txt", template_name="requirements.txt.tpl",
                     sdk_bambou_version=self._sdk_bambou_version)

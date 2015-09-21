@@ -54,28 +54,28 @@ class Specification(object):
         """
 
         if self.__default_specification__ is None:
-            default_data = pkgutil.get_data(__package__, '/data/default_specification.json')
+            default_data = pkgutil.get_data(__package__, "/data/default_specification.json")
             self.__default_specification__ = json.loads(default_data)
 
         data = deepcopy(self.__default_specification__)
 
-        data['model']['description'] = self.description
-        data['model']['entityName'] = self.name
-        data['model']['package'] = self.package
-        data['model']['resourceName'] = self.resource_name
-        data['model']['RESTName'] = self.remote_name
+        data["model"]["description"] = self.description
+        data["model"]["entityName"] = self.name
+        data["model"]["package"] = self.package
+        data["model"]["resourceName"] = self.resource_name
+        data["model"]["RESTName"] = self.remote_name
 
         for attribute in self.attributes:
-            data['model']['attributes'][attribute.name] = attribute.to_dict()
+            data["model"]["attributes"][attribute.name] = attribute.to_dict()
 
         for api in self.children_apis:
-            data['apis']['children'] = api.to_dict()
+            data["apis"]["children"] = api.to_dict()
 
         for api in self.parent_apis:
-            data['apis']['parent'] = api.to_dict()
+            data["apis"]["parent"] = api.to_dict()
 
         for api in self.self_apis:
-            data['apis']['self'] = api.to_dict()
+            data["apis"]["self"] = api.to_dict()
 
         return data
 
@@ -84,24 +84,24 @@ class Specification(object):
 
         """
 
-        self.description = data['model']['description']
-        self.package = data['model']['package']
+        self.description = data["model"]["description"]
+        self.package = data["model"]["package"]
 
-        entity_name = data['model']['entityName']
+        entity_name = data["model"]["entityName"]
 
         self.name = entity_name
         self.instance_name = SDKUtils.get_python_name(entity_name)
         self.plural_name = SDKUtils.get_plural_name(entity_name)
         self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
-        self.remote_name = data['model']['RESTName']
-        self.filename = '%s.spec' % self.remote_name
-        self.resource_name = data['model']['resourceName']
+        self.remote_name = data["model"]["RESTName"]
+        self.filename = "%s.spec" % self.remote_name
+        self.resource_name = data["model"]["resourceName"]
 
-        self.children_apis = self._get_apis('children', data['apis'])
-        self.parent_apis = self._get_apis('parents', data['apis'])
-        self.self_apis = self._get_apis('self', data['apis'])
+        self.children_apis = self._get_apis("children", data["apis"])
+        self.parent_apis = self._get_apis("parents", data["apis"])
+        self.self_apis = self._get_apis("self", data["apis"])
 
-        self.attributes = self._get_attributes(data['model']['attributes'])
+        self.attributes = self._get_attributes(data["model"]["attributes"])
 
     def _get_apis(self, api_name, apis):
         """ Process apis for the given model
@@ -116,7 +116,7 @@ class Specification(object):
         for path, data in apis[api_name].iteritems():
 
             api = SpecificationAPI()
-            data['path'] = path
+            data["path"] = path
             api.from_dict(data)
             result_apis.append(api)
 
@@ -129,7 +129,7 @@ class Specification(object):
         model_attributes = []
 
         for name, data in attributes.iteritems():
-            data['name'] = name
+            data["name"] = name
             model_attribute = SpecificationAttribute(specification=self, data=data)
 
             if model_attribute.has_time_attribute:
@@ -138,4 +138,4 @@ class Specification(object):
             if not model_attribute.ignored:
                 model_attributes.append(model_attribute)
 
-        return sorted(model_attributes, key=lambda x: getattr(x, 'local_name'))
+        return sorted(model_attributes, key=lambda x: getattr(x, "local_name"))

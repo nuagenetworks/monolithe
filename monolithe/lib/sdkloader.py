@@ -32,9 +32,9 @@ class SDKLoader(object):
                 Example:
                     sdk_identifier="1234.sdk"
         """
-        sdk = importlib.import_module('%s.%s' % (sdk_identifier, cls._version))
+        sdk = importlib.import_module("%s.%s" % (sdk_identifier, cls._version))
 
-        classnames = [name for name in dir(sdk) if name.startswith(sdk_class_prefix) and not name.endswith('Fetcher')]
+        classnames = [name for name in dir(sdk) if name.startswith(sdk_class_prefix) and not name.endswith("Fetcher")]
 
         for classname in classnames:
             klass = getattr(sdk, classname)
@@ -88,7 +88,7 @@ class SDKLoader(object):
             NURESTObject.__init__(self)
 
             for attribute in model.attributes:
-                setattr(self, '_%s' % attribute.local_name.lower(), None)
+                setattr(self, "_%s" % attribute.local_name.lower(), None)
                 allowed_choices = attribute.allowed_choices.sort() if attribute.allowed_choices and len(attribute.allowed_choices) > 0 else None
                 self.expose_attribute(local_name=attribute.local_name.lower(), remote_name=attribute.remote_name, attribute_type=attribute.local_type, is_required=attribute.required, choices=allowed_choices)
 
@@ -111,14 +111,14 @@ class SDKLoader(object):
             """"""
             NURESTFetcher.__init__(self)
 
-        fetcher_classname = '%s%sFetcher' % (sdk_class_prefix, model.plural_name)
+        fetcher_classname = "%s%sFetcher" % (sdk_class_prefix, model.plural_name)
         fetcher_klass = type(str(fetcher_classname), (NURESTFetcher, ), {"__init__": fetcher_init})
 
         def managed_class(cls):
             """"""
             return child.__class__
 
-        setattr(fetcher_klass, 'managed_class', classmethod(managed_class))
+        setattr(fetcher_klass, "managed_class", classmethod(managed_class))
 
         fetcher = fetcher_klass()
         setattr(parent, model.instance_plural_name, fetcher.fetcher_with_object(parent_object=parent))

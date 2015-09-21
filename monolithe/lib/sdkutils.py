@@ -48,33 +48,33 @@ class SDKUtils(object):
                 >>> enterprise_network
 
         """
-        first_cap_re = re.compile('(.)([A-Z](?!s([A-Z])*)[a-z]+)')
-        all_cap_re = re.compile('([a-z0-9])([A-Z])')
+        first_cap_re = re.compile("(.)([A-Z](?!s([A-Z])*)[a-z]+)")
+        all_cap_re = re.compile("([a-z0-9])([A-Z])")
 
-        s1 = first_cap_re.sub(r'\1_\2', cls._string_clean(name))
-        return all_cap_re.sub(r'\1_\2', s1).lower()
+        s1 = first_cap_re.sub(r"\1_\2", cls._string_clean(name))
+        return all_cap_re.sub(r"\1_\2", s1).lower()
 
     @classmethod
     def get_python_type_name(cls, type_name):
         """ Returns a python type according to a java type
 
         """
-        if type_name == 'long':
-            return 'long'
+        if type_name == "long":
+            return "long"
 
-        if type_name == 'boolean':
-            return 'bool'
+        if type_name == "boolean":
+            return "bool"
 
-        if type_name in ['int', 'integer']:
-            return 'int'
+        if type_name in ["int", "integer"]:
+            return "int"
 
-        if type_name in ['date', 'datetime', 'time']:
-            return 'time'
+        if type_name in ["date", "datetime", "time"]:
+            return "time"
 
-        if type_name in ['double', 'float']:
-            return 'float'
+        if type_name in ["double", "float"]:
+            return "float"
 
-        return 'str'
+        return "str"
 
     @classmethod
     def get_plural_name(cls, singular_name):
@@ -89,11 +89,11 @@ class SDKUtils(object):
                 The pluralized version of the singular name
 
         """
-        if singular_name[-1] == 'y' and singular_name[-2] not in ['a', 'e', 'i', 'o', 'u', 'y']:
-            return singular_name[:-1] + 'ies'
+        if singular_name[-1] == "y" and singular_name[-2] not in ["a", "e", "i", "o", "u", "y"]:
+            return singular_name[:-1] + "ies"
 
-        if singular_name[-1] != 's':
-            return singular_name + 's'
+        if singular_name[-1] != "s":
+            return singular_name + "s"
 
         return singular_name
 
@@ -112,10 +112,10 @@ class SDKUtils(object):
                 >>> v3_1
 
         """
-        if version == 'master':
+        if version == "master":
             return version
 
-        return ('v%s' % version).replace('.', '_')
+        return ("v%s" % version).replace(".", "_")
 
     @classmethod
     def get_float_version(cls, string_version):
@@ -132,7 +132,7 @@ class SDKUtils(object):
                 >>> 3.1
 
         """
-        if string_version == 'master':
+        if string_version == "master":
             return string_version
 
         return float(string_version.replace("v", "").replace("_", "."))

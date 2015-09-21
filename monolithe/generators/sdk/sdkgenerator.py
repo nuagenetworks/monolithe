@@ -47,7 +47,7 @@ class SDKGenerator(object):
                 else:
                     shutil.copy2(s, d)
 
-        shutil.move('%s/%s' % (self._sdk_output, '__sdk'), '%s/%s' % (self._sdk_output, self._sdk_name))
+        shutil.move("%s/%s" % (self._sdk_output, "__sdk"), "%s/%s" % (self._sdk_output, self._sdk_name))
 
     def _cleanup(self):
         """
@@ -80,11 +80,11 @@ class SDKGenerator(object):
 
 
             for branch in branches:
-                Printer.log("retrieving specifications from github '%s/%s@%s'" % (organization.lower(), repository.lower(), branch))
+                Printer.log("retrieving specifications from github \"%s/%s@%s\"" % (organization.lower(), repository.lower(), branch))
                 apiversion = self.repository_manager.get_api_version(branch=branch)
                 specifications = self.repository_manager.get_all_specifications(branch=branch)
                 specification_info[apiversion] = specifications
-                Printer.log("%d specifications retrieved from branch '%s' (api version: %s)" % (len(specifications), branch, apiversion))
+                Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, apiversion))
 
         for apiversion, specifications in specification_info.iteritems():
             Printer.log("generating %s package for api version: %s" % (self._sdk_name, apiversion))
@@ -98,4 +98,4 @@ class SDKGenerator(object):
 
         self._cleanup()
 
-        Printer.success("%s generation complete and available at '%s'" % (self._sdk_name, self._sdk_output))
+        Printer.success("%s generation complete and available at \"%s\"" % (self._sdk_name, self._sdk_output))

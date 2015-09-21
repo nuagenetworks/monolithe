@@ -31,25 +31,25 @@ class CourgetteTestResult(TestResult):
         """ Get test description
 
         """
-        return str(test).split(' ')[0]  # Removing (package.name)
+        return str(test).split(" ")[0]  # Removing (package.name)
 
     def addSuccess(self, test):
         """ Add success to the result
 
         """
         TestResult.addSuccess(self, test)
-        self.tests[self.getDescription(test)] = {'status': 'SUCCESS'}
+        self.tests[self.getDescription(test)] = {"status": "SUCCESS"}
 
-        Printer.success('OK')
+        Printer.success("OK")
 
     def addError(self, test, err, connection=None):
         """ Add error to the result
 
         """
         TestResult.addError(self, test, err)
-        self.tests[self.getDescription(test)] = {'status': 'ERROR', 'stacktrace': err, 'connection': connection}
+        self.tests[self.getDescription(test)] = {"status": "ERROR", "stacktrace": err, "connection": connection}
 
-        Printer.warn('ERROR')
+        Printer.warn("ERROR")
         Printer.warn(err[1])
         TestHelper.trace(connection)
 
@@ -59,9 +59,9 @@ class CourgetteTestResult(TestResult):
 
         """
         TestResult.addFailure(self, test, err)
-        self.tests[self.getDescription(test)] = {'status': 'FAILURE', 'stacktrace': err, 'connection': connection}
+        self.tests[self.getDescription(test)] = {"status": "FAILURE", "stacktrace": err, "connection": connection}
 
-        Printer.warn('Failure')
+        Printer.warn("Failure")
         Printer.warn(err[1])
         TestHelper.trace(connection)
 
@@ -139,14 +139,14 @@ class CourgetteTestCase(TestCase):
             except KeyboardInterrupt:
                 raise
             except BambouHTTPError as error:
-                result.addError(self, [None, u'Test setUp has failed', None], error.connection)
+                result.addError(self, [None, "Test setUp has failed", None], error.connection)
                 return
             except:
                 result.addError(self, sys.exc_info())
                 return
             ok = False
             try:
-                Printer.log('%s...' % self._testMethodName)
+                Printer.log("%s..." % self._testMethodName)
 
                 testMethod()
                 BambouConfig.set_should_raise_bambou_http_error(True)
@@ -162,7 +162,7 @@ class CourgetteTestCase(TestCase):
             except KeyboardInterrupt:
                 raise
             except BambouHTTPError as error:
-                result.addError(self, [None, u'Test tearDown has failed', None], error.connection)
+                result.addError(self, [None, "Test tearDown has failed", None], error.connection)
                 return
             except:
                 result.addError(self, sys.exc_info())
@@ -171,13 +171,13 @@ class CourgetteTestCase(TestCase):
         finally:
             result.stopTest(self)
 
-    def assertErrorEqual(self, errors, title, description, remote_name=u'', index=0):
+    def assertErrorEqual(self, errors, title, description, remote_name=u"", index=0):
         """ Check if errors received matches
 
         """
-        self.assertEquals(errors[index]['descriptions'][0]['title'], title, 'Expected error title "%s" != "%s"' % (title, errors[index]['descriptions'][0]['title']))
-        self.assertEquals(errors[index]['descriptions'][0]['description'], description, 'Expected error description "%s" != "%s"' % (description, errors[index]['descriptions'][0]['description']))
-        self.assertEquals(errors[index]['property'], remote_name, 'Expected error property "%s" != "%s"' % (remote_name, errors[index]['property']))
+        self.assertEquals(errors[index]["descriptions"][0]["title"], title, "Expected error title \"%s\" != \"%s\"" % (title, errors[index]["descriptions"][0]["title"]))
+        self.assertEquals(errors[index]["descriptions"][0]["description"], description, "Expected error description \"%s\" != \"%s\"" % (description, errors[index]["descriptions"][0]["description"]))
+        self.assertEquals(errors[index]["property"], remote_name, "Expected error property \"%s\" != \"%s\"" % (remote_name, errors[index]["property"]))
 
     def assertConnectionStatus(self, connection, expected_status):
         """ Check if the connection has expected status
@@ -191,4 +191,4 @@ class CourgetteTestCase(TestCase):
     def _connection_failure_message(cls, connection, expected_status):
         """ Returns a message that explains the connection status failure """
 
-        return 'Expected status code %s != %s\n' % (expected_status, connection.response.status_code)
+        return "Expected status code %s != %s\n" % (expected_status, connection.response.status_code)

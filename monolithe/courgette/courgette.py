@@ -32,7 +32,7 @@ class Courgette(object):
         """ Run all tests
 
             Returns:
-                A dictionnary containing tests' results.
+                A dictionnary containing tests results.
 
         """
 

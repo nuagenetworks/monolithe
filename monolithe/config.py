@@ -30,7 +30,7 @@ class MonolitheConfig(object):
         """
         """
         if not os.path.exists(path):
-            raise Exception("Couldn't find path %s" % path)
+            raise Exception("Could not find path %s" % path)
 
     def set_config_path(self, path):
         """
@@ -45,7 +45,7 @@ class MonolitheConfig(object):
         self.sdkdoc_user_vanilla = self.get_option("sdkdoc_user_vanilla", "sdkdoc")
 
         # mapping
-        mapping_path = '%s/mapping.ini' % os.path.dirname(path)
+        mapping_path = "%s/mapping.ini" % os.path.dirname(path)
 
         if not os.path.exists(path):
             return

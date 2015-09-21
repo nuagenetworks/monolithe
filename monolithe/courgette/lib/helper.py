@@ -82,9 +82,9 @@ class TestHelper(object):
         controller = session.login_controller
 
         headers = dict()
-        headers['Content-Type'] = u'application/json'
-        headers['X-Nuage-Organization'] = controller.enterprise
-        headers['Authorization'] = controller.get_authentication_header()
+        headers["Content-Type"] = "application/json"
+        headers["X-Nuage-Organization"] = controller.enterprise
+        headers["Authorization"] = controller.get_authentication_header()
 
         return headers
 
@@ -105,25 +105,25 @@ class TestHelper(object):
         """ Send a POST request
 
         """
-        return cls.send_request(method='post', url=url, data=data, remove_header=remove_header)
+        return cls.send_request(method="post", url=url, data=data, remove_header=remove_header)
 
     @classmethod
     def send_put(cls, url, data, remove_header=None):
         """ Send a PUT request
 
         """
-        return cls.send_request(method='put', url=url, data=data, remove_header=remove_header)
+        return cls.send_request(method="put", url=url, data=data, remove_header=remove_header)
 
     @classmethod
     def send_delete(cls, url, data, remove_header=None):
         """ Send a DELETE request
 
         """
-        return cls.send_request(method='delete', url=url, data=data, remove_header=remove_header)
+        return cls.send_request(method="delete", url=url, data=data, remove_header=remove_header)
 
     @classmethod
     def send_get(cls, url, remove_header=None):
         """ Send a GET request
 
         """
-        return cls.send_request(method='get', url=url, remove_header=remove_header)
+        return cls.send_request(method="get", url=url, remove_header=remove_header)
