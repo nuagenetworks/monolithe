@@ -1,54 +1,28 @@
 # Monolithe
 
-Monolithe is the generator of all documentation and SDK for Nuage Network VSP.
-
-Supported version:
-
-    * Python 2.6
-    * Python 2.7
-
-
+Monolithe is a library to generate SDKs, SDK documentation and API documentation based a github stored json specifications.
 
 ## Installation
-
-### Install  from package
 
 You can get Monolithe from PyPi:
 
     $ pip install monolithe
-
-### Install  from sources
-
-If not already done, get the source code:
-
-    $ git clone https://github.com/nuagenetworks/monolithe.git
-
-Then install the dependencies:
-
-    $ cd monolithe
-    $ pip install -r requirements.txt
-
-### Generate a package
-
-You can get generate a package Monolithe:
-
-    $ python setup.py sdist
-
-The package will be created in `dist`
 
 
 ## Usage
 
 Monolithe can :
 
-- generate the `vspk`
-- generate the documentation for `vspk`
-- generate the VSD api documentation
-- generate api specification files
-- validate a vsd server against the api specification
+- generate a sdk based on a configuration file and vanilla files
+- generate the documentation for sdk
+- generate the server api documentation
 
 
-### Generate vspk package
+## Configuration file
+
+The configuration file describes all the 
+
+## Generate vspk package
 
 Once all the `vsdk` versions you want to include in `vspk` have been generated, run the following command:
 
@@ -61,7 +35,7 @@ For instance:
 The source code for the generated `vsdp` package will be available in `codegen/vspk`.
 
 
-### Generate vspk documentation
+## Generate vspk documentation
 
 To generate the `vspk` API Documentation, run the following command (after having generated a `vspk`):
 
@@ -70,7 +44,7 @@ To generate the `vspk` API Documentation, run the following command (after havin
 The generated documentation will be available in `docgen/sdkdoc`
 
 
-### Generate VSD Server ReST API documentation
+## Generate VSD Server ReST API documentation
 
 You can generate a  VSD Server ReST API documentation for a particular API version against a running version of VSD by doing:
 

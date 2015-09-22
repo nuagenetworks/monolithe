@@ -3,7 +3,7 @@ import os
 import shutil
 
 from monolithe.lib import Printer
-from monolithe.specifications import RepositoryManager
+from monolithe.specifications import RepositoryManager, FolderManager
 from monolithe.generators.apidoc.lib import APIDocWriter
 
 
@@ -47,31 +47,47 @@ class APIDocumentationGenerator(object):
             else:
                 shutil.copy2(s, d)
 
-    def generate(self, specification_info=None, api_url=None, login_or_token=None, password=None, organization=None, repository=None, branches=None):
+    def generate_from_folder(self, folder):
+        """
+        """
+        specification_info = {}
+
+        Printer.log("retrieving specifications from folder \"%s\"" % (folder))
+        self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
+        apiversion = self.folder_manager.get_api_version()
+        specification_info[apiversion] = self.folder_manager.get_all_specifications()
+        Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specification_info[apiversion]), folder, apiversion))
+
+        self.generate(specification_info=specification_info)
+
+    def generate_from_repo(self, api_url, login_or_token, password, organization, repository, branches):
+        """
+        """
+        specification_info = {}
+
+        self.repository_manager = RepositoryManager(monolithe_config=self.monolithe_config,
+                                                    api_url=api_url,
+                                                    login_or_token=login_or_token,
+                                                    password=password,
+                                                    organization=organization,
+                                                    repository=repository)
+
+
+        for branch in branches:
+            Printer.log("retrieving specifications from github \"%s/%s@%s\"" % (organization.lower(), repository.lower(), branch))
+            apiversion = self.repository_manager.get_api_version(branch=branch)
+            specifications = self.repository_manager.get_all_specifications(branch=branch)
+            specification_info[apiversion] = specifications
+            Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, apiversion))
+
+        self.generate(specification_info=specification_info)
+
+    def generate(self, specification_info):
         """ Start generation ofthe API Documentation
 
         """
         writer = APIDocWriter(self.monolithe_config)
         apiversions = []
-
-        if not specification_info:
-
-            specification_info = {}
-
-            self.repository_manager = RepositoryManager(monolithe_config=self.monolithe_config,
-                                                        api_url=api_url,
-                                                        login_or_token=login_or_token,
-                                                        password=password,
-                                                        organization=organization,
-                                                        repository=repository)
-
-
-            for branch in branches:
-                Printer.log("retrieving specifications from github \"%s/%s@%s\"" % (organization.lower(), repository.lower(), branch))
-                apiversion = self.repository_manager.get_api_version(branch=branch)
-                specifications = self.repository_manager.get_all_specifications(branch=branch)
-                specification_info[apiversion] = specifications
-                Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, apiversion))
 
         for apiversion, specifications in specification_info.iteritems():
             self._install_system_vanilla(apiversion=apiversion)
