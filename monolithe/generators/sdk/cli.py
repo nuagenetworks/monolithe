@@ -44,11 +44,6 @@ def main(argv=sys.argv):
                         type=str,
                         required=True)
 
-    parser.add_argument("-d", "--destination",
-                        dest="output_path",
-                        help="directory where the generated sources will be placed",
-                        type=str)
-
     parser.add_argument("--doc",
                         dest="generate_doc",
                         help="generate documentation of the SDK",
