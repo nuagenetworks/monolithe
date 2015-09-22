@@ -10,49 +10,49 @@ def main(argv=sys.argv):
     """
 
     """
-    parser = argparse.ArgumentParser(description="SDK Generator.")
+    parser = argparse.ArgumentParser(description="Generates a SDK according from a specification set")
 
     parser.add_argument("-g", "--github",
                         dest="api_url",
-                        help="Github API URL. Can be given by setting the env variable $MONOLITHE_GITHUB_API_URL",
+                        help="The Github API URL. Can be given by setting the environment variable \"MONOLITHE_GITHUB_API_URL\"",
                         type=str)
 
     parser.add_argument("-l", "--login",
                         dest="login",
-                        help="Your Github login. Can be given by setting the env variable $MONOLITHE_GITHUB_LOGIN",
+                        help="The Github Login (if set, you will be prompted for your password). Can be given by setting the environment variable \"MONOLITHE_GITHUB_LOGIN\"",
                         type=str)
 
     parser.add_argument("-t", "--token",
                         dest="token",
-                        help="Github Token (then you don't need to provide your username/password). Can be given by setting the env variable $MONOLITHE_GITHUB_TOKEN",
+                        help="The Github Token (if set, --login will be ignored). To generate a token, go here https://github.com/settings/tokens. Can be given by setting the environment variable \"$MONOLITHE_GITHUB_TOKEN\"",
                         type=str)
 
     parser.add_argument("-o", "--organization",
                         dest="organization",
-                        help="Github organization name. Can be given by setting the env variable $MONOLITHE_GITHUB_ORGANIZATION",
+                        help="The Github Organization. Can be given by setting the environment variable \"MONOLITHE_GITHUB_ORGANIZATION\"",
                         type=str)
 
     parser.add_argument("-r", "--repository",
                         dest="repository",
-                        help="Github repository name. Can be given by setting the env variable $MONOLITHE_GITHUB_REPOSITORY",
+                        help="The Github Repository. Can be given by setting the environment variable \"MONOLITHE_GITHUB_REPOSITORY\"",
                         type=str)
 
     parser.add_argument("-b", "--branches",
                         dest="branches",
-                        help="branches of the SDK to generate (examples: \"master 3.2\")",
+                        help="The branches of the specifications to use to generate the documentation (examples: \"master 3.2\")",
                         nargs="*",
                         type=str,
                         required=True)
-
-    parser.add_argument("--doc",
-                        dest="generate_doc",
-                        help="generate documentation of the SDK",
-                        action="store_true")
 
     parser.add_argument("-c", "--config",
                         dest="config_path",
                         help="Path the monolithe configuration file",
                         type=str)
+
+    parser.add_argument("-d", "--doc",
+                        dest="generate_doc",
+                        help="generate documentation of the SDK",
+                        action="store_true")
 
     args = parser.parse_args()
 
