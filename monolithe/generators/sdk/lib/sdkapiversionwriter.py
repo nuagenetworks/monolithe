@@ -81,11 +81,11 @@ class SDKAPIVersionWriter(object):
 
         task_manager.wait_until_exit()
 
-        self.writer.write_constants_file(constants=constants)
-        self.writer.write_session_file()
-        self.writer.write_init_autogenerate_files(filenames=autogenerate_filenames)
-        self.writer.write_init_fetcher_files(filenames=fetcher_filenames)
-        self.writer.write_init_override_files(filenames=override_filenames)
+        self.writer.write_constants(constants=constants)
+        self.writer.write_session()
+        self.writer.write_init_autogenerates(filenames=autogenerate_filenames)
+        self.writer.write_init_fetchers(filenames=fetcher_filenames)
+        self.writer.write_init_overrides(filenames=override_filenames)
         self.writer.copy_attrs_defaults()
 
     def _write_autogenerate_file(self, model, filenames):
@@ -172,7 +172,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         if os.path.exists(general_defaults_path):
             return (general_defaults_path, "%s/%s" % (target_folder, defaults_name), target_folder)
 
-    def write_constants_file(self, constants):
+    def write_constants(self, constants):
         """ Write constants file
 
             Args:
@@ -184,7 +184,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
 
-    def write_init_autogenerate_files(self, filenames):
+    def write_init_autogenerates(self, filenames):
         """ Write constants file
 
             Args:
@@ -198,7 +198,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
 
-    def write_init_fetcher_files(self, filenames):
+    def write_init_fetchers(self, filenames):
         """ Write constants file
 
             Args:
@@ -211,7 +211,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
 
-    def write_init_override_files(self, filenames):
+    def write_init_overrides(self, filenames):
         """ Write constants file
 
             Args:
@@ -223,7 +223,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
 
-    def write_session_file(self):
+    def write_session(self):
         """ Write SDK session file
 
             Args:
@@ -307,6 +307,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     product_accronym=self._product_accronym)
 
         return (filename, model.plural_name)
+
 
     def copy_attrs_defaults(self):
         """
