@@ -21,9 +21,11 @@ class SDKWriter(object):
         """
         """
         self.writer = _SDKFileWriter(monolithe_config=self.monolithe_config)
-        self.writer.write_setup_file()
-        self.writer.write_manifest_file(apiversions)
-        self.writer.write_requirements_file()
+        self.writer.write_setup()
+        self.writer.write_root_init()
+        self.writer.write_utils()
+        self.writer.write_manifest(apiversions)
+        self.writer.write_requirements()
 
 
 
@@ -49,7 +51,7 @@ class _SDKFileWriter(TemplateFileWriter):
         self._copyright = self.monolithe_config.get_option("copyright")
         self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
 
-    def write_setup_file(self):
+    def write_setup(self):
         """
         """
         self.write( destination=self.output_directory, filename="setup.py", template_name="setup.py.tpl",
@@ -63,15 +65,28 @@ class _SDKFileWriter(TemplateFileWriter):
                     sdk_license_name=self._sdk_license_name,
                     copyright=self._copyright)
 
-    def write_manifest_file(self, apiversions):
+    def write_manifest(self, apiversions):
         """
         """
         self.write( destination=self.output_directory, filename="MANIFEST.in", template_name="MANIFEST.in.tpl",
                     sdk_name=self._sdk_name,
                     apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
 
-    def write_requirements_file(self):
+    def write_requirements(self):
         """
         """
         self.write( destination=self.output_directory, filename="requirements.txt", template_name="requirements.txt.tpl",
                     sdk_bambou_version=self._sdk_bambou_version)
+
+    def write_root_init(self):
+        """
+        """
+        destination = "%s/%s" % (self.output_directory, self._sdk_name)
+        self.write(destination=destination, filename="__init__.py", template_name="root__init__.py.tpl")
+
+    def write_utils(self):
+        """
+        """
+        destination = "%s/%s" % (self.output_directory, self._sdk_name)
+        self.write(destination=destination, filename="utils.py", template_name="utils.py.tpl",
+                    sdk_name=self._sdk_name)

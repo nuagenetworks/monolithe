@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import logging
-sdk_logger = logging.getLogger("sdk")
-
+sdk_logger = logging.getLogger("{{ sdk_name }}")
 
 def set_log_level(level, handler=None):
-    """ Set both sdk and Bambou log level to the given level
+    """ Set both {{ sdk_name }} and Bambou log level to the given level
 
         Args:
             level (logging.level): a logging level
