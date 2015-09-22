@@ -13,31 +13,37 @@ def main(argv=sys.argv):
 
     parser.add_argument("-g", "--github",
                         dest="api_url",
+                        metavar="github_api_url",
                         help="The Github API URL. Can be given by setting the environment variable \"MONOLITHE_GITHUB_API_URL\"",
                         type=str)
 
     parser.add_argument("-l", "--login",
                         dest="login",
+                        metavar="login_login",
                         help="The Github Login (if set, you will be prompted for your password). Can be given by setting the environment variable \"MONOLITHE_GITHUB_LOGIN\"",
                         type=str)
 
     parser.add_argument("-t", "--token",
                         dest="token",
+                        metavar="github_login",
                         help="The Github Token (if set, --login will be ignored). To generate a token, go here https://github.com/settings/tokens. Can be given by setting the environment variable \"$MONOLITHE_GITHUB_TOKEN\"",
                         type=str)
 
     parser.add_argument("-o", "--organization",
                         dest="organization",
+                        metavar="github_organization",
                         help="The Github Organization. Can be given by setting the environment variable \"MONOLITHE_GITHUB_ORGANIZATION\"",
                         type=str)
 
     parser.add_argument("-r", "--repository",
                         dest="repository",
+                        metavar="github_repository",
                         help="The Github Repository. Can be given by setting the environment variable \"MONOLITHE_GITHUB_REPOSITORY\"",
                         type=str)
 
     parser.add_argument("-b", "--branches",
                         dest="branches",
+                        metavar="branches",
                         help="The branches of the specifications to use to generate the documentation (examples: \"master 3.2\")",
                         nargs="*",
                         type=str,
@@ -45,6 +51,7 @@ def main(argv=sys.argv):
 
     parser.add_argument("-c", "--config",
                         dest="config_path",
+                        metavar="config_path",
                         help="Path the monolithe configuration file",
                         type=str)
 
