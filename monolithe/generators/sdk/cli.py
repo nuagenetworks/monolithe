@@ -14,27 +14,27 @@ def main(argv=sys.argv):
 
     parser.add_argument("-g", "--github",
                         dest="api_url",
-                        help="Github API URL",
+                        help="Github API URL. Can be given by setting the env variable $MONOLITHE_GITHUB_API_URL",
                         type=str)
 
     parser.add_argument("-l", "--login",
                         dest="login",
-                        help="Github login to connect with",
+                        help="Your Github login. Can be given by setting the env variable $MONOLITHE_GITHUB_LOGIN",
                         type=str)
 
     parser.add_argument("-t", "--token",
                         dest="token",
-                        help="Github Token to connect with",
+                        help="Github Token (then you don't need to provide your username/password). Can be given by setting the env variable $MONOLITHE_GITHUB_TOKEN",
                         type=str)
 
     parser.add_argument("-o", "--organization",
                         dest="organization",
-                        help="Github organization name",
+                        help="Github organization name. Can be given by setting the env variable $MONOLITHE_GITHUB_ORGANIZATION",
                         type=str)
 
     parser.add_argument("-r", "--repository",
                         dest="repository",
-                        help="Github repository name",
+                        help="Github repository name. Can be given by setting the env variable $MONOLITHE_GITHUB_REPOSITORY",
                         type=str)
 
     parser.add_argument("-b", "--branches",
