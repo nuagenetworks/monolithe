@@ -27,11 +27,11 @@
 
 {% for api in model.children_apis %}
 from ..fetchers import {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher{% endfor %}
-from bambou import NURESTBasicUser{% if model.has_time_attribute %}
+from bambou import NURESTRootObject{% if model.has_time_attribute %}
 from time import time{% endif %}
 
 
-class {{ sdk_class_prefix }}{{ model.name }}(NURESTBasicUser):
+class {{ sdk_class_prefix }}{{ model.name }}(NURESTRootObject):
     """ Represents a user that can login to the {{ product_accronym }}.
 
         Warning:

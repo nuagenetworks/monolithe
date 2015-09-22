@@ -143,10 +143,12 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._root_api = self.monolithe_config.get_option("root_api")
+        self._root_api_entity_name = self.monolithe_config.get_option("root_api_entity_name")
+        self._root_api_rest_name = self.monolithe_config.get_option("root_api_rest_name")
 
         self.apiversion = apiversion
         self.output_directory = "%s/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(apiversion))
-        self.override_folder = "%s/../../__overrides" % self.output_directory
+        self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
         self.autogenerate_path = "/autogenerates/"
         self.fetchers_path = "/fetchers/"
 
@@ -233,7 +235,9 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
-                    root_api=self._root_api)
+                    root_api=self._root_api,
+                    root_api_entity_name=self._root_api_entity_name,
+                    root_api_rest_name=self._root_api_rest_name)
 
     def write_model(self, model):
         """ Write autogenerate model file
@@ -257,7 +261,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         destination = "%s%s" % (self.output_directory, self.autogenerate_path)
         filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
 
-        self.write(destination=destination, filename=filename, template_name="root.py.tpl",
+        self.write(destination=destination, filename=filename, template_name="object_root.py.tpl",
                     model=model,
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,

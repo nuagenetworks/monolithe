@@ -27,7 +27,7 @@
 
 from bambou import NURESTSession
 from bambou.exceptions import InternalConsitencyError
-from .{{ sdk_class_prefix|lower }}{{ root_api }} import {{ sdk_class_prefix }}RESTUser
+from .{{ sdk_class_prefix|lower }}{{ root_api }} import {{ sdk_class_prefix }}{{ root_api_entity_name }}
 
 
 class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
@@ -55,12 +55,6 @@ class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
             raise InternalConsitencyError('{{ sdk_class_prefix }}{{ product_accronym|lower }}Session needs either a password or a certificate')
 
         super({{ sdk_class_prefix }}{{ product_accronym }}Session, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, version=str(self.version), certificate=certificate)
-
-    def create_rest_user(self):
-        """ Creates a new user
-
-        """
-        return {{ sdk_class_prefix }}RESTUser()
 
     @property
     def version(self):
