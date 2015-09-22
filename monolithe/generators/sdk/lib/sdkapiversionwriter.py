@@ -4,7 +4,7 @@ import os
 import shutil
 
 from monolithe.lib import Printer, SDKUtils, TaskManager
-from monolithe.generators.lib.writers import TemplateFileWriter
+from monolithe.generators.lib import TemplateFileWriter
 
 
 class SDKAPIVersionWriter(object):

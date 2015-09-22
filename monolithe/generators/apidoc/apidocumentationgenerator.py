@@ -2,10 +2,10 @@
 import os
 import shutil
 
-from ..lib.generator import Generator
 from monolithe.lib import Printer
 from monolithe.specifications import RepositoryManager, FolderManager
-from monolithe.generators.apidoc.lib import APIDocWriter
+from monolithe.generators.lib import Generator
+from .lib import APIDocWriter
 
 
 class APIDocumentationGenerator(Generator):

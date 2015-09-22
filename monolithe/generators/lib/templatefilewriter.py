@@ -5,10 +5,7 @@ import os
 from jinja2 import Environment, PackageLoader
 
 
-__all__ = ["TemplateFileWriter"]
-
-
-class FileWriter(object):
+class _FileWriter(object):
     """ Writer a file content
 
     """
@@ -34,7 +31,7 @@ class FileWriter(object):
         f.close()
 
 
-class TemplateFileWriter(FileWriter):
+class TemplateFileWriter(_FileWriter):
     """ Write a template file
 
     """

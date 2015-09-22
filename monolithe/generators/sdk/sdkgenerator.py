@@ -7,8 +7,7 @@ import sys
 from monolithe import MonolitheConfig
 from monolithe.lib import SDKUtils
 from monolithe.lib import Printer
-
-from ..lib.generator import Generator
+from monolithe.generators.lib import Generator
 from .lib import SDKWriter
 from .sdkapiversiongenerator import SDKAPIVersionGenerator
 

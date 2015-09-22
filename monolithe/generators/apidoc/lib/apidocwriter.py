@@ -4,7 +4,7 @@ import os
 import shutil
 
 from monolithe.lib import TaskManager, Printer
-from monolithe.generators.lib.writers import TemplateFileWriter
+from monolithe.generators.lib import TemplateFileWriter
 
 
 class APIDocWriter(object):

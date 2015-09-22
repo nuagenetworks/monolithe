@@ -2,7 +2,7 @@
 
 from monolithe import MonolitheConfig
 from monolithe.lib import SDKUtils
-from monolithe.generators.lib.writers import TemplateFileWriter
+from monolithe.generators.lib import TemplateFileWriter
 
 
 class SDKWriter(object):

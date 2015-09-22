@@ -64,9 +64,11 @@ class Generator(object):
     def install_user_vanilla(self, user_vanilla_path, output_path):
         """
         """
-        if user_vanilla_path and not os.path.exists(user_vanilla_path):
-            Printer.raiseError("Could not find user vanilla folder at path %s" % self._sdk_user_vanilla)
+        if not user_vanilla_path or not len(user_vanilla_path):
+            return
 
+        if not os.path.exists(user_vanilla_path):
+            Printer.raiseError("Could not find user vanilla folder at path %s" % user_vanilla_path)
 
         for item in os.listdir(user_vanilla_path):
             s = os.path.join(user_vanilla_path, item)
