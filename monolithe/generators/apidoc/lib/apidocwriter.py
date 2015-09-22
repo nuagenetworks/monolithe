@@ -17,7 +17,7 @@ class APIDocWriter(object):
         """
         self.writer = None
         self.monolithe_config = monolithe_config
-        self._rest_user_api = self.monolithe_config.get_option("rest_user_api")
+        self._root_api = self.monolithe_config.get_option("root_api")
 
     def write(self, resources, apiversion):
         """
@@ -37,7 +37,7 @@ class APIDocWriter(object):
     def _write_model(self, model, filenames):
         """
         """
-        if model.remote_name != self._rest_user_api:
+        if model.remote_name != self._root_api:
             (filename, classname) = self.writer.write_model(model=model)
             filenames[filename] = classname
 

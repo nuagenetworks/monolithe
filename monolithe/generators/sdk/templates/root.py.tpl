@@ -39,7 +39,7 @@ class {{ sdk_class_prefix }}{{ model.name }}(NURESTBasicUser):
             Override {{ sdk_name }}.{{ sdk_class_prefix }}{{ model.name }} instead.
     """
 
-    __rest_name__ = u"me"
+    __rest_name__ = u"{{ root_api }}"
 
     def __init__(self, **kwargs):
         """ Initializes a {{ model.name }} instance

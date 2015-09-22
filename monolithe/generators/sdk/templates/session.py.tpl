@@ -27,7 +27,7 @@
 
 from bambou import NURESTSession
 from bambou.exceptions import InternalConsitencyError
-from .{{ sdk_class_prefix|lower }}restuser import {{ sdk_class_prefix }}RESTUser
+from .{{ sdk_class_prefix|lower }}{{ root_api }} import {{ sdk_class_prefix }}RESTUser
 
 
 class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):

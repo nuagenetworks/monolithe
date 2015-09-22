@@ -19,7 +19,7 @@ class SDKAPIVersionWriter(object):
         self.writer = None
 
         self.monolithe_config = monolithe_config
-        self._rest_user_api = self.monolithe_config.get_option("rest_user_api")
+        self._root_api = self.monolithe_config.get_option("root_api")
 
 
     def _prepare_attributes(self, model, constants):
@@ -96,8 +96,8 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
-        if model.remote_name == self._rest_user_api:
-            (filename, classname) = self.writer.write_restuser_model(model=model)
+        if model.remote_name == self._root_api:
+            (filename, classname) = self.writer.write_root_model(model=model)
         else:
             (filename, classname) = self.writer.write_model(model=model)
 
@@ -122,7 +122,7 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
-        if model.name != self._rest_user_api:
+        if model.name != self._root_api:
             (filename, classname) = self.writer.write_fetcher(model=model)
             filenames[filename] = classname
 
@@ -142,6 +142,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
         self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
+        self._root_api = self.monolithe_config.get_option("root_api")
 
         self.apiversion = apiversion
         self.output_directory = "%s/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(apiversion))
@@ -231,7 +232,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self.write(destination=self.output_directory, filename=filename, template_name="session.py.tpl",
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    root_api=self._root_api)
 
     def write_model(self, model):
         """ Write autogenerate model file
@@ -248,18 +250,19 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         return (filename, model.name)
 
-    def write_restuser_model(self, model):
+    def write_root_model(self, model):
         """ Write autogenerate rest user model file
 
         """
         destination = "%s%s" % (self.output_directory, self.autogenerate_path)
         filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
 
-        self.write(destination=destination, filename=filename, template_name="restuser.py.tpl",
+        self.write(destination=destination, filename=filename, template_name="root.py.tpl",
                     model=model,
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    root_api=self._root_api)
 
         return (filename, model.name)
 
