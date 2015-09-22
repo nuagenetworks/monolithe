@@ -27,7 +27,7 @@
 
 from bambou import NURESTSession
 from bambou.exceptions import InternalConsitencyError
-from .{{ sdk_class_prefix|lower }}{{ root_api }} import {{ sdk_class_prefix }}{{ root_api_entity_name }}
+from .{{ sdk_class_prefix|lower }}{{ sdk_root_api_entity_name|lower }} import {{ sdk_class_prefix }}{{ sdk_root_api_entity_name }}
 
 
 class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
@@ -62,3 +62,17 @@ class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
 
         """
         return {{ version }}
+
+    @property
+    def {{root_api}}(self):
+        """ Returns the root object
+
+        """
+        return self.root_object
+
+    @classmethod
+    def create_root_object(self):
+        """ Returns a new instance
+
+        """
+        return {{ sdk_class_prefix }}{{ sdk_root_api_entity_name }}()

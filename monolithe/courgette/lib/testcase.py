@@ -112,7 +112,7 @@ class CourgetteTestCase(TestCase):
     _last_connection = None  # Last connection to present errors
     parent = None  # Parent SDK object
     sdkobject = None  # Current SDK object
-    user = None  # Current RESTUser
+    user = None  # Current Root Object
 
     @property
     def last_connection(self):
