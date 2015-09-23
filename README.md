@@ -1,6 +1,6 @@
 # Monolithe
 
-![](https://i.imgur.com/y0elz5z.png =100x100)
+![](https://i.imgur.com/y0elz5z.png =100x)
 
 Monolithe is a Python toolset that generates sdks, sdk documentation and api documentation based some specifications and configuration.
 
