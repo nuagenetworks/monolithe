@@ -10,17 +10,17 @@ It provides the following commands:
 
 The specifications are a set of files containing json data describing one object per file, its properties and their characteristics, and its position in the api hierarchy.
 
->> For more info, please read the Monolithe Specifications Reference (TODO).
+> For more info, please read the Monolithe Specifications Reference (TODO).
 
 
 In addition to the specifications, Monolithe uses a configuration that describes all the information relative to your sdk. For instance, you can set its name, the class prefix, some vanilla files, the license, and so on.
 
->> For more info, please read the Monolithe Configuration & Vanilla Reference (TODO).
+> For more info, please read the Monolithe Configuration & Vanilla Reference (TODO).
 
 
 Monolithe is before all a framework that you can integrate with other tools.
 
->> For more info, please read the Monolithe API Documentation (TODO).
+> For more info, please read the Monolithe API Documentation (TODO).
 
 
 ### Installation
@@ -47,7 +47,7 @@ Or directly run the command wrappers provided in the `commands` directory. Simpl
 You can find an `examples` folder in the source code repository. This contains a working example for a todo list api.
 More informations can be found in each files of the examples.
 
-**Be sure to have Flask installed in addition to Monolithe's `requirements.txt`.**
+> Be sure to have Flask installed in addition to Monolithe's `requirements.txt`.
 
 The example is composed of:
 
@@ -59,7 +59,7 @@ The example is composed of:
 
 #### Step 1: install dependencies
 
-**You should do this in a virtualenv.**
+> You should do this in a virtualenv.
 
     $ cd monolithe # be sure to go and stay there for the rest of the tutorial ;)
     $ pip install flask
@@ -70,9 +70,9 @@ The example is composed of:
 
     $ ./commands/monogen-sdk --config examples/conf/conf.ini --folder examples/specifications
 
->> Customizable using the configuration and the content of the `vanilla/sdk` folder.
+> Customizable using the configuration and the content of the `vanilla/sdk` folder.
 
->> You can also generate the sdk documentation by adding the `--doc` argument. But it's slow.
+> You can also generate the sdk documentation by adding the `--doc` argument. But it's slow.
 
 You'll see a `codegen` directory created under `examples`.
 
@@ -83,7 +83,7 @@ It contains all the auto-generated sdk source code according to the specificatio
 
     $ ./commands/monogen-apidoc --config examples/conf/conf.ini --folder examples/specifications
 
->> Customizable using the configuration and the content of the `vanilla/apidoc` folder.
+> Customizable using the configuration and the content of the `vanilla/apidoc` folder.
 
 You'll see a `apidocgen` directory created under `examples`.
 
@@ -108,7 +108,7 @@ check that it's working by doing
 
 And follow on screen instructions.
 
->> For mor information, open the `demo-client.py` file and follow the comments.
+> For mor information, open the `demo-client.py` file and follow the comments.
 
 
 
