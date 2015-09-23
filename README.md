@@ -121,16 +121,16 @@ And follow on screen instructions.
 Using your username/password:
 
     $ monogen-sdk --config [conf.ini] --branches [branch1[,branch2,...branchX]]
-    Enter your Github API URL: [https://api.github.com/v3]
-    Enter your Github login: [username]
-    Enter your Github organization: [repo-organization]
-    Enter your Github repository: [repo-name]
-    Enter your Github password for amercada: [password]
+    > Enter your Github API URL: [https://api.github.com/v3]
+    > Enter your Github login: [username]
+    > Enter your Github organization: [repo-organization]
+    > Enter your Github repository: [repo-name]
+    > Enter your Github password for amercada: [password]
 
 Of course, you can give all those parameters right from the cli:
 
     $ monogen-sdk --config [conf.ini] -g [https://api.gitbhub.com/3] -l [username] -o [repo-organization] -r [repo-name] -b [branch1[,branch2,...branchX]]
-    ] Enter your Github Password:
+    > Enter your Github Password:
 
 You can also use a Github Application Token (https://github.com/settings/tokens):
 
@@ -141,11 +141,11 @@ Then you won't have to enter your password.
 You can also defaults certains arguments by using a environment variables, and eventually put them in a source file:
 
     $ cat ~/.monorc
-    ] export MONOLITHE_GITHUB_API_URL=[https://api.github.com/v3]
-    ] export MONOLITHE_GITHUB_TOKEN=[token]
-    ] export MONOLITHE_GITHUB_ORGANIZATION=[repo-organization]
-    ] export MONOLITHE_GITHUB_REPOSITORY=[repo-name]
-    ] export MONOLITHE_CONFIG_FULLPATH=[path/to/conf]
+    > export MONOLITHE_GITHUB_API_URL=[https://api.github.com/v3]
+    > export MONOLITHE_GITHUB_TOKEN=[token]
+    > export MONOLITHE_GITHUB_ORGANIZATION=[repo-organization]
+    > export MONOLITHE_GITHUB_REPOSITORY=[repo-name]
+    > export MONOLITHE_CONFIG_FULLPATH=[path/to/conf]
     $ source ~/.monorc
 
 Then simply:
@@ -155,7 +155,7 @@ Then simply:
 
 ##### From a folder
 
-    $ monogen-sdk --config [conf.ini[] --folder [/path/to/specifications/]
+    $ monogen-sdk --config [conf.ini] --folder [/path/to/specifications/]
 
 
 
@@ -163,7 +163,7 @@ Then simply:
 
 ##### From a folder
 
-    $ monogen-apidoc --config [conf.ini[] --folder [/path/to/specifications/]
+    $ monogen-apidoc --config [conf.ini] --folder [/path/to/specifications/]
 
 ##### From Github
 
