@@ -13,8 +13,8 @@ setup(
     install_requires=[line for line in open("requirements.txt")],
     entry_points={
         "console_scripts": [
-            "generate-sdk = monolithe.generators.sdk.cli:main",
-            "generate-apidoc = monolithe.generators.apidoc.cli:main",
-            "generate-sdkdoc = monolithe.generators.sdkdoc.cli:main"]
+            "monogen-sdk = monolithe.generators.sdk.cli:main",
+            "monogen-apidoc = monolithe.generators.apidoc.cli:main",
+            "monogen-sdkdoc = monolithe.generators.sdkdoc.cli:main"]
     }
 )
