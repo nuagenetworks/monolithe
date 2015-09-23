@@ -142,6 +142,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
         self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
         self._sdk_root_api_entity_name = self.monolithe_config.get_option("sdk_root_api_entity_name", "sdk")
+        self._sdk_api_prefix = self.monolithe_config.get_option("sdk_api_prefix", "sdk")
         self._root_api = self.monolithe_config.get_option("root_api")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._root_api = self.monolithe_config.get_option("root_api")
@@ -235,6 +236,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
                     sdk_root_api_entity_name=self._sdk_root_api_entity_name,
+                    sdk_api_prefix=self._sdk_api_prefix,
                     product_accronym=self._product_accronym,
                     root_api=self._root_api)
 

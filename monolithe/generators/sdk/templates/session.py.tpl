@@ -54,7 +54,7 @@ class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
         if certificate is None and password is None:
             raise InternalConsitencyError('{{ sdk_class_prefix }}{{ product_accronym|lower }}Session needs either a password or a certificate')
 
-        super({{ sdk_class_prefix }}{{ product_accronym }}Session, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, version=str(self.version), certificate=certificate)
+        super({{ sdk_class_prefix }}{{ product_accronym }}Session, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, api_prefix="{{ sdk_api_prefix }}", version=str(self.version), certificate=certificate)
 
     @property
     def version(self):
