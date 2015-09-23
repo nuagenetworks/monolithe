@@ -23,11 +23,11 @@ Monolithe is before all a framework that you can integrate with other tools.
 > For more info, please read the Monolithe API Documentation (TODO).
 
 
-### Installation
+## Installation
 
-> And remember, kids! You should always use virtualenv.
+> And remember, kids! You should always be using a virtualenv.
 
-You install Monolithe from PyPi:
+You can install Monolithe from PyPi:
 
     $ pip install monolithe
 
@@ -44,7 +44,7 @@ Or directly run the command wrappers provided in the `commands` directory. Simpl
     $ pip install -r requirements.txt
 
 
-### ToDoList Tutorial
+## ToDoList Tutorial
 
 You can find an `examples` folder in the source code repository. This contains a working example for a todo list api.
 More informations can be found in each files of the examples.
@@ -59,14 +59,14 @@ The example is composed of:
 - A `demo-server.py` command that starts a really stupid server that implements a ReST API for the ToDoList
 - A `demo-client.py` command that interacts with the server using the generated sdk named `tdldk`.
 
-#### Step 1: install dependencies
+### Step 1: install dependencies
 
     $ cd monolithe # be sure to go and stay there for the rest of the tutorial ;)
     $ pip install flask
     $ pip install -r `requirements.txt`
 
 
-#### Step 2: generate the tdldk
+### Step 2: generate the tdldk
 
     $ ./commands/monogen-sdk --config examples/conf/conf.ini --folder examples/specifications
 
@@ -79,7 +79,7 @@ You'll see a `codegen` directory created under `examples`.
 It contains all the auto-generated sdk source code according to the specifications files.
 
 
-#### Step 3: generate the ReST api documentation
+### Step 3: generate the ReST api documentation
 
     $ ./commands/monogen-apidoc --config examples/conf/conf.ini --folder examples/specifications
 
@@ -90,7 +90,7 @@ You'll see a `apidocgen` directory created under `examples`.
 You can open the `index.html` to navigate the api documentation.
 
 
-#### Step 4: start the demo server
+### Step 4: start the demo server
 
     $ ./examples/demo-server.py
     > * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
@@ -102,7 +102,7 @@ check that it's working by doing
     > [{"description": "Things to buy", "ID": "1", "title": "Shopping List"}, {"description": "You should not see this", "ID": "2", "title": "Secret List"}]
 
 
-#### Step 5: run the client
+### Step 5: run the client
 
     $ ./examples/demo-client.py
 
@@ -112,11 +112,12 @@ And follow on screen instructions.
 
 
 
-### Command Line Interfaces Quick Reference
+## Command Line Interfaces Quick Reference
 
-#### monogen-sdk
+### monogen-sdk
+This command will generate a sdk using specifications either from a local folder, or from a Github repository.
 
-##### From Github
+#### From Github
 
 Using your username/password:
 
@@ -160,6 +161,10 @@ Then simply:
 
 
 #### monogen-apidoc
+
+This command will generate a ReST api documentation using specifications either from a local folder, or from a Github repository.
+
+> This command is very similar to `monogen-sdk`. 
 
 ##### From a folder
 

@@ -6,4 +6,3 @@ def is_complete(self):
             return False
 
     return True
-
