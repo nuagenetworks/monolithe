@@ -70,9 +70,12 @@ class {{ sdk_class_prefix }}{{ model.name }}(NURESTObject):
         {% for api in model.children_apis %}
         self.{{ api.instance_plural_name }} = {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
         {% endfor %}{% endif %}
-        {% if version > 3.1 and not model.remote_name.startswith('metadata') %}
-        self.metadata = {{ sdk_class_prefix }}MetadatasFetcher.fetcher_with_object(parent_object=self)
-        {% endif %}
+        try:
+            {% if version > 3.1 and not model.remote_name.startswith('metadata') %}
+            self.metadata = {{ sdk_class_prefix }}MetadatasFetcher.fetcher_with_object(parent_object=self)
+            {% endif %}
+        except:
+            pass
 
         self._compute_args(**kwargs)
 
