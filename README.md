@@ -25,6 +25,8 @@ Monolithe is before all a framework that you can integrate with other tools.
 
 ### Installation
 
+> And remember, kids! You should always use virtualenv.
+
 You install Monolithe from PyPi:
 
     $ pip install monolithe
@@ -58,8 +60,6 @@ The example is composed of:
 - A `demo-client.py` command that interacts with the server using the generated sdk named `tdldk`.
 
 #### Step 1: install dependencies
-
-> You should do this in a virtualenv.
 
     $ cd monolithe # be sure to go and stay there for the rest of the tutorial ;)
     $ pip install flask
