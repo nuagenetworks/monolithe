@@ -18,9 +18,6 @@ class SDKLoader(object):
         self._sdk_module = importlib.import_module("%s.%s" % (self._sdk_identifier, self._version))
         self._sdk_utils_module = importlib.import_module("%s.utils" % self._sdk_identifier)
 
-        self._load_sdk()
-        self._load_sdk_utils()
-
     @property
     def sdk(self):
         return self._sdk_module
