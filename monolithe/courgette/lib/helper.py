@@ -37,7 +37,7 @@ class TestHelper(object):
             Printer.log("Errors")
             Printer.json(response.errors)
 
-    def use_sdk(self, sdk, session_class_name):
+    def set_sdk(self, sdk, session_class_name):
         """ Retain used sdk
 
         """

@@ -35,60 +35,45 @@ class CourgetteTestsRunner(object):
                 default_values: all default values to have a valid version of the model
 
         """
-        self.monolithe_config = monolithe_config
-        self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
-        self.session_class_name = "%s%sSession" % (self._sdk_class_prefix, self.monolithe_config.get_option("product_accronym"))
+        session_class_name = "%s%sSession" % (monolithe_config.get_option("sdk_class_prefix", "sdk"), monolithe_config.get_option("product_accronym"))
+        sdk_loader = SDKLoader(version=version, sdk_identifier=sdk_identifier)
+
         self._helper = TestHelper()
+        self._helper.set_sdk(sdk_loader.sdk, self._session_class_name)
 
-        self._sdk_loader = SDKLoader(version=version, sdk_identifier=sdk_identifier)
-        self._helper.use_sdk(self._sdk_loader.sdk, self.session_class_name)
-
-        session = getattr(self._sdk_loader.sdk, self.session_class_name)(api_url=url, username=username, password=password, enterprise=enterprise)
+        session = getattr(sdk_loader.sdk, session_class_name)(api_url=url, username=username, password=password, enterprise=enterprise)
         session.start()
 
-        self.root_object = session.root_object
-        self.resource_name = model.resource_name
+        self._root_object = session.root_object
+        self._sdk_object = sdk_loader.get_instance_from_rest_name(model.remote_name)
 
-        python_attributes = {SDKUtils.get_python_name(name): value for name, value in default_values.iteritems()}
-
-        self.sdkobject = self._sdk_loader.get_instance_from_rest_name(model.remote_name)
-        self.sdkobject.from_dict(python_attributes)
-
-        self.parent = None
+        self._sdk_object.from_dict({SDKUtils.get_python_name(name): value for name, value in default_values.iteritems()})
+        self._sdk_parent_object = None
 
         if parent_resource and parent_id:
             try:
-                self.parent = self._sdk_loader.get_instance_from_rest_name(parent_resource)
-                self.parent.id = parent_id
-                self.parent.fetch()
+                self._sdk_parent_object = sdk_loader.get_instance_from_rest_name(parent_resource)
+                self._sdk_parent_object.id = parent_id
+                self._sdk_parent_object.fetch()
             except:
                 raise AttributeError("Could not find parent %s with ID=%s" % (parent_resource, parent_id))
 
-        self.is_create_allowed = False
-        self.is_delete_allowed = False
-        self.is_get_allowed = False
-        self.is_get_all_allowed = False
-        self.is_update_allowed = False
+        self._create_allowed = False
+        self._delete_allowed = False
+        self._get_allowed = False
+        self._get_all_allowed = False
+        self._update_allowed = False
 
         for api in model.parent_apis:
             for operation in api.operations:
-                method = operation.method
-
-                if method == "POST":
-                    self.is_create_allowed = True
-                elif method == "GET":
-                    self.is_get_all_allowed = True
+                self._create_allowed = (operation.method == "POST")
+                self._get_all_allowed = (operation.method == "GET")
 
         for api in model.self_apis:
             for operation in api.operations:
-                method = operation.method
-
-                if method == "PUT":
-                    self.is_update_allowed = True
-                elif method == "DELETE":
-                    self.is_delete_allowed = True
-                elif method == "GET":
-                    self.is_get_allowed = True
+                self._update_allowed = (operation.method == "PUT")
+                self._delete_allowed = (operation.method == "DELETE")
+                self._get_allowed = (operation.method == "GET")
 
     def suite(self):
         """ Returns a TestSuite that can be run
@@ -98,28 +83,28 @@ class CourgetteTestsRunner(object):
         """
         all_suites = TestSuite()
 
-        if self.is_create_allowed:
-            maker = CreateTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
+        if self._create_allowed:
+            maker = CreateTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
-        if self.is_update_allowed:
-            maker = UpdateTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
+        if self._update_allowed:
+            maker = UpdateTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
-        if self.is_delete_allowed:
-            maker = DeleteTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
+        if self._delete_allowed:
+            maker = DeleteTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
-        if self.is_get_allowed:
-            maker = GetTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
+        if self._get_allowed:
+            maker = GetTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
-        if self.is_get_all_allowed:
-            maker = GetAllTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
+        if self._get_all_allowed:
+            maker = GetAllTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 

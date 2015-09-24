@@ -3,7 +3,7 @@
 import importlib
 
 from .sdkutils import SDKUtils
-from bambou import NURESTFetcher, NURESTObject, NURESTModelController
+from bambou import NURESTModelController
 
 
 class SDKLoader(object):
@@ -35,8 +35,6 @@ class SDKLoader(object):
 
     @property
     def sdk_identifier(self):
-        """
-        """
         return self._sdk_identifier
 
     def class_from_rest_name(self, rest_name):
