@@ -1,22 +1,19 @@
 # Monolithe
 
-Monolithe is a Python toolset that generates sdks, sdk documentation and api documentation based some specifications and configuration.
+Monolithe is a Python toolset that generates sdks and their documentation and ReST api documentation based some specifications and configuration.
 
 It provides the following commands:
 
 - `monogen-sdk`: generates a bambou-based sdk according to specifications and configuration.
-- `monogen-apidoc`: generate server rest api documentation according to specifications and configuration.
-
+- `monogen-apidoc`: generates ReST api documentation according to specifications and configuration.
 
 The specifications are a set of files containing json data describing one object per file, its properties and their characteristics, and its position in the api hierarchy.
 
 > For more info, please read the Monolithe Specifications Reference (TODO).
 
-
 In addition to the specifications, Monolithe uses a configuration that describes all the information relative to your sdk. For instance, you can set its name, the class prefix, some vanilla files, the license, and so on.
 
 > For more info, please read the Monolithe Configuration & Vanilla Reference (TODO).
-
 
 Monolithe is before all a framework that you can integrate with other tools.
 

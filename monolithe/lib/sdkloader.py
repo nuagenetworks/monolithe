@@ -46,6 +46,12 @@ class SDKLoader(object):
         return sdk
 
     @classmethod
+    def get_sdk_utils_package(cls, sdk_identifier):
+        """
+        """
+        return importlib.import_module("%s.utils" % sdk_identifier)
+
+    @classmethod
     def has_resource(cls, name):
         """ Check if the resource name is known
 
@@ -97,6 +103,7 @@ class SDKLoader(object):
         classname = "%s%s" % (sdk_class_prefix, model.name)
         klass = type(str(classname), (NURESTObject, ), {"__init__": init})
         klass.__rest_name__ = model.remote_name
+        klass.__resource_name__ = model.resource_name
 
         cls._resources[model.resource_name] = klass  # Override
 

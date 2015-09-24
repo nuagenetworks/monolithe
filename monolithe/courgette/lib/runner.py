@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from unittest2 import TestSuite
 
 from monolithe.lib import SDKLoader
@@ -36,19 +38,28 @@ class CourgetteTestsRunner(object):
         self.monolithe_config = monolithe_config
         self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
         self.session_class_name = "%s%sSession" % (self._sdk_class_prefix, self.monolithe_config.get_option("product_accronym"))
+        self._helper = TestHelper()
 
         SDKLoader.init(version)
         sdk = SDKLoader.get_sdk_package(sdk_identifier=sdk_identifier, sdk_class_prefix=self._sdk_class_prefix)
-        TestHelper.use_sdk(sdk, self.session_class_name)
+
+        # sdk_utils = SDKLoader.get_sdk_utils_package(sdk_identifier=sdk_identifier)
+        # sdk_utils.set_log_level(logging.DEBUG)
+
+        self._helper.use_sdk(sdk, self.session_class_name)
 
         session = getattr(sdk, self.session_class_name)(api_url=url, username=username, password=password, enterprise=enterprise)
         session.start()
 
-        self.user = session.user
+        self.root_object = session.root_object
         self.resource_name = model.resource_name
 
         python_attributes = {SDKUtils.get_python_name(name): value for name, value in default_values.iteritems()}
         self.sdkobject = SDKLoader.get_instance_from_model(model, self._sdk_class_prefix, **python_attributes)
+
+        print "--------"
+        print dir(self.sdkobject)
+        print "--------"
 
         self.parent = None
 
@@ -96,27 +107,27 @@ class CourgetteTestsRunner(object):
         all_suites = TestSuite()
 
         if self.is_create_allowed:
-            maker = CreateTestMaker(self.parent, self.sdkobject, self.user)
+            maker = CreateTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_update_allowed:
-            maker = UpdateTestMaker(self.parent, self.sdkobject, self.user)
+            maker = UpdateTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_delete_allowed:
-            maker = DeleteTestMaker(self.parent, self.sdkobject, self.user)
+            maker = DeleteTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_get_allowed:
-            maker = GetTestMaker(self.parent, self.sdkobject, self.user)
+            maker = GetTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self.is_get_all_allowed:
-            maker = GetAllTestMaker(self.parent, self.sdkobject, self.user)
+            maker = GetAllTestMaker(self.parent, self.sdkobject, self.root_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 

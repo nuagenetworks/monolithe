@@ -73,6 +73,8 @@ class {{ sdk_class_prefix }}{{ model.name }}(NURESTObject):
         try:
             {% if version > 3.1 and not model.remote_name.startswith('metadata') %}
             self.metadata = {{ sdk_class_prefix }}MetadatasFetcher.fetcher_with_object(parent_object=self)
+            {% else %}
+            pass
             {% endif %}
         except:
             pass

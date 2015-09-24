@@ -18,12 +18,13 @@ class _TestMaker(object):
 
     IGNORED_ATTRIBUTES = ["id", "parent_id", "parent_type", "creation_date", "owner", "last_updated_date", "last_updated_by", "external_id"]
 
-    def __init__(self):
+    def __init__(self, helper):
         """ Initializes a TestMaker
 
         """
         self._object_registry = dict()
         self._attributes_registry = dict()
+        self.helper = helper
 
     def register_test(self, function_name, **conditions):
         """ Register test for all attributes
@@ -140,11 +141,11 @@ class CreateTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user):
+    def __init__(self, parent, sdkobject, user, helper):
         """ Initializes a test case for creating objects
 
         """
-        super(CreateTestMaker, self).__init__()
+        super(CreateTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
         self.user = user
@@ -165,6 +166,7 @@ class CreateTestMaker(_TestMaker):
         CreateTestCase.parent = self.parent
         CreateTestCase.sdkobject = self.sdkobject
         CreateTestCase.user = self.user
+        CreateTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=CreateTestCase)
         for test_name, test_func in tests.iteritems():
@@ -179,7 +181,7 @@ class CreateTestCase(CourgetteTestCase):
         """ Initialize
 
         """
-        CourgetteTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
@@ -201,10 +203,10 @@ class CreateTestCase(CourgetteTestCase):
     def _test_create_object_without_authentication_should_fail(self):
         """ Create an object without authentication """
 
-        TestHelper.set_api_key(None)
+        self.helper.set_api_key(None)
         (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
-        TestHelper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -256,11 +258,11 @@ class UpdateTestMaker(_TestMaker):
     """ TestCase for updating objects
 
     """
-    def __init__(self, parent, sdkobject, user):
+    def __init__(self, parent, sdkobject, user, helper):
         """ Initializes a test case for updating objects
 
         """
-        super(UpdateTestMaker, self).__init__()
+        super(UpdateTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
         self.user = user
@@ -282,6 +284,7 @@ class UpdateTestMaker(_TestMaker):
         UpdateTestCase.parent = self.parent
         UpdateTestCase.sdkobject = self.sdkobject
         UpdateTestCase.user = self.user
+        UpdateTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=UpdateTestCase)
         for test_name, test_func in tests.iteritems():
@@ -296,7 +299,7 @@ class UpdateTestCase(CourgetteTestCase):
         """ Initialize
 
         """
-        CourgetteTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
@@ -318,10 +321,10 @@ class UpdateTestCase(CourgetteTestCase):
     def _test_update_object_without_authentication_should_fail(self):
         """ Update an object without authentication """
 
-        TestHelper.set_api_key(None)
+        self.helper.set_api_key(None)
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
-        TestHelper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -338,7 +341,6 @@ class UpdateTestCase(CourgetteTestCase):
     # Attributes tests
     def _test_update_object_with_required_attribute_as_none_should_fail(self, attribute):
         """ Update an object with a required attribute as None """
-
         setattr(self.sdkobject, attribute.local_name, None)
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
@@ -384,11 +386,11 @@ class DeleteTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user):
+    def __init__(self, parent, sdkobject, user, helper):
         """ Initializes a test case for creating objects
 
         """
-        super(DeleteTestMaker, self).__init__()
+        super(DeleteTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
         self.user = user
@@ -407,6 +409,7 @@ class DeleteTestMaker(_TestMaker):
         DeleteTestCase.parent = self.parent
         DeleteTestCase.sdkobject = self.sdkobject
         DeleteTestCase.user = self.user
+        DeleteTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=DeleteTestCase)
         for test_name, test_func in tests.iteritems():
@@ -421,7 +424,7 @@ class DeleteTestCase(CourgetteTestCase):
         """ Initialize
 
         """
-        CourgetteTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
@@ -444,11 +447,11 @@ class DeleteTestCase(CourgetteTestCase):
     def _test_delete_object_without_authentication_should_fail(self):
         """ Delete an object without authentication """
 
-        TestHelper.set_api_key(None)
+        self.helper.set_api_key(None)
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
-        TestHelper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -486,11 +489,11 @@ class GetTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user):
+    def __init__(self, parent, sdkobject, user, helper):
         """ Initializes a test case for creating objects
 
         """
-        super(GetTestMaker, self).__init__()
+        super(GetTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
         self.user = user
@@ -509,6 +512,7 @@ class GetTestMaker(_TestMaker):
         GetTestCase.parent = self.parent
         GetTestCase.sdkobject = self.sdkobject
         GetTestCase.user = self.user
+        GetTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetTestCase)
         for test_name, test_func in tests.iteritems():
@@ -523,7 +527,7 @@ class GetTestCase(CourgetteTestCase):
         """ Initialize
 
         """
-        CourgetteTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
@@ -545,11 +549,11 @@ class GetTestCase(CourgetteTestCase):
     def _test_get_object_without_authentication_should_fail(self):
         """ Get an object without authentication """
 
-        TestHelper.set_api_key(None)
+        self.helper.set_api_key(None)
         (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
 
-        TestHelper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -589,11 +593,11 @@ class GetAllTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user):
+    def __init__(self, parent, sdkobject, user, helper):
         """ Initializes a test case for creating objects
 
         """
-        super(GetAllTestMaker, self).__init__()
+        super(GetAllTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
         self.user = user
@@ -612,6 +616,7 @@ class GetAllTestMaker(_TestMaker):
         GetAllTestCase.parent = self.parent
         GetAllTestCase.sdkobject = self.sdkobject
         GetAllTestCase.user = self.user
+        GetAllTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetAllTestCase)
         for test_name, test_func in tests.iteritems():
@@ -626,7 +631,7 @@ class GetAllTestCase(CourgetteTestCase):
         """ Initialize
 
         """
-        CourgetteTestCase.__init__(self, methodName)
+        CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
 
     def setUp(self):
@@ -646,14 +651,15 @@ class GetAllTestCase(CourgetteTestCase):
     def _test_get_all_objects_without_authentication_should_fail(self):
         """ Get all object without authentication """
 
-        TestHelper.set_api_key(None)
+        self.helper.set_api_key(None)
+
         fetcher = SDKLoader.get_fetcher_instance(self.parent, self.sdkobject)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
 
         self.last_connection = connection
 
-        TestHelper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.user.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
