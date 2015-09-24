@@ -40,37 +40,29 @@ class CourgetteTestsRunner(object):
         self.session_class_name = "%s%sSession" % (self._sdk_class_prefix, self.monolithe_config.get_option("product_accronym"))
         self._helper = TestHelper()
 
-        SDKLoader.init(version)
-        sdk = SDKLoader.get_sdk_package(sdk_identifier=sdk_identifier, sdk_class_prefix=self._sdk_class_prefix)
+        self._sdk_loader = SDKLoader(version=version, sdk_identifier=sdk_identifier)
+        self._helper.use_sdk(self._sdk_loader.sdk, self.session_class_name)
 
-        # sdk_utils = SDKLoader.get_sdk_utils_package(sdk_identifier=sdk_identifier)
-        # sdk_utils.set_log_level(logging.DEBUG)
-
-        self._helper.use_sdk(sdk, self.session_class_name)
-
-        session = getattr(sdk, self.session_class_name)(api_url=url, username=username, password=password, enterprise=enterprise)
+        session = getattr(self._sdk_loader.sdk, self.session_class_name)(api_url=url, username=username, password=password, enterprise=enterprise)
         session.start()
 
         self.root_object = session.root_object
         self.resource_name = model.resource_name
 
         python_attributes = {SDKUtils.get_python_name(name): value for name, value in default_values.iteritems()}
-        self.sdkobject = SDKLoader.get_instance_from_model(model, self._sdk_class_prefix, **python_attributes)
 
-        print "--------"
-        print dir(self.sdkobject)
-        print "--------"
+        self.sdkobject = self._sdk_loader.get_instance_from_rest_name(model.remote_name)
+        self.sdkobject.from_dict(python_attributes)
 
         self.parent = None
 
         if parent_resource and parent_id:
             try:
-                self.parent = SDKLoader.get_instance(parent_resource, id=parent_id)
+                self.parent = self._sdk_loader.get_instance_from_rest_name(parent_resource)
+                self.parent.id = parent_id
                 self.parent.fetch()
             except:
                 raise AttributeError("Could not find parent %s with ID=%s" % (parent_resource, parent_id))
-
-        SDKLoader.update_fetchers_for_object(self.parent, self.sdkobject, self._sdk_class_prefix, model)
 
         self.is_create_allowed = False
         self.is_delete_allowed = False

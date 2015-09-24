@@ -4,8 +4,6 @@ import re
 
 from unittest2 import TestSuite
 
-from monolithe.lib import SDKLoader
-
 from .helper import TestHelper
 from .testcase import CourgetteTestCase
 
@@ -182,14 +180,14 @@ class CreateTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
-        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
+        self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
+        self.sdkobject = self.pristine_sdkobject.copy()
 
     def tearDown(self):
         """ Clean up environment
@@ -300,14 +298,14 @@ class UpdateTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
-        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
+        self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
+        self.sdkobject = self.pristine_sdkobject.copy()
 
         self.parent.create_child(self.sdkobject)
 
@@ -425,14 +423,14 @@ class DeleteTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
-        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
+        self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up create test
 
         """
         self.last_connection = None
-        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
+        self.sdkobject = self.pristine_sdkobject.copy()
 
         self.parent.create_child(self.sdkobject)
 
@@ -528,14 +526,14 @@ class GetTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
-        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
+        self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up get test
 
         """
         self.last_connection = None
-        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
+        self.sdkobject = self.pristine_sdkobject.copy()
 
         self.parent.create_child(self.sdkobject)
 
@@ -632,14 +630,14 @@ class GetAllTestCase(CourgetteTestCase):
 
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
-        self.pristine_sdkobject = SDKLoader.get_instance_copy(self.sdkobject)
+        self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up get test
 
         """
         self.last_connection = None
-        self.sdkobject = SDKLoader.get_instance_copy(self.pristine_sdkobject)
+        self.sdkobject = self.pristine_sdkobject.copy()
 
     def tearDown(self):
         """ Clean up environment
@@ -653,7 +651,7 @@ class GetAllTestCase(CourgetteTestCase):
 
         self.helper.set_api_key(None)
 
-        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.sdkobject)
+        fetcher = self.parent.fetcher_for_rest_name(self.sdkobject.rest_name)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
 
@@ -667,7 +665,7 @@ class GetAllTestCase(CourgetteTestCase):
         """ Get all object without content should succeed with 200 response
 
         """
-        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.sdkobject)
+        fetcher = self.parent.fetcher_for_rest_name(self.sdkobject.rest_name)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
         self.last_connection = connection
@@ -680,7 +678,7 @@ class GetAllTestCase(CourgetteTestCase):
         """
         self.parent.create_child(self.sdkobject)
 
-        fetcher = SDKLoader.get_fetcher_instance(self.parent, self.sdkobject)
+        fetcher = self.parent.fetcher_for_rest_name(self.sdkobject.rest_name)
         (fetcher, parent, children) = fetcher.fetch()
         connection = fetcher.current_connection
 

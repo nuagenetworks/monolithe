@@ -3,236 +3,53 @@
 import importlib
 
 from .sdkutils import SDKUtils
-from bambou import NURESTFetcher, NURESTObject
+from bambou import NURESTFetcher, NURESTObject, NURESTModelController
 
 
 class SDKLoader(object):
-    """ Deals with SDK Object models
-
     """
-    _resources = dict()
-    _version = None
+    """
 
-    @classmethod
-    def init(cls, version):
-        """ Loads all SDK objects in memory to
-            enable retrieve each class according
-            to its remote name.
-
-        """
-        cls._version = SDKUtils.get_string_version(version)
-
-    @classmethod
-    def get_sdk_package(cls, sdk_identifier, sdk_class_prefix):
-        """ Returns sdk package
-
-            Args:
-                sdk_identifier: optional identifier to load the sdk
-
-                Example:
-                    sdk_identifier="1234.sdk"
-        """
-        sdk = importlib.import_module("%s.%s" % (sdk_identifier, cls._version))
-
-        classnames = [name for name in dir(sdk) if name.startswith(sdk_class_prefix) and not name.endswith("Fetcher")]
-
-        for classname in classnames:
-            klass = getattr(sdk, classname)
-
-            if issubclass(klass, NURESTObject):
-                resource_name = klass.rest_resource_name
-                cls._resources[resource_name] = klass
-
-        return sdk
-
-    @classmethod
-    def get_sdk_utils_package(cls, sdk_identifier):
+    def __init__(self, version, sdk_identifier):
         """
         """
-        return importlib.import_module("%s.utils" % sdk_identifier)
+        self._sdk_identifier = sdk_identifier
+        self._version = SDKUtils.get_string_version(version)
+        self._sdk_module = importlib.import_module("%s.%s" % (self._sdk_identifier, self._version))
+        self._sdk_utils_module = importlib.import_module("%s.utils" % self._sdk_identifier)
 
-    @classmethod
-    def has_resource(cls, name):
-        """ Check if the resource name is known
+        self._load_sdk()
+        self._load_sdk_utils()
 
-            Args:
-                name: the resource name
+    @property
+    def sdk(self):
+        return self._sdk_module
 
-            Returns:
-                Returns True if the resouce is known.
-                Otherwise False
+    @property
+    def sdk_utils(self):
+        return self._sdk_utils_module
+
+    @property
+    def version(self):
+        return self._version
+
+    @property
+    def sdk_identifier(self):
         """
-        return name in cls._resources
-
-    @classmethod
-    def class_from_resource(cls, name):
-        """ Get the class related to the resource name
-
-            Args:
-                name: the resource name
-
-            Returns:
-                Returns the class object or None if
-                no resource name matches.
         """
-        if cls.has_resource(name):
-            return cls._resources[name]
+        return self._sdk_identifier
 
-        return None
-
-    @classmethod
-    def class_from_model(cls, model, sdk_class_prefix):
-        """ Create a NURESTObject from the given specification
-
-            Args:
-                spec: the specification
-
+    def class_from_rest_name(self, rest_name):
         """
-
-        def init(self, **kwargs):
-            """ """
-            NURESTObject.__init__(self)
-
-            for attribute in model.attributes:
-                setattr(self, "_%s" % attribute.local_name.lower(), None)
-                allowed_choices = attribute.allowed_choices.sort() if attribute.allowed_choices and len(attribute.allowed_choices) > 0 else None
-                self.expose_attribute(local_name=attribute.local_name.lower(), remote_name=attribute.remote_name, attribute_type=attribute.local_type, is_required=attribute.required, choices=allowed_choices)
-
-            self._compute_args(**kwargs)
-
-        classname = "%s%s" % (sdk_class_prefix, model.name)
-        klass = type(str(classname), (NURESTObject, ), {"__init__": init})
-        klass.__rest_name__ = model.remote_name
-        klass.__resource_name__ = model.resource_name
-
-        cls._resources[model.resource_name] = klass  # Override
-
-        return klass
-
-    @classmethod
-    def update_fetchers_for_object(cls, parent, child, sdk_class_prefix,  model):
         """
+        return NURESTModelController.get_first_model(rest_name=rest_name)
 
+    def get_instance_from_rest_name(self, rest_name):
         """
-        def fetcher_init(self, **kwargs):
-            """"""
-            NURESTFetcher.__init__(self)
-
-        fetcher_classname = "%s%sFetcher" % (sdk_class_prefix, model.plural_name)
-        fetcher_klass = type(str(fetcher_classname), (NURESTFetcher, ), {"__init__": fetcher_init})
-
-        def managed_class(cls):
-            """"""
-            return child.__class__
-
-        setattr(fetcher_klass, "managed_class", classmethod(managed_class))
-
-        fetcher = fetcher_klass()
-        setattr(parent, model.instance_plural_name, fetcher.fetcher_with_object(parent_object=parent))
-
-    @classmethod
-    def get_fetcher_instance(cls, parent, child):
-        """ Get the fetcher instance from the parent that contains the child
-
         """
-        return parent.fetcher_for_rest_name(child.rest_name)
-
-    @classmethod
-    def get_instance(cls, resource_name, **attributes):
-        """ Get instance of a object related to its resource name
-
-            Args:
-                resource_name: the resource name
-                attributes: additionnal attributes
-
-            Returns:
-                Returns the instance or None if
-                no resource name matches.
-        """
-        klass = cls.class_from_resource(resource_name)
+        klass = self.class_from_rest_name(rest_name)
 
         if klass:
-            python_attributes = cls._convert_attributes(attributes)
-            return klass(**python_attributes)
+            return klass()
 
         return None
-
-    @classmethod
-    def get_instance_from_model(cls, model, sdk_class_prefix,  **attributes):
-        """ Get instance of a object related to its resource name
-
-            Args:
-                model: the model
-                attributes: attributes default values
-
-            Returns:
-                Returns the instance or None if
-                no resource name matches.
-        """
-        klass = cls.class_from_model(model, sdk_class_prefix)
-
-        if klass:
-            python_attributes = cls._convert_attributes(attributes)
-            return klass(**python_attributes)
-
-        return None
-
-    @classmethod
-    def get_instance_copy(cls, instance):
-        """ Creates a brand new copy of the instance
-
-        """
-        klass = instance.__class__
-        return klass(data=instance.to_dict())
-
-    @classmethod
-    def _convert_attributes(cls, attributes):
-        """ Convert attributes to with Python names
-
-            Args:
-                attributes: a dictionary of attributes
-
-        """
-        converted_attributes = dict()
-
-        for attribute_name, attribute_value in attributes.iteritems():
-            python_name = SDKUtils.get_python_name(attribute_name)
-            converted_attributes[python_name] = attribute_value
-
-        return converted_attributes
-
-    @classmethod
-    def parent_has_child(cls, parent_resource, child_resource):
-        """ Verify if the parent resource has a child
-            of resource child_resource
-
-            Args:
-                parent_resource: the parent resource name
-                child_resource: the child resource name
-
-            Return:
-                Returns True or False
-        """
-        parent = cls.class_from_resource(parent_resource)
-
-        if parent is None:
-            return False
-
-        return hasattr(parent, child_resource)
-
-    @classmethod
-    def update_instance(cls, instance, **attributes):
-        """ Update instance of an object with attributes values
-
-            Args:
-                instance: the object instance
-                attributes: attributes values
-
-            Returns:
-                Returns the updated instance.
-        """
-        for attribute_name, attribute_value in attributes.iteritems():
-            if hasattr(instance, attribute_name):
-                setattr(instance, attribute_name, attribute_value)
-
-        return instance
