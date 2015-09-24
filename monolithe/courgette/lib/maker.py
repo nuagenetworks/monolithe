@@ -139,14 +139,13 @@ class CreateTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user, helper):
+    def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for creating objects
 
         """
         super(CreateTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
-        self.user = user
 
         # Object tests
         self.register_test("_test_create_object_with_all_valid_attributes_should_succeed")
@@ -163,7 +162,6 @@ class CreateTestMaker(_TestMaker):
         """
         CreateTestCase.parent = self.parent
         CreateTestCase.sdkobject = self.sdkobject
-        CreateTestCase.user = self.user
         CreateTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=CreateTestCase)
@@ -204,7 +202,7 @@ class CreateTestCase(CourgetteTestCase):
         self.helper.set_api_key(None)
         (obj, connection) = self.parent.create_child(self.sdkobject)
         self.last_connection = connection
-        self.helper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.helper.session.root_object.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -256,14 +254,13 @@ class UpdateTestMaker(_TestMaker):
     """ TestCase for updating objects
 
     """
-    def __init__(self, parent, sdkobject, user, helper):
+    def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for updating objects
 
         """
         super(UpdateTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
-        self.user = user
 
         # Object tests
         self.register_test("_test_update_object_with_same_attributes_should_fail")
@@ -281,7 +278,6 @@ class UpdateTestMaker(_TestMaker):
         """
         UpdateTestCase.parent = self.parent
         UpdateTestCase.sdkobject = self.sdkobject
-        UpdateTestCase.user = self.user
         UpdateTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=UpdateTestCase)
@@ -322,7 +318,7 @@ class UpdateTestCase(CourgetteTestCase):
         self.helper.set_api_key(None)
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
-        self.helper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.helper.session.root_object.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -384,14 +380,13 @@ class DeleteTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user, helper):
+    def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for creating objects
 
         """
         super(DeleteTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
-        self.user = user
 
         # Object tests
         self.register_test("_test_delete_object_without_authentication_should_fail")
@@ -406,7 +401,6 @@ class DeleteTestMaker(_TestMaker):
         """
         DeleteTestCase.parent = self.parent
         DeleteTestCase.sdkobject = self.sdkobject
-        DeleteTestCase.user = self.user
         DeleteTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=DeleteTestCase)
@@ -449,7 +443,7 @@ class DeleteTestCase(CourgetteTestCase):
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
-        self.helper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.helper.session.root_object.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -487,14 +481,13 @@ class GetTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user, helper):
+    def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for creating objects
 
         """
         super(GetTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
-        self.user = user
 
         # Object tests
         self.register_test("_test_get_object_without_authentication_should_fail")
@@ -509,7 +502,6 @@ class GetTestMaker(_TestMaker):
         """
         GetTestCase.parent = self.parent
         GetTestCase.sdkobject = self.sdkobject
-        GetTestCase.user = self.user
         GetTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetTestCase)
@@ -551,7 +543,7 @@ class GetTestCase(CourgetteTestCase):
         (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
 
-        self.helper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.helper.session.root_object.api_key)
 
         self.assertConnectionStatus(connection, 401)
 
@@ -591,14 +583,13 @@ class GetAllTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
-    def __init__(self, parent, sdkobject, user, helper):
+    def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for creating objects
 
         """
         super(GetAllTestMaker, self).__init__(helper=helper)
         self.parent = parent
         self.sdkobject = sdkobject
-        self.user = user
 
         # Object tests
         self.register_test("_test_get_all_objects_without_authentication_should_fail")
@@ -613,7 +604,6 @@ class GetAllTestMaker(_TestMaker):
         """
         GetAllTestCase.parent = self.parent
         GetAllTestCase.sdkobject = self.sdkobject
-        GetAllTestCase.user = self.user
         GetAllTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetAllTestCase)
@@ -657,7 +647,7 @@ class GetAllTestCase(CourgetteTestCase):
 
         self.last_connection = connection
 
-        self.helper.set_api_key(self.user.api_key)
+        self.helper.set_api_key(self.helper.session.root_object.api_key)
 
         self.assertConnectionStatus(connection, 401)
 

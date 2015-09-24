@@ -10,10 +10,12 @@ class TestHelper(object):
     """ Helper to make tests easier
 
     """
-    def __init__(self):
-       self._sdk = None
-       self._debug = False
-       self._session_class_name = None
+    def __init__(self, sdk_module, sdk_session_class_name, api_url, api_username, api_password, api_enterprise):
+        """
+        """
+        self._sdk_module = sdk_module
+        self._sdk_session = getattr(self._sdk_module, sdk_session_class_name)(api_url=api_url, username=api_username, password=api_password, enterprise=api_enterprise)
+        self._sdk_session.start()
 
     @classmethod
     def trace(cls, connection):
@@ -37,41 +39,31 @@ class TestHelper(object):
             Printer.log("Errors")
             Printer.json(response.errors)
 
-    def set_sdk(self, sdk, session_class_name):
-        """ Retain used sdk
+    @property
+    def session(self):
+        return self._sdk_session
 
-        """
-        self._session_class_name = session_class_name
-        self._sdk = sdk
-
-    def current_push_center(self, session_class_name):
+    def current_push_center(self):
         """ Get current push center
 
         """
-
-        session = getattr(self._sdk, self._session_class_name).get_current_session()
-        return session.push_center
+        return self._sdk_session.push_center
 
     def set_api_key(self, api_key, sdk_object=None):
         """ Change api key
 
         """
-        session = getattr(self._sdk, self._session_class_name).get_current_session()
-        session.login_controller.api_key = api_key
+        self._sdk_session.login_controller.api_key = api_key
 
     def session_headers(self):
         """ Get headers
 
         """
-        session = getattr(self._sdk, self._session_class_name).get_current_session()
-        controller = session.login_controller
-
-        headers = dict()
-        headers["Content-Type"] = "application/json"
-        headers["X-Nuage-Organization"] = controller.enterprise
-        headers["Authorization"] = controller.get_authentication_header()
-
-        return headers
+        return {
+            "Content-Type": "application/json",
+            "X-Nuage-Organization": self._sdk_session.login_controller.enterprise,
+            "Authorization": self._sdk_session.login_controller.get_authentication_header()
+        }
 
     def send_request(self, method, url, data=None, remove_header=None):
         """ Send request with removed header

@@ -38,17 +38,17 @@ class CourgetteTestsRunner(object):
         session_class_name = "%s%sSession" % (monolithe_config.get_option("sdk_class_prefix", "sdk"), monolithe_config.get_option("product_accronym"))
         sdk_loader = SDKLoader(version=version, sdk_identifier=sdk_identifier)
 
-        self._helper = TestHelper()
-        self._helper.set_sdk(sdk_loader.sdk, self._session_class_name)
+        self._helper = TestHelper(  sdk_module=sdk_loader.sdk,
+                                    sdk_session_class_name=session_class_name,
+                                    api_url=url, api_username=username,
+                                    api_password=password,
+                                    api_enterprise=enterprise)
 
-        session = getattr(sdk_loader.sdk, session_class_name)(api_url=url, username=username, password=password, enterprise=enterprise)
-        session.start()
-
-        self._root_object = session.root_object
         self._sdk_object = sdk_loader.get_instance_from_rest_name(model.remote_name)
 
         self._sdk_object.from_dict({SDKUtils.get_python_name(name): value for name, value in default_values.iteritems()})
         self._sdk_parent_object = None
+
 
         if parent_resource and parent_id:
             try:
@@ -66,14 +66,20 @@ class CourgetteTestsRunner(object):
 
         for api in model.parent_apis:
             for operation in api.operations:
-                self._create_allowed = (operation.method == "POST")
-                self._get_all_allowed = (operation.method == "GET")
+                if operation.method == "POST":
+                    self._create_allowed = True
+                if operation.method == "GET":
+                    self._get_all_allowed = True
 
         for api in model.self_apis:
             for operation in api.operations:
-                self._update_allowed = (operation.method == "PUT")
-                self._delete_allowed = (operation.method == "DELETE")
-                self._get_allowed = (operation.method == "GET")
+                if operation.method == "PUT":
+                    self._update_allowed = True
+                if operation.method == "DELETE":
+                    self._delete_allowed = True
+                if operation.method == "GET":
+                    self._get_allowed = True
+
 
     def suite(self):
         """ Returns a TestSuite that can be run
@@ -84,27 +90,27 @@ class CourgetteTestsRunner(object):
         all_suites = TestSuite()
 
         if self._create_allowed:
-            maker = CreateTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
+            maker = CreateTestMaker(self._sdk_parent_object, self._sdk_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self._update_allowed:
-            maker = UpdateTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
+            maker = UpdateTestMaker(self._sdk_parent_object, self._sdk_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self._delete_allowed:
-            maker = DeleteTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
+            maker = DeleteTestMaker(self._sdk_parent_object, self._sdk_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self._get_allowed:
-            maker = GetTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
+            maker = GetTestMaker(self._sdk_parent_object, self._sdk_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
         if self._get_all_allowed:
-            maker = GetAllTestMaker(self._sdk_parent_object, self._sdk_object, self._root_object, self._helper)
+            maker = GetAllTestMaker(self._sdk_parent_object, self._sdk_object, self._helper)
             suite = maker.suite()
             all_suites.addTests(suite)
 
