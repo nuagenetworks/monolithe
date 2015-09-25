@@ -18,7 +18,7 @@ class RepositoryManager (object):
     """ RepositoryManager is an object that allows to manipulate the API specification repository
     """
 
-    def __init__(self, monolithe_config, api_url, login_or_token, password, organization, repository):
+    def __init__(self, monolithe_config, api_url, login_or_token, password, organization, repository, repository_path="/"):
         """ Initialize RepositoryManager
 
             Args:
@@ -30,8 +30,18 @@ class RepositoryManager (object):
         """
         self._monolithe_config = monolithe_config;
         self._repository = repository
+        self._repository_path = repository_path
+
+        if len(self._repository_path) > 1:
+            if self._repository_path[0] == "/":
+                self._repository_path = self._repository_path[1:]
+
+            if self._repository_path[-1] == "/":
+                self._repository_path = self._repository_path[:-1]
+
         self._github = Github(login_or_token=login_or_token, password=password, base_url=api_url)
         self._repo = self._github.get_organization(organization).get_repo(repository)
+
 
     @property
     def repository(self):
@@ -58,7 +68,7 @@ class RepositoryManager (object):
 
         ret = []
 
-        for file in self._repo.get_dir_contents("/", ref=branch):
+        for file in self._repo.get_dir_contents(self._repository_path, ref=branch):
 
             if os.path.splitext(file.name)[1] != ".spec":
                 continue
@@ -77,7 +87,8 @@ class RepositoryManager (object):
             Returns:
                 the server api version as a string (example: 3.2)
         """
-        return base64.b64decode(self._repo.get_file_contents("api.version", ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
+        path = "%s/%s" % (self._repository_path, "api.version")
+        return base64.b64decode(self._repo.get_file_contents(path, ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
 
     def get_last_commit(self, branch="master"):
         """
@@ -117,7 +128,6 @@ class RepositoryManager (object):
         # reads the content of the archive and generate Specification objects
         with zipfile.ZipFile(archive_path, "r") as archive_content:
             for file_name in archive_content.namelist():
-
                 if file_name == "api.version":
                     self._api_version = archive_content.read(file_name)
                     continue
@@ -143,8 +153,8 @@ class RepositoryManager (object):
             Returns:
                 JSON decoded structure of the specification file.
         """
-
-        return json.loads(base64.b64decode(self._repo.get_file_contents(name, ref=branch).content))
+        path = "%s/%s" % (self._repository_path, name)
+        return json.loads(base64.b64decode(self._repo.get_file_contents(path, ref=branch).content))
 
     def get_specification(self, name, branch="master"):
         """ Returns a Specification object from the given specification file name in the given branch
@@ -156,7 +166,6 @@ class RepositoryManager (object):
             Returns:
                 Specification object.
         """
-
         return Specification(data=self.get_specification_data(name, branch), monolithe_config=self._monolithe_config)
 
     def get_specifications(self, names, branch="master", callback=None):
