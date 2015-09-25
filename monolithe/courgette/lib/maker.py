@@ -302,7 +302,6 @@ class UpdateTestCase(CourgetteTestCase):
         """
         self.last_connection = None
         self.sdkobject = self.pristine_sdkobject.copy()
-
         self.parent.create_child(self.sdkobject)
 
     def tearDown(self):
@@ -391,7 +390,7 @@ class DeleteTestMaker(_TestMaker):
         # Object tests
         self.register_test("_test_delete_object_without_authentication_should_fail")
         self.register_test("_test_delete_object_with_valid_id_should_succeed")
-        self.register_test("_test_delete_object_with_wrong_id_should_succeed")
+        self.register_test("_test_delete_object_with_wrong_id_should_fail")
 
         # No Attribute tests
 
@@ -456,13 +455,14 @@ class DeleteTestCase(CourgetteTestCase):
 
         self.assertConnectionStatus(connection, 204)
         self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
+        self.sdkobject.id = None # so it won't be deleted again in tearDown
 
-    def _test_delete_object_with_wrong_id_should_succeed(self):
+    def _test_delete_object_with_wrong_id_should_fail(self):
         """ Delete an object with a wrong id should fail with 404 error
 
         """
         default_id = self.sdkobject.id
-        invalid_id = "Unknown ID"
+        invalid_id = "000-000-000-000-00-000"
         self.sdkobject.id = invalid_id
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
@@ -492,7 +492,7 @@ class GetTestMaker(_TestMaker):
         # Object tests
         self.register_test("_test_get_object_without_authentication_should_fail")
         self.register_test("_test_get_object_with_valid_id_should_succeed")
-        self.register_test("_test_get_object_with_wrong_id_should_succeed")
+        self.register_test("_test_get_object_with_wrong_id_should_fail")
 
         # No Attribute tests
 
@@ -557,12 +557,12 @@ class GetTestCase(CourgetteTestCase):
         self.assertConnectionStatus(connection, 200)
         self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
 
-    def _test_get_object_with_wrong_id_should_succeed(self):
+    def _test_get_object_with_wrong_id_should_fail(self):
         """ Get an object with a wrong id should fail with 404 error
 
         """
         default_id = self.sdkobject.id
-        invalid_id = "Unknown ID"
+        invalid_id = "000-000-000-000-00-000"
         self.sdkobject.id = invalid_id
         (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection

@@ -37,6 +37,7 @@ class CourgetteTestsRunner(object):
         """
         session_class_name = "%s%sSession" % (monolithe_config.get_option("sdk_class_prefix", "sdk"), monolithe_config.get_option("product_accronym"))
         sdk_loader = SDKLoader(version=version, sdk_identifier=sdk_identifier)
+        sdk_loader.sdk_utils.set_log_level(logging.DEBUG)
 
         self._helper = TestHelper(  sdk_module=sdk_loader.sdk,
                                     sdk_session_class_name=session_class_name,
@@ -79,7 +80,6 @@ class CourgetteTestsRunner(object):
                     self._delete_allowed = True
                 if operation.method == "GET":
                     self._get_allowed = True
-
 
     def suite(self):
         """ Returns a TestSuite that can be run
