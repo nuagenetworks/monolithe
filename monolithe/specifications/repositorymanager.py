@@ -88,7 +88,10 @@ class RepositoryManager (object):
                 the server api version as a string (example: 3.2)
         """
         path = "%s/%s" % (self._repository_path, "api.version")
-        return base64.b64decode(self._repo.get_file_contents(path, ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
+        try:
+            return base64.b64decode(self._repo.get_file_contents(path, ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
+        except:
+            return None
 
     def get_last_commit(self, branch="master"):
         """
