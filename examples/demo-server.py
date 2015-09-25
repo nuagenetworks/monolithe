@@ -2,82 +2,72 @@
 from flask import Flask, request
 import json
 
+import minilib.lib as lib
+
 app = Flask(__name__)
 
-_lists_ = [{
-    "ID": "1",
-    "title": "Shopping List",
-    "description": "Things to buy"
-},
-{
-    "ID": "2",
-    "title": "Secret List",
-    "description": "You should not see this"
-}]
 
-_tasks_ = [{
-        "ID": "11",
-        "parentID": "1",
-        "title": "Buy Milk",
-        "description": "because it is good",
-        "status": "TODO"
-    },
-    {
-        "ID": "12",
-        "parentID": "1",
-        "title": "Buy Chocolate",
-        "description": "because it is even better",
-        "status": "TODO"
-    },
-    {
-        "ID": "21",
-        "parentID": "2",
-        "title": "Explain Monolithe",
-        "description": "We are doing it right now",
-        "status": "TODO"
-    },
-    {
-        "ID": "22",
-        "parentID": "2",
-        "title": "Make Garuda popular",
-        "description": "Almost done",
-        "status": "TODO"
-    },
-
-    {
-        "ID": "23",
-        "parentID": "2",
-        "title": "Dominate the world",
-        "description": "That is the plan",
-        "status": "TODO"
-    }
-]
-
-def _get_tasks_of_lists(lid):
-    return filter((lambda t: t["parentID"] == lid), _tasks_)
-
-def _get_tasks(tid):
-    return filter((lambda t: t["ID"] == tid), _tasks_)[0]
-
+## root
 
 @app.route('/api/v1_0/root')
 def index():
-    return "{}"
+    return json.dumps([{"APIKey": "secret-api-key"}])
+
+
+## lists
 
 @app.route('/api/v1_0/lists')
 def get_lists():
-    return json.dumps(_lists_)
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_get_all_lists()
 
-@app.route('/api/v1_0/lists/<tid>/tasks')
-def get_tasks(tid):
-    return json.dumps(_get_tasks_of_lists(tid))
+@app.route('/api/v1_0/lists/<lid>')
+def get_list(lid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_get_list(lid)
+
+@app.route('/api/v1_0/lists', methods=["POST"])
+def create_list(lid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_create_list(request.json)
+
+@app.route('/api/v1_0/lists/<lid>', methods=["PUT"])
+def update_list(tid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_update_list(lid, request.json)
+
+@app.route('/api/v1_0/lists/<lid>', methods=["DELETE"])
+def delete_list(tid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_delete_list(lid)
+
+## tasks
+
+@app.route('/api/v1_0/lists/<lid>/tasks')
+def get_tasks(lid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_get_all_tasks(lid)
+
+@app.route('/api/v1_0/tasks/<lid>')
+def get_task(lid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_get_task(lid)
+
+@app.route('/api/v1_0/lists/<lid>/tasks', methods=["POST"])
+def create_task(lid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_create_task(lid, request.json)
 
 @app.route('/api/v1_0/tasks/<tid>', methods=["PUT"])
-def update_tasks(tid):
-    task = _get_tasks(tid)
-    task.update(request.json)
-    return json.dumps(request.json)
+def update_task(tid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_update_task(tid, request.json)
+
+@app.route('/api/v1_0/tasks/<tid>', methods=["DELETE"])
+def delete_task(tid):
+    if not lib.check_auth(request): return "", 401
+    return lib.perform_delete_task(tid)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

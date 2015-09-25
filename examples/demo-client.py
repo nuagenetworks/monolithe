@@ -37,7 +37,7 @@ tdldk = importlib.import_module("tdldk.v1_0")
 
 # create a session. The demo server doesn't care about your credentials,
 # we put junk. The only important thing is of course the api_url
-session = tdldk.GATDLSession(username="bob", enterprise="nuagenetworks", password="secret", api_url="http://127.0.0.1:5000")
+session = tdldk.GATDLSession(username="bob", enterprise="nuagenetworks", password="secret", api_url="http://127.0.0.1:8000")
 
 # now we start the session. This would normally authenticate your credentials and return your root api object with an
 # api key. But again, here we don't validate anything.
