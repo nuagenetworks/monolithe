@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="monolithe",
-    packages=find_packages(exclude=[""*tests*""]),
+    packages=find_packages(exclude=["*tests*"]),
     include_package_data=True,
     version="0.0.2",
     description="Monolithe is the basis of the universe",

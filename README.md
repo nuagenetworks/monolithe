@@ -1,6 +1,6 @@
 # Monolithe
 
-Monolithe is a Python toolset that generates sdks and their documentation and ReST api documentation based some specifications and configuration.
+Monolithe is a Python toolset that generates sdks with their documentation and ReST api documentation based some specifications and configuration.
 
 It provides the following commands:
 
