@@ -11,7 +11,16 @@
           ]
         }
     },
-    "parents": {},
+    "parents": {
+        "/lists": {
+            "RESTName": "list",
+            "resourceName": "lists",
+            "operations": [
+            {"availability": null, "method": "GET" },
+            {"availability": null, "method": "POST"}
+            ]
+        }
+    },
     "self": {
       "/lists/{id}": {
         "RESTName": "list",
