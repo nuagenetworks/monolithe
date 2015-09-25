@@ -139,11 +139,12 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
         self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
-        self._sdk_root_api_entity_name = self.monolithe_config.get_option("sdk_root_api_entity_name", "sdk")
+        self._sdk_root_object_class_name = self.monolithe_config.get_option("sdk_root_object_class_name", "sdk")
         self._sdk_api_prefix = self.monolithe_config.get_option("sdk_api_prefix", "sdk")
         self._root_api = self.monolithe_config.get_option("root_api")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._root_api = self.monolithe_config.get_option("root_api")
+        self._sdk_root_object_property_name = self.monolithe_config.get_option("sdk_root_object_property_name", "sdk")
 
         self.apiversion = apiversion
         self.output_directory = "%s/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(apiversion))
@@ -232,11 +233,11 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         filename = "%s%ssession.py" % (self._sdk_class_prefix.lower(),  self._product_accronym.lower())
         self.write(destination=self.output_directory, filename=filename, template_name="session.py.tpl",
                     version=self.apiversion,
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    sdk_root_api_entity_name=self._sdk_root_api_entity_name,
-                    sdk_api_prefix=self._sdk_api_prefix,
                     product_accronym=self._product_accronym,
-                    root_api=self._root_api)
+                    sdk_class_prefix=self._sdk_class_prefix,
+                    sdk_root_object_class_name=self._sdk_root_object_class_name,
+                    sdk_api_prefix=self._sdk_api_prefix,
+                    sdk_root_object_property_name=self._sdk_root_object_property_name)
 
     def write_specification(self, specification):
         """ Write autogenerate specification file
