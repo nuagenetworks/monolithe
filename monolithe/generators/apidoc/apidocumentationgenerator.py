@@ -37,6 +37,6 @@ class APIDocumentationGenerator(Generator):
             self.install_user_vanilla(user_vanilla_path=self._apidoc_user_vanilla, output_path=vanilla_output_path)
 
             Printer.log("generating %s api documentation for api version: %s" % (self._product_name, apiversion))
-            writer.write(resources=specifications, apiversion=apiversion)
+            writer.write(specifications=specifications, apiversion=apiversion)
 
         Printer.success("%s api documentation generation complete and available at \"%s\"" % (self._product_name, self._apidoc_output))

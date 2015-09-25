@@ -29,5 +29,5 @@ class SDKAPIVersionGenerator(object):
         """
         for apiversion, specifications in specification_info.iteritems():
             writer = SDKAPIVersionWriter(monolithe_config=self.monolithe_config)
-            writer.write(resources=specifications, apiversion=apiversion)
+            writer.write(specifications=specifications, apiversion=apiversion)
 

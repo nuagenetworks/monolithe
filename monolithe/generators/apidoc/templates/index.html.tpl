@@ -27,9 +27,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Components <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             {% set package_name = None %}
-                            {% for model in models|sort(attribute='package') %}
-                                {% if package_name != model.package %}
-                                    {% set package_name = model.package %}
+                            {% for specification in specifications|sort(attribute='package') %}
+                                {% if package_name != specification.package %}
+                                    {% set package_name = specification.package %}
                                     <li class="divider"></li>
                                     <li><a data-id="section-{{ package_name| replace(" ", "_")}}" href="#section-{{ package_name | replace(" ", "_")}}">{{ package_name }}</a></li>
                                 {% endif %}
@@ -49,20 +49,20 @@
 
     <div class="container" id="content">
         {% set package_name = None %}
-        {% for model in models|sort(attribute='package') %}
+        {% for specification in specifications|sort(attribute='package') %}
 
-            {% if package_name != model.package %}
+            {% if package_name != specification.package %}
                 {% if not package_name %}
                     </section>
                 {% endif %}
-                {% set package_name = model.package %}
+                {% set package_name = specification.package %}
                 <section id="section-{{ package_name | replace(" ", "_")}}">
                 <h3>{{ package_name }}</h3>
             {% endif %}
 
             <div class="row bordered-row">
                 <div class="col-xs-12">
-                    <a class="filterable" data-filter-keyword="{{ model.resource_name }}" id="{{ model.resource_name }}" href="{{ model.remote_name }}.html" title="API reference for {{ model.name }}">{{ model.resource_name }}</a>
+                    <a class="filterable" data-filter-keyword="{{ specification.resource_name }}" id="{{ specification.resource_name }}" href="{{ specification.remote_name }}.html" title="API reference for {{ specification.name }}">{{ specification.resource_name }}</a>
                 </div>
             </div>
         {% endfor %}

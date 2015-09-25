@@ -27,11 +27,11 @@
 from bambou import NURESTFetcher
 
 
-class {{ sdk_class_prefix }}{{ model.plural_name }}Fetcher(NURESTFetcher):
-    """ Represents a {{ sdk_class_prefix }}{{ model.plural_name }} fetcher
+class {{ sdk_class_prefix }}{{ specification.plural_name }}Fetcher(NURESTFetcher):
+    """ Represents a {{ sdk_class_prefix }}{{ specification.plural_name }} fetcher
 
         Notes:
-            This fetcher enables to fetch {{ sdk_class_prefix }}{{ model.name }} objects.
+            This fetcher enables to fetch {{ sdk_class_prefix }}{{ specification.name }} objects.
 
         See:
             bambou.NURESTFetcher
@@ -39,12 +39,12 @@ class {{ sdk_class_prefix }}{{ model.plural_name }}Fetcher(NURESTFetcher):
 
     @classmethod
     def managed_class(cls):
-        """ Return {{ sdk_class_prefix }}{{ model.name }} class that is managed.
+        """ Return {{ sdk_class_prefix }}{{ specification.name }} class that is managed.
 
             Returns:
-                {{ sdk_name }}.{{ sdk_class_prefix }}{{ model.name }}: the managed class
+                {{ sdk_name }}.{{ sdk_class_prefix }}{{ specification.name }}: the managed class
         """
 
-        from .. import {{ sdk_class_prefix }}{{ model.name }}
-        return {{ sdk_class_prefix }}{{ model.name }}
+        from .. import {{ sdk_class_prefix }}{{ specification.name }}
+        return {{ sdk_class_prefix }}{{ specification.name }}
 

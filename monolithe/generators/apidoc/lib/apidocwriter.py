@@ -19,7 +19,7 @@ class APIDocWriter(object):
         self.monolithe_config = monolithe_config
         self._root_api = self.monolithe_config.get_option("root_api")
 
-    def write(self, resources, apiversion):
+    def write(self, specifications, apiversion):
         """
         """
         filenames = dict()
@@ -27,18 +27,18 @@ class APIDocWriter(object):
 
         self.writer = APIDocFileWriter(monolithe_config=self.monolithe_config, apiversion=apiversion)
 
-        for model in resources:
-            task_manager.start_task(method=self._write_model, model=model, filenames=filenames)
+        for specification in specifications:
+            task_manager.start_task(method=self._write_specification, specification=specification, filenames=filenames)
 
         task_manager.wait_until_exit()
 
-        self.writer.write_index(resources)
+        self.writer.write_index(specifications)
 
-    def _write_model(self, model, filenames):
+    def _write_specification(self, specification, filenames):
         """
         """
-        if model.remote_name != self._root_api:
-            (filename, classname) = self.writer.write_model(model=model)
+        if specification.remote_name != self._root_api:
+            (filename, classname) = self.writer.write_specification(specification=specification)
             filenames[filename] = classname
 
 
@@ -59,21 +59,21 @@ class APIDocFileWriter(TemplateFileWriter):
         self.output_directory = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, apiversion)
 
 
-    def write_model(self, model):
+    def write_specification(self, specification):
         """
         """
-        filename = "%s.html" % model.remote_name.lower()
+        filename = "%s.html" % specification.remote_name.lower()
 
         self.write( destination=self.output_directory, filename=filename, template_name="object.html.tpl",
-                    model=model,
+                    specification=specification,
                     product_name=self._product_name)
 
-        return (filename, model.name)
+        return (filename, specification.name)
 
-    def write_index(self, models):
+    def write_index(self, specifications):
         """
         """
 
         self.write( destination=self.output_directory, filename="index.html", template_name="index.html.tpl",
-                    models=models,
+                    specifications=specifications,
                     product_name=self._product_name)

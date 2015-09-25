@@ -25,18 +25,18 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from .autogenerates import {{ sdk_class_prefix }}{{ model.name }} as AutoGenerate
+from .autogenerates import {{ sdk_class_prefix }}{{ specification.name }} as AutoGenerate
 
 
-class {{ sdk_class_prefix }}{{ model.name }}(AutoGenerate):
-    """ Represents a {{ sdk_class_prefix }}{{ model.name }} object in the {{ product_accronym }}
+class {{ sdk_class_prefix }}{{ specification.name }}(AutoGenerate):
+    """ Represents a {{ sdk_class_prefix }}{{ specification.name }} object in the {{ product_accronym }}
 
         See:
-            {{ sdk_name }}.autogenerates.{{ sdk_class_prefix }}{{ model.name }}
+            {{ sdk_name }}.autogenerates.{{ sdk_class_prefix }}{{ specification.name }}
     """
 
     def __init__(self, **kwargs):
-        """ Initializes a {{ sdk_class_prefix }}{{ model.name }} instance
+        """ Initializes a {{ sdk_class_prefix }}{{ specification.name }} instance
 
             Notes:
                 You can specify all parameters while calling this methods.
@@ -44,11 +44,11 @@ class {{ sdk_class_prefix }}{{ model.name }}(AutoGenerate):
                 object from a Python dictionary
 
             Examples:
-                >>> {{ model.name.lower() }} = {{ sdk_class_prefix }}{{ model.name }}(id=u'xxxx-xxx-xxx-xxx', name=u'{{ model.name }}')
-                >>> {{ model.name.lower() }} = {{ sdk_class_prefix }}{{ model.name }}(data=my_dict)
+                >>> {{ specification.name.lower() }} = {{ sdk_class_prefix }}{{ specification.name }}(id=u'xxxx-xxx-xxx-xxx', name=u'{{ specification.name }}')
+                >>> {{ specification.name.lower() }} = {{ sdk_class_prefix }}{{ specification.name }}(data=my_dict)
         """
 
-        super({{ sdk_class_prefix }}{{ model.name }}, self).__init__(**kwargs)
+        super({{ sdk_class_prefix }}{{ specification.name }}, self).__init__(**kwargs)
 {% if override_content %}
     {{ override_content.replace('\n', '\n    ') }}
 {% endif %}

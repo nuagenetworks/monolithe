@@ -22,25 +22,23 @@ class SDKAPIVersionWriter(object):
         self._root_api = self.monolithe_config.get_option("root_api")
 
 
-    def _prepare_attributes(self, model, constants):
+    def _prepare_constants(self, specification, constants):
         """ Removes attributes and computes constants
 
         """
         attributes = list()
-        for attribute in model.attributes:
+        for attribute in specification.attributes:
 
             attributes.append(attribute)
 
             if attribute.allowed_choices and len(attribute.allowed_choices) > 0:
 
                 if attribute.remote_name.lower() not in SDKAPIVersionWriter.COMMON_ATTRIBUTES:
-                    name = "%s%s%s" % (model.name, attribute.remote_name[0].upper(), attribute.remote_name[1:])
+                    name = "%s%s%s" % (specification.name, attribute.remote_name[0].upper(), attribute.remote_name[1:])
                 else:
                     name = "%s%s" % (attribute.remote_name[0].upper(), attribute.remote_name[1:])
 
                 constants[name] = self._make_constants_value(attribute.allowed_choices)
-
-        model.attributes = attributes
 
     def _make_constants_value(self, choices):
         """ Create a dictionary for constants
@@ -53,15 +51,15 @@ class SDKAPIVersionWriter(object):
 
         return results
 
-    def write(self, resources, apiversion):
+    def write(self, specifications, apiversion):
         """ Write all files according to data
 
             Args:
-                resources: A list of all resources to manage
+                specifications: A list of all specifications to manage
                 apiversion: the version of the api
 
             Returns:
-                Writes models and fetchers files
+                Writes specifications and fetchers files
 
         """
         autogenerate_filenames = dict()
@@ -73,11 +71,11 @@ class SDKAPIVersionWriter(object):
 
         task_manager = TaskManager()
 
-        for model in resources:
-            self._prepare_attributes(model=model, constants=constants)
-            task_manager.start_task(method=self._write_autogenerate_file, model=model, filenames=autogenerate_filenames)
-            task_manager.start_task(method=self._write_override_file, model=model, filenames=override_filenames)
-            task_manager.start_task(method=self._write_fetcher_file, model=model, filenames=fetcher_filenames)
+        for specification in specifications:
+            self._prepare_constants(specification=specification, constants=constants)
+            task_manager.start_task(method=self._write_autogenerate_file, specification=specification, filenames=autogenerate_filenames)
+            task_manager.start_task(method=self._write_override_file, specification=specification, filenames=override_filenames)
+            task_manager.start_task(method=self._write_fetcher_file, specification=specification, filenames=fetcher_filenames)
 
         task_manager.wait_until_exit()
 
@@ -88,42 +86,42 @@ class SDKAPIVersionWriter(object):
         self.writer.write_init_overrides(filenames=override_filenames)
         self.writer.copy_attrs_defaults()
 
-    def _write_autogenerate_file(self, model, filenames):
-        """ Write the autogenerate file for the model
+    def _write_autogenerate_file(self, specification, filenames):
+        """ Write the autogenerate file for the specification
 
             Args:
-                model: the model to write
+                specification: the specification to write
                 filenames: list of generates filenames
 
         """
-        if model.remote_name == self._root_api:
-            (filename, classname) = self.writer.write_root_model(model=model)
+        if specification.remote_name == self._root_api:
+            (filename, classname) = self.writer.write_root_specification(specification=specification)
         else:
-            (filename, classname) = self.writer.write_model(model=model)
+            (filename, classname) = self.writer.write_specification(specification=specification)
 
         filenames[filename] = classname
 
-    def _write_override_file(self, model, filenames):
-        """ Write the override file for the model
+    def _write_override_file(self, specification, filenames):
+        """ Write the override file for the specification
 
             Args:
-                model: the model to write
+                specification: the specification to write
 
         """
-        (filename, classname) = self.writer.write_model_override(model=model)
+        (filename, classname) = self.writer.write_specification_override(specification=specification)
 
         filenames[filename] = classname
 
-    def _write_fetcher_file(self, model, filenames):
-        """ Write the fetcher file for the model
+    def _write_fetcher_file(self, specification, filenames):
+        """ Write the fetcher file for the specification
 
             Args:
-                model: the model to write
+                specification: the specification to write
                 filenames: list of generates filenames
 
         """
-        if model.name != self._root_api:
-            (filename, classname) = self.writer.write_fetcher(model=model)
+        if specification.name != self._root_api:
+            (filename, classname) = self.writer.write_fetcher(specification=specification)
             filenames[filename] = classname
 
 
@@ -240,47 +238,47 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     product_accronym=self._product_accronym,
                     root_api=self._root_api)
 
-    def write_model(self, model):
-        """ Write autogenerate model file
+    def write_specification(self, specification):
+        """ Write autogenerate specification file
 
         """
         destination = "%s%s" % (self.output_directory, self.autogenerate_path)
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
 
         self.write(destination=destination, filename=filename, template_name="object_autogenerate.py.tpl",
-                    model=model,
+                    specification=specification,
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
 
-        return (filename, model.name)
+        return (filename, specification.name)
 
-    def write_root_model(self, model):
-        """ Write autogenerate rest user model file
+    def write_root_specification(self, specification):
+        """ Write autogenerate rest user specification file
 
         """
         destination = "%s%s" % (self.output_directory, self.autogenerate_path)
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
 
         self.write(destination=destination, filename=filename, template_name="object_root.py.tpl",
-                    model=model,
+                    specification=specification,
                     version=self.apiversion,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
                     root_api=self._root_api)
 
-        return (filename, model.name)
+        return (filename, specification.name)
 
-    def write_model_override(self, model):
-        """ Write model override
+    def write_specification_override(self, specification):
+        """ Write specification override
 
         """
         destination = self.output_directory
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), model.name.lower())
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
 
         # find override file
-        specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.apiversion, self._sdk_class_prefix.lower(), model.name.lower())
-        generic_override_path = "%s/%s%s.override.py" % (self.override_folder, self._sdk_class_prefix.lower(), model.name.lower())
+        specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.apiversion, self._sdk_class_prefix.lower(), specification.name.lower())
+        generic_override_path = "%s/%s%s.override.py" % (self.override_folder, self._sdk_class_prefix.lower(), specification.name.lower())
         final_path = specific_override_path if os.path.exists(specific_override_path) else generic_override_path
 
         # Read override from file
@@ -289,26 +287,26 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
             override_content = open(final_path).read()
 
         self.write(destination=destination, filename=filename, template_name="object_override.py.tpl",
-                    model=model,
+                    specification=specification,
                     override_content=override_content,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
 
-        return (filename, model.name)
+        return (filename, specification.name)
 
-    def write_fetcher(self, model):
+    def write_fetcher(self, specification):
         """ Write fetcher
 
         """
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
-        filename = "%s%s_fetcher.py" % (self._sdk_class_prefix.lower(), model.plural_name.lower())
+        filename = "%s%s_fetcher.py" % (self._sdk_class_prefix.lower(), specification.plural_name.lower())
 
         self.write(destination=destination, filename=filename, template_name="object_fetcher.py.tpl",
-                    model=model,
+                    specification=specification,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym)
 
-        return (filename, model.plural_name)
+        return (filename, specification.plural_name)
 
 
     def copy_attrs_defaults(self):

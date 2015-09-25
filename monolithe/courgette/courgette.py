@@ -45,12 +45,13 @@ class Courgette(object):
                                             password=self.password,
                                             enterprise=self.enterprise,
                                             version=self.apiversion,
-                                            model=configuration.specification,
+                                            specification=configuration.specification,
                                             sdk_identifier=self.sdk_identifier,
                                             monolithe_config=self.monolithe_config,
                                             parent_resource=configuration.parent_resource_name,
                                             parent_id=configuration.parent_id,
                                             **configuration.default_values)
+
             result.add_report(configuration.specification.remote_name + ".spec", runner.run())
 
         return result
