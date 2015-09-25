@@ -43,6 +43,10 @@ class TestHelper(object):
     def session(self):
         return self._sdk_session
 
+    @property
+    def root_object(self):
+        return self._sdk_session.root_object
+
     def current_push_center(self):
         """ Get current push center
 

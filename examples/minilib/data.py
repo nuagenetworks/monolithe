@@ -16,10 +16,10 @@ def get_list(lid):
         return None
 
 def insert_list(lst):
-    tasks.append(lst)
+    lists.append(lst)
 
 def delete_list(lst):
-    tasks.remove(lst)
+    lists.remove(lst)
 
 def list_equals(l1, l2):
     return (l1["ID"] == l2["ID"] and l1["title"] == l2["title"] and l1["description"] == l2["description"])

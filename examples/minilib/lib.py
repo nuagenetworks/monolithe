@@ -31,7 +31,7 @@ def perform_get_list(lid):
     lst = data.get_list(lid)
 
     if not lst:
-        return json.dumps(_create_error("", "list not found", "Cannot list task with ID %s" % tid)), 404
+        return json.dumps(_create_error("", "list not found", "Cannot find list with ID %s" % lid)), 404
 
     return json.dumps([lst]), 200
 
@@ -43,6 +43,7 @@ def perform_create_list(d):
     error = _validate_list(d)
     if error:
         return json.dumps(error), 409
+
 
     data.insert_list(d)
 
@@ -68,7 +69,7 @@ def perform_update_list(lid, d):
     if not lst:
         return json.dumps(_create_error("", "list not found", "Cannot find list with ID %s" % lid)), 404
 
-    if _list_equals(lst, d):
+    if data.list_equals(lst, d):
         return json.dumps(_create_error("", "No changes to modify the entity", "There are no attribute changes to modify the entity.")), 409
 
     lst.update(d)
@@ -80,8 +81,7 @@ def perform_update_list(lid, d):
     return json.dumps([lst]), 201
 
 def _validate_list(lst):
-    if not task["title"]: return _create_error("title", "Invalid input", "This value is mandatory.")
-    if not task["description"]: return _create_error("description", "Invalid input", "This value is mandatory.")
+    if not lst["title"]: return _create_error("title", "Invalid input", "This value is mandatory.")
     return None
 
 

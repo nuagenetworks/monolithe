@@ -58,6 +58,8 @@ class CourgetteTestsRunner(object):
                 self._sdk_parent_object.fetch()
             except:
                 raise AttributeError("Could not find parent %s with ID=%s" % (parent_resource, parent_id))
+        else:
+            self._sdk_parent_object = self._helper.root_object
 
         self._create_allowed = False
         self._delete_allowed = False

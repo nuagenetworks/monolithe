@@ -27,17 +27,17 @@ def get_list(lid):
     return lib.perform_get_list(lid)
 
 @app.route('/api/v1_0/lists', methods=["POST"])
-def create_list(lid):
+def create_list():
     if not lib.check_auth(request): return "", 401
     return lib.perform_create_list(request.json)
 
 @app.route('/api/v1_0/lists/<lid>', methods=["PUT"])
-def update_list(tid):
+def update_list(lid):
     if not lib.check_auth(request): return "", 401
     return lib.perform_update_list(lid, request.json)
 
 @app.route('/api/v1_0/lists/<lid>', methods=["DELETE"])
-def delete_list(tid):
+def delete_list(lid):
     if not lib.check_auth(request): return "", 401
     return lib.perform_delete_list(lid)
 
