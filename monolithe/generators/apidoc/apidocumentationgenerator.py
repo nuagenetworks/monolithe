@@ -1,62 +1,42 @@
 # -*- coding: utf-8 -*-
+import os
+import shutil
 
-from monolithe.lib.utils.printer import Printer
-from monolithe.lib.utils.constants import Constants
-
-from monolithe.lib.parsers import SwaggerParser
-from monolithe.lib.transformers import SpecificationTransformer, SwaggerTransformer
-from monolithe.generators.apidoc.lib import APIDocWriter
+from monolithe.lib import Printer
+from monolithe.specifications import RepositoryManager, FolderManager
+from monolithe.generators.lib import Generator
+from .lib import APIDocWriter
 
 
-class APIDocumentationGenerator(object):
-    """ Generate VSD API Documentation
+class APIDocumentationGenerator(Generator):
+    """ Generate SDK API Documentation
 
     """
-    def __init__(self, vsdurl, swagger_path, apiversion, output_path=None):
-        """ Initializes a VSDKGenerator
-
-            Can be used to generate a vsdk from a remote vsdurl or a local swagger_path.
-
-            Args:
-                vsdurl (string): the url of the vsd with its port
-                swagger_path (string): the path to swagger description files
-                apiversion (float): the api version
-                output_path (string): the output path to put generated python files
-
+    def __init__(self, monolithe_config):
         """
-        self.vsdurl = vsdurl
-        self.swagger_path = swagger_path
-        self.apiversion = apiversion
-        self.output_path = output_path
+        """
+        super(APIDocumentationGenerator, self).__init__(monolithe_config=monolithe_config)
 
-        if self.vsdurl is None and self.swagger_path is None:
-            Printer.raiseError("Please provide a vsd url or a path to swagger json file")
+        self._apidoc_output = self.monolithe_config.get_option("apidoc_output", "apidoc")
+        self._apidoc_user_vanilla = self.monolithe_config.get_option("apidoc_user_vanilla", "apidoc")
+        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+        self._product_name = self.monolithe_config.get_option("product_name")
 
-    def run(self):
+    def generate(self, specification_info):
         """ Start generation ofthe API Documentation
 
         """
-        # Read Swagger
-        swagger_parser = SwaggerParser(vsdurl=self.vsdurl, path=self.swagger_path, apiversion=self.apiversion)
-        swagger_resources = swagger_parser.run()
+        writer = APIDocWriter(self.monolithe_config)
+        apiversions = []
 
-        # Convert Swagger models
-        specifications = SwaggerTransformer.get_specifications(resources=swagger_resources, version=self.apiversion)
+        for apiversion, specifications in specification_info.iteritems():
 
-        # Process Swagger models
-        processed_resources = SpecificationTransformer.get_objects(specifications=specifications)
+            vanilla_output_path = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, apiversion)
 
-        # Compute output directory according to the version
-        if self.apiversion is None:
-            self.apiversion = swagger_parser.apiversion
+            self.install_system_vanilla(current_file=__file__, output_path=vanilla_output_path)
+            self.install_user_vanilla(user_vanilla_path=self._apidoc_user_vanilla, output_path=vanilla_output_path)
 
-        if self.output_path:
-            directory = '%s/%s' % (self.output_path, self.apiversion)
-        else:
-            directory = '%s/%s' % (Constants.DOCS_DIRECTORY, self.apiversion)
+            Printer.log("generating %s api documentation for api version: %s" % (self._product_name, apiversion))
+            writer.write(specifications=specifications, apiversion=apiversion)
 
-        # Write Python sources
-        writer = APIDocWriter(directory=directory)
-        writer.write(resources=processed_resources, apiversion=self.apiversion)
-
-        Printer.success('Generated %s documentation files for API version %s' % (len(processed_resources), self.apiversion))
+        Printer.success("%s api documentation generation complete and available at \"%s\"" % (self._product_name, self._apidoc_output))

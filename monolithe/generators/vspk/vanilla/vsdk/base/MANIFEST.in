@@ -1,4 +1,0 @@
-include *.txt
-include README.md
-include vsdk/resources/*.ini
-include LICENSE

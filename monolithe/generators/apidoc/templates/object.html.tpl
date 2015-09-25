@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{model.name}} API Reference</title>
+    <title>{{ specification.name }} API Reference</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">VSD API Documentation</a>
+                <a class="navbar-brand" href="index.html">{{ product_name }} API Documentation</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
@@ -29,8 +29,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Attributes <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            {% for attribute in model.attributes|sort(attribute='local_name') %}
-                            <li><a data-id="attr_{{attribute.remote_name}}" href="#attr_{{attribute.remote_name}}" class="fixed-text">{{attribute.remote_name}}</a></li>
+                            {% for attribute in specification.attributes|sort(attribute='local_name') %}
+                            <li><a data-id="attr_{{ attribute.remote_name }}" href="#attr_{{ attribute.remote_name }}" class="fixed-text">{{ attribute.remote_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -56,7 +56,7 @@
     {% elif method == "DELETE" %}
     {% set label_class = "label-danger" %}
     {% endif %}
-    <span class="label {{label_class}}">{{method.lower()}}</span>
+    <span class="label {{ label_class }}">{{ method.lower()}}</span>
     {% endmacro %}
 
     {# macro to create allowed_choices list #}
@@ -71,32 +71,32 @@
     {% set allowed_values = " (" + allowed|join(" | ") + ")" %}
     {% endif %}
     {% endif %}
-    {{allowed_values}}
+    {{ allowed_values }}
     {% endmacro %}
 
     {# macro to create api list #}
     {% macro make_api_list(apis, mode, nothing_string) %}
     {% if apis|count %}
-    {% for path, api in apis.iteritems()|sort %}
+    {% for api in apis|sort(attribute='path') %}
     <div class="row bordered-row">
         <div class="col-xs-7">
             {% if mode == "self" %}
-            <span class="fixed-text">{{path.replace("{id}", "<span class=\"text-muted\">id</span>")}}</span>
+            <span class="fixed-text">{{ api.path.replace("{id}", "<span class=\"text-muted\">id</span>")}}</span>
             {% elif mode == "parents" %}
-            <span class="fixed-text">/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a>/<span class="text-muted">id</span>/{{model.resource_name}}</span>
+            <span class="fixed-text">/<a href="{{ api.remote_name }}.html">{{ api.resource_name }}</a>/<span class="text-muted">id</span>/{{ specification.resource_name }}</span>
             {% else %}
-            <span class="fixed-text">/{{model.resource_name}}/<span class="text-muted">id</span>/<a href="{{api.remote_name}}.html">{{api.resource_name}}</a></span>
+            <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span>/<a href="{{ api.remote_name }}.html">{{ api.resource_name }}</a></span>
             {% endif %}
         </div>
         <div class="col-xs-5 text-right">
             {% for operation in api.operations|sort(attribute="method") %}
-            {{label_for_method(operation.method)}}
+            {{ label_for_method(operation.method)}}
             {% endfor %}
         </div>
     </div>
     {% endfor %}
     {% else %}
-    <p>{{nothing_string}}</p>
+    <p>{{ nothing_string }}</p>
     {% endif %}
     {% endmacro %}
 
@@ -104,20 +104,20 @@
     <div class="container">
 
         <section id="intro">
-            <h2>{{model.name}}</h2>
-            <p>{{model.description}}</p>
+            <h2>{{ specification.name }}</h2>
+            <p>{{ specification.description }}</p>
         </section>
 
         <section id="overview">
             <h3>Overview</h3>
                 <table>
-                    {% for attribute in model.attributes|sort(attribute='local_name') %}
+                    {% for attribute in specification.attributes|sort(attribute='local_name') %}
                     <tr>
                         <td class="fixed-text">
-                            <a href="#attr_{{attribute.remote_name}}" title="{{attribute.description}}">{{attribute.remote_name}}</a>
+                            <a href="#attr_{{ attribute.remote_name }}" title="{{ attribute.description }}">{{ attribute.remote_name }}</a>
                         </td>
                         <td style="padding-left: 10px" class="fixed-text hide-xs">
-                            <span class="type_{{attribute.type}}">{{attribute.type}}{{string_for_allowed_choices(attribute)}}</span>
+                            <span class="type_{{ attribute.type }}">{{ attribute.type }}{{ string_for_allowed_choices(attribute)}}</span>
                             {% if attribute.required %}
                             <span class="label label-primary fixed-text">required</span>
                             {% endif %}
@@ -129,27 +129,27 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {{make_api_list(model.apis.self, "self", "This object is not directly accessible.")}}
+            {{ make_api_list(specification.self_apis, "self", "This object is not directly accessible.")}}
         </section>
 
         <section id="parents">
             <h3>Parents</h3>
-            {{make_api_list(model.apis.parents, "parents", "This object has no parents.")}}
+            {{ make_api_list(specification.parents_apis, "parents", "This object has no parents.")}}
         </section>
 
         <section id="children">
             <h3>Children</h3>
-            {{make_api_list(model.apis.children, "children", "This object has no child.")}}
+            {{ make_api_list(specification.children_apis, "children", "This object has no child.")}}
         </section>
 
         <section id="attributes">
             <h3>Attributes documentation</h3>
-            {% for attribute in model.attributes|sort(attribute='local_name') %}
-            <section id="attr_{{attribute.remote_name}}" class="filterable" data-filter-keyword="{{attribute.remote_name}}" style="padding-top: 60px; margin-top: -60px;">
+            {% for attribute in specification.attributes|sort(attribute='local_name') %}
+            <section id="attr_{{ attribute.remote_name }}" class="filterable" data-filter-keyword="{{ attribute.remote_name }}" style="padding-top: 60px; margin-top: -60px;">
                 <div class="panel panel-default">
                     <div class="panel-heading fixed-text">
-                        <b>{{attribute.remote_name}}</b>
-                        <span class="type_{{attribute.type}} fixed-text">{{attribute.type}}</span>
+                        <b>{{ attribute.remote_name }}</b>
+                        <span class="type_{{ attribute.type }} fixed-text">{{ attribute.type }}</span>
                         {% if attribute.required %}
                         <span class="label label-danger float-right">required</span>
                         {% endif %}
@@ -160,21 +160,21 @@
 
                     <div class="panel-body">
                         <p><b>Discussion</b></p>
-                        <p>{{attribute.description}}</p>
+                        <p>{{ attribute.description }}</p>
 
                         {% if attribute.allowed_choices %}
                         <p><b>Allowed values</b></p>
                         <div class="panel panel-info">
                             <ul class="list-group fixed-text">
                             {% for value in attribute.allowed_choices|sort %}
-                                <li class="list-group-item">{{value}}</li>
+                                <li class="list-group-item">{{ value }}</li>
                             {% endfor %}
                             </ul>
                         </div>
                         {% endif %}
 
-                        <p><b>vsdk attribute</b></p>
-                        <p class="fixed-text">{{attribute.local_name}}</p>
+                        <p><b>sdk attribute</b></p>
+                        <p class="fixed-text">{{ attribute.local_name }}</p>
                     </div>
                 </div>
             </section>

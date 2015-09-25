@@ -1,7 +1,6 @@
 jinja2
 colorama
 argparse
-requests
 bambou
 Sphinx
 sphinx_rtd_theme

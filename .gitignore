@@ -1,8 +1,9 @@
 *.py[cod]
 _build/*
 codegen
+apidocgen
+sdkdocgen
 docgen
-specgen
 .DS_Store
 MANIFEST
 

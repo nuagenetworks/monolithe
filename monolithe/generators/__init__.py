@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['SpecificationsGenerator', 'APIDocumentationGenerator', 'VSDKGenerator', 'VSPKGenerator', 'VSPKDocumentationGenerator']
+__all__ = ["APIDocumentationGenerator", "SDKAPIVersionGenerator", "SDKGenerator", "SDKDocGenerator"]
 
-from monolithe.generators.specifications import SpecificationsGenerator
 from monolithe.generators.apidoc import APIDocumentationGenerator
-from monolithe.generators.vspk import VSDKGenerator, VSPKGenerator
-from monolithe.generators.vspkdoc import VSPKDocumentationGenerator
+from monolithe.generators.sdk import SDKAPIVersionGenerator, SDKGenerator
+from monolithe.generators.sdkdoc import SDKDocGenerator

@@ -1,124 +1,173 @@
 # Monolithe
 
-Monolithe is the generator of all documentation and SDK for Nuage Network VSP.
+Monolithe is a Python toolset that generates sdks with their documentation and ReST api documentation based some specifications and configuration.
 
-Supported version:
+It provides the following commands:
 
-    * Python 2.6
-    * Python 2.7
+- `monogen-sdk`: generates a bambou-based sdk according to specifications and configuration.
+- `monogen-apidoc`: generates ReST api documentation according to specifications and configuration.
 
+The specifications are a set of files containing json data describing one object per file, its properties and their characteristics, and its position in the api hierarchy.
+
+> For more info, please read the Monolithe Specifications Reference (TODO).
+
+In addition to the specifications, Monolithe uses a configuration that describes all the information relative to your sdk. For instance, you can set its name, the class prefix, some vanilla files, the license, and so on.
+
+> For more info, please read the Monolithe Configuration & Vanilla Reference (TODO).
+
+Monolithe is before all a framework that you can integrate with other tools.
+
+> For more info, please read the Monolithe API Documentation (TODO).
 
 
 ## Installation
 
-### Install  from package
+> And remember, kids! You should always be using a virtualenv.
 
-You can get Monolithe from PyPi:
+You can install Monolithe from PyPi:
 
     $ pip install monolithe
 
-### Install  from sources
+Or install it from the source:
 
-If not already done, get the source code:
+    $ python setup.py install
 
-    $ git clone https://github.com/nuagenetworks/monolithe.git
+Or install it in develop mode:
 
-Then install the dependencies:
+    $ python setup.py develop
 
-    $ cd monolithe
+Or directly run the command wrappers provided in the `commands` directory. Simply install the dependencies once:
+
     $ pip install -r requirements.txt
 
-### Generate a package
 
-You can get generate a package Monolithe:
+## ToDoList Tutorial
 
-    $ python setup.py sdist
+You can find an `examples` folder in the source code repository. This contains a working example for a todo list api.
+More informations can be found in each files of the examples.
 
-The package will be created in `dist`
+> Be sure to have Flask installed in addition to Monolithe's `requirements.txt`.
 
+The example is composed of:
 
-## Usage
+- Some specifications in `examples/specifications/`
+- A Monolithe configuration in `examples/conf/conf.ini`
+- Some vanilla data in `examples/vanilla`
+- A `demo-server.py` command that starts a really stupid server that implements a ReST API for the ToDoList
+- A `demo-client.py` command that interacts with the server using the generated sdk named `tdldk`.
 
-Monolithe can :
+### Step 1: install dependencies
 
-- generate the `vspk`
-- generate the documentation for `vspk`
-- generate the VSD api documentation
-- generate api specification files
-- validate a vsd server against the api specification
-
-
-### Generate vspk package
-
-Once all the `vsdk` versions you want to include in `vspk` have been generated, run the following command:
-
-    $ generate-vspk -u VSD_SERVER_API_URL -v [VERSIONS]
-
-For instance:
-
-    $ generate-vspk -u https://myvsd.com:8443 -v 3.0 3.1 3.2
-
-The source code for the generated `vsdp` package will be available in `codegen/vspk`.
+    $ cd monolithe # be sure to go and stay there for the rest of the tutorial ;)
+    $ pip install flask
+    $ pip install -r `requirements.txt`
 
 
-### Generate vspk documentation
+### Step 2: generate the tdldk
 
-To generate the `vspk` API Documentation, run the following command (after having generated a `vspk`):
+    $ ./commands/monogen-sdk --config examples/conf/conf.ini --folder examples/specifications
 
-    $ generate-vspkdoc
+> Customizable using the configuration and the content of the `vanilla/sdk` folder.
 
-The generated documentation will be available in `docgen/vspkdoc`
+> You can also generate the sdk documentation by adding the `--doc` argument. But it's slow.
 
+You'll see a `codegen` directory created under `examples`.
 
-### Generate VSD Server ReST API documentation
-
-You can generate a  VSD Server ReST API documentation for a particular API version against a running version of VSD by doing:
-
-    $ generate-apidoc -u VSD_SERVER_API_URL -v VERSION
-
-For instance:
-
-    $ generate-apidoc -u https://api.nuagenetworks.net:8443 -v 3.0
-    $ generate-apidoc -u https://api.nuagenetworks.net:8443 -v 3.1
-    $ generate-apidoc -u https://api.nuagenetworks.net:8443 -v 3.2
-
-The generated documentation will be available in `docgen/apidoc/{{version}}`
+It contains all the auto-generated sdk source code according to the specifications files.
 
 
-### Generate API specifications from a VSD server
+### Step 3: generate the ReST api documentation
 
-You can generate the specifications exposed by a running VSD server by doing:
+    $ ./commands/monogen-apidoc --config examples/conf/conf.ini --folder examples/specifications
 
-    $ generate-specifications -u VSD_SERVER_API_URL -v VERSION
+> Customizable using the configuration and the content of the `vanilla/apidoc` folder.
 
-For instance:
+You'll see a `apidocgen` directory created under `examples`.
 
-    $ generate-specifications -u https://api.nuagenetworks.net:8443 -v 3.0
-    $ generate-specifications -u https://api.nuagenetworks.net:8443 -v 3.1
-    $ generate-specifications -u https://api.nuagenetworks.net:8443 -v 3.2
-
-The generated documentation will be available in `specgen/{{version}}`
+You can open the `index.html` to navigate the api documentation.
 
 
-### Validate VSD server specifications against pristine specifications
+### Step 4: start the demo server
 
-You can validate the exposed specifications of a running VSD server against the pristing github version by doing:
+    $ ./examples/demo-server.py
+    > * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+    > * Restarting with stat
 
-    $ validate-specifications -u VSD_SERVER_API_URL -v VERSION -t GITHUB_AUTH_TOKEN -s SPECIFICATION_NAMES [-g GITHUB_API_URL] [-o GITHUB_ORG] [-r GITHUB_SPEC_REPO]
+check that it's working by doing
 
-For instance:
-
-    $ validate-specifications -u https://api.nuagenetworks.net:8443 -v 3.2 -t xxxxxxxxxxxxxxxxx -s applicationservice group
-
-The validation report will be printed into the console.
+    $ curl http://127.0.0.1:5000/api/v1_0/lists
+    > [{"description": "Things to buy", "ID": "1", "title": "Shopping List"}, {"description": "You should not see this", "ID": "2", "title": "Secret List"}]
 
 
-## Note
+### Step 5: run the client
 
-All commands that require to pass VSD informations such as vsd url, version, username, organization, etc can use environment variables
+    $ ./examples/demo-client.py
 
-    VSD_USERNAME
-    VSD_PASSWORD
-    VSD_API_URL
-    VSD_API_VERSION
-    VSD_ENTERPRISE
+And follow on screen instructions.
+
+> For mor information, open the `demo-client.py` file and follow the comments.
+
+
+
+## Command Line Interfaces Quick Reference
+
+### monogen-sdk
+This command will generate a sdk using specifications either from a local folder, or from a Github repository.
+
+#### From Github
+
+Using your username/password:
+
+    $ monogen-sdk --config [conf.ini] --branches [branch1[,branch2,...branchX]]
+    > Enter your Github API URL: [https://api.github.com/v3]
+    > Enter your Github login: [username]
+    > Enter your Github organization: [repo-organization]
+    > Enter your Github repository: [repo-name]
+    > Enter your Github password for amercada: [password]
+
+Of course, you can give all those parameters right from the cli:
+
+    $ monogen-sdk --config [conf.ini] -g [https://api.gitbhub.com/3] -l [username] -o [repo-organization] -r [repo-name] -b [branch1[,branch2,...branchX]]
+    > Enter your Github Password:
+
+You can also use a Github Application Token (https://github.com/settings/tokens):
+
+    $ monogen-sdk --config [conf.ini] -g [https://gitbhub.com] -t [token] -o [repo-organization] -r [repo-name] -b [branch1[,branch2,...branchX]]
+
+Then you won't have to enter your password.
+
+You can also defaults certains arguments by using a environment variables, and eventually put them in a source file:
+
+    $ cat ~/.monorc
+    > export MONOLITHE_GITHUB_API_URL=[https://api.github.com/v3]
+    > export MONOLITHE_GITHUB_TOKEN=[token]
+    > export MONOLITHE_GITHUB_ORGANIZATION=[repo-organization]
+    > export MONOLITHE_GITHUB_REPOSITORY=[repo-name]
+    > export MONOLITHE_CONFIG_FULLPATH=[path/to/conf]
+    $ source ~/.monorc
+
+Then simply:
+
+    $ monogen-sdk -b [branch1[,branch2,...branchX]]
+
+
+##### From a folder
+
+    $ monogen-sdk --config [conf.ini] --folder [/path/to/specifications/]
+
+
+
+#### monogen-apidoc
+
+This command will generate a ReST api documentation using specifications either from a local folder, or from a Github repository.
+
+> This command is very similar to `monogen-sdk`. 
+
+##### From a folder
+
+    $ monogen-apidoc --config [conf.ini] --folder [/path/to/specifications/]
+
+##### From Github
+
+The `monogen-apidoc` works exactly the same than `monogen-sdk`
+
