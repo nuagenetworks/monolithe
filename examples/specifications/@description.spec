@@ -1,19 +1,4 @@
 {
-  "apis": {
-    "children": {
-        "/[__RESOURCE_NAME__]/{id}/tasks": {
-          "RESTName": "task",
-          "resourceName": "tasks",
-          "entityName": "Task",
-          "operations": [
-              { "availability": null, "method": "GET" },
-              { "availability": null, "method": "PUT" }
-          ]
-        }
-    },
-    "parents": {},
-    "self": {}
-  },
   "model": {
     "attributes": {
       "description": {

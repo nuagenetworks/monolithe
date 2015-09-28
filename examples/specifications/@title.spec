@@ -1,9 +1,4 @@
 {
-  "apis": {
-    "children": {},
-    "parents": {},
-    "self": {}
-  },
   "model": {
     "attributes": {
       "title": {
