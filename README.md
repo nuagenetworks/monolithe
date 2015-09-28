@@ -143,6 +143,7 @@ You can also defaults certains arguments by using a environment variables, and e
     > export MONOLITHE_GITHUB_TOKEN=[token]
     > export MONOLITHE_GITHUB_ORGANIZATION=[repo-organization]
     > export MONOLITHE_GITHUB_REPOSITORY=[repo-name]
+    > export MONOLITHE_CONFIG_REPOSITORY_PATH=[/path/to/specsfolder]
     > export MONOLITHE_CONFIG_FULLPATH=[path/to/conf]
     $ source ~/.monorc
 
@@ -161,7 +162,7 @@ Then simply:
 
 This command will generate a ReST api documentation using specifications either from a local folder, or from a Github repository.
 
-> This command is very similar to `monogen-sdk`. 
+> This command is very similar to `monogen-sdk`.
 
 ##### From a folder
 
