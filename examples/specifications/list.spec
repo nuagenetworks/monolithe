@@ -35,7 +35,7 @@
     }
   },
   "model": {
-    "extends": ["@description", "@name"],
+    "extends": ["@description", "@title"],
     "RESTName": "list",
     "description": "Represent a a list of task to do",
     "entityName": "List",
