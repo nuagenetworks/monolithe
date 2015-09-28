@@ -7,7 +7,7 @@ class SpecificationAPI(object):
     """ Describe an object API
 
     """
-    def __init__(self, data=None):
+    def __init__(self, specification, data=None):
         """ Defines an API
 
             Example:
@@ -23,6 +23,7 @@ class SpecificationAPI(object):
         self.remote_name = None
         self.plural_name = None
         self.instance_plural_name = None
+        self.specification = specification
 
         self.operations = []
 
@@ -33,6 +34,14 @@ class SpecificationAPI(object):
         """
 
         """
+
+        ## replace all the tokens
+        string_data = json.dumps(data)
+        string_data.replace("{{RESSOURCE_NAME}}", self.specification.resource_name)
+        string_data.replace("{{REST_NAME}}", self.specification.remote_name)
+        string_data.replace("{{ENTITY_NAME}}", self.specification.name)
+        data = json.reads(string_data)
+
         self.path = data["path"]
         self.resource_name = data["resourceName"]
         self.remote_name = data["RESTName"]

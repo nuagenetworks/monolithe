@@ -115,7 +115,7 @@ class Specification(object):
         result_apis = []
         for path, data in apis[api_name].iteritems():
 
-            api = SpecificationAPI()
+            api = SpecificationAPI(specification=self)
             data["path"] = path
             api.from_dict(data)
             result_apis.append(api)
