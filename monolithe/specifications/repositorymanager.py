@@ -171,7 +171,8 @@ class RepositoryManager (object):
             data = json.loads(base64.b64decode(self._repo.get_file_contents(full_path, ref=branch).content))
 
         if "extends" in data["model"]:
-            data = merge_dict(data, self.get_specification_data(name="%s.spec" % data["model"]["extends"], branch=branch, archive=archive))
+            for extension in data["model"]["extends"]:
+                data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive))
 
         return data
 
