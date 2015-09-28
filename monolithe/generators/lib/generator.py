@@ -25,7 +25,7 @@ class Generator(object):
 
         self.generate(specification_info=specification_info)
 
-    def generate_from_repo(self, api_url, login_or_token, password, organization, repository, branches):
+    def generate_from_repo(self, api_url, login_or_token, password, organization, repository, repository_path, branches):
         """
         """
         specification_info = {}
@@ -34,10 +34,11 @@ class Generator(object):
                                                     login_or_token=login_or_token,
                                                     password=password,
                                                     organization=organization,
-                                                    repository=repository)
+                                                    repository=repository,
+                                                    repository_path=repository_path)
 
         for branch in branches:
-            Printer.log("retrieving specifications from github \"%s/%s@%s\"" % (organization.lower(), repository.lower(), branch))
+            Printer.log("retrieving specifications from github \"%s/%s%s@%s\"" % (organization.lower(), repository.lower(), repository_path, branch))
             apiversion = self.repository_manager.get_api_version(branch=branch)
             specifications = self.repository_manager.get_all_specifications(branch=branch)
             specification_info[apiversion] = specifications

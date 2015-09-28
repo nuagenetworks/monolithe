@@ -52,6 +52,12 @@ def main(argv=sys.argv):
                         nargs="*",
                         type=str)
 
+    parser.add_argument("-p", "--path",
+                        dest="repository_path",
+                        metavar="path",
+                        help="The relative repository path of the specification folder. Can be given by setting the environment variable \"MONOLITHE_GITHUB_REPOSITORY_PATH\"",
+                        type=str)
+
     parser.add_argument("-f", "--folder",
                         dest="folder",
                         metavar="folder",
@@ -96,6 +102,9 @@ def main(argv=sys.argv):
         if not args.repository and "MONOLITHE_GITHUB_REPOSITORY" in os.environ:
             args.repository = os.environ["MONOLITHE_GITHUB_REPOSITORY"]
 
+        if not args.repository_path and "MONOLITHE_GITHUB_REPOSITORY_PATH" in os.environ:
+            args.repository_path = os.environ["MONOLITHE_GITHUB_REPOSITORY_PATH"]
+
         if not args.config_path and "MONOLITHE_CONFIG_PATH" in os.environ:
             args.config_path = os.environ["MONOLITHE_CONFIG_PATH"]
 
@@ -115,6 +124,9 @@ def main(argv=sys.argv):
         if not args.config_path:
             args.config_path = raw_input("Enter the path of the monolithe config file: ")
 
+        if not args.repository_path:
+            args.repository_path = "/"
+
         # Ask for password
         if args.login:
             password = getpass.getpass(prompt="Enter your Github password for %s: " % args.login)
@@ -124,7 +136,13 @@ def main(argv=sys.argv):
             login_or_token = args.token
 
 
-        generator.generate_from_repo(api_url=args.api_url, login_or_token=login_or_token, password=password, organization=args.organization, repository=args.repository, branches=args.branches)
+        generator.generate_from_repo(   api_url=args.api_url,
+                                        login_or_token=login_or_token,
+                                        password=password,
+                                        organization=args.organization,
+                                        repository=args.repository,
+                                        repository_path=args.repository_path,
+                                        branches=args.branches)
 
     # Generate SDK documentation
     if args.generate_doc:

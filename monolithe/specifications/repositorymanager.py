@@ -10,6 +10,7 @@ import zipfile
 from functools import partial
 from github import Github
 from multiprocessing.pool import ThreadPool
+from monolithe.lib import merge_dict
 
 from .specification import Specification
 
@@ -70,7 +71,7 @@ class RepositoryManager (object):
 
         for file in self._repo.get_dir_contents(self._repository_path, ref=branch):
 
-            if os.path.splitext(file.name)[1] != ".spec":
+            if os.path.splitext(file.name)[1] != ".spec" or file.name.startswith("@"):
                 continue
 
             ret.append(file.name)
@@ -131,14 +132,17 @@ class RepositoryManager (object):
         # reads the content of the archive and generate Specification objects
         with zipfile.ZipFile(archive_path, "r") as archive_content:
             for file_name in archive_content.namelist():
-                if file_name == "api.version":
+
+                spec_name = os.path.split(file_name)[1]
+
+                if spec_name == "api.version":
                     self._api_version = archive_content.read(file_name)
                     continue
 
-                if os.path.splitext(file_name)[1] != ".spec":
+                if os.path.splitext(spec_name)[1] != ".spec" or spec_name.startswith("@"):
                     continue
 
-                specifications.append(Specification(data=json.loads(archive_content.read(file_name)), monolithe_config=self._monolithe_config))
+                specifications.append(Specification(data=self.get_specification_data(name=spec_name, archive=archive_content), monolithe_config=self._monolithe_config))
 
         # cleanup the temporary archive
         os.close(archive_fd)
@@ -146,7 +150,7 @@ class RepositoryManager (object):
 
         return specifications
 
-    def get_specification_data(self, name, branch="master"):
+    def get_specification_data(self, name, branch="master", archive=None):
         """ Returns the content of the specification_file in the given branch
 
             Args:
@@ -156,10 +160,23 @@ class RepositoryManager (object):
             Returns:
                 JSON decoded structure of the specification file.
         """
-        path = "%s/%s" % (self._repository_path, name)
-        return json.loads(base64.b64decode(self._repo.get_file_contents(path, ref=branch).content))
+        data = {}
+        full_path = None
 
-    def get_specification(self, name, branch="master"):
+        if archive:
+            full_path = "%s%s/%s" % (archive.namelist()[0], self._repository_path, name)
+            data = json.loads(archive.read(full_path))
+        else:
+            full_path = "%s/%s" % (self._repository_path, name)
+            data = json.loads(base64.b64decode(self._repo.get_file_contents(full_path, ref=branch).content))
+
+        if "extends" in data["model"]:
+            data = merge_dict(data, self.get_specification_data(name="%s.spec" % data["model"]["extends"], branch=branch, archive=archive))
+
+        return data
+
+
+    def get_specification(self, name, branch="master", archive=None):
         """ Returns a Specification object from the given specification file name in the given branch
 
             Args:
@@ -169,7 +186,7 @@ class RepositoryManager (object):
             Returns:
                 Specification object.
         """
-        return Specification(data=self.get_specification_data(name, branch), monolithe_config=self._monolithe_config)
+        return Specification(data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config)
 
     def get_specifications(self, names, branch="master", callback=None):
         """ Returns a Specification object from the given specification file name in the given branch

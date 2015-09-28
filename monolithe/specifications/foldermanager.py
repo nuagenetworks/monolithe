@@ -4,7 +4,7 @@ import json
 import os
 
 from .specification import Specification
-
+from monolithe.lib import merge_dict
 
 class FolderManager (object):
     """ RepositoryManager is an object that allows to manipulate the API specification repository
@@ -27,7 +27,7 @@ class FolderManager (object):
         """
         ret = []
         for filename in os.listdir(self._folder):
-            if os.path.splitext(filename)[1] != ".spec":
+            if os.path.splitext(filename)[1] != ".spec" or filename.startswith("@"):
                 continue
             ret.append(filename)
         return ret
@@ -49,8 +49,12 @@ class FolderManager (object):
     def get_specification_data(self, name):
         """
         """
+        data = {}
         with open("%s/%s" % (self._folder, name), "r") as f:
-            return json.loads(f.read())
+            data = json.loads(f.read())
+            if "extends" in data["model"]:
+                data = merge_dict(data, self.get_specification_data(name="%s.spec" % data["model"]["extends"]))
+        return data
 
     def get_specification(self, name):
         """
