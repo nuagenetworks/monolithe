@@ -324,19 +324,19 @@ For example:
 			]
 	}
 
-###### RESTName
+##### RESTName
 
 References the remote object `RESTName` as described in its own `model` section.
 
-###### resourceName
+##### resourceName
 
 References the remote object `resourceName` as described in its own `model` section.
 
-###### entityName
+##### entityName
 
 References the remote object `entityName` as described in its own `model` section.
 
-##### operations
+#### operations
 The operation section describes what kind of operation is available from the api.
 
 For example:
@@ -360,11 +360,11 @@ For example:
 				}
 			]
 
-###### availability
+##### availability
 
 Reserved for later usage.
 
-###### method
+##### method
 
 The method of the operation. This can be one of the valid following HTTP verbs:
 
