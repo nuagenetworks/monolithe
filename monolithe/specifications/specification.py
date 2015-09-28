@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pkgutil
+import json
 
 from copy import deepcopy
 
@@ -83,6 +84,13 @@ class Specification(object):
         """ Fill the current object with information from the specification
 
         """
+
+        ## replace all the tokens
+        string_data = json.dumps(data)
+        string_data.replace("[__RESSOURCE_NAME__]", data["model"]["resourceName"])
+        string_data.replace("[__REST_NAME__]", data["model"]["RESTName"])
+        string_data.replace("[__ENTITY_NAME__]", data["model"]["entityName"])
+        data = json.loads(string_data)
 
         self.description = data["model"]["description"]
         self.package = data["model"]["package"]
