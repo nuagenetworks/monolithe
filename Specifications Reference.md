@@ -274,7 +274,7 @@ Example:
 
 ### The APIs Section
 
-The API section describes all the APIs that can be used to get this object itself (`self`), get it from a parent (`parents`) or get its children (`children`).
+The API section describes all the APIs that can be used to get this object itself, get it from a parent or get its children.
 
 The each kind of api are using the same structure of api definition. The structure of an api definition looks like:
 
@@ -282,18 +282,41 @@ The each kind of api are using the same structure of api definition. The structu
 		“RESTName”: <rest-name>,
 		“resourceName: <resource-name>,
 	  “entityName”: <entity-name>
-		“operations”: [
-			…
-		]
+		“operations”: […]
 	}
-
-#### The API
 
 The key used for describing an api is the api path itself. It contains a wildcard `{id}` that must be written that way.
 
+#### API information
+
+All APIs **must** contain the following keys:
+
+- `RESTName`: References the remote object `RESTName` as described in its own `model` section.
+- `resourceName`: References the remote object `resourceName` as described in its own `model` section
+- `entityName`: References the remote object `entityName` as described in its own `model` section.
+
+#### API Operations
+
+The `operations` section of an `api` describes what kind of operations is available for it.
+
 For example:
 
-> the example below describes the API for a root object `unicorn` that has `legs` as a children.
+		“operations”: [
+			{
+				"availability": null,
+				“method”: <method>
+			}
+		]
+
+Operations **must** contain the following keys:
+
+- `availability`: Reserved for later usage.
+- `method`: The method of the operation. This can be one of the valid following HTTP verbs: `GET`, `POST`, `PUT`, `DELETE` or `HEAD`
+
+#### Children APIs
+The Children APIs section contains a list of available apis from the object described by the current Specification File.
+
+For example:
   
 	“children”: {
 		“/unicorns/{id}/legs” : {
@@ -301,46 +324,61 @@ For example:
 			“resourceName: “legs”,
 			“entityName”: “Leg”
 			“operations”: [
-				…
+				{
+					"availability": null,
+					“method”: “GET”
+				},
+				{
+					"availability": null,
+					“method”: “POST”
+				}
 			]
 		}
-	},
+	}
+
+This means it is possible to call:
+
+	GET /unicorns/3/legs # get the list a legs of unicorn3
+	POST /unicorns/3/legs # create a new leg for unicorn3
+
+> Usally, only `GET` and `POST` are available to a children api. There is an exception when you want to associate two objects together. Then in that case you can add the `PUT` operation. Just note that doing `PUT /parent/{id}/children` **requires** passing an array of id (`[“1”, “3”]`) instead of a json structure.
+
+#### Parent APIs
+The Parent APIs section contains all the other apis from where a list of the objects described in the current Specification File can be accessed from.
+
+For example:
+ 
 	“parents” : {
 		“/unicorns”: {
 			“RESTName”: “unicorn”,
 			“resourceName: “unicorns”,
 			“entityName”: “Unicorn”
 			“operations”: [
-				…
+				{
+					"availability": null,
+					“method”: “GET”
+				},
+				{
+					"availability": null,
+					“method”: “POST”
+				}
 			]
-	},
-	“self” : {
-		“/unicorns/{id}”: {
-			“RESTName”: “unicorn”,
-			“resourceName: “unicorns”,
-			“entityName”: “Unicorn”
-			“operations”: [
-				…
-			]
+		}
 	}
 
-##### RESTName
+This means it is possible to call:
 
-References the remote object `RESTName` as described in its own `model` section.
+	GET /unicorns # get the list of unicorns
+	POST /unicorns # create a new unicorn
 
-##### resourceName
+> `PUT` and `DELETE` cannot be set in a `parent` api.
 
-References the remote object `resourceName` as described in its own `model` section.
-
-##### entityName
-
-References the remote object `entityName` as described in its own `model` section.
-
-#### operations
-The operation section describes what kind of operation is available from the api.
+#### Self APIs
+The Self APIs section contains all the other apis from where the object described in the current Specification File can be accessed from.
 
 For example:
 
+	“self” : {
 		“/unicorns/{id}”: {
 			“RESTName”: “unicorn”,
 			“resourceName: “unicorns”,
@@ -352,28 +390,23 @@ For example:
 				},
 				{
 					"availability": null,
-					“method”: “DELETE”
+					“method”: “PUT”
 				},
 				{
 					"availability": null,
-					“method”: “PUT”
+					“method”: “DELETE”
 				}
 			]
+		}
+	}
 
-##### availability
+This means it is possible to call
 
-Reserved for later usage.
+	GET /unicorns/3 # get the unicorn3
+	PUT /unicorns/3 # update the unicorn3
+	DELETE /unicorns/3 # delete the unicorn3
 
-##### method
-
-The method of the operation. This can be one of the valid following HTTP verbs:
-
-- `GET`
-- `POST`
-- `PUT`
-- `DELETE`
-- `HEAD`
-
+> `POST` cannot be set in a `self` api.
 
 ## Inheritance
 
