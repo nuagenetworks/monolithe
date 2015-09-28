@@ -1,15 +1,15 @@
 {
   "apis": {
     "children": {
-      "/lists": {
-        "RESTName": "list",
-        "resourceName": "lists",
-        "entityName": "List",
-        "operations": [
-          { "availability": null, "method": "GET" },
-          { "availability": null, "method": "POST" }
-        ]
-      }
+        "/[__RESOURCE_NAME__]/{id}/tasks": {
+          "RESTName": "task",
+          "resourceName": "tasks",
+          "entityName": "Task",
+          "operations": [
+              { "availability": null, "method": "GET" },
+              { "availability": null, "method": "PUT" }
+          ]
+        }
     },
     "parents": {},
     "self": {}
