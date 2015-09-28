@@ -341,7 +341,7 @@ This means it is possible to call:
 	GET /unicorns/3/legs # get the list a legs of unicorn3
 	POST /unicorns/3/legs # create a new leg for unicorn3
 
-> Usally, only `GET` and `POST` are available to a children api. There is an exception when you want to associate two objects together. Then in that case you can add the `PUT` operation. Just note that doing `PUT /parent/{id}/children` **requires** passing an array of id (`[“1”, “3”]`) instead of a json structure.
+> Usally, only `GET` and `POST` are available to a children api. But there is an exception when you want to associate two objects together. Then in that case you can add the `PUT` operation. Just note that doing `PUT /parent/{id}/children` **requires** passing an array of valid id (`[“1”, “3”]`) instead of a json structure representing the children.
 
 #### Parent APIs
 The Parent APIs section contains all the other apis from where a list of the objects described in the current Specification File can be accessed from.
@@ -410,7 +410,7 @@ This means it is possible to call
 
 ## Inheritance
 
-As briefly discussed previously, a Specification File can inherit informations from another one. The list of Specification Files a Specification File inherits from is given using the `extends` section of the `model` section.
+As briefly discussed in a previous section, a Specification File can inherit informations from other ones. The list of Specification Files a Specification File inherits from is given using the `extends` section of the `model` section.
 
 ### Model Inheritance
 It is possible to inherits models values. The parent Specification can be a real declared object, or just a file that only contains the section you need.
@@ -475,6 +475,8 @@ It is also possible to inherits APIs. For instance if you want all the objects i
 Then both `Horse` and `Unicorn` object will have `metadatas` as child API.
 
 You can notice the `[__RESOURCE_NAME__]` token. This will be replaced by the actual Specification `resourceName` value set in its `model` section.
+
+> It is also possible to use `[__ENTITY_NAME__]` and `[__REST_NAME__]` as tokens.
 
 #### Inheritance-only Specification Files
 
