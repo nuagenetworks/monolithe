@@ -70,15 +70,6 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTObject):
         {% for api in specification.children_apis %}
         self.{{ api.instance_plural_name }} = {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
         {% endfor %}{% endif %}
-        try:
-            {% if version > 3.1 and not specification.remote_name.startswith('metadata') %}
-            self.metadata = {{ sdk_class_prefix }}MetadatasFetcher.fetcher_with_object(parent_object=self)
-            {% else %}
-            pass
-            {% endif %}
-        except:
-            pass
-
         self._compute_args(**kwargs)
 
     # Properties

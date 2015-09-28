@@ -164,13 +164,13 @@ class RepositoryManager (object):
         full_path = None
 
         if archive:
-            full_path = "%s%s/%s" % (archive.namelist()[0], self._repository_path, name)
+            full_path = os.path.normpath("%s%s/%s" % (archive.namelist()[0], self._repository_path, name))
             data = json.loads(archive.read(full_path))
         else:
-            full_path = "%s/%s" % (self._repository_path, name)
+            full_path = os.path.normpath("%s/%s" % (self._repository_path, name))
             data = json.loads(base64.b64decode(self._repo.get_file_contents(full_path, ref=branch).content))
 
-        if "extends" in data["model"]:
+        if "model" in data and "extends" in data["model"]:
             for extension in data["model"]["extends"]:
                 data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive))
 

@@ -52,7 +52,7 @@ class FolderManager (object):
         data = {}
         with open("%s/%s" % (self._folder, name), "r") as f:
             data = json.loads(f.read())
-            if "extends" in data["model"]:
+            if "model" in data and "extends" in data["model"]:
                 for extension in data["model"]["extends"]:
                     data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension))
         return data
