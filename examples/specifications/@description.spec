@@ -15,7 +15,6 @@
     "self": {}
   },
   "model": {
-    "extends": "@name",
     "attributes": {
       "description": {
         "allowedChars": null,
