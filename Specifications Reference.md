@@ -26,33 +26,33 @@ A Specification File describes a particular object of the API. It will tell what
 
 It **must** contains valid json data. And the structure is following (the order of the key does not make any difference).
 
-```json
-{
-	“apis”: {
-		“children”: {
-			…
-		},
-		“parents”: {
-			…
-		},
-		“self” : {
-			…
-		}
-	},
-	“model”: {
-		…
-		“attributes”: {
-			“attribute1”: {
+
+	{
+		“apis”: {
+			“children”: {
 				…
 			},
-			…,
-			“attributeN”: {
+			“parents”: {
 				…
+			},
+			“self” : {
+				…
+			}
+		},
+		“model”: {
+			…
+			“attributes”: {
+				“attribute1”: {
+					…
+				},
+				…,
+				“attributeN”: {
+					…
+				}
 			}
 		}
 	}
-}
-```
+
 
 ### The Model Section
 
