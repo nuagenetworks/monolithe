@@ -79,7 +79,7 @@ For example:
 
 	“entityName”: “Unicorn”
 
-### package
+#### package
 Used to group the objects in the generated API documentation.
 
 For example:
