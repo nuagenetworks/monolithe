@@ -9,7 +9,7 @@ It provides the following commands:
 
 The specifications are a set of files containing json data describing one object per file, its properties and their characteristics, and its position in the api hierarchy.
 
-> For more info, please read the Monolithe Specifications Reference (TODO).
+> For more info, please read the [Monolithe Specifications Reference](Specifications Reference.md).
 
 In addition to the specifications, Monolithe uses a configuration that describes all the information relative to your sdk. For instance, you can set its name, the class prefix, some vanilla files, the license, and so on.
 
