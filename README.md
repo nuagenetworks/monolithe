@@ -13,7 +13,7 @@ The specifications are a set of files containing json data describing one object
 
 In addition to the specifications, Monolithe uses a configuration that describes all the information relative to your sdk. For instance, you can set its name, the class prefix, some vanilla files, the license, and so on.
 
-> For more info, please read the Monolithe Configuration & Vanilla Reference (TODO).
+> For more info, please read the [Monolithe Configuration & Vanilla Reference](Configuration & Vanilla Reference.md).
 
 Monolithe is before all a framework that you can integrate with other tools.
 
