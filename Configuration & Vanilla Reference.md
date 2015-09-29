@@ -318,8 +318,58 @@ For instance:
 
 ### The ReST API Documentation vanilla
 
-	TODO
+The API Documentation vanilla is fairly straightforward. 
+
+### Custom HTML Pages
+
+To add some html files, simply add them to the root vanilla directory. They will be embeded in the API documentation. The entry point page in your customized pages **must** be named `usage.html` and **must** be placed in the root vanilla folder.
+
+#### Custom CSS
+
+To add your custom CSS, create a folder named `css` in the root vanilla folder, and add a `style.css` file.
+
+> this will override the entire style of the documentation. Also not that the api documentation uses bootstrap.
+
+#### Custom javascript
+
+To add custom javascript, create a folder named `js` in the root vanilla folder, and add your scripts. You can use them from your custom html files.
+
+
+
 
 ### The SDK Documentation vanilla
 
-	TODO
+	The SDK API Documentation Vanilla allows you to add custom pages and set the TOC of the documentation.
+
+To add new pages, add `rst` files in the root SDK Documentation Vanilla folder.
+
+Once you have added all the pages you want to add, create a file named `pages.json`. This file will tell Monolithe how to organize your pages in the documentation hierarchy.
+
+The json structure must look like the following:
+
+	[
+	    {
+	        "name": “<section1-name>“,
+	        "toc_depth": <page-depth>,
+	        "description": “<description>”,
+	        "pages": [
+	            “<page-1>”,
+	            "<page-x>",
+	            "<page-n>"
+	        ]
+	    }
+	]
+
+It represents an array of `section` that contains pages.
+
+#### name
+The name of the section, as it will be showned on the toc and the index page.
+
+#### toc_depth
+The depth of the pages hierarchy to display on the toc and index page
+
+#### description
+Description of the section. It will be shown in the index page, right before the section’s pages list.
+
+#### pages
+Array of pages in the section. The values of the array must be the file name representing the page, without the `.rst` extension
