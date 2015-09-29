@@ -480,7 +480,7 @@ You can notice the `[__RESOURCE_NAME__]` token. This will be replaced by the act
 
 #### Inheritance-only Specification Files
 
-In the previous example, you can notice the `@` preceding the `metadata-capable.spec` Specification File name. This will make Monolithe to not generate an actual object from that specification. It’s very useful to set some files that regroups common attributes and apis, but doesn’t necessarily need to be generated as an api object.
+In the previous example, you can notice the `@` preceding the `metadatas-capable.spec` Specification File name. This will make Monolithe to not generate an actual object from that specification. It’s very useful to set some files that regroups common attributes and apis, but doesn’t necessarily need to be generated as an api object.
 
 #### Multiple inheritance
 
@@ -489,12 +489,12 @@ The `extends` property is an array, so it is possible to inherit apis and attrib
 For instance:
 
 	“extends”: [
-		“@metadata-capable”,
+		“@metadatas-capable”,
 		“@named-object”,
 		“horse”
 	]
 
 All apis and models will be merged into the current Apecification File. In case of collision in apis or attribute, the last extension declared in the list will win.
 
-For instance, in the previous example, if both `@metadata-capable` and `horse` contains a `package` attribute in the `model`, section, the one in `horse` will be the one used in the end. 
+For instance, in the previous example, if both `@metadatas-capable` and `horse` contains a `package` attribute in the `model`, section, the one in `horse` will be the one used in the end. 
 
