@@ -1,6 +1,6 @@
 # Monolithe Specifications Reference
 
-Monolithe is using well defined specifications to generate sdks and documentations. This document describe how Specifications works and how to create your own.
+Monolithe is using well defined specifications to generate sdks and documentations. This document describes how Specifications work and how to create your own.
 
 
 ## Specifications Folder
@@ -114,7 +114,7 @@ For example:
 	}
 
 
-The attribute must contains its charateristics. Each characteristic define one behavior of the attribute, and multiple things can happens during the sdk/documentation generation process according to these characteristics.
+The attribute must contains its charateristics. Each characteristic define one behavior of the attribute, and multiple things can happen during the sdk/documentation generation process according to these characteristics.
 
 #### allowedChars
 Python-style regular expression that will be used to validates the content of the attribute.
@@ -410,7 +410,7 @@ This means it is possible to call
 
 ## Inheritance
 
-As briefly discussed in a previous section, a Specification File can inherit informations from other ones. The list of Specification Files a Specification File inherits from is given using the `extends` section of the `model` section.
+As briefly discussed in a previous section, a Specification File can inherit information from other ones. The list of Specification Files a Specification File inherits from is given using the `extends` section of the `model` section.
 
 ### Model Inheritance
 It is possible to inherits models values. The parent Specification can be a real declared object, or just a file that only contains the section you need.
@@ -447,7 +447,7 @@ For instance, we can have the following:
 This will generate two objects, one `Horse` with `name`, `age` and `size` as attributes and one `Unicorn` with `name`, `age` and `size` and `hornSize`.
 
 ### API Inheritance
-It is also possible to inherits APIs. For instance if you want all the objects in your model to have a common children api, say `metadatas`, you can do the following:
+It is also possible to inherit APIs. For instance if you want all the objects in your model to have a common children api, say `metadatas`, you can do the following:
 
 	$ cat @metadatas-capable.spec
 	{
