@@ -1,1 +1,325 @@
-# todo
+# Monolithe Configuration & Vanilla Reference
+
+In order to generate sdks and documentation, Monolithe uses some Specifications. But it also need informations that does not belong to these Specifications. For instance, what class names to use when generating a Python SDK, what would be the name of the SDK, additional API documentation pages and so on.
+
+All that information are given to Monolithe through a configuration file. This file is a `ini` file, and it is given either as a parameter of the `monogen` command line interfaces, or through  a `MonolitheConfig` object, when using Monolithe as a library.
+
+It also uses what we call some `vanilla` data. It is a folder that contains static files, or overrides and other things like that.
+
+This document describe all the parameters of the configuration file, and what can be done using the `vanilla`.
+
+
+## Monolithe Configuration File
+
+The configuration file is a `ini` file that is divided into several sections.
+
+### The [monolithe] Section
+
+This section contains general information about the sdk and documentation you want to generate.
+
+#### product_name
+
+Usually the full name of your product. It can contain spaces, is used in various places, especially in the generated documentation.
+
+For example:
+
+	product_name=Virtualized Service Directory
+
+#### product_accronym
+
+The accronym of your product. It is used when generating some classes, like the ReST Session, or some doc strings.
+
+It **must not** contain any space and **must** be uppercase
+
+For example:
+
+	product_accronym=VSD
+
+#### copyright
+
+Your copyright. It will be used in various places.
+
+For example:
+
+	copyright=Copyright (c) 2042, Nuage Networks
+
+
+### The [sdk] Section
+
+This section contains informations related to the sdk generation.
+
+#### sdk_name
+
+The name of your sdk. This will be used to generate the Python package, and in a lot of places.
+
+it **must not** contain any space
+
+For example:
+
+	sdk_name=vspk
+
+#### sdk_version
+The version of your sdk. This will be used when generating the `setup.py`
+
+For example:
+
+	sdk_version=1.0
+
+
+#### sdk_output
+
+The path where the generation of the sdk will be created.
+
+If you don’t provide an initial `/`, it will be created relatively to the current folder. 
+
+If you provide an initial `/` then it will be created using the absolute path.
+
+For example:
+
+	sdk_output=codegen
+
+#### sdk_class_prefix
+
+Prefix used by all classes. This is a general good practice, that helps identify the origin of an object in your code. All classes will be prefixed with it. 
+
+For example:
+
+	sdk_class_prefix=NU
+
+So if you have a Specification File describing an object with an `entityName` set to `Unicorn`, the equivalent SDK object will be:
+
+	NUUnicorn
+
+And the fetchers of that objects from the parents will be:
+
+	NUUnicornsFetcher
+
+> For more information about these objects fetchers, please read the Bambou documentation.
+
+#### sdk_api_prefix
+
+The root api of your server. This is the prefix that will be used to communicate with your server.
+
+it **must not** contain any spaces, and **must not** contain any `/` as first or last character.
+ 
+For example:
+
+	sdk_api_prefix=nuage/api
+
+`Bambou` will append the api version at the end. So when doing a call to the server, with that previous configuration, the URL would be:
+
+	http://yourserver/nuage/api/v3_2
+
+#### sdk_root_object_class_name
+
+The root class name used for the SDK. `Bambou` uses a `NURESTRootObject` that will be accessible right from the session. This parameter gives you a chance to name it the way you want.
+
+It **must** start with a capital, and **must not** contain any space.
+
+For example:
+
+	sdk_root_object_class_name=RESTUser
+
+#### sdk_root_api
+
+The root object of your api. Usually this is your authentication api.
+
+It **must not** contain any space and **must** be lowercase.
+
+For example:
+
+	sdk_root_api=me
+
+This means that when fetching your `NURESTUser`, Bambou will call:
+
+	http://yourserver/nuage/api/v3_0/me
+
+#### sdk_root_object_property_name
+
+The accessor for the `sdk_root_object_class_name` from the session. Bambou is using an NUAbstractSession as a way to authenticate yourself, and keep track of your credentials. From this session, you can access to the `root_object` property to get the equivalent of the root of your api. This parameter gives you a chance to change the accessor name.
+
+For example:
+
+	sdk_root_object_property_name=user
+
+Note that the Bambou session is abstract, Monolithe will generate a class that inherits from it using the `sdk_class_prefix` and the `product_accronym`. Using the previous examples, that would be
+
+	NUVSDSession
+
+And thus, to access the root object:
+
+	session = NUVSDSession(…)
+	print session.user
+
+#### sdk_bambou_version
+
+The bambou version to use. This will be used to generate the `requirements.txt`.
+
+For example:
+
+	sdk_bambou_version=1.0.1
+
+Note that this will be used a strict version and will be translated to `bambou==1.0.1`
+
+#### sdk_url, sdk_author, sdk_email, sdk_description, sdk_license_name
+
+Informatino related to your sdk. All of these will be used to generate the `setup.py`
+
+For example:
+	
+	sdk_url=http://nuagenetworks.github.io/vspk
+	sdk_author=Antoine Mercadal, Christophe Serafin
+	sdk_email=opensource@nuagenetworks.net
+	sdk_description=awesome sdk for vsd
+	sdk_license_name=BSD-3
+
+#### sdk_user_vanilla
+
+The path the sdk vanilla folder (see next chapter). 
+
+If you don’t provide an initial `/`, it will be found relatively to the current folder. 
+
+If you provide an initial `/` then it will be found using the absolute path.
+
+For example:
+
+	sdk_user_vanilla=vsdk/vanilla/sdk
+
+### The [apidoc] Section
+
+This section contains information needed to generate the ReST API Documentation.
+
+#### apidoc_output
+
+The path where the generation of the api documentation will be created.
+
+If you don’t provide an initial `/`, it will be created relatively to the current folder. 
+
+If you provide an initial `/` then it will be created using the absolute path.
+
+For example:
+
+	apidoc_output=docgen
+
+#### apidoc_user_vanilla
+
+The path the api documentation vanilla folder (see next chapter). 
+
+If you don’t provide an initial `/`, it will be found relatively to the current folder. 
+
+If you provide an initial `/` then it will be found using the absolute path.
+
+For example:
+
+	apidoc_user_vanilla=vsdk/vanilla/apidoc
+
+### The [sdkdoc] Section
+
+This section contains information needed to generate the sdk Documentation.
+
+#### sdkdoc_output
+
+The path where the generation of the sdk documentation will be created.
+
+If you don’t provide an initial `/`, it will be created relatively to the current folder. 
+
+If you provide an initial `/` then it will be created using the absolute path.
+
+For example:
+
+	sdkdoc_output=sdkdoc
+
+#### sdkdoc_user_vanilla
+
+The path the sdk documentation vanilla folder (see next chapter). 
+
+If you don’t provide an initial `/`, it will be found relatively to the current folder. 
+
+If you provide an initial `/` then it will be found using the absolute path.
+
+For example:
+
+	sdkdoc_user_vanilla=vsdk/vanilla/sdkdoc
+
+## The vanilla folder
+
+Vanilla folder allows you to add some data to the generated sdk and documentation. There is one vanilla that can be used for the sdk generation, one for the api documentation and one for the sdk documentation.
+
+### The sdk vanilla
+
+The structure of the sdk vanilla is the following:
+
+	<sdk_user_vanilla>/LICENSE
+	<sdk_user_vanilla>/README.md
+	<sdk_user_vanilla>/__attributes_defaults/attrs_defaults.ini
+	<sdk_user_vanilla>/__overrides/<object-rest-name>.override.py
+
+
+#### License & Readme
+
+- `LICENSE`: the license file that will be added to the Python package
+- `README.md`: the readme that will be added to the Python package
+
+#### Default Attributes Configuration
+
+Bambou can use a file in order to populate default values for the attributes of an object. You can provide your own default attribute by adding a folder named `__attributes_defaults` that contains an `attrs_defaults.ini` file.
+
+For example:
+
+	$ cat __attributes_defaults/attrs_defaults.ini
+	[enterprise]
+	name=“New Enterprise“
+	description=“A cool enterprise“
+
+For more information, please read the bambou documentation.
+
+As Monolithe handles multiple version of the api a same sdk, it is possible that some objects doesn’t exist accross all the version. So it is possible to create a specific `attrs_defaults.ini` for specific api version. To do so, simply prefix the file name with `<major.minor>_`
+
+For example:
+	
+	3.2_attrs_defaults.ini # will be used for 3.2 api version
+	3.1_attrs_defaults.ini # will be used for 3.1 api version
+	attrs_defaults.ini # will be used for all other api versions
+
+
+#### Object Model Overrides
+
+Monolithe generates everything for you from Specifications. But sometimes it could be useful to add custom methods to the objects. You might want to transform a value of an exposed attribute, or do some more complexe operations.
+
+For instance, you might want a simple way to get the full name of a user object that has a first name and last name attributes. Overrides as made for this.
+
+In order to add the full name accessors to an object with a `RESTName` set to `user`, add a file in the `__overrides` folder and name it using the following model:
+
+	<sdk_class_prefix|lower><rest-name>.override.py
+
+And add methods. You don’t need to redeclare a class. Those methods will be added to the correct class. So the keyword `self` and all other properties are accessible.
+
+For instance:
+
+		$ cat __overrides/nuuser.override.py
+		def get_full_name(self):
+	      return “%s %s” % (self.first_name, self.last_name)
+	
+	  def get_full_name(self, full_name):
+				# definitely not a good way to split that…
+				self.first_name, self.last_name = full_name.split()
+
+You can add as many overrides you want, one per object in the model.
+
+Like the default attributes, you can prefix the override file using the same schema in order to use an override file for a specific version only (see previous section)
+
+For instance:
+
+		3.2_nuuser.override.py # will be used for 3.2 api version
+    3.1_nuuser.override.py # will be used for 3.1 api version 
+	  nuuser.override.py # will be used for all other api versions
+
+
+
+### The ReST API Documentation vanilla
+
+	TODO
+
+### The SDK Documentation vanilla
+
+	TODO
