@@ -17,7 +17,7 @@ class APIDocWriter(object):
         """
         self.writer = None
         self.monolithe_config = monolithe_config
-        self._root_api = self.monolithe_config.get_option("root_api")
+        self._sdk_root_api = self.monolithe_config.get_option("sdk_root_api", "sdk")
 
     def write(self, specifications, apiversion):
         """
@@ -37,7 +37,7 @@ class APIDocWriter(object):
     def _write_specification(self, specification, filenames):
         """
         """
-        if specification.remote_name != self._root_api:
+        if specification.remote_name != self._sdk_root_api:
             (filename, classname) = self.writer.write_specification(specification=specification)
             filenames[filename] = classname
 

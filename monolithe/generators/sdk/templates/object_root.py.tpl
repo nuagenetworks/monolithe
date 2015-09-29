@@ -39,7 +39,7 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTRootObject):
             Override {{ sdk_name }}.{{ sdk_class_prefix }}{{ specification.name }} instead.
     """
 
-    __rest_name__ = u"{{ root_api }}"
+    __rest_name__ = u"{{ sdk_root_api }}"
 
     def __init__(self, **kwargs):
         """ Initializes a {{ specification.name }} instance
