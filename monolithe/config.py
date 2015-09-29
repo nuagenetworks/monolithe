@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ConfigParser import ConfigParser
 import os
-
+import StringIO
 
 class MonolitheConfig(object):
 
@@ -19,12 +19,26 @@ class MonolitheConfig(object):
         self.mapping = None
 
         if self.path:
-            self.set_config_path(self.path)
+            self._check_path_exists(path)
+            config = ConfigParser()
+            config.read(path)
+            self.set_config(config)
 
     def copy(self):
         """
         """
-        return MonolitheConfig(path=self.path)
+        # duplicate the config parser
+        conf_data = StringIO.StringIO()
+        self.config.write(conf_data)
+        conf_data.seek(0)
+        new_config_parser = ConfigParser()
+        new_config_parser.readfp(conf_data)
+
+        # create a new MonolitheConfig and give it the duplicate config parser
+        monolithe_config_copy = MonolitheConfig(path=self.path)
+        monolithe_config_copy.set_config(new_config_parser)
+
+        return monolithe_config_copy
 
     def _check_path_exists(self, path):
         """
@@ -32,12 +46,10 @@ class MonolitheConfig(object):
         if not os.path.exists(path):
             raise Exception("Could not find path %s" % path)
 
-    def set_config_path(self, path):
+    def set_config(self, config):
         """
         """
-        self._check_path_exists(path)
-        self.config = ConfigParser()
-        self.config.read(path)
+        self.config = config
 
         # vanilla
         self.sdk_user_vanilla = self.get_option("sdk_user_vanilla", "sdk")
@@ -45,9 +57,9 @@ class MonolitheConfig(object):
         self.sdkdoc_user_vanilla = self.get_option("sdkdoc_user_vanilla", "sdkdoc")
 
         # mapping
-        mapping_path = "%s/mapping.ini" % os.path.dirname(path)
+        mapping_path = "%s/mapping.ini" % os.path.dirname(self.path)
 
-        if not os.path.exists(path):
+        if not os.path.exists(self.path):
             return
 
         self.mapping = ConfigParser()
