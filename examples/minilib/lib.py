@@ -82,6 +82,7 @@ def perform_update_list(lid, d):
 
 def _validate_list(lst):
     if not lst["title"]: return _create_error("title", "Invalid input", "This value is mandatory.")
+    if not lst["description"]: return _create_error("description", "Invalid input", "This value is mandatory.")
     return None
 
 
