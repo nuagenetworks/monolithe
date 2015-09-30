@@ -96,34 +96,6 @@ And the fetchers of that objects from the parents will be:
 
 > For more information about these objects fetchers, please read the Bambou documentation.
 
-#### sdk_api_prefix
-
-The root api of your server. This is the prefix that will be used to communicate with your server.
-
-it **must not** contain any spaces, and **must not** contain any `/` as first or last character.
-
-For example:
-
-	sdk_api_prefix=nuage/api
-
-`Bambou` will append the api version at the end. So when doing a call to the server, with that previous configuration, the URL would be:
-
-	http://yourserver/nuage/api/v3_2
-
-#### sdk_root_api
-
-The root object of your api. Usually this is your authentication api.
-
-It **must not** contain any space and **must** be lowercase.
-
-For example:
-
-	sdk_root_api=me
-
-This means that when fetching your `NURESTUser`, Bambou will call:
-
-	http://yourserver/nuage/api/v3_0/me
-
 #### sdk_bambou_version
 
 The bambou version to use. This will be used to generate the `requirements.txt`.
