@@ -20,10 +20,10 @@
         "minValue": null,
         "orderable": true,
         "readOnly": false,
-        "required": false,
+        "required": true,
         "transient": false,
         "type": "string",
-        "unique": true
+        "unique": false
       }
     }
   }

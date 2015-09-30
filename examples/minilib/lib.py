@@ -78,7 +78,7 @@ def perform_update_list(lid, d):
     if error:
         return json.dumps(error), 409
 
-    return json.dumps([lst]), 201
+    return json.dumps([lst]), 200
 
 def _validate_list(lst):
     if not lst["title"]: return _create_error("title", "Invalid input", "This value is mandatory.")
