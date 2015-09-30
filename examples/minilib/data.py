@@ -22,7 +22,7 @@ def delete_list(lst):
     lists.remove(lst)
 
 def list_equals(l1, l2):
-    return (l1["ID"] == l2["ID"] and l1["title"] == l2["title"] and l1["description"] and l2["description"] and l1["description"] == l2["description"])
+    return (l1["ID"] == l2["ID"] and l1["title"] == l2["title"] and l1["description"] == l2["description"])
 
 
 
@@ -88,7 +88,7 @@ def delete_task(task):
     tasks.remove(task)
 
 def task_equals(t1, t2):
-    return (t1["ID"] == t2["ID"] and t1["title"] == t2["title"] and t1["description"] == t2["description"] and t1["status"] == t2["status"])
+    return t1["ID"] == t2["ID"] and t1["title"] == t2["title"] and t1["description"] == t2["description"] and t1["status"] == t2["status"]
 
 
 
