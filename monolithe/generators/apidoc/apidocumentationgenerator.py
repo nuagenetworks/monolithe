@@ -29,14 +29,14 @@ class APIDocumentationGenerator(Generator):
         writer = APIDocWriter(self.monolithe_config)
         apiversions = []
 
-        for apiversion, specifications in specification_info.iteritems():
+        for info in specification_info:
 
-            vanilla_output_path = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, apiversion)
+            vanilla_output_path = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, info["api"]["version"])
 
             self.install_system_vanilla(current_file=__file__, output_path=vanilla_output_path)
             self.install_user_vanilla(user_vanilla_path=self._apidoc_user_vanilla, output_path=vanilla_output_path)
 
-            Printer.log("generating %s api documentation for api version: %s" % (self._product_name, apiversion))
-            writer.write(specifications=specifications, apiversion=apiversion)
+            Printer.log("generating %s api documentation for api version: %s" % (self._product_name, info["api"]["version"]))
+            writer.write(specifications=info["specifications"], api_info=info["api"])
 
         Printer.success("%s api documentation generation complete and available at \"%s\"" % (self._product_name, self._apidoc_output))

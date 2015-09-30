@@ -78,21 +78,18 @@ class RepositoryManager (object):
 
         return ret
 
-    def get_api_version(self, branch="master"):
+    def get_api_info(self, branch="master"):
         """
-            Returns the content of the api.version in the specification
+            Returns the content of the api.info in the specification
 
             Args:
-                branch: the branch where to the api version (default: "master")
+                branch: the branch where to the api info (default: "master")
 
             Returns:
-                the server api version as a string (example: 3.2)
+                the server api version as dict containing the keys "version", "prefix" and "root"
         """
-        path = "%s/%s" % (self._repository_path, "api.version")
-        try:
-            return base64.b64decode(self._repo.get_file_contents(path, ref=branch).content).replace("\n", "").replace("\r", "").replace(" ", "")
-        except:
-            return None
+        path = os.path.normpath("%s/%s" % (self._repository_path, "api.info"))
+        return json.loads(base64.b64decode(self._repo.get_file_contents(path, ref=branch).content))
 
     def get_last_commit(self, branch="master"):
         """
@@ -135,8 +132,7 @@ class RepositoryManager (object):
 
                 spec_name = os.path.split(file_name)[1]
 
-                if spec_name == "api.version":
-                    self._api_version = archive_content.read(file_name)
+                if spec_name == "api.info":
                     continue
 
                 if os.path.splitext(spec_name)[1] != ".spec" or spec_name.startswith("@"):

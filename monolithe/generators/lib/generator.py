@@ -15,20 +15,21 @@ class Generator(object):
     def generate_from_folder(self, folder):
         """
         """
-        specification_info = {}
+        specification_info = []
 
         Printer.log("retrieving specifications from folder \"%s\"" % (folder))
         self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
-        apiversion = self.folder_manager.get_api_version()
-        specification_info[apiversion] = self.folder_manager.get_all_specifications()
-        Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specification_info[apiversion]), folder, apiversion))
+        api_info = self.folder_manager.get_api_info()
+        specifications = self.folder_manager.get_all_specifications()
+        specification_info.append({"specifications": specifications, "api": api_info})
+        Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specifications), folder, api_info["version"]))
 
         self.generate(specification_info=specification_info)
 
     def generate_from_repo(self, api_url, login_or_token, password, organization, repository, repository_path, branches):
         """
         """
-        specification_info = {}
+        specification_info = []
         self.repository_manager = RepositoryManager(monolithe_config=self.monolithe_config,
                                                     api_url=api_url,
                                                     login_or_token=login_or_token,
@@ -39,10 +40,10 @@ class Generator(object):
 
         for branch in branches:
             Printer.log("retrieving specifications from github \"%s/%s%s@%s\"" % (organization.lower(), repository.lower(), repository_path, branch))
-            apiversion = self.repository_manager.get_api_version(branch=branch)
+            api_info = self.repository_manager.get_api_info(branch=branch)
             specifications = self.repository_manager.get_all_specifications(branch=branch)
-            specification_info[apiversion] = specifications
-            Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, apiversion))
+            specification_info.append({"specifications": specifications, "api": api_info})
+            Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, api_info["version"]))
 
         self.generate(specification_info=specification_info)
 

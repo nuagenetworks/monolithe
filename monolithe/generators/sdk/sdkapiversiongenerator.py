@@ -24,10 +24,10 @@ class SDKAPIVersionGenerator(object):
 
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
 
-    def generate(self, specification_info, apiversion):
+    def generate(self, specification_info):
         """
         """
-        for apiversion, specifications in specification_info.iteritems():
+        for info in specification_info:
             writer = SDKAPIVersionWriter(monolithe_config=self.monolithe_config)
-            writer.write(specifications=specifications, apiversion=apiversion)
+            writer.write(specifications=info["specifications"], api_info=info["api"])
 

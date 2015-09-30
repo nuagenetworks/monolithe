@@ -45,10 +45,10 @@ class SDKGenerator(Generator):
         generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
         apiversions = []
 
-        for apiversion, specifications in specification_info.iteritems():
-            Printer.log("generating %s package for api version: %s" % (self._sdk_name, apiversion))
-            apiversions.append(apiversion)
-            generator.generate(specification_info=specification_info, apiversion=apiversion)
+        for info in specification_info:
+            apiversions.append(info["api"]["version"])
+
+        generator.generate(specification_info=specification_info)
 
         Printer.log("assembling all packages...")
         sdk_writer = SDKWriter(monolithe_config=self.monolithe_config)

@@ -17,15 +17,15 @@ class APIDocWriter(object):
         """
         self.writer = None
         self.monolithe_config = monolithe_config
-        self._sdk_root_api = self.monolithe_config.get_option("sdk_root_api", "sdk")
 
-    def write(self, specifications, apiversion):
+    def write(self, specifications, api_info):
         """
         """
         filenames = dict()
         task_manager = TaskManager()
 
-        self.writer = APIDocFileWriter(monolithe_config=self.monolithe_config, apiversion=apiversion)
+        self.api_info = api_info
+        self.writer = APIDocFileWriter(monolithe_config=self.monolithe_config, api_info=self.api_info)
 
         for specification in specifications:
             task_manager.start_task(method=self._write_specification, specification=specification, filenames=filenames)
@@ -37,7 +37,7 @@ class APIDocWriter(object):
     def _write_specification(self, specification, filenames):
         """
         """
-        if specification.remote_name != self._sdk_root_api:
+        if specification.remote_name != self.api_info:
             (filename, classname) = self.writer.write_specification(specification=specification)
             filenames[filename] = classname
 
@@ -46,7 +46,7 @@ class APIDocFileWriter(TemplateFileWriter):
     """
     """
 
-    def __init__(self, monolithe_config, apiversion):
+    def __init__(self, monolithe_config, api_info):
         """
         """
         super(APIDocFileWriter, self).__init__(package="monolithe.generators.apidoc")
@@ -56,7 +56,7 @@ class APIDocFileWriter(TemplateFileWriter):
         self._apidoc_output = self.monolithe_config.get_option("apidoc_output", "apidoc")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, apiversion)
+        self.output_directory = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, api_info["version"])
 
 
     def write_specification(self, specification):

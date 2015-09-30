@@ -32,11 +32,11 @@ class FolderManager (object):
             ret.append(filename)
         return ret
 
-    def get_api_version(self):
+    def get_api_info(self):
         """
         """
-        with open("%s/api.version" % self._folder, "r") as f:
-            return f.read().replace("\n", "").replace("\r", "").replace(" ", "")
+        with open("%s/api.info" % self._folder, "r") as f:
+            return json.loads(f.read())
 
     def get_all_specifications(self):
         """
