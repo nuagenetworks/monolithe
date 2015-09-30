@@ -70,7 +70,7 @@ For example:
 
 The path where the generation of the sdk will be created.
 
-If you don’t provide an initial `/`, it will be created relatively to the current folder. 
+If you don’t provide an initial `/`, it will be created relatively to the current folder.
 
 If you provide an initial `/` then it will be created using the absolute path.
 
@@ -80,7 +80,7 @@ For example:
 
 #### sdk_class_prefix
 
-Prefix used by all classes. This is a general good practice, that helps identify the origin of an object in your code. All classes will be prefixed with it. 
+Prefix used by all classes. This is a general good practice, that helps identify the origin of an object in your code. All classes will be prefixed with it.
 
 For example:
 
@@ -101,7 +101,7 @@ And the fetchers of that objects from the parents will be:
 The root api of your server. This is the prefix that will be used to communicate with your server.
 
 it **must not** contain any spaces, and **must not** contain any `/` as first or last character.
- 
+
 For example:
 
 	sdk_api_prefix=nuage/api
@@ -109,16 +109,6 @@ For example:
 `Bambou` will append the api version at the end. So when doing a call to the server, with that previous configuration, the URL would be:
 
 	http://yourserver/nuage/api/v3_2
-
-#### sdk_root_object_class_name
-
-The root class name used for the SDK. `Bambou` uses a `NURESTRootObject` that will be accessible right from the session. This parameter gives you a chance to name it the way you want.
-
-It **must** start with a capital, and **must not** contain any space.
-
-For example:
-
-	sdk_root_object_class_name=RESTUser
 
 #### sdk_root_api
 
@@ -133,23 +123,6 @@ For example:
 This means that when fetching your `NURESTUser`, Bambou will call:
 
 	http://yourserver/nuage/api/v3_0/me
-
-#### sdk_root_object_property_name
-
-The accessor for the `sdk_root_object_class_name` from the session. Bambou is using an NUAbstractSession as a way to authenticate yourself, and keep track of your credentials. From this session, you can access to the `root_object` property to get the equivalent of the root of your api. This parameter gives you a chance to change the accessor name.
-
-For example:
-
-	sdk_root_object_property_name=user
-
-Note that the Bambou session is abstract, Monolithe will generate a class that inherits from it using the `sdk_class_prefix` and the `product_accronym`. Using the previous examples, that would be
-
-	NUVSDSession
-
-And thus, to access the root object:
-
-	session = NUVSDSession(…)
-	print session.user
 
 #### sdk_bambou_version
 
@@ -166,7 +139,7 @@ Note that this will be used a strict version and will be translated to `bambou==
 Informatino related to your sdk. All of these will be used to generate the `setup.py`
 
 For example:
-	
+
 	sdk_url=http://nuagenetworks.github.io/vspk
 	sdk_author=Antoine Mercadal, Christophe Serafin
 	sdk_email=opensource@nuagenetworks.net
@@ -175,9 +148,9 @@ For example:
 
 #### sdk_user_vanilla
 
-The path the sdk vanilla folder (see next chapter). 
+The path the sdk vanilla folder (see next chapter).
 
-If you don’t provide an initial `/`, it will be found relatively to the current folder. 
+If you don’t provide an initial `/`, it will be found relatively to the current folder.
 
 If you provide an initial `/` then it will be found using the absolute path.
 
@@ -193,7 +166,7 @@ This section contains information needed to generate the ReST API Documentation.
 
 The path where the generation of the api documentation will be created.
 
-If you don’t provide an initial `/`, it will be created relatively to the current folder. 
+If you don’t provide an initial `/`, it will be created relatively to the current folder.
 
 If you provide an initial `/` then it will be created using the absolute path.
 
@@ -203,9 +176,9 @@ For example:
 
 #### apidoc_user_vanilla
 
-The path the api documentation vanilla folder (see next chapter). 
+The path the api documentation vanilla folder (see next chapter).
 
-If you don’t provide an initial `/`, it will be found relatively to the current folder. 
+If you don’t provide an initial `/`, it will be found relatively to the current folder.
 
 If you provide an initial `/` then it will be found using the absolute path.
 
@@ -221,7 +194,7 @@ This section contains information needed to generate the sdk Documentation.
 
 The path where the generation of the sdk documentation will be created.
 
-If you don’t provide an initial `/`, it will be created relatively to the current folder. 
+If you don’t provide an initial `/`, it will be created relatively to the current folder.
 
 If you provide an initial `/` then it will be created using the absolute path.
 
@@ -231,9 +204,9 @@ For example:
 
 #### sdkdoc_user_vanilla
 
-The path the sdk documentation vanilla folder (see next chapter). 
+The path the sdk documentation vanilla folder (see next chapter).
 
-If you don’t provide an initial `/`, it will be found relatively to the current folder. 
+If you don’t provide an initial `/`, it will be found relatively to the current folder.
 
 If you provide an initial `/` then it will be found using the absolute path.
 
@@ -276,7 +249,7 @@ For more information, please read the bambou documentation.
 As Monolithe handles multiple version of the api a same sdk, it is possible that some objects doesn’t exist accross all the version. So it is possible to create a specific `attrs_defaults.ini` for specific api version. To do so, simply prefix the file name with `<major.minor>_`
 
 For example:
-	
+
 	3.2_attrs_defaults.ini # will be used for 3.2 api version
 	3.1_attrs_defaults.ini # will be used for 3.1 api version
 	attrs_defaults.ini # will be used for all other api versions
@@ -299,7 +272,7 @@ For instance:
 		$ cat __overrides/nuuser.override.py
 		def get_full_name(self):
 	      return “%s %s” % (self.first_name, self.last_name)
-	
+
 	  def get_full_name(self, full_name):
 				# definitely not a good way to split that…
 				self.first_name, self.last_name = full_name.split()
@@ -311,14 +284,14 @@ Like the default attributes, you can prefix the override file using the same sch
 For instance:
 
 		3.2_nuuser.override.py # will be used for 3.2 api version
-    3.1_nuuser.override.py # will be used for 3.1 api version 
+    3.1_nuuser.override.py # will be used for 3.1 api version
 	  nuuser.override.py # will be used for all other api versions
 
 
 
 ### The ReST API Documentation vanilla
 
-The API Documentation vanilla is fairly straightforward. 
+The API Documentation vanilla is fairly straightforward.
 
 ### Custom HTML Pages
 
