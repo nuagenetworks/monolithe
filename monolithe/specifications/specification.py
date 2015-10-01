@@ -73,7 +73,7 @@ class Specification(object):
             data["apis"]["children"] = api.to_dict()
 
         for api in self.parent_apis:
-            data["apis"]["parent"] = api.to_dict()
+            data["apis"]["parents"] = api.to_dict()
 
         for api in self.self_apis:
             data["apis"]["self"] = api.to_dict()
@@ -121,6 +121,7 @@ class Specification(object):
 
         """
         result_apis = []
+
         for path, data in apis[api_name].iteritems():
 
             api = SpecificationAPI(specification=self)
