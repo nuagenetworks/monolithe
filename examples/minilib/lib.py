@@ -117,7 +117,7 @@ def perform_create_task(lid, d):
 
     data.insert_task(d)
 
-    return json.dumps([d]), 201
+    return json.dumps([d]), 200
 
 def perform_delete_task(tid):
     """
