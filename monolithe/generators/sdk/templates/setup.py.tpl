@@ -46,7 +46,7 @@ sdk_name_upper = "{{ sdk_name }}_VERSION".upper()
 
 setup(
     name='{{ sdk_name }}',
-    version=os.environ[sdk_name_upper] if sdk_name_upper in os.environ else {{ sdk_version }},
+    version=os.environ[sdk_name_upper] if sdk_name_upper in os.environ else "{{ sdk_version }}",
     url='{{ sdk_url }}',
     author='{{ sdk_author }}',
     author_email='{{ sdk_email }}',
