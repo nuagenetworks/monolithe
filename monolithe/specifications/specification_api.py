@@ -83,6 +83,7 @@ class SpecificationAPIOperation(object):
         """
         self.method = None
         self.availability = None
+        self.deprecated = None
 
         if data:
             self.from_dict(data)
@@ -93,6 +94,7 @@ class SpecificationAPIOperation(object):
         """
         self.method = data["method"]
         self.availability = data["availability"]
+        self.deprecated = data["deprecated"] if "deprecated" in data else False
 
     def to_dict(self):
         """
@@ -102,5 +104,6 @@ class SpecificationAPIOperation(object):
 
         data["method"] = self.method
         data["availability"] = self.availability
+        data["deprecated"] = self.deprecated
 
         return data

@@ -41,6 +41,7 @@ class SpecificationAttribute(object):
         self.creation_only = False
         self.default_order = False
         self.default_value = None
+        self.deprecated = False
         self.filterable = None
         self.format = None
         self.max_length = None
@@ -51,6 +52,7 @@ class SpecificationAttribute(object):
         self.readonly = False
         self.required = False
         self.unique = False
+        self.unique_scope = None
 
         # Specific attributes
         self.ignored = False
@@ -73,6 +75,7 @@ class SpecificationAttribute(object):
         self.channel = data["channel"]
         self.creation_only = data["creationOnly"]
         self.default_order = data["defaultOrder"]
+        self.deprectated = data["deprectated"] if "deprectated" in data else False
         self.description = data["description"]
         self.exposed = data["exposed"]
         self.filterable = data["filterable"]
@@ -87,6 +90,7 @@ class SpecificationAttribute(object):
         self.transient = data["transient"]
         self.type = data["type"]
         self.unique = data["unique"]
+        self.unique_scope = data["uniqueScope"] if "uniqueScope" in data else None
 
         self.local_type = SDKUtils.get_python_type_name(type_name=self.type)
 
@@ -118,6 +122,7 @@ class SpecificationAttribute(object):
         data["channel"] = self.channel
         data["creationOnly"] = self.creation_only
         data["defaultOrder"] = self.default_order
+        data["deprectated"] = self.deprectated
         data["description"] = self.description
         data["exposed"] = self.exposed
         data["filterable"] = self.filterable
@@ -133,5 +138,6 @@ class SpecificationAttribute(object):
         data["transient"] = self.transient
         data["type"] = self.type
         data["unique"] = self.unique
+        data["uniqueScope"] = self.unique_scope
 
         return data
