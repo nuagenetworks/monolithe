@@ -19,7 +19,7 @@ class APIDocumentationGenerator(Generator):
 
         self._apidoc_output = self.monolithe_config.get_option("apidoc_output", "apidoc")
         self._apidoc_user_vanilla = self.monolithe_config.get_option("apidoc_user_vanilla", "apidoc")
-        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+        self._sdk_name = self.monolithe_config.get_option("product_name")
         self._product_name = self.monolithe_config.get_option("product_name")
 
     def generate(self, specification_info):
