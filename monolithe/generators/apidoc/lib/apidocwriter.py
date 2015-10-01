@@ -52,11 +52,10 @@ class APIDocFileWriter(TemplateFileWriter):
         super(APIDocFileWriter, self).__init__(package="monolithe.generators.apidoc")
 
         self.monolithe_config = monolithe_config
-        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
         self._apidoc_output = self.monolithe_config.get_option("apidoc_output", "apidoc")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/%s/%s" % (self._apidoc_output, self._sdk_name, api_info["version"])
+        self.output_directory = "%s/%s/%s" % (self._apidoc_output, self._product_name, api_info["version"])
 
 
     def write_specification(self, specification):
