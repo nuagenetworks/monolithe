@@ -87,9 +87,9 @@ class Specification(object):
 
         ## replace all the tokens
         string_data = json.dumps(data)
-        string_data.replace("[__RESSOURCE_NAME__]", data["model"]["resourceName"])
-        string_data.replace("[__REST_NAME__]", data["model"]["RESTName"])
-        string_data.replace("[__ENTITY_NAME__]", data["model"]["entityName"])
+        string_data = string_data.replace("[__RESOURCE_NAME__]", data["model"]["resourceName"])
+        string_data = string_data.replace("[__REST_NAME__]", data["model"]["RESTName"])
+        string_data = string_data.replace("[__ENTITY_NAME__]", data["model"]["entityName"])
         data = json.loads(string_data)
 
         self.description = data["model"]["description"]

@@ -89,7 +89,10 @@ class RepositoryManager (object):
                 the server api version as dict containing the keys "version", "prefix" and "root"
         """
         path = os.path.normpath("%s/%s" % (self._repository_path, "api.info"))
-        return json.loads(base64.b64decode(self._repo.get_file_contents(path, ref=branch).content))
+        try:
+            return json.loads(base64.b64decode(self._repo.get_file_contents(path, ref=branch).content))
+        except Exception as e:
+            raise Exception("could not parse api.info", e)
 
     def get_last_commit(self, branch="master"):
         """
@@ -161,10 +164,16 @@ class RepositoryManager (object):
 
         if archive:
             full_path = os.path.normpath("%s%s/%s" % (archive.namelist()[0], self._repository_path, name))
-            data = json.loads(archive.read(full_path))
+            try:
+                data = json.loads(archive.read(full_path))
+            except Exception as e:
+                raise Exception("could not parse %s" % name, e)
         else:
             full_path = os.path.normpath("%s/%s" % (self._repository_path, name))
-            data = json.loads(base64.b64decode(self._repo.get_file_contents(full_path, ref=branch).content))
+            try:
+                data = json.loads(base64.b64decode(self._repo.get_file_contents(full_path, ref=branch).content))
+            except Exception as e:
+                raise Exception("could not parse %s" % name, e)
 
         if "model" in data and "extends" in data["model"]:
             for extension in data["model"]["extends"]:

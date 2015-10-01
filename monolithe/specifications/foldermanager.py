@@ -36,7 +36,10 @@ class FolderManager (object):
         """
         """
         with open("%s/api.info" % self._folder, "r") as f:
-            return json.loads(f.read())
+            try:
+                return json.loads(f.read())
+            except Exception as e:
+                raise Exception("could not parse api.info", e)
 
     def get_all_specifications(self):
         """
@@ -51,10 +54,13 @@ class FolderManager (object):
         """
         data = {}
         with open("%s/%s" % (self._folder, name), "r") as f:
-            data = json.loads(f.read())
-            if "model" in data and "extends" in data["model"]:
-                for extension in data["model"]["extends"]:
-                    data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension))
+            try:
+                data = json.loads(f.read())
+                if "model" in data and "extends" in data["model"]:
+                    for extension in data["model"]["extends"]:
+                        data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension))
+            except Exception as e:
+                raise Exception("Could not parse %s" % name, e)
         return data
 
     def get_specification(self, name):
