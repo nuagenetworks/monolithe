@@ -2,7 +2,7 @@
 {{ header }}
 
 {% for api in specification.children_apis %}
-from ..fetchers import {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher{% endfor %}
+from .fetchers import {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher{% endfor %}
 from bambou import NURESTRootObject{% if specification.has_time_attribute %}
 from time import time{% endif %}
 
@@ -15,7 +15,14 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTRootObject):
             Override {{ sdk_name }}.{{ sdk_class_prefix }}{{ specification.name }} instead.
     """
 
-    __rest_name__ = u"{{ sdk_root_api }}"
+    __rest_name__ = "{{ sdk_root_api }}"
+
+    {% if constants|length %}
+    ## Constants
+    {% for name, constant_value in constants.iteritems() %}
+    {{ name }} = "{{ constant_value }}"
+    {% endfor %}
+    {% endif %}
 
     def __init__(self, **kwargs):
         """ Initializes a {{ specification.name }} instance
@@ -36,7 +43,7 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTRootObject):
         {% for attribute in specification.attributes %}
         self._{{ attribute.local_name|lower }} = None{% endfor %}
         {% for attribute in specification.attributes %}
-        self.expose_attribute(local_name=u"{{ attribute.local_name|lower }}", remote_name=u"{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
+        self.expose_attribute(local_name="{{ attribute.local_name|lower }}", remote_name="{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
         {% if specification.children_apis|length > 0 %}
         # Fetchers
         {% for api in specification.children_apis %}
@@ -47,7 +54,8 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTRootObject):
 
     # Properties
     {% for attribute in specification.attributes %}
-    def _get_{{ attribute.local_name }}(self):
+    @property
+    def {{ attribute.local_name }}(self):
         """ Get {{ attribute.local_name }} value.
 
             Notes:
@@ -59,7 +67,8 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTRootObject):
         """
         return self._{{ attribute.local_name }}
 
-    def _set_{{ attribute.local_name }}(self, value):
+    @{{ attribute.local_name }}.setter
+    def {{ attribute.local_name }}(self, value):
         """ Set {{ attribute.local_name }} value.
 
             Notes:
@@ -71,7 +80,6 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTRootObject):
         """
         self._{{ attribute.local_name }} = value
 
-    {{ attribute.local_name }} = property(_get_{{ attribute.local_name }}, _set_{{ attribute.local_name }})
     {% endfor %}
     # Methods
 
@@ -122,3 +130,8 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTRootObject):
         """
 
         return "%s/%s" % (self.__class__.rest_base_url(), nurest_object_type.rest_resource_name)
+
+    {% if override_content %}
+    ## Custom methods
+    {{ override_content.replace('\n', '\n    ') }}
+    {% endif %}

@@ -172,7 +172,7 @@ class CourgetteTestCase(TestCase):
         finally:
             result.stopTest(self)
 
-    def assertErrorEqual(self, errors, title, description, remote_name=u"", index=0):
+    def assertErrorEqual(self, errors, title, description, remote_name="", index=0):
         """ Check if errors received matches
 
         """
