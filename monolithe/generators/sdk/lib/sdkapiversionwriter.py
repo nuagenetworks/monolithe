@@ -233,11 +233,22 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """
         filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
 
+        # find override file
+        specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.api_version, self._sdk_class_prefix.lower(), specification.name.lower())
+        generic_override_path = "%s/%s%s.override.py" % (self.override_folder, self._sdk_class_prefix.lower(), specification.name.lower())
+        final_path = specific_override_path if os.path.exists(specific_override_path) else generic_override_path
+
+        # Read override from file
+        override_content = None
+        if os.path.isfile(final_path):
+            override_content = open(final_path).read()
+
         self.write(destination=self.output_directory, filename=filename, template_name="object_model.py.tpl",
                     specification=specification,
                     version=self.api_version,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
+                    override_content=override_content,
                     header=self.header_content)
 
         return (filename, specification.name)

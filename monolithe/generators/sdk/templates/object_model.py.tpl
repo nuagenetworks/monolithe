@@ -50,7 +50,8 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTObject):
 
     # Properties
     {% for attribute in specification.attributes %}
-    def _get_{{ attribute.local_name }}(self):
+    @property
+    def {{ attribute.local_name }}(self):
         """ Get {{ attribute.local_name }} value.
 
             Notes:
@@ -62,7 +63,8 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTObject):
         """
         return self._{{ attribute.local_name }}
 
-    def _set_{{ attribute.local_name }}(self, value):
+    @{{ attribute.local_name }}.setter
+    def {{ attribute.local_name }}(self, value):
         """ Set {{ attribute.local_name }} value.
 
             Notes:
@@ -74,6 +76,8 @@ class {{ sdk_class_prefix }}{{ specification.name }}(NURESTObject):
         """
         self._{{ attribute.local_name }} = value
 
-    {{ attribute.local_name }} = property(_get_{{ attribute.local_name }}, _set_{{ attribute.local_name }})
     {% endfor %}
-
+    {% if override_content %}
+    ## Custom methods
+    {{ override_content.replace('\n', '\n    ') }}
+    {% endif %}
