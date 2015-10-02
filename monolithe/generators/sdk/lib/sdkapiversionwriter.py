@@ -55,11 +55,7 @@ class SDKAPIVersionWriter(object):
     def _write_models(self, specification, filenames):
         """
         """
-        if specification.remote_name == self.api_info["root"]:
-            (filename, classname) = self.writer.write_root_model(specification=specification)
-        else:
-            (filename, classname) = self.writer.write_model(specification=specification)
-
+        (filename, classname) = self.writer.write_model(specification=specification)
         filenames[filename] = classname
 
     def _write_fetcher_file(self, specification, filenames):
@@ -110,13 +106,17 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 version (str): the version of the server
 
         """
-        filename = "%s%ssession.py" % (self._sdk_class_prefix.lower(),  self._product_accronym.lower())
+        base_name = "%ssession" % self._product_accronym.lower()
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), base_name)
+        override_content = self._extract_override_content(base_name)
+
         self.write(destination=self.output_directory, filename=filename, template_name="session.py.tpl",
                     version=self.api_version,
                     product_accronym=self._product_accronym,
                     sdk_class_prefix=self._sdk_class_prefix,
                     sdk_root_api=self.api_root,
                     sdk_api_prefix=self.api_prefix,
+                    override_content=override_content,
                     header=self.header_content)
 
     def write_sdk_info(self):
@@ -139,32 +139,11 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
-        self.write(destination=self.output_directory, filename="__init__.py", template_name="__model_init__.py.tpl",
+        self.write(destination=self.output_directory, filename="__init__.py", template_name="__init_model__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
                     header=self.header_content)
-
-    def write_root_model(self, specification):
-        """ Write autogenerate rest user specification file
-
-        """
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
-
-        override_content = self._extract_override_content(specification)
-        constants = self._extract_constants(specification)
-
-        self.write(destination=self.output_directory, filename=filename, template_name="object_root.py.tpl",
-                    specification=specification,
-                    version=self.api_version,
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym,
-                    sdk_root_api=self.api_root,
-                    override_content=override_content,
-                    constants=constants,
-                    header=self.header_content)
-
-        return (filename, specification.name)
 
     def write_model(self, specification):
         """ Write autogenerate specification file
@@ -172,15 +151,17 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """
         filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
 
-        override_content = self._extract_override_content(specification)
+        override_content = self._extract_override_content(specification.name)
         constants = self._extract_constants(specification)
+        superclass_name =  "NURESTRootObject" if specification.remote_name == self.api_root else "NURESTObject"
 
-        self.write(destination=self.output_directory, filename=filename, template_name="object_model.py.tpl",
+        self.write(destination=self.output_directory, filename=filename, template_name="model.py.tpl",
                     specification=specification,
                     version=self.api_version,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
                     override_content=override_content,
+                    superclass_name=superclass_name,
                     constants=constants,
                     header=self.header_content)
 
@@ -194,7 +175,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         """
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
-        self.write(destination=destination, filename="__init__.py", template_name="__fetcher_init__.py.tpl",
+        self.write(destination=destination, filename="__init__.py", template_name="__init_fetcher__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
@@ -207,7 +188,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
         filename = "%s%s_fetcher.py" % (self._sdk_class_prefix.lower(), specification.plural_name.lower())
 
-        self.write(destination=destination, filename=filename, template_name="object_fetcher.py.tpl",
+        self.write(destination=destination, filename=filename, template_name="fetcher.py.tpl",
                     specification=specification,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
@@ -247,12 +228,12 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         shutil.copyfile(src, dst)
 
-    def _extract_override_content(self, specification):
+    def _extract_override_content(self, name):
         """
         """
         # find override file
-        specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.api_version, self._sdk_class_prefix.lower(), specification.name.lower())
-        generic_override_path = "%s/%s%s.override.py" % (self.override_folder, self._sdk_class_prefix.lower(), specification.name.lower())
+        specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.api_version, self._sdk_class_prefix.lower(), name.lower())
+        generic_override_path = "%s/%s%s.override.py" % (self.override_folder, self._sdk_class_prefix.lower(), name.lower())
         final_path = specific_override_path if os.path.exists(specific_override_path) else generic_override_path
 
         # Read override from file

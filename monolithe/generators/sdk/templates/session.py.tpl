@@ -52,3 +52,8 @@ class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
 
         """
         return {{ sdk_class_prefix }}{{ sdk_root_api|capitalize }}()
+
+    {% if override_content %}
+    ## Custom methods
+    {{ override_content.replace('\n', '\n    ') }}
+    {% endif %}
