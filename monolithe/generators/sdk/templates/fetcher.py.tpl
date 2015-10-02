@@ -25,3 +25,7 @@ class {{ sdk_class_prefix }}{{ specification.plural_name }}Fetcher(NURESTFetcher
         from .. import {{ sdk_class_prefix }}{{ specification.name }}
         return {{ sdk_class_prefix }}{{ specification.name }}
 
+    {% if override_content %}
+    ## Custom methods
+    {{ override_content.replace('\n', '\n    ') }}
+    {% endif %}

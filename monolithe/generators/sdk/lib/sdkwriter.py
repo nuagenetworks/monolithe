@@ -87,7 +87,7 @@ class _SDKFileWriter(TemplateFileWriter):
         """
         destination = "%s/%s" % (self.output_directory, self._sdk_name)
         self.write(destination=destination, filename="__init__.py", template_name="__init__.py.tpl",
-            header=self.header_content)
+                    header=self.header_content)
 
     def write_utils(self):
         """
