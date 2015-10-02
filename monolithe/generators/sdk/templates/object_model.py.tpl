@@ -2,7 +2,7 @@
 {{ header }}
 
 {% for api in specification.children_apis %}
-from ..fetchers import {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher{% endfor %}
+from .fetchers import {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher{% endfor %}
 from bambou import NURESTObject{% if specification.has_time_attribute %}
 from time import time{% endif %}
 
