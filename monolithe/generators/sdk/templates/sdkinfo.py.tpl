@@ -4,7 +4,7 @@
 from {{ sdk_class_prefix|lower }}{{ product_accronym|lower }}session import {{ sdk_class_prefix }}{{ product_accronym }}Session
 from .{{ sdk_class_prefix|lower }}{{ sdk_root_api|lower }} import {{ sdk_class_prefix }}{{ sdk_root_api|capitalize }}
 
-class SDKInformation (object)
+class SDKInfo (object):
 
     @classmethod
     def api_version(cls):
