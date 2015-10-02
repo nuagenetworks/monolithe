@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+{{ header }}
 
 import logging
 sdk_logger = logging.getLogger("{{ sdk_name }}")

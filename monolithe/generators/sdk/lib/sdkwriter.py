@@ -51,6 +51,9 @@ class _SDKFileWriter(TemplateFileWriter):
         self._copyright = self.monolithe_config.get_option("copyright")
         self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
 
+        with open("%s/__coder_header" % self.output_directory, "r") as f:
+            self.header_content = f.read()
+
     def write_setup(self):
         """
         """
@@ -63,7 +66,8 @@ class _SDKFileWriter(TemplateFileWriter):
                     sdk_email=self._sdk_email,
                     sdk_description=self._sdk_description,
                     sdk_license_name=self._sdk_license_name,
-                    copyright=self._copyright)
+                    copyright=self._copyright,
+                    header=self.header_content)
 
     def write_manifest(self, apiversions):
         """
@@ -82,11 +86,13 @@ class _SDKFileWriter(TemplateFileWriter):
         """
         """
         destination = "%s/%s" % (self.output_directory, self._sdk_name)
-        self.write(destination=destination, filename="__init__.py", template_name="root__init__.py.tpl")
+        self.write(destination=destination, filename="__init__.py", template_name="root__init__.py.tpl",
+            header=self.header_content)
 
     def write_utils(self):
         """
         """
         destination = "%s/%s" % (self.output_directory, self._sdk_name)
         self.write(destination=destination, filename="utils.py", template_name="utils.py.tpl",
-                    sdk_name=self._sdk_name)
+                    sdk_name=self._sdk_name,
+                    header=self.header_content)

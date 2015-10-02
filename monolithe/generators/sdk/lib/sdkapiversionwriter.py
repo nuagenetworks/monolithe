@@ -82,6 +82,7 @@ class SDKAPIVersionWriter(object):
 
         self.writer.write_constants(constants=constants)
         self.writer.write_session()
+        self.writer.write_sdk_info()
         self.writer.write_init_autogenerates(filenames=autogenerate_filenames)
         self.writer.write_init_fetchers(filenames=fetcher_filenames)
         self.writer.write_init_overrides(filenames=override_filenames)
@@ -145,11 +146,16 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
         self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
+        self._product_name = self.monolithe_config.get_option("product_name")
 
         self.output_directory = "%s/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(self.api_version))
         self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
         self.autogenerate_path = "/autogenerates/"
         self.fetchers_path = "/fetchers/"
+
+        with open("%s/__coder_header" % self._sdk_output, "r") as f:
+            self.header_content = f.read()
+
 
     def _attr_defaults_file(self):
         """
@@ -181,7 +187,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self.write(destination=self.output_directory, filename="constants.py", template_name="constants.py.tpl",
                     constants=constants,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    header=self.header_content)
 
     def write_init_autogenerates(self, filenames):
         """ Write constants file
@@ -195,7 +202,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self.write(destination=destination, filename="__init__.py", template_name="__autogenerate_init__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    header=self.header_content)
 
     def write_init_fetchers(self, filenames):
         """ Write constants file
@@ -208,7 +216,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self.write(destination=destination, filename="__init__.py", template_name="__fetcher_init__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    header=self.header_content)
 
     def write_init_overrides(self, filenames):
         """ Write constants file
@@ -220,7 +229,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self.write(destination=self.output_directory, filename="__init__.py", template_name="__override_init__.py.tpl",
                     filenames=filenames,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    header=self.header_content)
 
     def write_session(self):
         """ Write SDK session file
@@ -235,7 +245,21 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     product_accronym=self._product_accronym,
                     sdk_class_prefix=self._sdk_class_prefix,
                     sdk_root_api=self.api_root,
-                    sdk_api_prefix=self.api_prefix)
+                    sdk_api_prefix=self.api_prefix,
+                    header=self.header_content)
+
+    def write_sdk_info(self):
+        """ Write API Info file
+        """
+        self.write(destination=self.output_directory, filename="sdkinfo.py", template_name="sdkinfo.py.tpl",
+                    version=self.api_version,
+                    product_accronym=self._product_accronym,
+                    sdk_class_prefix=self._sdk_class_prefix,
+                    sdk_root_api=self.api_root,
+                    sdk_api_prefix=self.api_prefix,
+                    product_name=self._product_name,
+                    sdk_name=self._sdk_name,
+                    header=self.header_content)
 
     def write_specification(self, specification):
         """ Write autogenerate specification file
@@ -248,7 +272,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     specification=specification,
                     version=self.api_version,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    header=self.header_content)
 
         return (filename, specification.name)
 
@@ -264,7 +289,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     version=self.api_version,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
-                    sdk_root_api=self.api_root)
+                    sdk_root_api=self.api_root,
+                    header=self.header_content)
 
         return (filename, specification.name)
 
@@ -289,7 +315,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     specification=specification,
                     override_content=override_content,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    header=self.header_content)
 
         return (filename, specification.name)
 
@@ -303,7 +330,8 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self.write(destination=destination, filename=filename, template_name="object_fetcher.py.tpl",
                     specification=specification,
                     sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym)
+                    product_accronym=self._product_accronym,
+                    header=self.header_content)
 
         return (filename, specification.plural_name)
 
