@@ -2,7 +2,7 @@
 {{ header }}
 
 {% set classnames = [] %}
-{% for filename, classname in filenames.iteritems() %}
+{% for filename, classname in filenames.iteritems() | sort %}
 {% do classnames.append('"' + sdk_class_prefix + classname + 'Fetcher"') %}from .{{ filename[:-3]}} import {{ sdk_class_prefix }}{{ classname }}Fetcher{% endfor %}
 
 __all__ = [{{ ', '.join(classnames)}}]
