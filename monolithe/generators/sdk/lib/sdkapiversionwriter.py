@@ -2,6 +2,7 @@
 
 import os
 import shutil
+from collections import OrderedDict
 
 from monolithe.lib import Printer, SDKUtils, TaskManager
 from monolithe.generators.lib import TemplateFileWriter
@@ -139,11 +140,22 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                 filenames (dict): dict of filename and classes
 
         """
+
         self.write(destination=self.output_directory, filename="__init__.py", template_name="__init_model__.py.tpl",
-                    filenames=filenames,
+                    filenames=self._prepare_filenames(filenames),
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
                     header=self.header_content)
+
+    def _prepare_filenames(self, filenames, suffix=''):
+        """
+        """
+        formatted_filenames = {}
+
+        for filename, classname in filenames.iteritems():
+            formatted_filenames[filename[:-3]] = "%s%s%s" % (self._sdk_class_prefix, classname, suffix)
+
+        return OrderedDict(sorted(formatted_filenames.items()))
 
     def write_model(self, specification):
         """ Write autogenerate specification file
@@ -176,7 +188,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
         self.write(destination=destination, filename="__init__.py", template_name="__init_fetcher__.py.tpl",
-                    filenames=filenames,
+                    filenames=self._prepare_filenames(filenames, suffix='Fetcher'),
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
                     header=self.header_content)
