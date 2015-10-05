@@ -67,7 +67,7 @@ class SDKDocGenerator(object):
         """
         Printer.log("generating %s documentation..." % self._sdk_name)
 
-        sys.path.append(self._sdk_output)
+        sys.path.append(os.path.abspath(self._sdk_output))
         subprocess_environ = {"PYTHONPATH": ":".join(sys.path), "PATH": os.environ["PATH"]}
 
         self._install_system_vanilla()
