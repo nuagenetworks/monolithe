@@ -1,0 +1,5 @@
+include *.txt
+include README.md
+include LICENSE
+
+include tdldk/v1_0/resources/*.ini
