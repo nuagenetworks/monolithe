@@ -68,8 +68,6 @@ class SDKDocWriter(object):
                 elif inspected_object_name.startswith("CONST_"):
                     info["constant_names"].append(inspected_object_name)
 
-            from pprint import pprint
-            pprint(info)
             classes.append(info)
 
         return classes
