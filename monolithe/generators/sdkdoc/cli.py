@@ -16,6 +16,7 @@ def main(argv=sys.argv):
     parser.add_argument("-c", "--config",
                         dest="config_path",
                         help="Path the monolithe configuration file",
+                        required=True,
                         type=str)
 
     args = parser.parse_args()
