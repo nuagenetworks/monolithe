@@ -6,7 +6,7 @@ __all__ = {{ classnames }}
 {% for filename, classname in filenames.iteritems() %}
 from .{{ filename }} import {{ classname }}{% endfor %}
 from .{{ sdk_class_prefix|lower }}{{ product_accronym|lower }}session import {{ sdk_class_prefix }}{{ product_accronym }}Session
-
+from .sdkinfo import SDKInfo
 
 def __setup_bambou():
     """ Avoid having bad behavior when using importlib.import_module method

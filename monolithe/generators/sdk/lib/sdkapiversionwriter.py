@@ -153,7 +153,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         formatted_filenames = {}
 
         for filename, classname in filenames.iteritems():
-            formatted_filenames[filename[:-3]] = "%s%s%s" % (self._sdk_class_prefix, classname, suffix)
+            formatted_filenames[filename[:-3]] = str("%s%s%s" % (self._sdk_class_prefix, classname, suffix))
 
         return OrderedDict(sorted(formatted_filenames.items()))
 
