@@ -37,7 +37,7 @@ class SDKDocWriter(object):
             inspected_class = module_info[1]
             inspected_class_name = module_info[0]
 
-            if inspected_class_name in ("AutoGenerate", "NullHandler"):
+            if inspected_class_name in ("NullHandler"):
                 continue
 
             info = {"class_name": inspected_class_name, "property_names": [], "method_names": [], "inherited_method_names": [], "class_method_names": []}
