@@ -40,7 +40,7 @@ class SDKDocWriter(object):
             if inspected_class_name in ("NullHandler"):
                 continue
 
-            info = {"class_name": inspected_class_name, "property_names": [], "method_names": [], "inherited_method_names": [], "class_method_names": []}
+            info = {"class_name": inspected_class_name, "constant_names": [], "property_names": [], "inherited_property_names": [], "method_names": [], "inherited_method_names": [], "class_method_names": []}
 
             for class_info in inspect.getmembers(inspected_class):
 
@@ -54,17 +54,22 @@ class SDKDocWriter(object):
                     continue
 
                 if inspect.ismethod(inspected_object):
-                    if not inspected_object in inspected_class.__dict__:
-                        if inspected_object.__self__ is inspected_class:
-                            info["method_names"].append(inspected_object_name)
-                        else:
-                            info["inherited_method_names"].append(inspected_object_name)
-                    else:
+                    if inspected_object_name in inspected_class.__dict__:
                         info["method_names"].append(inspected_object_name)
+                    else:
+                        info["inherited_method_names"].append(inspected_object_name)
 
                 elif inspect.isdatadescriptor(inspected_object):
-                    info["property_names"].append(inspected_object_name)
+                    if inspected_object in inspected_class.__dict__.values():
+                        info["property_names"].append(inspected_object_name)
+                    else:
+                        info["inherited_property_names"].append(inspected_object_name)
 
+                elif inspected_object_name.startswith("CONST_"):
+                    info["constant_names"].append(inspected_object_name)
+
+            from pprint import pprint
+            pprint(info)
             classes.append(info)
 
         return classes
@@ -196,6 +201,8 @@ class SDKDocFileWriter(TemplateFileWriter):
                     module_name=module_name,
                     class_name=class_info["class_name"],
                     property_names=class_info["property_names"],
+                    inherited_property_names=class_info["inherited_property_names"],
+                    constant_names=class_info["constant_names"],
                     class_method_names=class_info["class_method_names"],
                     method_names=class_info["method_names"],
                     inherited_method_names=class_info["inherited_method_names"])
