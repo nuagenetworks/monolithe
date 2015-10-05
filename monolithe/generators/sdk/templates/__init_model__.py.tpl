@@ -7,11 +7,17 @@ __all__ = {{ classnames }}
 from .{{ filename }} import {{ classname }}{% endfor %}
 from .{{ sdk_class_prefix|lower }}{{ product_accronym|lower }}session import {{ sdk_class_prefix }}{{ product_accronym }}Session
 
-import pkg_resources
-from bambou import BambouConfig, NURESTModelController
 
-default_attrs = pkg_resources.resource_filename(__name__, '/resources/attrs_defaults.ini')
-BambouConfig.set_default_values_config_file(default_attrs)
+def __setup_bambou():
+    """ Avoid having bad behavior when using importlib.import_module method
+    """
+    import pkg_resources
+    from bambou import BambouConfig, NURESTModelController
 
-{% for filename, classname in filenames.iteritems()|sort %}NURESTModelController.register_model({{ classname }})
-{% endfor %}
+    default_attrs = pkg_resources.resource_filename(__name__, '/resources/attrs_defaults.ini')
+    BambouConfig.set_default_values_config_file(default_attrs)
+
+    {% for filename, classname in filenames.iteritems()|sort %}NURESTModelController.register_model({{ classname }})
+    {% endfor %}
+
+__setup_bambou()
