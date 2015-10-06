@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-# TODO
+#
+# __code_header example
+# put your license header here
+# it will be added to all the generated files
+#
 
 from bambou import NURESTSession
 from bambou.exceptions import InternalConsitencyError
@@ -53,4 +57,13 @@ class GATDLSession(NURESTSession):
         """
         return GARoot()
 
+    
+    ## Custom methods
+    @property
+    def supercalifragilisticexpialidocious(self):
+        """
+            For obvious simplicity, you can use this property to get
+            the root object
+        """
+        return self.root_object()
     
