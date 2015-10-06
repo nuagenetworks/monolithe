@@ -36,7 +36,7 @@ class SDKGenerator(Generator):
         if os.path.exists(attrs_defaults_path):
             shutil.rmtree(attrs_defaults_path)
 
-        code_header_path = "%s/__coder_header"  % self._sdk_output
+        code_header_path = "%s/__code_header"  % self._sdk_output
         if os.path.exists(code_header_path):
             os.remove(code_header_path)
 

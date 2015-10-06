@@ -97,7 +97,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
         self.fetchers_path = "/fetchers/"
 
-        with open("%s/__coder_header" % self._sdk_output, "r") as f:
+        with open("%s/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
     def write_session(self):

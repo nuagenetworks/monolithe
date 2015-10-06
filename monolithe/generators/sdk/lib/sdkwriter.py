@@ -51,7 +51,7 @@ class _SDKFileWriter(TemplateFileWriter):
         self._copyright = self.monolithe_config.get_option("copyright")
         self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
 
-        with open("%s/__coder_header" % self.output_directory, "r") as f:
+        with open("%s/__code_header" % self.output_directory, "r") as f:
             self.header_content = f.read()
 
     def write_setup(self):
