@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-# TODO
+#
+# __code_header example
+# put your license header here
+# it will be added to all the generated files
+#
 
 from setuptools import setup
 import os
@@ -14,7 +18,6 @@ for version_folder in os.listdir(sdk_api_version_path):
 
     packages.append("tdldk.%s" % version_folder)
     packages.append("tdldk.%s.fetchers" % version_folder)
-    packages.append("tdldk.%s.autogenerates" % version_folder)
 
     resources.append(('tdldk/%s/resources' % version_folder, ['tdldk/%s/resources/attrs_defaults.ini' % version_folder]))
 

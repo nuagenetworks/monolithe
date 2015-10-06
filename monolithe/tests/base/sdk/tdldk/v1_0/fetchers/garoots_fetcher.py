@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-# TODO
+#
+# __code_header example
+# put your license header here
+# it will be added to all the generated files
+#
 
 from bambou import NURESTFetcher
 
