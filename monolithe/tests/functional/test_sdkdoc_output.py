@@ -27,10 +27,9 @@ class SDKDocOutputTest(FunctionalTestCase):
         """
         pass
 
-    @SkipTest  # TODO: This test is skipped while the sdkdoc is broken
     def test_generate_sdkdoc(self):
         """ Verify SDK Documentation generation output
         """
         base_dir = "%s/monolithe/tests/base/sdkdoc" % os.getcwd()
-        output_dir = "%s/sdkdoc" % self.get_base_path()
+        output_dir = "%s/sdkdocgen" % self.get_base_path()
         self.assertDirectoriesEquals(base_dir, output_dir)

@@ -1,0 +1,524 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NURESTLoginController &mdash; tdldk  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="tdldk  documentation" href="../index.html"/>
+        <link rel="up" title="Bambou API Reference" href="../bambou_reference.html"/>
+        <link rel="next" title="NURESTModelController" href="bambou.nurestmodelcontroller.html"/>
+        <link rel="prev" title="NURESTFetcher" href="bambou.nurestfetcher.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../index.html" class="icon icon-home"> tdldk
+        
+
+        
+          
+          <img src="../_static/logo.png" class="logo" />
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general_concepts.html">General Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../general_concepts.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general_concepts.html#nurestsession">NURESTSession</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general_concepts.html#nurestobject">NURESTObject</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#rest-names">ReST Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#rest-api-uri-generation">ReST API URI Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#exposing-rest-attributes">Exposing ReST Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#crud-operations">CRUD Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#converting-to-and-from-a-python-dictionary">Converting to and from a Python Dictionary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general_concepts.html#nurestfetcher">NURESTFetcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#fetching-children-list">Fetching Children List</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#discussion-about-fetchers">Discussion about Fetchers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general_concepts.html#nurestpushcenter">NURESTPushCenter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#using-the-nurestpushcenter">Using the NURESTPushCenter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general_concepts.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general_concepts.html#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdldk_1.0_reference.html">TDLDK API 1.0 Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/models.galist.html">GAList</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.galist.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.galist.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.galist.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.galist.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/models.garoot.html">GARoot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.garoot.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.garoot.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/models.gatask.html">GATask</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatask.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatask.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatask.html#constants">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatask.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatask.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/models.gatdlsession.html">GATDLSession</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatdlsession.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatdlsession.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatdlsession.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.gatdlsession.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/models.sdkinfo.html">SDKInfo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/models.sdkinfo.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/fetchers.galistsfetcher.html">GAListsFetcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.galistsfetcher.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.galistsfetcher.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.galistsfetcher.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/fetchers.garootsfetcher.html">GARootsFetcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.garootsfetcher.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.garootsfetcher.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.garootsfetcher.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tdldk/1.0/fetchers.gatasksfetcher.html">GATasksFetcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.gatasksfetcher.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.gatasksfetcher.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tdldk/1.0/fetchers.gatasksfetcher.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../bambou_reference.html">Bambou API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bambou.bambouconfig.html">BambouConfig</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.bambouconfig.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestconnection.html">NURESTConnection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestconnection.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestconnection.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestfetcher.html">NURESTFetcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestfetcher.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestfetcher.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">NURESTLoginController</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestmodelcontroller.html">NURESTModelController</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestmodelcontroller.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestobject.html">NURESTObject</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestobject.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestobject.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestpushcenter.html">NURESTPushCenter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestpushcenter.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestpushcenter.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestrequest.html">NURESTRequest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestrequest.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestrequest.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestresponse.html">NURESTResponse</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestresponse.html#properties">Properties</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestrootobject.html">NURESTRootObject</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestrootobject.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestrootobject.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestrootobject.html#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestrootobject.html#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestsession.html">NURESTSession</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestsession.html#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bambou.nurestsession.html#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">tdldk</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../bambou_reference.html">Bambou API Reference</a> &raquo;</li>
+      
+    <li>NURESTLoginController</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/bambou/bambou.nurestlogincontroller.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="nurestlogincontroller">
+<h1>NURESTLoginController<a class="headerlink" href="#nurestlogincontroller" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bambou.NURESTLoginController">
+<em class="property">class </em><code class="descname">NURESTLoginController</code><a class="reference internal" href="../_modules/bambou/nurest_login_controller.html#NURESTLoginController"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTLoginController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds information about the current user session</p>
+</dd></dl>
+
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt id="bambou.NURESTLoginController.api_key">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">api_key</code><a class="headerlink" href="#bambou.NURESTLoginController.api_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get API Key</p>
+<p>API Key is available when root api has been fetched.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the string containing the API Key</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.async">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">async</code><a class="headerlink" href="#bambou.NURESTLoginController.async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is asynchronous controller</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns True if the controller is asynchronous</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.certificate">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">certificate</code><a class="headerlink" href="#bambou.NURESTLoginController.certificate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the certificate used for authentication</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the certificate</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.enterprise">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">enterprise</code><a class="headerlink" href="#bambou.NURESTLoginController.enterprise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the enterprise name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the name of the enterprise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.impersonation">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">impersonation</code><a class="headerlink" href="#bambou.NURESTLoginController.impersonation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get impersonation information</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns string information about the impersonsation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.is_impersonating">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">is_impersonating</code><a class="headerlink" href="#bambou.NURESTLoginController.is_impersonating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if we are currently using impersonation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns True if currently using impersonation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.password">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">password</code><a class="headerlink" href="#bambou.NURESTLoginController.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get user password</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns user password</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.url">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">url</code><a class="headerlink" href="#bambou.NURESTLoginController.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get API URL endpoint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the API URL endpoint</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTLoginController.user">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">user</code><a class="headerlink" href="#bambou.NURESTLoginController.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the user name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the name of the user</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="method">
+<dt id="bambou.NURESTLoginController.equals">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">equals</code><span class="sig-paren">(</span><em>controller</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_login_controller.html#NURESTLoginController.equals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTLoginController.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify if the controller corresponds
+to the current one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTLoginController.get_authentication_header">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">get_authentication_header</code><span class="sig-paren">(</span><em>user=None</em>, <em>api_key=None</em>, <em>password=None</em>, <em>certificate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_login_controller.html#NURESTLoginController.get_authentication_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTLoginController.get_authentication_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return authenication string to place in Authorization Header</p>
+<p>If API Token is set, it&#8217;ll be used. Otherwise, the clear
+text password will be sent. Users of NURESTLoginController are responsible to
+clean the password property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the XREST Authentication string with API Key or user password encoded.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTLoginController.impersonate">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">impersonate</code><span class="sig-paren">(</span><em>user</em>, <em>enterprise</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_login_controller.html#NURESTLoginController.impersonate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTLoginController.impersonate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Impersonate a user in a enterprise</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user</strong> &#8211; the name of the user to impersonate</li>
+<li><strong>enterprise</strong> &#8211; the name of the enterprise where to use impersonation</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTLoginController.reset">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_login_controller.html#NURESTLoginController.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTLoginController.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset controller</p>
+<p>It removes all information about previous session</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTLoginController.stop_impersonate">
+<code class="descclassname">NURESTLoginController.</code><code class="descname">stop_impersonate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_login_controller.html#NURESTLoginController.stop_impersonate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTLoginController.stop_impersonate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop impersonization</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bambou.nurestmodelcontroller.html" class="btn btn-neutral float-right" title="NURESTModelController" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bambou.nurestfetcher.html" class="btn btn-neutral" title="NURESTFetcher" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2015, Nuage Networks.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
