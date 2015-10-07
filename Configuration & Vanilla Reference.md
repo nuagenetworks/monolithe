@@ -1,6 +1,6 @@
 # Monolithe Configuration & Vanilla Reference
 
-In order to generate sdks and documentation, Monolithe uses some Specifications. But it also need informations that does not belong to these Specifications. For instance, what class names to use when generating a Python SDK, what would be the name of the SDK, additional API documentation pages and so on.
+In order to generate sdks/clis and documentation, Monolithe uses some Specifications. But it also need informations that does not belong to these Specifications. For instance, what class names to use when generating a Python SDK, what would be the name of the SDK, additional API documentation pages and so on.
 
 All that information are given to Monolithe through a configuration file. This file is a `ini` file, and it is given either as a parameter of the `monogen` command line interfaces, or through  a `MonolitheConfig` object, when using Monolithe as a library.
 
@@ -12,6 +12,8 @@ This document describe all the parameters of the configuration file, and what ca
 ## Monolithe Configuration File
 
 The configuration file is a `ini` file that is divided into several sections.
+
+> All configuration tokens are mandatory. If the value is optional, simply leave it empty.
 
 ### The [monolithe] Section
 
@@ -130,6 +132,16 @@ For example:
 
 	sdk_user_vanilla=vsdk/vanilla/sdk
 
+#### sdk_cli_name
+
+The name of the command line interface of the sdk
+
+It **must not** contain any space
+
+For example:
+
+	sdk_cli_name=todolist
+
 ### The [apidoc] Section
 
 This section contains information needed to generate the ReST API Documentation.
@@ -241,13 +253,13 @@ And add methods. You don’t need to redeclare a class. Those methods will be ad
 
 For instance:
 
-		$ cat __overrides/nuuser.override.py
+	$ cat __overrides/nuuser.override.py
 		def get_full_name(self):
-	      return “%s %s” % (self.first_name, self.last_name)
+			return “%s %s” % (self.first_name, self.last_name)
 
-	  def get_full_name(self, full_name):
-				# definitely not a good way to split that…
-				self.first_name, self.last_name = full_name.split()
+		def get_full_name(self, full_name):
+			# definitely not a good way to split that…
+			self.first_name, self.last_name = full_name.split()
 
 You can add as many overrides you want, one per object in the model.
 
@@ -255,9 +267,9 @@ Like the default attributes, you can prefix the override file using the same sch
 
 For instance:
 
-		3.2_nuuser.override.py # will be used for 3.2 api version
-    3.1_nuuser.override.py # will be used for 3.1 api version
-	  nuuser.override.py # will be used for all other api versions
+	3.2_nuuser.override.py # will be used for 3.2 api version
+	3.1_nuuser.override.py # will be used for 3.1 api version
+	nuuser.override.py # will be used for all other api versions
 
 
 
