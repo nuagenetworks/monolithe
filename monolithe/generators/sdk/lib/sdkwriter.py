@@ -47,6 +47,7 @@ class _SDKFileWriter(TemplateFileWriter):
         self._sdk_email = self.monolithe_config.get_option("sdk_email", "sdk")
         self._sdk_description = self.monolithe_config.get_option("sdk_description", "sdk")
         self._sdk_license_name = self.monolithe_config.get_option("sdk_license_name", "sdk")
+        self._sdk_cli_name = self.monolithe_config.get_option("sdk_cli_name", "sdk")
         self._sdk_bambou_version = self.monolithe_config.get_option("sdk_bambou_version", "sdk")
         self._copyright = self.monolithe_config.get_option("copyright")
         self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
@@ -66,6 +67,7 @@ class _SDKFileWriter(TemplateFileWriter):
                     sdk_email=self._sdk_email,
                     sdk_description=self._sdk_description,
                     sdk_license_name=self._sdk_license_name,
+                    sdk_cli_name=self._sdk_cli_name,
                     copyright=self._copyright,
                     header=self.header_content)
 

@@ -4,12 +4,16 @@
 from setuptools import setup
 import os
 
-packages = ['{{ sdk_name }}']
+packages = ['{{ sdk_name }}', '{{ sdk_name }}.cli']
 resources = []
 sdk_api_version_path = "./{{ sdk_name }}"
 
 for version_folder in os.listdir(sdk_api_version_path):
+
     if os.path.isfile("%s/%s" % (sdk_api_version_path, version_folder)):
+        continue
+
+    if version_folder == "cli":
         continue
 
     packages.append("{{ sdk_name }}.%s" % version_folder)
@@ -31,5 +35,9 @@ setup(
     install_requires=[line for line in open('requirements.txt')],
     license='{{ sdk_license_name }}',
     include_package_data=True,
-    data_files=resources
+    data_files=resources,
+    entry_points={
+        'console_scripts': [
+            '{{ sdk_cli_name }} = {{ sdk_name }}.cli.cli:main']
+    }
 )
