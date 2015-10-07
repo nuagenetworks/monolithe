@@ -136,10 +136,10 @@ You can simply run
     > | status       | TODO                                 |
     > | description  | from cli                             |
     > | title        | my task                              |
-    > | parentType   |                                      |
+    > | parentType   | <the demo server doesn't handle that>|
     > | parentID     | 2                                    |
-    > | owner        |                                      |
-    > | creationDate |                                      |
+    > | owner        | <the demo server doesn't handle that>|
+    > | creationDate | <the demo server doesn't handle that>|
     > | ID           | b3ae22d2-6c87-11e5-be61-080027ba8f35 |
     > +--------------+--------------------------------------+
 
