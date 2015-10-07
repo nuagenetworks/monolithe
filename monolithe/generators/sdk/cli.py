@@ -104,8 +104,20 @@ def main(argv=sys.argv):
                         help="generate documentation of the SDK",
                         action="store_true")
 
+    parser.add_argument("--vanilla-prefix",
+                        dest="vanilla_prefix",
+                        help="Prefix added to all vanilla path declared in the monolithe configuration file",
+                        required=False,
+                        type=str)
+
     args = parser.parse_args()
     monolithe_config = MonolitheConfig.config_with_path(args.config_path)
+
+    if args.vanilla_prefix:
+        monolithe_config.set_option("sdk_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdk_user_vanilla", "sdk")), "sdk")
+        monolithe_config.set_option("sdkdoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdkdoc_user_vanilla", "sdkdoc")), "sdkdoc")
+        monolithe_config.set_option("apidoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("apidoc_user_vanilla", "apidoc")), "apidoc")
+
     generator = SDKGenerator(monolithe_config=monolithe_config)
 
 
