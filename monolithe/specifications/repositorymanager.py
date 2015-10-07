@@ -23,9 +23,9 @@ class RepositoryManager (object):
         """ Initialize RepositoryManager
 
             Args:
-                api_url: the API url for Github
-                login_or_token: the authentication token or login for Github
-                password: the authentication password for Github (only if login_or_token is a username)
+                api_url: the API url for GitHub
+                login_or_token: the authentication token or login for GitHub
+                password: the authentication password for GitHub (only if login_or_token is a username)
                 organization: the organization where specifications_repository is
                 repository: the repository containing the specifications
         """
@@ -106,7 +106,7 @@ class RepositoryManager (object):
 
 
     def get_all_specifications(self, branch="master"):
-        """ Returns all availables specifications using zipball feature of Github
+        """ Returns all availables specifications using zipball feature of GitHub
             This is extremely fast if you need to get a lot of Specifications in one
             shot.
 
@@ -219,7 +219,7 @@ class RepositoryManager (object):
         return ThreadPool(40).map(func, names)
 
     def save_specification(self, specification, branch="master", commit_message="updated using monolithe"):
-        """ Saves (commit) a specification to the Github Repository
+        """ Saves (commit) a specification to the GitHub Repository
 
             Args:
                 specification: the specification object to save

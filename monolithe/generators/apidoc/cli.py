@@ -17,31 +17,34 @@ def main(argv=sys.argv):
     parser.add_argument("-g", "--github",
                         dest="api_url",
                         metavar="github_api_url",
-                        help="The Github API URL. Can be given by setting the environment variable \"MONOLITHE_GITHUB_API_URL\"",
+                        default="https://api.github.com",
+                        help="The GitHub API URL. Can be given by setting the environment variable \"MONOLITHE_GITHUB_API_URL\"",
                         type=str)
 
     parser.add_argument("-l", "--login",
                         dest="login",
                         metavar="login_login",
-                        help="The Github Login (if set, you will be prompted for your password). Can be given by setting the environment variable \"MONOLITHE_GITHUB_LOGIN\"",
+                        help="The GitHub Login (if set, you will be prompted for your password). Can be given by setting the environment variable \"MONOLITHE_GITHUB_LOGIN\"",
                         type=str)
 
     parser.add_argument("-t", "--token",
                         dest="token",
-                        metavar="github_login",
-                        help="The Github Token (if set, --login will be ignored). To generate a token, go here https://github.com/settings/tokens. Can be given by setting the environment variable \"$MONOLITHE_GITHUB_TOKEN\"",
+                        metavar="github_token",
+                        help="The GitHub Token (if set, --login will be ignored). To generate a token, go here https://github.com/settings/tokens. Can be given by setting the environment variable \"$MONOLITHE_GITHUB_TOKEN\"",
                         type=str)
 
     parser.add_argument("-o", "--organization",
                         dest="organization",
                         metavar="github_organization",
-                        help="The Github Organization. Can be given by setting the environment variable \"MONOLITHE_GITHUB_ORGANIZATION\"",
+                        default="nuagenetworks",
+                        help="The GitHub Organization. Can be given by setting the environment variable \"MONOLITHE_GITHUB_ORGANIZATION\"",
                         type=str)
 
     parser.add_argument("-r", "--repository",
                         dest="repository",
                         metavar="github_repository",
-                        help="The Github Repository. Can be given by setting the environment variable \"MONOLITHE_GITHUB_REPOSITORY\"",
+                        default="vsd-api-specifications",
+                        help="The GitHub Repository. Can be given by setting the environment variable \"MONOLITHE_GITHUB_REPOSITORY\"",
                         type=str)
 
     parser.add_argument("-p", "--path",
@@ -100,18 +103,8 @@ def main(argv=sys.argv):
         if not args.config_path and "MONOLITHE_CONFIG_PATH" in os.environ:
             args.config_path = os.environ["MONOLITHE_CONFIG_PATH"]
 
-        # Additional validation
-        if not args.api_url:
-            args.api_url = raw_input("Enter your Github API URL: ")
-
         if not args.login and not args.token:
-            args.login = raw_input("Enter your Github login: ")
-
-        if not args.organization:
-            args.organization = raw_input("Enter your Github organization: ")
-
-        if not args.repository:
-            args.repository = raw_input("Enter your Github repository: ")
+            args.login = raw_input("Enter your GitHub login: ")
 
         if not args.config_path:
             args.config_path = raw_input("Enter the path of the monolithe config file: ")
@@ -121,7 +114,7 @@ def main(argv=sys.argv):
 
         # Ask for password
         if args.login:
-            password = getpass.getpass(prompt="Enter your Github password for %s: " % args.login)
+            password = getpass.getpass(prompt="Enter your GitHub password for %s: " % args.login)
             login_or_token = args.login
         else:
             password = None
