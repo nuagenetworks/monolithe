@@ -35,6 +35,7 @@ class CLICommand(object):
         classname = instance.__class__.__name__[2:]
         plural_classname = Utils.get_plural_name(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
+        query_parameters = cls._get_attributes(args.query_parameters)
 
         try:
             fetcher = getattr(parent, fetcher_name)
@@ -47,7 +48,7 @@ class CLICommand(object):
 
             Printer.raise_error(error_message)
 
-        (fetcher, parent, objects) = fetcher.fetch(filter=args.filter)
+        (fetcher, parent, objects) = fetcher.fetch(filter=args.filter, query_parameters=query_parameters)
 
         if objects is None:
             Printer.raise_error("Could not retrieve. Activate verbose mode for more information")
@@ -69,6 +70,7 @@ class CLICommand(object):
         classname = instance.__class__.__name__[2:]
         plural_classname = Utils.get_plural_name(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
+        query_parameters = cls._get_attributes(args.query_parameters)
 
         try:
             fetcher = getattr(parent, fetcher_name)
@@ -81,7 +83,7 @@ class CLICommand(object):
 
             Printer.raise_error(error_message)
 
-        (fetcher, parent, count) = fetcher.count(filter=args.filter)
+        (fetcher, parent, count) = fetcher.count(filter=args.filter, query_parameters=query_parameters)
 
         Printer.success("%s %s have been retrieved" % (count, instance.rest_resource_name))
         Printer.output({instance.rest_resource_name: count}, fields=[instance.rest_resource_name], json=args.json)
@@ -256,6 +258,9 @@ class CLICommand(object):
                 A dict
 
         """
+        if not params:
+            return None
+
         attributes = dict()
 
         for param in params:

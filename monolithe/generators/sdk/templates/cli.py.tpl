@@ -47,13 +47,15 @@ def main(argv=sys.argv):
     list_parser.add_argument("--in", dest="parent_infos", nargs=2, help="Specify the PARENT_NAME and PARENT_UUID")
     list_parser.add_argument("-f", "--filter", dest="filter", help="Specify a filter predicate")
     list_parser.add_argument("-x", "--fields", dest="fields", help="Specify output fields", nargs="+", type=str)
+    list_parser.add_argument("-q", "--query", dest="query_parameters", nargs="*", help="List of Key=Value that will be sent as query parameters", required=False)
 
     # Count Command
-    list_parser = subparsers.add_parser("count", description="Count all objects", parents=[default_parser])
-    list_parser.add_argument("count", help="Name of the object (See command 'objects' to list all objects name)")
-    list_parser.add_argument("--in", dest="parent_infos", nargs=2, help="Specify the parent name and its uuid")
-    list_parser.add_argument("-f", "--filter", dest="filter", help="Specify a filter predicate")
-    list_parser.add_argument("-x", "--fields", dest="fields", help="Specify output fields", nargs="+", type=str)
+    count_parser = subparsers.add_parser("count", description="Count all objects", parents=[default_parser])
+    count_parser.add_argument("count", help="Name of the object (See command 'objects' to list all objects name)")
+    count_parser.add_argument("--in", dest="parent_infos", nargs=2, help="Specify the parent name and its uuid")
+    count_parser.add_argument("-f", "--filter", dest="filter", help="Specify a filter predicate")
+    count_parser.add_argument("-x", "--fields", dest="fields", help="Specify output fields", nargs="+", type=str)
+    count_parser.add_argument("-q", "--query", dest="query_parameters", nargs="*", help="List of Key=Value that will be sent as query parameters", required=False)
 
     # Show Command
     show_parser = subparsers.add_parser("show", description="Show a specific object", parents=[default_parser])
