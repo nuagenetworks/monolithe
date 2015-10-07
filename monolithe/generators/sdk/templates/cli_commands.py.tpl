@@ -293,7 +293,10 @@ class CLICommand(object):
                 Printer.raise_error("Attribute %s could not be found in %s" % (attribute_name, instance.rest_name))
 
             try:
-                value = attribute.attribute_type(attribute_value)
+                if attribute.attribute_type is bool:
+                    value = cls._parse_bool(attribute_value)
+                else:
+                    value = attribute.attribute_type(attribute_value)
                 setattr(instance, attribute_name, value)
             except Exception, e:
                 Printer.raise_error("Attribute %s could not be set with value %s\n%s" % (attribute_name, attribute_value, e))
@@ -301,3 +304,16 @@ class CLICommand(object):
         # TODO-CS: Remove validation when we will have all attribute information from Swagger...
         # if not instance.validate():
         #     Printer.raise_error("Cannot validate %s for creation due to following errors\n%s" % (instance.rest_name, instance.errors))
+
+    @classmethod
+    def _parse_bool(cls, value):
+        """
+            Verify if a string contains a true boolean value
+
+            Args:
+                value (string): the string to check
+
+            Returns:
+                (bool): True is the string is one of "true", "t", "yes", "y", "1"
+        """
+        return value.lower() in ("true", "t", "yes", "y", "1")
