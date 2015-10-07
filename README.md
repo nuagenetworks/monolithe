@@ -75,6 +75,15 @@ You'll see a `codegen` directory created under `examples`.
 
 It contains all the auto-generated sdk source code according to the specifications files.
 
+You can install it by doing:
+
+    $ cd examples/codegen
+    $ python setup.py develop
+    $ cd ../..
+
+> This is mandatory for Step 6
+
+> Don't forget to come back to the root folder
 
 ### Step 3: generate the ReST api documentation
 
@@ -108,6 +117,44 @@ And follow on screen instructions.
 > For mor information, open the `demo-client.py` file and follow the comments.
 
 
+### Step 6:  have fun with the cli
+
+Each Monolithe SDK comes with a command line interface. According to the Monolithe Configuration file, this cli is named `tdl`.
+
+You can simply run
+
+    # hint: the exports can be put in a source file ;)
+    $ export TDL_USERNAME=user
+    $ export TDL_PASSWORD=password
+    $ export TDL_API_URL=http://127.0.0.1:5000
+    $ export TDL_API_VERSION=1.0
+    $ export TDL_ENTERPRISE=root
+
+    $ tdl create task --in lists 2 -p title='my task' description='from cli'
+    > [Success] task has been created with ID=b3ae22d2-6c87-11e5-be61-080027ba8f35
+    > +--------------+--------------------------------------+
+    > | status       | TODO                                 |
+    > | description  | from cli                             |
+    > | title        | my task                              |
+    > | parentType   |                                      |
+    > | parentID     | 2                                    |
+    > | owner        |                                      |
+    > | creationDate |                                      |
+    > | ID           | b3ae22d2-6c87-11e5-be61-080027ba8f35 |
+    > +--------------+--------------------------------------+
+
+    $ tdl list tasks --in lists 2
+    > [Success] 3 tasks have been retrieved
+    > +----------+---------------------------+---------------------+--------------+------------+---------+----------------+------+
+    > | status   | description               | title               | parentType   |   parentID |   owner |   creationDate |   ID |
+    > |----------+---------------------------+---------------------+--------------+------------+---------+----------------+------|
+    > | TODO     | We are doing it right now | Explain Monolithe   | list         |          2 |         |                |   21 |
+    > | TODO     | Almost done               | Make Garuda popular | list         |          2 |         |                |   22 |
+    > | TODO     | That is the plan          | Dominate the world  | list         |          2 |         |                |   23 |
+    > | TODO     | from cli                  | my task             |              |          2 |         |                |[snip]|
+    > +----------+---------------------------+---------------------+--------------+------------+---------+----------------+------+
+
+> `tdl --help` for the complete usage
 
 ## Command Line Interfaces Quick Reference
 
