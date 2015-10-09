@@ -154,6 +154,26 @@ class SDKInspector(object):
 
         return resources
 
+    def get_sdk_class(self, name):
+        """ Get a SDK class object
+            Args:
+                name: the name of the object
+            Returns:
+                a SDK class object
+        """
+        if name in self._objects_mapping:
+            classname = self._objects_mapping[name]
+
+            klass = None
+            try:
+                klass = getattr(self._sdk, classname)
+            except:
+                Printer.raise_error('Unknown class %s' % classname)
+
+            return klass
+
+        Printer.raise_error('Unknown object named %s' % name)
+
     def get_sdk_instance(self, name):
         """ Get SDK object instance according to a given name
 
@@ -163,18 +183,8 @@ class SDKInspector(object):
             Returns:
                 A SDK object or raise an exception
         """
-        if name in self._objects_mapping:
-            classname = self._objects_mapping[name]
-
-            klass = None
-            try:
-                klass = getattr(self._sdk, classname)
-            except:
-                Printer.raise_error("Unknown class %s" % classname)
-
-            return klass()
-
-        Printer.raise_error("Unknown object named %s" % name)
+        klass = self.get_sdk_class(name)
+        return klass()
 
     def get_sdk_parent(self, parent_infos, root_object):
         """ Get SDK parent object if possible

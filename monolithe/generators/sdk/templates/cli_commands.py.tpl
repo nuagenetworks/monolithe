@@ -161,6 +161,69 @@ class CLICommand(object):
         Printer.output(instance, json=args.json)
 
     @classmethod
+    def assign(cls, args):
+        """ Assign one or multiple new objects
+            Already assigned objects will be ignored.
+        """
+        def internal_method(object_class, ids, current_objects):
+            """ Returns final objects and nb_affected_objects """
+
+            nb_affected_objects = 0
+            final_objects = current_objects
+            known_ids = [current_object.id for current_object in current_objects]
+
+            for id in ids:
+                if id not in known_ids:
+                    nb_affected_objects = nb_affected_objects + 1
+                    obj = object_class(id=id)
+                    final_objects.append(obj)
+
+            return (final_objects, nb_affected_objects)
+
+        Printer.success('%s %s with IDs=%s have been assigned to %s with ID=%s' % cls._internal_assign(args, method=internal_method))
+
+    @classmethod
+    def unassign(cls, args):
+        """ Unassign one or multiple new objects
+            Already unassigned objects will be ignored.
+        """
+
+        def internal_method(object_class, ids, current_objects):
+            """ Returns final objects and nb_affected_objects """
+            nb_affected_objects = 0
+            final_objects = []
+            for current_object in current_objects:
+                if current_object.id in ids:
+                    nb_affected_objects = nb_affected_objects + 1
+                else:
+                    final_objects.append(current_object)
+
+            return (final_objects, nb_affected_objects)
+
+        Printer.success('%s %s with IDs=%s have been unassigned from %s with ID=%s' % cls._internal_assign(args, method=internal_method))
+
+    @classmethod
+    def reassign(cls, args):
+        """ Change all assignations
+            Previous assignations will be removed
+        """
+        def internal_method(object_class, ids, current_objects):
+            """ Returns final objects and nb_affected_objects """
+
+            nb_affected_objects = 0
+            final_objects = []
+
+            if ids:
+                for id in ids:
+                    nb_affected_objects = nb_affected_objects + 1
+                    obj = object_class(id=id)
+                    final_objects.append(obj)
+
+            return (final_objects, nb_affected_objects)
+
+        Printer.success('%s %s with IDs=%s have been reassigned to %s with ID=%s' % cls._internal_assign(args, method=internal_method))
+
+    @classmethod
     def delete(cls, args):
         """ Delete an existing object
 
@@ -273,6 +336,52 @@ class CLICommand(object):
             attributes[attribute_name] = infos[1]
 
         return attributes
+
+    @classmethod
+    def _internal_assign(cls, args, method):
+        """ Execute method to list final assignation
+            Returns:
+                (nb_affected_objects, assigned_objects_name, assigned_objects_ids, parent_name, parent_id)
+        """
+        inspector = SDKInspector(args.version)
+
+        name = Utils.get_singular_name(args.name)
+        object_class = inspector.get_sdk_class(name)
+        object_type = object_class()
+
+        session = inspector.get_user_session(args)
+        resource = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+
+        classname = object_class.__name__[2:]
+        plural_classname = Utils.get_plural_name(classname)
+        fetcher_name = Utils.get_python_name(plural_classname)
+
+        try:
+            fetcher = getattr(resource, fetcher_name)
+        except:
+
+            if resource.rest_name == 'me':
+                resource_name = 'Root'
+
+            error_message = '%s failed to found children %s.' % (resource_name, fetcher_name)
+            Printer.raise_error(error_message)
+
+        (fetcher, resource, current_objects) = fetcher.fetch()
+
+        if current_objects is None:
+            current_objects = []
+
+        (final_objects, nb_affected_objects) = method(object_class, args.ids, current_objects)
+
+        try:
+            (references, connection) = resource.assign(final_objects, object_class)
+        except Exception, e:
+            Printer.raise_error('Cannot assign %s:\n%s' % (name, e))
+
+        if args.ids is None:
+            args.ids = []
+
+        return (nb_affected_objects, args.name, args.ids, resource.rest_name, resource.id)
 
     @classmethod
     def _fill_instance_with_attributes(cls, instance, attributes):
