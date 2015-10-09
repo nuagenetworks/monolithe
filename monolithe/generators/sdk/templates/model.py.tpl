@@ -47,7 +47,7 @@ class {{ sdk_class_prefix }}{{ specification.name }}({{ superclass_name }}):
         {% if specification.children_apis|length > 0 %}
         # Fetchers
         {% for api in specification.children_apis %}
-        self.{{ api.instance_plural_name }} = {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self)
+        self.{{ api.instance_plural_name }} = {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
         {% endfor %}{% endif %}
 
         self._compute_args(**kwargs)

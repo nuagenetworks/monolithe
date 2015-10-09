@@ -47,6 +47,7 @@ class SpecificationAPI(object):
         self.resource_name = None
         self.remote_name = None
         self.plural_name = None
+        self.relationship = "child"
         self.instance_plural_name = None
         self.specification = specification
 
@@ -62,6 +63,7 @@ class SpecificationAPI(object):
         self.path = data["path"]
         self.resource_name = data["resourceName"]
         self.remote_name = data["RESTName"]
+        self.relationship = data["relationship"] if "relationship" in data else "child"
 
         if "entityName" in data:
             # Only for children
@@ -87,6 +89,7 @@ class SpecificationAPI(object):
         data["path"] = self.path
         data["resourceName"] = self.resource_name
         data["RESTName"] = self.remote_name
+        data["relationship"] = self.relationship
         data["operations"] = []
 
         for operation in self.operations:

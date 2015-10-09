@@ -1,6 +1,18 @@
 {
   "apis": {
-    "children": {},
+    "children": {
+        "/tasks/{id}/users": {
+          "RESTName": "user",
+          "resourceName": "users",
+          "entityName": "User",
+          "relationship": "member",
+          "operations": [
+            { "availability": null, "method": "GET" },
+            { "availability": null, "method": "PUT" }
+          ]
+        }
+
+    },
     "parents": {
       "/lists/{id}/tasks": {
         "RESTName": "list",
