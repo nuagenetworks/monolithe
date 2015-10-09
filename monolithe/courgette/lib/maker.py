@@ -478,7 +478,7 @@ class DeleteTestCase(CourgetteTestCase):
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
-        self.assertConnectionStatus(connection, 204)
+        self.assertConnectionStatus(connection, 200)
         self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
         self.sdkobject.id = None # so it won't be deleted again in tearDown
 
