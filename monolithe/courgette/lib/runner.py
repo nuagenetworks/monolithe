@@ -44,7 +44,7 @@ class CourgetteTestsRunner(object):
 
     """
 
-    def __init__(self, url, username, password, enterprise, version, specification, sdk_identifier, monolithe_config, parent_resource=None, parent_id=None, **default_values):
+    def __init__(self, url, username, password, enterprise, version, specification, sdk_identifier, monolithe_config, default_values, parent_resource=None, parent_id=None):
         """ Initializes the CourgetteTestsRunner.
 
             Args:
@@ -71,8 +71,7 @@ class CourgetteTestsRunner(object):
                                     api_enterprise=enterprise)
 
         self._sdk_object = sdk_loader.get_instance_from_rest_name(specification.remote_name)
-
-        self._sdk_object.from_dict({SDKUtils.get_python_name(name): value for name, value in default_values.iteritems()})
+        self._sdk_object.from_dict(default_values)
         self._sdk_parent_object = None
 
 

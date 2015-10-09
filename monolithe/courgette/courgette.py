@@ -75,7 +75,7 @@ class Courgette(object):
                                             monolithe_config=self.monolithe_config,
                                             parent_resource=configuration.parent_resource_name,
                                             parent_id=configuration.parent_id,
-                                            **configuration.default_values)
+                                            default_values=configuration.default_values)
 
             result.add_report(configuration.specification.remote_name + ".spec", runner.run())
 

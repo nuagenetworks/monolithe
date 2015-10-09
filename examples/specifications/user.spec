@@ -117,7 +117,7 @@
         },
         "description": "Represent a user",
         "entityName": "User",
-        "extends": ["@title"],
+        "extends": [],
         "package": "todo-list",
         "resourceName": "users"
     }
