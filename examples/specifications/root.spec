@@ -9,6 +9,15 @@
           { "availability": null, "method": "GET" },
           { "availability": null, "method": "POST" }
         ]
+      },
+      "/users": {
+        "RESTName": "user",
+        "resourceName": "users",
+        "entityName": "User",
+        "operations": [
+          { "availability": null, "method": "GET" },
+          { "availability": null, "method": "POST" }
+        ]
       }
     },
     "parents": {},
