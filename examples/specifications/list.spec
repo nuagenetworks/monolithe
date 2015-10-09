@@ -1,46 +1,70 @@
 {
-  "apis": {
-    "children": {
-        "/lists/{id}/tasks": {
-          "RESTName": "task",
-          "resourceName": "tasks",
-          "entityName": "Task",
-          "operations": [
-              { "availability": null, "method": "GET" },
-              { "availability": null, "method": "POST" }
-          ]
+    "apis": {
+        "children": {
+            "/lists/{id}/tasks": {
+                "RESTName": "task",
+                "entityName": "Task",
+                "operations": [
+                    {
+                        "availability": null,
+                        "method": "GET"
+                    },
+                    {
+                        "availability": null,
+                        "method": "POST"
+                    }
+                ],
+                "resourceName": "tasks"
+            }
+        },
+        "parents": {
+            "/lists": {
+                "RESTName": "list",
+                "operations": [
+                    {
+                        "availability": null,
+                        "method": "GET"
+                    },
+                    {
+                        "availability": null,
+                        "method": "POST"
+                    }
+                ],
+                "resourceName": "lists"
+            }
+        },
+        "self": {
+            "/lists/{id}": {
+                "RESTName": "list",
+                "entityName": "List",
+                "operations": [
+                    {
+                        "availability": null,
+                        "method": "PUT"
+                    },
+                    {
+                        "availability": null,
+                        "method": "DELETE"
+                    },
+                    {
+                        "availability": null,
+                        "method": "GET"
+                    }
+                ],
+                "resourceName": "lists"
+            }
         }
     },
-    "parents": {
-        "/lists": {
-            "RESTName": "list",
-            "resourceName": "lists",
-            "operations": [
-            {"availability": null, "method": "GET" },
-            {"availability": null, "method": "POST"}
-            ]
-        }
-    },
-    "self": {
-      "/lists/{id}": {
+    "model": {
         "RESTName": "list",
-        "resourceName": "lists",
+        "attributes": {},
+        "description": "Represent a a list of task to do",
         "entityName": "List",
-        "operations": [
-            { "availability": null, "method": "PUT" },
-            { "availability": null, "method": "DELETE" },
-            { "availability": null, "method": "GET" }
-        ]
-      }
+        "extends": [
+            "@description",
+            "@title"
+        ],
+        "package": "todo-list",
+        "resourceName": "lists"
     }
-  },
-  "model": {
-    "extends": ["@description", "@title"],
-    "RESTName": "list",
-    "description": "Represent a a list of task to do",
-    "entityName": "List",
-    "package": "todo-list",
-    "resourceName": "lists",
-    "attributes": {}
-  }
 }

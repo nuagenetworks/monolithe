@@ -1,34 +1,46 @@
 {
-  "apis": {
-    "children": {
-      "/lists": {
-        "RESTName": "list",
-        "resourceName": "lists",
-        "entityName": "List",
-        "operations": [
-          { "availability": null, "method": "GET" },
-          { "availability": null, "method": "POST" }
-        ]
-      },
-      "/users": {
-        "RESTName": "user",
-        "resourceName": "users",
-        "entityName": "User",
-        "operations": [
-          { "availability": null, "method": "GET" },
-          { "availability": null, "method": "POST" }
-        ]
-      }
+    "apis": {
+        "children": {
+            "/lists": {
+                "RESTName": "list",
+                "entityName": "List",
+                "operations": [
+                    {
+                        "availability": null,
+                        "method": "GET"
+                    },
+                    {
+                        "availability": null,
+                        "method": "POST"
+                    }
+                ],
+                "resourceName": "lists"
+            },
+            "/users": {
+                "RESTName": "user",
+                "entityName": "User",
+                "operations": [
+                    {
+                        "availability": null,
+                        "method": "GET"
+                    },
+                    {
+                        "availability": null,
+                        "method": "POST"
+                    }
+                ],
+                "resourceName": "users"
+            }
+        },
+        "parents": {},
+        "self": {}
     },
-    "parents": {},
-    "self": {}
-  },
-  "model": {
-    "RESTName": "root",
-    "description": "Root object of the API",
-    "entityName": "Root",
-    "package": "todo-list",
-    "resourceName": "root",
-    "attributes": { }
-  }
+    "model": {
+        "RESTName": "root",
+        "attributes": {},
+        "description": "Root object of the API",
+        "entityName": "Root",
+        "package": "todo-list",
+        "resourceName": "root"
+    }
 }
