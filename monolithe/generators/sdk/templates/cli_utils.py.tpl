@@ -121,7 +121,7 @@ class SDKInspector(object):
         """
         self._get_sdk_package()
 
-        object_names = [name for name in dir(self._sdk) if name != "{{ sdk_class_prefix }}{{ product_accronym }}Session" and name.startswith("{{ sdk_class_prefix }}") and not name.endswith("Fetcher")]
+        object_names = [name for name in dir(self._sdk) if name != "{{ sdk_class_prefix }}{{ product_accronym }}Session" and name != "SDKInfo" and name.startswith("{{ sdk_class_prefix }}") and not name.endswith("Fetcher")]
 
         for object_name in object_names:
             obj = getattr(self._sdk, object_name)

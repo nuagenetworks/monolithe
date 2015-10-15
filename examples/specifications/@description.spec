@@ -20,7 +20,7 @@
                 "minValue": null,
                 "orderable": true,
                 "readOnly": false,
-                "required": true,
+                "required": false,
                 "transient": false,
                 "type": "string",
                 "unique": false

@@ -71,7 +71,7 @@
                 "channel": null,
                 "creationOnly": false,
                 "defaultOrder": false,
-                "defaultValue": null,
+                "defaultValue": "TODO",
                 "description": "The status of the task",
                 "exposed": true,
                 "filterable": true,
@@ -82,7 +82,7 @@
                 "minValue": null,
                 "orderable": true,
                 "readOnly": false,
-                "required": true,
+                "required": false,
                 "transient": false,
                 "type": "enum",
                 "unique": false
