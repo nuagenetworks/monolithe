@@ -92,7 +92,10 @@ class SpecificationAttribute(object):
         """
         self.remote_name = data["name"]
 
-        self.local_name = SDKUtils.get_python_name(self.specification.monolithe_config.map_attribute(self.specification.remote_name, self.remote_name))
+        if self.specification.monolithe_config:
+            self.local_name = SDKUtils.get_python_name(self.specification.monolithe_config.map_attribute(self.specification.remote_name, self.remote_name))
+        else:
+            self.local_name = self.remote_name
 
         self.allowed_chars = data["allowedChars"]
         self.allowed_choices = data["allowedChoices"]
