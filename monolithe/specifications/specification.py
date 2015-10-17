@@ -40,7 +40,7 @@ class Specification(object):
 
     """
 
-    def __init__(self, monolithe_config,  data=None):
+    def __init__(self, monolithe_config, filename, data=None):
         """ Initializes a model object
 
             Example:
@@ -55,7 +55,7 @@ class Specification(object):
         self.__default_specification__ = None
 
         self.monolithe_config = monolithe_config
-        self.filename = None
+        self.filename = filename
         self.description = None
         self.package = None
         self.name = None  # The original name of the object
@@ -68,6 +68,7 @@ class Specification(object):
         self.children_apis = []
         self.parent_apis = []
         self.self_apis = []
+        self.extends = []
 
         self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
@@ -112,29 +113,60 @@ class Specification(object):
 
         ## replace all the tokens
         string_data = json.dumps(data)
-        string_data = string_data.replace("[__RESOURCE_NAME__]", data["model"]["resourceName"])
-        string_data = string_data.replace("[__REST_NAME__]", data["model"]["RESTName"])
-        string_data = string_data.replace("[__ENTITY_NAME__]", data["model"]["entityName"])
-        data = json.loads(string_data)
+        tokens_replaced = False
 
-        self.description = data["model"]["description"]
-        self.package = data["model"]["package"]
+        if "apis" in data:
 
-        entity_name = data["model"]["entityName"]
+            if "children" in data["apis"]:
+                self.children_apis = self._get_apis("children", data["apis"])
 
-        self.name = entity_name
-        self.instance_name = SDKUtils.get_python_name(entity_name)
-        self.plural_name = SDKUtils.get_plural_name(entity_name)
-        self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
-        self.remote_name = data["model"]["RESTName"]
-        self.filename = "%s.spec" % self.remote_name
-        self.resource_name = data["model"]["resourceName"]
+            if "parents" in data["apis"]:
+                self.parent_apis = self._get_apis("parents", data["apis"])
 
-        self.children_apis = self._get_apis("children", data["apis"])
-        self.parent_apis = self._get_apis("parents", data["apis"])
-        self.self_apis = self._get_apis("self", data["apis"])
+            if "self" in data["apis"]:
+                self.self_apis = self._get_apis("self", data["apis"])
 
-        self.attributes = self._get_attributes(data["model"]["attributes"])
+        if "model" in data:
+
+            if "resourceName" in data["model"]:
+                string_data = string_data.replace("[__RESOURCE_NAME__]", data["model"]["resourceName"])
+                tokens_replaced = True
+
+            if "RESTName" in data["model"]:
+                string_data = string_data.replace("[__REST_NAME__]", data["model"]["RESTName"])
+                tokens_replaced = True
+
+            if "entityName" in data["model"]:
+                string_data = string_data.replace("[__ENTITY_NAME__]", data["model"]["entityName"])
+                tokens_replaced = True
+
+            if tokens_replaced:
+                data = json.loads(string_data)
+
+            if "description" in data["model"]:
+                self.description = data["model"]["description"]
+
+            if "package" in data["model"]:
+                self.package = data["model"]["package"]
+
+            if "extends" in data["model"]:
+                self.extends = data["model"]["extends"]
+
+            if "entityName" in data["model"]:
+                entity_name = data["model"]["entityName"]
+                self.name = entity_name
+                self.instance_name = SDKUtils.get_python_name(entity_name)
+                self.plural_name = SDKUtils.get_plural_name(entity_name)
+                self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+
+            if "RESTName" in data["model"]:
+                self.remote_name = data["model"]["RESTName"]
+
+            if "resourceName" in data["model"]:
+                self.resource_name = data["model"]["resourceName"]
+
+            if "attributes" in data["model"]:
+                self.attributes = self._get_attributes(data["model"]["attributes"])
 
     def _get_apis(self, api_name, apis):
         """ Process apis for the given model

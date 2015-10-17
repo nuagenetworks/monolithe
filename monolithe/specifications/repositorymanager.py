@@ -39,6 +39,9 @@ from monolithe.lib import merge_dict
 
 from .specification import Specification
 
+MODE_NORMAL = 1
+MODE_RAW_SPECS = 2
+MODE_RAW_ABSTRACTS = 3
 
 class RepositoryManager (object):
     """ RepositoryManager is an object that allows to manipulate the API specification repository
@@ -130,7 +133,7 @@ class RepositoryManager (object):
         return self._repo.get_commits()[0]
 
 
-    def get_all_specifications(self, branch="master"):
+    def get_all_specifications(self, branch="master", mode=MODE_NORMAL):
         """ Returns all availables specifications using zipball feature of GitHub
             This is extremely fast if you need to get a lot of Specifications in one
             shot.
@@ -163,10 +166,19 @@ class RepositoryManager (object):
                 if spec_name == "api.info":
                     continue
 
-                if os.path.splitext(spec_name)[1] != ".spec" or spec_name.startswith("@"):
+                ext = os.path.splitext(spec_name)[1]
+                is_abstract = spec_name.startswith("@")
+
+                if ext != ".spec":
                     continue
 
-                specifications.append(Specification(data=self.get_specification_data(name=spec_name, archive=archive_content), monolithe_config=self._monolithe_config))
+                if mode in (MODE_NORMAL, MODE_RAW_SPECS) and is_abstract:
+                    continue
+
+                if mode == MODE_RAW_ABSTRACTS and not is_abstract:
+                    continue
+
+                specifications.append(Specification(filename=spec_name, data=self.get_specification_data(name=spec_name, archive=archive_content, mode=mode), monolithe_config=self._monolithe_config))
 
         # cleanup the temporary archive
         os.close(archive_fd)
@@ -174,7 +186,7 @@ class RepositoryManager (object):
 
         return specifications
 
-    def get_specification_data(self, name, branch="master", archive=None):
+    def get_specification_data(self, name, branch="master", archive=None, mode=MODE_NORMAL):
         """ Returns the content of the specification_file in the given branch
 
             Args:
@@ -200,14 +212,14 @@ class RepositoryManager (object):
             except Exception as e:
                 raise Exception("could not parse %s" % name, e)
 
-        if "model" in data and "extends" in data["model"]:
+        if mode == MODE_NORMAL and "model" in data and "extends" in data["model"]:
             for extension in data["model"]["extends"]:
-                data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive))
+                data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive, mode=MODE_NORMAL))
 
         return data
 
 
-    def get_specification(self, name, branch="master", archive=None):
+    def get_specification(self, name, branch="master", archive=None, mode=MODE_NORMAL):
         """ Returns a Specification object from the given specification file name in the given branch
 
             Args:
@@ -217,40 +229,4 @@ class RepositoryManager (object):
             Returns:
                 Specification object.
         """
-        return Specification(data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config)
-
-    def get_specifications(self, names, branch="master", callback=None):
-        """ Returns a Specification object from the given specification file name in the given branch
-
-            Args:
-                name: the name of the specification file of which you want to get the content
-                branch: the branch where to find files (default: "master")
-
-            Returns:
-                list of Specification objects.
-        """
-        def internal_get_specification(name, branch, callback):
-            """
-            """
-            specification = self.get_specification(name=name, branch=branch)
-
-            if callback:
-                callback(specification)
-
-            return specification
-
-        func = partial(internal_get_specification, branch=branch, callback=callback)
-
-        return ThreadPool(40).map(func, names)
-
-    def save_specification(self, specification, branch="master", commit_message="updated using monolithe"):
-        """ Saves (commit) a specification to the GitHub Repository
-
-            Args:
-                specification: the specification object to save
-                branch: the branch where to commit (default: "master")
-                commit_message: the commit message (default: "updated using monolithe")
-
-        """
-
-        pass
+        return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config, mode=MODE_NORMAL)

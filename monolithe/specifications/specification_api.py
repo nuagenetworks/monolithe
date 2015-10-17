@@ -47,6 +47,7 @@ class SpecificationAPI(object):
         self.resource_name = None
         self.remote_name = None
         self.plural_name = None
+        self.deprecated = False
         self.relationship = "child"
         self.instance_plural_name = None
         self.specification = specification
@@ -63,6 +64,7 @@ class SpecificationAPI(object):
         self.path = data["path"]
         self.resource_name = data["resourceName"]
         self.remote_name = data["RESTName"]
+        self.deprecated = data["deprecated"]  if "deprecated" in data else False
         self.relationship = data["relationship"] if "relationship" in data else "child"
 
         if "entityName" in data:
@@ -90,6 +92,7 @@ class SpecificationAPI(object):
         data["resourceName"] = self.resource_name
         data["RESTName"] = self.remote_name
         data["relationship"] = self.relationship
+        data["deprecated"] = self.deprecated
         data["operations"] = []
 
         for operation in self.operations:

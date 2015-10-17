@@ -91,12 +91,12 @@ class FolderManager (object):
     def get_specification(self, name):
         """
         """
-        return Specification(data=self.get_specification_data(name), monolithe_config=self._monolithe_config)
+        return Specification(filename=name, data=self.get_specification_data(name), monolithe_config=self._monolithe_config)
 
     def get_specifications(self, names, callback=None):
         """
         """
         specifications = []
         for name in names:
-            specification.append(Specification(data=self.get_specification_data(name=name)))
+            specification.append(Specification(filename=name, data=self.get_specification_data(name=name)))
         return specifications
