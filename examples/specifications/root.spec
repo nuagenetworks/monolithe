@@ -4,6 +4,7 @@
             "/lists": {
                 "RESTName": "list",
                 "entityName": "List",
+                "relationship": "root",
                 "operations": [
                     {
                         "availability": null,
@@ -19,6 +20,7 @@
             "/users": {
                 "RESTName": "user",
                 "entityName": "User",
+                "relationship": "root",
                 "operations": [
                     {
                         "availability": null,

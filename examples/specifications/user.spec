@@ -4,6 +4,7 @@
         "parents": {
             "/users": {
                 "RESTName": "user",
+                "relationship": "root",
                 "operations": [
                     {
                         "availability": null,

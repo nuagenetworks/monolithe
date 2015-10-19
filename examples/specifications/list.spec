@@ -20,6 +20,7 @@
         "parents": {
             "/lists": {
                 "RESTName": "list",
+                "relationship": "root",
                 "operations": [
                     {
                         "availability": null,
