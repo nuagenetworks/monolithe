@@ -102,8 +102,8 @@ class SDKUtils(object):
         if type_name in ["list", "array"]:
             return "list"
 
-        if type_name in ["object"]:
-            return "object"
+        if type_name in ["object", "dict"]:
+            return "dict"
 
         return "str"
         # raise Exception("Unknow type %s" % type_name)
