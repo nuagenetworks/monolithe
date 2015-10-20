@@ -16,6 +16,21 @@
                     }
                 ],
                 "resourceName": "users"
+            },
+            "/tasks/id/users": {
+                "RESTName": "task",
+                "relationship": "member",
+                "resourceName": "tasks",
+                "operations": [
+                    {
+                        "availability": null,
+                        "method": "GET"
+                    },
+                    {
+                        "availability": null,
+                        "method": "PUT"
+                    }
+                ]
             }
         },
         "self": {
