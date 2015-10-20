@@ -25,8 +25,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["RepositoryManager", "FolderManager", "Specification"]
+__all__ = ["RepositoryManager", "FolderManager", "Specification", "SpecificationAttribute", "SpecificationAPI", "SpecificationAPIOperation"]
 
 from .repositorymanager import RepositoryManager
 from .specification import Specification
+from .specification_attribute import SpecificationAttribute
+from .specification_api import SpecificationAPI, SpecificationAPIOperation
 from .foldermanager import FolderManager

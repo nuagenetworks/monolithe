@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {{ header }}
 
-{% for api in specification.children_apis %}
+{% for api in specification.child_apis %}
 from .fetchers import {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher{% endfor %}
 from bambou import {{ superclass_name }}{% if specification.has_time_attribute %}
 from time import time{% endif %}
@@ -44,9 +44,9 @@ class {{ sdk_class_prefix }}{{ specification.name }}({{ superclass_name }}):
         self._{{ attribute.local_name|lower }} = None{% endfor %}
         {% for attribute in specification.attributes %}
         self.expose_attribute(local_name="{{ attribute.local_name|lower }}", remote_name="{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
-        {% if specification.children_apis|length > 0 %}
+        {% if specification.child_apis|length > 0 %}
         # Fetchers
-        {% for api in specification.children_apis %}
+        {% for api in specification.child_apis %}
         self.{{ api.instance_plural_name }} = {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
         {% endfor %}{% endif %}
 

@@ -58,14 +58,14 @@ class Specification(object):
         self.filename = filename
         self.description = None
         self.package = None
-        self.name = None  # The original name of the object
+        self._name = None  # The original name of the object
         self.instance_name = None  # Name of the object as an instance
         self.plural_name = None  # the original name in plural
         self.instance_plural_name = None  # Name of the object as an instance of array or fetcher
         self.remote_name = None  # The remote name of the object
         self.resource_name = None  # The name of the resource used in URI
         self.attributes = []  # A list of all properties of the object
-        self.children_apis = []
+        self.child_apis = []
         self.parent_apis = []
         self.self_apis = []
         self.extends = []
@@ -74,6 +74,22 @@ class Specification(object):
 
         if data:
             self.from_dict(data=data)
+
+    @property
+    def name(self):
+        """
+        """
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        """
+        """
+        self._name = value
+        self.instance_name = SDKUtils.get_python_name(value)
+        self.plural_name = SDKUtils.get_plural_name(value)
+        self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+
 
     def to_dict(self):
         """ Transform the current specification to a dictionary
@@ -93,13 +109,15 @@ class Specification(object):
         data["model"]["RESTName"] = self.remote_name
 
         for attribute in self.attributes:
-            data["model"]["attributes"][attribute.name] = attribute.to_dict()
+            data["model"]["attributes"][attribute.remote_name] = attribute.to_dict()
 
-        for api in self.children_apis:
-            data["apis"]["children"] = api.to_dict()
+        data["apis"]["children"] = {}
+        for api in self.child_apis:
+            data["apis"]["children"][api.path] = api.to_dict()
 
+        data["apis"]["parents"] = {}
         for api in self.parent_apis:
-            data["apis"]["parents"] = api.to_dict()
+            data["apis"]["parents"][api.path] = api.to_dict()
 
         for api in self.self_apis:
             data["apis"]["self"] = api.to_dict()
@@ -118,7 +136,7 @@ class Specification(object):
         if "apis" in data:
 
             if "children" in data["apis"]:
-                self.children_apis = self._get_apis("children", data["apis"])
+                self.child_apis = self._get_apis("children", data["apis"])
 
             if "parents" in data["apis"]:
                 self.parent_apis = self._get_apis("parents", data["apis"])
@@ -153,11 +171,7 @@ class Specification(object):
                 self.extends = data["model"]["extends"]
 
             if "entityName" in data["model"]:
-                entity_name = data["model"]["entityName"]
-                self.name = entity_name
-                self.instance_name = SDKUtils.get_python_name(entity_name)
-                self.plural_name = SDKUtils.get_plural_name(entity_name)
-                self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+                self.name = data["model"]["entityName"]
 
             if "RESTName" in data["model"]:
                 self.remote_name = data["model"]["RESTName"]

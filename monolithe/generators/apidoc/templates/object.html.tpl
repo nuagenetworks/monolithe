@@ -171,7 +171,7 @@
 
         <section id="children">
             <h3>Children</h3>
-            {{ make_api_list(specification.children_apis, "children", "This object has no child.")}}
+            {{ make_api_list(specification.child_apis, "children", "This object has no child.")}}
         </section>
 
         <section id="attributes">

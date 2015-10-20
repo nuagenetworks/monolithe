@@ -51,11 +51,28 @@ class SpecificationAPI(object):
         self.relationship = "child"
         self.instance_plural_name = None
         self.specification = specification
-
+        self._entity_name = None
         self.operations = []
 
         if data:
             self.from_dict(data)
+
+    @property
+    def entity_name(self):
+        """
+        """
+        return self._entity_name
+
+    @entity_name.setter
+    def entity_name(self, value):
+        """
+        """
+        self._entity_name = value
+        self.plural_name = SDKUtils.get_plural_name(value)
+        self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+
+        if self.remote_name == "allalarm":
+            self.instance_plural_name = "all_alarms"  # Differs from alarms
 
     def from_dict(self, data):
         """
@@ -68,15 +85,8 @@ class SpecificationAPI(object):
         self.relationship = data["relationship"] if "relationship" in data else "child"
 
         if "entityName" in data:
-            # Only for children
-            # Used to create fetchers
-
-            entity_name = data["entityName"]
-            self.plural_name = SDKUtils.get_plural_name(entity_name)
-            self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
-
-            if self.remote_name == "allalarm":
-                self.instance_plural_name = "all_alarms"  # Differs from alarms
+            # Only for children to Used to create fetchers
+            self.entity_name = data["entityName"]
 
         for operation in data["operations"]:
             model_operation = SpecificationAPIOperation(data=operation)
@@ -88,7 +98,6 @@ class SpecificationAPI(object):
 
         data = {}
 
-        data["path"] = self.path
         data["resourceName"] = self.resource_name
         data["RESTName"] = self.remote_name
         data["relationship"] = self.relationship
@@ -114,7 +123,7 @@ class SpecificationAPIOperation(object):
         """
         self.method = None
         self.availability = None
-        self.deprecated = None
+        self.deprecated = False
 
         if data:
             self.from_dict(data)
