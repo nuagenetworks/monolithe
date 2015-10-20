@@ -66,11 +66,11 @@ class Specification(object):
         self.resource_name = None  # The name of the resource used in URI
         self.attributes = []  # A list of all properties of the object
         self.child_apis = []
-        self.parent_apis = []
         self.extends = []
         self.allows_get = True
-        self.allows_create = True
-
+        self.allows_create = False
+        self.allows_update = True
+        self.allows_delete = False
         self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
         if data:
@@ -123,25 +123,28 @@ class Specification(object):
         if self.extends:
             data["extends"] = self.extends
 
+        if self.get:
+            data["get"] = self.get
+
+        if self.update:
+            data["update"] = self.update
+
+        if self.create:
+            data["create"] = self.create
+
+        if self.delete:
+            data["delete"] = self.delete
+
         for attribute in self.attributes:
             data["attributes"][attribute.remote_name] = attribute.to_dict()
 
         if not len(data["attributes"]):
             del data["attributes"]
 
-        data["children"] = {}
-        for api in self.child_apis:
-            data["children"][api.path] = api.to_dict()
-
-        if not len(data["children"]):
-            del data["children"]
-
-        data["parents"] = {}
-        for api in self.parent_apis:
-            data["parents"][api.path] = api.to_dict()
-
-        if not len(data["parents"]):
-            del data["parents"]
+        if len(self.child_apis):
+            data["children"] = []
+            for api in self.child_apis:
+                data["children"] = api.to_dict()
 
         return data
 
@@ -155,10 +158,7 @@ class Specification(object):
         tokens_replaced = False
 
         if "children" in data:
-            self.child_apis = self._get_apis("children", data)
-
-        if "parents" in data:
-            self.parent_apis = self._get_apis("parents", data)
+            self.child_apis = self._get_apis(data["children"])
 
         if "resource_name" in data:
             string_data = string_data.replace("[[resource_name]]", data["resource_name"])
@@ -175,28 +175,22 @@ class Specification(object):
         if tokens_replaced:
             data = json.loads(string_data)
 
-        if "description" in data:
-            self.description = data["description"]
-
-        if "package" in data:
-            self.package = data["package"]
-
-        if "extends" in data:
-            self.extends = data["extends"]
-
-        if "entity_name" in data:
-            self.name = data["entity_name"]
-
-        if "rest_name" in data:
-            self.remote_name = data["rest_name"]
-
-        if "resource_name" in data:
-            self.resource_name = data["resource_name"]
+        self.description   = data["description"] if "description" in data else None
+        self.package       = data["package"] if "package" in data else None
+        self.extends       = data["extends"] if "extends" in data else []
+        self.name          = data["entity_name"] if "entity_name" in data else None
+        self.remote_name   = data["rest_name"] if "rest_name" in data else None
+        self.resource_name = data["resource_name"] if "resource_name" in data else None
+        self.allows_get    = data["get"] if "get" in data else True
+        self.allows_create = data["create"] if "create" in data else False
+        self.allows_update = data["update"] if "update" in data else True
+        self.allows_delete = data["delete"] if "delete" in data else True
 
         if "attributes" in data:
             self.attributes = self._get_attributes(data["attributes"])
 
-    def _get_apis(self, api_name, apis):
+
+    def _get_apis(self, apis):
         """ Process apis for the given model
 
             Args:
@@ -205,16 +199,14 @@ class Specification(object):
                 relations: dict containing all relations between resources
 
         """
-        result_apis = []
+        ret = []
 
-        for path, data in apis[api_name].iteritems():
-
+        for data in apis:
             api = SpecificationAPI(specification=self)
-            data["path"] = path
             api.from_dict(data)
-            result_apis.append(api)
+            ret.append(api)
 
-        return result_apis
+        return ret
 
     def _get_attributes(self, attributes):
         """

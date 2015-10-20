@@ -144,7 +144,7 @@ class RepositoryManager (object):
             Returns:
                 list of Specification objects.
         """
-        specifications = []
+        specifications = {}
         archive_fd, archive_path = tempfile.mkstemp("archive.zip")
         url = self._repo.get_archive_link("zipball", ref=branch)
         req = requests.get(url, stream=True, verify=False)
@@ -178,7 +178,7 @@ class RepositoryManager (object):
                 if mode == MODE_RAW_ABSTRACTS and not is_abstract:
                     continue
 
-                specifications.append(Specification(filename=spec_name, data=self.get_specification_data(name=spec_name, archive=archive_content, mode=mode), monolithe_config=self._monolithe_config))
+                specifications[spec_name.replace(".spec", "")] = Specification(filename=spec_name, data=self.get_specification_data(name=spec_name, archive=archive_content, mode=mode), monolithe_config=self._monolithe_config)
 
         # cleanup the temporary archive
         os.close(archive_fd)
@@ -212,8 +212,8 @@ class RepositoryManager (object):
             except Exception as e:
                 raise Exception("could not parse %s" % name, e)
 
-        if mode == MODE_NORMAL and "model" in data and "extends" in data["model"]:
-            for extension in data["model"]["extends"]:
+        if mode == MODE_NORMAL and "extends" in data:
+            for extension in data["extends"]:
                 data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive, mode=MODE_NORMAL))
 
         return data

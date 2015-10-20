@@ -2,7 +2,9 @@
 {{ header }}
 
 {% for api in specification.child_apis %}
-from .fetchers import {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher{% endfor %}
+{% set child_spec = specification_set[api.specification] %}
+from .fetchers import {{ sdk_class_prefix }}{{ child_spec.plural_name }}Fetcher
+{% endfor %}
 from bambou import {{ superclass_name }}{% if specification.has_time_attribute %}
 from time import time{% endif %}
 
@@ -45,9 +47,11 @@ class {{ sdk_class_prefix }}{{ specification.name }}({{ superclass_name }}):
         {% for attribute in specification.attributes %}
         self.expose_attribute(local_name="{{ attribute.local_name|lower }}", remote_name="{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
         {% if specification.child_apis|length > 0 %}
+
         # Fetchers
         {% for api in specification.child_apis %}
-        self.{{ api.instance_plural_name }} = {{ sdk_class_prefix }}{{ api.plural_name }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
+        {% set child_spec = specification_set[api.specification] %}
+        self.{{ child_spec.instance_plural_name }} = {{ sdk_class_prefix }}{{ child_spec.plural_name }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
         {% endfor %}{% endif %}
 
         self._compute_args(**kwargs)

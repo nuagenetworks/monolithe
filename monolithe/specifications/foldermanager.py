@@ -69,9 +69,9 @@ class FolderManager (object):
     def get_all_specifications(self):
         """
         """
-        specifications = []
+        specifications = {}
         for name in self.get_available_specifications():
-            specifications.append(self.get_specification(name))
+            specifications[name.replace(".spec", "")] = self.get_specification(name)
         return specifications
 
     def get_specification_data(self, name):
@@ -81,8 +81,8 @@ class FolderManager (object):
         with open("%s/%s" % (self._folder, name), "r") as f:
             try:
                 data = json.loads(f.read())
-                if "model" in data and "extends" in data["model"]:
-                    for extension in data["model"]["extends"]:
+                if "extends" in data:
+                    for extension in data["extends"]:
                         data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension))
             except Exception as e:
                 raise Exception("Could not parse %s" % name, e)

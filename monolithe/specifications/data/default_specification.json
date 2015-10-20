@@ -4,10 +4,9 @@
     "entity_name": null,
     "package": null,
     "resource_name": null,
-    "allowGet": true,
-    "allowCreate": true,
+    "get": true,
+    "update": true,
     "allowUpdate": false,
     "attributes": {},
-    "parents": {},
     "children": {}
 }

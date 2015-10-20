@@ -1,39 +1,13 @@
 {
-
-    "parents": {
-        "/users": {
-            "rest_name": "user",
-            "relationship": "root",
-            "operations": [
-                {
-                    "availability": null,
-                    "method": "GET"
-                },
-                {
-                    "availability": null,
-                    "method": "POST"
-                }
-            ],
-            "resource_name": "users"
-        },
-        "/tasks/id/users": {
-            "rest_name": "task",
-            "relationship": "member",
-            "resource_name": "tasks",
-            "operations": [
-                {
-                    "availability": null,
-                    "method": "GET"
-                },
-                {
-                    "availability": null,
-                    "method": "PUT"
-                }
-            ]
-        }
-    },
-
     "rest_name": "user",
+    "description": "Represent a user",
+    "entity_name": "User",
+    "extends": [],
+    "package": "todo-list",
+    "resource_name": "users",
+    "get": true,
+    "update": true,
+
     "attributes": {
         "firstName": {
             "allowed_chars": null,
@@ -107,12 +81,5 @@
             "type": "string",
             "unique": true
         }
-    },
-    "description": "Represent a user",
-    "entity_name": "User",
-    "extends": [],
-    "package": "todo-list",
-    "resource_name": "users",
-    "allowsUpdate": true,
-    "allowsCreate": true
+    }
 }

@@ -1,40 +1,22 @@
 {
-    "children": {
-        "/tasks/{id}/users": {
-            "rest_name": "user",
-            "entity_name": "User",
-            "operations": [
-                {
-                    "availability": null,
-                    "method": "GET"
-                },
-                {
-                    "availability": null,
-                    "method": "PUT"
-                }
-            ],
-            "relationship": "member",
-            "resource_name": "users"
-        }
-    },
-    "parents": {
-        "/lists/{id}/tasks": {
-            "rest_name": "list",
-            "entity_name": "List",
-            "operations": [
-                {
-                    "availability": null,
-                    "method": "GET"
-                },
-                {
-                    "availability": null,
-                    "method": "POST"
-                }
-            ],
-            "resource_name": "lists"
-        }
-    },
     "rest_name": "task",
+    "description": "Represent a task to do in a list",
+    "entity_name": "Task",
+    "extends": ["@description", "@title"],
+    "package": "todo-list",
+    "resource_name": "tasks",
+    "get": true,
+    "update": true,
+
+    "children": [
+        {
+            "specification": "user",
+            "relationship": "member",
+            "get": true,
+            "update": true
+        }
+    ],
+
     "attributes": {
         "status": {
             "allowed_chars": null,
@@ -63,12 +45,5 @@
             "type": "enum",
             "unique": false
         }
-    },
-    "description": "Represent a task to do in a list",
-    "entity_name": "Task",
-    "extends": ["@description", "@title"],
-    "package": "todo-list",
-    "resource_name": "tasks",
-    "allows_get": true,
-    "allows_create": true
+    }
 }
