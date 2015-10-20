@@ -70,5 +70,5 @@
     "package": "todo-list",
     "resource_name": "tasks",
     "allows_get": true,
-    "allows_create": true,
+    "allows_create": true
 }
