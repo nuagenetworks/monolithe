@@ -120,23 +120,23 @@ For example:
 
 The attribute must contains its charateristics. Each characteristic define one behavior of the attribute, and multiple things can happen during the sdk/documentation generation process according to these characteristics.
 
-#### allowedChars
+#### allowed_chars
 Python-style regular expression that will be used to validates the content of the attribute.
 
 > Only working for attributes of type `string`.
 
 Example:
 
-	“allowedChars”: “[A-Za-z]”
+	“allowed_chars”: “[A-Za-z]”
 
-#### allowedChoices
+#### allowed_choices
 Array containing the list of allowed values the attribute can take.
 
 > Only working for attributes of type `enum`.
 
 Example:
 
-	“allowedChoices”: [
+	“allowed_choices”: [
 		“MALE”,
 		“FEMALE”,
 		“OTHER”

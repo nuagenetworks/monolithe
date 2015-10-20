@@ -67,7 +67,6 @@ class Specification(object):
         self.attributes = []  # A list of all properties of the object
         self.child_apis = []
         self.parent_apis = []
-        self.self_apis = []
         self.extends = []
         self.allows_get = True
         self.allows_create = True
@@ -130,25 +129,19 @@ class Specification(object):
         if not len(data["attributes"]):
             del data["attributes"]
 
-        data["apis"]["children"] = {}
+        data["children"] = {}
         for api in self.child_apis:
-            data["apis"]["children"][api.path] = api.to_dict()
+            data["children"][api.path] = api.to_dict()
 
-        if not len(data["apis"]["children"]):
-            del data["apis"]["children"]
+        if not len(data["children"]):
+            del data["children"]
 
-        data["apis"]["parents"] = {}
+        data["parents"] = {}
         for api in self.parent_apis:
-            data["apis"]["parents"][api.path] = api.to_dict()
+            data["parents"][api.path] = api.to_dict()
 
-        if not len(data["apis"]["parents"]):
-            del data["apis"]["parents"]
-
-        for api in self.self_apis:
-            data["apis"]["self"] = api.to_dict()
-
-        if not len(data["apis"]["self"]):
-            del data["apis"]["self"]
+        if not len(data["parents"]):
+            del data["parents"]
 
         return data
 
@@ -161,14 +154,11 @@ class Specification(object):
         string_data = json.dumps(data)
         tokens_replaced = False
 
-        if "children" in data["apis"]:
-            self.child_apis = self._get_apis("children", data["apis"])
+        if "children" in data:
+            self.child_apis = self._get_apis("children", data)
 
-        if "parents" in data["apis"]:
-            self.parent_apis = self._get_apis("parents", data["apis"])
-
-        if "self" in data["apis"]:
-            self.self_apis = self._get_apis("self", data["apis"])
+        if "parents" in data:
+            self.parent_apis = self._get_apis("parents", data)
 
         if "resource_name" in data:
             string_data = string_data.replace("[[resource_name]]", data["resource_name"])

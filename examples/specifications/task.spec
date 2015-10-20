@@ -37,8 +37,8 @@
     "rest_name": "task",
     "attributes": {
         "status": {
-            "allowedChars": null,
-            "allowedChoices": [
+            "allowed_chars": null,
+            "allowed_choices": [
                 "TODO",
                 "DONE"
             ],
