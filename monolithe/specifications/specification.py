@@ -105,28 +105,28 @@ class Specification(object):
         data = deepcopy(self.__default_specification__)
 
         if self.description:
-            data["model"]["description"] = self.description
+            data["description"] = self.description
 
         if self.name:
-            data["model"]["entityName"] = self.name
+            data["entityName"] = self.name
 
         if self.package:
-            data["model"]["package"] = self.package
+            data["package"] = self.package
 
         if self.resource_name:
-            data["model"]["resourceName"] = self.resource_name
+            data["resourceName"] = self.resource_name
 
         if self.remote_name:
-            data["model"]["RESTName"] = self.remote_name
+            data["RESTName"] = self.remote_name
 
         if self.extends:
-            data["model"]["extends"] = self.extends
+            data["extends"] = self.extends
 
         for attribute in self.attributes:
-            data["model"]["attributes"][attribute.remote_name] = attribute.to_dict()
+            data["attributes"][attribute.remote_name] = attribute.to_dict()
 
-        if not len(data["model"]["attributes"]):
-            del data["model"]["attributes"]
+        if not len(data["attributes"]):
+            del data["attributes"]
 
         data["apis"]["children"] = {}
         for api in self.child_apis:
@@ -172,41 +172,41 @@ class Specification(object):
 
         if "model" in data:
 
-            if "resourceName" in data["model"]:
-                string_data = string_data.replace("[__RESOURCE_NAME__]", data["model"]["resourceName"])
+            if "resourceName" in data:
+                string_data = string_data.replace("[__RESOURCE_NAME__]", data["resourceName"])
                 tokens_replaced = True
 
-            if "RESTName" in data["model"]:
-                string_data = string_data.replace("[__REST_NAME__]", data["model"]["RESTName"])
+            if "RESTName" in data:
+                string_data = string_data.replace("[__REST_NAME__]", data["RESTName"])
                 tokens_replaced = True
 
-            if "entityName" in data["model"]:
-                string_data = string_data.replace("[__ENTITY_NAME__]", data["model"]["entityName"])
+            if "entityName" in data:
+                string_data = string_data.replace("[__ENTITY_NAME__]", data["entityName"])
                 tokens_replaced = True
 
             if tokens_replaced:
                 data = json.loads(string_data)
 
-            if "description" in data["model"]:
-                self.description = data["model"]["description"]
+            if "description" in data:
+                self.description = data["description"]
 
-            if "package" in data["model"]:
-                self.package = data["model"]["package"]
+            if "package" in data:
+                self.package = data["package"]
 
-            if "extends" in data["model"]:
-                self.extends = data["model"]["extends"]
+            if "extends" in data:
+                self.extends = data["extends"]
 
-            if "entityName" in data["model"]:
-                self.name = data["model"]["entityName"]
+            if "entityName" in data:
+                self.name = data["entityName"]
 
-            if "RESTName" in data["model"]:
-                self.remote_name = data["model"]["RESTName"]
+            if "RESTName" in data:
+                self.remote_name = data["RESTName"]
 
-            if "resourceName" in data["model"]:
-                self.resource_name = data["model"]["resourceName"]
+            if "resourceName" in data:
+                self.resource_name = data["resourceName"]
 
-            if "attributes" in data["model"]:
-                self.attributes = self._get_attributes(data["model"]["attributes"])
+            if "attributes" in data:
+                self.attributes = self._get_attributes(data["attributes"])
 
     def _get_apis(self, api_name, apis):
         """ Process apis for the given model

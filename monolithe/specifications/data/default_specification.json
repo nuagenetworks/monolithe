@@ -1,17 +1,13 @@
 {
-    "model":
-    {
-        "RESTName": null,
-        "attributes": {},
-        "description": null,
-        "entityName": null,
-        "package": null,
-        "resourceName": null
-    },
-    "apis":
-    {
-        "parents": {},
-        "children": {},
-        "self": {}
-    }
+    "RESTName": null,
+    "description": null,
+    "entityName": null,
+    "package": null,
+    "resourceName": null,
+    "allowGet": true,
+    "allowCreate": true,
+    "allowUpdate": false,
+    "attributes": {},
+    "parents": {},
+    "children": {}
 }

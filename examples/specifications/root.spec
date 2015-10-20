@@ -1,48 +1,43 @@
 {
-    "apis": {
-        "children": {
-            "/lists": {
-                "RESTName": "list",
-                "entityName": "List",
-                "relationship": "root",
-                "operations": [
-                    {
-                        "availability": null,
-                        "method": "GET"
-                    },
-                    {
-                        "availability": null,
-                        "method": "POST"
-                    }
-                ],
-                "resourceName": "lists"
-            },
-            "/users": {
-                "RESTName": "user",
-                "entityName": "User",
-                "relationship": "root",
-                "operations": [
-                    {
-                        "availability": null,
-                        "method": "GET"
-                    },
-                    {
-                        "availability": null,
-                        "method": "POST"
-                    }
-                ],
-                "resourceName": "users"
-            }
+    "children": {
+        "/lists": {
+            "RESTName": "list",
+            "entityName": "List",
+            "relationship": "root",
+            "operations": [
+                {
+                    "availability": null,
+                    "method": "GET"
+                },
+                {
+                    "availability": null,
+                    "method": "POST"
+                }
+            ],
+            "resourceName": "lists"
         },
-        "parents": {},
-        "self": {}
+        "/users": {
+            "RESTName": "user",
+            "entityName": "User",
+            "relationship": "root",
+            "operations": [
+                {
+                    "availability": null,
+                    "method": "GET"
+                },
+                {
+                    "availability": null,
+                    "method": "POST"
+                }
+            ],
+            "resourceName": "users"
+        }
     },
-    "model": {
-        "RESTName": "root",
-        "attributes": {},
-        "description": "Root object of the API",
-        "entityName": "Root",
-        "package": "todo-list",
-        "resourceName": "root"
-    }
+
+    "RESTName": "root",
+    "attributes": {},
+    "description": "Root object of the API",
+    "entityName": "Root",
+    "package": "todo-list",
+    "resourceName": "root"
 }
