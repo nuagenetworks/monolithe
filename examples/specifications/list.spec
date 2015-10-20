@@ -2,8 +2,8 @@
 
     "children": {
         "/lists/{id}/tasks": {
-            "RESTName": "task",
-            "entityName": "Task",
+            "rest_name": "task",
+            "entity_name": "Task",
             "operations": [
                 {
                     "availability": null,
@@ -14,12 +14,12 @@
                     "method": "POST"
                 }
             ],
-            "resourceName": "tasks"
+            "resource_name": "tasks"
         }
     },
     "parents": {
         "/lists": {
-            "RESTName": "list",
+            "rest_name": "list",
             "relationship": "root",
             "operations": [
                 {
@@ -31,18 +31,17 @@
                     "method": "POST"
                 }
             ],
-            "resourceName": "lists"
+            "resource_mame": "lists"
         }
     },
 
-    "RESTName": "list",
+    "rest_name": "list",
     "attributes": {},
     "description": "Represent a a list of task to do",
-    "entityName": "List",
+    "entity_name": "List",
     "extends": ["@description", "@title"],
     "package": "todo-list",
-    "resourceName": "lists",
-    "allowsGet": true,
-    "allowsCreate": true,
-    "allowsUpdate": false
+    "resource_name": "lists",
+    "allows_get": true,
+    "allows_create": true
 }

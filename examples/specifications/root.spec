@@ -1,8 +1,8 @@
 {
     "children": {
         "/lists": {
-            "RESTName": "list",
-            "entityName": "List",
+            "rest_name": "list",
+            "entity_name": "List",
             "relationship": "root",
             "operations": [
                 {
@@ -14,11 +14,11 @@
                     "method": "POST"
                 }
             ],
-            "resourceName": "lists"
+            "resource_name": "lists"
         },
         "/users": {
-            "RESTName": "user",
-            "entityName": "User",
+            "rest_name": "user",
+            "entity_name": "User",
             "relationship": "root",
             "operations": [
                 {
@@ -30,14 +30,14 @@
                     "method": "POST"
                 }
             ],
-            "resourceName": "users"
+            "resource_name": "users"
         }
     },
 
-    "RESTName": "root",
+    "rest_name": "root",
     "attributes": {},
     "description": "Root object of the API",
-    "entityName": "Root",
+    "entity_name": "Root",
     "package": "todo-list",
-    "resourceName": "root"
+    "resource_name": "root"
 }

@@ -81,14 +81,14 @@ class SpecificationAPI(object):
 
         """
         self.path = data["path"]
-        self.resource_name = data["resourceName"]
-        self.remote_name = data["RESTName"]
+        self.resource_name = data["resource_name"]
+        self.remote_name = data["rest_name"]
         self.deprecated = data["deprecated"]  if "deprecated" in data else False
         self.relationship = data["relationship"] if "relationship" in data else "child"
 
-        if "entityName" in data:
+        if "entity_name" in data:
             # Only for children to Used to create fetchers
-            self.entity_name = data["entityName"]
+            self.entity_name = data["entity_name"]
 
         for operation in data["operations"]:
             model_operation = SpecificationAPIOperation(data=operation)
@@ -101,10 +101,10 @@ class SpecificationAPI(object):
         data = {}
 
         if self.resource_name:
-            data["resourceName"] = self.resource_name
+            data["resource_name"] = self.resource_name
 
         if self.remote_name:
-            data["RESTName"] = self.remote_name
+            data["rest_name"] = self.remote_name
 
         if self.relationship:
             data["relationship"] = self.relationship

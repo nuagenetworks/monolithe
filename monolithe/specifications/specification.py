@@ -69,6 +69,8 @@ class Specification(object):
         self.parent_apis = []
         self.self_apis = []
         self.extends = []
+        self.allows_get = True
+        self.allows_create = True
 
         self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
@@ -108,16 +110,16 @@ class Specification(object):
             data["description"] = self.description
 
         if self.name:
-            data["entityName"] = self.name
+            data["entity_name"] = self.name
 
         if self.package:
             data["package"] = self.package
 
         if self.resource_name:
-            data["resourceName"] = self.resource_name
+            data["resource_name"] = self.resource_name
 
         if self.remote_name:
-            data["RESTName"] = self.remote_name
+            data["rest_name"] = self.remote_name
 
         if self.extends:
             data["extends"] = self.extends
@@ -159,54 +161,50 @@ class Specification(object):
         string_data = json.dumps(data)
         tokens_replaced = False
 
-        if "apis" in data:
+        if "children" in data["apis"]:
+            self.child_apis = self._get_apis("children", data["apis"])
 
-            if "children" in data["apis"]:
-                self.child_apis = self._get_apis("children", data["apis"])
+        if "parents" in data["apis"]:
+            self.parent_apis = self._get_apis("parents", data["apis"])
 
-            if "parents" in data["apis"]:
-                self.parent_apis = self._get_apis("parents", data["apis"])
+        if "self" in data["apis"]:
+            self.self_apis = self._get_apis("self", data["apis"])
 
-            if "self" in data["apis"]:
-                self.self_apis = self._get_apis("self", data["apis"])
+        if "resource_name" in data:
+            string_data = string_data.replace("[[resource_name]]", data["resource_name"])
+            tokens_replaced = True
 
-        if "model" in data:
+        if "rest_name" in data:
+            string_data = string_data.replace("[[rest_name]]", data["rest_name"])
+            tokens_replaced = True
 
-            if "resourceName" in data:
-                string_data = string_data.replace("[__RESOURCE_NAME__]", data["resourceName"])
-                tokens_replaced = True
+        if "entity_name" in data:
+            string_data = string_data.replace("[[entity_name]]", data["entity_name"])
+            tokens_replaced = True
 
-            if "RESTName" in data:
-                string_data = string_data.replace("[__REST_NAME__]", data["RESTName"])
-                tokens_replaced = True
+        if tokens_replaced:
+            data = json.loads(string_data)
 
-            if "entityName" in data:
-                string_data = string_data.replace("[__ENTITY_NAME__]", data["entityName"])
-                tokens_replaced = True
+        if "description" in data:
+            self.description = data["description"]
 
-            if tokens_replaced:
-                data = json.loads(string_data)
+        if "package" in data:
+            self.package = data["package"]
 
-            if "description" in data:
-                self.description = data["description"]
+        if "extends" in data:
+            self.extends = data["extends"]
 
-            if "package" in data:
-                self.package = data["package"]
+        if "entity_name" in data:
+            self.name = data["entity_name"]
 
-            if "extends" in data:
-                self.extends = data["extends"]
+        if "rest_name" in data:
+            self.remote_name = data["rest_name"]
 
-            if "entityName" in data:
-                self.name = data["entityName"]
+        if "resource_name" in data:
+            self.resource_name = data["resource_name"]
 
-            if "RESTName" in data:
-                self.remote_name = data["RESTName"]
-
-            if "resourceName" in data:
-                self.resource_name = data["resourceName"]
-
-            if "attributes" in data:
-                self.attributes = self._get_attributes(data["attributes"])
+        if "attributes" in data:
+            self.attributes = self._get_attributes(data["attributes"])
 
     def _get_apis(self, api_name, apis):
         """ Process apis for the given model

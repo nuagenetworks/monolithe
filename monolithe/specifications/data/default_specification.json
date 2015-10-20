@@ -1,9 +1,9 @@
 {
-    "RESTName": null,
+    "rest_name": null,
     "description": null,
-    "entityName": null,
+    "entity_name": null,
     "package": null,
-    "resourceName": null,
+    "resource_name": null,
     "allowGet": true,
     "allowCreate": true,
     "allowUpdate": false,
