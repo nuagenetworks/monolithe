@@ -114,5 +114,5 @@
     "package": "todo-list",
     "resource_name": "users",
     "allowsUpdate": true,
-    "allowsCreate": true,
+    "allowsCreate": true
 }
