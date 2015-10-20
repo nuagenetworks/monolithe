@@ -68,7 +68,7 @@
     "entity_name": "Task",
     "extends": ["@description", "@title"],
     "package": "todo-list",
-    "resource_name": "tasks"
+    "resource_name": "tasks",
     "allows_get": true,
     "allows_create": true,
 }

@@ -1,5 +1,4 @@
 {
-
     "children": {
         "/lists/{id}/tasks": {
             "rest_name": "task",

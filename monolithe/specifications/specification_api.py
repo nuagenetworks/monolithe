@@ -80,11 +80,20 @@ class SpecificationAPI(object):
         """
 
         """
-        self.path = data["path"]
-        self.resource_name = data["resource_name"]
-        self.remote_name = data["rest_name"]
-        self.deprecated = data["deprecated"]  if "deprecated" in data else False
-        self.relationship = data["relationship"] if "relationship" in data else "child"
+        if "path" in data:
+            self.path = data["path"]
+
+        if "resource_name" in data:
+            self.resource_name = data["resource_name"]
+
+        if "rest_name" in data:
+            self.remote_name = data["rest_name"]
+
+        if "deprecated" in data:
+            self.deprecated = data["deprecated"]  if "deprecated" in data else False
+
+        if "relationship" in data:
+            self.relationship = data["relationship"] if "relationship" in data else "child"
 
         if "entity_name" in data:
             # Only for children to Used to create fetchers
