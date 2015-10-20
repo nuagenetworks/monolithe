@@ -68,11 +68,13 @@ class SpecificationAPI(object):
         """
         """
         self._entity_name = value
-        self.plural_name = SDKUtils.get_plural_name(value)
-        self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
 
-        if self.remote_name == "allalarm":
-            self.instance_plural_name = "all_alarms"  # Differs from alarms
+        if value:
+            self.plural_name = SDKUtils.get_plural_name(value)
+            self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+
+            if self.remote_name == "allalarm":
+                self.instance_plural_name = "all_alarms"  # Differs from alarms
 
     def from_dict(self, data):
         """
@@ -98,14 +100,25 @@ class SpecificationAPI(object):
 
         data = {}
 
-        data["resourceName"] = self.resource_name
-        data["RESTName"] = self.remote_name
-        data["relationship"] = self.relationship
-        data["deprecated"] = self.deprecated
+        if self.resource_name:
+            data["resourceName"] = self.resource_name
+
+        if self.remote_name:
+            data["RESTName"] = self.remote_name
+
+        if self.relationship:
+            data["relationship"] = self.relationship
+
+        if self.deprecated:
+            data["deprecated"] = self.deprecated
+
         data["operations"] = []
 
         for operation in self.operations:
             data["operations"].append(operation.to_dict())
+
+        if not len(data["operations"]):
+            del data["operations"]
 
         return data
 

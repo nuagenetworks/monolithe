@@ -86,9 +86,11 @@ class Specification(object):
         """
         """
         self._name = value
-        self.instance_name = SDKUtils.get_python_name(value)
-        self.plural_name = SDKUtils.get_plural_name(value)
-        self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+
+        if value:
+            self.instance_name = SDKUtils.get_python_name(value)
+            self.plural_name = SDKUtils.get_plural_name(value)
+            self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
 
 
     def to_dict(self):
@@ -102,25 +104,49 @@ class Specification(object):
 
         data = deepcopy(self.__default_specification__)
 
-        data["model"]["description"] = self.description
-        data["model"]["entityName"] = self.name
-        data["model"]["package"] = self.package
-        data["model"]["resourceName"] = self.resource_name
-        data["model"]["RESTName"] = self.remote_name
+        if self.description:
+            data["model"]["description"] = self.description
+
+        if self.name:
+            data["model"]["entityName"] = self.name
+
+        if self.package:
+            data["model"]["package"] = self.package
+
+        if self.resource_name:
+            data["model"]["resourceName"] = self.resource_name
+
+        if self.remote_name:
+            data["model"]["RESTName"] = self.remote_name
+
+        if self.extends:
+            data["model"]["extends"] = self.extends
 
         for attribute in self.attributes:
             data["model"]["attributes"][attribute.remote_name] = attribute.to_dict()
+
+        if not len(data["model"]["attributes"]):
+            del data["model"]["attributes"]
 
         data["apis"]["children"] = {}
         for api in self.child_apis:
             data["apis"]["children"][api.path] = api.to_dict()
 
+        if not len(data["apis"]["children"]):
+            del data["apis"]["children"]
+
         data["apis"]["parents"] = {}
         for api in self.parent_apis:
             data["apis"]["parents"][api.path] = api.to_dict()
 
+        if not len(data["apis"]["parents"]):
+            del data["apis"]["parents"]
+
         for api in self.self_apis:
             data["apis"]["self"] = api.to_dict()
+
+        if not len(data["apis"]["self"]):
+            del data["apis"]["self"]
 
         return data
 

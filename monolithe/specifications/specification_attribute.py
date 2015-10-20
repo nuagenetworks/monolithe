@@ -99,9 +99,11 @@ class SpecificationAttribute(object):
         """
         """
         self._type = value
-        self.local_type = SDKUtils.get_python_type_name(type_name=value)
-        if self.local_type == "time":
-            self.has_time_attribute = True
+
+        if value:
+            self.local_type = SDKUtils.get_python_type_name(type_name=value)
+            if self.local_type == "time":
+                self.has_time_attribute = True
 
     @property
     def remote_name(self):
@@ -114,7 +116,7 @@ class SpecificationAttribute(object):
         """
         """
         self._remote_name = value
-        if self.specification.monolithe_config:
+        if self.specification and self.specification.monolithe_config:
             self.local_name = SDKUtils.get_python_name(self.specification.monolithe_config.map_attribute(self.specification.remote_name, value))
         else:
             self.local_name = value
