@@ -71,6 +71,7 @@ class Specification(object):
         self.allows_create = False
         self.allows_update = True
         self.allows_delete = False
+        self.is_root = False
         self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
         if data:
@@ -135,6 +136,9 @@ class Specification(object):
         if self.delete:
             data["delete"] = self.delete
 
+        if self.is_root:
+            data["root"] = self.is_root
+
         for attribute in self.attributes:
             data["attributes"][attribute.remote_name] = attribute.to_dict()
 
@@ -185,6 +189,7 @@ class Specification(object):
         self.allows_create = data["create"] if "create" in data else False
         self.allows_update = data["update"] if "update" in data else True
         self.allows_delete = data["delete"] if "delete" in data else True
+        self.is_root       = data["root"] if "root" in data else False
 
         if "attributes" in data:
             self.attributes = self._get_attributes(data["attributes"])

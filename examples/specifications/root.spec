@@ -6,6 +6,7 @@
     "package": "todo-list",
     "resource_name": "root",
     "get": true,
+    "root": true,
 
     "children": [
         {
