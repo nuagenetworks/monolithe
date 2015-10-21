@@ -7,6 +7,7 @@
     "resource_name": "users",
     "get": true,
     "update": true,
+    "delete": true,
 
     "attributes": {
         "firstName": {

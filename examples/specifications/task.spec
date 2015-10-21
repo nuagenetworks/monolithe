@@ -7,6 +7,7 @@
     "resource_name": "tasks",
     "get": true,
     "update": true,
+    "delete": true,
 
     "children": [
         {

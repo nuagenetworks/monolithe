@@ -52,18 +52,18 @@ class APIDocWriter(object):
         self.api_info = api_info
         self.writer = APIDocFileWriter(monolithe_config=self.monolithe_config, api_info=self.api_info)
 
-        for specification in specifications:
-            task_manager.start_task(method=self._write_specification, specification=specification, filenames=filenames)
+        for specification in specifications.values():
+            task_manager.start_task(method=self._write_specification, specification=specification, specification_set=specifications, filenames=filenames)
 
         task_manager.wait_until_exit()
 
-        self.writer.write_index(specifications)
+        self.writer.write_index(specifications.values())
 
-    def _write_specification(self, specification, filenames):
+    def _write_specification(self, specification, specification_set, filenames):
         """
         """
         if specification.remote_name != self.api_info:
-            (filename, classname) = self.writer.write_specification(specification=specification)
+            (filename, classname) = self.writer.write_specification(specification=specification, specification_set=specification_set)
             filenames[filename] = classname
 
 
@@ -82,14 +82,38 @@ class APIDocFileWriter(TemplateFileWriter):
 
         self.output_directory = "%s/%s/%s" % (self._apidoc_output, self._product_name, api_info["version"])
 
+    def _get_actions(self, obj):
+        """
+        """
+        actions = []
+        if obj.allows_get: actions.append("GET")
+        if obj.allows_create: actions.append("POST")
+        if obj.allows_update: actions.append("PUT")
+        if obj.allows_delete: actions.append("DELETE")
+        return actions
 
-    def write_specification(self, specification):
+    def write_specification(self, specification, specification_set):
         """
         """
         filename = "%s.html" % specification.remote_name.lower()
 
+        parent_apis = []
+        for rest_name, remote_spec in specification_set.iteritems():
+            for related_child_api in remote_spec.child_apis:
+                if related_child_api.specification == specification.remote_name:
+                    parent_apis.append({"remote_spec": remote_spec, "actions": self._get_actions(related_child_api), "relationship": related_child_api.relationship})
+
+        child_apis = []
+        for child_api in specification.child_apis:
+            child_apis.append({"remote_spec": specification_set[child_api.specification], "actions": self._get_actions(child_api), "relationship": child_api.relationship})
+
+        self_apis = [{"actions": self._get_actions(specification)}]
+
         self.write( destination=self.output_directory, filename=filename, template_name="object.html.tpl",
                     specification=specification,
+                    parent_apis=parent_apis,
+                    child_apis=child_apis,
+                    self_apis=self_apis,
                     product_name=self._product_name)
 
         return (filename, specification.name)

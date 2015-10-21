@@ -107,22 +107,42 @@
     {% endmacro %}
 
     {# macro to create api list #}
-    {% macro make_api_list(apis, mode, nothing_string) %}
+    {% macro make_api_list(mode, nothing_string) %}
+    {% if mode == "children" %}
+    {% set apis = child_apis %}
+    {% elif mode == "parents" %}
+    {% set apis = parent_apis %}
+    {% else %}
+    {% set apis = self_apis %}
+    {% endif %}
+
     {% if apis|count %}
-    {% for api in apis|sort(attribute='path') %}
+    {% for api in apis %}
     <div class="row bordered-row">
         <div class="col-xs-7">
-            {% if mode == "self" %}
-            <span class="fixed-text">{{ api.path.replace("{id}", "<span class=\"text-muted\">id</span>")}}</span>
-            {% elif mode == "parents" %}
-            <span class="fixed-text">/<a href="{{ api.remote_name }}.html">{{ api.resource_name }}</a>/<span class="text-muted">id</span>/{{ specification.resource_name }}</span>
+
+            {% if mode == "parents" %}
+            {% if api.relationship == "root" %}
+            <span class="fixed-text">/{{ specification.resource_name }}</a>
             {% else %}
-            <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span>/<a href="{{ api.remote_name }}.html">{{ api.resource_name }}</a></span>
+            <span class="fixed-text">/<a href="{{ api.remote_spec.remote_name }}.html">{{ api.remote_spec.resource_name }}</a>/<span class="text-muted">id</span>/{{ specification.resource_name }}</span>
+            {% endif %}
+
+            {% elif mode == "children" %}
+
+            {% if api.relationship == "root" %}
+            <span class="fixed-text">/{{ specification.resource_name }}</a>
+            {% else%}
+            <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span>/<a href="{{ api.remote_spec.remote_name }}.html">{{ api.remote_spec.resource_name }}</a></span>
+            {% endif %}
+
+            {% else %}
+            <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span></a>
             {% endif %}
         </div>
         <div class="col-xs-5 text-right">
-            {% for operation in api.operations|sort(attribute="method") %}
-            {{ label_for_method(operation.method)}}
+            {% for action in api.actions|sort() %}
+            {{ label_for_method(action)}}
             {% endfor %}
         </div>
     </div>
@@ -161,17 +181,17 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {{ make_api_list(specification.self_apis, "self", "This object is not directly accessible.")}}
+            {{ make_api_list("self", "This cannot be accessed. Which is weird...")}}
         </section>
 
         <section id="parents">
             <h3>Parents</h3>
-            {{ make_api_list(specification.parent_apis, "parents", "This object has no parents.")}}
+            {{ make_api_list("parents", "This object has no parents.")}}
         </section>
 
         <section id="children">
             <h3>Children</h3>
-            {{ make_api_list(specification.child_apis, "children", "This object has no child.")}}
+            {{ make_api_list("children", "This object has no child.")}}
         </section>
 
         <section id="attributes">

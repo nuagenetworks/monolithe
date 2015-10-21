@@ -7,6 +7,7 @@
     "resource_name": "lists",
     "get": true,
     "update": true,
+    "delete": true,
 
     "children": [
         {
