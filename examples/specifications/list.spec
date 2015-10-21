@@ -1,6 +1,5 @@
 {
     "rest_name": "list",
-    "attributes": {},
     "description": "Represent a a list of task to do",
     "entity_name": "List",
     "extends": ["@description", "@title"],

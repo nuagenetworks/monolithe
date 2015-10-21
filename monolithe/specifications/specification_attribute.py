@@ -45,8 +45,6 @@ class SpecificationAttribute(object):
                 local_name: associated_gateway_id
                 local_type: str
         """
-        self.__default_attribute__ = None
-
         self.specification = specification
 
         # Main attributes
@@ -161,12 +159,7 @@ class SpecificationAttribute(object):
     def to_dict(self):
         """ Transform an attribute to a dict
         """
-
-        if self.__default_attribute__ is None:
-            default_data = pkgutil.get_data(__package__, "/data/default_attribute.json")
-            self.__default_attribute__ = json.loads(default_data)
-
-        data = deepcopy(self.__default_attribute__)
+        data = {}
 
         data["allowed_chars"] = self.allowed_chars
         data["allowed_choices"] = self.allowed_choices

@@ -52,8 +52,6 @@ class Specification(object):
                 resource_name: enterprisenetworks
                 package: network
         """
-        self.__default_specification__ = None
-
         self.monolithe_config = monolithe_config
         self.filename = filename
         self.description = None
@@ -67,9 +65,9 @@ class Specification(object):
         self.attributes = []  # A list of all properties of the object
         self.child_apis = []
         self.extends = []
-        self.allows_get = True
+        self.allows_get = False
         self.allows_create = False
-        self.allows_update = True
+        self.allows_update = False
         self.allows_delete = False
         self.is_root = False
         self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
@@ -100,11 +98,7 @@ class Specification(object):
 
         """
 
-        if self.__default_specification__ is None:
-            default_data = pkgutil.get_data(__package__, "/data/default_specification.json")
-            self.__default_specification__ = json.loads(default_data)
-
-        data = deepcopy(self.__default_specification__)
+        data = {}
 
         if self.description:
             data["description"] = self.description
@@ -139,14 +133,15 @@ class Specification(object):
         if self.is_root:
             data["root"] = self.is_root
 
-        for attribute in self.attributes:
-            data["attributes"][attribute.remote_name] = attribute.to_dict()
+        if len(self.attributes):
+            data["attributes"] = {}
 
-        if not len(data["attributes"]):
-            del data["attributes"]
+            for attribute in self.attributes:
+                data["attributes"][attribute.remote_name] = attribute.to_dict()
 
         if len(self.child_apis):
             data["children"] = []
+
             for api in self.child_apis:
                 data["children"].append(api.to_dict())
 
@@ -185,10 +180,10 @@ class Specification(object):
         self.name          = data["entity_name"] if "entity_name" in data else None
         self.remote_name   = data["rest_name"] if "rest_name" in data else None
         self.resource_name = data["resource_name"] if "resource_name" in data else None
-        self.allows_get    = data["get"] if "get" in data else True
+        self.allows_get    = data["get"] if "get" in data else False
         self.allows_create = data["create"] if "create" in data else False
-        self.allows_update = data["update"] if "update" in data else True
-        self.allows_delete = data["delete"] if "delete" in data else True
+        self.allows_update = data["update"] if "update" in data else False
+        self.allows_delete = data["delete"] if "delete" in data else False
         self.is_root       = data["root"] if "root" in data else False
 
         if "attributes" in data:

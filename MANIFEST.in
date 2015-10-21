@@ -6,4 +6,3 @@ recursive-include monolithe/generators/sdk/templates *
 recursive-include monolithe/generators/sdk/vanilla *
 recursive-include monolithe/generators/sdkdoc/templates *
 recursive-include monolithe/generators/sdkdoc/vanilla *
-recursive-include monolithe/specifications/data *
