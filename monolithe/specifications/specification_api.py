@@ -58,7 +58,6 @@ class SpecificationAPI(object):
         self.deprecated    = data["deprecated"] if "deprecated" in data else False
         self.relationship  = data["relationship"] if "relationship" in data else "child"
 
-
     def to_dict(self):
         """
         """
