@@ -1,0 +1,136 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2015, Alcatel-Lucent Inc
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the copyright holder nor the names of its contributors
+#       may be used to endorse or promote products derived from this software without
+#       specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import os
+import sys
+import json
+import shutil
+import argparse
+
+def convert(path, output):
+    """
+    """
+    if os.path.exists(output):
+        shutil.rmtree(output)
+    os.makedirs(output)
+
+    with open(os.path.join(path, 'api.info'), 'r') as f:
+        apiinfo = json.loads(f.read())
+
+    for item in os.listdir(path):
+        if os.path.splitext(item)[1] == '.spec':
+            with open(item, 'r') as f:
+                data = json.loads(f.read())
+                convert_specification(data, item, output, apiinfo)
+
+def convert_specification(data, name, output, apiinfo):
+    """
+    """
+    if "model" in data:
+        for token in data["model"]:
+            converted_token = convert_token(token)
+            data[converted_token] = data["model"][token]
+        del data["model"]
+
+    if "apis" in data:
+
+        if "self" in data["apis"]:
+            del data["apis"]["self"]
+        if "parents" in data["apis"]:
+            del data["apis"]["parents"]
+
+        if "children" in data["apis"]:
+
+            data["children"] = []
+            for key, value in data["apis"]["children"].iteritems():
+                converted_apis = {
+                    "specification": value["RESTName"],
+                    "relationship":  value["relationship"] if "relationship" in value else "child"
+                }
+
+                if "rest_name" in data:
+                    if apiinfo["root"] == data["rest_name"]:
+                        converted_apis["relationship"] = "root"
+
+                for operation in value["operations"]:
+                    if operation["method"] == "GET": converted_apis["get"] = True
+                    if operation["method"] == "POST": converted_apis["create"] = True
+                    if operation["method"] == "PUT": converted_apis["update"] = True
+                    if operation["method"] == "DELETE": converted_apis["delete"] = True
+                data["children"].append(converted_apis)
+            del data["apis"]
+
+        if "attributes" in data:
+            for key, attr in data["attributes"].iteritems():
+                converted_characteristics = {}
+                for token, value in attr.iteritems():
+                    converted_characteristics[convert_token(token)] = value
+                data["attributes"][key] = converted_characteristics
+
+    with open(os.path.join(output, name), 'w') as f:
+        f.write(json.dumps(data, indent=4))
+
+def convert_token(token):
+    """
+    """
+    if token == "RESTName": return "rest_name"
+    if token == "resourceName": return "resource_name"
+    if token == "entityName": return "entity_name"
+    if token == "readOnly": return "read_only"
+    if token == "minValue": return "min_value"
+    if token == "allowedChars": return "allowed_chars"
+    if token == "allowedChoices": return "allowed_choices"
+    if token == "defaultOrder": return "default_order"
+    if token == "defaultValue": return "default_value"
+    if token == "creationOnly": return "creation_only"
+    if token == "minLength": return "min_length"
+    if token == "maxValue": return "max_value"
+    if token == "maxLength": return "max_length"
+    return token
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="Converts specification set from v1 to v2")
+
+    parser.add_argument("-i", "--input",
+                        dest="input",
+                        metavar="folder",
+                        help="The path to the folder containing the v1 specification set",
+                        required=True,
+                        type=str)
+
+    parser.add_argument("-o", "--output",
+                        dest="output",
+                        metavar="output",
+                        help="The path where to put the converted specification set",
+                        required=True,
+                        type=str)
+
+    args = parser.parse_args()
+
+    convert(args.input, args.output)
