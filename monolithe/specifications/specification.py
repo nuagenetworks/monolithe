@@ -124,17 +124,17 @@ class Specification(object):
         if self.extends:
             data["extends"] = self.extends
 
-        if self.get:
-            data["get"] = self.get
+        if self.allows_get:
+            data["get"] = self.allows_get
 
-        if self.update:
-            data["update"] = self.update
+        if self.allows_update:
+            data["update"] = self.allows_update
 
-        if self.create:
-            data["create"] = self.create
+        if self.allows_create:
+            data["create"] = self.allows_create
 
-        if self.delete:
-            data["delete"] = self.delete
+        if self.allows_delete:
+            data["delete"] = self.allows_delete
 
         if self.is_root:
             data["root"] = self.is_root
@@ -148,7 +148,7 @@ class Specification(object):
         if len(self.child_apis):
             data["children"] = []
             for api in self.child_apis:
-                data["children"] = api.to_dict()
+                data["children"].append(api.to_dict())
 
         return data
 

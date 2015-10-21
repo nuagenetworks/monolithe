@@ -65,11 +65,23 @@ class SpecificationAPI(object):
         data = {}
 
         data["specification"] = self.specification
-        data["get"]           = self.allows_get
-        data["create"]        = self.allows_create
-        data["update"]        = self.allows_update
-        data["delete"]        = self.allows_delete
-        data["deprecated"]    = self.deprecated
-        data["relationship"]  = self.relationship
+
+        if self.allows_get:
+            data["get"] = self.allows_get
+
+        if self.allows_create:
+            data["create"] = self.allows_create
+
+        if self.allows_update:
+            data["update"] = self.allows_update
+
+        if self.allows_delete:
+            data["delete"] = self.allows_delete
+
+        if self.deprecated:
+            data["deprecated"] = self.deprecated
+
+        if self.relationship:
+            data["relationship"] = self.relationship
 
         return data
