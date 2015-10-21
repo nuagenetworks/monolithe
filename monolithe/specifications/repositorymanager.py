@@ -66,7 +66,7 @@ class RepositoryManager (object):
                 self._repository_path = self._repository_path[:-1]
 
         self._github = Github(login_or_token=login_or_token, password=password, base_url=api_url)
-        self._repo = self._github.get_organization(organization).get_repo(repository)
+        self._repo = self._github.get_repo("%s/%s" % (organization, repository))
 
 
     @property
