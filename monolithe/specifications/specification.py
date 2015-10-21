@@ -221,7 +221,6 @@ class Specification(object):
             if model_attribute.has_time_attribute:
                 self.has_time_attribute = True
 
-            if not model_attribute.ignored:
-                model_attributes.append(model_attribute)
+            model_attributes.append(model_attribute)
 
         return sorted(model_attributes, key=lambda x: getattr(x, "local_name"))

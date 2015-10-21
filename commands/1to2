@@ -85,12 +85,12 @@ def convert_specification(data, name, output, apiinfo):
                 data["children"].append(converted_apis)
             del data["apis"]
 
-        if "attributes" in data:
-            for key, attr in data["attributes"].iteritems():
-                converted_characteristics = {}
-                for token, value in attr.iteritems():
-                    converted_characteristics[convert_token(token)] = value
-                data["attributes"][key] = converted_characteristics
+    if "attributes" in data:
+        for key, attr in data["attributes"].iteritems():
+            converted_characteristics = {}
+            for token, value in attr.iteritems():
+                converted_characteristics[convert_token(token)] = value
+            data["attributes"][key] = converted_characteristics
 
     with open(os.path.join(output, name), 'w') as f:
         f.write(json.dumps(data, indent=4))
