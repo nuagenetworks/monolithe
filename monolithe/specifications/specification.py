@@ -217,10 +217,6 @@ class Specification(object):
         for name, data in attributes.iteritems():
             data["name"] = name
             model_attribute = SpecificationAttribute(specification=self, data=data)
-
-            if model_attribute.has_time_attribute:
-                self.has_time_attribute = True
-
             model_attributes.append(model_attribute)
 
         return sorted(model_attributes, key=lambda x: getattr(x, "local_name"))

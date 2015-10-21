@@ -6,7 +6,7 @@
 from .fetchers import {{ sdk_class_prefix }}{{ child_spec.plural_name }}Fetcher
 {% endfor %}
 from bambou import {{ superclass_name }}{% if specification.has_time_attribute %}
-from time import time{% endif %}
+from datetime import time{% endif %}
 
 
 class {{ sdk_class_prefix }}{{ specification.name }}({{ superclass_name }}):

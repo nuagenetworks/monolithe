@@ -84,29 +84,53 @@ class SDKUtils(object):
         """ Returns a python type according to a java type
 
         """
-        if type_name in ["str", "string", "enum"]:
+        if type_name in ("string", "enum"):
             return "str"
 
-        if type_name in ["boolean", "bool"]:
+        if type_name == "boolean":
             return "bool"
 
-        if type_name in ["int", "integer"]:
+        if type_name == "integer":
             return "int"
 
-        if type_name in ["date", "datetime", "time"]:
+        if type_name ==  "time":
             return "time"
 
-        if type_name in ["double", "float", "long"]:
+        return type_name
+
+    @classmethod
+    def massage_type_name(cls, type_name):
+        """ Returns a python type according to a java type
+
+        """
+        if type_name.lower() in ("enum", "enumeration"):
+            return "enum"
+
+        if type_name.lower() in ("str", "string"):
+            return "string"
+
+        if type_name.lower() in ("boolean", "bool"):
+            return "boolean"
+
+        if type_name.lower() in ("int", "integer"):
+            return "integer"
+
+        if type_name.lower() in ("date", "datetime", "time"):
+            return "time"
+
+        if type_name.lower() in ("double", "float", "long"):
             return "float"
 
-        if type_name in ["list", "array"]:
+        if type_name.lower() in ("list", "array"):
             return "list"
 
-        if type_name in ["object", "dict"]:
+        if type_name.lower() in ("object", "dict"):
             return "dict"
 
-        return "str"
-        # raise Exception("Unknow type %s" % type_name)
+        if "array" in type_name.lower():
+            return "list"
+
+        return "string"
 
     @classmethod
     def get_plural_name(cls, singular_name):

@@ -52,7 +52,6 @@ class SpecificationAttribute(object):
         self._remote_name = None
         self.local_name = None
         self.local_type = None
-        self.has_time_attribute = False
 
         # Other attributes
         self.channel = None
@@ -93,12 +92,12 @@ class SpecificationAttribute(object):
     def type(self, value):
         """
         """
-        self._type = value
+        self._type = SDKUtils.massage_type_name(type_name=value)
 
         if value:
             self.local_type = SDKUtils.get_python_type_name(type_name=value)
             if self.local_type == "time":
-                self.has_time_attribute = True
+                self.specification.has_time_attribute = True
 
     @property
     def remote_name(self):
@@ -136,7 +135,7 @@ class SpecificationAttribute(object):
             self.deprecated = data["deprecated"] if "deprecated" in data else False
             self.exposed = data["exposed"] if "exposed" in data else True
             self.filterable = data["filterable"] if "filterable" in data else True
-            self.format = data["format"] if "format" in data else True
+            self.format = data["format"] if "format" in data else "free"
             self.max_length = data["max_length"] if "max_length" in data else None
             self.max_value = data["max_value"] if "max_value" in data else None
             self.min_length = data["min_length"] if "min_length" in data else None
@@ -146,7 +145,7 @@ class SpecificationAttribute(object):
             self.required = data["required"] if "required" in data else False
             self.transient = data["transient"] if "transient" in data else False
             self.unique = data["unique"] if "unique" in data else False
-            self.unique_scope = data["uniqueScope"] if "uniqueScope" in data else None
+            self.unique_scope = data["unique_scope"] if "unique_scope" in data else None
 
         except Exception as ex:
             raise Exception("Unable to parse attribute %s for specification %s: %s" % (data["name"], self.specification.remote_name, ex))
