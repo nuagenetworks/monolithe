@@ -82,6 +82,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.rest_name, data['rest_name'])
         self.assertEquals(s.description, data['description'])
         self.assertEquals(s.entity_name, 'TheTask')
+        self.assertEquals(s.entity_name_plural, 'TheTasks')
         self.assertEquals(s.package, 'todo-list')
         self.assertEquals(s.instance_name, 'the_task')
         self.assertEquals(s.instance_name_plural, 'the_tasks')
