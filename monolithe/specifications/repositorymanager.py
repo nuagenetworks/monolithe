@@ -229,4 +229,4 @@ class RepositoryManager (object):
             Returns:
                 Specification object.
         """
-        return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config, mode=MODE_NORMAL)
+        return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config)
