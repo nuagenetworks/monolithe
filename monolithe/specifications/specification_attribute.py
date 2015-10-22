@@ -37,7 +37,7 @@ class SpecificationAttribute(object):
     """ Define an attribute of an object
 
     """
-    def __init__(self, specification, data=None):
+    def __init__(self, remote_name, specification, data=None):
         """ Define an attribute
 
             Example:
@@ -45,8 +45,6 @@ class SpecificationAttribute(object):
                 local_name: associated_gateway_id
                 local_type: str
         """
-        self.specification = specification
-
         # Main attributes
         self.description = None
         self._remote_name = None
@@ -77,6 +75,9 @@ class SpecificationAttribute(object):
         self._type = None
         self.exposed = True
         self.transient = False
+
+        self.specification = specification
+        self.remote_name = remote_name
 
         # Load information from data
         if data:
@@ -113,7 +114,7 @@ class SpecificationAttribute(object):
         if self.specification and self.specification.monolithe_config:
             self.local_name = SDKUtils.get_python_name(self.specification.monolithe_config.map_attribute(self.specification.remote_name, value))
         else:
-            self.local_name = value
+            self.local_name = SDKUtils.get_python_name(value)
 
     def from_dict(self, data):
         """
@@ -121,7 +122,6 @@ class SpecificationAttribute(object):
         """
         try:
             # mandatory characteristics
-            self.remote_name = data["name"]
             self.description = data["description"]
             self.type = data["type"]
 
@@ -132,6 +132,7 @@ class SpecificationAttribute(object):
             self.channel = data["channel"] if "channel" in data else None
             self.creation_only = data["creation_only"] if "creation_only" in data else False
             self.default_order = data["default_order"] if "default_order" in data else False
+            self.default_value = data["default_value"] if "default_value" in data else None
             self.deprecated = data["deprecated"] if "deprecated" in data else False
             self.exposed = data["exposed"] if "exposed" in data else True
             self.filterable = data["filterable"] if "filterable" in data else True
@@ -145,10 +146,10 @@ class SpecificationAttribute(object):
             self.required = data["required"] if "required" in data else False
             self.transient = data["transient"] if "transient" in data else False
             self.unique = data["unique"] if "unique" in data else False
-            self.unique_scope = data["unique_scope"] if "unique_scope" in data else None
+            self.unique_scope = data["unique_scope"] if "unique_scope" in data else 'no'
 
         except Exception as ex:
-            raise Exception("Unable to parse attribute %s for specification %s: %s" % (data["name"], self.specification.remote_name, ex))
+            raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.remote_name, ex))
 
     def to_dict(self):
         """ Transform an attribute to a dict
@@ -156,7 +157,6 @@ class SpecificationAttribute(object):
         data = {}
 
         # mandatory characteristics
-        data["name"] = self.remote_name
         data["description"] = self.description
         data["type"] = self.type
 
@@ -178,6 +178,9 @@ class SpecificationAttribute(object):
 
         if self.default_order:
             data["default_order"] = self.default_order
+
+        if self.default_value:
+            data["default_value"] = self.default_value
 
         if self.deprecated:
             data["deprecated"] = self.deprecated

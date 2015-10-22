@@ -40,7 +40,7 @@ class Specification(object):
 
     """
 
-    def __init__(self, monolithe_config, filename, data=None):
+    def __init__(self, filename, monolithe_config=None, data=None):
         """ Initializes a model object
 
             Example:
@@ -215,8 +215,7 @@ class Specification(object):
         model_attributes = []
 
         for name, data in attributes.iteritems():
-            data["name"] = name
-            model_attribute = SpecificationAttribute(specification=self, data=data)
+            model_attribute = SpecificationAttribute(remote_name=name, specification=self, data=data)
             model_attributes.append(model_attribute)
 
         return sorted(model_attributes, key=lambda x: getattr(x, "local_name"))
