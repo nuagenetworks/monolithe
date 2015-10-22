@@ -56,21 +56,18 @@ SPEC = """{
             "unique_scope": "global"
         }
     },
-    "children": [
-        {
-            "specification": "user",
-            "relationship": "member",
-            "update": true,
-            "get": true
-        },
-        {
-            "specification": "toto",
+    "children": {
+        "toto": {
             "relationship": "child",
             "create": true,
             "get": true
+        },
+        "user": {
+            "relationship": "member",
+            "update": true,
+            "get": true
         }
-
-    ]
+    }
 }
 """
 
@@ -149,19 +146,19 @@ class SpecificationTest(TestCase):
 
 
         self.assertEquals(len(s.child_apis), 2)
-        self.assertEquals(s.child_apis[0].specification, 'user')
-        self.assertEquals(s.child_apis[0].relationship, 'member')
-        self.assertFalse(s.child_apis[0].allows_create)
-        self.assertTrue(s.child_apis[0].allows_update)
-        self.assertFalse(s.child_apis[0].allows_delete)
-        self.assertTrue(s.child_apis[0].allows_get)
+        self.assertEquals(s.child_apis[0].specification, 'toto')
+        self.assertEquals(s.child_apis[0].relationship, 'child')
+        self.assertEquals(s.child_apis[0].allows_create, True)
+        self.assertEquals(s.child_apis[0].allows_update, False)
+        self.assertEquals(s.child_apis[0].allows_delete, False)
+        self.assertEquals(s.child_apis[0].allows_get, True)
 
-        self.assertEquals(s.child_apis[1].specification, 'toto')
-        self.assertEquals(s.child_apis[1].relationship, 'child')
-        self.assertTrue(s.child_apis[1].allows_create)
-        self.assertFalse(s.child_apis[1].allows_update)
-        self.assertFalse(s.child_apis[1].allows_delete)
-        self.assertTrue(s.child_apis[1].allows_get)
+        self.assertEquals(s.child_apis[1].specification, 'user')
+        self.assertEquals(s.child_apis[1].relationship, 'member')
+        self.assertEquals(s.child_apis[1].allows_create, False)
+        self.assertEquals(s.child_apis[1].allows_update, True)
+        self.assertEquals(s.child_apis[1].allows_delete, False)
+        self.assertEquals(s.child_apis[1].allows_get, True)
 
     def test_specification_from_dict(self):
         """ Convert REST names to Python

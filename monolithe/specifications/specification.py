@@ -142,10 +142,10 @@ class Specification(object):
                 data["attributes"][attribute.rest_name] = attribute.to_dict()
 
         if len(self.child_apis):
-            data["children"] = []
+            data["children"] = {}
 
             for api in self.child_apis:
-                data["children"].append(api.to_dict())
+                data["children"][api.specification] = api.to_dict()
 
         return data
 
@@ -180,7 +180,7 @@ class Specification(object):
         self.package       = data["package"] if "package" in data else None
         self.extends       = data["extends"] if "extends" in data else []
         self.entity_name   = data["entity_name"] if "entity_name" in data else None
-        self.rest_name   = data["rest_name"] if "rest_name" in data else None
+        self.rest_name     = data["rest_name"] if "rest_name" in data else None
         self.resource_name = data["resource_name"] if "resource_name" in data else None
         self.allows_get    = data["get"] if "get" in data else False
         self.allows_create = data["create"] if "create" in data else False
@@ -203,21 +203,21 @@ class Specification(object):
         """
         ret = []
 
-        for data in apis:
-            api = SpecificationAPI(specification=self)
+        for name, data in apis.iteritems():
+            api = SpecificationAPI(remote_specification_name=name, specification=self)
             api.from_dict(data)
             ret.append(api)
 
-        return ret
+        return sorted(ret, key=lambda x: getattr(x, "specification"))
 
     def _get_attributes(self, attributes):
         """
 
         """
-        model_attributes = []
+        ret = []
 
         for name, data in attributes.iteritems():
             model_attribute = SpecificationAttribute(rest_name=name, specification=self, data=data)
-            model_attributes.append(model_attribute)
+            ret.append(model_attribute)
 
-        return sorted(model_attributes, key=lambda x: getattr(x, "local_name"))
+        return sorted(ret, key=lambda x: getattr(x, "rest_name"))

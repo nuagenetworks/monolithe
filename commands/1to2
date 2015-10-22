@@ -73,12 +73,11 @@ def convert_specification(data, name, output, apiinfo):
 
         if "children" in data["apis"]:
 
-            data["children"] = []
+            data["children"] = {}
             for key, value in data["apis"]["children"].iteritems():
-                converted_apis = {
-                    "specification": value["RESTName"],
-                    "relationship":  value["relationship"] if "relationship" in value else "child"
-                }
+                data["children"][value["RESTName"]] = {}
+                converted_apis = {}
+                converted_apis["relationship"] = value["relationship"] if "relationship" in value else "child"
 
                 if "rest_name" in data:
                     if apiinfo["root"] == data["rest_name"]:
@@ -89,7 +88,7 @@ def convert_specification(data, name, output, apiinfo):
                     if operation["method"] == "POST": converted_apis["create"] = True
                     if operation["method"] == "PUT": converted_apis["update"] = True
                     if operation["method"] == "DELETE": converted_apis["delete"] = True
-                data["children"].append(converted_apis)
+                data["children"][value["RESTName"]] = converted_apis
             del data["apis"]
 
     if "attributes" in data:
