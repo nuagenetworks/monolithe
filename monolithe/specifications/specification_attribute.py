@@ -97,7 +97,7 @@ class SpecificationAttribute(object):
 
         if value:
             self.local_type = SDKUtils.get_python_type_name(type_name=value)
-            if self.local_type == "time":
+            if self.local_type == "time" and self.specification:
                 self.specification.has_time_attribute = True
 
     @property

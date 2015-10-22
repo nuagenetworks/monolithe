@@ -96,6 +96,9 @@ class SDKUtils(object):
         if type_name ==  "time":
             return "time"
 
+        if type_name ==  "object":
+            return "dict"
+
         return type_name
 
     @classmethod
@@ -125,7 +128,7 @@ class SDKUtils(object):
             return "list"
 
         if type_name.lower() in ("object", "dict"):
-            return "dict"
+            return "object"
 
         if "array" in type_name.lower():
             return "list"
