@@ -93,7 +93,6 @@ class SpecificationTest(TestCase):
         self.assertTrue(s.allows_update)
         self.assertTrue(s.allows_delete)
         self.assertFalse(s.is_root)
-        self.assertTrue(s.has_time_attribute)
 
         self.assertEquals(len(s.attributes), 2)
         self.assertEquals(s.attributes[0].allowed_chars, None)
@@ -131,7 +130,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.attributes[1].exposed, False)
         self.assertEquals(s.attributes[1].filterable, False)
         self.assertEquals(s.attributes[1].format, None)
-        self.assertEquals(s.attributes[1].local_type, 'time')
+        self.assertEquals(s.attributes[1].local_type, 'float')
         self.assertEquals(s.attributes[1].max_length, 1)
         self.assertEquals(s.attributes[1].max_value, 2)
         self.assertEquals(s.attributes[1].min_length, 3)

@@ -94,7 +94,7 @@ class SDKUtils(object):
             return "int"
 
         if type_name ==  "time":
-            return "time"
+            return "float"
 
         if type_name ==  "object":
             return "dict"

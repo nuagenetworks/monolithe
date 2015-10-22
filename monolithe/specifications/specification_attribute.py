@@ -94,11 +94,7 @@ class SpecificationAttribute(object):
         """
         """
         self._type = SDKUtils.massage_type_name(type_name=value)
-
-        if value:
-            self.local_type = SDKUtils.get_python_type_name(type_name=value)
-            if self.local_type == "time" and self.specification:
-                self.specification.has_time_attribute = True
+        self.local_type = SDKUtils.get_python_type_name(type_name=value)
 
     @property
     def rest_name(self):

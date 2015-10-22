@@ -62,7 +62,6 @@ class Specification(object):
         self.description = None
         self.entity_name_plural = None  # the original name in plural
         self.extends = []
-        self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
         self.instance_name = None  # Name of the object as an instance
         self.instance_name_plural = None  # Name of the object as an instance of array or fetcher
         self.is_root = False
