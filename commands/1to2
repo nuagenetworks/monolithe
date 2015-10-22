@@ -60,7 +60,14 @@ def convert_specification(data, name, output, apiinfo):
     if "apis" in data:
 
         if "self" in data["apis"]:
+            for key, value in data["apis"]["self"].iteritems():
+                for operation in value["operations"]:
+                    if operation["method"] == "GET": data["get"] = True
+                    if operation["method"] == "POST": data["create"] = True
+                    if operation["method"] == "PUT": data["update"] = True
+                    if operation["method"] == "DELETE": data["delete"] = True
             del data["apis"]["self"]
+
         if "parents" in data["apis"]:
             del data["apis"]["parents"]
 
