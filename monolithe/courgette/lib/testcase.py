@@ -197,13 +197,13 @@ class CourgetteTestCase(TestCase):
         finally:
             result.stopTest(self)
 
-    def assertErrorEqual(self, errors, title, description, remote_name="", index=0):
+    def assertErrorEqual(self, errors, title, description, rest_name="", index=0):
         """ Check if errors received matches
 
         """
         self.assertEquals(errors[index]["descriptions"][0]["title"], title, "Expected error title \"%s\" != \"%s\"" % (title, errors[index]["descriptions"][0]["title"]))
         self.assertEquals(errors[index]["descriptions"][0]["description"], description, "Expected error description \"%s\" != \"%s\"" % (description, errors[index]["descriptions"][0]["description"]))
-        self.assertEquals(errors[index]["property"], remote_name, "Expected error property \"%s\" != \"%s\"" % (remote_name, errors[index]["property"]))
+        self.assertEquals(errors[index]["property"], rest_name, "Expected error property \"%s\" != \"%s\"" % (rest_name, errors[index]["property"]))
 
     def assertConnectionStatus(self, connection, expected_status):
         """ Check if the connection has expected status

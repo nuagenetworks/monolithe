@@ -62,7 +62,7 @@ class APIDocWriter(object):
     def _write_specification(self, specification, specification_set, filenames):
         """
         """
-        if specification.remote_name != self.api_info:
+        if specification.rest_name != self.api_info:
             (filename, classname) = self.writer.write_specification(specification=specification, specification_set=specification_set)
             filenames[filename] = classname
 
@@ -95,12 +95,12 @@ class APIDocFileWriter(TemplateFileWriter):
     def write_specification(self, specification, specification_set):
         """
         """
-        filename = "%s.html" % specification.remote_name.lower()
+        filename = "%s.html" % specification.rest_name.lower()
 
         parent_apis = []
         for rest_name, remote_spec in specification_set.iteritems():
             for related_child_api in remote_spec.child_apis:
-                if related_child_api.specification == specification.remote_name:
+                if related_child_api.specification == specification.rest_name:
                     parent_apis.append({"remote_spec": remote_spec, "actions": self._get_actions(related_child_api), "relationship": related_child_api.relationship})
 
         child_apis = []

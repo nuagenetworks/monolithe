@@ -48,7 +48,7 @@ class Specification(object):
                 instance_name: enterprise_network
                 plural_name: EnterpriseNetworks
                 instance_plural_name: enterprise_networks
-                remote_name: enterprisenetwork
+                rest_name: enterprisenetwork
                 resource_name: enterprisenetworks
                 package: network
         """
@@ -60,7 +60,7 @@ class Specification(object):
         self.instance_name = None  # Name of the object as an instance
         self.plural_name = None  # the original name in plural
         self.instance_plural_name = None  # Name of the object as an instance of array or fetcher
-        self.remote_name = None  # The remote name of the object
+        self.rest_name = None  # The remote name of the object
         self.resource_name = None  # The name of the resource used in URI
         self.attributes = []  # A list of all properties of the object
         self.child_apis = []
@@ -112,8 +112,8 @@ class Specification(object):
         if self.resource_name:
             data["resource_name"] = self.resource_name
 
-        if self.remote_name:
-            data["rest_name"] = self.remote_name
+        if self.rest_name:
+            data["rest_name"] = self.rest_name
 
         if self.extends:
             data["extends"] = self.extends
@@ -137,7 +137,7 @@ class Specification(object):
             data["attributes"] = {}
 
             for attribute in self.attributes:
-                data["attributes"][attribute.remote_name] = attribute.to_dict()
+                data["attributes"][attribute.rest_name] = attribute.to_dict()
 
         if len(self.child_apis):
             data["children"] = []
@@ -178,7 +178,7 @@ class Specification(object):
         self.package       = data["package"] if "package" in data else None
         self.extends       = data["extends"] if "extends" in data else []
         self.entity_name   = data["entity_name"] if "entity_name" in data else None
-        self.remote_name   = data["rest_name"] if "rest_name" in data else None
+        self.rest_name   = data["rest_name"] if "rest_name" in data else None
         self.resource_name = data["resource_name"] if "resource_name" in data else None
         self.allows_get    = data["get"] if "get" in data else False
         self.allows_create = data["create"] if "create" in data else False
@@ -215,7 +215,7 @@ class Specification(object):
         model_attributes = []
 
         for name, data in attributes.iteritems():
-            model_attribute = SpecificationAttribute(remote_name=name, specification=self, data=data)
+            model_attribute = SpecificationAttribute(rest_name=name, specification=self, data=data)
             model_attributes.append(model_attribute)
 
         return sorted(model_attributes, key=lambda x: getattr(x, "local_name"))

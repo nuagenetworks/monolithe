@@ -92,7 +92,7 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
-        if specification.remote_name != self.api_info["root"]:
+        if specification.rest_name != self.api_info["root"]:
             (filename, classname) = self.writer.write_fetcher(specification=specification, specification_set=specification_set)
             filenames[filename] = classname
 
@@ -190,7 +190,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         override_content = self._extract_override_content(specification.entity_name)
         constants = self._extract_constants(specification)
-        superclass_name =  "NURESTRootObject" if specification.remote_name == self.api_root else "NURESTObject"
+        superclass_name =  "NURESTRootObject" if specification.rest_name == self.api_root else "NURESTObject"
 
         self.write(destination=self.output_directory, filename=filename, template_name="model.py.tpl",
                     specification=specification,

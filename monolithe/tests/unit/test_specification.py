@@ -82,7 +82,7 @@ class SpecificationTest(TestCase):
     def _verify(self, s, data):
         """
         """
-        self.assertEquals(s.remote_name, data['rest_name'])
+        self.assertEquals(s.rest_name, data['rest_name'])
         self.assertEquals(s.description, data['description'])
         self.assertEquals(s.entity_name, 'TheTask')
         self.assertEquals(s.package, 'todo-list')
@@ -116,7 +116,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.attributes[0].min_value, None)
         self.assertEquals(s.attributes[0].orderable, True)
         self.assertEquals(s.attributes[0].read_only, False)
-        self.assertEquals(s.attributes[0].remote_name, 'status')
+        self.assertEquals(s.attributes[0].rest_name, 'status')
         self.assertEquals(s.attributes[0].transient, False)
         self.assertEquals(s.attributes[0].type, 'enum')
         self.assertEquals(s.attributes[0].unique, False)
@@ -140,7 +140,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.attributes[1].min_value, 4)
         self.assertEquals(s.attributes[1].orderable, False)
         self.assertEquals(s.attributes[1].read_only, True)
-        self.assertEquals(s.attributes[1].remote_name, 'theTime')
+        self.assertEquals(s.attributes[1].rest_name, 'theTime')
         self.assertEquals(s.attributes[1].local_name, 'the_time')
         self.assertEquals(s.attributes[1].transient, True)
         self.assertEquals(s.attributes[1].type, 'time')

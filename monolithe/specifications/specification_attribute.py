@@ -37,17 +37,17 @@ class SpecificationAttribute(object):
     """ Define an attribute of an object
 
     """
-    def __init__(self, remote_name, specification=None, data=None):
+    def __init__(self, rest_name, specification=None, data=None):
         """ Define an attribute
 
             Example:
-                remote_name: associatedGatewayID
+                rest_name: associatedGatewayID
                 local_name: associated_gateway_id
                 local_type: str
         """
         # Main attributes
         self.description = None
-        self._remote_name = None
+        self._rest_name = None
         self.local_name = None
         self.local_type = None
 
@@ -77,7 +77,7 @@ class SpecificationAttribute(object):
         self.transient = False
 
         self.specification = specification
-        self.remote_name = remote_name
+        self.rest_name = rest_name
 
         # Load information from data
         if data:
@@ -101,18 +101,18 @@ class SpecificationAttribute(object):
                 self.specification.has_time_attribute = True
 
     @property
-    def remote_name(self):
+    def rest_name(self):
         """
         """
-        return self._remote_name
+        return self._rest_name
 
-    @remote_name.setter
-    def remote_name(self, value):
+    @rest_name.setter
+    def rest_name(self, value):
         """
         """
-        self._remote_name = value
+        self._rest_name = value
         if self.specification and self.specification.monolithe_config:
-            self.local_name = SDKUtils.get_python_name(self.specification.monolithe_config.map_attribute(self.specification.remote_name, value))
+            self.local_name = SDKUtils.get_python_name(self.specification.monolithe_config.map_attribute(self.specification.rest_name, value))
         else:
             self.local_name = SDKUtils.get_python_name(value)
 
@@ -149,7 +149,7 @@ class SpecificationAttribute(object):
             self.unique_scope = data["unique_scope"] if "unique_scope" in data else 'no'
 
         except Exception as ex:
-            raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.remote_name, ex))
+            raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.rest_name, ex))
 
     def to_dict(self):
         """ Transform an attribute to a dict

@@ -102,11 +102,11 @@ class MonolitheConfig(object):
         return self.config.set(section, option, value)
 
 
-    def map_attribute(self, remote_name, attribute_name):
+    def map_attribute(self, rest_name, attribute_name):
         """
         """
-        if self.mapping is None or not self.mapping.has_section(remote_name) or not self.mapping.has_option(remote_name, attribute_name):
+        if self.mapping is None or not self.mapping.has_section(rest_name) or not self.mapping.has_option(rest_name, attribute_name):
             return attribute_name
 
-        return self.mapping.get(remote_name, attribute_name)
+        return self.mapping.get(rest_name, attribute_name)
 

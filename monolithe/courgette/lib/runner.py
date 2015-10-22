@@ -70,7 +70,7 @@ class CourgetteTestsRunner(object):
                                     api_password=password,
                                     api_enterprise=enterprise)
 
-        self._sdk_object = sdk_loader.get_instance_from_rest_name(specification.remote_name)
+        self._sdk_object = sdk_loader.get_instance_from_rest_name(specification.rest_name)
         self._sdk_object.from_dict(default_values)
         self._sdk_parent_object = None
 

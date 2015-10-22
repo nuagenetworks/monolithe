@@ -16,7 +16,7 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
             {{ specification.description }}
     """
 
-    __rest_name__ = "{{ specification.remote_name }}"
+    __rest_name__ = "{{ specification.rest_name }}"
     __resource_name__ = "{{ specification.resource_name }}"
 
     {% if constants|length %}
@@ -45,7 +45,7 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
         {% for attribute in specification.attributes %}
         self._{{ attribute.local_name|lower }} = None{% endfor %}
         {% for attribute in specification.attributes %}
-        self.expose_attribute(local_name="{{ attribute.local_name|lower }}", remote_name="{{ attribute.remote_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
+        self.expose_attribute(local_name="{{ attribute.local_name|lower }}", remote_name="{{ attribute.rest_name }}", attribute_type={{ attribute.local_type }}, is_required={{ attribute.required }}, is_unique={{ attribute.unique }}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}, choices={{ attribute.allowed_choices|sort|trim }}{% endif %}){% endfor %}
         {% if specification.child_apis|length > 0 %}
 
         # Fetchers
@@ -65,8 +65,8 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
             Notes:
                 {{ attribute.description }}
 
-                {% if attribute.local_name != attribute.remote_name %}
-                This attribute is named `{{ attribute.remote_name }}` in {{ product_accronym }} API.
+                {% if attribute.local_name != attribute.rest_name %}
+                This attribute is named `{{ attribute.rest_name }}` in {{ product_accronym }} API.
                 {% endif %}
         """
         return self._{{ attribute.local_name }}
@@ -78,8 +78,8 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
             Notes:
                 {{ attribute.description }}
 
-                {% if attribute.local_name != attribute.remote_name %}
-                This attribute is named `{{ attribute.remote_name }}` in {{ product_accronym }} API.
+                {% if attribute.local_name != attribute.rest_name %}
+                This attribute is named `{{ attribute.rest_name }}` in {{ product_accronym }} API.
                 {% endif %}
         """
         self._{{ attribute.local_name }} = value

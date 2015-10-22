@@ -62,7 +62,7 @@
 
             <div class="row bordered-row">
                 <div class="col-xs-12">
-                    <a class="filterable" data-filter-keyword="{{ specification.resource_name }}" id="{{ specification.resource_name }}" href="{{ specification.remote_name }}.html" title="API reference for {{ specification.remote_name }}">{{ specification.resource_name }}</a>
+                    <a class="filterable" data-filter-keyword="{{ specification.resource_name }}" id="{{ specification.resource_name }}" href="{{ specification.rest_name }}.html" title="API reference for {{ specification.rest_name }}">{{ specification.resource_name }}</a>
                 </div>
             </div>
         {% endfor %}

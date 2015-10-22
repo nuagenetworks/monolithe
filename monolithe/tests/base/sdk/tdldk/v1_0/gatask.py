@@ -49,9 +49,9 @@ class GATask(NURESTObject):
         self._status = None
         self._title = None
         
-        self.expose_attribute(local_name="description", remote_name="description", attribute_type=str, is_required=True, is_unique=False)
-        self.expose_attribute(local_name="status", remote_name="status", attribute_type=str, is_required=True, is_unique=False, choices=[u'DONE', u'TODO'])
-        self.expose_attribute(local_name="title", remote_name="title", attribute_type=str, is_required=True, is_unique=True)
+        self.expose_attribute(local_name="description", rest_name="description", attribute_type=str, is_required=True, is_unique=False)
+        self.expose_attribute(local_name="status", rest_name="status", attribute_type=str, is_required=True, is_unique=False, choices=[u'DONE', u'TODO'])
+        self.expose_attribute(local_name="title", rest_name="title", attribute_type=str, is_required=True, is_unique=True)
         
 
         self._compute_args(**kwargs)
