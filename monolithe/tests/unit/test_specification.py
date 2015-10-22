@@ -87,7 +87,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.entity_name, 'TheTask')
         self.assertEquals(s.package, 'todo-list')
         self.assertEquals(s.instance_name, 'the_task')
-        self.assertEquals(s.instance_plural_name, 'the_tasks')
+        self.assertEquals(s.instance_name_plural, 'the_tasks')
         self.assertEquals(s.resource_name, 'tasks')
         self.assertEquals(s.extends, ["@description", "@title"])
         self.assertTrue(s.allows_get)

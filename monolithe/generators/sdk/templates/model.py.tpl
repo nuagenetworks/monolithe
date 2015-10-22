@@ -3,7 +3,7 @@
 
 {% for api in specification.child_apis %}
 {% set child_spec = specification_set[api.specification] %}
-from .fetchers import {{ sdk_class_prefix }}{{ child_spec.plural_name }}Fetcher
+from .fetchers import {{ sdk_class_prefix }}{{ child_spec.entity_name_plural }}Fetcher
 {% endfor %}
 from bambou import {{ superclass_name }}{% if specification.has_time_attribute %}
 from datetime import time{% endif %}
@@ -51,7 +51,7 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
         # Fetchers
         {% for api in specification.child_apis %}
         {% set child_spec = specification_set[api.specification] %}
-        self.{{ child_spec.instance_plural_name }} = {{ sdk_class_prefix }}{{ child_spec.plural_name }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
+        self.{{ child_spec.instance_name_plural }} = {{ sdk_class_prefix }}{{ child_spec.entity_name_plural }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
         {% endfor %}{% endif %}
 
         self._compute_args(**kwargs)

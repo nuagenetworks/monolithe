@@ -4,8 +4,8 @@
 from bambou import NURESTFetcher
 
 
-class {{ sdk_class_prefix }}{{ specification.plural_name }}Fetcher(NURESTFetcher):
-    """ Represents a {{ sdk_class_prefix }}{{ specification.plural_name }} fetcher
+class {{ sdk_class_prefix }}{{ specification.entity_name_plural }}Fetcher(NURESTFetcher):
+    """ Represents a {{ sdk_class_prefix }}{{ specification.entity_name_plural }} fetcher
 
         Notes:
             This fetcher enables to fetch {{ sdk_class_prefix }}{{ specification.entity_name }} objects.

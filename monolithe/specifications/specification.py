@@ -46,31 +46,33 @@ class Specification(object):
             Example:
                 name: EnterpriseNetwork
                 instance_name: enterprise_network
-                plural_name: EnterpriseNetworks
-                instance_plural_name: enterprise_networks
+                entity_name_plural: EnterpriseNetworks
+                instance_name_plural: enterprise_networks
                 rest_name: enterprisenetwork
                 resource_name: enterprisenetworks
                 package: network
         """
         self.monolithe_config = monolithe_config
         self.filename = filename
+
+        self.allows_create = False
+        self.allows_delete = False
+        self.allows_get = False
+        self.allows_update = False
         self.description = None
-        self.package = None
-        self._entity_name = None  # The original name of the object
+        self.entity_name_plural = None  # the original name in plural
+        self.extends = []
+        self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
         self.instance_name = None  # Name of the object as an instance
-        self.plural_name = None  # the original name in plural
-        self.instance_plural_name = None  # Name of the object as an instance of array or fetcher
-        self.rest_name = None  # The remote name of the object
+        self.instance_name_plural = None  # Name of the object as an instance of array or fetcher
+        self.is_root = False
+        self.package = None
         self.resource_name = None  # The name of the resource used in URI
+        self.rest_name = None  # The remote name of the object
+        self._entity_name = None  # The original name of the object
+
         self.attributes = []  # A list of all properties of the object
         self.child_apis = []
-        self.extends = []
-        self.allows_get = False
-        self.allows_create = False
-        self.allows_update = False
-        self.allows_delete = False
-        self.is_root = False
-        self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
         if data:
             self.from_dict(data=data)
@@ -89,8 +91,8 @@ class Specification(object):
 
         if value:
             self.instance_name = SDKUtils.get_python_name(value)
-            self.plural_name = SDKUtils.get_plural_name(value)
-            self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+            self.entity_name_plural = SDKUtils.get_entity_name_plural(value)
+            self.instance_name_plural = SDKUtils.get_python_name(self.entity_name_plural)
 
 
     def to_dict(self):

@@ -133,7 +133,7 @@ class SDKUtils(object):
         return "string"
 
     @classmethod
-    def get_plural_name(cls, singular_name):
+    def get_entity_name_plural(cls, singular_name):
         """ Returns the plural name of the singular name
 
             Certain words are invariant.

@@ -5,17 +5,17 @@ from monolithe.lib import SDKUtils
 
 
 class GetPluralNameTest(TestCase):
-    """ Test for get_plural_name function
+    """ Test for get_entity_name_plural function
 
     """
-    def assertPluralNameEquals(self, singular_name, plural_name):
+    def assertPluralNameEquals(self, singular_name, entity_name_plural):
         """ Check that the remote name is well converted to
             the python name
 
         """
-        self.assertEqual(SDKUtils.get_plural_name(singular_name), plural_name)
+        self.assertEqual(SDKUtils.get_entity_name_plural(singular_name), entity_name_plural)
 
-    def test_get_plural_name(self):
+    def test_get_entity_name_plural(self):
         """ Compute plural names properly
 
         """

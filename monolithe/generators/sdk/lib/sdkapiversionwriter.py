@@ -224,7 +224,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         """
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
-        base_name = "%s_fetcher" % specification.plural_name.lower()
+        base_name = "%s_fetcher" % specification.entity_name_plural.lower()
         filename = "%s%s.py" % (self._sdk_class_prefix.lower(), base_name)
         override_content = self._extract_override_content(base_name)
 
@@ -236,7 +236,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     override_content=override_content,
                     header=self.header_content)
 
-        return (filename, specification.plural_name)
+        return (filename, specification.entity_name_plural)
 
     def write_attrs_defaults(self):
         """

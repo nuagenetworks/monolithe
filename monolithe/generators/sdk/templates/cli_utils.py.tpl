@@ -48,22 +48,22 @@ class Utils(object):
         return all_cap_re.sub(r"\1_\2", s1).lower()
 
     @classmethod
-    def get_singular_name(cls, plural_name):
+    def get_singular_name(cls, entity_name_plural):
         """ Returns the singular name of the plural name """
 
-        if plural_name in Utils.INVARIANT_RESOURCES:
-            return plural_name
+        if entity_name_plural in Utils.INVARIANT_RESOURCES:
+            return entity_name_plural
 
-        if plural_name[-3:] == "ies":
-            return plural_name[:-3] + "y"
+        if entity_name_plural[-3:] == "ies":
+            return entity_name_plural[:-3] + "y"
 
-        if plural_name[-1] == "s":
-            return plural_name[:-1]
+        if entity_name_plural[-1] == "s":
+            return entity_name_plural[:-1]
 
-        return plural_name
+        return entity_name_plural
 
     @classmethod
-    def get_plural_name(cls, singular_name):
+    def get_entity_name_plural(cls, singular_name):
         """ Returns the plural name of the singular name """
 
         if singular_name in Utils.INVARIANT_RESOURCES:
@@ -150,7 +150,7 @@ class SDKInspector(object):
 
         """
         resources = self._objects_mapping.keys()
-        resources = [Utils.get_plural_name(name) for name in resources if name not in self._ignored_resources]
+        resources = [Utils.get_entity_name_plural(name) for name in resources if name not in self._ignored_resources]
 
         return resources
 
