@@ -52,20 +52,34 @@ def convert_specification(data, name, output, apiinfo):
     """
     """
     if "model" in data:
-        for token in data["model"]:
-            converted_token = convert_token(token)
-            data[converted_token] = data["model"][token]
-        del data["model"]
+
+        if "attributes" in data["model"]:
+            data["attributes"] = {}
+
+            for key, attr in data["model"]["attributes"].iteritems():
+                converted_characteristics = {}
+
+                for token, value in attr.iteritems():
+                    converted_characteristics[convert_token(token)] = value
+
+                data["attributes"][key] = converted_characteristics
+
+            del data["model"]["attributes"]
+
+        converted_model = {}
+        for key, value in data["model"].iteritems():
+            converted_model[convert_token(key)] = value
+        data["model"] = converted_model
 
     if "apis" in data:
 
         if "self" in data["apis"]:
             for key, value in data["apis"]["self"].iteritems():
                 for operation in value["operations"]:
-                    if operation["method"] == "GET": data["get"] = True
-                    if operation["method"] == "POST": data["create"] = True
-                    if operation["method"] == "PUT": data["update"] = True
-                    if operation["method"] == "DELETE": data["delete"] = True
+                    if operation["method"] == "GET": data["model"]["get"] = True
+                    if operation["method"] == "POST": data["model"]["create"] = True
+                    if operation["method"] == "PUT": data["model"]["update"] = True
+                    if operation["method"] == "DELETE": data["model"]["delete"] = True
             del data["apis"]["self"]
 
         if "parents" in data["apis"]:
@@ -79,8 +93,8 @@ def convert_specification(data, name, output, apiinfo):
                 converted_apis = {}
                 converted_apis["relationship"] = value["relationship"] if "relationship" in value else "child"
 
-                if "rest_name" in data:
-                    if apiinfo["root"] == data["rest_name"]:
+                if "model" in data and "rest_name" in data["model"]:
+                    if apiinfo["root"] == data["model"]["rest_name"]:
                         converted_apis["relationship"] = "root"
 
                 for operation in value["operations"]:
@@ -90,13 +104,6 @@ def convert_specification(data, name, output, apiinfo):
                     if operation["method"] == "DELETE": converted_apis["delete"] = True
                 data["children"][value["RESTName"]] = converted_apis
             del data["apis"]
-
-    if "attributes" in data:
-        for key, attr in data["attributes"].iteritems():
-            converted_characteristics = {}
-            for token, value in attr.iteritems():
-                converted_characteristics[convert_token(token)] = value
-            data["attributes"][key] = converted_characteristics
 
     with open(os.path.join(output, name), 'w') as f:
         f.write(json.dumps(data, indent=4))

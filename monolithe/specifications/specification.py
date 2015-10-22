@@ -99,40 +99,43 @@ class Specification(object):
 
         """
 
-        data = {}
+        data = {"model": {}}
 
         if self.description:
-            data["description"] = self.description
+            data["model"]["description"] = self.description
 
         if self.entity_name:
-            data["entity_name"] = self.entity_name
+            data["model"]["entity_name"] = self.entity_name
 
         if self.package:
-            data["package"] = self.package
+            data["model"]["package"] = self.package
 
         if self.resource_name:
-            data["resource_name"] = self.resource_name
+            data["model"]["resource_name"] = self.resource_name
 
         if self.rest_name:
-            data["rest_name"] = self.rest_name
+            data["model"]["rest_name"] = self.rest_name
 
         if self.extends:
-            data["extends"] = self.extends
+            data["model"]["extends"] = self.extends
 
         if self.allows_get:
-            data["get"] = self.allows_get
+            data["model"]["get"] = self.allows_get
 
         if self.allows_update:
-            data["update"] = self.allows_update
+            data["model"]["update"] = self.allows_update
 
         if self.allows_create:
-            data["create"] = self.allows_create
+            data["model"]["create"] = self.allows_create
 
         if self.allows_delete:
-            data["delete"] = self.allows_delete
+            data["model"]["delete"] = self.allows_delete
 
         if self.is_root:
-            data["root"] = self.is_root
+            data["model"]["root"] = self.is_root
+
+        if not len(data["model"]):
+            del data["model"]
 
         if len(self.attributes):
             data["attributes"] = {}
@@ -160,32 +163,34 @@ class Specification(object):
         if "children" in data:
             self.child_apis = self._get_apis(data["children"])
 
-        if "resource_name" in data:
-            string_data = string_data.replace("[[resource_name]]", data["resource_name"])
+        if "model" in data and "resource_name" in data["model"]:
+            string_data = string_data.replace("[[resource_name]]", data["model"]["resource_name"])
             tokens_replaced = True
 
-        if "rest_name" in data:
-            string_data = string_data.replace("[[rest_name]]", data["rest_name"])
+        if "model" in data and "rest_name" in data["model"]:
+            string_data = string_data.replace("[[rest_name]]", data["model"]["rest_name"])
             tokens_replaced = True
 
-        if "entity_name" in data:
-            string_data = string_data.replace("[[entity_name]]", data["entity_name"])
+        if "model" in data and "entity_name" in data["model"]:
+            string_data = string_data.replace("[[entity_name]]", data["model"]["entity_name"])
             tokens_replaced = True
 
         if tokens_replaced:
             data = json.loads(string_data)
 
-        self.description   = data["description"] if "description" in data else None
-        self.package       = data["package"] if "package" in data else None
-        self.extends       = data["extends"] if "extends" in data else []
-        self.entity_name   = data["entity_name"] if "entity_name" in data else None
-        self.rest_name     = data["rest_name"] if "rest_name" in data else None
-        self.resource_name = data["resource_name"] if "resource_name" in data else None
-        self.allows_get    = data["get"] if "get" in data else False
-        self.allows_create = data["create"] if "create" in data else False
-        self.allows_update = data["update"] if "update" in data else False
-        self.allows_delete = data["delete"] if "delete" in data else False
-        self.is_root       = data["root"] if "root" in data else False
+        if "model" in data:
+            model = data["model"]
+            self.description   = model["description"] if "description" in model else None
+            self.package       = model["package"] if "package" in model else None
+            self.extends       = model["extends"] if "extends" in model else []
+            self.entity_name   = model["entity_name"] if "entity_name" in model else None
+            self.rest_name     = model["rest_name"] if "rest_name" in model else None
+            self.resource_name = model["resource_name"] if "resource_name" in model else None
+            self.allows_get    = model["get"] if "get" in model else False
+            self.allows_create = model["create"] if "create" in model else False
+            self.allows_update = model["update"] if "update" in model else False
+            self.allows_delete = model["delete"] if "delete" in model else False
+            self.is_root       = model["root"] if "root" in model else False
 
         if "attributes" in data:
             self.attributes = self._get_attributes(data["attributes"])

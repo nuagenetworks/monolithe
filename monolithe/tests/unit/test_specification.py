@@ -5,18 +5,20 @@ from unittest import TestCase
 from monolithe.specifications import Specification
 
 SPEC = """{
-    "resource_name": "tasks",
-    "description": "Represent a task to do in a list",
-    "entity_name": "TheTask",
-    "package": "todo-list",
-    "get": true,
-    "update": true,
-    "delete": true,
-    "rest_name": "task",
-    "extends": [
-        "@description",
-        "@title"
-    ],
+    "model": {
+        "resource_name": "tasks",
+        "description": "Represent a task to do in a list",
+        "entity_name": "TheTask",
+        "package": "todo-list",
+        "get": true,
+        "update": true,
+        "delete": true,
+        "rest_name": "task",
+        "extends": [
+            "@description",
+            "@title"
+        ]
+    },
     "attributes": {
         "status": {
             "min_length": 1,
@@ -79,20 +81,20 @@ class SpecificationTest(TestCase):
     def _verify(self, s, data):
         """
         """
-        self.assertEquals(s.rest_name, data['rest_name'])
-        self.assertEquals(s.description, data['description'])
+        self.assertEquals(s.rest_name, data['model']['rest_name'])
+        self.assertEquals(s.description, data['model']['description'])
         self.assertEquals(s.entity_name, 'TheTask')
         self.assertEquals(s.entity_name_plural, 'TheTasks')
-        self.assertEquals(s.package, 'todo-list')
+        self.assertEquals(s.package, data['model']['package'])
         self.assertEquals(s.instance_name, 'the_task')
         self.assertEquals(s.instance_name_plural, 'the_tasks')
-        self.assertEquals(s.resource_name, 'tasks')
-        self.assertEquals(s.extends, ["@description", "@title"])
-        self.assertTrue(s.allows_get)
-        self.assertFalse(s.allows_create)
-        self.assertTrue(s.allows_update)
-        self.assertTrue(s.allows_delete)
-        self.assertFalse(s.is_root)
+        self.assertEquals(s.resource_name, data['model']['resource_name'])
+        self.assertEquals(s.extends, data['model']['extends'])
+        self.assertEquals(s.allows_get, data['model']['get'])
+        self.assertEquals(s.allows_create, False)
+        self.assertEquals(s.allows_update, data['model']['update'])
+        self.assertEquals(s.allows_delete, data['model']['delete'])
+        self.assertEquals(s.is_root, False)
 
         self.assertEquals(len(s.attributes), 2)
         self.assertEquals(s.attributes[0].allowed_chars, None)

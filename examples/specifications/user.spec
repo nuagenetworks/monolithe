@@ -1,11 +1,14 @@
 {
-    "resource_name": "users",
-    "description": "Represent a user",
-    "entity_name": "User",
-    "get": true,
-    "package": "todo-list",
-    "update": true,
-    "rest_name": "user",
+    "model": {
+        "resource_name": "users",
+        "description": "Represent a user",
+        "entity_name": "User",
+        "get": true,
+        "package": "todo-list",
+        "update": true,
+        "rest_name": "user",
+        "delete": true
+    },
     "attributes": {
         "userName": {
             "min_length": 1,
@@ -41,6 +44,5 @@
             "orderable": true,
             "type": "string"
         }
-    },
-    "delete": true
+    }
 }

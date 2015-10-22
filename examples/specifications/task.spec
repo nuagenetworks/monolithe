@@ -1,15 +1,18 @@
 {
-    "resource_name": "tasks",
-    "description": "Represent a task to do in a list",
-    "entity_name": "Task",
-    "package": "todo-list",
-    "get": true,
-    "update": true,
-    "rest_name": "task",
-    "extends": [
-        "@description",
-        "@title"
-    ],
+    "model": {
+        "resource_name": "tasks",
+        "description": "Represent a task to do in a list",
+        "entity_name": "Task",
+        "package": "todo-list",
+        "get": true,
+        "update": true,
+        "delete": true,
+        "rest_name": "task",
+        "extends": [
+            "@description",
+            "@title"
+        ]
+    },
     "attributes": {
         "status": {
             "min_length": 1,
@@ -32,6 +35,5 @@
             "relationship": "member",
             "get": true
         }
-    },
-    "delete": true
+    }
 }
