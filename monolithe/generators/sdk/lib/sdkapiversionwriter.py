@@ -92,7 +92,7 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
-        if specification.name != self.api_info["root"]:
+        if specification.remote_name != self.api_info["root"]:
             (filename, classname) = self.writer.write_fetcher(specification=specification, specification_set=specification_set)
             filenames[filename] = classname
 
@@ -186,9 +186,9 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
         """ Write autogenerate specification file
 
         """
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.entity_name.lower())
 
-        override_content = self._extract_override_content(specification.name)
+        override_content = self._extract_override_content(specification.entity_name)
         constants = self._extract_constants(specification)
         superclass_name =  "NURESTRootObject" if specification.remote_name == self.api_root else "NURESTObject"
 
@@ -203,7 +203,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     constants=constants,
                     header=self.header_content)
 
-        return (filename, specification.name)
+        return (filename, specification.entity_name)
 
     def write_init_fetchers(self, filenames):
         """ Write fetcher init file

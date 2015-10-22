@@ -37,7 +37,7 @@ class SpecificationAttribute(object):
     """ Define an attribute of an object
 
     """
-    def __init__(self, remote_name, specification, data=None):
+    def __init__(self, remote_name, specification=None, data=None):
         """ Define an attribute
 
             Example:

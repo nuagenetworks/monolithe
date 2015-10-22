@@ -9,8 +9,8 @@ from bambou import {{ superclass_name }}{% if specification.has_time_attribute %
 from datetime import time{% endif %}
 
 
-class {{ sdk_class_prefix }}{{ specification.name }}({{ superclass_name }}):
-    """ Represents a {{ specification.name }} in the {{ product_accronym }}
+class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }}):
+    """ Represents a {{ specification.entity_name }} in the {{ product_accronym }}
 
         Notes:
             {{ specification.description }}
@@ -27,7 +27,7 @@ class {{ sdk_class_prefix }}{{ specification.name }}({{ superclass_name }}):
     {% endif %}
 
     def __init__(self, **kwargs):
-        """ Initializes a {{ specification.name }} instance
+        """ Initializes a {{ specification.entity_name }} instance
 
             Notes:
                 You can specify all parameters while calling this methods.
@@ -35,11 +35,11 @@ class {{ sdk_class_prefix }}{{ specification.name }}({{ superclass_name }}):
                 object from a Python dictionary
 
             Examples:
-                >>> {{ specification.name.lower() }} = {{ sdk_class_prefix }}{{ specification.name }}(id=u'xxxx-xxx-xxx-xxx', name=u'{{ specification.name }}')
-                >>> {{ specification.name.lower() }} = {{ sdk_class_prefix }}{{ specification.name }}(data=my_dict)
+                >>> {{ specification.entity_name.lower() }} = {{ sdk_class_prefix }}{{ specification.entity_name }}(id=u'xxxx-xxx-xxx-xxx', name=u'{{ specification.entity_name }}')
+                >>> {{ specification.entity_name.lower() }} = {{ sdk_class_prefix }}{{ specification.entity_name }}(data=my_dict)
         """
 
-        super({{ sdk_class_prefix }}{{ specification.name }}, self).__init__()
+        super({{ sdk_class_prefix }}{{ specification.entity_name }}, self).__init__()
 
         # Read/Write Attributes
         {% for attribute in specification.attributes %}

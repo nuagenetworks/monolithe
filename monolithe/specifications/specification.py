@@ -56,7 +56,7 @@ class Specification(object):
         self.filename = filename
         self.description = None
         self.package = None
-        self._name = None  # The original name of the object
+        self._entity_name = None  # The original name of the object
         self.instance_name = None  # Name of the object as an instance
         self.plural_name = None  # the original name in plural
         self.instance_plural_name = None  # Name of the object as an instance of array or fetcher
@@ -76,16 +76,16 @@ class Specification(object):
             self.from_dict(data=data)
 
     @property
-    def name(self):
+    def entity_name(self):
         """
         """
-        return self._name
+        return self._entity_name
 
-    @name.setter
-    def name(self, value):
+    @entity_name.setter
+    def entity_name(self, value):
         """
         """
-        self._name = value
+        self._entity_name = value
 
         if value:
             self.instance_name = SDKUtils.get_python_name(value)
@@ -103,8 +103,8 @@ class Specification(object):
         if self.description:
             data["description"] = self.description
 
-        if self.name:
-            data["entity_name"] = self.name
+        if self.entity_name:
+            data["entity_name"] = self.entity_name
 
         if self.package:
             data["package"] = self.package
@@ -177,7 +177,7 @@ class Specification(object):
         self.description   = data["description"] if "description" in data else None
         self.package       = data["package"] if "package" in data else None
         self.extends       = data["extends"] if "extends" in data else []
-        self.name          = data["entity_name"] if "entity_name" in data else None
+        self.entity_name   = data["entity_name"] if "entity_name" in data else None
         self.remote_name   = data["rest_name"] if "rest_name" in data else None
         self.resource_name = data["resource_name"] if "resource_name" in data else None
         self.allows_get    = data["get"] if "get" in data else False

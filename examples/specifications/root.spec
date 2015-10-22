@@ -1,25 +1,23 @@
 {
-    "rest_name": "root",
-    "attributes": {},
-    "description": "Root object of the API",
-    "entity_name": "Root",
-    "package": "todo-list",
-    "resource_name": "root",
-    "get": true,
-    "root": true,
-
+    "resource_name": "root", 
+    "description": "Root object of the API", 
+    "entity_name": "Root", 
+    "get": true, 
+    "package": "todo-list", 
+    "rest_name": "root", 
+    "root": true, 
     "children": [
         {
-            "specification": "list",
-            "relationship": "root",
-            "get": true,
-            "create": true
-        },
+            "specification": "list", 
+            "create": true, 
+            "relationship": "root", 
+            "get": true
+        }, 
         {
-            "specification": "user",
-            "relationship": "root",
-            "get": true,
-            "create": true
+            "specification": "user", 
+            "create": true, 
+            "relationship": "root", 
+            "get": true
         }
     ]
 }

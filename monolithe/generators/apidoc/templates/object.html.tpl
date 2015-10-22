@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ specification.name }} API Reference</title>
+    <title>{{ specification.entity_name }} API Reference</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -156,7 +156,7 @@
     <div class="container">
 
         <section id="intro">
-            <h2>{{ specification.name }}</h2>
+            <h2>{{ specification.entity_name }}</h2>
             <p>{{ specification.description }}</p>
         </section>
 

@@ -116,7 +116,7 @@ class APIDocFileWriter(TemplateFileWriter):
                     self_apis=self_apis,
                     product_name=self._product_name)
 
-        return (filename, specification.name)
+        return (filename, specification.entity_name)
 
     def write_index(self, specifications):
         """

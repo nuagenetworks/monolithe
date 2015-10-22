@@ -1,19 +1,22 @@
 {
-    "rest_name": "list",
-    "description": "Represent a a list of task to do",
-    "entity_name": "List",
-    "extends": ["@description", "@title"],
-    "package": "todo-list",
-    "resource_name": "lists",
-    "get": true,
-    "update": true,
-    "delete": true,
-
+    "resource_name": "lists", 
+    "description": "Represent a a list of task to do", 
+    "entity_name": "List", 
+    "package": "todo-list", 
+    "get": true, 
+    "update": true, 
+    "rest_name": "list", 
+    "extends": [
+        "@description", 
+        "@title"
+    ], 
     "children": [
         {
-            "specification": "task",
-            "get": true,
-            "create": true
+            "specification": "task", 
+            "create": true, 
+            "relationship": "child", 
+            "get": true
         }
-    ]
+    ], 
+    "delete": true
 }
