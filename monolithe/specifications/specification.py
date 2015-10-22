@@ -158,26 +158,23 @@ class Specification(object):
         """
 
         ## replace all the tokens
-        string_data = json.dumps(data)
-        tokens_replaced = False
-
-        if "children" in data:
-            self.child_apis = self._get_apis(data["children"])
-
-        if "model" in data and "resource_name" in data["model"]:
-            string_data = string_data.replace("[[resource_name]]", data["model"]["resource_name"])
-            tokens_replaced = True
-
-        if "model" in data and "rest_name" in data["model"]:
-            string_data = string_data.replace("[[rest_name]]", data["model"]["rest_name"])
-            tokens_replaced = True
-
-        if "model" in data and "entity_name" in data["model"]:
-            string_data = string_data.replace("[[entity_name]]", data["model"]["entity_name"])
-            tokens_replaced = True
-
-        if tokens_replaced:
-            data = json.loads(string_data)
+        # string_data = json.dumps(data)
+        # tokens_replaced = False
+        #
+        # if "model" in data and "resource_name" in data["model"]:
+        #     string_data = string_data.replace("[[resource_name]]", data["model"]["resource_name"])
+        #     tokens_replaced = True
+        #
+        # if "model" in data and "rest_name" in data["model"]:
+        #     string_data = string_data.replace("[[rest_name]]", data["model"]["rest_name"])
+        #     tokens_replaced = True
+        #
+        # if "model" in data and "entity_name" in data["model"]:
+        #     string_data = string_data.replace("[[entity_name]]", data["model"]["entity_name"])
+        #     tokens_replaced = True
+        #
+        # if tokens_replaced:
+        #     data = json.loads(string_data)
 
         if "model" in data:
             model = data["model"]
@@ -196,6 +193,8 @@ class Specification(object):
         if "attributes" in data:
             self.attributes = self._get_attributes(data["attributes"])
 
+        if "children" in data:
+            self.child_apis = self._get_apis(data["children"])
 
     def _get_apis(self, apis):
         """ Process apis for the given model
