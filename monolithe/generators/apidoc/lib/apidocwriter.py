@@ -97,15 +97,16 @@ class APIDocFileWriter(TemplateFileWriter):
         """
         filename = "%s.html" % specification.rest_name.lower()
 
+        # remove this when template can use the things resolved by _resolve_parent_apis
         parent_apis = []
         for rest_name, remote_spec in specification_set.iteritems():
             for related_child_api in remote_spec.child_apis:
-                if related_child_api.specification == specification.rest_name:
+                if related_child_api.remote_specification_name == specification.rest_name:
                     parent_apis.append({"remote_spec": remote_spec, "actions": self._get_actions(related_child_api), "relationship": related_child_api.relationship})
 
         child_apis = []
         for child_api in specification.child_apis:
-            child_apis.append({"remote_spec": specification_set[child_api.specification], "actions": self._get_actions(child_api), "relationship": child_api.relationship})
+            child_apis.append({"remote_spec": specification_set[child_api.remote_specification_name], "actions": self._get_actions(child_api), "relationship": child_api.relationship})
 
         self_apis = [{"actions": self._get_actions(specification)}]
 

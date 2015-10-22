@@ -148,14 +148,14 @@ class SpecificationTest(TestCase):
 
 
         self.assertEquals(len(s.child_apis), 2)
-        self.assertEquals(s.child_apis[0].specification, 'toto')
+        self.assertEquals(s.child_apis[0].remote_specification_name, 'toto')
         self.assertEquals(s.child_apis[0].relationship, 'child')
         self.assertEquals(s.child_apis[0].allows_create, True)
         self.assertEquals(s.child_apis[0].allows_update, False)
         self.assertEquals(s.child_apis[0].allows_delete, False)
         self.assertEquals(s.child_apis[0].allows_get, True)
 
-        self.assertEquals(s.child_apis[1].specification, 'user')
+        self.assertEquals(s.child_apis[1].remote_specification_name, 'user')
         self.assertEquals(s.child_apis[1].relationship, 'member')
         self.assertEquals(s.child_apis[1].allows_create, False)
         self.assertEquals(s.child_apis[1].allows_update, True)

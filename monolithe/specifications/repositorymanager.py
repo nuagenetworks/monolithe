@@ -212,8 +212,8 @@ class RepositoryManager (object):
             except Exception as e:
                 raise Exception("could not parse %s" % name, e)
 
-        if mode == MODE_NORMAL and "extends" in data:
-            for extension in data["extends"]:
+        if mode == MODE_NORMAL and "model" in data and "extends" in data["model"]:
+            for extension in data["model"]["extends"]:
                 data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive, mode=MODE_NORMAL))
 
         return data

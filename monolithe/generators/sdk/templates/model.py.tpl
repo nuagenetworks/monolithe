@@ -2,7 +2,7 @@
 {{ header }}
 
 {% for api in specification.child_apis %}
-{% set child_spec = specification_set[api.specification] %}
+{% set child_spec = specification_set[api.remote_specification_name] %}
 from .fetchers import {{ sdk_class_prefix }}{{ child_spec.entity_name_plural }}Fetcher
 {% endfor %}
 from bambou import {{ superclass_name }}
@@ -49,7 +49,7 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
 
         # Fetchers
         {% for api in specification.child_apis %}
-        {% set child_spec = specification_set[api.specification] %}
+        {% set child_spec = specification_set[api.remote_specification_name] %}
         self.{{ child_spec.instance_name_plural }} = {{ sdk_class_prefix }}{{ child_spec.entity_name_plural }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
         {% endfor %}{% endif %}
 

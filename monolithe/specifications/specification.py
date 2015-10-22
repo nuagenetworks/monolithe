@@ -72,6 +72,7 @@ class Specification(object):
 
         self.attributes = []  # A list of all properties of the object
         self.child_apis = []
+        self.parent_apis = []
 
         if data:
             self.from_dict(data=data)
@@ -147,7 +148,7 @@ class Specification(object):
             data["children"] = {}
 
             for api in self.child_apis:
-                data["children"][api.specification] = api.to_dict()
+                data["children"][api.remote_specification_name] = api.to_dict()
 
         return data
 

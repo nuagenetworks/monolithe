@@ -35,7 +35,8 @@ class SpecificationAPI(object):
     def __init__(self, remote_specification_name, specification=None, data=None):
         """
         """
-        self.specification = remote_specification_name
+        self.remote_specification_name = remote_specification_name
+        self.specification = specification
 
         self.allows_get    = False
         self.allows_create = False

@@ -29,7 +29,7 @@ import os
 import shutil
 
 from monolithe.lib import Printer
-from monolithe.specifications import RepositoryManager, FolderManager
+from monolithe.specifications import RepositoryManager, FolderManager, SpecificationAPI
 
 class Generator(object):
 
@@ -48,6 +48,7 @@ class Generator(object):
         self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
         api_info = self.folder_manager.get_api_info()
         specifications = self.folder_manager.get_all_specifications()
+        self._resolve_parent_apis(specifications)
         specification_info.append({"specifications": specifications, "api": api_info})
         Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specifications), folder, api_info["version"]))
 
@@ -69,6 +70,7 @@ class Generator(object):
             Printer.log("retrieving specifications from github \"%s/%s%s@%s\"" % (organization.lower(), repository.lower(), repository_path, branch))
             api_info = self.repository_manager.get_api_info(branch=branch)
             specifications = self.repository_manager.get_all_specifications(branch=branch)
+            self._resolve_parent_apis(specifications)
             specification_info.append({"specifications": specifications, "api": api_info})
             Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, api_info["version"]))
 
@@ -106,3 +108,27 @@ class Generator(object):
                 shutil.copytree(s, d, False, None)
             else:
                 shutil.copy2(s, d)
+
+    ## Utilities
+
+    def _resolve_parent_apis(self, specifications):
+        """
+        """
+
+        # certainly not the best algo ever... but I need to get somthing done :)
+        for specification_rest_name, specification in specifications.iteritems():
+
+            for rest_name, remote_spec in specifications.iteritems():
+
+                for related_child_api in remote_spec.child_apis:
+
+                    if related_child_api.remote_specification_name == specification.rest_name:
+
+                        parent_api = SpecificationAPI(remote_specification_name=related_child_api.remote_specification_name, specification=specification)
+
+                        if specification.allows_get: parent_api.allows_get = True
+                        if specification.allows_create: parent_api.allows_create = True
+                        if specification.allows_update: parent_api.allows_update = True
+                        if specification.allows_delete: parent_api.allows_Delete = True
+
+                        specification.parent_apis.append(parent_api)
