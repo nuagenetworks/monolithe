@@ -120,6 +120,9 @@ class SDKDocWriter(object):
 
         for folder in os.listdir(generated_sdk_path):
 
+            if folder == "cli":
+                continue
+
             if not os.path.isdir("%s/%s" % (generated_sdk_path, folder)):
                 continue
 
