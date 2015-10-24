@@ -239,15 +239,20 @@ class RepositoryManager (object):
                      message=message,
                      branch=branch)
 
-    def delete_sprecification(self, specification, message, branch):
+    def rename_specification(self, specification, old_name, message, branch="master"):
         """
         """
-        pass # todo
+        print "====="
+        print old_name
+        print "====="
 
-    def create_sprecification(self, specification, message, branch):
+        self._delete(filename=old_name, message=message, branch=branch)
+        self.save_specification(specification=specification, message=message, branch=branch)
+
+    def delete_specification(self, specification, message, branch):
         """
         """
-        pass # todo
+        self._delete(filename=specification.filename, message=message, branch=branch)
 
     def save_apiinfo(self, version, root_api, prefix, message, branch="master"):
         """
@@ -256,6 +261,16 @@ class RepositoryManager (object):
                      content=json.dumps({"prefix": prefix, "root": root_api, "version": version}, indent=4, sort_keys=True),
                      message=message,
                      branch=branch)
+
+    def _delete(self, filename, message, branch):
+        """
+        """
+        # ugly manual porting of https://github.com/PyGithub/PyGithub/pull/316/files
+        path       = "%s/%s" % (self._repository_path, filename)
+        sha        = self._repo.get_file_contents(path, branch).sha
+        parameters = {"message": message, "sha": sha, "branch": branch}
+
+        self._repo._requester.requestJsonAndCheck("DELETE", self._repo.url + "/contents/" + path, input=parameters)
 
     def _commit(self, filename, content, message, branch):
         """
