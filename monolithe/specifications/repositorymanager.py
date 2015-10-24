@@ -33,7 +33,7 @@ import requests
 import zipfile
 
 from functools import partial
-from github import Github
+from github import Github, InputGitTreeElement
 from multiprocessing.pool import ThreadPool
 from monolithe.lib import merge_dict
 
@@ -230,3 +230,52 @@ class RepositoryManager (object):
                 Specification object.
         """
         return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config)
+
+    def save_specification(self, specification, message, branch="master"):
+        """
+        """
+        self._commit(filename=specification.filename,
+                     content=json.dumps(specification.to_dict(), indent=4, sort_keys=True),
+                     message=message,
+                     branch=branch)
+
+    def delete_sprecification(self, specification, message, branch):
+        """
+        """
+        pass # todo
+
+    def create_sprecification(self, specification, message, branch):
+        """
+        """
+        pass # todo
+
+    def save_apiinfo(self, version, root_api, prefix, message, branch="master"):
+        """
+        """
+        self._commit(filename='api.info',
+                     content=json.dumps({"prefix": prefix, "root": root_api, "version": version}, indent=4, sort_keys=True),
+                     message=message,
+                     branch=branch)
+
+    def _commit(self, filename, content, message, branch):
+        """
+        """
+        head_ref      = self._repo.get_git_ref("heads/%s" % branch)
+        latest_commit = self._repo.get_git_commit(head_ref.object.sha)
+        base_tree     = latest_commit.tree
+
+        new_tree = self._repo.create_git_tree(
+            [InputGitTreeElement(
+                path="%s/%s" % (self._repository_path, filename),
+                mode="100644",
+                type="blob",
+                content=content
+            )],
+            base_tree)
+
+        new_commit = self._repo.create_git_commit(
+            message=message,
+            parents=[latest_commit],
+            tree=new_tree)
+
+        head_ref.edit(sha=new_commit.sha, force=False)
