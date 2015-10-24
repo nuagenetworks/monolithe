@@ -61,10 +61,10 @@ class RepositoryManager (object):
         self._repository = repository
         self._repository_path = repository_path
 
-        if len(self._repository_path) > 1:
-            if self._repository_path[0] == "/":
-                self._repository_path = self._repository_path[1:]
+        if self._repository_path[0] == "/":
+            self._repository_path = self._repository_path[1:]
 
+        if len(self._repository_path) > 1:
             if self._repository_path[-1] == "/":
                 self._repository_path = self._repository_path[:-1]
 
@@ -242,10 +242,6 @@ class RepositoryManager (object):
     def rename_specification(self, specification, old_name, message, branch="master"):
         """
         """
-        print "====="
-        print old_name
-        print "====="
-
         self._delete(filename=old_name, message=message, branch=branch)
         self.save_specification(specification=specification, message=message, branch=branch)
 
@@ -266,7 +262,7 @@ class RepositoryManager (object):
         """
         """
         # ugly manual porting of https://github.com/PyGithub/PyGithub/pull/316/files
-        path       = "%s/%s" % (self._repository_path, filename)
+        path       = os.path.join(self._repository_path, filename)
         sha        = self._repo.get_file_contents(path, branch).sha
         parameters = {"message": message, "sha": sha, "branch": branch}
 
@@ -281,7 +277,7 @@ class RepositoryManager (object):
 
         new_tree = self._repo.create_git_tree(
             [InputGitTreeElement(
-                path="%s/%s" % (self._repository_path, filename),
+                path="%s" % os.path.join(self._repository_path, filename),
                 mode="100644",
                 type="blob",
                 content=content
