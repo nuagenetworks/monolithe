@@ -30,6 +30,8 @@ import json
 import os
 import tempfile
 import requests
+import ConfigParser
+import StringIO
 import zipfile
 
 from functools import partial
@@ -121,6 +123,27 @@ class RepositoryManager (object):
             return json.loads(base64.b64decode(self._repo.get_file_contents(path, ref=branch).content))
         except Exception as e:
             raise Exception("could not parse api.info", e)
+
+    def get_monolithe_config(self, branch="master"):
+        """
+            Returns the content of the monolithe config
+
+            Args:
+                branch: the branch where to the monolithe config (default: "master")
+
+            Returns:
+                the ConfigParserObject
+        """
+        path = os.path.normpath("%s/%s" % (self._repository_path, "monolithe.ini"))
+        try:
+            data = base64.b64decode(self._repo.get_file_contents(path, ref=branch).content)
+            string_buffer = StringIO.StringIO(data)
+            monolithe_config_parser = ConfigParser.ConfigParser()
+            monolithe_config_parser.readfp(string_buffer)
+            return monolithe_config_parser
+
+        except Exception as e:
+            raise Exception("could not parse monolithe.ini", e)
 
     def get_last_commit(self, branch="master"):
         """
@@ -255,6 +278,18 @@ class RepositoryManager (object):
         """
         self._commit(filename='api.info',
                      content=json.dumps({"prefix": prefix, "root": root_api, "version": version}, indent=4, sort_keys=True),
+                     message=message,
+                     branch=branch)
+
+    def save_monolithe_config(self, monolithe_config_parser, message, branch="master"):
+        """
+        """
+        string_buffer = StringIO.StringIO()
+        monolithe_config_parser.write(string_buffer)
+        data = string_buffer.getvalue()
+
+        self._commit(filename='monolithe.ini',
+                     content=data,
                      message=message,
                      branch=branch)
 

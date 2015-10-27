@@ -66,6 +66,18 @@ class FolderManager (object):
             except Exception as e:
                 raise Exception("could not parse api.info", e)
 
+    def get_monolithe_config(self, branch="master"):
+        """
+        """
+        with open("%s/monolithe.ini" % self._folder, "r") as f:
+            try:
+                monolithe_config_parser = ConfigParser.ConfigParser()
+                monolithe_config_parser.readfp(f)
+                return monolithe_config_parser
+
+            except Exception as e:
+                raise Exception("could not parse monolithe.ini", e)
+
     def get_all_specifications(self):
         """
         """
