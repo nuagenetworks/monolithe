@@ -27,6 +27,7 @@
 
 import json
 import os
+import ConfigParser
 
 from .specification import Specification
 from monolithe.lib import merge_dict
@@ -40,6 +41,10 @@ class FolderManager (object):
         """
         self._monolithe_config = monolithe_config
         self._folder = folder;
+
+    @property
+    def folder(self):
+        return self._folder
 
     def get_available_specifications(self):
         """ Returns the list of available specification files

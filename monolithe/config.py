@@ -83,6 +83,9 @@ class MonolitheConfig(object):
         self.sdkdoc_user_vanilla = self.get_option("sdkdoc_user_vanilla", "sdkdoc")
 
         # mapping
+        if not self.path:
+            return
+
         mapping_path = "%s/mapping.ini" % os.path.dirname(self.path)
 
         if not os.path.exists(self.path):

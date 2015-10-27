@@ -28,6 +28,7 @@
 import os
 import shutil
 
+from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from monolithe.specifications import RepositoryManager, FolderManager, SpecificationAPI
 
@@ -39,25 +40,36 @@ class Generator(object):
         self.monolithe_config = monolithe_config
 
 
-    def generate_from_folder(self, folder):
+    def initialize_folder_manager(self, folder):
+        """
+        """
+        self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
+
+    def retrieve_monolithe_config_from_folder(self):
+        """
+        """
+        parser = self.folder_manager.get_monolithe_config()
+        self.monolithe_config = MonolitheConfig()
+        self.monolithe_config.set_config(parser)
+        self.folder_manager.monolithe_config = self.monolithe_config
+
+    def generate_from_folder(self):
         """
         """
         specification_info = []
 
-        Printer.log("retrieving specifications from folder \"%s\"" % (folder))
-        self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
+        Printer.log("retrieving specifications from folder \"%s\"" % (self.folder_manager.folder))
         api_info = self.folder_manager.get_api_info()
         specifications = self.folder_manager.get_all_specifications()
         self._resolve_parent_apis(specifications)
         specification_info.append({"specifications": specifications, "api": api_info})
-        Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specifications), folder, api_info["version"]))
+        Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specifications), self.folder_manager.folder, api_info["version"]))
 
         self.generate(specification_info=specification_info)
 
-    def generate_from_repo(self, api_url, login_or_token, password, organization, repository, repository_path, branches):
+    def initialize_repository_manager(self, api_url, login_or_token, password, organization, repository, repository_path):
         """
         """
-        specification_info = []
         self.repository_manager = RepositoryManager(monolithe_config=self.monolithe_config,
                                                     api_url=api_url,
                                                     login_or_token=login_or_token,
@@ -66,8 +78,21 @@ class Generator(object):
                                                     repository=repository,
                                                     repository_path=repository_path)
 
+    def retrieve_monolithe_config_from_repo(self, branch):
+        """
+        """
+        parser = self.repository_manager.get_monolithe_config(branch=branch)
+        self.monolithe_config = MonolitheConfig()
+        self.monolithe_config.set_config(parser)
+        self.repository_manager.monolithe_config = self.monolithe_config
+
+    def generate_from_repo(self, branches):
+        """
+        """
+        specification_info = []
+
         for branch in branches:
-            Printer.log("retrieving specifications from github \"%s/%s%s@%s\"" % (organization.lower(), repository.lower(), repository_path, branch))
+            Printer.log("retrieving specifications from github \"%s/%s%s@%s\"" % (self.repository_manager.organization.lower(), self.repository_manager.repository.lower(), self.repository_manager.repository_path, branch))
             api_info = self.repository_manager.get_api_info(branch=branch)
             specifications = self.repository_manager.get_all_specifications(branch=branch)
             self._resolve_parent_apis(specifications)

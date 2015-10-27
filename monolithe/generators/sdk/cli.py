@@ -111,9 +111,12 @@ def main(argv=sys.argv):
                         type=str)
 
     args = parser.parse_args()
-    monolithe_config = MonolitheConfig.config_with_path(args.config_path)
 
-    if args.vanilla_prefix:
+    monolithe_config = None
+    if args.config_path:
+        monolithe_config = MonolitheConfig.config_with_path(args.config_path)
+
+    if monolithe_config and args.vanilla_prefix:
         monolithe_config.set_option("sdk_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdk_user_vanilla", "sdk")), "sdk")
         monolithe_config.set_option("sdkdoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdkdoc_user_vanilla", "sdkdoc")), "sdkdoc")
         monolithe_config.set_option("apidoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("apidoc_user_vanilla", "apidoc")), "apidoc")
@@ -122,7 +125,9 @@ def main(argv=sys.argv):
 
 
     if args.folder:
-        generator.generate_from_folder(folder=args.folder)
+        generator.initialize_folder_manager(folder=args.folder)
+        if not monolithe_config: generator.retrieve_monolithe_config_from_folder()
+        generator.generate_from_folder()
 
     else:
         # Use environment variable if necessary
@@ -153,9 +158,6 @@ def main(argv=sys.argv):
         if not args.login and not args.token :
             args.login = raw_input("Enter your GitHub login: ")
 
-        if not args.config_path:
-            args.config_path = raw_input("Enter the path of the monolithe config file: ")
-
         if not args.repository_path:
             args.repository_path = "/"
 
@@ -168,13 +170,15 @@ def main(argv=sys.argv):
             login_or_token = args.token
 
 
-        generator.generate_from_repo(   api_url=args.api_url,
-                                        login_or_token=login_or_token,
-                                        password=password,
-                                        organization=args.organization,
-                                        repository=args.repository,
-                                        repository_path=args.repository_path,
-                                        branches=args.branches)
+        generator.initialize_repository_manager(api_url=args.api_url,
+                                                login_or_token=login_or_token,
+                                                password=password,
+                                                organization=args.organization,
+                                                repository=args.repository,
+                                                repository_path=args.repository_path)
+
+        if not monolithe_config: generator.retrieve_monolithe_config_from_repo(branch=args.branches[0])
+        generator.generate_from_repo(branches=args.branches)
 
     # Generate SDK documentation
     if args.generate_doc:

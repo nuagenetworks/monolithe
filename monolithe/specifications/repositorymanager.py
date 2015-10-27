@@ -60,8 +60,9 @@ class RepositoryManager (object):
                 repository: the repository containing the specifications
         """
         self._monolithe_config = monolithe_config;
-        self._repository = repository
-        self._repository_path = repository_path
+        self._organization     = organization
+        self._repository       = repository
+        self._repository_path  = repository_path
 
         if self._repository_path[0] == "/":
             self._repository_path = self._repository_path[1:]
@@ -73,10 +74,17 @@ class RepositoryManager (object):
         self._github = Github(login_or_token=login_or_token, password=password, base_url=api_url)
         self._repo = self._github.get_repo("%s/%s" % (organization, repository))
 
+    @property
+    def organization(self):
+        return self._organization
 
     @property
     def repository(self):
         return self._repository
+
+    @property
+    def repository_path(self):
+        return self._repository_path
 
     def get_available_branches(self):
         """ Returns the list of available API spec branches
