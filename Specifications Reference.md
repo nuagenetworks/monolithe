@@ -113,8 +113,8 @@ The list of Attributes the model has. It is a dictionary where the key is the na
 For example:
 
     "attributes" : {
-        "name": { … },
-        "description": {…}
+        "name": { ... },
+        "description": {...}
     }
 
 
@@ -330,62 +330,60 @@ For instance, we can have the following:
 
     $ cat horse.spec
     {
-        …
         "model": {
             "rest_name": "horse",
+            ...
         },
 
         "attributes": {
-            "name": {…},
-            "age": {…},
-            "size": {…}
+            "name": {...},
+            "age": {...},
+            "size": {...}
         }
     }
 
     $ cat unicorn.spec
-        {
-        …
+    {
         "model": {
             "extends": ["horse"],
             "rest_name": "unicorn",
         },
 
         "attributes": {
-            "hornSize": {…}
+            "hornSize": {...}
         }
     }
 
 This will generate two objects, one `Horse` with `name`, `age` and `size` as attributes and one `Unicorn` with `name`, `age` and `size` and `hornSize`.
 
-### API Inheritance
+### Children API Inheritance
+
 It is also possible to inherit APIs. For instance if you want all the objects in your model to have a common children api, say `metadata`, you can do the following:
 
     $ cat @metadata-capable.spec
     {
         "children": {
-            "metadata": {
-                …
-            }
+            "metadata": {...}
         }
     }
 
     $ cat horse.spec
     {
-        …
+        ...
         "model": {
             "extends": ["@metadata-capable"],
             "rest_name": "unicorn"
         },
 
         "attributes": {
-            "hornSize": {…}
+            "hornSize": {...}
         }
     }
 
 Then both `Horse` and `Unicorn` object will have `metadatas` as child API.
 
 
-#### Inheritance-only Specification Files
+#### Abstract Specification Files
 
 In the previous example, you can notice the `@` preceding the `metadatas-capable.spec` Specification File name. This will make Monolithe to not generate an actual object from that specification. It’s very useful to set some files that regroups common attributes and apis, but doesn’t necessarily need to be generated as an api object.
 
@@ -401,7 +399,7 @@ For instance:
         "horse"
     ]
 
-All apis and models will be merged into the current Apecification File. In case of collision in apis or attribute, the last extension declared in the list will win.
+All apis and models will be merged into the current Apecification File. In case of collision in children or attribute, the last extension declared in the list will win.
 
 For instance, in the previous example, if both `@metadatas-capable` and `horse` contains a `package` attribute in the `model`, section, the one in `horse` will be the one used in the end.
 
