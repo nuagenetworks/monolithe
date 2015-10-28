@@ -219,7 +219,7 @@ class RepositoryManager (object):
         return data
 
 
-    def get_specification(self, name, branch="master", archive=None, mode=MODE_NORMAL):
+    def get_specification(self, name, branch="master", archive=None):
         """ Returns a Specification object from the given specification file name in the given branch
 
             Args:
@@ -229,4 +229,4 @@ class RepositoryManager (object):
             Returns:
                 Specification object.
         """
-        return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config, mode=MODE_NORMAL)
+        return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config)
