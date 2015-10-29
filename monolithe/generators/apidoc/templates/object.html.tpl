@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ specification.name }} API Reference</title>
+    <title>{{ specification.entity_name }} API Reference</title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -30,7 +30,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Attributes <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             {% for attribute in specification.attributes|sort(attribute='local_name') %}
-                            <li><a data-id="attr_{{ attribute.remote_name }}" href="#attr_{{ attribute.remote_name }}" class="fixed-text">{{ attribute.remote_name }}</a></li>
+                            <li><a data-id="attr_{{ attribute.rest_name }}" href="#attr_{{ attribute.rest_name }}" class="fixed-text">{{ attribute.rest_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -107,22 +107,42 @@
     {% endmacro %}
 
     {# macro to create api list #}
-    {% macro make_api_list(apis, mode, nothing_string) %}
+    {% macro make_api_list(mode, nothing_string) %}
+    {% if mode == "children" %}
+    {% set apis = child_apis %}
+    {% elif mode == "parents" %}
+    {% set apis = parent_apis %}
+    {% else %}
+    {% set apis = self_apis %}
+    {% endif %}
+
     {% if apis|count %}
-    {% for api in apis|sort(attribute='path') %}
+    {% for api in apis %}
     <div class="row bordered-row">
         <div class="col-xs-7">
-            {% if mode == "self" %}
-            <span class="fixed-text">{{ api.path.replace("{id}", "<span class=\"text-muted\">id</span>")}}</span>
-            {% elif mode == "parents" %}
-            <span class="fixed-text">/<a href="{{ api.remote_name }}.html">{{ api.resource_name }}</a>/<span class="text-muted">id</span>/{{ specification.resource_name }}</span>
+
+            {% if mode == "parents" %}
+            {% if api.relationship == "root" %}
+            <span class="fixed-text">/{{ specification.resource_name }}</a>
             {% else %}
-            <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span>/<a href="{{ api.remote_name }}.html">{{ api.resource_name }}</a></span>
+            <span class="fixed-text">/<a href="{{ api.remote_spec.rest_name }}.html">{{ api.remote_spec.resource_name }}</a>/<span class="text-muted">id</span>/{{ specification.resource_name }}</span>
+            {% endif %}
+
+            {% elif mode == "children" %}
+
+            {% if api.relationship == "root" %}
+            <span class="fixed-text">/{{ specification.resource_name }}</a>
+            {% else%}
+            <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span>/<a href="{{ api.remote_spec.rest_name }}.html">{{ api.remote_spec.resource_name }}</a></span>
+            {% endif %}
+
+            {% else %}
+            <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span></a>
             {% endif %}
         </div>
         <div class="col-xs-5 text-right">
-            {% for operation in api.operations|sort(attribute="method") %}
-            {{ label_for_method(operation.method)}}
+            {% for action in api.actions|sort() %}
+            {{ label_for_method(action)}}
             {% endfor %}
         </div>
     </div>
@@ -136,7 +156,7 @@
     <div class="container">
 
         <section id="intro">
-            <h2>{{ specification.name }}</h2>
+            <h2>{{ specification.entity_name }}</h2>
             <p>{{ specification.description }}</p>
         </section>
 
@@ -146,7 +166,7 @@
                     {% for attribute in specification.attributes|sort(attribute='local_name') %}
                     <tr>
                         <td class="fixed-text">
-                            <a href="#attr_{{ attribute.remote_name }}" title="{{ attribute.description }}">{{ attribute.remote_name }}</a>
+                            <a href="#attr_{{ attribute.rest_name }}" title="{{ attribute.description }}">{{ attribute.rest_name }}</a>
                         </td>
                         <td style="padding-left: 10px;" class="fixed-text hide-xs">
                             <span class="type_{{ attribute.type }}">{{ attribute.type }}{{ string_for_allowed_choices(attribute)}}</span>
@@ -161,26 +181,26 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {{ make_api_list(specification.self_apis, "self", "This object is not directly accessible.")}}
+            {{ make_api_list("self", "This cannot be accessed. Which is weird...")}}
         </section>
 
         <section id="parents">
             <h3>Parents</h3>
-            {{ make_api_list(specification.parent_apis, "parents", "This object has no parents.")}}
+            {{ make_api_list("parents", "This object has no parents.")}}
         </section>
 
         <section id="children">
             <h3>Children</h3>
-            {{ make_api_list(specification.child_apis, "children", "This object has no child.")}}
+            {{ make_api_list("children", "This object has no child.")}}
         </section>
 
         <section id="attributes">
             <h3>Attributes documentation</h3>
             {% for attribute in specification.attributes|sort(attribute='local_name') %}
-            <section id="attr_{{ attribute.remote_name }}" class="filterable" data-filter-keyword="{{ attribute.remote_name }}" style="padding-top: 60px; margin-top: -60px;">
+            <section id="attr_{{ attribute.rest_name }}" class="filterable" data-filter-keyword="{{ attribute.rest_name }}" style="padding-top: 60px; margin-top: -60px;">
                 <div class="panel panel-default">
                     <div class="panel-heading fixed-text">
-                        <b>{{ attribute.remote_name }}</b>
+                        <b>{{ attribute.rest_name }}</b>
                         <span class="type_{{ attribute.type }} fixed-text">{{ attribute.type }}</span>
                         {{ tokens_for_attribute(attribute) }}
                     </div>

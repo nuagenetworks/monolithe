@@ -60,7 +60,7 @@ def main(argv=sys.argv):
         monolithe_config.set_option("sdkdoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdkdoc_user_vanilla", "sdkdoc")), "sdkdoc")
         monolithe_config.set_option("apidoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("apidoc_user_vanilla", "apidoc")), "apidoc")
 
-    generator = SDKDocGenerator(monolithe_config=monolithe_config, prefix=args.prefix_path)
+    generator = SDKDocGenerator(monolithe_config=monolithe_config)
     generator.generate()
 
 if __name__ == "__main__":

@@ -32,67 +32,32 @@ class SpecificationAPI(object):
     """ Describe an object API
 
     """
-    def __init__(self, specification, data=None):
-        """ Defines an API
-
-            Example:
-                path: /enterprises/id/gateway
-                resource_name : enterprisenetworks
-                remote_name : enterprisenetwork
-                plural_name : EnterpriseNetworks
-                instance_plural_name : enterprise_networks
-
+    def __init__(self, remote_specification_name, specification=None, data=None):
         """
-        self.path = None
-        self.resource_name = None
-        self.remote_name = None
-        self.plural_name = None
-        self.deprecated = False
-        self.relationship = "child"
-        self.instance_plural_name = None
+        """
+        self.remote_specification_name = remote_specification_name
         self.specification = specification
-        self._entity_name = None
-        self.operations = []
+
+        self.allows_get    = False
+        self.allows_create = False
+        self.allows_update = False
+        self.allows_delete = False
+        self.deprecated    = False
+        self.relationship  = "child"
 
         if data:
             self.from_dict(data)
-
-    @property
-    def entity_name(self):
-        """
-        """
-        return self._entity_name
-
-    @entity_name.setter
-    def entity_name(self, value):
-        """
-        """
-        self._entity_name = value
-
-        if value:
-            self.plural_name = SDKUtils.get_plural_name(value)
-            self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
-
-            if self.remote_name == "allalarm":
-                self.instance_plural_name = "all_alarms"  # Differs from alarms
 
     def from_dict(self, data):
         """
 
         """
-        self.path = data["path"]
-        self.resource_name = data["resourceName"]
-        self.remote_name = data["RESTName"]
-        self.deprecated = data["deprecated"]  if "deprecated" in data else False
-        self.relationship = data["relationship"] if "relationship" in data else "child"
-
-        if "entityName" in data:
-            # Only for children to Used to create fetchers
-            self.entity_name = data["entityName"]
-
-        for operation in data["operations"]:
-            model_operation = SpecificationAPIOperation(data=operation)
-            self.operations.append(model_operation)
+        self.allows_get    = data["get"] if "get" in data else False
+        self.allows_create = data["create"] if "create" in data else False
+        self.allows_update = data["update"] if "update" in data else False
+        self.allows_delete = data["delete"] if "delete" in data else False
+        self.deprecated    = data["deprecated"] if "deprecated" in data else False
+        self.relationship  = data["relationship"] if "relationship" in data else "child"
 
     def to_dict(self):
         """
@@ -100,63 +65,22 @@ class SpecificationAPI(object):
 
         data = {}
 
-        if self.resource_name:
-            data["resourceName"] = self.resource_name
+        if self.allows_get:
+            data["get"] = self.allows_get
 
-        if self.remote_name:
-            data["RESTName"] = self.remote_name
+        if self.allows_create:
+            data["create"] = self.allows_create
 
-        if self.relationship:
-            data["relationship"] = self.relationship
+        if self.allows_update:
+            data["update"] = self.allows_update
+
+        if self.allows_delete:
+            data["delete"] = self.allows_delete
 
         if self.deprecated:
             data["deprecated"] = self.deprecated
 
-        data["operations"] = []
-
-        for operation in self.operations:
-            data["operations"].append(operation.to_dict())
-
-        if not len(data["operations"]):
-            del data["operations"]
-
-        return data
-
-
-class SpecificationAPIOperation(object):
-    """ Describe an API operation
-
-    """
-    def __init__(self, data=None):
-        """ Defines an API
-
-            Example:
-                method: GET
-
-        """
-        self.method = None
-        self.availability = None
-        self.deprecated = False
-
-        if data:
-            self.from_dict(data)
-
-    def from_dict(self, data):
-        """
-
-        """
-        self.method = data["method"]
-        self.availability = data["availability"]
-        self.deprecated = data["deprecated"] if "deprecated" in data else False
-
-    def to_dict(self):
-        """
-        """
-
-        data = {}
-
-        data["method"] = self.method
-        data["availability"] = self.availability
-        data["deprecated"] = self.deprecated
+        if self.relationship:
+            data["relationship"] = self.relationship
 
         return data

@@ -8,12 +8,12 @@ class GetPythonNameTest(TestCase):
     """ Test for get_python_name function
 
     """
-    def assertPythonNameEquals(self, remote_name, python_name):
+    def assertPythonNameEquals(self, rest_name, python_name):
         """ Check that the remote name is well converted to
             the python name
 
         """
-        self.assertEqual(SDKUtils.get_python_name(remote_name), python_name)
+        self.assertEqual(SDKUtils.get_python_name(rest_name), python_name)
 
     def test_get_python_name(self):
         """ Convert REST names to Python

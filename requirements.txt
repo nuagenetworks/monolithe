@@ -1,6 +1,5 @@
 jinja2
 colorama
-argparse
 bambou==2.0.0
 Sphinx
 sphinx_rtd_theme

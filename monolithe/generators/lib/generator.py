@@ -28,8 +28,9 @@
 import os
 import shutil
 
+from monolithe import MonolitheConfig
 from monolithe.lib import Printer
-from monolithe.specifications import RepositoryManager, FolderManager
+from monolithe.specifications import RepositoryManager, FolderManager, SpecificationAPI
 
 class Generator(object):
 
@@ -39,24 +40,36 @@ class Generator(object):
         self.monolithe_config = monolithe_config
 
 
-    def generate_from_folder(self, folder):
+    def initialize_folder_manager(self, folder):
+        """
+        """
+        self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
+
+    def retrieve_monolithe_config_from_folder(self):
+        """
+        """
+        parser = self.folder_manager.get_monolithe_config()
+        self.monolithe_config = MonolitheConfig()
+        self.monolithe_config.set_config(parser)
+        self.folder_manager.monolithe_config = self.monolithe_config
+
+    def generate_from_folder(self):
         """
         """
         specification_info = []
 
-        Printer.log("retrieving specifications from folder \"%s\"" % (folder))
-        self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
+        Printer.log("retrieving specifications from folder \"%s\"" % (self.folder_manager.folder))
         api_info = self.folder_manager.get_api_info()
         specifications = self.folder_manager.get_all_specifications()
+        self._resolve_parent_apis(specifications)
         specification_info.append({"specifications": specifications, "api": api_info})
-        Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specifications), folder, api_info["version"]))
+        Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specifications), self.folder_manager.folder, api_info["version"]))
 
         self.generate(specification_info=specification_info)
 
-    def generate_from_repo(self, api_url, login_or_token, password, organization, repository, repository_path, branches):
+    def initialize_repository_manager(self, api_url, login_or_token, password, organization, repository, repository_path):
         """
         """
-        specification_info = []
         self.repository_manager = RepositoryManager(monolithe_config=self.monolithe_config,
                                                     api_url=api_url,
                                                     login_or_token=login_or_token,
@@ -65,10 +78,24 @@ class Generator(object):
                                                     repository=repository,
                                                     repository_path=repository_path)
 
+    def retrieve_monolithe_config_from_repo(self, branch):
+        """
+        """
+        parser = self.repository_manager.get_monolithe_config(branch=branch)
+        self.monolithe_config = MonolitheConfig()
+        self.monolithe_config.set_config(parser)
+        self.repository_manager.monolithe_config = self.monolithe_config
+
+    def generate_from_repo(self, branches):
+        """
+        """
+        specification_info = []
+
         for branch in branches:
-            Printer.log("retrieving specifications from github \"%s/%s%s@%s\"" % (organization.lower(), repository.lower(), repository_path, branch))
+            Printer.log("retrieving specifications from github \"%s/%s%s@%s\"" % (self.repository_manager.organization.lower(), self.repository_manager.repository.lower(), self.repository_manager.repository_path, branch))
             api_info = self.repository_manager.get_api_info(branch=branch)
             specifications = self.repository_manager.get_all_specifications(branch=branch)
+            self._resolve_parent_apis(specifications)
             specification_info.append({"specifications": specifications, "api": api_info})
             Printer.log("%d specifications retrieved from branch \"%s\" (api version: %s)" % (len(specifications), branch, api_info["version"]))
 
@@ -106,3 +133,27 @@ class Generator(object):
                 shutil.copytree(s, d, False, None)
             else:
                 shutil.copy2(s, d)
+
+    ## Utilities
+
+    def _resolve_parent_apis(self, specifications):
+        """
+        """
+
+        # certainly not the best algo ever... but I need to get somthing done :)
+        for specification_rest_name, specification in specifications.iteritems():
+
+            for rest_name, remote_spec in specifications.iteritems():
+
+                for related_child_api in remote_spec.child_apis:
+
+                    if related_child_api.remote_specification_name == specification.rest_name:
+
+                        parent_api = SpecificationAPI(remote_specification_name=related_child_api.remote_specification_name, specification=specification)
+
+                        if specification.allows_get: parent_api.allows_get = True
+                        if specification.allows_create: parent_api.allows_create = True
+                        if specification.allows_update: parent_api.allows_update = True
+                        if specification.allows_delete: parent_api.allows_Delete = True
+
+                        specification.parent_apis.append(parent_api)

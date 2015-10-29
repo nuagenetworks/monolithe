@@ -250,7 +250,7 @@ class CreateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        #self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", remote_name=attribute.remote_name)
+        #self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", rest_name=attribute.rest_name)
 
     def _test_create_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Create an objet with an attribute as none """
@@ -270,7 +270,7 @@ class CreateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", remote_name=attribute.remote_name)
+        # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", rest_name=attribute.rest_name)
 
 
 
@@ -288,7 +288,7 @@ class UpdateTestMaker(_TestMaker):
         self.sdkobject = sdkobject
 
         # Object tests
-        self.register_test("_test_update_object_with_same_attributes_should_fail")
+        # self.register_test("_test_update_object_with_same_attributes_should_fail") # this feature is completely stupid anyway
         self.register_test("_test_update_object_without_authentication_should_fail")
 
         # Attribute tests
@@ -351,6 +351,7 @@ class UpdateTestCase(CourgetteTestCase):
 
         """
         (obj, connection) = self.sdkobject.save()
+        (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
@@ -364,7 +365,7 @@ class UpdateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", remote_name=attribute.remote_name)
+        # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", rest_name=attribute.rest_name)
 
     def _test_update_object_with_attribute_with_choices_as_none_should_fail(self, attribute):
         """ Update an objet with an attribute with choices as none should fail """
@@ -384,7 +385,7 @@ class UpdateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", remote_name=attribute.remote_name)
+        # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", rest_name=attribute.rest_name)
 
     def _test_update_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Update an objet with an attribute as none """

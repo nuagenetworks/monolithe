@@ -84,32 +84,59 @@ class SDKUtils(object):
         """ Returns a python type according to a java type
 
         """
-        if type_name in ["str", "string", "enum"]:
+        if type_name in ("string", "enum"):
             return "str"
 
-        if type_name in ["boolean", "bool"]:
+        if type_name == "boolean":
             return "bool"
 
-        if type_name in ["int", "integer"]:
+        if type_name == "integer":
             return "int"
 
-        if type_name in ["date", "datetime", "time"]:
-            return "time"
-
-        if type_name in ["double", "float", "long"]:
+        if type_name ==  "time":
             return "float"
 
-        if type_name in ["list", "array"]:
-            return "list"
-
-        if type_name in ["object", "dict"]:
+        if type_name ==  "object":
             return "dict"
 
-        return "str"
-        # raise Exception("Unknow type %s" % type_name)
+        return type_name
 
     @classmethod
-    def get_plural_name(cls, singular_name):
+    def massage_type_name(cls, type_name):
+        """ Returns a python type according to a java type
+
+        """
+        if type_name.lower() in ("enum", "enumeration"):
+            return "enum"
+
+        if type_name.lower() in ("str", "string"):
+            return "string"
+
+        if type_name.lower() in ("boolean", "bool"):
+            return "boolean"
+
+        if type_name.lower() in ("int", "integer"):
+            return "integer"
+
+        if type_name.lower() in ("date", "datetime", "time"):
+            return "time"
+
+        if type_name.lower() in ("double", "float", "long"):
+            return "float"
+
+        if type_name.lower() in ("list", "array"):
+            return "list"
+
+        if type_name.lower() in ("object", "dict"):
+            return "object"
+
+        if "array" in type_name.lower():
+            return "list"
+
+        return "string"
+
+    @classmethod
+    def get_entity_name_plural(cls, singular_name):
         """ Returns the plural name of the singular name
 
             Certain words are invariant.

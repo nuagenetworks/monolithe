@@ -77,7 +77,7 @@ class Courgette(object):
                                             parent_id=configuration.parent_id,
                                             default_values=configuration.default_values)
 
-            result.add_report(configuration.specification.remote_name + ".spec", runner.run())
+            result.add_report(configuration.specification.rest_name + ".spec", runner.run())
 
         return result
 

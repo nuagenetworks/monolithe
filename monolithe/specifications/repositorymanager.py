@@ -30,10 +30,12 @@ import json
 import os
 import tempfile
 import requests
+import ConfigParser
+import StringIO
 import zipfile
 
 from functools import partial
-from github import Github
+from github import Github, InputGitTreeElement
 from multiprocessing.pool import ThreadPool
 from monolithe.lib import merge_dict
 
@@ -58,23 +60,31 @@ class RepositoryManager (object):
                 repository: the repository containing the specifications
         """
         self._monolithe_config = monolithe_config;
-        self._repository = repository
-        self._repository_path = repository_path
+        self._organization     = organization
+        self._repository       = repository
+        self._repository_path  = repository_path
+
+        if self._repository_path[0] == "/":
+            self._repository_path = self._repository_path[1:]
 
         if len(self._repository_path) > 1:
-            if self._repository_path[0] == "/":
-                self._repository_path = self._repository_path[1:]
-
             if self._repository_path[-1] == "/":
                 self._repository_path = self._repository_path[:-1]
 
         self._github = Github(login_or_token=login_or_token, password=password, base_url=api_url)
         self._repo = self._github.get_repo("%s/%s" % (organization, repository))
 
+    @property
+    def organization(self):
+        return self._organization
 
     @property
     def repository(self):
         return self._repository
+
+    @property
+    def repository_path(self):
+        return self._repository_path
 
     def get_available_branches(self):
         """ Returns the list of available API spec branches
@@ -122,6 +132,27 @@ class RepositoryManager (object):
         except Exception as e:
             raise Exception("could not parse api.info", e)
 
+    def get_monolithe_config(self, branch="master"):
+        """
+            Returns the content of the monolithe config
+
+            Args:
+                branch: the branch where to the monolithe config (default: "master")
+
+            Returns:
+                the ConfigParserObject
+        """
+        path = os.path.normpath("%s/%s" % (self._repository_path, "monolithe.ini"))
+        try:
+            data = base64.b64decode(self._repo.get_file_contents(path, ref=branch).content)
+            string_buffer = StringIO.StringIO(data)
+            monolithe_config_parser = ConfigParser.ConfigParser()
+            monolithe_config_parser.readfp(string_buffer)
+            return monolithe_config_parser
+
+        except Exception as e:
+            raise Exception("could not parse monolithe.ini", e)
+
     def get_last_commit(self, branch="master"):
         """
             Returns the last commit in the given branch
@@ -144,7 +175,7 @@ class RepositoryManager (object):
             Returns:
                 list of Specification objects.
         """
-        specifications = []
+        specifications = {}
         archive_fd, archive_path = tempfile.mkstemp("archive.zip")
         url = self._repo.get_archive_link("zipball", ref=branch)
         req = requests.get(url, stream=True, verify=False)
@@ -178,7 +209,7 @@ class RepositoryManager (object):
                 if mode == MODE_RAW_ABSTRACTS and not is_abstract:
                     continue
 
-                specifications.append(Specification(filename=spec_name, data=self.get_specification_data(name=spec_name, archive=archive_content, mode=mode), monolithe_config=self._monolithe_config))
+                specifications[spec_name.replace(".spec", "")] = Specification(filename=spec_name, data=self.get_specification_data(name=spec_name, archive=archive_content, mode=mode), monolithe_config=self._monolithe_config)
 
         # cleanup the temporary archive
         os.close(archive_fd)
@@ -219,7 +250,7 @@ class RepositoryManager (object):
         return data
 
 
-    def get_specification(self, name, branch="master", archive=None):
+    def get_specification(self, name, branch="master", archive=None, mode=MODE_NORMAL):
         """ Returns a Specification object from the given specification file name in the given branch
 
             Args:
@@ -230,3 +261,75 @@ class RepositoryManager (object):
                 Specification object.
         """
         return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config)
+
+    def save_specification(self, specification, message, branch="master"):
+        """
+        """
+        self._commit(filename=specification.filename,
+                     content=json.dumps(specification.to_dict(), indent=4, sort_keys=True),
+                     message=message,
+                     branch=branch)
+
+    def rename_specification(self, specification, old_name, message, branch="master"):
+        """
+        """
+        self._delete(filename=old_name, message=message, branch=branch)
+        self.save_specification(specification=specification, message=message, branch=branch)
+
+    def delete_specification(self, specification, message, branch):
+        """
+        """
+        self._delete(filename=specification.filename, message=message, branch=branch)
+
+    def save_apiinfo(self, version, root_api, prefix, message, branch="master"):
+        """
+        """
+        self._commit(filename='api.info',
+                     content=json.dumps({"prefix": prefix, "root": root_api, "version": version}, indent=4, sort_keys=True),
+                     message=message,
+                     branch=branch)
+
+    def save_monolithe_config(self, monolithe_config_parser, message, branch="master"):
+        """
+        """
+        string_buffer = StringIO.StringIO()
+        monolithe_config_parser.write(string_buffer)
+        data = string_buffer.getvalue()
+
+        self._commit(filename='monolithe.ini',
+                     content=data,
+                     message=message,
+                     branch=branch)
+
+    def _delete(self, filename, message, branch):
+        """
+        """
+        # ugly manual porting of https://github.com/PyGithub/PyGithub/pull/316/files
+        path       = os.path.join(self._repository_path, filename)
+        sha        = self._repo.get_file_contents(path, branch).sha
+        parameters = {"message": message, "sha": sha, "branch": branch}
+
+        self._repo._requester.requestJsonAndCheck("DELETE", self._repo.url + "/contents/" + path, input=parameters)
+
+    def _commit(self, filename, content, message, branch):
+        """
+        """
+        head_ref      = self._repo.get_git_ref("heads/%s" % branch)
+        latest_commit = self._repo.get_git_commit(head_ref.object.sha)
+        base_tree     = latest_commit.tree
+
+        new_tree = self._repo.create_git_tree(
+            [InputGitTreeElement(
+                path="%s" % os.path.join(self._repository_path, filename),
+                mode="100644",
+                type="blob",
+                content=content
+            )],
+            base_tree)
+
+        new_commit = self._repo.create_git_commit(
+            message=message,
+            parents=[latest_commit],
+            tree=new_tree)
+
+        head_ref.edit(sha=new_commit.sha, force=False)

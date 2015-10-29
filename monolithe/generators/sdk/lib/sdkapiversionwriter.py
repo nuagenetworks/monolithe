@@ -49,7 +49,7 @@ class SDKAPIVersionWriter(object):
         """ Write all files according to data
 
             Args:
-                specifications: A list of all specifications to manage
+                specifications: A dict of all specifications to manage
                 api_info: the version of the api
 
             Returns:
@@ -66,9 +66,9 @@ class SDKAPIVersionWriter(object):
 
         task_manager = TaskManager()
 
-        for specification in specifications:
-            task_manager.start_task(method=self._write_models, specification=specification, filenames=model_filenames)
-            task_manager.start_task(method=self._write_fetcher_file, specification=specification, filenames=fetcher_filenames)
+        for rest_name, specification in specifications.iteritems():
+            task_manager.start_task(method=self._write_models, specification=specification, filenames=model_filenames, specification_set=specifications)
+            task_manager.start_task(method=self._write_fetcher_file, specification=specification, filenames=fetcher_filenames, specification_set=specifications)
 
         task_manager.wait_until_exit()
 
@@ -78,13 +78,13 @@ class SDKAPIVersionWriter(object):
         self.writer.write_init_fetchers(filenames=fetcher_filenames)
         self.writer.write_attrs_defaults()
 
-    def _write_models(self, specification, filenames):
+    def _write_models(self, specification, filenames, specification_set):
         """
         """
-        (filename, classname) = self.writer.write_model(specification=specification)
+        (filename, classname) = self.writer.write_model(specification=specification, specification_set=specification_set)
         filenames[filename] = classname
 
-    def _write_fetcher_file(self, specification, filenames):
+    def _write_fetcher_file(self, specification, filenames, specification_set):
         """ Write the fetcher file for the specification
 
             Args:
@@ -92,8 +92,8 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
-        if specification.name != self.api_info["root"]:
-            (filename, classname) = self.writer.write_fetcher(specification=specification)
+        if specification.rest_name != self.api_info["root"]:
+            (filename, classname) = self.writer.write_fetcher(specification=specification, specification_set=specification_set)
             filenames[filename] = classname
 
 
@@ -182,18 +182,19 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
 
         return OrderedDict(sorted(formatted_filenames.items()))
 
-    def write_model(self, specification):
+    def write_model(self, specification, specification_set):
         """ Write autogenerate specification file
 
         """
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.name.lower())
+        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.entity_name.lower())
 
-        override_content = self._extract_override_content(specification.name)
+        override_content = self._extract_override_content(specification.entity_name)
         constants = self._extract_constants(specification)
-        superclass_name =  "NURESTRootObject" if specification.remote_name == self.api_root else "NURESTObject"
+        superclass_name =  "NURESTRootObject" if specification.rest_name == self.api_root else "NURESTObject"
 
         self.write(destination=self.output_directory, filename=filename, template_name="model.py.tpl",
                     specification=specification,
+                    specification_set=specification_set,
                     version=self.api_version,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
@@ -202,7 +203,7 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     constants=constants,
                     header=self.header_content)
 
-        return (filename, specification.name)
+        return (filename, specification.entity_name)
 
     def write_init_fetchers(self, filenames):
         """ Write fetcher init file
@@ -218,23 +219,24 @@ class _SDKAPIVersionFileWriter(TemplateFileWriter):
                     product_accronym=self._product_accronym,
                     header=self.header_content)
 
-    def write_fetcher(self, specification):
+    def write_fetcher(self, specification, specification_set):
         """ Write fetcher
 
         """
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
-        base_name = "%s_fetcher" % specification.plural_name.lower()
+        base_name = "%s_fetcher" % specification.entity_name_plural.lower()
         filename = "%s%s.py" % (self._sdk_class_prefix.lower(), base_name)
         override_content = self._extract_override_content(base_name)
 
         self.write(destination=destination, filename=filename, template_name="fetcher.py.tpl",
                     specification=specification,
+                    specification_set=specification_set,
                     sdk_class_prefix=self._sdk_class_prefix,
                     product_accronym=self._product_accronym,
                     override_content=override_content,
                     header=self.header_content)
 
-        return (filename, specification.plural_name)
+        return (filename, specification.entity_name_plural)
 
     def write_attrs_defaults(self):
         """

@@ -88,7 +88,7 @@ For example:
 
 	sdk_class_prefix=NU
 
-So if you have a Specification File describing an object with an `entityName` set to `Unicorn`, the equivalent SDK object will be:
+So if you have a Specification File describing an object with an `entity_name` set to `Unicorn`, the equivalent SDK object will be:
 
 	NUUnicorn
 
@@ -245,7 +245,7 @@ Monolithe generates everything for you from Specifications. But sometimes it cou
 
 For instance, you might want a simple way to get the full name of a user object that has a first name and last name attributes. Overrides as made for this.
 
-In order to add the full name accessors to an object with a `RESTName` set to `user`, add a file in the `__overrides` folder and name it using the following model:
+In order to add the full name accessors to an object with a `rest_name` set to `user`, add a file in the `__overrides` folder and name it using the following model:
 
 	<sdk_class_prefix|lower><rest-name>.override.py
 

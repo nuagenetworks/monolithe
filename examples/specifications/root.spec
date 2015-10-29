@@ -1,48 +1,23 @@
 {
-    "apis": {
-        "children": {
-            "/lists": {
-                "RESTName": "list",
-                "entityName": "List",
-                "relationship": "root",
-                "operations": [
-                    {
-                        "availability": null,
-                        "method": "GET"
-                    },
-                    {
-                        "availability": null,
-                        "method": "POST"
-                    }
-                ],
-                "resourceName": "lists"
-            },
-            "/users": {
-                "RESTName": "user",
-                "entityName": "User",
-                "relationship": "root",
-                "operations": [
-                    {
-                        "availability": null,
-                        "method": "GET"
-                    },
-                    {
-                        "availability": null,
-                        "method": "POST"
-                    }
-                ],
-                "resourceName": "users"
-            }
-        },
-        "parents": {},
-        "self": {}
-    },
     "model": {
-        "RESTName": "root",
-        "attributes": {},
+        "resource_name": "root",
         "description": "Root object of the API",
-        "entityName": "Root",
+        "entity_name": "Root",
+        "get": true,
         "package": "todo-list",
-        "resourceName": "root"
+        "rest_name": "root",
+        "root": true
+    },
+    "children": {
+        "list": {
+            "create": true,
+            "relationship": "root",
+            "get": true
+        },
+        "user": {
+            "create": true,
+            "relationship": "root",
+            "get": true
+        }
     }
 }

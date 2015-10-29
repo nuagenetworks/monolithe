@@ -19,7 +19,8 @@ for version_folder in os.listdir(sdk_api_version_path):
     packages.append("{{ sdk_name }}.%s" % version_folder)
     packages.append("{{ sdk_name }}.%s.fetchers" % version_folder)
 
-    resources.append(('{{ sdk_name }}/%s/resources' % version_folder, ['{{ sdk_name }}/%s/resources/attrs_defaults.ini' % version_folder]))
+    if os.path.exists('{{ sdk_name }}/%s/resources' % version_folder):
+        resources.append(('{{ sdk_name }}/%s/resources' % version_folder, ['{{ sdk_name }}/%s/resources/attrs_defaults.ini' % version_folder]))
 
 sdk_name_upper = "{{ sdk_name }}_VERSION".upper()
 

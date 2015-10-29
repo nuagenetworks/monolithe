@@ -40,57 +40,59 @@ class Specification(object):
 
     """
 
-    def __init__(self, monolithe_config, filename, data=None):
+    def __init__(self, filename, monolithe_config=None, data=None):
         """ Initializes a model object
 
             Example:
                 name: EnterpriseNetwork
                 instance_name: enterprise_network
-                plural_name: EnterpriseNetworks
-                instance_plural_name: enterprise_networks
-                remote_name: enterprisenetwork
+                entity_name_plural: EnterpriseNetworks
+                instance_name_plural: enterprise_networks
+                rest_name: enterprisenetwork
                 resource_name: enterprisenetworks
                 package: network
         """
-        self.__default_specification__ = None
-
         self.monolithe_config = monolithe_config
         self.filename = filename
+
+        self.allows_create = False
+        self.allows_delete = False
+        self.allows_get = False
+        self.allows_update = False
         self.description = None
-        self.package = None
-        self._name = None  # The original name of the object
+        self.entity_name_plural = None  # the original name in plural
+        self.extends = []
         self.instance_name = None  # Name of the object as an instance
-        self.plural_name = None  # the original name in plural
-        self.instance_plural_name = None  # Name of the object as an instance of array or fetcher
-        self.remote_name = None  # The remote name of the object
+        self.instance_name_plural = None  # Name of the object as an instance of array or fetcher
+        self.is_root = False
+        self.package = None
         self.resource_name = None  # The name of the resource used in URI
+        self.rest_name = None  # The remote name of the object
+        self._entity_name = None  # The original name of the object
+
         self.attributes = []  # A list of all properties of the object
         self.child_apis = []
         self.parent_apis = []
-        self.self_apis = []
-        self.extends = []
-
-        self.has_time_attribute = False  # A boolean to flag if the model has a time attribute
 
         if data:
             self.from_dict(data=data)
 
     @property
-    def name(self):
+    def entity_name(self):
         """
         """
-        return self._name
+        return self._entity_name
 
-    @name.setter
-    def name(self, value):
+    @entity_name.setter
+    def entity_name(self, value):
         """
         """
-        self._name = value
+        self._entity_name = value
 
         if value:
             self.instance_name = SDKUtils.get_python_name(value)
-            self.plural_name = SDKUtils.get_plural_name(value)
-            self.instance_plural_name = SDKUtils.get_python_name(self.plural_name)
+            self.entity_name_plural = SDKUtils.get_entity_name_plural(value)
+            self.instance_name_plural = SDKUtils.get_python_name(self.entity_name_plural)
 
 
     def to_dict(self):
@@ -98,55 +100,55 @@ class Specification(object):
 
         """
 
-        if self.__default_specification__ is None:
-            default_data = pkgutil.get_data(__package__, "/data/default_specification.json")
-            self.__default_specification__ = json.loads(default_data)
-
-        data = deepcopy(self.__default_specification__)
+        data = {"model": {}}
 
         if self.description:
             data["model"]["description"] = self.description
 
-        if self.name:
-            data["model"]["entityName"] = self.name
+        if self.entity_name:
+            data["model"]["entity_name"] = self.entity_name
 
         if self.package:
             data["model"]["package"] = self.package
 
         if self.resource_name:
-            data["model"]["resourceName"] = self.resource_name
+            data["model"]["resource_name"] = self.resource_name
 
-        if self.remote_name:
-            data["model"]["RESTName"] = self.remote_name
+        if self.rest_name:
+            data["model"]["rest_name"] = self.rest_name
 
         if self.extends:
             data["model"]["extends"] = self.extends
 
-        for attribute in self.attributes:
-            data["model"]["attributes"][attribute.remote_name] = attribute.to_dict()
+        if self.allows_get:
+            data["model"]["get"] = self.allows_get
 
-        if not len(data["model"]["attributes"]):
-            del data["model"]["attributes"]
+        if self.allows_update:
+            data["model"]["update"] = self.allows_update
 
-        data["apis"]["children"] = {}
-        for api in self.child_apis:
-            data["apis"]["children"][api.path] = api.to_dict()
+        if self.allows_create:
+            data["model"]["create"] = self.allows_create
 
-        if not len(data["apis"]["children"]):
-            del data["apis"]["children"]
+        if self.allows_delete:
+            data["model"]["delete"] = self.allows_delete
 
-        data["apis"]["parents"] = {}
-        for api in self.parent_apis:
-            data["apis"]["parents"][api.path] = api.to_dict()
+        if self.is_root:
+            data["model"]["root"] = self.is_root
 
-        if not len(data["apis"]["parents"]):
-            del data["apis"]["parents"]
+        if not len(data["model"]):
+            del data["model"]
 
-        for api in self.self_apis:
-            data["apis"]["self"] = api.to_dict()
+        if len(self.attributes):
+            data["attributes"] = {}
 
-        if not len(data["apis"]["self"]):
-            del data["apis"]["self"]
+            for attribute in self.attributes:
+                data["attributes"][attribute.rest_name] = attribute.to_dict()
+
+        if len(self.child_apis):
+            data["children"] = {}
+
+            for api in self.child_apis:
+                data["children"][api.remote_specification_name] = api.to_dict()
 
         return data
 
@@ -156,59 +158,45 @@ class Specification(object):
         """
 
         ## replace all the tokens
-        string_data = json.dumps(data)
-        tokens_replaced = False
-
-        if "apis" in data:
-
-            if "children" in data["apis"]:
-                self.child_apis = self._get_apis("children", data["apis"])
-
-            if "parents" in data["apis"]:
-                self.parent_apis = self._get_apis("parents", data["apis"])
-
-            if "self" in data["apis"]:
-                self.self_apis = self._get_apis("self", data["apis"])
+        # string_data = json.dumps(data)
+        # tokens_replaced = False
+        #
+        # if "model" in data and "resource_name" in data["model"]:
+        #     string_data = string_data.replace("[[resource_name]]", data["model"]["resource_name"])
+        #     tokens_replaced = True
+        #
+        # if "model" in data and "rest_name" in data["model"]:
+        #     string_data = string_data.replace("[[rest_name]]", data["model"]["rest_name"])
+        #     tokens_replaced = True
+        #
+        # if "model" in data and "entity_name" in data["model"]:
+        #     string_data = string_data.replace("[[entity_name]]", data["model"]["entity_name"])
+        #     tokens_replaced = True
+        #
+        # if tokens_replaced:
+        #     data = json.loads(string_data)
 
         if "model" in data:
+            model = data["model"]
+            self.description   = model["description"] if "description" in model else None
+            self.package       = model["package"] if "package" in model else None
+            self.extends       = model["extends"] if "extends" in model else []
+            self.entity_name   = model["entity_name"] if "entity_name" in model else None
+            self.rest_name     = model["rest_name"] if "rest_name" in model else None
+            self.resource_name = model["resource_name"] if "resource_name" in model else None
+            self.allows_get    = model["get"] if "get" in model else False
+            self.allows_create = model["create"] if "create" in model else False
+            self.allows_update = model["update"] if "update" in model else False
+            self.allows_delete = model["delete"] if "delete" in model else False
+            self.is_root       = model["root"] if "root" in model else False
 
-            if "resourceName" in data["model"]:
-                string_data = string_data.replace("[__RESOURCE_NAME__]", data["model"]["resourceName"])
-                tokens_replaced = True
+        if "attributes" in data:
+            self.attributes = self._get_attributes(data["attributes"])
 
-            if "RESTName" in data["model"]:
-                string_data = string_data.replace("[__REST_NAME__]", data["model"]["RESTName"])
-                tokens_replaced = True
+        if "children" in data:
+            self.child_apis = self._get_apis(data["children"])
 
-            if "entityName" in data["model"]:
-                string_data = string_data.replace("[__ENTITY_NAME__]", data["model"]["entityName"])
-                tokens_replaced = True
-
-            if tokens_replaced:
-                data = json.loads(string_data)
-
-            if "description" in data["model"]:
-                self.description = data["model"]["description"]
-
-            if "package" in data["model"]:
-                self.package = data["model"]["package"]
-
-            if "extends" in data["model"]:
-                self.extends = data["model"]["extends"]
-
-            if "entityName" in data["model"]:
-                self.name = data["model"]["entityName"]
-
-            if "RESTName" in data["model"]:
-                self.remote_name = data["model"]["RESTName"]
-
-            if "resourceName" in data["model"]:
-                self.resource_name = data["model"]["resourceName"]
-
-            if "attributes" in data["model"]:
-                self.attributes = self._get_attributes(data["model"]["attributes"])
-
-    def _get_apis(self, api_name, apis):
+    def _get_apis(self, apis):
         """ Process apis for the given model
 
             Args:
@@ -217,31 +205,23 @@ class Specification(object):
                 relations: dict containing all relations between resources
 
         """
-        result_apis = []
+        ret = []
 
-        for path, data in apis[api_name].iteritems():
-
-            api = SpecificationAPI(specification=self)
-            data["path"] = path
+        for name, data in apis.iteritems():
+            api = SpecificationAPI(remote_specification_name=name, specification=self)
             api.from_dict(data)
-            result_apis.append(api)
+            ret.append(api)
 
-        return result_apis
+        return sorted(ret, key=lambda x: getattr(x, "specification"))
 
     def _get_attributes(self, attributes):
         """
 
         """
-        model_attributes = []
+        ret = []
 
         for name, data in attributes.iteritems():
-            data["name"] = name
-            model_attribute = SpecificationAttribute(specification=self, data=data)
+            model_attribute = SpecificationAttribute(rest_name=name, specification=self, data=data)
+            ret.append(model_attribute)
 
-            if model_attribute.has_time_attribute:
-                self.has_time_attribute = True
-
-            if not model_attribute.ignored:
-                model_attributes.append(model_attribute)
-
-        return sorted(model_attributes, key=lambda x: getattr(x, "local_name"))
+        return sorted(ret, key=lambda x: getattr(x, "rest_name"))

@@ -27,6 +27,7 @@
 
 import json
 import os
+import ConfigParser
 
 from .specification import Specification
 from monolithe.lib import merge_dict
@@ -40,6 +41,10 @@ class FolderManager (object):
         """
         self._monolithe_config = monolithe_config
         self._folder = folder;
+
+    @property
+    def folder(self):
+        return self._folder
 
     def get_available_specifications(self):
         """ Returns the list of available specification files
@@ -66,12 +71,24 @@ class FolderManager (object):
             except Exception as e:
                 raise Exception("could not parse api.info", e)
 
+    def get_monolithe_config(self, branch="master"):
+        """
+        """
+        with open("%s/monolithe.ini" % self._folder, "r") as f:
+            try:
+                monolithe_config_parser = ConfigParser.ConfigParser()
+                monolithe_config_parser.readfp(f)
+                return monolithe_config_parser
+
+            except Exception as e:
+                raise Exception("could not parse monolithe.ini", e)
+
     def get_all_specifications(self):
         """
         """
-        specifications = []
+        specifications = {}
         for name in self.get_available_specifications():
-            specifications.append(self.get_specification(name))
+            specifications[name.replace(".spec", "")] = self.get_specification(name)
         return specifications
 
     def get_specification_data(self, name):

@@ -70,7 +70,7 @@ class CourgetteTestsRunner(object):
                                     api_password=password,
                                     api_enterprise=enterprise)
 
-        self._sdk_object = sdk_loader.get_instance_from_rest_name(specification.remote_name)
+        self._sdk_object = sdk_loader.get_instance_from_rest_name(specification.rest_name)
         self._sdk_object.from_dict(default_values)
         self._sdk_parent_object = None
 
@@ -91,21 +91,17 @@ class CourgetteTestsRunner(object):
         self._get_all_allowed = False
         self._update_allowed = False
 
-        for api in specification.parent_apis:
-            for operation in api.operations:
-                if operation.method == "POST":
-                    self._create_allowed = True
-                if operation.method == "GET":
-                    self._get_all_allowed = True
+        # as we get one single spec, we can't know the parent info...
+        self._create_allowed = True
+        self._get_all_allowed = True
 
-        for api in specification.self_apis:
-            for operation in api.operations:
-                if operation.method == "PUT":
-                    self._update_allowed = True
-                if operation.method == "DELETE":
-                    self._delete_allowed = True
-                if operation.method == "GET":
-                    self._get_allowed = True
+        # for api in specification.parent_apis:
+        #     self._create_allowed = api.allows_create
+        #     self._get_all_allowed = api.allows_get
+
+        self._update_allowed = specification.allows_update
+        self._delete_allowed = specification.allows_delete
+        self._get_allowed = specification.allows_get
 
     def suite(self):
         """ Returns a TestSuite that can be run

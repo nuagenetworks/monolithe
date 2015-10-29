@@ -41,35 +41,32 @@ class SDKGenerator(Generator):
     """
     """
 
-    def __init__(self, monolithe_config):
-        """
-        """
-        super(SDKGenerator, self).__init__(monolithe_config=monolithe_config)
-
-        self._sdk_user_vanilla = self.monolithe_config.get_option("sdk_user_vanilla", "sdk")
-        self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
-        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
-
     def cleanup(self):
         """
         """
-        overrides_path = "%s/__overrides" % self._sdk_output
+        sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+
+        overrides_path = "%s/__overrides" % sdk_output
         if os.path.exists(overrides_path):
             shutil.rmtree(overrides_path)
 
-        attrs_defaults_path = "%s/__attributes_defaults" % self._sdk_output
+        attrs_defaults_path = "%s/__attributes_defaults" % sdk_output
         if os.path.exists(attrs_defaults_path):
             shutil.rmtree(attrs_defaults_path)
 
-        code_header_path = "%s/__code_header"  % self._sdk_output
+        code_header_path = "%s/__code_header"  % sdk_output
         if os.path.exists(code_header_path):
             os.remove(code_header_path)
 
     def generate(self, specification_info):
         """
         """
-        self.install_system_vanilla(current_file=__file__, output_path=self._sdk_output)
-        self.install_user_vanilla(user_vanilla_path=self._sdk_user_vanilla, output_path=self._sdk_output)
+        sdk_user_vanilla = self.monolithe_config.get_option("sdk_user_vanilla", "sdk")
+        sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+        sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+
+        self.install_system_vanilla(current_file=__file__, output_path=sdk_output)
+        self.install_user_vanilla(user_vanilla_path=sdk_user_vanilla, output_path=sdk_output)
 
         generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
         apiversions = []
@@ -88,4 +85,4 @@ class SDKGenerator(Generator):
 
         self.cleanup()
 
-        Printer.success("%s generation complete and available at \"%s\"" % (self._sdk_name, self._sdk_output))
+        Printer.success("%s generation complete and available at \"%s\"" % (sdk_name, sdk_output))
