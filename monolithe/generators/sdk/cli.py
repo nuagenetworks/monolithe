@@ -44,7 +44,6 @@ def main(argv=sys.argv):
     parser.add_argument("-g", "--github",
                         dest="api_url",
                         metavar="github_api_url",
-                        default="https://api.github.com",
                         help="The GitHub API URL. Can be given by setting the environment variable \"MONOLITHE_GITHUB_API_URL\"",
                         type=str)
 
@@ -63,14 +62,12 @@ def main(argv=sys.argv):
     parser.add_argument("-o", "--organization",
                         dest="organization",
                         metavar="github_organization",
-                        default="nuagenetworks",
                         help="The GitHub Organization. Can be given by setting the environment variable \"MONOLITHE_GITHUB_ORGANIZATION\"",
                         type=str)
 
     parser.add_argument("-r", "--repository",
                         dest="repository",
                         metavar="github_repository",
-                        default="vsd-api-specifications",
                         help="The GitHub Repository. Can be given by setting the environment variable \"MONOLITHE_GITHUB_REPOSITORY\"",
                         type=str)
 
@@ -168,7 +165,6 @@ def main(argv=sys.argv):
         else:
             password = None
             login_or_token = args.token
-
 
         generator.initialize_repository_manager(api_url=args.api_url,
                                                 login_or_token=login_or_token,
