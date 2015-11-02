@@ -217,4 +217,4 @@ class CourgetteTestCase(TestCase):
     def _connection_failure_message(cls, connection, expected_status):
         """ Returns a message that explains the connection status failure """
 
-        return "Expected status code %s != %s\n" % (expected_status, connection.response.status_code)
+        return "Expected status code %s != to Received status code %s\n" % (expected_status, connection.response.status_code)
