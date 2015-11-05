@@ -62,7 +62,7 @@ class SDKLoader(object):
     def class_from_rest_name(self, rest_name):
         """
         """
-        return NURESTModelController.get_first_model(rest_name=rest_name)
+        return NURESTModelController.get_first_model_with_rest_name(rest_name=rest_name)
 
     def get_instance_from_rest_name(self, rest_name):
         """

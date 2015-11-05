@@ -53,7 +53,7 @@ class CLICommand(object):
         if objects is None:
             Printer.raise_error("Could not retrieve. Activate verbose mode for more information")
 
-        Printer.success("%s %s have been retrieved" % (len(objects), instance.rest_resource_name))
+        Printer.success("%s %s have been retrieved" % (len(objects), instance.resource_name))
         Printer.output(objects, fields=args.fields, json=args.json)
 
     @classmethod
@@ -85,8 +85,8 @@ class CLICommand(object):
 
         (fetcher, parent, count) = fetcher.count(filter=args.filter, query_parameters=query_parameters)
 
-        Printer.success("%s %s have been retrieved" % (count, instance.rest_resource_name))
-        Printer.output({instance.rest_resource_name: count}, fields=[instance.rest_resource_name], json=args.json)
+        Printer.success("%s %s have been retrieved" % (count, instance.resource_name))
+        Printer.output({instance.resource_name: count}, fields=[instance.resource_name], json=args.json)
 
     @classmethod
     def show(cls, args):
