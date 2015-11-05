@@ -394,7 +394,7 @@ class UpdateTestCase(CourgetteTestCase):
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
 
-        self.assertConnectionStatus(connection, 204)
+        self.assertConnectionStatus(connection, 200)
         self.assertIsNone(getattr(obj, attribute.local_name), "%s should be none but was %s instead" % (attribute.local_name, getattr(obj, attribute.local_name)))
 
 
@@ -479,7 +479,7 @@ class DeleteTestCase(CourgetteTestCase):
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
-        self.assertConnectionStatus(connection, 204)
+        self.assertConnectionStatus(connection, 200)
         self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
         self.sdkobject.id = None # so it won't be deleted again in tearDown
 
