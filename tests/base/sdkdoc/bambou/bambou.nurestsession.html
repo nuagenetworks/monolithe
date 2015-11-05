@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NURESTSession &mdash; tdldk  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="tdldk  documentation" href="../index.html"/>
+        <link rel="up" title="Bambou API Reference" href="../bambou_reference.html"/>
+        <link rel="prev" title="NURESTRootObject" href="bambou.nurestrootobject.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> tdldk
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general_concepts.html">General Concepts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdldk_1.0_reference.html">TDLDK API 1.0 Reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../bambou_reference.html">Bambou API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bambou.bambouconfig.html">BambouConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestconnection.html">NURESTConnection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestfetcher.html">NURESTFetcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestlogincontroller.html">NURESTLoginController</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestmodelcontroller.html">NURESTModelController</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestobject.html">NURESTObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestpushcenter.html">NURESTPushCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestrequest.html">NURESTRequest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestresponse.html">NURESTResponse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestrootobject.html">NURESTRootObject</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">NURESTSession</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">tdldk</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../bambou_reference.html">Bambou API Reference</a> &raquo;</li>
+      
+    <li>NURESTSession</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/bambou/bambou.nurestsession.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nurestsession">
+<h1>NURESTSession<a class="headerlink" href="#nurestsession" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bambou.NURESTSession">
+<em class="property">class </em><code class="descname">NURESTSession</code><span class="sig-paren">(</span><em>username</em>, <em>password</em>, <em>enterprise</em>, <em>api_url</em>, <em>api_prefix</em>, <em>version</em>, <em>certificate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authenticated sessions used for sending ReST calls</p>
+<p>The session holds the credential information for a particular
+user. It is used by <a class="reference internal" href="bambou.nurestconnection.html#bambou.NURESTConnection" title="bambou.NURESTConnection"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTConnection</span></code></a> to get
+the authentication information needed to send the request.</p>
+<p>NURESTSession supports the <cite>with</cite> statement.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NURESTSession <em>must</em> be subclassed, and the subclass <em>must</em> implement <a class="reference internal" href="#bambou.NURESTSession.create_root_object" title="bambou.NURESTSession.create_root_object"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTSession.create_root_object</span></code></a></p>
+</div>
+<p class="rubric">Example</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mainsession</span> <span class="o">=</span>  <span class="n">NUMySession</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&quot;csproot&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&quot;csproot&quot;</span><span class="p">,</span> <span class="n">enterprise</span><span class="o">=</span><span class="s">&quot;csp&quot;</span><span class="p">,</span> <span class="n">api_url</span><span class="o">=</span><span class="s">&quot;https://vsd:8443&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">othersession</span> <span class="o">=</span> <span class="n">NUMySession</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&quot;user&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&quot;password&quot;</span><span class="p">,</span> <span class="n">enterprise</span><span class="o">=</span><span class="s">&quot;ent&quot;</span><span class="p">,</span> <span class="n">api_url</span><span class="o">=</span><span class="s">&quot;https://vsd:8443&quot;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mainsession</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mainsession</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[&lt;NUEntity at 1&gt;, &lt;NUEntity at 2&gt;, &lt;NUEntity at 3&gt;]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">othersession</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">session</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">[&lt;NUEntity at 2&gt;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt id="bambou.NURESTSession.is_impersonating">
+<code class="descclassname">NURESTSession.</code><code class="descname">is_impersonating</code><a class="headerlink" href="#bambou.NURESTSession.is_impersonating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the session is currently impersonating
+a root object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a boolean that indicate if the session is impersonating a root object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTSession.login_controller">
+<code class="descclassname">NURESTSession.</code><code class="descname">login_controller</code><a class="headerlink" href="#bambou.NURESTSession.login_controller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="bambou.nurestlogincontroller.html#bambou.NURESTLoginController" title="bambou.NURESTLoginController"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTLoginController</span></code></a> of the current session</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You should not need to use this method. It&#8217;s used automatically when needed</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTSession.push_center">
+<code class="descclassname">NURESTSession.</code><code class="descname">push_center</code><a class="headerlink" href="#bambou.NURESTSession.push_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="bambou.nurestpushcenter.html#bambou.NURESTPushCenter" title="bambou.NURESTPushCenter"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTPushCenter</span></code></a> of the current session</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Use this method to start and stop receiving push notifications</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTSession.root_object">
+<code class="descclassname">NURESTSession.</code><code class="descname">root_object</code><a class="headerlink" href="#bambou.NURESTSession.root_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the root object of the session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the root object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bambou.NURESTRootObject)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="method">
+<dt id="bambou.NURESTSession.create_root_object">
+<code class="descclassname">NURESTSession.</code><code class="descname">create_root_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.create_root_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.create_root_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="bambou.nurestrootobject.html#bambou.NURESTRootObject" title="bambou.NURESTRootObject"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTRootObject</span></code></a>.</p>
+<p>This method <em>MUST</em> be overriden by subclasses in order to provide
+a valid <a class="reference internal" href="bambou.nurestrootobject.html#bambou.NURESTRootObject" title="bambou.NURESTRootObject"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTRootObject</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">class:<cite>bambou.NURESTRootObject</cite></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">A instance of a subclass of</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTSession.equals">
+<code class="descclassname">NURESTSession.</code><code class="descname">equals</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.equals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify if the current session equals the given parameter</p>
+<p class="rubric">Notes</p>
+<p>Verification is based on username, enterprise, api_url and its version.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session</strong> (<a class="reference internal" href="#bambou.NURESTSession" title="bambou.NURESTSession"><em>bambou.NURESTSession</em></a>) &#8211; the session to compare with</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if session are equal</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bambou.NURESTSession.get_current_session">
+<em class="property">classmethod </em><code class="descclassname">NURESTSession.</code><code class="descname">get_current_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.get_current_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.get_current_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the current session</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bambou.NURESTSession)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTSession.impersonate">
+<code class="descclassname">NURESTSession.</code><code class="descname">impersonate</code><span class="sig-paren">(</span><em>username</em>, <em>enterprise</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.impersonate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.impersonate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the session to impersonate a user within an enterprise</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> (<em>string</em>) &#8211; name of the user to impersonate</li>
+<li><strong>enterprise</strong> (<em>string</em>) &#8211; name of the enterprise</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTSession.is_current_session">
+<code class="descclassname">NURESTSession.</code><code class="descname">is_current_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.is_current_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.is_current_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify if the session is the current.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the session is the current</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTSession.reset">
+<code class="descclassname">NURESTSession.</code><code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the session.</p>
+<p>Resetting the session will flush the API stored API key. Any additional calls will require to call start, and a
+/me request will be reissued.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTSession.start">
+<code class="descclassname">NURESTSession.</code><code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the session.</p>
+<p>Starting the session will actually get the API key of the current user</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTSession.stop_impersonate">
+<code class="descclassname">NURESTSession.</code><code class="descname">stop_impersonate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_session.html#NURESTSession.stop_impersonate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTSession.stop_impersonate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop impersonating a user</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="bambou.nurestrootobject.html" class="btn btn-neutral" title="NURESTRootObject" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2015, Nuage Networks.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

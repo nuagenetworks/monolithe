@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NURESTConnection &mdash; tdldk  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="tdldk  documentation" href="../index.html"/>
+        <link rel="up" title="Bambou API Reference" href="../bambou_reference.html"/>
+        <link rel="next" title="NURESTFetcher" href="bambou.nurestfetcher.html"/>
+        <link rel="prev" title="BambouConfig" href="bambou.bambouconfig.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> tdldk
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general_concepts.html">General Concepts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tdldk_1.0_reference.html">TDLDK API 1.0 Reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../bambou_reference.html">Bambou API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bambou.bambouconfig.html">BambouConfig</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">NURESTConnection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestfetcher.html">NURESTFetcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestlogincontroller.html">NURESTLoginController</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestmodelcontroller.html">NURESTModelController</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestobject.html">NURESTObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestpushcenter.html">NURESTPushCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestrequest.html">NURESTRequest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestresponse.html">NURESTResponse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestrootobject.html">NURESTRootObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bambou.nurestsession.html">NURESTSession</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">tdldk</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../bambou_reference.html">Bambou API Reference</a> &raquo;</li>
+      
+    <li>NURESTConnection</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/bambou/bambou.nurestconnection.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nurestconnection">
+<h1>NURESTConnection<a class="headerlink" href="#nurestconnection" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bambou.NURESTConnection">
+<em class="property">class </em><code class="descname">NURESTConnection</code><span class="sig-paren">(</span><em>request</em>, <em>async</em>, <em>callback=None</em>, <em>callbacks={}</em>, <em>root_object=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_connection.html#NURESTConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connection that enable HTTP requests</p>
+</dd></dl>
+
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt id="bambou.NURESTConnection.async">
+<code class="descclassname">NURESTConnection.</code><code class="descname">async</code><a class="headerlink" href="#bambou.NURESTConnection.async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get async</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns True if the request is asynchronous</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.callbacks">
+<code class="descclassname">NURESTConnection.</code><code class="descname">callbacks</code><a class="headerlink" href="#bambou.NURESTConnection.callbacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get callbacks</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">It returns an array containing user callbacks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.has_timeouted">
+<code class="descclassname">NURESTConnection.</code><code class="descname">has_timeouted</code><a class="headerlink" href="#bambou.NURESTConnection.has_timeouted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get has timouted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns True if the request has timeout.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.ignore_request_idle">
+<code class="descclassname">NURESTConnection.</code><code class="descname">ignore_request_idle</code><a class="headerlink" href="#bambou.NURESTConnection.ignore_request_idle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get ignore request idle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">It returns a boolean. By default ignore request idle is set to False.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.request">
+<code class="descclassname">NURESTConnection.</code><code class="descname">request</code><a class="headerlink" href="#bambou.NURESTConnection.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get request. Read-only property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the NURESTRequest object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.response">
+<code class="descclassname">NURESTConnection.</code><code class="descname">response</code><a class="headerlink" href="#bambou.NURESTConnection.response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get response</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">It returns the NURESTResponse object of the request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.timeout">
+<code class="descclassname">NURESTConnection.</code><code class="descname">timeout</code><a class="headerlink" href="#bambou.NURESTConnection.timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get timeout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">It returns the timeout time in seconds. Default is 3000.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.transaction_id">
+<code class="descclassname">NURESTConnection.</code><code class="descname">transaction_id</code><a class="headerlink" href="#bambou.NURESTConnection.transaction_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get transaction ID. Read-only property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the transaction ID</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bambou.NURESTConnection.user_info">
+<code class="descclassname">NURESTConnection.</code><code class="descname">user_info</code><a class="headerlink" href="#bambou.NURESTConnection.user_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get user info</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">It returns additionnal user information</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="method">
+<dt id="bambou.NURESTConnection.handle_response_for_connection">
+<code class="descclassname">NURESTConnection.</code><code class="descname">handle_response_for_connection</code><span class="sig-paren">(</span><em>should_post=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_connection.html#NURESTConnection.handle_response_for_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTConnection.handle_response_for_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the response succeed or not.</p>
+<p>In case of error, this method also print messages and set
+an array of errors in the response object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns True if the response has succeed, False otherwise</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTConnection.has_callbacks">
+<code class="descclassname">NURESTConnection.</code><code class="descname">has_callbacks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_connection.html#NURESTConnection.has_callbacks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTConnection.has_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the request has callbacks</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns YES if there is a local or remote callbacks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTConnection.has_succeed">
+<code class="descclassname">NURESTConnection.</code><code class="descname">has_succeed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_connection.html#NURESTConnection.has_succeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTConnection.has_succeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the connection has succeed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns True if connection has succeed.
+False otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTConnection.reset">
+<code class="descclassname">NURESTConnection.</code><code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_connection.html#NURESTConnection.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTConnection.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the connection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bambou.NURESTConnection.start">
+<code class="descclassname">NURESTConnection.</code><code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bambou/nurest_connection.html#NURESTConnection.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bambou.NURESTConnection.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an HTTP request with a specific method</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bambou.nurestfetcher.html" class="btn btn-neutral float-right" title="NURESTFetcher" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bambou.bambouconfig.html" class="btn btn-neutral" title="BambouConfig" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2015, Nuage Networks.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

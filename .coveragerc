@@ -1,0 +1,10 @@
+[run]
+timid = True
+concurrency = thread
+include =
+    monolithe/*
+
+[report]
+# show_missing = true
+omit=
+    */__init__.py

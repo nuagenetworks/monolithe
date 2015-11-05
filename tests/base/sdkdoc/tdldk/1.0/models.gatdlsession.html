@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GATDLSession &mdash; tdldk  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="tdldk  documentation" href="../../index.html"/>
+        <link rel="up" title="TDLDK API 1.0 Reference" href="../../tdldk_1.0_reference.html"/>
+        <link rel="next" title="GAUser" href="models.gauser.html"/>
+        <link rel="prev" title="GATask" href="models.gatask.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> tdldk
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../general_concepts.html">General Concepts</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../tdldk_1.0_reference.html">TDLDK API 1.0 Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="models.galist.html">GAList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.garoot.html">GARoot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.gatask.html">GATask</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">GATDLSession</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inherited-properties">Inherited Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inherited-methods">Inherited Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.gauser.html">GAUser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.sdkinfo.html">SDKInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fetchers.galistsfetcher.html">GAListsFetcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fetchers.gatasksfetcher.html">GATasksFetcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fetchers.gausersfetcher.html">GAUsersFetcher</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../bambou_reference.html">Bambou API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">tdldk</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../tdldk_1.0_reference.html">TDLDK API 1.0 Reference</a> &raquo;</li>
+      
+    <li>GATDLSession</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/tdldk/1.0/models.gatdlsession.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gatdlsession">
+<h1>GATDLSession<a class="headerlink" href="#gatdlsession" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="tdldk.v1_0.GATDLSession">
+<em class="property">class </em><code class="descname">GATDLSession</code><span class="sig-paren">(</span><em>username</em>, <em>enterprise</em>, <em>api_url</em>, <em>password=None</em>, <em>certificate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tdldk/v1_0/gatdlsession.html#GATDLSession"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tdldk.v1_0.GATDLSession" title="Permalink to this definition">¶</a></dt>
+<dd><p>TDL User Session</p>
+<p>Session can be started and stopped whenever its needed</p>
+</dd></dl>
+
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt id="tdldk.v1_0.GATDLSession.root">
+<code class="descclassname">GATDLSession.</code><code class="descname">root</code><a class="headerlink" href="#tdldk.v1_0.GATDLSession.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the root object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tdldk.v1_0.GATDLSession.supercalifragilisticexpialidocious">
+<code class="descclassname">GATDLSession.</code><code class="descname">supercalifragilisticexpialidocious</code><a class="headerlink" href="#tdldk.v1_0.GATDLSession.supercalifragilisticexpialidocious" title="Permalink to this definition">¶</a></dt>
+<dd><p>For obvious simplicity, you can use this property to get
+the root object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tdldk.v1_0.GATDLSession.version">
+<code class="descclassname">GATDLSession.</code><code class="descname">version</code><a class="headerlink" href="#tdldk.v1_0.GATDLSession.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current TDL version</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="classmethod">
+<dt id="tdldk.v1_0.GATDLSession.create_root_object">
+<em class="property">classmethod </em><code class="descclassname">GATDLSession.</code><code class="descname">create_root_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tdldk/v1_0/gatdlsession.html#GATDLSession.create_root_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tdldk.v1_0.GATDLSession.create_root_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new instance</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="inherited-properties">
+<h2>Inherited Properties<a class="headerlink" href="#inherited-properties" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="attribute">
+<dt id="tdldk.v1_0.GATDLSession.is_impersonating">
+<code class="descclassname">GATDLSession.</code><code class="descname">is_impersonating</code><a class="headerlink" href="#tdldk.v1_0.GATDLSession.is_impersonating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the session is currently impersonating
+a root object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a boolean that indicate if the session is impersonating a root object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tdldk.v1_0.GATDLSession.login_controller">
+<code class="descclassname">GATDLSession.</code><code class="descname">login_controller</code><a class="headerlink" href="#tdldk.v1_0.GATDLSession.login_controller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="../../bambou/bambou.nurestlogincontroller.html#bambou.NURESTLoginController" title="bambou.NURESTLoginController"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTLoginController</span></code></a> of the current session</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You should not need to use this method. It&#8217;s used automatically when needed</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tdldk.v1_0.GATDLSession.push_center">
+<code class="descclassname">GATDLSession.</code><code class="descname">push_center</code><a class="headerlink" href="#tdldk.v1_0.GATDLSession.push_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <a class="reference internal" href="../../bambou/bambou.nurestpushcenter.html#bambou.NURESTPushCenter" title="bambou.NURESTPushCenter"><code class="xref py py-class docutils literal"><span class="pre">bambou.NURESTPushCenter</span></code></a> of the current session</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Use this method to start and stop receiving push notifications</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tdldk.v1_0.GATDLSession.root_object">
+<code class="descclassname">GATDLSession.</code><code class="descname">root_object</code><a class="headerlink" href="#tdldk.v1_0.GATDLSession.root_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the root object of the session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the root object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bambou.NURESTRootObject)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="inherited-methods">
+<h2>Inherited Methods<a class="headerlink" href="#inherited-methods" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="method">
+<dt id="tdldk.v1_0.GATDLSession.equals">
+<code class="descclassname">GATDLSession.</code><code class="descname">equals</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#tdldk.v1_0.GATDLSession.equals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify if the current session equals the given parameter</p>
+<p class="rubric">Notes</p>
+<p>Verification is based on username, enterprise, api_url and its version.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session</strong> (<a class="reference internal" href="../../bambou/bambou.nurestsession.html#bambou.NURESTSession" title="bambou.NURESTSession"><em>bambou.NURESTSession</em></a>) &#8211; the session to compare with</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if session are equal</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tdldk.v1_0.GATDLSession.get_current_session">
+<code class="descclassname">GATDLSession.</code><code class="descname">get_current_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tdldk.v1_0.GATDLSession.get_current_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the current session</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bambou.NURESTSession)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tdldk.v1_0.GATDLSession.impersonate">
+<code class="descclassname">GATDLSession.</code><code class="descname">impersonate</code><span class="sig-paren">(</span><em>username</em>, <em>enterprise</em><span class="sig-paren">)</span><a class="headerlink" href="#tdldk.v1_0.GATDLSession.impersonate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the session to impersonate a user within an enterprise</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> (<em>string</em>) &#8211; name of the user to impersonate</li>
+<li><strong>enterprise</strong> (<em>string</em>) &#8211; name of the enterprise</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tdldk.v1_0.GATDLSession.is_current_session">
+<code class="descclassname">GATDLSession.</code><code class="descname">is_current_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tdldk.v1_0.GATDLSession.is_current_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify if the session is the current.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the session is the current</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(bool)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tdldk.v1_0.GATDLSession.reset">
+<code class="descclassname">GATDLSession.</code><code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tdldk.v1_0.GATDLSession.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the session.</p>
+<p>Resetting the session will flush the API stored API key. Any additional calls will require to call start, and a
+/me request will be reissued.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tdldk.v1_0.GATDLSession.start">
+<code class="descclassname">GATDLSession.</code><code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tdldk.v1_0.GATDLSession.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the session.</p>
+<p>Starting the session will actually get the API key of the current user</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tdldk.v1_0.GATDLSession.stop_impersonate">
+<code class="descclassname">GATDLSession.</code><code class="descname">stop_impersonate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tdldk.v1_0.GATDLSession.stop_impersonate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop impersonating a user</p>
+</dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="models.gauser.html" class="btn btn-neutral float-right" title="GAUser" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="models.gatask.html" class="btn btn-neutral" title="GATask" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2015, Nuage Networks.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
