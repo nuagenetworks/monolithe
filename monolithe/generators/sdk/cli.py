@@ -107,6 +107,12 @@ def main(argv=sys.argv):
                         required=False,
                         type=str)
 
+    parser.add_argument("--sdk-version",
+                        dest="sdk_version",
+                        help="Overwrite the sdk version given in monolithe.conf",
+                        required=False,
+                        type=str)
+
     args = parser.parse_args()
 
     monolithe_config = None
@@ -117,6 +123,9 @@ def main(argv=sys.argv):
         monolithe_config.set_option("sdk_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdk_user_vanilla", "sdk")), "sdk")
         monolithe_config.set_option("sdkdoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdkdoc_user_vanilla", "sdkdoc")), "sdkdoc")
         monolithe_config.set_option("apidoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("apidoc_user_vanilla", "apidoc")), "apidoc")
+
+    if monolithe_config and args.sdk_version:
+        monolithe_config.set_option("sdk_version", args.sdk_version, "sdk")
 
     generator = SDKGenerator(monolithe_config=monolithe_config)
 
