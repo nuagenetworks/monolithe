@@ -22,11 +22,9 @@ for version_folder in os.listdir(sdk_api_version_path):
     if os.path.exists('{{ sdk_name }}/%s/resources' % version_folder):
         resources.append(('{{ sdk_name }}/%s/resources' % version_folder, ['{{ sdk_name }}/%s/resources/attrs_defaults.ini' % version_folder]))
 
-sdk_name_upper = "{{ sdk_name }}_VERSION".upper()
-
 setup(
     name='{{ sdk_name }}',
-    version=os.environ[sdk_name_upper] if sdk_name_upper in os.environ else "{{ sdk_version }}",
+    version="{{ sdk_version }}",
     url='{{ sdk_url }}',
     author='{{ sdk_author }}',
     author_email='{{ sdk_email }}',
