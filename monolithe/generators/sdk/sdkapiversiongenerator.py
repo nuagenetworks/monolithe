@@ -31,10 +31,7 @@ import shutil
 
 from monolithe import MonolitheConfig
 from monolithe.lib import Printer
-from monolithe.specifications import RepositoryManager
 from monolithe.generators.sdk.lib import SDKAPIVersionWriter
-
-RepositoryManager
 
 
 class SDKAPIVersionGenerator(object):
