@@ -43,6 +43,7 @@ class MonolitheConfig(object):
         self.path = path
         self.config = None
         self.mapping = None
+        self.language = 'python'
 
         if self.path:
             self._check_path_exists(path)

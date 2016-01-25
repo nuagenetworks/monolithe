@@ -45,23 +45,36 @@ class SDKWriter(object):
     def write(self, apiversions):
         """
         """
-        self.writer = _SDKFileWriter(monolithe_config=self.monolithe_config)
-        self.writer.write_setup()
-        self.writer.write_root_init()
-        self.writer.write_utils()
-        self.writer.write_manifest(apiversions)
-        self.writer.write_requirements()
+        self.writer = self._get_writer()
+        self.writer.write_sdk(apiversions=apiversions)
+
+    def _get_writer(self):
+        """ Get the appropriate writer
+        """
+        language = self.monolithe_config.language
+        klass = None
+
+        if language == 'ruby':
+            klass = _RubySDKFileWriter
+
+        elif language == 'python':
+            klass = _PythonSDKFileWriter
+
+        if klass is None:
+            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
+
+        return klass(monolithe_config=self.monolithe_config)
 
 
 
-class _SDKFileWriter(TemplateFileWriter):
+class _PythonSDKFileWriter(TemplateFileWriter):
     """
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(_SDKFileWriter, self).__init__(package="monolithe.generators.sdk")
+        super(_PythonSDKFileWriter, self).__init__(package="monolithe.generators.sdk", language=monolithe_config.language)
 
         self.monolithe_config = monolithe_config
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
@@ -80,7 +93,16 @@ class _SDKFileWriter(TemplateFileWriter):
         with open("%s/__code_header" % self.output_directory, "r") as f:
             self.header_content = f.read()
 
-    def write_setup(self):
+    def write_sdk(self, apiversions):
+        """
+        """
+        self._write_setup()
+        self._write_root_init()
+        self._write_utils()
+        self._write_manifest(apiversions)
+        self._write_requirements()
+
+    def _write_setup(self):
         """
         """
         self.write( destination=self.output_directory, filename="setup.py", template_name="setup.py.tpl",
@@ -96,30 +118,110 @@ class _SDKFileWriter(TemplateFileWriter):
                     copyright=self._copyright,
                     header=self.header_content)
 
-    def write_manifest(self, apiversions):
+    def _write_manifest(self, apiversions):
         """
         """
         self.write( destination=self.output_directory, filename="MANIFEST.in", template_name="MANIFEST.in.tpl",
                     sdk_name=self._sdk_name,
                     apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
 
-    def write_requirements(self):
+    def _write_requirements(self):
         """
         """
         self.write( destination=self.output_directory, filename="requirements.txt", template_name="requirements.txt.tpl",
                     sdk_bambou_version=self._sdk_bambou_version)
 
-    def write_root_init(self):
+    def _write_root_init(self):
         """
         """
         destination = "%s/%s" % (self.output_directory, self._sdk_name)
         self.write(destination=destination, filename="__init__.py", template_name="__init__.py.tpl",
                     header=self.header_content)
 
-    def write_utils(self):
+    def _write_utils(self):
         """
         """
         destination = "%s/%s" % (self.output_directory, self._sdk_name)
         self.write(destination=destination, filename="utils.py", template_name="utils.py.tpl",
+                    sdk_name=self._sdk_name,
+                    header=self.header_content)
+
+
+class _RubySDKFileWriter(TemplateFileWriter):
+    """
+    """
+
+    def __init__(self, monolithe_config):
+        """
+        """
+        super(_RubySDKFileWriter, self).__init__(package="monolithe.generators.sdk", language=monolithe_config.language)
+
+        self.monolithe_config = monolithe_config
+        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+        self._sdk_version = self.monolithe_config.get_option("sdk_version", "sdk")
+        self._sdk_revision_number = self.monolithe_config.get_option("sdk_revision_number", "sdk")
+        self._sdk_url = self.monolithe_config.get_option("sdk_url", "sdk")
+        self._sdk_author = self.monolithe_config.get_option("sdk_author", "sdk")
+        self._sdk_email = self.monolithe_config.get_option("sdk_email", "sdk")
+        self._sdk_description = self.monolithe_config.get_option("sdk_description", "sdk")
+        self._sdk_license_name = self.monolithe_config.get_option("sdk_license_name", "sdk")
+        self._sdk_cli_name = self.monolithe_config.get_option("sdk_cli_name", "sdk")
+        self._sdk_bambou_version = self.monolithe_config.get_option("sdk_bambou_version", "sdk")
+        self._copyright = self.monolithe_config.get_option("copyright")
+        self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
+
+        with open("%s/__code_header" % self.output_directory, "r") as f:
+            self.header_content = f.read()
+
+    def write_sdk(self, apiversions):
+        """
+        """
+        self._write_setup()
+        self._write_root_init()
+        self._write_utils()
+        self._write_manifest(apiversions)
+        self._write_requirements()
+
+    def _write_setup(self):
+        """
+        """
+        self.write( destination=self.output_directory, filename="setup.rb", template_name="setup.rb.tpl",
+                    sdk_name=self._sdk_name,
+                    sdk_version=self._sdk_version,
+                    sdk_revision_number=self._sdk_revision_number,
+                    sdk_url=self._sdk_url,
+                    sdk_author=self._sdk_author,
+                    sdk_email=self._sdk_email,
+                    sdk_description=self._sdk_description,
+                    sdk_license_name=self._sdk_license_name,
+                    sdk_cli_name=self._sdk_cli_name,
+                    copyright=self._copyright,
+                    header=self.header_content)
+
+    def _write_manifest(self, apiversions):
+        """
+        """
+        self.write( destination=self.output_directory, filename="MANIFEST.in", template_name="MANIFEST.in.tpl",
+                    sdk_name=self._sdk_name,
+                    apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
+
+    def _write_requirements(self):
+        """
+        """
+        self.write( destination=self.output_directory, filename="requirements.txt", template_name="requirements.txt.tpl",
+                    sdk_bambou_version=self._sdk_bambou_version)
+
+    def _write_root_init(self):
+        """
+        """
+        destination = "%s/%s" % (self.output_directory, self._sdk_name)
+        self.write(destination=destination, filename="__init__.rb", template_name="__init__.rb.tpl",
+                    header=self.header_content)
+
+    def _write_utils(self):
+        """
+        """
+        destination = "%s/%s" % (self.output_directory, self._sdk_name)
+        self.write(destination=destination, filename="utils.rb", template_name="utils.rb.tpl",
                     sdk_name=self._sdk_name,
                     header=self.header_content)

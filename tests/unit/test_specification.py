@@ -3,6 +3,7 @@
 import json
 from unittest import TestCase
 from monolithe.specifications import Specification
+from monolithe.config import MonolitheConfig
 
 SPEC = """{
     "model": {
@@ -167,7 +168,8 @@ class SpecificationTest(TestCase):
 
         """
         data = json.loads(SPEC)
-        s = Specification("task.spec")
+        monolithe_config = MonolitheConfig()
+        s = Specification(filename="task.spec", monolithe_config=monolithe_config)
         s.from_dict(data)
         self._verify(s, data)
 
@@ -176,7 +178,8 @@ class SpecificationTest(TestCase):
         """
         """
         data = json.loads(SPEC)
-        s = Specification("task.spec")
+        monolithe_config = MonolitheConfig()
+        s = Specification(filename="task.spec", monolithe_config=monolithe_config)
         s.from_dict(data)
         data = s.to_dict()
         self._verify(s, data)

@@ -54,7 +54,7 @@ class APIDocumentationGenerator(Generator):
 
             vanilla_output_path = "%s/%s/%s" % (apidoc_output, sdk_name, info["api"]["version"])
 
-            self.install_system_vanilla(current_file=__file__, output_path=vanilla_output_path)
+            self.install_system_vanilla(current_file=__file__, output_path=vanilla_output_path, multiple_languages=False)
             self.install_user_vanilla(user_vanilla_path=apidoc_user_vanilla, output_path=vanilla_output_path)
 
             Printer.log("generating %s api documentation for api version: %s" % (product_name, info["api"]["version"]))

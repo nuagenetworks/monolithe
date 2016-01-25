@@ -61,13 +61,18 @@ class TemplateFileWriter(_FileWriter):
 
     """
 
-    def __init__(self, package):
+    def __init__(self, package, language=None):
         """ Initializes a FileWriter
 
         """
         super(TemplateFileWriter, self).__init__()
 
-        self.env = Environment(loader=PackageLoader(package, "templates"), extensions=["jinja2.ext.do"])
+        templates = "templates"
+
+        if language:
+            templates += "/%s" % language
+
+        self.env = Environment(loader=PackageLoader(package, templates), extensions=["jinja2.ext.do"])
 
     def write(self, destination, filename, template_name, **kwargs):
         """ Write a file according to the template name

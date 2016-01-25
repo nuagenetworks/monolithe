@@ -93,8 +93,11 @@ class SpecificationAttribute(object):
     def type(self, value):
         """
         """
+
+        language = self.specification.monolithe_config.language
+
         self._type = SDKUtils.massage_type_name(type_name=value)
-        self.local_type = SDKUtils.get_python_type_name(type_name=value)
+        self.local_type = SDKUtils.get_type_name_in_language(type_name=value, language=language)
 
     @property
     def rest_name(self):
@@ -107,10 +110,12 @@ class SpecificationAttribute(object):
         """
         """
         self._rest_name = value
+        language = self.specification.monolithe_config.language
+
         if self.specification and self.specification.monolithe_config:
-            self.local_name = SDKUtils.get_python_name(self.specification.monolithe_config.map_attribute(self.specification.rest_name, value))
+            self.local_name = SDKUtils.get_name_in_language(name=self.specification.monolithe_config.map_attribute(self.specification.rest_name, value), language=language)
         else:
-            self.local_name = SDKUtils.get_python_name(value)
+            self.local_name = SDKUtils.get_name_in_language(name=value, language=language)
 
     def from_dict(self, data):
         """
@@ -145,7 +150,7 @@ class SpecificationAttribute(object):
             self.unique_scope = data["unique_scope"] if "unique_scope" in data else 'no'
 
         except Exception as ex:
-            raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.rest_name, ex))
+            raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.rest_name, self.specification.rest_name, ex))
 
     def to_dict(self):
         """ Transform an attribute to a dict
