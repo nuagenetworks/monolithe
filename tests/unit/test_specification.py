@@ -32,7 +32,8 @@ SPEC = """{
             "max_length": 2048,
             "orderable": true,
             "type": "enum",
-            "description": "The status of the task"
+            "description": "The status of the task",
+            "subtype": "test"
         },
         "theTime": {
             "allowed_chars": "123",
@@ -120,6 +121,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.attributes[0].type, 'enum')
         self.assertEquals(s.attributes[0].unique, False)
         self.assertEquals(s.attributes[0].unique_scope, 'no')
+        self.assertEquals(s.attributes[0].subtype, 'test')
 
         self.assertEquals(s.attributes[1].allowed_chars, '123')
         self.assertEquals(s.attributes[1].allowed_choices, None)
@@ -145,7 +147,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.attributes[1].type, 'time')
         self.assertEquals(s.attributes[1].unique, True)
         self.assertEquals(s.attributes[1].unique_scope, 'global')
-
+        self.assertEquals(s.attributes[1].subtype, None)
 
         self.assertEquals(len(s.child_apis), 2)
         self.assertEquals(s.child_apis[0].remote_specification_name, 'toto')

@@ -75,6 +75,7 @@ class SpecificationAttribute(object):
         self._type = None
         self.exposed = True
         self.transient = False
+        self.subtype = None
 
         self.specification = specification
         self.rest_name = rest_name
@@ -143,6 +144,7 @@ class SpecificationAttribute(object):
             self.transient = data["transient"] if "transient" in data else False
             self.unique = data["unique"] if "unique" in data else False
             self.unique_scope = data["unique_scope"] if "unique_scope" in data else 'no'
+            self.subtype = data["subtype"] if "subtype" in data else None
 
         except Exception as ex:
             raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.rest_name, ex))
@@ -219,5 +221,8 @@ class SpecificationAttribute(object):
 
         if self.unique_scope:
             data["uniqueScope"] = self.unique_scope
+
+        if self.subtype:
+            data["subtype"] = self.subtype
 
         return data
