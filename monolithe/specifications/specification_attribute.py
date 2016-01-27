@@ -94,8 +94,7 @@ class SpecificationAttribute(object):
     def type(self, value):
         """
         """
-
-        language = self.specification.monolithe_config.language
+        language = self.specification.monolithe_config.language if self.specification.monolithe_config else 'python'
 
         self._type = SDKUtils.massage_type_name(type_name=value)
         self.local_type = SDKUtils.get_type_name_in_language(type_name=value, language=language)
@@ -111,7 +110,8 @@ class SpecificationAttribute(object):
         """
         """
         self._rest_name = value
-        language = self.specification.monolithe_config.language
+
+        language = self.specification.monolithe_config.language if self.specification.monolithe_config else 'python'
 
         if self.specification and self.specification.monolithe_config:
             self.local_name = SDKUtils.get_name_in_language(name=self.specification.monolithe_config.map_attribute(self.specification.rest_name, value), language=language)

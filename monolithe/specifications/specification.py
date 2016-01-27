@@ -88,7 +88,8 @@ class Specification(object):
         """
         """
         self._entity_name = value
-        language = self.monolithe_config.language
+
+        language = self.monolithe_config.language if self.monolithe_config else 'python'
 
         if value:
             self.instance_name = SDKUtils.get_name_in_language(name=value, language=language)

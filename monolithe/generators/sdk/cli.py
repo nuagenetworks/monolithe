@@ -134,8 +134,8 @@ def main(argv=sys.argv):
     if monolithe_config and args.sdk_version:
         monolithe_config.set_option("sdk_version", args.sdk_version, "sdk")
 
-
-    monolithe_config.language = args.language
+    if monolithe_config and args.language:
+        monolithe_config.language = args.language
 
     generator = SDKGenerator(monolithe_config=monolithe_config)
 
