@@ -29,7 +29,10 @@ from ConfigParser import ConfigParser
 import os
 import StringIO
 
+
 class MonolitheConfig(object):
+    """
+    """
 
     @classmethod
     def config_with_path(cls, path):
@@ -43,6 +46,7 @@ class MonolitheConfig(object):
         self.path = path
         self.config = None
         self.mapping = None
+        self.language = 'python'
 
         if self.path:
             self._check_path_exists(path)
@@ -104,7 +108,6 @@ class MonolitheConfig(object):
         """
         return self.config.set(section, option, value)
 
-
     def map_attribute(self, rest_name, attribute_name):
         """
         """
@@ -112,4 +115,3 @@ class MonolitheConfig(object):
             return attribute_name
 
         return self.mapping.get(rest_name, attribute_name)
-

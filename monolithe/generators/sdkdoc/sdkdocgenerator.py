@@ -26,17 +26,12 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-import importlib
 import os
 import shutil
-import re
-import inspect
 import subprocess
 
-from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from .lib import SDKDocWriter
-
 
 
 class SDKDocGenerator(object):
@@ -63,7 +58,7 @@ class SDKDocGenerator(object):
         if os.path.exists(self._sdkdoc_output):
             shutil.rmtree(self._sdkdoc_output)
 
-        system_vanilla_path = os.path.join(os.path.dirname(__file__), "vanilla");
+        system_vanilla_path = os.path.join(os.path.dirname(__file__), "vanilla")
         shutil.copytree(system_vanilla_path, self._sdkdoc_tmp_path)
 
     def _install_user_vanilla(self):

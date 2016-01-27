@@ -107,13 +107,17 @@ class Generator(object):
         pass
 
 
-    def install_system_vanilla(self, current_file, output_path):
+    def install_system_vanilla(self, current_file, output_path, multiple_languages=True):
         """
         """
         if os.path.exists(output_path):
             shutil.rmtree(output_path)
 
-        system_vanilla_path = os.path.join(os.path.dirname(current_file), "vanilla");
+        if multiple_languages:
+            system_vanilla_path = os.path.join(os.path.dirname(current_file), self.monolithe_config.language, "vanilla");
+        else:
+            system_vanilla_path = os.path.join(os.path.dirname(current_file), "vanilla");
+
         shutil.copytree(system_vanilla_path, output_path)
 
 

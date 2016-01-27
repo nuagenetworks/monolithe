@@ -76,7 +76,8 @@ def main(argv=sys.argv):
                         metavar="branches",
                         help="The branches of the specifications to use to generate the documentation (examples: \"master 3.2\")",
                         nargs="*",
-                        type=str)
+                        type=str,
+                        required=True)
 
     parser.add_argument("-p", "--path",
                         dest="repository_path",
@@ -113,6 +114,12 @@ def main(argv=sys.argv):
                         required=False,
                         type=str)
 
+    parser.add_argument("--language",
+                        dest="language",
+                        help="Choose the output language of the SDK. Default is python",
+                        default='python',
+                        type=str)
+
     args = parser.parse_args()
 
     monolithe_config = None
@@ -126,6 +133,9 @@ def main(argv=sys.argv):
 
     if monolithe_config and args.sdk_version:
         monolithe_config.set_option("sdk_version", args.sdk_version, "sdk")
+
+
+    monolithe_config.language = args.language
 
     generator = SDKGenerator(monolithe_config=monolithe_config)
 

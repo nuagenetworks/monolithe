@@ -81,7 +81,8 @@ def main(argv=sys.argv):
                         metavar="branches",
                         help="The branches of the specifications to use to generate the documentation (examples: \"master 3.2\")",
                         nargs="*",
-                        type=str)
+                        type=str,
+                        required=True)
 
     parser.add_argument("-f", "--folder",
                         dest="folder",

@@ -26,11 +26,9 @@ for version_folder in os.listdir(sdk_api_version_path):
     if os.path.exists('tdldk/%s/resources' % version_folder):
         resources.append(('tdldk/%s/resources' % version_folder, ['tdldk/%s/resources/attrs_defaults.ini' % version_folder]))
 
-sdk_name_upper = "tdldk_VERSION".upper()
-
 setup(
     name='tdldk',
-    version=os.environ[sdk_name_upper] if sdk_name_upper in os.environ else "1.0",
+    version="1.0",
     url='www.mycompany.net/mysdk',
     author='someone',
     author_email='someone@yourcompany.com',
