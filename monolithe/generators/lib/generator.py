@@ -114,7 +114,7 @@ class Generator(object):
             shutil.rmtree(output_path)
 
         if multiple_languages:
-            system_vanilla_path = os.path.join(os.path.dirname(current_file), "vanilla", self.monolithe_config.language);
+            system_vanilla_path = os.path.join(os.path.dirname(current_file), self.monolithe_config.language, "vanilla");
         else:
             system_vanilla_path = os.path.join(os.path.dirname(current_file), "vanilla");
 

@@ -25,10 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os
-import shutil
-
-from monolithe.lib import TaskManager, Printer
+from monolithe.lib import TaskManager
 from monolithe.generators.lib import TemplateFileWriter
 
 
@@ -86,10 +83,17 @@ class APIDocFileWriter(TemplateFileWriter):
         """
         """
         actions = []
-        if obj.allows_get: actions.append("GET")
-        if obj.allows_create: actions.append("POST")
-        if obj.allows_update: actions.append("PUT")
-        if obj.allows_delete: actions.append("DELETE")
+        if obj.allows_get:
+            actions.append("GET")
+
+        if obj.allows_create:
+            actions.append("POST")
+
+        if obj.allows_update:
+            actions.append("PUT")
+
+        if obj.allows_delete:
+            actions.append("DELETE")
         return actions
 
     def write_specification(self, specification, specification_set):
@@ -110,12 +114,12 @@ class APIDocFileWriter(TemplateFileWriter):
 
         self_apis = [{"actions": self._get_actions(specification)}]
 
-        self.write( destination=self.output_directory, filename=filename, template_name="object.html.tpl",
-                    specification=specification,
-                    parent_apis=parent_apis,
-                    child_apis=child_apis,
-                    self_apis=self_apis,
-                    product_name=self._product_name)
+        self.write(destination=self.output_directory, filename=filename, template_name="object.html.tpl",
+                   specification=specification,
+                   parent_apis=parent_apis,
+                   child_apis=child_apis,
+                   self_apis=self_apis,
+                   product_name=self._product_name)
 
         return (filename, specification.entity_name)
 
@@ -123,6 +127,6 @@ class APIDocFileWriter(TemplateFileWriter):
         """
         """
 
-        self.write( destination=self.output_directory, filename="index.html", template_name="index.html.tpl",
-                    specifications=specifications,
-                    product_name=self._product_name)
+        self.write(destination=self.output_directory, filename="index.html", template_name="index.html.tpl",
+                   specifications=specifications,
+                   product_name=self._product_name)
