@@ -311,12 +311,15 @@ class RepositoryManager (object):
 
         self._repo._requester.requestJsonAndCheck("DELETE", self._repo.url + "/contents/" + path, input=parameters)
 
-    def _commit(self, filename, content, message, branch):
+    def _commit(self, filename, content, message, branch, remove_trailing_whitespaces=True):
         """
         """
         head_ref      = self._repo.get_git_ref("heads/%s" % branch)
         latest_commit = self._repo.get_git_commit(head_ref.object.sha)
         base_tree     = latest_commit.tree
+
+        if remove_trailing_whitespaces:
+            content = '\n'.join([line.rstrip() for line in content.split('\n')])
 
         new_tree = self._repo.create_git_tree(
             [InputGitTreeElement(
