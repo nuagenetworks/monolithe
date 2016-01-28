@@ -163,6 +163,12 @@ class RepositoryManager (object):
 
         return self._repo.get_commits()[0]
 
+    def get_repository_push_permission(self):
+        """
+            Returns if current user can push to the current repository
+        """
+        return self._repo.permissions.push
+
 
     def get_all_specifications(self, branch="master", mode=MODE_NORMAL):
         """ Returns all availables specifications using zipball feature of GitHub
