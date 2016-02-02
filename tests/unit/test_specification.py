@@ -64,7 +64,10 @@ SPEC = """{
         "toto": {
             "relationship": "child",
             "create": true,
-            "get": true
+            "get": true,
+            "bulk_create": true,
+            "bulk_update": true,
+            "bulk_delete": true
         },
         "user": {
             "relationship": "member",
@@ -157,6 +160,9 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.child_apis[0].allows_update, False)
         self.assertEquals(s.child_apis[0].allows_delete, False)
         self.assertEquals(s.child_apis[0].allows_get, True)
+        self.assertEquals(s.child_apis[0].allows_bulk_create, True)
+        self.assertEquals(s.child_apis[0].allows_bulk_update, True)
+        self.assertEquals(s.child_apis[0].allows_bulk_delete, True)
 
         self.assertEquals(s.child_apis[1].remote_specification_name, 'user')
         self.assertEquals(s.child_apis[1].relationship, 'member')
@@ -164,6 +170,9 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.child_apis[1].allows_update, True)
         self.assertEquals(s.child_apis[1].allows_delete, False)
         self.assertEquals(s.child_apis[1].allows_get, True)
+        self.assertEquals(s.child_apis[1].allows_bulk_create, False)
+        self.assertEquals(s.child_apis[1].allows_bulk_update, False)
+        self.assertEquals(s.child_apis[1].allows_bulk_delete, False)
 
     def test_specification_from_dict(self):
         """ Convert REST names to Python

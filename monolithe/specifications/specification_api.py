@@ -38,12 +38,15 @@ class SpecificationAPI(object):
         self.remote_specification_name = remote_specification_name
         self.specification = specification
 
-        self.allows_get    = False
-        self.allows_create = False
-        self.allows_update = False
-        self.allows_delete = False
-        self.deprecated    = False
-        self.relationship  = "child"
+        self.allows_get         = False
+        self.allows_create      = False
+        self.allows_update      = False
+        self.allows_delete      = False
+        self.allows_bulk_create = False
+        self.allows_bulk_update = False
+        self.allows_bulk_delete = False
+        self.deprecated         = False
+        self.relationship       = "child"
 
         if data:
             self.from_dict(data)
@@ -52,12 +55,15 @@ class SpecificationAPI(object):
         """
 
         """
-        self.allows_get    = data["get"] if "get" in data else False
-        self.allows_create = data["create"] if "create" in data else False
-        self.allows_update = data["update"] if "update" in data else False
-        self.allows_delete = data["delete"] if "delete" in data else False
-        self.deprecated    = data["deprecated"] if "deprecated" in data else False
-        self.relationship  = data["relationship"] if "relationship" in data else "child"
+        self.allows_get         = data["get"] if "get" in data else False
+        self.allows_create      = data["create"] if "create" in data else False
+        self.allows_update      = data["update"] if "update" in data else False
+        self.allows_delete      = data["delete"] if "delete" in data else False
+        self.allows_bulk_create = data["bulk_create"] if "bulk_create" in data else False
+        self.allows_bulk_update = data["bulk_update"] if "bulk_update" in data else False
+        self.allows_bulk_delete = data["bulk_delete"] if "bulk_delete" in data else False
+        self.deprecated         = data["deprecated"] if "deprecated" in data else False
+        self.relationship       = data["relationship"] if "relationship" in data else "child"
 
     def to_dict(self):
         """
@@ -76,6 +82,15 @@ class SpecificationAPI(object):
 
         if self.allows_delete:
             data["delete"] = self.allows_delete
+
+        if self.allows_bulk_create:
+            data["bulk_create"] = self.allows_bulk_create
+
+        if self.allows_bulk_update:
+            data["bulk_update"] = self.allows_bulk_update
+
+        if self.allows_bulk_delete:
+            data["bulk_delete"] = self.allows_bulk_delete
 
         if self.deprecated:
             data["deprecated"] = self.deprecated
