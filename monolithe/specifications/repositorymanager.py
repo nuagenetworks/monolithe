@@ -334,7 +334,7 @@ class RepositoryManager (object):
             return False
 
         upstream_last_commit = upstream_repo.get_branch(upstream_branch).commit.sha
-        self._repo.merge(base=branch, head=upstream_last_commit, commit_message=commit_message)
+        self._repo.merge(base=local_branch, head=upstream_last_commit, commit_message=commit_message)
 
         return True
 
