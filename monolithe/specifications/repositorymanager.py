@@ -169,6 +169,12 @@ class RepositoryManager (object):
         """
         return self._repo.permissions.push
 
+    def get_upstream_repository(self):
+        """
+            Returns information of the upstream repository
+            if it exists, otherwise, None
+        """
+        return self._repo.parent
 
     def get_all_specifications(self, branch="master", mode=MODE_NORMAL):
         """ Returns all availables specifications using zipball feature of GitHub
@@ -306,6 +312,31 @@ class RepositoryManager (object):
                      content=data,
                      message=message,
                      branch=branch)
+
+    def merge_upstream_master(self, local_branch, upstream_branch="master", commit_message="auto merge from monolithe"):
+        """
+            Synchronizes current parent repo's given branch into given local branch
+
+            Note:
+                If the local repository doesn't have an upstream, this function will return False
+
+            Args:
+                local_branch: the name of the branch of the local repository you want to merge into
+                upstream_repo: the name of the upstream repository branch you want to merge
+                commit_message: the message for the merge commit
+
+            Returns:
+                True in case of success, or False if the local repo doesn't have an upstream
+        """
+        upstream_repo = self.get_upstream_repository()
+
+        if not upstream_repo:
+            return False
+
+        upstream_last_commit = upstream_repo.get_branch(upstream_branch).commit.sha
+        self._repo.merge(base=branch, head=upstream_last_commit, commit_message=commit_message)
+
+        return True
 
     def _delete(self, filename, message, branch):
         """
