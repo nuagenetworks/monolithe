@@ -61,19 +61,19 @@ class SpecificationAttribute(object):
         self.default_order = False
         self.default_value = None
         self.deprecated = False
-        self.filterable = True
+        self.filterable = False
         self.format = "free"
         self.max_length = None
         self.max_value = None
         self.min_length = None
         self.min_value = None
-        self.orderable = True
+        self.orderable = False
         self.read_only = False
         self.required = False
         self.unique = False
         self.unique_scope = None
         self._type = None
-        self.exposed = True
+        self.exposed = False
         self.transient = False
         self.subtype = None
 
