@@ -71,31 +71,14 @@ class SpecificationAPI(object):
 
         data = {}
 
-        if self.allows_get:
-            data["get"] = self.allows_get
-
-        if self.allows_create:
-            data["create"] = self.allows_create
-
-        if self.allows_update:
-            data["update"] = self.allows_update
-
-        if self.allows_delete:
-            data["delete"] = self.allows_delete
-
-        if self.allows_bulk_create:
-            data["bulk_create"] = self.allows_bulk_create
-
-        if self.allows_bulk_update:
-            data["bulk_update"] = self.allows_bulk_update
-
-        if self.allows_bulk_delete:
-            data["bulk_delete"] = self.allows_bulk_delete
-
-        if self.deprecated:
-            data["deprecated"] = self.deprecated
-
-        if self.relationship:
-            data["relationship"] = self.relationship
+        data["get"] = self.allows_get
+        data["create"] = self.allows_create
+        data["update"] = self.allows_update
+        data["delete"] = self.allows_delete
+        data["bulk_create"] = self.allows_bulk_create
+        data["bulk_update"] = self.allows_bulk_update
+        data["bulk_delete"] = self.allows_bulk_delete
+        data["deprecated"] = self.deprecated
+        data["relationship"] = self.relationship
 
         return data

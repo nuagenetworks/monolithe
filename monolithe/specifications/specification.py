@@ -103,53 +103,25 @@ class Specification(object):
 
         data = {"model": {}}
 
-        if self.description:
-            data["model"]["description"] = self.description
+        data["model"]["description"] = self.description
+        data["model"]["entity_name"] = self.entity_name
+        data["model"]["package"] = self.package
+        data["model"]["resource_name"] = self.resource_name
+        data["model"]["rest_name"] = self.rest_name
+        data["model"]["extends"] = self.extends
+        data["model"]["get"] = self.allows_get
+        data["model"]["update"] = self.allows_update
+        data["model"]["create"] = self.allows_create
+        data["model"]["delete"] = self.allows_delete
+        data["model"]["root"] = self.is_root
 
-        if self.entity_name:
-            data["model"]["entity_name"] = self.entity_name
+        data["attributes"] = {}
+        for attribute in self.attributes:
+            data["attributes"][attribute.rest_name] = attribute.to_dict()
 
-        if self.package:
-            data["model"]["package"] = self.package
-
-        if self.resource_name:
-            data["model"]["resource_name"] = self.resource_name
-
-        if self.rest_name:
-            data["model"]["rest_name"] = self.rest_name
-
-        if self.extends:
-            data["model"]["extends"] = self.extends
-
-        if self.allows_get:
-            data["model"]["get"] = self.allows_get
-
-        if self.allows_update:
-            data["model"]["update"] = self.allows_update
-
-        if self.allows_create:
-            data["model"]["create"] = self.allows_create
-
-        if self.allows_delete:
-            data["model"]["delete"] = self.allows_delete
-
-        if self.is_root:
-            data["model"]["root"] = self.is_root
-
-        if not len(data["model"]):
-            del data["model"]
-
-        if len(self.attributes):
-            data["attributes"] = {}
-
-            for attribute in self.attributes:
-                data["attributes"][attribute.rest_name] = attribute.to_dict()
-
-        if len(self.child_apis):
-            data["children"] = {}
-
-            for api in self.child_apis:
-                data["children"][api.remote_specification_name] = api.to_dict()
+        data["children"] = {}
+        for api in self.child_apis:
+            data["children"][api.remote_specification_name] = api.to_dict()
 
         return data
 
@@ -157,26 +129,6 @@ class Specification(object):
         """ Fill the current object with information from the specification
 
         """
-
-        ## replace all the tokens
-        # string_data = json.dumps(data)
-        # tokens_replaced = False
-        #
-        # if "model" in data and "resource_name" in data["model"]:
-        #     string_data = string_data.replace("[[resource_name]]", data["model"]["resource_name"])
-        #     tokens_replaced = True
-        #
-        # if "model" in data and "rest_name" in data["model"]:
-        #     string_data = string_data.replace("[[rest_name]]", data["model"]["rest_name"])
-        #     tokens_replaced = True
-        #
-        # if "model" in data and "entity_name" in data["model"]:
-        #     string_data = string_data.replace("[[entity_name]]", data["model"]["entity_name"])
-        #     tokens_replaced = True
-        #
-        # if tokens_replaced:
-        #     data = json.loads(string_data)
-
         if "model" in data:
             model = data["model"]
             self.description   = model["description"] if "description" in model else None
