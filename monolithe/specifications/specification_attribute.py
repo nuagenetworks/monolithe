@@ -136,14 +136,14 @@ class SpecificationAttribute(object):
             self.default_order = data["default_order"] if "default_order" in data else False
             self.default_value = data["default_value"] if "default_value" in data else None
             self.deprecated = data["deprecated"] if "deprecated" in data else False
-            self.exposed = data["exposed"] if "exposed" in data else True
-            self.filterable = data["filterable"] if "filterable" in data else True
+            self.exposed = data["exposed"] if "exposed" in data else False
+            self.filterable = data["filterable"] if "filterable" in data else False
             self.format = data["format"] if "format" in data else "free"
             self.max_length = data["max_length"] if "max_length" in data else None
             self.max_value = data["max_value"] if "max_value" in data else None
             self.min_length = data["min_length"] if "min_length" in data else None
             self.min_value = data["min_value"] if "min_value" in data else None
-            self.orderable = data["orderable"] if "orderable" in data else True
+            self.orderable = data["orderable"] if "orderable" in data else False
             self.read_only = data["read_only"] if "read_only" in data else False
             self.required = data["required"] if "required" in data else False
             self.transient = data["transient"] if "transient" in data else False
