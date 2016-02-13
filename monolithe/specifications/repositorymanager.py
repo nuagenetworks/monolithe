@@ -257,7 +257,7 @@ class RepositoryManager (object):
 
         if mode == MODE_NORMAL and "model" in data and "extends" in data["model"]:
             for extension in data["model"]["extends"]:
-                data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive, mode=MODE_NORMAL))
+                data = merge_dict(self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive, mode=MODE_NORMAL), data)
 
         return data
 
