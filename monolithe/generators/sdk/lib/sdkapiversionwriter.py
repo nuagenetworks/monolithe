@@ -92,6 +92,10 @@ class SDKAPIVersionWriter(object):
     def _write_models(self, specification, filenames, specification_set):
         """
         """
+
+        if not hasattr(self.writer, "write_model"):
+            return
+
         (filename, classname) = self.writer.write_model(specification=specification, specification_set=specification_set)
         filenames[filename] = classname
 
@@ -103,6 +107,9 @@ class SDKAPIVersionWriter(object):
                 filenames: list of generates filenames
 
         """
+        if not hasattr(self.writer, "write_fetcher"):
+            return
+
         if specification.rest_name != self.api_info["root"]:
             (filename, classname) = self.writer.write_fetcher(specification=specification, specification_set=specification_set)
             filenames[filename] = classname

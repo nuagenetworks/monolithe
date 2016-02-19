@@ -43,6 +43,10 @@ class CLIWriter(object):
         """
         """
         self.writer = self._get_writer()
+
+        if not hasattr(self.writer, "write_cli"):
+            return
+
         self.writer.write_cli()
 
     def _get_writer(self):

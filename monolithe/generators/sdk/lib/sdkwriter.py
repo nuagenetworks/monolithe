@@ -47,6 +47,10 @@ class SDKWriter(object):
         """
         """
         self.writer = self._get_writer()
+
+        if not hasattr(self.writer, "write_sdk"):
+            return
+
         self.writer.write_sdk(apiversions=apiversions)
 
     def _get_writer(self):
