@@ -134,7 +134,7 @@ class Generator(object):
         if multi_lang:
             user_vanilla_path = os.path.join(user_vanilla_path, self.monolithe_config.language)
         else:
-            user_vanilla_path = os.path.join(user_vanilla_path, "vanilla")
+            user_vanilla_path = os.path.join(user_vanilla_path)
 
         if not os.path.exists(user_vanilla_path):
             Printer.warn("Could not find user vanilla folder at path %s. Ignoring" % user_vanilla_path)
