@@ -137,7 +137,8 @@ class Generator(object):
             user_vanilla_path = os.path.join(user_vanilla_path, "vanilla")
 
         if not os.path.exists(user_vanilla_path):
-            Printer.raiseError("Could not find user vanilla ssfolder at path %s" % user_vanilla_path)
+            Printer.warn("Could not find user vanilla folder at path %s. Ignoring" % user_vanilla_path)
+            return
 
         for item in os.listdir(user_vanilla_path):
             s = os.path.join(user_vanilla_path, item)
