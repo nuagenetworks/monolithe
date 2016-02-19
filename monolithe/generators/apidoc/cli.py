@@ -110,7 +110,6 @@ def main(argv=sys.argv):
 
     if monolithe_config and args.vanilla_prefix:
         monolithe_config.set_option("sdk_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdk_user_vanilla", "sdk")), "sdk")
-        monolithe_config.set_option("sdkdoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdkdoc_user_vanilla", "sdkdoc")), "sdkdoc")
         monolithe_config.set_option("apidoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("apidoc_user_vanilla", "apidoc")), "apidoc")
 
     generator = APIDocumentationGenerator(monolithe_config=monolithe_config)

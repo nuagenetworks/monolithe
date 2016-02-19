@@ -85,5 +85,22 @@ class SDKGenerator(Generator):
         cli_writer.write()
 
         self.cleanup()
+        Printer.success("%s generation complete and available in \"%s/python\"" % (sdk_name, sdk_output))
 
-        Printer.success("%s generation complete and available at \"%s\"" % (sdk_name, sdk_output))
+    def generate_documentation(self):
+        """
+        """
+        sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+        sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+        sdk_doc_output = self.monolithe_config.get_option("sdk_doc_output", "sdk")
+
+        input_path = os.path.join(sdk_output, self.monolithe_config.language, sdk_name)
+        output_path = os.path.join(sdk_doc_output, self.monolithe_config.language)
+
+        if self.monolithe_config.language == 'python':
+            Printer.log("generating documentation...")
+            os.system("pdoc --overwrite --html --html-dir '%s' '%s' >/dev/null 2>&1" % (output_path, input_path))
+            Printer.success("%s documentation generation complete and available in \"%s\"" % (sdk_name, output_path))
+        else:
+            Printer.warn("no documentation generator for this language. ignoring")
+

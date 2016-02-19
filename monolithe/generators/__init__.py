@@ -25,8 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["APIDocumentationGenerator", "SDKAPIVersionGenerator", "SDKGenerator", "SDKDocGenerator"]
+__all__ = ["APIDocumentationGenerator", "SDKAPIVersionGenerator", "SDKGenerator"]
 
 from monolithe.generators.apidoc import APIDocumentationGenerator
 from monolithe.generators.sdk import SDKAPIVersionGenerator, SDKGenerator
-from monolithe.generators.sdkdoc import SDKDocGenerator

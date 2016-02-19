@@ -186,17 +186,6 @@ For example:
 
 	sdkdoc_output=sdkdoc
 
-#### sdkdoc_user_vanilla
-
-The path the sdk documentation vanilla folder (see next chapter).
-
-If you don’t provide an initial `/`, it will be found relatively to the current folder.
-
-If you provide an initial `/` then it will be found using the absolute path.
-
-For example:
-
-	sdkdoc_user_vanilla=vsdk/vanilla/sdkdoc
 
 ## The vanilla folder
 
@@ -290,43 +279,3 @@ To add your custom CSS, create a folder named `css` in the root vanilla folder, 
 #### Custom javascript
 
 To add custom javascript, create a folder named `js` in the root vanilla folder, and add your scripts. You can use them from your custom html files.
-
-
-
-
-### The SDK Documentation vanilla
-
-	The SDK API Documentation Vanilla allows you to add custom pages and set the TOC of the documentation.
-
-To add new pages, add `rst` files in the root SDK Documentation Vanilla folder.
-
-Once you have added all the pages you want to add, create a file named `pages.json`. This file will tell Monolithe how to organize your pages in the documentation hierarchy.
-
-The json structure must look like the following:
-
-	[
-	    {
-	        "name": “<section1-name>“,
-	        "toc_depth": <page-depth>,
-	        "description": “<description>”,
-	        "pages": [
-	            “<page-1>”,
-	            "<page-x>",
-	            "<page-n>"
-	        ]
-	    }
-	]
-
-It represents an array of `section` that contains pages.
-
-#### name
-The name of the section, as it will be showned on the toc and the index page.
-
-#### toc_depth
-The depth of the pages hierarchy to display on the toc and index page
-
-#### description
-Description of the section. It will be shown in the index page, right before the section’s pages list.
-
-#### pages
-Array of pages in the section. The values of the array must be the file name representing the page, without the `.rst` extension

@@ -23,16 +23,6 @@ def update_sdk():
     copy_files(origin_path, destination_path)
 
 
-def update_sdkdoc():
-    """
-    """
-    print "Updating SDK Doc"
-    origin_path = "%s/../examples/sdkdocgen/" % os.path.dirname(__file__)
-    destination_path = "%s/../tests/base/sdkdoc" % os.path.dirname(__file__)
-
-    copy_files(origin_path, destination_path)
-
-
 def update_apidoc():
     """
     """
@@ -53,11 +43,6 @@ def main(argv=sys.argv):
                         help="Update SDK tests",
                         action='store_true')
 
-    parser.add_argument("--sdkdoc",
-                        dest="update_sdkdoc",
-                        help="Update SDK Doc tests",
-                        action='store_true')
-
     parser.add_argument("--apidoc",
                         dest="update_apidoc",
                         help="Update API Doc tests",
@@ -72,9 +57,6 @@ def main(argv=sys.argv):
 
     if args.update_all or args.update_sdk:
         update_sdk()
-
-    if args.update_all or args.update_sdkdoc:
-        update_sdkdoc()
 
     if args.update_all or args.update_apidoc:
         update_apidoc()

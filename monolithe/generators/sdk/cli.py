@@ -32,7 +32,7 @@ import os
 import sys
 
 from monolithe import MonolitheConfig
-from monolithe.generators import SDKGenerator, SDKDocGenerator
+from monolithe.generators import SDKGenerator
 
 
 def main(argv=sys.argv):
@@ -114,7 +114,7 @@ def main(argv=sys.argv):
                         required=False,
                         type=str)
 
-    parser.add_argument("--language",
+    parser.add_argument("-L","--language",
                         dest="language",
                         help="Choose the output language of the SDK. Default is python",
                         default='python',
@@ -128,7 +128,6 @@ def main(argv=sys.argv):
 
     if monolithe_config and args.vanilla_prefix:
         monolithe_config.set_option("sdk_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdk_user_vanilla", "sdk")), "sdk")
-        monolithe_config.set_option("sdkdoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdkdoc_user_vanilla", "sdkdoc")), "sdkdoc")
         monolithe_config.set_option("apidoc_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("apidoc_user_vanilla", "apidoc")), "apidoc")
 
     if monolithe_config and args.sdk_version:
@@ -142,7 +141,8 @@ def main(argv=sys.argv):
 
     if args.folder:
         generator.initialize_folder_manager(folder=args.folder)
-        if not monolithe_config: generator.retrieve_monolithe_config_from_folder(language=args.language)
+        if not monolithe_config:
+            monolithe_config = generator.retrieve_monolithe_config_from_folder(language=args.language)
         generator.generate_from_folder()
 
     else:
@@ -192,15 +192,13 @@ def main(argv=sys.argv):
                                                 repository=args.repository,
                                                 repository_path=args.repository_path)
         if not monolithe_config:
-            generator.retrieve_monolithe_config_from_repo(branch=args.branches[0], language=args.language)
+            monolithe_config = generator.retrieve_monolithe_config_from_repo(branch=args.branches[0], language=args.language)
 
         generator.generate_from_repo(branches=args.branches)
 
     # Generate SDK documentation
     if args.generate_doc:
-        doc_generator = SDKDocGenerator(monolithe_config=monolithe_config)
-        doc_generator.generate()
-
+        generator.generate_documentation()
 
 if __name__ == "__main__":
     main()

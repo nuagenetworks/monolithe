@@ -53,6 +53,7 @@ class Generator(object):
         self.monolithe_config.set_config(parser)
         self.monolithe_config.language = language
         self.folder_manager.monolithe_config = self.monolithe_config
+        return self.monolithe_config
 
     def generate_from_folder(self):
         """
@@ -87,6 +88,7 @@ class Generator(object):
         self.monolithe_config.set_config(parser)
         self.monolithe_config.language = language
         self.repository_manager.monolithe_config = self.monolithe_config
+        return self.monolithe_config
 
     def generate_from_repo(self, branches):
         """
@@ -109,13 +111,13 @@ class Generator(object):
         pass
 
 
-    def install_system_vanilla(self, current_file, output_path, multiple_languages=True):
+    def install_system_vanilla(self, current_file, output_path, multi_lang=True):
         """
         """
         if os.path.exists(output_path):
             shutil.rmtree(output_path)
 
-        if multiple_languages:
+        if multi_lang:
             system_vanilla_path = os.path.join(os.path.dirname(current_file), self.monolithe_config.language, "vanilla");
         else:
             system_vanilla_path = os.path.join(os.path.dirname(current_file), "vanilla");
@@ -123,14 +125,19 @@ class Generator(object):
         shutil.copytree(system_vanilla_path, output_path)
 
 
-    def install_user_vanilla(self, user_vanilla_path, output_path):
+    def install_user_vanilla(self, user_vanilla_path, output_path, multi_lang=True):
         """
         """
         if not user_vanilla_path or not len(user_vanilla_path):
             return
 
+        if multi_lang:
+            user_vanilla_path = os.path.join(user_vanilla_path, self.monolithe_config.language)
+        else:
+            user_vanilla_path = os.path.join(user_vanilla_path, "vanilla")
+
         if not os.path.exists(user_vanilla_path):
-            Printer.raiseError("Could not find user vanilla folder at path %s" % user_vanilla_path)
+            Printer.raiseError("Could not find user vanilla ssfolder at path %s" % user_vanilla_path)
 
         for item in os.listdir(user_vanilla_path):
             s = os.path.join(user_vanilla_path, item)
@@ -139,6 +146,11 @@ class Generator(object):
                 shutil.copytree(s, d, False, None)
             else:
                 shutil.copy2(s, d)
+
+    def generate_documentation(self):
+        """
+        """
+        pass
 
     ## Utilities
 

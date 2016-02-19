@@ -1,7 +1,6 @@
 jinja2
 colorama
-bambou==2.0.0
-Sphinx
-sphinx_rtd_theme
+bambou>=2.0
 unittest2
 PyGithub
+pdoc

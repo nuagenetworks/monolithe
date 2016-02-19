@@ -84,7 +84,6 @@ class MonolitheConfig(object):
         # vanilla
         self.sdk_user_vanilla = self.get_option("sdk_user_vanilla", "sdk")
         self.apidoc_user_vanilla = self.get_option("apidoc_user_vanilla", "apidoc")
-        self.sdkdoc_user_vanilla = self.get_option("sdkdoc_user_vanilla", "sdkdoc")
 
         # mapping
         if not self.path:
