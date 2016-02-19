@@ -28,6 +28,7 @@
 import os
 import shutil
 from collections import OrderedDict
+from ConfigParser import RawConfigParser
 
 from monolithe.lib import SDKUtils
 from monolithe.generators.lib import TemplateFileWriter
@@ -55,6 +56,11 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
 
         self.output_directory = "%s/go/%s/%s" % (self._sdk_output, SDKUtils.get_string_version(self.api_version), self._sdk_name)
 
+        self.attrs_defaults = RawConfigParser()
+        path = "%s/go/__attributes_defaults/attrs_defaults.ini" % self._sdk_output
+        self.attrs_defaults.optionxform = str
+        self.attrs_defaults.read(path)
+
         with open("%s/go/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
@@ -63,20 +69,20 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
         """
 
         self.write(destination=self.output_directory, filename="sdkinfo.go", template_name="sdkinfo.go.tpl",
-                    version=self.api_version,
-                    product_accronym=self._product_accronym,
-                    sdk_root_api=self.api_root,
-                    sdk_api_prefix=self.api_prefix,
-                    product_name=self._product_name,
-                    sdk_name=self._sdk_name,
-                    header=self.header_content)
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   sdk_root_api=self.api_root,
+                   sdk_api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   sdk_name=self._sdk_name,
+                   header=self.header_content)
 
         self.write(destination=self.output_directory, filename="session.go", template_name="session.go.tpl",
-                    version=self.api_version,
-                    sdk_root_api=self.api_root,
-                    sdk_api_prefix=self.api_prefix,
-                    sdk_name=self._sdk_name,
-                    header=self.header_content)
+                   version=self.api_version,
+                   sdk_root_api=self.api_root,
+                   sdk_api_prefix=self.api_prefix,
+                   sdk_name=self._sdk_name,
+                   header=self.header_content)
 
 
     def write_model(self, specification, specification_set):
@@ -85,10 +91,17 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
         """
         filename = "%s.go" % (specification.entity_name.lower())
 
+        defaults = {}
+        section = specification.entity_name
+        if self.attrs_defaults.has_section(section):
+            for attribute in self.attrs_defaults.options(section):
+                defaults[attribute] = self.attrs_defaults.get(section, attribute)
+
         self.write(destination=self.output_directory, filename=filename, template_name="model.go.tpl",
-                    specification=specification,
-                    specification_set=specification_set,
-                    sdk_name=self._sdk_name,
-                    header=self.header_content)
+                   specification=specification,
+                   specification_set=specification_set,
+                   sdk_name=self._sdk_name,
+                   header=self.header_content,
+                   attribute_defaults=defaults)
 
         return (filename, specification.entity_name)

@@ -51,6 +51,9 @@ func New{{specification.entity_name}}() *{{specification.entity_name}} {
     return &{{specification.entity_name}}{
         ExposedObject: bambou.ExposedObject{
             Identity: {{specification.entity_name}}Identity,
+            {% for attribute, value in attribute_defaults.iteritems() -%}
+            {{attribute}}: {{value}},
+            {% endfor %}
         },
     }
 }
