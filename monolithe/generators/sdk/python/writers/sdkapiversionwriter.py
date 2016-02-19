@@ -54,11 +54,11 @@ class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(self.api_version))
+        self.output_directory = "%s/python/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(self.api_version))
         self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
         self.fetchers_path = "/fetchers/"
 
-        with open("%s/__code_header" % self._sdk_output, "r") as f:
+        with open("%s/python/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
     def write_sdkapiversion(self, model_filenames, fetcher_filenames):

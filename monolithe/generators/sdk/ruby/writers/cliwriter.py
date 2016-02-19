@@ -44,9 +44,9 @@ class _RubyCLIFileWriter(TemplateFileWriter):
         self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
-        self.output_directory = "%s/%s/cli" % (self._sdk_output, self._sdk_name)
+        self.output_directory = "%s/ruby/%s/cli" % (self._sdk_output, self._sdk_name)
 
-        with open("%s/__code_header" % self._sdk_output, "r") as f:
+        with open("%s/ruby/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
     def write_cli(self):

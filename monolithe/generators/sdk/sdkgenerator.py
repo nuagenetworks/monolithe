@@ -45,16 +45,17 @@ class SDKGenerator(Generator):
         """
         """
         sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+        language = self.monolithe_config.language
 
-        overrides_path = "%s/__overrides" % sdk_output
+        overrides_path = "%s/%s/__overrides" % (sdk_output, language)
         if os.path.exists(overrides_path):
             shutil.rmtree(overrides_path)
 
-        attrs_defaults_path = "%s/__attributes_defaults" % sdk_output
+        attrs_defaults_path = "%s/%s/__attributes_defaults" % (sdk_output, language)
         if os.path.exists(attrs_defaults_path):
             shutil.rmtree(attrs_defaults_path)
 
-        code_header_path = "%s/__code_header"  % sdk_output
+        code_header_path = "%s/%s/__code_header" % (sdk_output, language)
         if os.path.exists(code_header_path):
             os.remove(code_header_path)
 
@@ -65,8 +66,8 @@ class SDKGenerator(Generator):
         sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
         sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
 
-        self.install_system_vanilla(current_file=__file__, output_path=sdk_output)
-        self.install_user_vanilla(user_vanilla_path=sdk_user_vanilla, output_path=sdk_output)
+        self.install_system_vanilla(current_file=__file__, output_path="%s/%s" % (sdk_output, self.monolithe_config.language))
+        self.install_user_vanilla(user_vanilla_path=sdk_user_vanilla, output_path="%s/%s" % (sdk_output, self.monolithe_config.language))
 
         generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
         apiversions = []

@@ -12,17 +12,12 @@ var (
     _URLPostfix string
 )
 
-func MakeSession(username, password, organization, url string) *bambou.Session {
+func NewSession(username, password, organization, url string) *bambou.Session {
 
     root := New{{sdk_root_api|capitalize}}()
+    url += _URLPostfix
 
-    return &bambou.Session{
-        Username:     username,
-        Password:     password,
-        Organization: organization,
-        URL:          url + _URLPostfix,
-        RootObject:   root,
-    }
+    return bambou.NewSession(username, password, organization, url, root)
 }
 
 func init() {

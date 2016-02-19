@@ -50,7 +50,7 @@ class _PythonSDKFileWriter(TemplateFileWriter):
         self._sdk_cli_name = self.monolithe_config.get_option("sdk_cli_name", "sdk")
         self._sdk_bambou_version = self.monolithe_config.get_option("sdk_bambou_version", "sdk")
         self._copyright = self.monolithe_config.get_option("copyright")
-        self.output_directory = self.monolithe_config.get_option("sdk_output", "sdk")
+        self.output_directory = "%s/python" % self.monolithe_config.get_option("sdk_output", "sdk")
 
         with open("%s/__code_header" % self.output_directory, "r") as f:
             self.header_content = f.read()

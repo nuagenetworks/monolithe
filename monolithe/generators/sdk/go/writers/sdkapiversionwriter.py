@@ -53,9 +53,9 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/%s/%s" % (self._sdk_output, SDKUtils.get_string_version(self.api_version), self._sdk_name)
+        self.output_directory = "%s/go/%s/%s" % (self._sdk_output, SDKUtils.get_string_version(self.api_version), self._sdk_name)
 
-        with open("%s/__code_header" % self._sdk_output, "r") as f:
+        with open("%s/go/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
     def write_sdkapiversion(self, model_filenames, fetcher_filenames):

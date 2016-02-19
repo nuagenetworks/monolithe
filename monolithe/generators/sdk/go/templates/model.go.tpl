@@ -74,6 +74,11 @@ func (o *{{specification.entity_name}}) URL() string {
     return bambou.CurrentSession().URL + "/" + o.Identity.ResourceName
 }
 
+func (o *{{specification.entity_name}}) URLForChildrenIdentity(identity bambou.RESTIdentity) string {
+
+    return bambou.CurrentSession().URL + "/" + identity.ResourceName
+}
+
 {% endif -%}
 
 /*
@@ -95,10 +100,10 @@ func (o *{{specification.entity_name}}) Delete() *bambou.Error {
 }
 
 /*
-    Children Enitities
+    Children Entities
 */
 {% for api in specification.child_apis -%}
-{% if  api.relationship == "child" -%}
+{% if  api.relationship == "child" or api.relationship == "root" -%}
 {% set child_specification = specification_set[api.remote_specification_name] -%}
 
 
