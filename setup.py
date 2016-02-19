@@ -41,6 +41,7 @@ setup(
     entry_points={
         "console_scripts": [
             "monogen-sdk = monolithe.generators.sdk.cli:main",
-            "monogen-apidoc = monolithe.generators.apidoc.cli:main"]
+            "monogen-apidoc = monolithe.generators.apidoc.cli:main"
+        ]
     }
 )
