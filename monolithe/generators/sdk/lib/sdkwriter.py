@@ -29,6 +29,7 @@ from monolithe.generators.lib import TemplateFileWriter
 
 from ..python.writers.sdkwriter import _PythonSDKFileWriter
 from ..ruby.writers.sdkwriter import _RubySDKFileWriter
+from ..go.writers.sdkwriter import _GoSDKFileWriter
 
 
 class SDKWriter(object):
@@ -41,7 +42,6 @@ class SDKWriter(object):
         self.writer = None
 
         self.monolithe_config = monolithe_config
-
 
     def write(self, apiversions):
         """
@@ -64,6 +64,9 @@ class SDKWriter(object):
 
         elif language == 'python':
             klass = _PythonSDKFileWriter
+
+        elif language == 'go':
+            klass = _GoSDKFileWriter
 
         if klass is None:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)

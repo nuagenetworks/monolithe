@@ -155,6 +155,9 @@ class SDKUtils(object):
         elif language == 'ruby':
             method = cls.get_ruby_name
 
+        elif language == 'go':
+            method = cls.get_go_name
+
         if not method:
             raise Exception("SDKUtils does not implement methods for language %s" % language)
 
@@ -182,6 +185,9 @@ class SDKUtils(object):
 
         elif language == 'ruby':
             method = cls.get_ruby_type_name
+
+        elif language == 'go':
+            method = cls.get_go_type_name
 
         if not method:
             raise Exception("SDKUtils does not implement methods for language %s" % language)
@@ -281,6 +287,23 @@ class SDKUtils(object):
         return all_cap_re.sub(r"\1_\2", s1).lower()
 
     @classmethod
+    def get_go_name(cls, name):
+        """ Transform a given name to go name
+
+            Args:
+                name (string): the name to convert
+
+            Returns:
+                A ruby name
+
+            Exammple:
+                get_ruby_name(EnterpriseNetwork)
+                >>> enterprise_network
+
+        """
+        return name
+
+    @classmethod
     def get_ruby_type_name(cls, type_name):
         """ Returns a ruby type according to a java type
 
@@ -299,5 +322,30 @@ class SDKUtils(object):
 
         if type_name ==  "object":
             return "dict"
+
+        return type_name
+
+    @classmethod
+    def get_go_type_name(cls, type_name):
+        """ Returns a ruby type according to a java type
+
+        """
+        if type_name in ("string", "enum"):
+            return "string"
+
+        if type_name == "boolean":
+            return "bool"
+
+        if type_name == "list":
+            return "[]interface{}"
+
+        if type_name == "integer":
+            return "int"
+
+        if type_name ==  "time":
+            return "float"
+
+        if type_name ==  "object":
+            return "struct"
 
         return type_name

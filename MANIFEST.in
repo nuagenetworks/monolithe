@@ -6,5 +6,7 @@ recursive-include monolithe/generators/sdk/python/templates *
 recursive-include monolithe/generators/sdk/python/vanilla *
 recursive-include monolithe/generators/sdk/ruby/templates *
 recursive-include monolithe/generators/sdk/ruby/vanilla *
+recursive-include monolithe/generators/sdk/go/templates *
+recursive-include monolithe/generators/sdk/go/vanilla *
 recursive-include monolithe/generators/sdkdoc/templates *
 recursive-include monolithe/generators/sdkdoc/vanilla *

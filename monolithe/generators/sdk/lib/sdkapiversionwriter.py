@@ -30,6 +30,7 @@ from monolithe.lib import TaskManager
 
 from ..python.writers.sdkapiversionwriter import _PythonSDKAPIVersionFileWriter
 from ..ruby.writers.sdkapiversionwriter import _RubySDKAPIVersionFileWriter
+from ..go.writers.sdkapiversionwriter import _GoSDKAPIVersionFileWriter
 
 
 class SDKAPIVersionWriter(object):
@@ -83,6 +84,9 @@ class SDKAPIVersionWriter(object):
 
         elif language == 'python':
             klass = _PythonSDKAPIVersionFileWriter
+
+        elif language == 'go':
+            klass = _GoSDKAPIVersionFileWriter
 
         if klass is None:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkapiversionwriter.py' % language)

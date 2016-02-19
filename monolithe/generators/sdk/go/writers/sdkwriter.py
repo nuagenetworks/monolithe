@@ -25,47 +25,15 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from ..python.writers.cliwriter import _PythonCLIFileWriter
-from ..ruby.writers.cliwriter import _RubyCLIFileWriter
-from ..go.writers.cliwriter import _GoCLIFileWriter
+from monolithe.lib import SDKUtils
+from monolithe.generators.lib import TemplateFileWriter
 
 
-class CLIWriter(object):
+class _GoSDKFileWriter(TemplateFileWriter):
     """
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        self.writer = None
-        self.monolithe_config = monolithe_config
-
-    def write(self):
-        """
-        """
-        self.writer = self._get_writer()
-
-        if not hasattr(self.writer, "write_cli"):
-            return
-
-        self.writer.write_cli()
-
-    def _get_writer(self):
-        """ Get the appropriate writer
-        """
-        language = self.monolithe_config.language
-        klass = None
-
-        if language == 'ruby':
-            klass = _RubyCLIFileWriter
-
-        elif language == 'python':
-            klass = _PythonCLIFileWriter
-
-        elif language == 'go':
-            klass = _GoCLIFileWriter
-
-        if klass is None:
-            raise Exception('Unsupported language %s. Please create the appropriate class in cliwriter.py' % language)
-
-        return klass(monolithe_config=self.monolithe_config)
+        super(_GoSDKFileWriter, self).__init__(package="monolithe.generators.sdk.go")
