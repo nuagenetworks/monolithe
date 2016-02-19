@@ -134,7 +134,7 @@ def main(argv=sys.argv):
     if monolithe_config and args.sdk_version:
         monolithe_config.set_option("sdk_version", args.sdk_version, "sdk")
 
-    if monolithe_config and args.language:
+    if monolithe_config:
         monolithe_config.language = args.language
 
     generator = SDKGenerator(monolithe_config=monolithe_config)
@@ -142,7 +142,7 @@ def main(argv=sys.argv):
 
     if args.folder:
         generator.initialize_folder_manager(folder=args.folder)
-        if not monolithe_config: generator.retrieve_monolithe_config_from_folder()
+        if not monolithe_config: generator.retrieve_monolithe_config_from_folder(language=args.language)
         generator.generate_from_folder()
 
     else:
@@ -191,8 +191,9 @@ def main(argv=sys.argv):
                                                 organization=args.organization,
                                                 repository=args.repository,
                                                 repository_path=args.repository_path)
+        if not monolithe_config:
+            generator.retrieve_monolithe_config_from_repo(branch=args.branches[0], language=args.language)
 
-        if not monolithe_config: generator.retrieve_monolithe_config_from_repo(branch=args.branches[0])
         generator.generate_from_repo(branches=args.branches)
 
     # Generate SDK documentation

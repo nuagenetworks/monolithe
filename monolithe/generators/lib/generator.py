@@ -45,12 +45,13 @@ class Generator(object):
         """
         self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
 
-    def retrieve_monolithe_config_from_folder(self):
+    def retrieve_monolithe_config_from_folder(self, language):
         """
         """
         parser = self.folder_manager.get_monolithe_config()
         self.monolithe_config = MonolitheConfig()
         self.monolithe_config.set_config(parser)
+        self.monolithe_config.language = language
         self.folder_manager.monolithe_config = self.monolithe_config
 
     def generate_from_folder(self):
@@ -78,12 +79,13 @@ class Generator(object):
                                                     repository=repository,
                                                     repository_path=repository_path)
 
-    def retrieve_monolithe_config_from_repo(self, branch):
+    def retrieve_monolithe_config_from_repo(self, branch, language):
         """
         """
         parser = self.repository_manager.get_monolithe_config(branch=branch)
         self.monolithe_config = MonolitheConfig()
         self.monolithe_config.set_config(parser)
+        self.monolithe_config.language = language
         self.repository_manager.monolithe_config = self.monolithe_config
 
     def generate_from_repo(self, branches):

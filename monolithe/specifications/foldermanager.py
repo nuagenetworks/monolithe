@@ -39,8 +39,8 @@ class FolderManager (object):
     def __init__(self, folder, monolithe_config):
         """
         """
-        self._monolithe_config = monolithe_config
-        self._folder = folder;
+        self.monolithe_config = monolithe_config
+        self._folder = folder
 
     @property
     def folder(self):
@@ -108,7 +108,7 @@ class FolderManager (object):
     def get_specification(self, name):
         """
         """
-        return Specification(filename=name, data=self.get_specification_data(name), monolithe_config=self._monolithe_config)
+        return Specification(filename=name, data=self.get_specification_data(name), monolithe_config=self.monolithe_config)
 
     def get_specifications(self, names, callback=None):
         """

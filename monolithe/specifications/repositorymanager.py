@@ -59,7 +59,7 @@ class RepositoryManager (object):
                 organization: the organization where specifications_repository is
                 repository: the repository containing the specifications
         """
-        self._monolithe_config = monolithe_config;
+        self.monolithe_config  = monolithe_config
         self._organization     = organization
         self._repository       = repository
         self._repository_path  = repository_path
@@ -221,7 +221,7 @@ class RepositoryManager (object):
                 if mode == MODE_RAW_ABSTRACTS and not is_abstract:
                     continue
 
-                specifications[spec_name.replace(".spec", "")] = Specification(filename=spec_name, data=self.get_specification_data(name=spec_name, archive=archive_content, mode=mode), monolithe_config=self._monolithe_config)
+                specifications[spec_name.replace(".spec", "")] = Specification(filename=spec_name, data=self.get_specification_data(name=spec_name, archive=archive_content, mode=mode), monolithe_config=self.monolithe_config)
 
         # cleanup the temporary archive
         os.close(archive_fd)
@@ -272,7 +272,7 @@ class RepositoryManager (object):
             Returns:
                 Specification object.
         """
-        return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self._monolithe_config)
+        return Specification(filename=name, data=self.get_specification_data(name, branch, archive), monolithe_config=self.monolithe_config)
 
     def save_specification(self, specification, message, branch="master"):
         """

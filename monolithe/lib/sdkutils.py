@@ -243,7 +243,7 @@ class SDKUtils(object):
 
     @classmethod
     def get_python_type_name(cls, type_name):
-        """ Returns a python type according to a java type
+        """ Returns a python type according to a spec type
 
         """
         if type_name in ("string", "enum"):
@@ -287,25 +287,8 @@ class SDKUtils(object):
         return all_cap_re.sub(r"\1_\2", s1).lower()
 
     @classmethod
-    def get_go_name(cls, name):
-        """ Transform a given name to go name
-
-            Args:
-                name (string): the name to convert
-
-            Returns:
-                A ruby name
-
-            Exammple:
-                get_ruby_name(EnterpriseNetwork)
-                >>> enterprise_network
-
-        """
-        return name
-
-    @classmethod
     def get_ruby_type_name(cls, type_name):
-        """ Returns a ruby type according to a java type
+        """ Returns a ruby type according to a spec type
 
         """
         if type_name in ("string", "enum"):
@@ -326,8 +309,25 @@ class SDKUtils(object):
         return type_name
 
     @classmethod
+    def get_go_name(cls, name):
+        """ Transform a given name to go name
+
+            Args:
+                name (string): the name to convert
+
+            Returns:
+                A ruby name
+
+            Exammple:
+                get_ruby_name(EnterpriseNetwork)
+                >>> enterprise_network
+
+        """
+        return name
+
+    @classmethod
     def get_go_type_name(cls, type_name):
-        """ Returns a ruby type according to a java type
+        """ Returns a go type according to a spec type
 
         """
         if type_name in ("string", "enum"):
