@@ -333,6 +333,9 @@ class SDKUtils(object):
         if type_name in ("string", "enum"):
             return "string"
 
+        if type_name == "float":
+            return "float64"
+
         if type_name == "boolean":
             return "bool"
 
@@ -343,9 +346,9 @@ class SDKUtils(object):
             return "int"
 
         if type_name ==  "time":
-            return "float"
+            return "float64"
 
         if type_name ==  "object":
-            return "struct"
+            return "interface{}"
 
         return type_name

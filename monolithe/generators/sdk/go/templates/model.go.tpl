@@ -37,9 +37,7 @@ type {{specification.entity_name}} struct {
 
     {%- if specification.is_root %}
     APIKey string `json:"APIKey,omitempty"`
-    Username string `json:"userName,omitempty"`
-    Password string `json:"password,omitempty"`
-    Organization string `json:"organization,omitempty"`
+    Organization string `json:"enterprise,omitempty"`
     {%- endif %}
 }
 
@@ -51,10 +49,10 @@ func New{{specification.entity_name}}() *{{specification.entity_name}} {
     return &{{specification.entity_name}}{
         ExposedObject: bambou.ExposedObject{
             Identity: {{specification.entity_name}}Identity,
-            {% for attribute, value in attribute_defaults.iteritems() -%}
-            {{attribute}}: {{value}},
-            {% endfor %}
         },
+        {% for attribute, value in attribute_defaults.iteritems() -%}
+        {{attribute}}: {{value}},
+        {% endfor %}
     }
 }
 
@@ -72,12 +70,12 @@ func (o *{{specification.entity_name}}) SetAPIKey(key string) {
     o.APIKey = key
 }
 
-func (o *{{specification.entity_name}}) URL() string {
+func (o *{{specification.entity_name}}) GetURL() string {
 
     return bambou.CurrentSession().URL + "/" + o.Identity.ResourceName
 }
 
-func (o *{{specification.entity_name}}) URLForChildrenIdentity(identity bambou.RESTIdentity) string {
+func (o *{{specification.entity_name}}) GetURLForChildrenIdentity(identity bambou.RESTIdentity) string {
 
     return bambou.CurrentSession().URL + "/" + identity.ResourceName
 }
