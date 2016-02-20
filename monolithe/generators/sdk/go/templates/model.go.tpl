@@ -3,7 +3,7 @@
 package {{ sdk_name }}
 
 import (
-    "github.com/primalmotion/bambou"
+    "github.com/nuagenetworks/go-bambou/bambou"
 )
 
 /*
@@ -32,7 +32,8 @@ type {{specification.entity_name}} struct {
 
     {% for attribute in specification.attributes -%}
     {% set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
-    {{ field_name }} {{ attribute.local_type }} `json:"{{attribute.local_name}},omitempty"`
+    {% set can_ommit = attribute.type != "boolean" -%}
+    {{ field_name }} {{ attribute.local_type }} `json:"{{attribute.local_name}}{% if can_ommit -%},omitempty{% endif -%}"`
     {% endfor -%}
 
     {%- if specification.is_root %}
