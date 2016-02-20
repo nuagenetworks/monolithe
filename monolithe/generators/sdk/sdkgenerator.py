@@ -85,7 +85,7 @@ class SDKGenerator(Generator):
         cli_writer.write()
 
         self.cleanup()
-        Printer.success("%s generation complete and available in \"%s/python\"" % (sdk_name, sdk_output))
+        Printer.success("%s generation complete and available in \"%s/%s\"" % (sdk_name, sdk_output, self.monolithe_config.language))
 
     def generate_documentation(self):
         """
