@@ -116,7 +116,8 @@ def main(argv=sys.argv):
 
     if args.folder:
         generator.initialize_folder_manager(folder=args.folder)
-        if not monolithe_config: generator.retrieve_monolithe_config_from_folder()
+        if not monolithe_config:
+            generator.retrieve_monolithe_config_from_folder()
         generator.generate_from_folder()
     else:
         # Use environment variable if necessary
@@ -143,19 +144,17 @@ def main(argv=sys.argv):
         if not args.config_path and "MONOLITHE_CONFIG_PATH" in os.environ:
             args.config_path = os.environ["MONOLITHE_CONFIG_PATH"]
 
-        if not args.login and not args.token:
-            args.login = raw_input("Enter your GitHub login: ")
-
         if not args.repository_path:
             args.repository_path = "/"
 
-        # Ask for password
-        if args.login:
-            password = getpass.getpass(prompt="Enter your GitHub password for %s: " % args.login)
-            login_or_token = args.login
-        else:
+        login_or_token = None
+        password = None
+        if args.token:
             password = None
             login_or_token = args.token
+        elif args.login:
+            login_or_token = args.login
+            password = getpass.getpass(prompt="Enter your GitHub password for %s: " % args.login)
 
         generator.initialize_repository_manager(api_url=args.api_url,
                                                 login_or_token=login_or_token,
@@ -164,7 +163,9 @@ def main(argv=sys.argv):
                                                 repository=args.repository,
                                                 repository_path=args.repository_path)
 
-        if not monolithe_config: generator.retrieve_monolithe_config_from_repo(branch=args.branches[0])
+        if not monolithe_config:
+            generator.retrieve_monolithe_config_from_repo(branch=args.branches[0])
+
         generator.generate_from_repo(branches=args.branches)
 
 if __name__ == "__main__":
