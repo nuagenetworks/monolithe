@@ -6,27 +6,22 @@ import (
     "github.com/nuagenetworks/go-bambou/bambou"
 )
 
-/*
-    Identity
-*/
 var (
     {{specification.entity_name}}Identity = bambou.RESTIdentity{"{{specification.rest_name}}", "{{specification.resource_name}}"}
 )
 
 {%- if not specification.is_root %}
-/*
-    Ancestor Interface
-*/
+// Represents a list of {{specification.entity_name_plural}}
 type {{specification.entity_name_plural}}List []*{{specification.entity_name}}
+
+// Interface of an ancestor of a {{specification.entity_name}}
 type {{specification.entity_name_plural}}Ancestor interface {
     {{specification.entity_name_plural}}(*bambou.FetchingInfo) ({{specification.entity_name_plural}}List, *bambou.Error)
     Create{{specification.entity_name_plural}}(*{{ specification.entity_name }}) (*bambou.Error)
 }
 {%- endif %}
 
-/*
-    Object Structure
-*/
+// Represents a {{specification.entity_name}}
 type {{specification.entity_name}} struct {
     bambou.ExposedObject
 
@@ -42,9 +37,7 @@ type {{specification.entity_name}} struct {
     {%- endif %}
 }
 
-/*
-    Initializer
-*/
+// Returns a new *{{specification.entity_name}}
 func New{{specification.entity_name}}() *{{specification.entity_name}} {
 
     return &{{specification.entity_name}}{
@@ -58,24 +51,25 @@ func New{{specification.entity_name}}() *{{specification.entity_name}} {
 }
 
 {% if specification.is_root -%}
-/*
-    Rootable interface
-*/
+// Returns a the API Key
 func (o *{{specification.entity_name}}) GetAPIKey() string {
 
     return o.APIKey
 }
 
+// Sets a the API Key
 func (o *{{specification.entity_name}}) SetAPIKey(key string) {
 
     o.APIKey = key
 }
 
+// Returns the special Rootable object URL
 func (o *{{specification.entity_name}}) GetURL() string {
 
     return bambou.CurrentSession().URL + "/" + o.Identity.ResourceName
 }
 
+// Returns the special Rootable object children URL
 func (o *{{specification.entity_name}}) GetURLForChildrenIdentity(identity bambou.RESTIdentity) string {
 
     return bambou.CurrentSession().URL + "/" + identity.ResourceName
@@ -83,59 +77,44 @@ func (o *{{specification.entity_name}}) GetURLForChildrenIdentity(identity bambo
 
 {% endif -%}
 
-/*
-    Exposable Interface
-*/
+// Retrieves the {{specification.entity_name}} from the server
 func (o *{{specification.entity_name}}) Fetch() *bambou.Error {
 
     return bambou.FetchEntity(o)
 }
 
+// Saves the {{specification.entity_name}} into the server
 func (o *{{specification.entity_name}}) Save() *bambou.Error {
 
     return bambou.SaveEntity(o)
 }
 
+// Deletes the {{specification.entity_name}} from the server
 func (o *{{specification.entity_name}}) Delete() *bambou.Error {
 
     return bambou.DeleteEntity(o)
 }
 
-/*
-    Children Entities
-*/
 {% for api in specification.child_apis -%}
-{% if  api.relationship == "child" or api.relationship == "root" -%}
 {% set child_specification = specification_set[api.remote_specification_name] -%}
-
-
+// Retrieves the list of child {{ child_specification.entity_name_plural }} of the {{specification.entity_name}}
 func (o *{{ specification.entity_name }}) {{ child_specification.entity_name_plural }}(info *bambou.FetchingInfo) ({{ child_specification.entity_name_plural }}List, *bambou.Error) {
 
     var list {{ child_specification.entity_name_plural }}List
     err := bambou.FetchChildren(o, {{ child_specification.entity_name }}Identity, &list, info)
     return list, err
 }
-
+{% if  api.relationship == "child" or api.relationship == "root" or api.relationship == "alias" %}
+// Creates a new child {{ child_specification.entity_name }} under the {{specification.entity_name}}
 func (o *{{ specification.entity_name }}) Create{{ child_specification.entity_name }}(child *{{ child_specification.entity_name }}) *bambou.Error {
 
     return bambou.CreateChild(o, child)
 }
-
-{% endif -%}
-{% endfor -%}
-
-
-/*
-    Assignation
-*/
-{% for api in specification.child_apis -%}
-{% if  api.relationship == "member" -%}
-{% set child_specification = specification_set[api.remote_specification_name] -%}
+{% else %}
+// Assigns the list of {{ child_specification.entity_name_plural }} to the {{specification.entity_name}}
 func (o *{{ specification.entity_name }}) Assign{{ child_specification.entity_name_plural }}(children interface{}) *bambou.Error {
 
     return bambou.AssignChildren(o, children, {{ child_specification.entity_name }}Identity)
 }
-{% endif -%}
+{% endif %}
 {% endfor -%}
-
-

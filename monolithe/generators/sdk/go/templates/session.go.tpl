@@ -12,6 +12,7 @@ var (
     _URLPostfix string
 )
 
+// Returns a new Session
 func NewSession(username, password, organization, url string) (*bambou.Session, *{{sdk_root_api|capitalize}}) {
 
     root := New{{sdk_root_api|capitalize}}()
