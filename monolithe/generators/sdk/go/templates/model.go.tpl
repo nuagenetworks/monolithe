@@ -7,7 +7,10 @@ import (
 )
 
 var (
-    {{specification.entity_name}}Identity = bambou.RESTIdentity{"{{specification.rest_name}}", "{{specification.resource_name}}"}
+    {{specification.entity_name}}Identity = bambou.RESTIdentity{
+        RESTName: "{{specification.rest_name}}",
+        ResourceName: "{{specification.resource_name}}",
+    }
 )
 
 {%- if not specification.is_root %}
