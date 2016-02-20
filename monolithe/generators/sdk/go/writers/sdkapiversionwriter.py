@@ -105,3 +105,9 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
                    attribute_defaults=defaults)
 
         return (filename, specification.entity_name)
+
+    def postprocess(self):
+        """ Perform some linting operations
+
+        """
+        os.system("gofmt -w '%s' >/dev/null 2>&1" % self.output_directory)

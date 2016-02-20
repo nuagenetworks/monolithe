@@ -72,6 +72,16 @@ class SDKAPIVersionWriter(object):
         task_manager.wait_until_exit()
 
         self.writer.write_sdkapiversion(model_filenames=model_filenames, fetcher_filenames=fetcher_filenames)
+        self.postprocess()
+
+    def postprocess(self):
+        """
+        Allows the sub writer to do some post generation operations
+        """
+        if not hasattr(self.writer, "postprocess"):
+            return
+
+        self.writer.postprocess()
 
     def _get_writer(self):
         """ Get the appropriate writer
