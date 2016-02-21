@@ -54,7 +54,7 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/go/vspk" % (self._sdk_output)
+        self.output_directory = "%s/go/%s" % (self._sdk_output, self._sdk_name)
 
         self.attrs_defaults = RawConfigParser()
         path = "%s/go/__attributes_defaults/attrs_defaults.ini" % self._sdk_output

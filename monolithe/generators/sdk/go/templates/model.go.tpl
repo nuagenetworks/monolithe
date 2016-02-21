@@ -2,18 +2,15 @@
 
 package {{ sdk_name }}
 
-import (
-    "github.com/nuagenetworks/go-bambou/bambou"
-)
+import "github.com/nuagenetworks/go-bambou/bambou"
 
-var (
-    {{specification.entity_name}}Identity = bambou.RESTIdentity{
-        RESTName: "{{specification.rest_name}}",
-        ResourceName: "{{specification.resource_name}}",
-    }
-)
+// Represents the Identity of the object
+var {{specification.entity_name}}Identity = bambou.Identity {
+    RESTName:     "{{specification.rest_name}}",
+    ResourceName: "{{specification.resource_name}}",
+}
 
-{%- if not specification.is_root %}
+{% if not specification.is_root -%}
 // Represents a list of {{specification.entity_name_plural}}
 type {{specification.entity_name_plural}}List []*{{specification.entity_name}}
 
@@ -73,7 +70,7 @@ func (o *{{specification.entity_name}}) GetURL() string {
 }
 
 // Returns the special Rootable object children URL
-func (o *{{specification.entity_name}}) GetURLForChildrenIdentity(identity bambou.RESTIdentity) string {
+func (o *{{specification.entity_name}}) GetURLForChildrenIdentity(identity bambou.Identity) string {
 
     return bambou.CurrentSession().URL + "/" + identity.ResourceName
 }
