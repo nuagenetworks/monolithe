@@ -64,15 +64,20 @@ func (o *{{specification.entity_name}}) SetAPIKey(key string) {
 }
 
 // Returns the special Rootable object URL
-func (o *{{specification.entity_name}}) GetURL() string {
+func (o *{{specification.entity_name}}) GetPersonalURL() string {
 
     return bambou.CurrentSession().URL + "/" + o.Identity.ResourceName
+}
+
+func (o *{{specification.entity_name}}) GetGeneralURL() string {
+
+    return o.GetPersonalURL()
 }
 
 // Returns the special Rootable object children URL
 func (o *{{specification.entity_name}}) GetURLForChildrenIdentity(identity bambou.Identity) string {
 
-    return bambou.CurrentSession().URL + "/" + identity.ResourceName
+    return o.GetPersonalURL()
 }
 
 {% endif -%}
