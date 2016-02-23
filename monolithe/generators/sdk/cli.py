@@ -76,8 +76,7 @@ def main(argv=sys.argv):
                         metavar="branches",
                         help="The branches of the specifications to use to generate the documentation (examples: \"master 3.2\")",
                         nargs="*",
-                        type=str,
-                        required=True)
+                        type=str)
 
     parser.add_argument("-p", "--path",
                         dest="repository_path",
@@ -138,7 +137,6 @@ def main(argv=sys.argv):
 
     generator = SDKGenerator(monolithe_config=monolithe_config)
 
-
     if args.folder:
         generator.initialize_folder_manager(folder=args.folder)
         if not monolithe_config:
@@ -146,6 +144,10 @@ def main(argv=sys.argv):
         generator.generate_from_folder()
 
     else:
+        if not args.branches:
+            print "You must provide the --branches options. Use --help for help."
+            sys.exit(1)
+
         # Use environment variable if necessary
         if not args.api_url and "MONOLITHE_GITHUB_API_URL" in os.environ:
             args.api_url = os.environ["MONOLITHE_GITHUB_API_URL"]
