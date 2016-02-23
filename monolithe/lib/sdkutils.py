@@ -164,7 +164,7 @@ class SDKUtils(object):
         return method(name)
 
     @classmethod
-    def get_type_name_in_language(cls, type_name, language):
+    def get_type_name_in_language(cls, type_name, sub_type, language):
         """ Get the type for the given language
 
             Args:
@@ -192,7 +192,7 @@ class SDKUtils(object):
         if not method:
             raise Exception("SDKUtils does not implement methods for language %s" % language)
 
-        return method(type_name)
+        return method(type_name, sub_type)
 
     # Python methods
 
@@ -242,7 +242,7 @@ class SDKUtils(object):
         return all_cap_re.sub(r"\1_\2", s1).lower()
 
     @classmethod
-    def get_python_type_name(cls, type_name):
+    def get_python_type_name(cls, type_name, sub_type=None):
         """ Returns a python type according to a spec type
 
         """
@@ -287,7 +287,7 @@ class SDKUtils(object):
         return all_cap_re.sub(r"\1_\2", s1).lower()
 
     @classmethod
-    def get_ruby_type_name(cls, type_name):
+    def get_ruby_type_name(cls, type_name, sub_type=None):
         """ Returns a ruby type according to a spec type
 
         """
@@ -326,7 +326,7 @@ class SDKUtils(object):
         return name
 
     @classmethod
-    def get_go_type_name(cls, type_name):
+    def get_go_type_name(cls, type_name, sub_type=None):
         """ Returns a go type according to a spec type
 
         """
@@ -340,7 +340,8 @@ class SDKUtils(object):
             return "bool"
 
         if type_name == "list":
-            return "[]interface{}"
+            st = cls.get_go_type_name(type_name=sub_type, sub_type=None) if sub_type else "interface{}"
+            return "[]%s" % st
 
         if type_name == "integer":
             return "int"
@@ -348,7 +349,4 @@ class SDKUtils(object):
         if type_name ==  "time":
             return "float64"
 
-        if type_name ==  "object":
-            return "interface{}"
-
-        return type_name
+        return "interface{}"

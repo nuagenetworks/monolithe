@@ -97,7 +97,7 @@ class SpecificationAttribute(object):
         language = self.specification.monolithe_config.language if self.specification and self.specification.monolithe_config else 'python'
 
         self._type = SDKUtils.massage_type_name(type_name=value)
-        self.local_type = SDKUtils.get_type_name_in_language(type_name=value, language=language)
+        self.local_type = SDKUtils.get_type_name_in_language(type_name=value, sub_type=self.subtype, language=language)
 
     @property
     def rest_name(self):
@@ -123,6 +123,9 @@ class SpecificationAttribute(object):
 
         """
         try:
+            # this must be done before setting the type
+            self.subtype = data["subtype"] if "subtype" in data else None
+
             # mandatory characteristics
             self.description = data["description"]
             self.type = data["type"]
@@ -149,7 +152,6 @@ class SpecificationAttribute(object):
             self.transient = data["transient"] if "transient" in data else False
             self.unique = data["unique"] if "unique" in data else False
             self.unique_scope = data["unique_scope"] if "unique_scope" in data else 'no'
-            self.subtype = data["subtype"] if "subtype" in data else None
 
         except Exception as ex:
             raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.rest_name, self.specification.rest_name, ex))
