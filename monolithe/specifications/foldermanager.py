@@ -32,6 +32,7 @@ import ConfigParser
 from .specification import Specification
 from monolithe.lib import merge_dict
 
+
 class FolderManager (object):
     """ RepositoryManager is an object that allows to manipulate the API specification repository
     """
@@ -100,7 +101,7 @@ class FolderManager (object):
                 data = json.loads(f.read())
                 if "model" in data and "extends" in data["model"]:
                     for extension in data["model"]["extends"]:
-                        data = merge_dict(data, self.get_specification_data(name="%s.spec" % extension))
+                        data = merge_dict(self.get_specification_data(name="%s.spec" % extension), data)
             except Exception as e:
                 raise Exception("Could not parse %s" % name, e)
         return data
@@ -115,5 +116,5 @@ class FolderManager (object):
         """
         specifications = []
         for name in names:
-            specification.append(Specification(filename=name, data=self.get_specification_data(name=name)))
+            specifications.append(Specification(filename=name, data=self.get_specification_data(name=name)))
         return specifications
