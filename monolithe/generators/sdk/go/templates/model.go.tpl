@@ -77,7 +77,7 @@ func (o *{{specification.entity_name}}) GetGeneralURL() string {
 // Returns the special Rootable object children URL
 func (o *{{specification.entity_name}}) GetURLForChildrenIdentity(identity bambou.Identity) string {
 
-    return o.GetGeneralURL() + "/" + identity.ResourceName
+    return bambou.CurrentSession().URL + "/" + identity.ResourceName
 }
 
 {% endif -%}
