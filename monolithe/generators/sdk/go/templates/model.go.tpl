@@ -32,7 +32,7 @@ type {{specification.entity_name}} struct {
     {% endfor -%}
 
     {%- if specification.is_root %}
-    APIKey string `json:"APIKey,omitempty"`
+    Token string `json:"APIKey,omitempty"`
     Organization string `json:"enterprise,omitempty"`
     {%- endif %}
 }
@@ -52,15 +52,15 @@ func New{{specification.entity_name}}() *{{specification.entity_name}} {
 
 {% if specification.is_root -%}
 // GetAPIKey returns a the API Key
-func (o *{{specification.entity_name}}) GetAPIKey() string {
+func (o *{{specification.entity_name}}) APIKey() string {
 
-    return o.APIKey
+    return o.Token
 }
 
 // SetAPIKey sets a the API Key
 func (o *{{specification.entity_name}}) SetAPIKey(key string) {
 
-    o.APIKey = key
+    o.Token = key
 }
 
 {% endif -%}
