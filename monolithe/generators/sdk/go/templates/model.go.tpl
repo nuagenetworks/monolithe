@@ -23,7 +23,7 @@ type {{specification.entity_name_plural}}Ancestor interface {
 
 // {{specification.entity_name}} represents the model of a {{specification.rest_name}}
 type {{specification.entity_name}} struct {
-    bambou.ExposedObject
+    bambou.RemoteObject
 
     {% for attribute in specification.attributes -%}
     {% set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
