@@ -40,14 +40,14 @@ type {{specification.entity_name}} struct {
 // New{{specification.entity_name}} returns a new *{{specification.entity_name}}
 func New{{specification.entity_name}}() *{{specification.entity_name}} {
 
-    return &{{specification.entity_name}}{
-        ExposedObject: bambou.ExposedObject{
-            Identity: {{specification.entity_name}}Identity,
-        },
+    o := &{{specification.entity_name}}{
         {% for attribute, value in attribute_defaults.iteritems() -%}
         {{attribute}}: {{value}},
         {% endfor %}
     }
+    o.SetIdentity({{specification.entity_name}}Identity)
+
+    return o
 }
 
 {% if specification.is_root -%}
