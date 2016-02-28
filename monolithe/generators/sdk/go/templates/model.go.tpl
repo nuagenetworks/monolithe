@@ -51,7 +51,7 @@ func New{{specification.entity_name}}() *{{specification.entity_name}} {
 }
 
 {% if specification.is_root -%}
-// GetAPIKey returns a the API Key
+// APIKey returns a the API Key
 func (o *{{specification.entity_name}}) APIKey() string {
 
     return o.Token
@@ -100,9 +100,14 @@ func (o *{{ specification.entity_name }}) Create{{ child_specification.entity_na
 }
 {% else %}
 // Assign{{ child_specification.entity_name_plural }} assigns the list of {{ child_specification.entity_name_plural }} to the {{specification.entity_name}}
-func (o *{{ specification.entity_name }}) Assign{{ child_specification.entity_name_plural }}(children interface{}) *bambou.Error {
+func (o *{{ specification.entity_name }}) Assign{{ child_specification.entity_name_plural }}(children {{ child_specification.entity_name_plural }}List) *bambou.Error {
 
-    return bambou.CurrentSession().AssignChildren(o, children, {{ child_specification.entity_name }}Identity)
+    list := []bambou.Identifiable{}
+    for _, c := range children {
+        list = append(list, c)
+    }
+
+    return bambou.CurrentSession().AssignChildren(o, list, {{ child_specification.entity_name }}Identity)
 }
 {% endif %}
 {% endfor -%}
