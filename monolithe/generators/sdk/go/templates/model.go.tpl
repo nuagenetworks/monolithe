@@ -6,8 +6,8 @@ import "github.com/nuagenetworks/go-bambou/bambou"
 
 // {{specification.entity_name}}Identity represents the Identity of the object
 var {{specification.entity_name}}Identity = bambou.Identity {
-    RESTName:     "{{specification.rest_name}}",
-    ResourceName: "{{specification.resource_name}}",
+    Name:     "{{specification.rest_name}}",
+    Category: "{{specification.resource_name}}",
 }
 
 {% if not specification.is_root -%}
@@ -23,8 +23,10 @@ type {{specification.entity_name_plural}}Ancestor interface {
 
 // {{specification.entity_name}} represents the model of a {{specification.rest_name}}
 type {{specification.entity_name}} struct {
-    bambou.RemoteObject
-
+    ID         string `json:"ID,omitempty"`
+    ParentID   string `json:"parentID,omitempty"`
+    ParentType string `json:"parentType,omitempty"`
+    Owner      string `json:"owner,omitempty"`
     {% for attribute in specification.attributes -%}
     {% set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
     {% set can_ommit = attribute.type != "boolean" -%}
@@ -40,14 +42,29 @@ type {{specification.entity_name}} struct {
 // New{{specification.entity_name}} returns a new *{{specification.entity_name}}
 func New{{specification.entity_name}}() *{{specification.entity_name}} {
 
-    o := &{{specification.entity_name}}{
+    return &{{specification.entity_name}}{
         {% for attribute, value in attribute_defaults.iteritems() -%}
         {{attribute}}: {{value}},
         {% endfor %}
     }
-    o.SetIdentity({{specification.entity_name}}Identity)
+}
 
-    return o
+// Identity returns the Identity of the object.
+func (o *{{specification.entity_name}}) Identity() bambou.Identity {
+
+    return {{specification.entity_name}}Identity
+}
+
+// Identifier returns the value of the object's unique identifier.
+func (o *{{specification.entity_name}}) Identifier() string {
+
+    return o.ID
+}
+
+// SetIdentifier sets the value of the object's unique identifier.
+func (o *{{specification.entity_name}}) SetIdentifier(ID string) {
+
+    o.ID = ID
 }
 
 {% if specification.is_root -%}
