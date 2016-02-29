@@ -25,8 +25,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.lib import SDKUtils
-
 
 class SpecificationAPI(object):
     """ Describe an object API
@@ -37,16 +35,16 @@ class SpecificationAPI(object):
         """
         self.specification = specification
 
-        self.rest_name          = ""
-        self.allows_get         = False
-        self.allows_create      = False
-        self.allows_update      = False
-        self.allows_delete      = False
+        self.rest_name = ""
+        self.allows_get = False
+        self.allows_create = False
+        self.allows_update = False
+        self.allows_delete = False
         self.allows_bulk_create = False
         self.allows_bulk_update = False
         self.allows_bulk_delete = False
-        self.deprecated         = False
-        self.relationship       = "child"
+        self.deprecated = False
+        self.relationship = "child"
 
         if data:
             self.from_dict(data)
@@ -56,17 +54,17 @@ class SpecificationAPI(object):
 
         """
         # mandatory
-        self.rest_name          = data["rest_name"]
+        self.rest_name = data["rest_name"]
 
-        self.allows_get         = data["get"] if "get" in data else False
-        self.allows_create      = data["create"] if "create" in data else False
-        self.allows_update      = data["update"] if "update" in data else False
-        self.allows_delete      = data["delete"] if "delete" in data else False
+        self.allows_get = data["get"] if "get" in data else False
+        self.allows_create = data["create"] if "create" in data else False
+        self.allows_update = data["update"] if "update" in data else False
+        self.allows_delete = data["delete"] if "delete" in data else False
         self.allows_bulk_create = data["bulk_create"] if "bulk_create" in data else False
         self.allows_bulk_update = data["bulk_update"] if "bulk_update" in data else False
         self.allows_bulk_delete = data["bulk_delete"] if "bulk_delete" in data else False
-        self.deprecated         = data["deprecated"] if "deprecated" in data else False
-        self.relationship       = data["relationship"] if "relationship" in data else "child"
+        self.deprecated = data["deprecated"] if "deprecated" in data else False
+        self.relationship = data["relationship"] if "relationship" in data else "child"
 
     def to_dict(self):
         """

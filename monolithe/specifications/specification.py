@@ -70,7 +70,7 @@ class Specification(object):
         self.rest_name = None  # The remote name of the object
         self._entity_name = None  # The original name of the object
 
-        self.attributes = []  # A list of all properties of the object
+        self.attributes = []
         self.child_apis = []
         self.parent_apis = []
 
@@ -161,9 +161,7 @@ class Specification(object):
         ret = []
 
         for data in apis:
-            api = SpecificationAPI(specification=self)
-            api.from_dict(data)
-            ret.append(api)
+            ret.append(SpecificationAPI(specification=self, data=data))
 
         return sorted(ret, key=lambda x: getattr(x, "specification"))
 
@@ -174,7 +172,6 @@ class Specification(object):
         ret = []
 
         for data in attributes:
-            model_attribute = SpecificationAttribute(specification=self, data=data)
-            ret.append(model_attribute)
+            ret.append(SpecificationAttribute(specification=self, data=data))
 
         return sorted(ret, key=lambda x: getattr(x, "name"))
