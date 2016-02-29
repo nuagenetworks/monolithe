@@ -151,7 +151,6 @@ class Specification(object):
                 model: the model processed
                 apis: the list of apis availble for the current model
                 relations: dict containing all relations between resources
-
         """
         ret = []
 
