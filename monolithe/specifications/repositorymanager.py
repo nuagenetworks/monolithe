@@ -45,6 +45,7 @@ MODE_NORMAL = 1
 MODE_RAW_SPECS = 2
 MODE_RAW_ABSTRACTS = 3
 
+
 class RepositoryManager (object):
     """ RepositoryManager is an object that allows to manipulate the API specification repository
     """
@@ -59,10 +60,10 @@ class RepositoryManager (object):
                 organization: the organization where specifications_repository is
                 repository: the repository containing the specifications
         """
-        self.monolithe_config  = monolithe_config
-        self._organization     = organization
-        self._repository       = repository
-        self._repository_path  = repository_path
+        self.monolithe_config = monolithe_config
+        self._organization = organization
+        self._repository = repository
+        self._repository_path = repository_path
 
         if self._repository_path[0] == "/":
             self._repository_path = self._repository_path[1:]
@@ -261,7 +262,6 @@ class RepositoryManager (object):
 
         return data
 
-
     def get_specification(self, name, branch="master", archive=None, mode=MODE_NORMAL):
         """ Returns a Specification object from the given specification file name in the given branch
 
@@ -342,8 +342,8 @@ class RepositoryManager (object):
         """
         """
         # ugly manual porting of https://github.com/PyGithub/PyGithub/pull/316/files
-        path       = os.path.join(self._repository_path, filename)
-        sha        = self._repo.get_file_contents(path, branch).sha
+        path = os.path.join(self._repository_path, filename)
+        sha = self._repo.get_file_contents(path, branch).sha
         parameters = {"message": message, "sha": sha, "branch": branch}
 
         self._repo._requester.requestJsonAndCheck("DELETE", self._repo.url + "/contents/" + path, input=parameters)
@@ -351,9 +351,9 @@ class RepositoryManager (object):
     def _commit(self, filename, content, message, branch, remove_trailing_whitespaces=True):
         """
         """
-        head_ref      = self._repo.get_git_ref("heads/%s" % branch)
+        head_ref = self._repo.get_git_ref("heads/%s" % branch)
         latest_commit = self._repo.get_git_commit(head_ref.object.sha)
-        base_tree     = latest_commit.tree
+        base_tree = latest_commit.tree
 
         if remove_trailing_whitespaces:
             content = '\n'.join([line.rstrip() for line in content.split('\n')])

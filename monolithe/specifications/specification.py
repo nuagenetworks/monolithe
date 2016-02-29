@@ -25,11 +25,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import pkgutil
-import json
-
-from copy import deepcopy
-
 from monolithe.lib import SDKUtils
 from .specification_api import SpecificationAPI
 from .specification_attribute import SpecificationAttribute
@@ -131,17 +126,17 @@ class Specification(object):
         """
         if "model" in data:
             model = data["model"]
-            self.description   = model["description"] if "description" in model else None
-            self.package       = model["package"] if "package" in model else None
-            self.extends       = model["extends"] if "extends" in model else []
-            self.entity_name   = model["entity_name"] if "entity_name" in model else None
-            self.rest_name     = model["rest_name"] if "rest_name" in model else None
+            self.description = model["description"] if "description" in model else None
+            self.package = model["package"] if "package" in model else None
+            self.extends = model["extends"] if "extends" in model else []
+            self.entity_name = model["entity_name"] if "entity_name" in model else None
+            self.rest_name = model["rest_name"] if "rest_name" in model else None
             self.resource_name = model["resource_name"] if "resource_name" in model else None
-            self.allows_get    = model["get"] if "get" in model else False
+            self.allows_get = model["get"] if "get" in model else False
             self.allows_create = model["create"] if "create" in model else False
             self.allows_update = model["update"] if "update" in model else False
             self.allows_delete = model["delete"] if "delete" in model else False
-            self.is_root       = model["root"] if "root" in model else False
+            self.is_root = model["root"] if "root" in model else False
 
         if "attributes" in data:
             self.attributes = self._get_attributes(data["attributes"])
