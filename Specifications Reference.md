@@ -32,15 +32,9 @@ It **must** contains valid json data. And the structure is following (the order 
 
 
     {
-        "children": {
-            ...
-        },
-        "model": {
-            ...
-        },
-        "attributes": {
-            ...
-        }
+        "attributes": [...],
+        "children": [...],
+        "model": {...}
     }
 
 
@@ -112,10 +106,10 @@ The list of Attributes the model has. It is a dictionary where the key is the na
 
 For example:
 
-    "attributes" : {
-        "name": { ... },
-        "description": {...}
-    }
+    "attributes" : [
+        { "name": "firstName", ... },
+        { "name": "lastName", ... }
+    ]
 
 
 The attribute must contains its charateristics. Each characteristic define one behavior of the attribute, and multiple things can happen during the sdk/documentation generation process according to these characteristics.
@@ -230,6 +224,13 @@ Example:
     "min_value": -100,
     "max_value": 100
 
+#### name
+String indicating the name of the attribute.
+
+Example:
+
+    "name": "firstName"
+
 #### orderable
 Boolean that tells if the attribute can be used to order a query.
 
@@ -283,16 +284,20 @@ The Children section describes all the APIs that can be used to fetch its childr
 
 The structure of an children api definition looks like:
 
-    "legs" : {
+    {
+        "rest_name": "legs",
         ...
     }
 
-The key used *must* be the remote specification `rest_name` attribute (which translates to the filename `<rest_name>.spec`).
+The `rest_name` *must* be the remote specification `rest_name` attribute (which translates to the filename `<rest_name>.spec`).
 
 This means it is possible to call:
 
     GET /unicorns/3/legs # get the list a legs of unicorn3
     POST /unicorns/3/legs # create a new leg for unicorn3
+
+#### rest_name
+The `rest_name` of the remote specification describing the children object.
 
 #### relationship
 
