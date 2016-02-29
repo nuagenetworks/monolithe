@@ -115,13 +115,13 @@ class Specification(object):
         data["model"]["delete"] = self.allows_delete
         data["model"]["root"] = self.is_root
 
-        data["attributes"] = {}
+        data["attributes"] = []
         for attribute in self.attributes:
-            data["attributes"][attribute.rest_name] = attribute.to_dict()
+            data["attributes"].append(attribute.to_dict())
 
-        data["children"] = {}
+        data["children"] = []
         for api in self.child_apis:
-            data["children"][api.remote_specification_name] = api.to_dict()
+            data["children"].append(api.to_dict())
 
         return data
 
@@ -160,8 +160,8 @@ class Specification(object):
         """
         ret = []
 
-        for name, data in apis.iteritems():
-            api = SpecificationAPI(remote_specification_name=name, specification=self)
+        for data in apis:
+            api = SpecificationAPI(specification=self)
             api.from_dict(data)
             ret.append(api)
 
@@ -173,8 +173,8 @@ class Specification(object):
         """
         ret = []
 
-        for name, data in attributes.iteritems():
-            model_attribute = SpecificationAttribute(rest_name=name, specification=self, data=data)
+        for data in attributes:
+            model_attribute = SpecificationAttribute(specification=self, data=data)
             ret.append(model_attribute)
 
-        return sorted(ret, key=lambda x: getattr(x, "rest_name"))
+        return sorted(ret, key=lambda x: getattr(x, "name"))

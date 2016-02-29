@@ -101,7 +101,7 @@ func (o *{{specification.entity_name}}) Delete() *bambou.Error {
 }
 
 {% for api in specification.child_apis -%}
-{% set child_specification = specification_set[api.remote_specification_name] -%}
+{% set child_specification = specification_set[api.rest_name] -%}
 // {{ child_specification.entity_name_plural }} retrieves the list of child {{ child_specification.entity_name_plural }} of the {{specification.entity_name}}
 func (o *{{ specification.entity_name }}) {{ child_specification.entity_name_plural }}(info *bambou.FetchingInfo) ({{ child_specification.entity_name_plural }}List, *bambou.Error) {
 

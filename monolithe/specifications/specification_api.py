@@ -32,12 +32,12 @@ class SpecificationAPI(object):
     """ Describe an object API
 
     """
-    def __init__(self, remote_specification_name, specification=None, data=None):
+    def __init__(self, specification=None, data=None):
         """
         """
-        self.remote_specification_name = remote_specification_name
         self.specification = specification
 
+        self.rest_name          = ""
         self.allows_get         = False
         self.allows_create      = False
         self.allows_update      = False
@@ -55,6 +55,9 @@ class SpecificationAPI(object):
         """
 
         """
+        # mandatory
+        self.rest_name          = data["rest_name"]
+
         self.allows_get         = data["get"] if "get" in data else False
         self.allows_create      = data["create"] if "create" in data else False
         self.allows_update      = data["update"] if "update" in data else False
@@ -71,6 +74,7 @@ class SpecificationAPI(object):
 
         data = {}
 
+        data["rest_name"] = self.rest_name
         data["get"] = self.allows_get
         data["create"] = self.allows_create
         data["update"] = self.allows_update

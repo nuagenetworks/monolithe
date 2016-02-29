@@ -153,8 +153,7 @@ class Generator(object):
         """
         pass
 
-    ## Utilities
-
+    # Utilities
     def _resolve_parent_apis(self, specifications):
         """
         """
@@ -166,13 +165,17 @@ class Generator(object):
 
                 for related_child_api in remote_spec.child_apis:
 
-                    if related_child_api.remote_specification_name == specification.rest_name:
+                    if related_child_api.rest_name == specification.rest_name:
 
-                        parent_api = SpecificationAPI(remote_specification_name=related_child_api.remote_specification_name, specification=specification)
-
-                        if specification.allows_get: parent_api.allows_get = True
-                        if specification.allows_create: parent_api.allows_create = True
-                        if specification.allows_update: parent_api.allows_update = True
-                        if specification.allows_delete: parent_api.allows_Delete = True
+                        parent_api = SpecificationAPI(specification=specification)
+                        parent_api.rest_name = related_child_api.rest_name
+                        if specification.allows_get:
+                            parent_api.allows_get = True
+                        if specification.allows_create:
+                            parent_api.allows_create = True
+                        if specification.allows_update:
+                            parent_api.allows_update = True
+                        if specification.allows_delete:
+                            parent_api.allows_Delete = True
 
                         specification.parent_apis.append(parent_api)

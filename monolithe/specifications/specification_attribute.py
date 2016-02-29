@@ -37,21 +37,21 @@ class SpecificationAttribute(object):
     """ Define an attribute of an object
 
     """
-    def __init__(self, rest_name, specification=None, data=None):
+    def __init__(self, specification=None, data=None):
         """ Define an attribute
 
             Example:
-                rest_name: associatedGatewayID
+                name: associatedGatewayID
                 local_name: associated_gateway_id
                 local_type: str
         """
         # Main attributes
         self.description = None
-        self._rest_name = None
         self.local_name = None
         self.local_type = None
 
         # Other attributes
+        self._name = None
         self.channel = None
         self.allowed_chars = None
         self.allowed_choices = None
@@ -78,8 +78,6 @@ class SpecificationAttribute(object):
         self.subtype = None
 
         self.specification = specification
-        self.rest_name = rest_name
-
         # Load information from data
         if data:
             self.from_dict(data)
@@ -100,16 +98,16 @@ class SpecificationAttribute(object):
         self.local_type = SDKUtils.get_type_name_in_language(type_name=value, sub_type=self.subtype, language=language)
 
     @property
-    def rest_name(self):
+    def name(self):
         """
         """
-        return self._rest_name
+        return self._name
 
-    @rest_name.setter
-    def rest_name(self, value):
+    @name.setter
+    def name(self, value):
         """
         """
-        self._rest_name = value
+        self._name = value
 
         language = self.specification.monolithe_config.language if self.specification and self.specification.monolithe_config else 'python'
 
@@ -127,6 +125,7 @@ class SpecificationAttribute(object):
             self.subtype = data["subtype"] if "subtype" in data else None
 
             # mandatory characteristics
+            self.name = data["name"]
             self.description = data["description"]
             self.type = data["type"]
 
@@ -154,7 +153,7 @@ class SpecificationAttribute(object):
             self.unique_scope = data["unique_scope"] if "unique_scope" in data else 'no'
 
         except Exception as ex:
-            raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.rest_name, self.specification.rest_name, ex))
+            raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.rest_name, ex))
 
     def to_dict(self):
         """ Transform an attribute to a dict
@@ -162,6 +161,7 @@ class SpecificationAttribute(object):
         data = {}
 
         # mandatory characteristics
+        data["name"] = self.name
         data["description"] = self.description
         data["type"] = self.type
         data["allowed_chars"] = self.allowed_chars

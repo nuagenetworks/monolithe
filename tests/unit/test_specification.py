@@ -154,7 +154,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.attributes[1].subtype, None)
 
         self.assertEquals(len(s.child_apis), 2)
-        self.assertEquals(s.child_apis[0].remote_specification_name, 'toto')
+        self.assertEquals(s.child_apis[0].rest_name, 'toto')
         self.assertEquals(s.child_apis[0].relationship, 'child')
         self.assertEquals(s.child_apis[0].allows_create, True)
         self.assertEquals(s.child_apis[0].allows_update, False)
@@ -164,7 +164,7 @@ class SpecificationTest(TestCase):
         self.assertEquals(s.child_apis[0].allows_bulk_update, True)
         self.assertEquals(s.child_apis[0].allows_bulk_delete, True)
 
-        self.assertEquals(s.child_apis[1].remote_specification_name, 'user')
+        self.assertEquals(s.child_apis[1].rest_name, 'user')
         self.assertEquals(s.child_apis[1].relationship, 'member')
         self.assertEquals(s.child_apis[1].allows_create, False)
         self.assertEquals(s.child_apis[1].allows_update, True)
