@@ -45,7 +45,7 @@ class Generator(object):
         """
         self.folder_manager = FolderManager(folder=folder, monolithe_config=self.monolithe_config)
 
-    def retrieve_monolithe_config_from_folder(self, language):
+    def retrieve_monolithe_config_from_folder(self, language="python"):
         """
         """
         parser = self.folder_manager.get_monolithe_config()
