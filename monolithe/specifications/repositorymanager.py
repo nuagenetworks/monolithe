@@ -34,10 +34,8 @@ import ConfigParser
 import StringIO
 import zipfile
 
-from functools import partial
 from github import Github, InputGitTreeElement
-from multiprocessing.pool import ThreadPool
-from monolithe.lib import merge_dict
+from monolithe.lib import apply_extension
 
 from .specification import Specification
 
@@ -258,7 +256,7 @@ class RepositoryManager (object):
 
         if mode == MODE_NORMAL and "model" in data and "extends" in data["model"]:
             for extension in data["model"]["extends"]:
-                data = merge_dict(self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive, mode=MODE_NORMAL), data)
+                apply_extension(self.get_specification_data(name="%s.spec" % extension, branch=branch, archive=archive, mode=MODE_NORMAL), data)
 
         return data
 

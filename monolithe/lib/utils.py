@@ -28,13 +28,45 @@
 from copy import deepcopy
 
 
-def merge_dict(one, two):
-    if isinstance(two, dict):
-        result = deepcopy(one)
-        for key, value in two.iteritems():
-            if key in result and isinstance(result[key], dict):
-                result[key] = merge_dict(result[key], value)
-            else:
-                result[key] = deepcopy(value)
-        return result
-    return two
+def apply_extension(extension, specification):
+
+    if "model" in extension:
+        if "model" not in specification:
+            specification["model"] = {}
+
+        for key, value in extension["model"].iteritems():
+            if value is not None:
+                if key not in specification["model"] or specification["model"][key] is None:
+                    specification["model"][key] = value
+
+    if "attributes" in extension:
+        if "attributes" not in specification:
+            specification["attributes"] = []
+
+        for attr in extension["attributes"]:
+            attribute_name = attr["name"]
+
+            found = False
+            for a in specification["attributes"]:
+                if a["name"] == attribute_name:
+                    found = True
+                    break
+
+            if not found:
+                specification["attributes"].append(attr)
+
+    if "children" in extension:
+        if "children" not in specification:
+            specification["children"] = []
+
+        for api in extension["children"]:
+            api_name = api["rest_name"]
+
+            found = False
+            for a in specification["children"]:
+                if a["rest_name"] == api_name:
+                    found = True
+                    break
+
+            if not found:
+                specification["children"].append(api)

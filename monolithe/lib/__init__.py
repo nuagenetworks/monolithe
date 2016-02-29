@@ -25,10 +25,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["Printer", "SDKLoader", "SDKUtils", "TaskManager", "merge_dict"]
+__all__ = ["Printer", "SDKLoader", "SDKUtils", "TaskManager", "apply_extension"]
 
 from .printer import Printer
 from .sdkloader import SDKLoader
 from .sdkutils import SDKUtils
 from .taskmanager import TaskManager
-from .utils import merge_dict
+from .utils import apply_extension
