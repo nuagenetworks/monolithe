@@ -157,7 +157,7 @@ class Specification(object):
         for data in apis:
             ret.append(SpecificationAPI(specification=self, data=data))
 
-        return sorted(ret, key=lambda x: getattr(x, "specification"))
+        return sorted(ret, lambda x, y: cmp(x.rest_name, y.rest_name))
 
     def _get_attributes(self, attributes):
         """
@@ -168,4 +168,4 @@ class Specification(object):
         for data in attributes:
             ret.append(SpecificationAttribute(specification=self, data=data))
 
-        return sorted(ret, key=lambda x: getattr(x, "name"))
+        return sorted(ret, lambda x, y: cmp(x.name, y.name))
