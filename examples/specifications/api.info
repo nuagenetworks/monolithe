@@ -1,5 +1,5 @@
 {
-    "prefix": "api", 
-    "version": "1.0", 
-    "root": "root"
+    "prefix": "api",
+    "root": "root",
+    "version": "1.0"
 }
