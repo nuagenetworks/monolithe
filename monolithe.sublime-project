@@ -1,0 +1,23 @@
+{
+	"folders":
+	[
+		{
+            "folder_exclude_patterns":
+            [
+                "apidocgen",
+                "codegen",
+                "*.egg-info",
+                "ModulesSources",
+                "dist",
+            ],
+            "file_exclude_patterns":
+            [
+                ".coverage",
+                ".coveragerc",
+                "*.pyc",
+
+            ],
+			"path": "."
+		}
+	]
+}

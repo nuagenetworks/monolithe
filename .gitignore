@@ -6,6 +6,7 @@ sdkdocgen
 docgen
 .DS_Store
 MANIFEST
+*.sublime-workspace
 
 # C extensions
 *.so

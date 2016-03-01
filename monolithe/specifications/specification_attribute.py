@@ -145,7 +145,7 @@ class SpecificationAttribute(object):
             self.required = data["required"] if "required" in data else False
             self.transient = data["transient"] if "transient" in data else False
             self.unique = data["unique"] if "unique" in data else False
-            self.unique_scope = data["unique_scope"] if "unique_scope" in data else 'no'
+            self.unique_scope = data["unique_scope"] if "unique_scope" in data else None
 
         except Exception as ex:
             raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.rest_name, ex))
