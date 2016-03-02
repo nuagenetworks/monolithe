@@ -154,7 +154,7 @@ class SDKUtils(object):
             module = importlib.import_module('.lang.%s.converter' % language, package="monolithe.generators.sdk")
             method = module.get_idiomatic_name
         except:
-            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
+            raise Exception('Unsupported language %s.' % language)
 
         cls.lang_modules_cache[language] = module
 
@@ -182,7 +182,7 @@ class SDKUtils(object):
             module = importlib.import_module('.lang.%s.converter' % language, package="monolithe.generators.sdk")
             method = module.get_type_name
         except:
-            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
+            raise Exception('Unsupported language %s.' % language)
 
         cls.lang_modules_cache[language] = module
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ product_name }} API Reference</title>
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
+    <title>{{ product_name }} API Reference {{ apiversion }}</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body data-spy="scroll" data-target="#navbarmain">
@@ -17,12 +17,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">{{ product_name }} API Documentation</a>
+                <a class="navbar-brand" href="index.html">{{ product_name }} API Documentation {{ apiversion }}</a>
 
             </div>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
-                    <li><a href="usage.html">API Usage</a></li>
+                    <li><a href="../usage.html">API Usage</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Components <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -62,7 +62,9 @@
 
             <div class="row bordered-row">
                 <div class="col-xs-12">
-                    <a class="filterable" data-filter-keyword="{{ specification.resource_name }}" id="{{ specification.resource_name }}" href="{{ specification.rest_name }}.html" title="API reference for {{ specification.rest_name }}">{{ specification.resource_name }}</a>
+                    <a class="filterable" data-filter-keyword="{{ specification.resource_name }}" id="{{ specification.resource_name }}" href="{{ specification.rest_name }}.html" title="API reference for {{ specification.rest_name }}">{{ specification.resource_name }} </a>
+                    <br>
+                    <small>{{ specification.description }}</small>
                 </div>
             </div>
         {% endfor %}
@@ -70,8 +72,8 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/search.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/search.js"></script>
 
     <script>
         $(document).ready(function() {

@@ -25,28 +25,14 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import importlib
 
-
-class SDKManager(object):
+def get_idiomatic_name(name):
     """
     """
+    return name
 
-    def __init__(self, monolithe_config):
-        """
-        """
-        self.monolithe_config = monolithe_config
 
-    def execute(self, apiversions):
-        """
-        """
-        language = self.monolithe_config.language
-
-        try:
-            module = importlib.import_module('.lang.%s.writers.sdkwriter' % language, package="monolithe.generators.sdk")
-            klass = module.SDKWriter
-        except:
-            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
-
-        writer = klass(monolithe_config=self.monolithe_config)
-        writer.perform(apiversions=apiversions)
+def get_type_name(type_name, sub_type=None):
+    """
+    """
+    return type_name

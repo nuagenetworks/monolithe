@@ -25,19 +25,31 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.generators.lib import TemplateFileWriter
+import importlib
 
 
-class CLIWriter(TemplateFileWriter):
-    """ Implements `write_cli` that writes CLI Go files
+class WriterManager(object):
+    """
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(CLIWriter, self).__init__(package="monolithe.generators.sdk.lang.go")
+        self.monolithe_config = monolithe_config
 
-    def perform(self):
+    def execute(self, apiversions):
         """
         """
-        pass
+        language = self.monolithe_config.language
+
+        try:
+            module = importlib.import_module('.lang.%s.writers.writer' % language, package="monolithe.generators.sdk")
+        except:
+            raise Exception('Unsupported language %s.' % language)
+
+        if not hasattr(module, 'GeneralWriter'):
+            return
+
+        klass = module.GeneralWriter
+        writer = klass(monolithe_config=self.monolithe_config)
+        writer.perform(apiversions=apiversions)

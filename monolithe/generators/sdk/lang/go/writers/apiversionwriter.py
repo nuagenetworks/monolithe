@@ -32,7 +32,7 @@ from monolithe.lib import TaskManager
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class SDKAPIVersionWriter(TemplateFileWriter):
+class APIVersionWriter(TemplateFileWriter):
     """ Provide usefull method to write Go files.
 
     """
@@ -40,7 +40,7 @@ class SDKAPIVersionWriter(TemplateFileWriter):
         """ Initializes a _GoSDKAPIVersionFileWriter
 
         """
-        super(SDKAPIVersionWriter, self).__init__(package="monolithe.generators.sdk.lang.go")
+        super(APIVersionWriter, self).__init__(package="monolithe.generators.sdk.lang.go")
 
         self.monolithe_config = monolithe_config
 

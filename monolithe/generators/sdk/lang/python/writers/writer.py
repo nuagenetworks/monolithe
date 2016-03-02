@@ -29,14 +29,14 @@ from monolithe.lib import SDKUtils
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class SDKWriter(TemplateFileWriter):
+class GeneralWriter(TemplateFileWriter):
     """
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(SDKWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
+        super(GeneralWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
 
         self.monolithe_config = monolithe_config
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")

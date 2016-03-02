@@ -25,34 +25,31 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.lib import Printer
-from monolithe.generators.lib import Generator
-from .lib import APIDocManager
+import importlib
 
 
-class APIDocumentationGenerator(Generator):
-    """ Generate SDK API Documentation
-
+class CLIWriterManager(object):
+    """
     """
 
-    def generate(self, specification_info):
-        """ Start generation ofthe API Documentation
+    def __init__(self, monolithe_config):
         """
-        apidoc_output = self.monolithe_config.get_option("apidoc_output", "apidoc")
-        apidoc_user_vanilla = self.monolithe_config.get_option("apidoc_user_vanilla", "apidoc")
-        sdk_name = self.monolithe_config.get_option("product_name")
-        product_name = self.monolithe_config.get_option("product_name")
+        """
+        self.monolithe_config = monolithe_config
 
-        doc_manager = APIDocManager(self.monolithe_config)
+    def execute(self):
+        """
+        """
+        language = self.monolithe_config.language
 
-        for info in specification_info:
+        try:
+            module = importlib.import_module('.lang.%s.writers.cliwriter' % language, package="monolithe.generators.sdk")
+        except:
+            raise Exception('Unsupported language %s.' % language)
 
-            vanilla_output_path = "%s/%s/%s" % (apidoc_output, sdk_name, info["api"]["version"])
+        if not hasattr(module, 'CLIWriter'):
+            return
 
-            self.install_system_vanilla(current_file=__file__, output_path=vanilla_output_path, multi_lang=False)
-            self.install_user_vanilla(user_vanilla_path=apidoc_user_vanilla, output_path=vanilla_output_path, multi_lang=False)
-
-            Printer.log("generating %s api documentation for api version: %s" % (product_name, info["api"]["version"]))
-            doc_manager.execute(specifications=info["specifications"], api_info=info["api"])
-
-        Printer.success("%s api documentation generation complete and available at \"%s\"" % (product_name, apidoc_output))
+        klass = module.CLIWriter
+        writer = klass(monolithe_config=self.monolithe_config)
+        writer.perform()

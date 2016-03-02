@@ -28,14 +28,14 @@
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class SDKWriter(TemplateFileWriter):
+class GeneralWriter(TemplateFileWriter):
     """
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(SDKWriter, self).__init__(package="monolithe.generators.sdk.lang.go")
+        super(GeneralWriter, self).__init__(package="monolithe.generators.sdk.lang.go")
 
     def perform(self, apiversions):
         """

@@ -25,59 +25,27 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.lib import TaskManager
 from monolithe.generators.lib import TemplateFileWriter
+from monolithe.lib import SDKUtils, TaskManager
 
 
-class APIDocManager(object):
-    """ Writer of the Python SDK Documentation
-
-    """
-
-    def __init__(self, monolithe_config):
-        """
-        """
-        self.writer = None
-        self.monolithe_config = monolithe_config
-
-    def execute(self, specifications, api_info):
-        """
-        """
-        filenames = dict()
-        task_manager = TaskManager()
-
-        self.api_info = api_info
-        self.writer = APIDocFileWriter(monolithe_config=self.monolithe_config, api_info=self.api_info)
-
-        for specification in specifications.values():
-            task_manager.start_task(method=self._write_specification, specification=specification, specification_set=specifications, filenames=filenames)
-
-        task_manager.wait_until_exit()
-
-        self.writer.write_index(specifications.values())
-
-    def _write_specification(self, specification, specification_set, filenames):
-        """
-        """
-        if specification.rest_name != self.api_info:
-            (filename, classname) = self.writer.write_specification(specification=specification, specification_set=specification_set)
-            filenames[filename] = classname
-
-
-class APIDocFileWriter(TemplateFileWriter):
+class APIVersionWriter(TemplateFileWriter):
     """
     """
 
     def __init__(self, monolithe_config, api_info):
         """
         """
-        super(APIDocFileWriter, self).__init__(package="monolithe.generators.apidoc")
+        super(APIVersionWriter, self).__init__(package="monolithe.generators.sdk.lang.html")
 
         self.monolithe_config = monolithe_config
-        self._apidoc_output = self.monolithe_config.get_option("apidoc_output", "apidoc")
+
+        self._api_version = api_info["version"]
+        self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/%s/%s" % (self._apidoc_output, self._product_name, api_info["version"])
+        self.output_directory = "%s/html/%s" % (self._sdk_output, SDKUtils.get_string_version(self._api_version))
 
     def _get_actions(self, obj):
         """
@@ -96,7 +64,18 @@ class APIDocFileWriter(TemplateFileWriter):
             actions.append("DELETE")
         return actions
 
-    def write_specification(self, specification, specification_set):
+    def perform(self, specifications):
+        """
+        """
+
+        task_manager = TaskManager()
+        for rest_name, specification in specifications.iteritems():
+            task_manager.start_task(method=self._write_specification, specification=specification, specification_set=specifications)
+        task_manager.wait_until_exit()
+
+        self._write_index(specifications)
+
+    def _write_specification(self, specification, specification_set):
         """
         """
         filename = "%s.html" % specification.rest_name.lower()
@@ -115,6 +94,7 @@ class APIDocFileWriter(TemplateFileWriter):
         self_apis = [{"actions": self._get_actions(specification)}]
 
         self.write(destination=self.output_directory, filename=filename, template_name="object.html.tpl",
+                   apiversion=self._api_version,
                    specification=specification,
                    parent_apis=parent_apis,
                    child_apis=child_apis,
@@ -123,10 +103,10 @@ class APIDocFileWriter(TemplateFileWriter):
 
         return (filename, specification.entity_name)
 
-    def write_index(self, specifications):
+    def _write_index(self, specifications):
         """
         """
-
         self.write(destination=self.output_directory, filename="index.html", template_name="index.html.tpl",
-                   specifications=specifications,
+                   apiversion=self._api_version,
+                   specifications=specifications.values(),
                    product_name=self._product_name)
