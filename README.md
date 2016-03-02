@@ -24,21 +24,9 @@ Monolithe is before all a framework that you can integrate with other tools.
 
 > And remember, kids! You should always be using a virtualenv.
 
-You can install Monolithe from PyPi:
+You can install Monolithe by running the following command:
 
-    $ pip install monolithe
-
-Or install it from the source:
-
-    $ python setup.py install
-
-Or install it in develop mode:
-
-    $ python setup.py develop
-
-Or directly run the command wrappers provided in the `commands` directory. Simply install the dependencies once:
-
-    $ pip install -r requirements.txt
+    pip install git+https://github.com/nuagenetworks/monolithe.git
 
 
 ## ToDoList Tutorial
@@ -57,14 +45,14 @@ The example is composed of:
 
 ### Step 1: install dependencies
 
-    $ cd monolithe # be sure to go and stay there for the rest of the tutorial ;)
-    $ pip install flask
-    $ pip install -r `requirements.txt`
+    cd monolithe # be sure to go and stay there for the rest of the tutorial ;)
+    pip install flask
+    pip install -r `requirements.txt`
 
 
 ### Step 2: generate the tdldk
 
-    $ ./commands/monogen-sdk -f examples/specifications -L python
+    ./commands/monogen-sdk -f examples/specifications -L python
 
 > Customizable using the configuration and the content of the `vanilla/python` folder.
 
@@ -76,9 +64,9 @@ It contains all the auto-generated sdk source code according to the specificatio
 
 You can install it by doing:
 
-    $ cd examples/codegen
-    $ python setup.py develop
-    $ cd ../..
+    cd examples/codegen
+    python setup.py develop
+    cd ../..
 
 > This is mandatory for Step 6
 
@@ -86,7 +74,7 @@ You can install it by doing:
 
 ### Step 3: generate the ReST api documentation
 
-    $ ./commands/monogen-sdk -f examples/specifications -L html
+    ./commands/monogen-sdk -f examples/specifications -L html
 
 > Customizable using the configuration and the content of the `vanilla/html` folder.
 
@@ -97,19 +85,14 @@ You can open the `index.html` to navigate the api documentation.
 
 ### Step 4: start the demo server
 
-    $ ./examples/demo-server.py
-    > * Running on http://127.0.0.1:2000/ (Press CTRL+C to quit)
+    ./examples/demo-server.py
+    > * Running on http://127.0.0.1:5555/ (Press CTRL+C to quit)
     > * Restarting with stat
-
-check that it's working by doing
-
-    $ curl http://127.0.0.1:2000/api/v1_0/lists
-    > [{"description": "Things to buy", "ID": "1", "title": "Shopping List"}, {"description": "You should not see this", "ID": "2", "title": "Secret List"}]
 
 
 ### Step 5: run the client
 
-    $ ./examples/demo-client.py
+    ./examples/demo-client.py
 
 And follow on screen instructions.
 
@@ -123,11 +106,11 @@ Each Monolithe SDK comes with a command line interface. According to the Monolit
 You can simply run
 
     # hint: the exports can be put in a source file ;)
-    $ export TDL_USERNAME=user
-    $ export TDL_PASSWORD=password
-    $ export TDL_API_URL=http://127.0.0.1:5000
-    $ export TDL_API_VERSION=1.0
-    $ export TDL_ENTERPRISE=root
+    export TDL_USERNAME=user
+    export TDL_PASSWORD=password
+    export TDL_API_URL=http://127.0.0.1:5555
+    export TDL_API_VERSION=1.0
+    export TDL_ENTERPRISE=root
 
     $ tdl create task --in lists 2 -p title='my task' description='from cli'
     > [Success] task has been created with ID=b3ae22d2-6c87-11e5-be61-080027ba8f35
@@ -157,14 +140,13 @@ You can simply run
 
 ## Command Line Interfaces Quick Reference
 
-### monogen-sdk
-This command will generate a sdk using specifications either from a local folder, or from a Github repository.
+`monogen-sdk` command will generate a sdk using specifications either from a local folder, or from a Github repository.
 
 #### From Github
 
 Using your username/password:
 
-    $ monogen-sdk --config [conf.ini] --branches [branch1[,branch2,...branchX]]
+    monogen-sdk --branches [branch1[,branch2,...branchX]]
     > Enter your Github API URL: [https://api.github.com/v3]
     > Enter your Github login: [username]
     > Enter your Github organization: [repo-organization]
@@ -173,25 +155,25 @@ Using your username/password:
 
 Of course, you can give all those parameters right from the cli:
 
-    $ monogen-sdk --config [conf.ini] -g [https://api.gitbhub.com/3] -l [username] -o [repo-organization] -r [repo-name] -b [branch1[,branch2,...branchX]]
+    monogen-sdk -g [https://api.gitbhub.com/3] -l [username] -o [repo-organization] -r [repo-name] -b [branch1[,branch2,...branchX]]
     > Enter your Github Password:
 
-You can also use a Github Application Token (https://github.com/settings/tokens):
+You can use a Github Application Token (https://github.com/settings/tokens):
 
-    $ monogen-sdk --config [conf.ini] -g [https://gitbhub.com] -t [token] -o [repo-organization] -r [repo-name] -b [branch1[,branch2,...branchX]]
+    monogen-sdk -g [https://gitbhub.com] -t [token] -o [repo-organization] -r [repo-name] -b [branch1[,branch2,...branchX]]
 
 Then you won't have to enter your password.
 
 You can also defaults certains arguments by using a environment variables, and eventually put them in a source file:
 
-    $ cat ~/.monorc
+    cat ~/.monorc
     > export MONOLITHE_GITHUB_API_URL=[https://api.github.com/v3]
     > export MONOLITHE_GITHUB_TOKEN=[token]
     > export MONOLITHE_GITHUB_ORGANIZATION=[repo-organization]
     > export MONOLITHE_GITHUB_REPOSITORY=[repo-name]
     > export MONOLITHE_CONFIG_REPOSITORY_PATH=[/path/to/specsfolder]
     > export MONOLITHE_CONFIG_FULLPATH=[path/to/conf]
-    $ source ~/.monorc
+    source ~/.monorc
 
 Then simply:
 
@@ -200,21 +182,4 @@ Then simply:
 
 ##### From a folder
 
-    $ monogen-sdk --config [conf.ini] --folder [/path/to/specifications/]
-
-
-
-#### monogen-apidoc
-
-This command will generate a ReST api documentation using specifications either from a local folder, or from a Github repository.
-
-> This command is very similar to `monogen-sdk`.
-
-##### From a folder
-
-    $ monogen-apidoc --config [conf.ini] --folder [/path/to/specifications/]
-
-##### From Github
-
-The `monogen-apidoc` works exactly the same than `monogen-sdk`
-
+    $ monogen-sdk --folder [/path/to/specifications/]
