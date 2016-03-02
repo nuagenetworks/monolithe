@@ -31,7 +31,7 @@ from ConfigParser import RawConfigParser
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
+class SDKAPIVersionWriter(TemplateFileWriter):
     """ Provide usefull method to write Go files.
 
     """
@@ -39,7 +39,7 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
         """ Initializes a _GoSDKAPIVersionFileWriter
 
         """
-        super(_GoSDKAPIVersionFileWriter, self).__init__(package="monolithe.generators.sdk.go")
+        super(SDKAPIVersionWriter, self).__init__(package="monolithe.generators.sdk.go")
 
         self.api_version = api_info["version"]
         self.api_root = api_info["root"]

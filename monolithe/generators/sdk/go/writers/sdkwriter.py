@@ -25,15 +25,14 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.lib import SDKUtils
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class _GoSDKFileWriter(TemplateFileWriter):
+class SDKWriter(TemplateFileWriter):
     """
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(_GoSDKFileWriter, self).__init__(package="monolithe.generators.sdk.go")
+        super(SDKWriter, self).__init__(package="monolithe.generators.sdk.go")

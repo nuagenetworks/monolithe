@@ -25,8 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from ..python.writers.cliwriter import _PythonCLIFileWriter
-from ..go.writers.cliwriter import _GoCLIFileWriter
+import importlib
 
 
 class CLIWriter(object):
@@ -53,15 +52,11 @@ class CLIWriter(object):
         """ Get the appropriate writer
         """
         language = self.monolithe_config.language
-        klass = None
 
-        if language == 'python':
-            klass = _PythonCLIFileWriter
-
-        elif language == 'go':
-            klass = _GoCLIFileWriter
-
-        if klass is None:
-            raise Exception('Unsupported language %s. Please create the appropriate class in cliwriter.py' % language)
+        try:
+            module = importlib.import_module('.%s.writers.cliwriter' % language, package="monolithe.generators.sdk")
+            klass = module.CLIWriter
+        except:
+            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
         return klass(monolithe_config=self.monolithe_config)

@@ -25,10 +25,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.lib import TaskManager
+import importlib
 
-from ..python.writers.sdkapiversionwriter import _PythonSDKAPIVersionFileWriter
-from ..go.writers.sdkapiversionwriter import _GoSDKAPIVersionFileWriter
+from monolithe.lib import TaskManager
 
 
 class SDKAPIVersionWriter(object):
@@ -85,16 +84,12 @@ class SDKAPIVersionWriter(object):
         """ Get the appropriate writer
         """
         language = self.monolithe_config.language
-        klass = None
 
-        if language == 'python':
-            klass = _PythonSDKAPIVersionFileWriter
-
-        elif language == 'go':
-            klass = _GoSDKAPIVersionFileWriter
-
-        if klass is None:
-            raise Exception('Unsupported language %s. Please create the appropriate class in sdkapiversionwriter.py' % language)
+        try:
+            module = importlib.import_module('.%s.writers.sdkapiversionwriter' % language, package="monolithe.generators.sdk")
+            klass = module.SDKAPIVersionWriter
+        except:
+            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
         return klass(monolithe_config=self.monolithe_config, api_info=self.api_info)
 

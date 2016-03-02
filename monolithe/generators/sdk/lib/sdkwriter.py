@@ -25,8 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from ..python.writers.sdkwriter import _PythonSDKFileWriter
-from ..go.writers.sdkwriter import _GoSDKFileWriter
+import importlib
 
 
 class SDKWriter(object):
@@ -54,15 +53,11 @@ class SDKWriter(object):
         """ Get the appropriate writer
         """
         language = self.monolithe_config.language
-        klass = None
 
-        if language == 'python':
-            klass = _PythonSDKFileWriter
-
-        elif language == 'go':
-            klass = _GoSDKFileWriter
-
-        if klass is None:
+        try:
+            module = importlib.import_module('.%s.writers.sdkwriter' % language, package="monolithe.generators.sdk")
+            klass = module.SDKWriter
+        except:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
         return klass(monolithe_config=self.monolithe_config)

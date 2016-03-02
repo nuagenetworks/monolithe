@@ -28,11 +28,11 @@
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class _GoCLIFileWriter(TemplateFileWriter):
+class CLIWriter(TemplateFileWriter):
     """ Implements `write_cli` that writes CLI Go files
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(_GoCLIFileWriter, self).__init__(package="monolithe.generators.sdk.go")
+        super(CLIWriter, self).__init__(package="monolithe.generators.sdk.go")

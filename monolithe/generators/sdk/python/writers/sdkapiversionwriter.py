@@ -33,7 +33,7 @@ from monolithe.lib import SDKUtils
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
+class SDKAPIVersionWriter(TemplateFileWriter):
     """ Provide usefull method to write Python files.
 
     """
@@ -41,7 +41,7 @@ class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
         """ Initializes a _PythonSDKAPIVersionFileWriter
 
         """
-        super(_PythonSDKAPIVersionFileWriter, self).__init__(package="monolithe.generators.sdk.python")
+        super(SDKAPIVersionWriter, self).__init__(package="monolithe.generators.sdk.python")
 
         self.api_version = api_info["version"]
         self.api_root = api_info["root"]

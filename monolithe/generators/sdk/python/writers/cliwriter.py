@@ -28,14 +28,14 @@
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class _PythonCLIFileWriter(TemplateFileWriter):
+class CLIWriter(TemplateFileWriter):
     """ Implements `write_cli` that writes CLI python files
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(_PythonCLIFileWriter, self).__init__(package="monolithe.generators.sdk.python")
+        super(CLIWriter, self).__init__(package="monolithe.generators.sdk.python")
 
         self.monolithe_config = monolithe_config
         self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
