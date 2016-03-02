@@ -62,19 +62,21 @@ class SDKGenerator(Generator):
         user_vanilla = self.monolithe_config.get_option("user_vanilla", "transformer")
         output = self.monolithe_config.get_option("output", "transformer")
         name = self.monolithe_config.get_option("name", "transformer")
+        lang = self.monolithe_config.language
 
-        self.install_system_vanilla(current_file=__file__, output_path="%s/%s" % (output, self.monolithe_config.language))
-        self.install_user_vanilla(user_vanilla_path=user_vanilla, output_path="%s/%s" % (output, self.monolithe_config.language))
+        self.install_system_vanilla(current_file=__file__, output_path="%s/%s" % (output, lang))
+        self.install_user_vanilla(user_vanilla_path=user_vanilla, output_path="%s/%s" % (output, lang))
 
-        generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
+        version_generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
         apiversions = []
 
         for info in specification_info:
+            Printer.log("transforming specifications into %s for version %s..." % (lang, info["api"]["version"]))
             apiversions.append(info["api"]["version"])
 
-        generator.generate(specification_info=specification_info)
+        version_generator.generate(specification_info=specification_info)
 
-        Printer.log("assembling all packages...")
+        Printer.log("assembling...")
         manager = WriterManager(monolithe_config=self.monolithe_config)
         manager.execute(apiversions=apiversions)
 
