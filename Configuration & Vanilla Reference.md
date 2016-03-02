@@ -142,11 +142,6 @@ For example:
 
 	sdk_cli_name=todolist
 
-
-### The [sdkdoc] Section
-
-This section contains information needed to generate the sdk Documentation.
-
 #### sdkdoc_output
 
 The path where the generation of the sdk documentation will be created.
