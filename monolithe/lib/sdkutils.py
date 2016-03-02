@@ -27,8 +27,6 @@
 
 import re
 
-from monolithe.lib import Printer
-
 
 class SDKUtils(object):
     """ SDK Utilities
@@ -152,9 +150,6 @@ class SDKUtils(object):
         if language == 'python':
             method = cls.get_python_name
 
-        elif language == 'ruby':
-            method = cls.get_ruby_name
-
         elif language == 'go':
             method = cls.get_go_name
 
@@ -182,9 +177,6 @@ class SDKUtils(object):
 
         if language == 'python':
             method = cls.get_python_type_name
-
-        elif language == 'ruby':
-            method = cls.get_ruby_type_name
 
         elif language == 'go':
             method = cls.get_go_type_name
@@ -255,55 +247,10 @@ class SDKUtils(object):
         if type_name == "integer":
             return "int"
 
-        if type_name ==  "time":
+        if type_name == "time":
             return "float"
 
-        if type_name ==  "object":
-            return "dict"
-
-        return type_name
-
-    # Ruby methods
-
-    @classmethod
-    def get_ruby_name(cls, name):
-        """ Transform a given name to ruby name
-
-            Args:
-                name (string): the name to convert
-
-            Returns:
-                A ruby name
-
-            Exammple:
-                get_ruby_name(EnterpriseNetwork)
-                >>> enterprise_network
-
-        """
-        first_cap_re = re.compile("(.)([A-Z](?!s([A-Z])*)[a-z]+)")
-        all_cap_re = re.compile("([a-z0-9])([A-Z])")
-
-        s1 = first_cap_re.sub(r"\1_\2", cls._string_clean(name))
-        return all_cap_re.sub(r"\1_\2", s1).lower()
-
-    @classmethod
-    def get_ruby_type_name(cls, type_name, sub_type=None):
-        """ Returns a ruby type according to a spec type
-
-        """
-        if type_name in ("string", "enum"):
-            return "str"
-
-        if type_name == "boolean":
-            return "bool"
-
-        if type_name == "integer":
-            return "int"
-
-        if type_name ==  "time":
-            return "float"
-
-        if type_name ==  "object":
+        if type_name == "object":
             return "dict"
 
         return type_name
@@ -316,10 +263,10 @@ class SDKUtils(object):
                 name (string): the name to convert
 
             Returns:
-                A ruby name
+                A go name
 
             Exammple:
-                get_ruby_name(EnterpriseNetwork)
+                get_go_name(EnterpriseNetwork)
                 >>> enterprise_network
 
         """
@@ -346,7 +293,7 @@ class SDKUtils(object):
         if type_name == "integer":
             return "int"
 
-        if type_name ==  "time":
+        if type_name == "time":
             return "float64"
 
         return "interface{}"

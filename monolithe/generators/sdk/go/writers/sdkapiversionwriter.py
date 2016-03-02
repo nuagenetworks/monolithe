@@ -26,11 +26,8 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import shutil
-from collections import OrderedDict
 from ConfigParser import RawConfigParser
 
-from monolithe.lib import SDKUtils
 from monolithe.generators.lib import TemplateFileWriter
 
 
@@ -83,7 +80,6 @@ class _GoSDKAPIVersionFileWriter(TemplateFileWriter):
                    sdk_api_prefix=self.api_prefix,
                    sdk_name=self._sdk_name,
                    header=self.header_content)
-
 
     def write_model(self, specification, specification_set):
         """ Write autogenerate specification file

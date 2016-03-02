@@ -27,10 +27,7 @@
 
 import os
 import shutil
-import sys
 
-from monolithe import MonolitheConfig
-from monolithe.lib import SDKUtils
 from monolithe.lib import Printer
 from monolithe.generators.lib import Generator
 from .lib import SDKWriter, CLIWriter
@@ -103,4 +100,3 @@ class SDKGenerator(Generator):
             Printer.success("%s documentation generation complete and available in \"%s\"" % (sdk_name, output_path))
         else:
             Printer.warn("no documentation generator for this language. ignoring")
-

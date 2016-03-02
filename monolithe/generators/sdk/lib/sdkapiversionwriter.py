@@ -25,11 +25,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 from monolithe.lib import TaskManager
 
 from ..python.writers.sdkapiversionwriter import _PythonSDKAPIVersionFileWriter
-from ..ruby.writers.sdkapiversionwriter import _RubySDKAPIVersionFileWriter
 from ..go.writers.sdkapiversionwriter import _GoSDKAPIVersionFileWriter
 
 
@@ -89,10 +87,7 @@ class SDKAPIVersionWriter(object):
         language = self.monolithe_config.language
         klass = None
 
-        if language == 'ruby':
-            klass = _RubySDKAPIVersionFileWriter
-
-        elif language == 'python':
+        if language == 'python':
             klass = _PythonSDKAPIVersionFileWriter
 
         elif language == 'go':

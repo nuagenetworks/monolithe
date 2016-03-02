@@ -81,8 +81,7 @@ def main(argv=sys.argv):
                         metavar="branches",
                         help="The branches of the specifications to use to generate the documentation (examples: \"master 3.2\")",
                         nargs="*",
-                        type=str,
-                        required=True)
+                        type=str)
 
     parser.add_argument("-f", "--folder",
                         dest="folder",
@@ -120,6 +119,11 @@ def main(argv=sys.argv):
             generator.retrieve_monolithe_config_from_folder()
         generator.generate_from_folder()
     else:
+
+        if not args.branches:
+            print "You must provide the --branches options. Use --help for help."
+            sys.exit(1)
+
         # Use environment variable if necessary
         if not args.api_url and "MONOLITHE_GITHUB_API_URL" in os.environ:
             args.api_url = os.environ["MONOLITHE_GITHUB_API_URL"]

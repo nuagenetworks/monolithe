@@ -82,26 +82,26 @@ class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
         override_content = self._extract_override_content(base_name)
 
         self.write(destination=self.output_directory, filename=filename, template_name="session.py.tpl",
-                    version=self.api_version,
-                    product_accronym=self._product_accronym,
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    sdk_root_api=self.api_root,
-                    sdk_api_prefix=self.api_prefix,
-                    override_content=override_content,
-                    header=self.header_content)
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   sdk_class_prefix=self._sdk_class_prefix,
+                   sdk_root_api=self.api_root,
+                   sdk_api_prefix=self.api_prefix,
+                   override_content=override_content,
+                   header=self.header_content)
 
     def _write_sdk_info(self):
         """ Write API Info file
         """
         self.write(destination=self.output_directory, filename="sdkinfo.py", template_name="sdkinfo.py.tpl",
-                    version=self.api_version,
-                    product_accronym=self._product_accronym,
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    sdk_root_api=self.api_root,
-                    sdk_api_prefix=self.api_prefix,
-                    product_name=self._product_name,
-                    sdk_name=self._sdk_name,
-                    header=self.header_content)
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   sdk_class_prefix=self._sdk_class_prefix,
+                   sdk_root_api=self.api_root,
+                   sdk_api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   sdk_name=self._sdk_name,
+                   header=self.header_content)
 
     def _write_init_models(self, filenames):
         """ Write init file
@@ -112,10 +112,10 @@ class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
         """
 
         self.write(destination=self.output_directory, filename="__init__.py", template_name="__init_model__.py.tpl",
-                    filenames=self._prepare_filenames(filenames),
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym,
-                    header=self.header_content)
+                   filenames=self._prepare_filenames(filenames),
+                   sdk_class_prefix=self._sdk_class_prefix,
+                   product_accronym=self._product_accronym,
+                   header=self.header_content)
 
     def _prepare_filenames(self, filenames, suffix=''):
         """
@@ -138,15 +138,15 @@ class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
         superclass_name = "NURESTRootObject" if specification.rest_name == self.api_root else "NURESTObject"
 
         self.write(destination=self.output_directory, filename=filename, template_name="model.py.tpl",
-                    specification=specification,
-                    specification_set=specification_set,
-                    version=self.api_version,
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym,
-                    override_content=override_content,
-                    superclass_name=superclass_name,
-                    constants=constants,
-                    header=self.header_content)
+                   specification=specification,
+                   specification_set=specification_set,
+                   version=self.api_version,
+                   sdk_class_prefix=self._sdk_class_prefix,
+                   product_accronym=self._product_accronym,
+                   override_content=override_content,
+                   superclass_name=superclass_name,
+                   constants=constants,
+                   header=self.header_content)
 
         return (filename, specification.entity_name)
 
@@ -159,10 +159,10 @@ class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
         """
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
         self.write(destination=destination, filename="__init__.py", template_name="__init_fetcher__.py.tpl",
-                    filenames=self._prepare_filenames(filenames, suffix='Fetcher'),
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym,
-                    header=self.header_content)
+                   filenames=self._prepare_filenames(filenames, suffix='Fetcher'),
+                   sdk_class_prefix=self._sdk_class_prefix,
+                   product_accronym=self._product_accronym,
+                   header=self.header_content)
 
     def write_fetcher(self, specification, specification_set):
         """ Write fetcher
@@ -174,12 +174,12 @@ class _PythonSDKAPIVersionFileWriter(TemplateFileWriter):
         override_content = self._extract_override_content(base_name)
 
         self.write(destination=destination, filename=filename, template_name="fetcher.py.tpl",
-                    specification=specification,
-                    specification_set=specification_set,
-                    sdk_class_prefix=self._sdk_class_prefix,
-                    product_accronym=self._product_accronym,
-                    override_content=override_content,
-                    header=self.header_content)
+                   specification=specification,
+                   specification_set=specification_set,
+                   sdk_class_prefix=self._sdk_class_prefix,
+                   product_accronym=self._product_accronym,
+                   override_content=override_content,
+                   header=self.header_content)
 
         return (filename, specification.entity_name_plural)
 

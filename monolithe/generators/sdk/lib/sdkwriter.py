@@ -25,10 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.generators.lib import TemplateFileWriter
-
 from ..python.writers.sdkwriter import _PythonSDKFileWriter
-from ..ruby.writers.sdkwriter import _RubySDKFileWriter
 from ..go.writers.sdkwriter import _GoSDKFileWriter
 
 
@@ -59,10 +56,7 @@ class SDKWriter(object):
         language = self.monolithe_config.language
         klass = None
 
-        if language == 'ruby':
-            klass = _RubySDKFileWriter
-
-        elif language == 'python':
+        if language == 'python':
             klass = _PythonSDKFileWriter
 
         elif language == 'go':

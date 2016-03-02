@@ -113,7 +113,7 @@ def main(argv=sys.argv):
                         required=False,
                         type=str)
 
-    parser.add_argument("-L","--language",
+    parser.add_argument("-L", "--language",
                         dest="language",
                         help="Choose the output language of the SDK. Default is python",
                         default='python',

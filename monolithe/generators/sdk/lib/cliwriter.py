@@ -26,7 +26,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from ..python.writers.cliwriter import _PythonCLIFileWriter
-from ..ruby.writers.cliwriter import _RubyCLIFileWriter
 from ..go.writers.cliwriter import _GoCLIFileWriter
 
 
@@ -56,10 +55,7 @@ class CLIWriter(object):
         language = self.monolithe_config.language
         klass = None
 
-        if language == 'ruby':
-            klass = _RubyCLIFileWriter
-
-        elif language == 'python':
+        if language == 'python':
             klass = _PythonCLIFileWriter
 
         elif language == 'go':

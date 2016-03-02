@@ -25,12 +25,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os
-import sys
-import shutil
-
-from monolithe import MonolitheConfig
-from monolithe.lib import Printer
 from monolithe.generators.sdk.lib import SDKAPIVersionWriter
 
 
@@ -52,4 +46,3 @@ class SDKAPIVersionGenerator(object):
         for info in specification_info:
             writer = SDKAPIVersionWriter(monolithe_config=self.monolithe_config)
             writer.write(specifications=info["specifications"], api_info=info["api"])
-
