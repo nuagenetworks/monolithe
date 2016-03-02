@@ -25,6 +25,32 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from pkg_resources import iter_entry_points, load_entry_point
+
+_language_plugin_cache = {}
+
+
+def load_language_plugins(language, key):
+    """
+    """
+    global _language_plugin_cache
+
+    if key in _language_plugin_cache:
+        return True, _language_plugin_cache[language][key]
+
+    method = None
+    group = 'monolithe.plugin.lang.%s' % language
+    for entry_point in iter_entry_points(group=group, name='info'):
+        method = load_entry_point(entry_point.dist, group=group, name='info')
+        break
+
+    if method:
+        _language_plugin_cache[language] = method()
+        return True, _language_plugin_cache[language][key]
+    else:
+        _language_plugin_cache[language] = {'APIVersionWriter': None, 'PackageWriter': None, 'CLIWriter': None, 'VanillaWriter': None, 'get_idiomatic_name': None, 'get_type_name': None}
+        return False, None
+
 
 def apply_extension(extension, specification):
 

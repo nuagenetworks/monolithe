@@ -25,40 +25,39 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import importlib
+from monolithe.generators.lib import TemplateFileWriter
+from monolithe.lib import SDKUtils
 
 
-class APIVersionWriterManager(object):
-    """ Writer of the SDK
-
+class PackageWriter(TemplateFileWriter):
+    """
     """
 
     def __init__(self, monolithe_config):
         """
         """
+        super(PackageWriter, self).__init__(package="monolithe.generators.lang.html")
+
         self.monolithe_config = monolithe_config
 
-    def execute(self, specifications, api_info):
-        """ Write all files according to data
+        self._output = self.monolithe_config.get_option("output", "transformer")
+        self._product_name = self.monolithe_config.get_option("product_name")
 
-            Args:
-                specifications: A dict of all specifications to manage
-                api_info: the version of the api
+        self.output_directory = "%s/html/" % (self._output)
 
-            Returns:
-                Writes specifications and fetchers files
-
+    def perform(self, apiversions):
         """
-        language = self.monolithe_config.language
+        """
+        self._write_main_index(apiversions=apiversions)
 
-        try:
-            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
-        except:
-            raise Exception('Unsupported language %s.' % language)
+    def _write_main_index(self, apiversions):
+        """
+        """
+        versions = {}
 
-        if not hasattr(module, 'APIVersionWriter'):
-            return
+        for v in apiversions:
+            versions[v] = SDKUtils.get_string_version(v)
 
-        klass = module.APIVersionWriter
-        writer = klass(monolithe_config=self.monolithe_config, api_info=api_info)
-        writer.perform(specifications=specifications)
+        self.write(destination=self.output_directory, filename="index.html", template_name="main_index.html.tpl",
+                   apiversion=versions,
+                   product_name=self._product_name)

@@ -26,6 +26,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import importlib
+from .utils import load_language_plugins
 
 
 class SDKUtils(object):
@@ -33,7 +34,8 @@ class SDKUtils(object):
 
     """
 
-    lang_modules_cache = {}
+    idiomatic_methods_cache = {}
+    type_methods_cache = {}
 
     @classmethod
     def massage_type_name(cls, type_name):
@@ -147,23 +149,29 @@ class SDKUtils(object):
                 get_idiomatic_name_in_language("EnterpriseNetwork", "python")
                 >>> enterprise_network
         """
-        if language in cls.lang_modules_cache:
-            m = cls.lang_modules_cache[language]
+        if language in cls.idiomatic_methods_cache:
+            m = cls.idiomatic_methods_cache[language]
             if not m:
                 return name
-            return m.get_idiomatic_name(name)
+            return m(name)
 
-        try:
-            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
-        except:
-            raise Exception('Unsupported language %s.' % language)
+        found, method = load_language_plugins(language, 'get_idiomatic_name')
+        if found:
+            cls.idiomatic_methods_cache[language] = method
+            if method:
+                return method(name)
+            else:
+                return name
 
-        if not hasattr(module, "get_idiomatic_name"):
-            cls.lang_modules_cache[language] = None
+        module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
+
+        if not hasattr(module, 'get_idiomatic_name'):
+            cls.idiomatic_methods_cache[language] = None
             return name
 
-        cls.lang_modules_cache[language] = module
-        return module.get_idiomatic_name(name)
+        method = getattr(module, 'get_idiomatic_name')
+        cls.idiomatic_methods_cache[language] = method
+        return method(name)
 
     @classmethod
     def get_type_name_in_language(cls, type_name, sub_type, language):
@@ -180,20 +188,26 @@ class SDKUtils(object):
                 get_type_name_in_language("Varchar", "python")
                 >>> str
         """
-        if language in cls.lang_modules_cache:
-            m = cls.lang_modules_cache[language]
+        if language in cls.type_methods_cache:
+            m = cls.type_methods_cache[language]
             if not m:
                 return type_name
-            return m.get_type_name(type_name)
+            return m(type_name)
 
-        try:
-            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
-        except:
-            raise Exception('Unsupported language %s.' % language)
+        found, method = load_language_plugins(language, 'get_type_name')
+        if found:
+            cls.type_methods_cache[language] = method
+            if method:
+                return method(type_name, sub_type)
+            else:
+                return type_name
 
-        if not hasattr(module, "get_type_name"):
-            cls.lang_modules_cache[language] = None
+        module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
+
+        if not hasattr(module, 'get_type_name'):
+            cls.type_methods_cache[language] = None
             return type_name
 
-        cls.lang_modules_cache[language] = module
-        return module.get_type_name(type_name, sub_type)
+        method = getattr(module, 'get_type_name')
+        cls.type_methods_cache[language] = method
+        return method(type_name, sub_type)

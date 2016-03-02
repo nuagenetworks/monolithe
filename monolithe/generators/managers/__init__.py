@@ -25,8 +25,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["APIVersionWriterManager", "WriterManager", "CLIWriterManager"]
+__all__ = ['MainManager', 'VanillaManager', 'APIVersionManager', 'CLIManager']
 
-from .apiversionwritermanager import APIVersionWriterManager
-from .writermanager import WriterManager
-from .cliwritermanager import CLIWriterManager
+from .mainmanager import MainManager
+from .vanillamanager import VanillaManager
+from .apiversionmanager import APIVersionManager
+from .climanager import CLIManager

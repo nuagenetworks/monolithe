@@ -29,14 +29,14 @@ from monolithe.lib import SDKUtils
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class GeneralWriter(TemplateFileWriter):
+class PackageWriter(TemplateFileWriter):
     """
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        super(GeneralWriter, self).__init__(package="monolithe.generators.lang.python")
+        super(PackageWriter, self).__init__(package="monolithe.generators.lang.python")
 
         self.monolithe_config = monolithe_config
         self._transformation_name = self.monolithe_config.get_option("name", "transformer")

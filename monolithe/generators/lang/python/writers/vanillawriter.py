@@ -25,8 +25,24 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ['PackageWriter', 'VanillaWriter', 'APIVersionWriter']
+import os
+import shutil
 
-from .writers.packagewriter import PackageWriter
-from .writers.vanillawriter import VanillaWriter
-from .writers.apiversionwriter import APIVersionWriter
+
+class VanillaWriter(object):
+    """
+    """
+    def __init__(self, monolithe_config, output_path):
+        """
+        """
+        self.monolithe_config = monolithe_config
+        self.output_path = output_path
+
+    def perform(self):
+        """
+        """
+        if os.path.exists(self.output_path):
+            shutil.rmtree(self.output_path)
+
+        system_vanilla_path = os.path.join(os.path.dirname(__file__), "../vanilla")
+        shutil.copytree(system_vanilla_path, self.output_path)

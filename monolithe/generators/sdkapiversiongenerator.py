@@ -25,7 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.generators.managers import APIVersionWriterManager
+from monolithe.generators.managers import APIVersionManager
 
 
 class SDKAPIVersionGenerator(object):
@@ -42,5 +42,5 @@ class SDKAPIVersionGenerator(object):
         """
         """
         for info in specification_info:
-            manager = APIVersionWriterManager(monolithe_config=self.monolithe_config)
+            manager = APIVersionManager(monolithe_config=self.monolithe_config)
             manager.execute(specifications=info["specifications"], api_info=info["api"])

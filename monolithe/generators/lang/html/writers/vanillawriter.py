@@ -25,31 +25,24 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import importlib
+import os
+import shutil
 
 
-class CLIWriterManager(object):
+class VanillaWriter(object):
     """
     """
-
-    def __init__(self, monolithe_config):
+    def __init__(self, monolithe_config, output_path):
         """
         """
         self.monolithe_config = monolithe_config
+        self.output_path = output_path
 
-    def execute(self):
+    def perform(self):
         """
         """
-        language = self.monolithe_config.language
+        if os.path.exists(self.output_path):
+            shutil.rmtree(self.output_path)
 
-        try:
-            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
-        except:
-            raise Exception('Unsupported language %s.' % language)
-
-        if not hasattr(module, 'CLIWriter'):
-            return
-
-        klass = module.CLIWriter
-        writer = klass(monolithe_config=self.monolithe_config)
-        writer.perform()
+        system_vanilla_path = os.path.join(os.path.dirname(__file__), "../vanilla")
+        shutil.copytree(system_vanilla_path, self.output_path)

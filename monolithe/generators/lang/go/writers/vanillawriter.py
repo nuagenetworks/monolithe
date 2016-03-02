@@ -25,39 +25,24 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.generators.lib import TemplateFileWriter
-from monolithe.lib import SDKUtils
+import os
+import shutil
 
 
-class GeneralWriter(TemplateFileWriter):
+class VanillaWriter(object):
     """
     """
-
-    def __init__(self, monolithe_config):
+    def __init__(self, monolithe_config, output_path):
         """
         """
-        super(GeneralWriter, self).__init__(package="monolithe.generators.lang.html")
-
         self.monolithe_config = monolithe_config
+        self.output_path = output_path
 
-        self._output = self.monolithe_config.get_option("output", "transformer")
-        self._product_name = self.monolithe_config.get_option("product_name")
-
-        self.output_directory = "%s/html/" % (self._output)
-
-    def perform(self, apiversions):
+    def perform(self):
         """
         """
-        self._write_main_index(apiversions=apiversions)
+        if os.path.exists(self.output_path):
+            shutil.rmtree(self.output_path)
 
-    def _write_main_index(self, apiversions):
-        """
-        """
-        versions = {}
-
-        for v in apiversions:
-            versions[v] = SDKUtils.get_string_version(v)
-
-        self.write(destination=self.output_directory, filename="index.html", template_name="main_index.html.tpl",
-                   apiversion=versions,
-                   product_name=self._product_name)
+        system_vanilla_path = os.path.join(os.path.dirname(__file__), "../vanilla")
+        shutil.copytree(system_vanilla_path, self.output_path)

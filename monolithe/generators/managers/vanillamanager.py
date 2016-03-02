@@ -25,8 +25,22 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ['PackageWriter', 'VanillaWriter', 'APIVersionWriter']
+from .manager import Manager
 
-from .writers.packagewriter import PackageWriter
-from .writers.vanillawriter import VanillaWriter
-from .writers.apiversionwriter import APIVersionWriter
+
+class VanillaManager(Manager):
+    """
+    """
+
+    def __init__(self, monolithe_config):
+        """
+        """
+        super(VanillaManager, self).__init__(monolithe_config=monolithe_config, target_name='VanillaWriter')
+
+    def execute(self, output_path):
+        """
+        """
+        klass = self.get_managed_class()
+        if klass:
+            writer = klass(monolithe_config=self.monolithe_config, output_path=output_path)
+            writer.perform()

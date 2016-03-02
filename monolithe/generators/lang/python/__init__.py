@@ -25,9 +25,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["APIVersionWriter", "GeneralWriter", "CLIWriter", "get_idiomatic_name", "get_type_name"]
+__all__ = ['PackageWriter', 'VanillaWriter', 'APIVersionWriter', 'CLIWriter', 'get_idiomatic_name', 'get_type_name']
 
+from .writers.packagewriter import PackageWriter
+from .writers.vanillawriter import VanillaWriter
 from .writers.apiversionwriter import APIVersionWriter
-from .writers.writer import GeneralWriter
 from .writers.cliwriter import CLIWriter
+
 from .converter import get_idiomatic_name, get_type_name

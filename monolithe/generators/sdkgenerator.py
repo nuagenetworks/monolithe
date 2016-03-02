@@ -30,7 +30,7 @@ import shutil
 
 from monolithe.lib import Printer
 from monolithe.generators.lib import Generator
-from monolithe.generators.managers import WriterManager, CLIWriterManager
+from monolithe.generators.managers import MainManager, CLIManager, VanillaManager
 from .sdkapiversiongenerator import SDKAPIVersionGenerator
 
 
@@ -64,7 +64,9 @@ class SDKGenerator(Generator):
         name = self.monolithe_config.get_option("name", "transformer")
         lang = self.monolithe_config.language
 
-        self.install_system_vanilla(current_file=__file__, output_path="%s/%s" % (output, lang))
+        vanilla_manager = VanillaManager(monolithe_config=self.monolithe_config)
+        vanilla_manager.execute(output_path="%s/%s" % (output, lang))
+
         self.install_user_vanilla(user_vanilla_path=user_vanilla, output_path="%s/%s" % (output, lang))
 
         version_generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
@@ -77,10 +79,10 @@ class SDKGenerator(Generator):
         version_generator.generate(specification_info=specification_info)
 
         Printer.log("assembling...")
-        manager = WriterManager(monolithe_config=self.monolithe_config)
+        manager = MainManager(monolithe_config=self.monolithe_config)
         manager.execute(apiversions=apiversions)
 
-        cli_manager = CLIWriterManager(monolithe_config=self.monolithe_config)
+        cli_manager = CLIManager(monolithe_config=self.monolithe_config)
         cli_manager.execute()
 
         self.cleanup()
