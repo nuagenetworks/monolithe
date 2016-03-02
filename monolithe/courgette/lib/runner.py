@@ -30,13 +30,10 @@ import logging
 from unittest2 import TestSuite
 
 from monolithe.lib import SDKLoader
-from monolithe.lib import SDKUtils
 
 from .maker import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
 from .helper import TestHelper
 from .testcase import CourgetteTestRunner
-
-
 
 
 class CourgetteTestsRunner(object):

@@ -25,13 +25,15 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import re
+import importlib
 
 
 class SDKUtils(object):
     """ SDK Utilities
 
     """
+
+    lang_modules_cache = {}
 
     @classmethod
     def massage_type_name(cls, type_name):
@@ -68,7 +70,7 @@ class SDKUtils(object):
         return "string"
 
     @classmethod
-    def get_entity_name_plural(cls, singular_name):
+    def get_plural(cls, singular_name):
         """ Returns the plural name of the singular name
 
             Certain words are invariant.
@@ -131,7 +133,7 @@ class SDKUtils(object):
     # Commons language conversion
 
     @classmethod
-    def get_name_in_language(cls, name, language):
+    def get_idiomatic_name_in_language(cls, name, language):
         """ Get the name for the given language
 
             Args:
@@ -142,19 +144,19 @@ class SDKUtils(object):
                 a name in the given language
 
             Example:
-                get_name_in_language("EnterpriseNetwork", "python")
+                get_idiomatic_name_in_language("EnterpriseNetwork", "python")
                 >>> enterprise_network
         """
-        method = None
+        if language in cls.lang_modules_cache:
+            return cls.lang_modules_cache[language].get_idiomatic_name(name)
 
-        if language == 'python':
-            method = cls.get_python_name
+        try:
+            module = importlib.import_module('.lang.%s.converter' % language, package="monolithe.generators.sdk")
+            method = module.get_idiomatic_name
+        except:
+            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
-        elif language == 'go':
-            method = cls.get_go_name
-
-        if not method:
-            raise Exception("SDKUtils does not implement methods for language %s" % language)
+        cls.lang_modules_cache[language] = module
 
         return method(name)
 
@@ -173,127 +175,15 @@ class SDKUtils(object):
                 get_type_name_in_language("Varchar", "python")
                 >>> str
         """
-        method = None
+        if language in cls.lang_modules_cache:
+            return cls.lang_modules_cache[language].get_type_name(type_name, sub_type)
 
-        if language == 'python':
-            method = cls.get_python_type_name
+        try:
+            module = importlib.import_module('.lang.%s.converter' % language, package="monolithe.generators.sdk")
+            method = module.get_type_name
+        except:
+            raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
-        elif language == 'go':
-            method = cls.get_go_type_name
-
-        if not method:
-            raise Exception("SDKUtils does not implement methods for language %s" % language)
+        cls.lang_modules_cache[language] = module
 
         return method(type_name, sub_type)
-
-    # Python methods
-
-    @classmethod
-    def _string_clean(cls, string):
-        """ String cleaning for specific cases
-
-            This is very specific and is used to force
-            some underscore while using get_python_name.
-
-            Args:
-                string: the string to clean
-
-            Returns:
-                Returns a clean string
-        """
-        rep = {
-            "IPID": "IpID",
-            "VCenter": "Vcenter",
-            "vCenter": "Vcenter",
-            "VPort": "Vport",
-        }
-
-        rep = dict((re.escape(k), v) for k, v in rep.iteritems())
-        pattern = re.compile("|".join(rep.keys()))
-        return pattern.sub(lambda m: rep[re.escape(m.group(0))], string)
-
-    @classmethod
-    def get_python_name(cls, name):
-        """ Transform a given name to python name
-
-            Args:
-                name (string): the name to convert
-
-            Returns:
-                A pythonic name
-
-            Exammple:
-                get_python_name(EnterpriseNetwork)
-                >>> enterprise_network
-
-        """
-        first_cap_re = re.compile("(.)([A-Z](?!s([A-Z])*)[a-z]+)")
-        all_cap_re = re.compile("([a-z0-9])([A-Z])")
-
-        s1 = first_cap_re.sub(r"\1_\2", cls._string_clean(name))
-        return all_cap_re.sub(r"\1_\2", s1).lower()
-
-    @classmethod
-    def get_python_type_name(cls, type_name, sub_type=None):
-        """ Returns a python type according to a spec type
-
-        """
-        if type_name in ("string", "enum"):
-            return "str"
-
-        if type_name == "boolean":
-            return "bool"
-
-        if type_name == "integer":
-            return "int"
-
-        if type_name == "time":
-            return "float"
-
-        if type_name == "object":
-            return "dict"
-
-        return type_name
-
-    @classmethod
-    def get_go_name(cls, name):
-        """ Transform a given name to go name
-
-            Args:
-                name (string): the name to convert
-
-            Returns:
-                A go name
-
-            Exammple:
-                get_go_name(EnterpriseNetwork)
-                >>> enterprise_network
-
-        """
-        return name
-
-    @classmethod
-    def get_go_type_name(cls, type_name, sub_type=None):
-        """ Returns a go type according to a spec type
-
-        """
-        if type_name in ("string", "enum"):
-            return "string"
-
-        if type_name == "float":
-            return "float64"
-
-        if type_name == "boolean":
-            return "bool"
-
-        if type_name == "list":
-            st = cls.get_go_type_name(type_name=sub_type, sub_type=None) if sub_type else "interface{}"
-            return "[]%s" % st
-
-        if type_name == "integer":
-            return "int"
-
-        if type_name == "time":
-            return "float64"
-
-        return "interface{}"

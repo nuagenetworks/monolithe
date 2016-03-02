@@ -87,9 +87,9 @@ class Specification(object):
         language = self.monolithe_config.language if self.monolithe_config else 'python'
 
         if value:
-            self.instance_name = SDKUtils.get_name_in_language(name=value, language=language)
-            self.entity_name_plural = SDKUtils.get_entity_name_plural(singular_name=value)
-            self.instance_name_plural = SDKUtils.get_name_in_language(name=self.entity_name_plural, language=language)
+            self.instance_name = SDKUtils.get_idiomatic_name_in_language(name=value, language=language)
+            self.entity_name_plural = SDKUtils.get_plural(singular_name=value)
+            self.instance_name_plural = SDKUtils.get_idiomatic_name_in_language(name=self.entity_name_plural, language=language)
 
     def to_dict(self):
         """ Transform the current specification to a dictionary

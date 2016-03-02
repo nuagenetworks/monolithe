@@ -107,9 +107,9 @@ class SpecificationAttribute(object):
         language = self.specification.monolithe_config.language if self.specification and self.specification.monolithe_config else 'python'
 
         if self.specification and self.specification.monolithe_config:
-            self.local_name = SDKUtils.get_name_in_language(name=self.specification.monolithe_config.map_attribute(self.specification.rest_name, value), language=language)
+            self.local_name = SDKUtils.get_idiomatic_name_in_language(name=self.specification.monolithe_config.map_attribute(self.specification.rest_name, value), language=language)
         else:
-            self.local_name = SDKUtils.get_name_in_language(name=value, language=language)
+            self.local_name = SDKUtils.get_idiomatic_name_in_language(name=value, language=language)
 
     def from_dict(self, data):
         """

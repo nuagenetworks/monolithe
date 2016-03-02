@@ -37,7 +37,7 @@ class CLICommand(object):
         parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
 
         classname = instance.__class__.__name__[2:]
-        plural_classname = Utils.get_entity_name_plural(classname)
+        plural_classname = Utils.get_plural(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
         query_parameters = cls._get_attributes(args.query_parameters)
 
@@ -72,7 +72,7 @@ class CLICommand(object):
         parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
 
         classname = instance.__class__.__name__[2:]
-        plural_classname = Utils.get_entity_name_plural(classname)
+        plural_classname = Utils.get_plural(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
         query_parameters = cls._get_attributes(args.query_parameters)
 
@@ -259,7 +259,7 @@ class CLICommand(object):
             name = Utils.get_singular_name(args.parent)
             instance = inspector.get_sdk_instance(name)
 
-            objects = [Utils.get_entity_name_plural(name) for name in instance.children_rest_names]
+            objects = [Utils.get_plural(name) for name in instance.children_rest_names]
         else:
             objects = inspector.get_all_objects()
 
@@ -351,13 +351,12 @@ class CLICommand(object):
 
         name = Utils.get_singular_name(args.name)
         object_class = inspector.get_sdk_class(name)
-        object_type = object_class()
 
         session = inspector.get_user_session(args)
         resource = inspector.get_sdk_parent(args.parent_infos, session.root_object)
 
         classname = object_class.__name__[2:]
-        plural_classname = Utils.get_entity_name_plural(classname)
+        plural_classname = Utils.get_plural(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
 
         try:
