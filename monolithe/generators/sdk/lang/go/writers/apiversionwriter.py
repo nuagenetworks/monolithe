@@ -48,8 +48,8 @@ class APIVersionWriter(TemplateFileWriter):
         self.api_root = api_info["root"]
         self.api_prefix = api_info["prefix"]
 
-        self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
-        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+        self._sdk_output = self.monolithe_config.get_option("output", "transformer")
+        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 

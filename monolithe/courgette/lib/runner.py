@@ -29,8 +29,7 @@ import logging
 
 from unittest2 import TestSuite
 
-from monolithe.lib import SDKLoader
-
+from .sdkloader import SDKLoader
 from .maker import GetTestMaker, CreateTestMaker, UpdateTestMaker, DeleteTestMaker, GetAllTestMaker
 from .helper import TestHelper
 from .testcase import CourgetteTestRunner
@@ -57,7 +56,7 @@ class CourgetteTestsRunner(object):
                 default_values: all default values to have a valid version of the specification
 
         """
-        session_class_name = "%s%sSession" % (monolithe_config.get_option("sdk_class_prefix", "sdk"), monolithe_config.get_option("product_accronym"))
+        session_class_name = "%s%sSession" % (monolithe_config.get_option("class_prefix", "transformer"), monolithe_config.get_option("product_accronym"))
         sdk_loader = SDKLoader(version=version, sdk_identifier=sdk_identifier)
         sdk_loader.sdk_utils.set_log_level(logging.DEBUG)
 

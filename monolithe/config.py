@@ -82,7 +82,7 @@ class MonolitheConfig(object):
         self.config = config
 
         # vanilla
-        self.sdk_user_vanilla = self.get_option("sdk_user_vanilla", "sdk")
+        self.user_vanilla = self.get_option("user_vanilla", "transformer")
 
         # mapping
         if not self.path:

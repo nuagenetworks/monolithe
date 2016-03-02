@@ -126,10 +126,10 @@ def main(argv=sys.argv):
         monolithe_config = MonolitheConfig.config_with_path(args.config_path)
 
     if monolithe_config and args.vanilla_prefix:
-        monolithe_config.set_option("sdk_user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("sdk_user_vanilla", "sdk")), "sdk")
+        monolithe_config.set_option("user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("user_vanilla", "transformer")), "transformer")
 
     if monolithe_config and args.sdk_version:
-        monolithe_config.set_option("sdk_version", args.sdk_version, "sdk")
+        monolithe_config.set_option("version", args.sdk_version, "transformer")
 
     if monolithe_config:
         monolithe_config.language = args.language

@@ -38,10 +38,10 @@ class CLIWriter(TemplateFileWriter):
         super(CLIWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
 
         self.monolithe_config = monolithe_config
-        self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
-        self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
-        self._sdk_cli_name = self.monolithe_config.get_option("sdk_cli_name", "sdk")
-        self._sdk_class_prefix = self.monolithe_config.get_option("sdk_class_prefix", "sdk")
+        self._sdk_output = self.monolithe_config.get_option("output", "transformer")
+        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
+        self._sdk_cli_name = self.monolithe_config.get_option("cli_name", "transformer")
+        self._sdk_class_prefix = self.monolithe_config.get_option("class_prefix", "transformer")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
         self.output_directory = "%s/python/%s/cli" % (self._sdk_output, self._sdk_name)

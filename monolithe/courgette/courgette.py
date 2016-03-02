@@ -65,20 +65,18 @@ class Courgette(object):
 
         for configuration in configurations:
 
-            runner = CourgetteTestsRunner(  url=self.url,
-                                            username=self.username,
-                                            password=self.password,
-                                            enterprise=self.enterprise,
-                                            version=self.apiversion,
-                                            specification=configuration.specification,
-                                            sdk_identifier=self.sdk_identifier,
-                                            monolithe_config=self.monolithe_config,
-                                            parent_resource=configuration.parent_resource_name,
-                                            parent_id=configuration.parent_id,
-                                            default_values=configuration.default_values)
+            runner = CourgetteTestsRunner(url=self.url,
+                                          username=self.username,
+                                          password=self.password,
+                                          enterprise=self.enterprise,
+                                          version=self.apiversion,
+                                          specification=configuration.specification,
+                                          sdk_identifier=self.sdk_identifier,
+                                          monolithe_config=self.monolithe_config,
+                                          parent_resource=configuration.parent_resource_name,
+                                          parent_id=configuration.parent_id,
+                                          default_values=configuration.default_values)
 
             result.add_report(configuration.specification.rest_name + ".spec", runner.run())
 
         return result
-
-

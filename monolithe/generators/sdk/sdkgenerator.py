@@ -41,7 +41,7 @@ class SDKGenerator(Generator):
     def cleanup(self):
         """
         """
-        sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
+        sdk_output = self.monolithe_config.get_option("output", "transformer")
         language = self.monolithe_config.language
 
         overrides_path = "%s/%s/__overrides" % (sdk_output, language)
@@ -59,9 +59,9 @@ class SDKGenerator(Generator):
     def generate(self, specification_info):
         """
         """
-        sdk_user_vanilla = self.monolithe_config.get_option("sdk_user_vanilla", "sdk")
-        sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
-        sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
+        sdk_user_vanilla = self.monolithe_config.get_option("user_vanilla", "transformer")
+        sdk_output = self.monolithe_config.get_option("output", "transformer")
+        sdk_name = self.monolithe_config.get_option("name", "transformer")
 
         self.install_system_vanilla(current_file=__file__, output_path="%s/%s" % (sdk_output, self.monolithe_config.language))
         self.install_user_vanilla(user_vanilla_path=sdk_user_vanilla, output_path="%s/%s" % (sdk_output, self.monolithe_config.language))
@@ -87,9 +87,9 @@ class SDKGenerator(Generator):
     def generate_documentation(self):
         """
         """
-        sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
-        sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
-        sdk_doc_output = self.monolithe_config.get_option("sdk_doc_output", "sdk")
+        sdk_name = self.monolithe_config.get_option("name", "transformer")
+        sdk_output = self.monolithe_config.get_option("output", "transformer")
+        sdk_doc_output = self.monolithe_config.get_option("doc_output", "transformer")
 
         input_path = os.path.join(sdk_output, self.monolithe_config.language, sdk_name)
         output_path = os.path.join(sdk_doc_output, self.monolithe_config.language)
