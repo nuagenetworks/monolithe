@@ -29,7 +29,7 @@ from monolithe.lib import TaskManager
 from monolithe.generators.lib import TemplateFileWriter
 
 
-class APIDocWriter(object):
+class APIDocManager(object):
     """ Writer of the Python SDK Documentation
 
     """
@@ -40,7 +40,7 @@ class APIDocWriter(object):
         self.writer = None
         self.monolithe_config = monolithe_config
 
-    def write(self, specifications, api_info):
+    def execute(self, specifications, api_info):
         """
         """
         filenames = dict()

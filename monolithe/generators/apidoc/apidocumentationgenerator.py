@@ -25,13 +25,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os
-import shutil
-
 from monolithe.lib import Printer
-from monolithe.specifications import RepositoryManager, FolderManager
 from monolithe.generators.lib import Generator
-from .lib import APIDocWriter
+from .lib import APIDocManager
 
 
 class APIDocumentationGenerator(Generator):
@@ -47,8 +43,7 @@ class APIDocumentationGenerator(Generator):
         sdk_name = self.monolithe_config.get_option("product_name")
         product_name = self.monolithe_config.get_option("product_name")
 
-        writer = APIDocWriter(self.monolithe_config)
-        apiversions = []
+        doc_manager = APIDocManager(self.monolithe_config)
 
         for info in specification_info:
 
@@ -58,6 +53,6 @@ class APIDocumentationGenerator(Generator):
             self.install_user_vanilla(user_vanilla_path=apidoc_user_vanilla, output_path=vanilla_output_path, multi_lang=False)
 
             Printer.log("generating %s api documentation for api version: %s" % (product_name, info["api"]["version"]))
-            writer.write(specifications=info["specifications"], api_info=info["api"])
+            doc_manager.execute(specifications=info["specifications"], api_info=info["api"])
 
         Printer.success("%s api documentation generation complete and available at \"%s\"" % (product_name, apidoc_output))

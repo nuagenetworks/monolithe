@@ -28,7 +28,7 @@
 import importlib
 
 
-class SDKWriter(object):
+class SDKManager(object):
     """
     """
 
@@ -37,7 +37,7 @@ class SDKWriter(object):
         """
         self.monolithe_config = monolithe_config
 
-    def write(self, apiversions):
+    def execute(self, apiversions):
         """
         """
         language = self.monolithe_config.language

@@ -28,8 +28,9 @@
 import importlib
 
 
-class CLIWriter(object):
-    """
+class SDKAPIVersionManager(object):
+    """ Writer of the SDK
+
     """
 
     def __init__(self, monolithe_config):
@@ -37,16 +38,24 @@ class CLIWriter(object):
         """
         self.monolithe_config = monolithe_config
 
-    def perform(self):
-        """
+    def execute(self, specifications, api_info):
+        """ Write all files according to data
+
+            Args:
+                specifications: A dict of all specifications to manage
+                api_info: the version of the api
+
+            Returns:
+                Writes specifications and fetchers files
+
         """
         language = self.monolithe_config.language
 
         try:
-            module = importlib.import_module('.%s.writers.cliwriter' % language, package="monolithe.generators.sdk")
-            klass = module.CLIWriter
+            module = importlib.import_module('.%s.writers.sdkapiversionwriter' % language, package="monolithe.generators.sdk")
+            klass = module.SDKAPIVersionWriter
         except:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
-        writer = klass(monolithe_config=self.monolithe_config)
-        writer.perform()
+        writer = klass(monolithe_config=self.monolithe_config, api_info=api_info)
+        writer.perform(specifications=specifications)

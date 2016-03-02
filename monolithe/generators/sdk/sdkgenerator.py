@@ -30,7 +30,7 @@ import shutil
 
 from monolithe.lib import Printer
 from monolithe.generators.lib import Generator
-from .lib import SDKWriter, CLIWriter
+from .lib import SDKManager, CLIManager
 from .sdkapiversiongenerator import SDKAPIVersionGenerator
 
 
@@ -75,11 +75,11 @@ class SDKGenerator(Generator):
         generator.generate(specification_info=specification_info)
 
         Printer.log("assembling all packages...")
-        sdk_writer = SDKWriter(monolithe_config=self.monolithe_config)
-        sdk_writer.write(apiversions=apiversions)
+        sdk_manager = SDKManager(monolithe_config=self.monolithe_config)
+        sdk_manager.execute(apiversions=apiversions)
 
-        cli_writer = CLIWriter(monolithe_config=self.monolithe_config)
-        cli_writer.perform()
+        cli_manager = CLIManager(monolithe_config=self.monolithe_config)
+        cli_manager.execute()
 
         self.cleanup()
         Printer.success("%s generation complete and available in \"%s/%s\"" % (sdk_name, sdk_output, self.monolithe_config.language))
