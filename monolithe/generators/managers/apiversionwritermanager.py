@@ -25,34 +25,40 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-def get_idiomatic_name(name):
-    """
-    """
-    return name
+import importlib
 
 
-def get_type_name(type_name, sub_type=None):
-    """ Returns a go type according to a spec type
+class APIVersionWriterManager(object):
+    """ Writer of the SDK
 
     """
-    if type_name in ("string", "enum"):
-        return "string"
 
-    if type_name == "float":
-        return "float64"
+    def __init__(self, monolithe_config):
+        """
+        """
+        self.monolithe_config = monolithe_config
 
-    if type_name == "boolean":
-        return "bool"
+    def execute(self, specifications, api_info):
+        """ Write all files according to data
 
-    if type_name == "list":
-        st = get_type_name(type_name=sub_type, sub_type=None) if sub_type else "interface{}"
-        return "[]%s" % st
+            Args:
+                specifications: A dict of all specifications to manage
+                api_info: the version of the api
 
-    if type_name == "integer":
-        return "int"
+            Returns:
+                Writes specifications and fetchers files
 
-    if type_name == "time":
-        return "float64"
+        """
+        language = self.monolithe_config.language
 
-    return "interface{}"
+        try:
+            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
+        except:
+            raise Exception('Unsupported language %s.' % language)
+
+        if not hasattr(module, 'APIVersionWriter'):
+            return
+
+        klass = module.APIVersionWriter
+        writer = klass(monolithe_config=self.monolithe_config, api_info=api_info)
+        writer.perform(specifications=specifications)

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2015, Alcatel-Lucent Inc
@@ -26,10 +25,39 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import sys
+from monolithe.generators.lib import TemplateFileWriter
+from monolithe.lib import SDKUtils
 
-sys.path.append("../monolithe")
 
-if __name__ == '__main__':
-    from monolithe.generators.sdkdoc.cli import main
-    sys.exit(main(sys.argv))
+class GeneralWriter(TemplateFileWriter):
+    """
+    """
+
+    def __init__(self, monolithe_config):
+        """
+        """
+        super(GeneralWriter, self).__init__(package="monolithe.generators.lang.html")
+
+        self.monolithe_config = monolithe_config
+
+        self._output = self.monolithe_config.get_option("output", "transformer")
+        self._product_name = self.monolithe_config.get_option("product_name")
+
+        self.output_directory = "%s/html/" % (self._output)
+
+    def perform(self, apiversions):
+        """
+        """
+        self._write_main_index(apiversions=apiversions)
+
+    def _write_main_index(self, apiversions):
+        """
+        """
+        versions = {}
+
+        for v in apiversions:
+            versions[v] = SDKUtils.get_string_version(v)
+
+        self.write(destination=self.output_directory, filename="index.html", template_name="main_index.html.tpl",
+                   apiversion=versions,
+                   product_name=self._product_name)

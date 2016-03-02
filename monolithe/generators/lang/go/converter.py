@@ -25,19 +25,28 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.generators.lib import TemplateFileWriter
 
+def get_type_name(type_name, sub_type=None):
+    """ Returns a go type according to a spec type
 
-class GeneralWriter(TemplateFileWriter):
     """
-    """
+    if type_name in ("string", "enum"):
+        return "string"
 
-    def __init__(self, monolithe_config):
-        """
-        """
-        super(GeneralWriter, self).__init__(package="monolithe.generators.sdk.lang.go")
+    if type_name == "float":
+        return "float64"
 
-    def perform(self, apiversions):
-        """
-        """
-        pass
+    if type_name == "boolean":
+        return "bool"
+
+    if type_name == "list":
+        st = get_type_name(type_name=sub_type, sub_type=None) if sub_type else "interface{}"
+        return "[]%s" % st
+
+    if type_name == "integer":
+        return "int"
+
+    if type_name == "time":
+        return "float64"
+
+    return "interface{}"

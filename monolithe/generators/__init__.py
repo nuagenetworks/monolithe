@@ -25,6 +25,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["SDKAPIVersionGenerator", "SDKGenerator"]
+__all__ = ["SDKGenerator"]
 
-from monolithe.generators.sdk import SDKAPIVersionGenerator, SDKGenerator
+from .sdkgenerator import SDKGenerator

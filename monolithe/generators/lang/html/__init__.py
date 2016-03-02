@@ -25,7 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["SDKAPIVersionGenerator", "SDKGenerator"]
+__all__ = ["APIVersionWriter", "GeneralWriter"]
 
-from .sdkapiversiongenerator import SDKAPIVersionGenerator
-from .sdkgenerator import SDKGenerator
+from .writers.apiversionwriter import APIVersionWriter
+from .writers.writer import GeneralWriter

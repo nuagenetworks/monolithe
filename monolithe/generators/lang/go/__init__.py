@@ -25,31 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import importlib
+__all__ = ["APIVersionWriter", "get_type_name"]
 
-
-class WriterManager(object):
-    """
-    """
-
-    def __init__(self, monolithe_config):
-        """
-        """
-        self.monolithe_config = monolithe_config
-
-    def execute(self, apiversions):
-        """
-        """
-        language = self.monolithe_config.language
-
-        try:
-            module = importlib.import_module('.lang.%s.writers.writer' % language, package="monolithe.generators.sdk")
-        except:
-            raise Exception('Unsupported language %s.' % language)
-
-        if not hasattr(module, 'GeneralWriter'):
-            return
-
-        klass = module.GeneralWriter
-        writer = klass(monolithe_config=self.monolithe_config)
-        writer.perform(apiversions=apiversions)
+from .writers.apiversionwriter import APIVersionWriter
+from .converter import get_type_name

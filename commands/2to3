@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2015, Alcatel-Lucent Inc
@@ -25,14 +26,36 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import os
+import json
 
-def get_idiomatic_name(name):
-    """
-    """
-    return name
+for f in os.listdir("."):
 
+    if os.path.splitext(f)[1] != ".spec":
+        continue
 
-def get_type_name(type_name, sub_type=None):
-    """
-    """
-    return type_name
+    with open(f, 'r') as fp:
+        print ("converting %s" % f)
+        d = json.loads(fp.read())
+
+        if "attributes" in d:
+            attrs = d["attributes"]
+            d["attributes"] = []
+            for key, a in attrs.iteritems():
+                a[u'name'] = key
+                d[u'attributes'].append(a)
+            d["attributes"] = sorted(d["attributes"], lambda x, y: cmp(x["name"], y["name"]))
+
+        if "children" in d:
+            apis = d["children"]
+            d["children"] = []
+            for key, a in apis.iteritems():
+                a[u'rest_name'] = key
+                d[u'children'].append(a)
+            d["children"] = sorted(d["children"], lambda x, y: cmp(x["rest_name"], y["rest_name"]))
+
+        content = json.dumps(d, sort_keys=True, indent=4)
+        content = '\n'.join([line.rstrip() for line in content.split('\n')])
+
+    with open(f, 'w') as fp:
+        fp.write(content)

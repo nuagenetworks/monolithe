@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # Copyright (c) 2015, Alcatel-Lucent Inc
@@ -26,11 +25,31 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import importlib
 
-import sys
 
-sys.path.append("../monolithe")
+class CLIWriterManager(object):
+    """
+    """
 
-if __name__ == '__main__':
-    from monolithe.generators.apidoc.cli import main
-    sys.exit(main(sys.argv))
+    def __init__(self, monolithe_config):
+        """
+        """
+        self.monolithe_config = monolithe_config
+
+    def execute(self):
+        """
+        """
+        language = self.monolithe_config.language
+
+        try:
+            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
+        except:
+            raise Exception('Unsupported language %s.' % language)
+
+        if not hasattr(module, 'CLIWriter'):
+            return
+
+        klass = module.CLIWriter
+        writer = klass(monolithe_config=self.monolithe_config)
+        writer.perform()

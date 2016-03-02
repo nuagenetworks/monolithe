@@ -36,7 +36,7 @@ class APIVersionWriter(TemplateFileWriter):
     def __init__(self, monolithe_config, api_info):
         """
         """
-        super(APIVersionWriter, self).__init__(package="monolithe.generators.sdk.lang.html")
+        super(APIVersionWriter, self).__init__(package="monolithe.generators.lang.html")
 
         self.monolithe_config = monolithe_config
 

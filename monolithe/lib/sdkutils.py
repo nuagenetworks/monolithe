@@ -148,17 +148,22 @@ class SDKUtils(object):
                 >>> enterprise_network
         """
         if language in cls.lang_modules_cache:
-            return cls.lang_modules_cache[language].get_idiomatic_name(name)
+            m = cls.lang_modules_cache[language]
+            if not m:
+                return name
+            return m.get_idiomatic_name(name)
 
         try:
-            module = importlib.import_module('.lang.%s.converter' % language, package="monolithe.generators.sdk")
-            method = module.get_idiomatic_name
+            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
         except:
             raise Exception('Unsupported language %s.' % language)
 
-        cls.lang_modules_cache[language] = module
+        if not hasattr(module, "get_idiomatic_name"):
+            cls.lang_modules_cache[language] = None
+            return name
 
-        return method(name)
+        cls.lang_modules_cache[language] = module
+        return module.get_idiomatic_name(name)
 
     @classmethod
     def get_type_name_in_language(cls, type_name, sub_type, language):
@@ -176,14 +181,19 @@ class SDKUtils(object):
                 >>> str
         """
         if language in cls.lang_modules_cache:
-            return cls.lang_modules_cache[language].get_type_name(type_name, sub_type)
+            m = cls.lang_modules_cache[language]
+            if not m:
+                return type_name
+            return m.get_type_name(type_name)
 
         try:
-            module = importlib.import_module('.lang.%s.converter' % language, package="monolithe.generators.sdk")
-            method = module.get_type_name
+            module = importlib.import_module('.lang.%s' % language, package="monolithe.generators")
         except:
             raise Exception('Unsupported language %s.' % language)
 
-        cls.lang_modules_cache[language] = module
+        if not hasattr(module, "get_type_name"):
+            cls.lang_modules_cache[language] = None
+            return type_name
 
-        return method(type_name, sub_type)
+        cls.lang_modules_cache[language] = module
+        return module.get_type_name(type_name, sub_type)

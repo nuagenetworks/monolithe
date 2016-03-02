@@ -40,7 +40,7 @@ class APIVersionWriter(TemplateFileWriter):
         """ Initializes a _GoSDKAPIVersionFileWriter
 
         """
-        super(APIVersionWriter, self).__init__(package="monolithe.generators.sdk.lang.go")
+        super(APIVersionWriter, self).__init__(package="monolithe.generators.lang.go")
 
         self.monolithe_config = monolithe_config
 

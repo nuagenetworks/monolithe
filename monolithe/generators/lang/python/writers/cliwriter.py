@@ -35,7 +35,7 @@ class CLIWriter(TemplateFileWriter):
     def __init__(self, monolithe_config):
         """
         """
-        super(CLIWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
+        super(CLIWriter, self).__init__(package="monolithe.generators.lang.python")
 
         self.monolithe_config = monolithe_config
         self._output = self.monolithe_config.get_option("output", "transformer")

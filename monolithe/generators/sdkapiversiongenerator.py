@@ -25,39 +25,22 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from monolithe.generators.lib import TemplateFileWriter
-from monolithe.lib import SDKUtils
+from monolithe.generators.managers import APIVersionWriterManager
 
 
-class GeneralWriter(TemplateFileWriter):
+class SDKAPIVersionGenerator(object):
+    """ Generate SDK
+
     """
-    """
-
     def __init__(self, monolithe_config):
         """
         """
-        super(GeneralWriter, self).__init__(package="monolithe.generators.sdk.lang.html")
-
         self.monolithe_config = monolithe_config
+        self.repository_manager = None
 
-        self._output = self.monolithe_config.get_option("output", "transformer")
-        self._product_name = self.monolithe_config.get_option("product_name")
-
-        self.output_directory = "%s/html/" % (self._output)
-
-    def perform(self, apiversions):
+    def generate(self, specification_info):
         """
         """
-        self._write_main_index(apiversions=apiversions)
-
-    def _write_main_index(self, apiversions):
-        """
-        """
-        versions = {}
-
-        for v in apiversions:
-            versions[v] = SDKUtils.get_string_version(v)
-
-        self.write(destination=self.output_directory, filename="index.html", template_name="main_index.html.tpl",
-                   apiversion=versions,
-                   product_name=self._product_name)
+        for info in specification_info:
+            manager = APIVersionWriterManager(monolithe_config=self.monolithe_config)
+            manager.execute(specifications=info["specifications"], api_info=info["api"])

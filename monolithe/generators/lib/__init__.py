@@ -27,5 +27,5 @@
 
 __all__ = ["Generator", "TemplateFileWriter"]
 
-from .templatefilewriter import TemplateFileWriter
 from .generator import Generator
+from .templatefilewriter import TemplateFileWriter

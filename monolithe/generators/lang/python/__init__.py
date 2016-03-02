@@ -25,31 +25,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import importlib
+__all__ = ["APIVersionWriter", "GeneralWriter", "CLIWriter", "get_idiomatic_name", "get_type_name"]
 
-
-class CLIWriterManager(object):
-    """
-    """
-
-    def __init__(self, monolithe_config):
-        """
-        """
-        self.monolithe_config = monolithe_config
-
-    def execute(self):
-        """
-        """
-        language = self.monolithe_config.language
-
-        try:
-            module = importlib.import_module('.lang.%s.writers.cliwriter' % language, package="monolithe.generators.sdk")
-        except:
-            raise Exception('Unsupported language %s.' % language)
-
-        if not hasattr(module, 'CLIWriter'):
-            return
-
-        klass = module.CLIWriter
-        writer = klass(monolithe_config=self.monolithe_config)
-        writer.perform()
+from .writers.apiversionwriter import APIVersionWriter
+from .writers.writer import GeneralWriter
+from .writers.cliwriter import CLIWriter
+from .converter import get_idiomatic_name, get_type_name

@@ -31,5 +31,6 @@ import sys
 sys.path.append("../monolithe")
 
 if __name__ == '__main__':
-    from monolithe.generators.sdk.cli import main
-    sys.exit(main(sys.argv))
+    # from monolithe.cli import main
+    # sys.exit(main(sys.argv))
+    pass

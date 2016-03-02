@@ -30,7 +30,7 @@ import shutil
 
 from monolithe.lib import Printer
 from monolithe.generators.lib import Generator
-from .lib import WriterManager, CLIWriterManager
+from monolithe.generators.managers import WriterManager, CLIWriterManager
 from .sdkapiversiongenerator import SDKAPIVersionGenerator
 
 

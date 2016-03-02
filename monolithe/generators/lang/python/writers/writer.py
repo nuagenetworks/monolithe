@@ -36,7 +36,7 @@ class GeneralWriter(TemplateFileWriter):
     def __init__(self, monolithe_config):
         """
         """
-        super(GeneralWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
+        super(GeneralWriter, self).__init__(package="monolithe.generators.lang.python")
 
         self.monolithe_config = monolithe_config
         self._transformation_name = self.monolithe_config.get_option("name", "transformer")
