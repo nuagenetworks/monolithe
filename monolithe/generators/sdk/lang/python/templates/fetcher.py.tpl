@@ -4,11 +4,11 @@
 from bambou import NURESTFetcher
 
 
-class {{ sdk_class_prefix }}{{ specification.entity_name_plural }}Fetcher(NURESTFetcher):
-    """ Represents a {{ sdk_class_prefix }}{{ specification.entity_name_plural }} fetcher
+class {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher(NURESTFetcher):
+    """ Represents a {{ class_prefix }}{{ specification.entity_name_plural }} fetcher
 
         Notes:
-            This fetcher enables to fetch {{ sdk_class_prefix }}{{ specification.entity_name }} objects.
+            This fetcher enables to fetch {{ class_prefix }}{{ specification.entity_name }} objects.
 
         See:
             bambou.NURESTFetcher
@@ -16,14 +16,14 @@ class {{ sdk_class_prefix }}{{ specification.entity_name_plural }}Fetcher(NUREST
 
     @classmethod
     def managed_class(cls):
-        """ Return {{ sdk_class_prefix }}{{ specification.entity_name }} class that is managed.
+        """ Return {{ class_prefix }}{{ specification.entity_name }} class that is managed.
 
             Returns:
-                {{ sdk_name }}.{{ sdk_class_prefix }}{{ specification.entity_name }}: the managed class
+                {{ name }}.{{ class_prefix }}{{ specification.entity_name }}: the managed class
         """
 
-        from .. import {{ sdk_class_prefix }}{{ specification.entity_name }}
-        return {{ sdk_class_prefix }}{{ specification.entity_name }}
+        from .. import {{ class_prefix }}{{ specification.entity_name }}
+        return {{ class_prefix }}{{ specification.entity_name }}
 
     {% if override_content %}
     ## Custom methods

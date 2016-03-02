@@ -119,27 +119,27 @@ class SDKInspector(object):
         """ Load objects in a temporary database
 
         """
-        self._get_sdk_package()
+        self._get_package()
 
-        object_names = [name for name in dir(self._sdk) if name != "{{ sdk_class_prefix }}{{ product_accronym }}Session" and name != "SDKInfo" and name.startswith("{{ sdk_class_prefix }}") and not name.endswith("Fetcher")]
+        object_names = [name for name in dir(self._sdk) if name != "{{ class_prefix }}{{ product_accronym }}Session" and name != "SDKInfo" and name.startswith("{{ class_prefix }}") and not name.endswith("Fetcher")]
 
         for object_name in object_names:
             obj = getattr(self._sdk, object_name)
             self._objects_mapping[obj.rest_name] = object_name
 
-    def _get_sdk_package(self):
+    def _get_package(self):
         """ Returns sdk package
 
         """
         if self._sdk is None:
             try:
-                self._sdk = importlib.import_module("{{ sdk_name }}.%s" % self._version)
-                self._logger = importlib.import_module("{{ sdk_name }}.utils").set_log_level
+                self._sdk = importlib.import_module("{{ name }}.%s" % self._version)
+                self._logger = importlib.import_module("{{ name }}.utils").set_log_level
                 self._ignored_resources = [self._sdk.SDKInfo.root_object_class().rest_name]
 
-                # Printer.info("Imported {{ sdk_name }}.%s." % self._version)
+                # Printer.info("Imported {{ name }}.%s." % self._version)
             except ImportError:
-                self._sdk = importlib.import_module("{{ sdk_name }}")
+                self._sdk = importlib.import_module("{{ name }}")
             except ImportError as error:
                 Printer.raise_error("Please install requirements using command line 'pip install -r requirements.txt'.\n%s" % error)
 
@@ -154,7 +154,7 @@ class SDKInspector(object):
 
         return resources
 
-    def get_sdk_class(self, name):
+    def get_class(self, name):
         """ Get a SDK class object
             Args:
                 name: the name of the object
@@ -174,7 +174,7 @@ class SDKInspector(object):
 
         Printer.raise_error('Unknown object named %s' % name)
 
-    def get_sdk_instance(self, name):
+    def get_instance(self, name):
         """ Get SDK object instance according to a given name
 
             Args:
@@ -183,10 +183,10 @@ class SDKInspector(object):
             Returns:
                 A SDK object or raise an exception
         """
-        klass = self.get_sdk_class(name)
+        klass = self.get_class(name)
         return klass()
 
-    def get_sdk_parent(self, parent_infos, root_object):
+    def get_parent(self, parent_infos, root_object):
         """ Get SDK parent object if possible
             Otherwise it will take the user
 
@@ -202,7 +202,7 @@ class SDKInspector(object):
             uuid = parent_infos[1]
 
             singular_name = Utils.get_singular_name(name)
-            parent = self.get_sdk_instance(singular_name)
+            parent = self.get_instance(singular_name)
             parent.id = uuid
 
             try:
@@ -227,7 +227,7 @@ class SDKInspector(object):
                 Returns an API Key if everything works fine
         """
         self._set_verbose_mode(args.verbose)
-        session = self._sdk.{{ sdk_class_prefix }}{{ product_accronym }}Session(username=args.username, password=args.password, enterprise=args.enterprise, api_url=args.api)
+        session = self._sdk.{{ class_prefix }}{{ product_accronym }}Session(username=args.username, password=args.password, enterprise=args.enterprise, api_url=args.api)
         try:
             session.start()
         except BambouHTTPError as error:
@@ -235,7 +235,7 @@ class SDKInspector(object):
             if status_code == 401:
                 Printer.raise_error("Could not log on %s (API %s) with username=%s password=%s enterprise=%s" % (args.api, args.version, args.username, args.password, args.enterprise))
             else:
-                Printer.raise_error("Cannot access %s [HTTP %s]. Current {{ sdk_name }} version tried to connect to the Server API %s" % (args.api, status_code, args.version))
+                Printer.raise_error("Cannot access %s [HTTP %s]. Current {{ name }} version tried to connect to the Server API %s" % (args.api, status_code, args.version))
 
         root_object = session.root_object
 

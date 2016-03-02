@@ -40,11 +40,10 @@ class GeneralWriter(TemplateFileWriter):
 
         self.monolithe_config = monolithe_config
 
-        self._sdk_output = self.monolithe_config.get_option("output", "transformer")
-        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
+        self._output = self.monolithe_config.get_option("output", "transformer")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/html/" % (self._sdk_output)
+        self.output_directory = "%s/html/" % (self._output)
 
     def perform(self, apiversions):
         """

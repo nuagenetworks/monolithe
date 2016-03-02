@@ -38,15 +38,15 @@ class CLIWriter(TemplateFileWriter):
         super(CLIWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
 
         self.monolithe_config = monolithe_config
-        self._sdk_output = self.monolithe_config.get_option("output", "transformer")
-        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
-        self._sdk_cli_name = self.monolithe_config.get_option("cli_name", "transformer")
-        self._sdk_class_prefix = self.monolithe_config.get_option("class_prefix", "transformer")
+        self._output = self.monolithe_config.get_option("output", "transformer")
+        self._transformation_name = self.monolithe_config.get_option("name", "transformer")
+        self._cli_name = self.monolithe_config.get_option("cli_name", "transformer")
+        self._class_prefix = self.monolithe_config.get_option("class_prefix", "transformer")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
-        self.output_directory = "%s/python/%s/cli" % (self._sdk_output, self._sdk_name)
+        self.output_directory = "%s/python/%s/cli" % (self._output, self._transformation_name)
 
-        with open("%s/python/__code_header" % self._sdk_output, "r") as f:
+        with open("%s/python/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
     def perform(self):
@@ -78,7 +78,7 @@ class CLIWriter(TemplateFileWriter):
         self.write(destination=self.output_directory, filename="commands.py", template_name="cli_commands.py.tpl",
                    product_accronym=self._product_accronym,
                    product_name=self._product_name,
-                   sdk_cli_name=self._sdk_cli_name,
+                   cli_name=self._cli_name,
                    header=self.header_content)
 
     def _write_printer(self):
@@ -92,6 +92,6 @@ class CLIWriter(TemplateFileWriter):
         """
         self.write(destination=self.output_directory, filename="utils.py", template_name="cli_utils.py.tpl",
                    product_accronym=self._product_accronym,
-                   sdk_class_prefix=self._sdk_class_prefix,
-                   sdk_name=self._sdk_name,
+                   class_prefix=self._class_prefix,
+                   name=self._transformation_name,
                    header=self.header_content)

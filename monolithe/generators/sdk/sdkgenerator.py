@@ -41,30 +41,30 @@ class SDKGenerator(Generator):
     def cleanup(self):
         """
         """
-        sdk_output = self.monolithe_config.get_option("output", "transformer")
+        output = self.monolithe_config.get_option("output", "transformer")
         language = self.monolithe_config.language
 
-        overrides_path = "%s/%s/__overrides" % (sdk_output, language)
+        overrides_path = "%s/%s/__overrides" % (output, language)
         if os.path.exists(overrides_path):
             shutil.rmtree(overrides_path)
 
-        attrs_defaults_path = "%s/%s/__attributes_defaults" % (sdk_output, language)
+        attrs_defaults_path = "%s/%s/__attributes_defaults" % (output, language)
         if os.path.exists(attrs_defaults_path):
             shutil.rmtree(attrs_defaults_path)
 
-        code_header_path = "%s/%s/__code_header" % (sdk_output, language)
+        code_header_path = "%s/%s/__code_header" % (output, language)
         if os.path.exists(code_header_path):
             os.remove(code_header_path)
 
     def generate(self, specification_info):
         """
         """
-        sdk_user_vanilla = self.monolithe_config.get_option("user_vanilla", "transformer")
-        sdk_output = self.monolithe_config.get_option("output", "transformer")
-        sdk_name = self.monolithe_config.get_option("name", "transformer")
+        user_vanilla = self.monolithe_config.get_option("user_vanilla", "transformer")
+        output = self.monolithe_config.get_option("output", "transformer")
+        name = self.monolithe_config.get_option("name", "transformer")
 
-        self.install_system_vanilla(current_file=__file__, output_path="%s/%s" % (sdk_output, self.monolithe_config.language))
-        self.install_user_vanilla(user_vanilla_path=sdk_user_vanilla, output_path="%s/%s" % (sdk_output, self.monolithe_config.language))
+        self.install_system_vanilla(current_file=__file__, output_path="%s/%s" % (output, self.monolithe_config.language))
+        self.install_user_vanilla(user_vanilla_path=user_vanilla, output_path="%s/%s" % (output, self.monolithe_config.language))
 
         generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
         apiversions = []
@@ -75,28 +75,28 @@ class SDKGenerator(Generator):
         generator.generate(specification_info=specification_info)
 
         Printer.log("assembling all packages...")
-        sdk_manager = WriterManager(monolithe_config=self.monolithe_config)
-        sdk_manager.execute(apiversions=apiversions)
+        manager = WriterManager(monolithe_config=self.monolithe_config)
+        manager.execute(apiversions=apiversions)
 
         cli_manager = CLIWriterManager(monolithe_config=self.monolithe_config)
         cli_manager.execute()
 
         self.cleanup()
-        Printer.success("%s generation complete and available in \"%s/%s\"" % (sdk_name, sdk_output, self.monolithe_config.language))
+        Printer.success("%s generation complete and available in \"%s/%s\"" % (name, output, self.monolithe_config.language))
 
     def generate_documentation(self):
         """
         """
-        sdk_name = self.monolithe_config.get_option("name", "transformer")
-        sdk_output = self.monolithe_config.get_option("output", "transformer")
-        sdk_doc_output = self.monolithe_config.get_option("doc_output", "transformer")
+        name = self.monolithe_config.get_option("name", "transformer")
+        output = self.monolithe_config.get_option("output", "transformer")
+        doc_output = self.monolithe_config.get_option("doc_output", "transformer")
 
-        input_path = os.path.join(sdk_output, self.monolithe_config.language, sdk_name)
-        output_path = os.path.join(sdk_doc_output, self.monolithe_config.language)
+        input_path = os.path.join(output, self.monolithe_config.language, name)
+        output_path = os.path.join(doc_output, self.monolithe_config.language)
 
         if self.monolithe_config.language == 'python':
             Printer.log("generating documentation...")
             os.system("pdoc --overwrite --html --html-dir '%s' '%s' >/dev/null 2>&1" % (output_path, input_path))
-            Printer.success("%s documentation generation complete and available in \"%s\"" % (sdk_name, output_path))
+            Printer.success("%s documentation generation complete and available in \"%s\"" % (name, output_path))
         else:
             Printer.warn("no documentation generator for this language. ignoring")

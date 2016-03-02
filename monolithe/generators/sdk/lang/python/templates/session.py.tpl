@@ -3,10 +3,10 @@
 
 from bambou import NURESTSession
 from bambou.exceptions import InternalConsitencyError
-from .{{ sdk_class_prefix|lower }}{{ sdk_root_api|lower }} import {{ sdk_class_prefix }}{{ sdk_root_api|capitalize }}
+from .{{ class_prefix|lower }}{{ root_api|lower }} import {{ class_prefix }}{{ root_api|capitalize }}
 
 
-class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
+class {{ class_prefix }}{{ product_accronym }}Session(NURESTSession):
     """ {{ product_accronym }} User Session
 
         Session can be started and stopped whenever its needed
@@ -22,15 +22,15 @@ class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
                 api_url (string): the url to the api
 
             Example:
-                >>> session =  {{ sdk_class_prefix }}{{ product_accronym|lower }}Session(username="csproot", password="csproot", enterprise="csp", api_url="https://{{ product_accronym }}:8443")
+                >>> session =  {{ class_prefix }}{{ product_accronym|lower }}Session(username="csproot", password="csproot", enterprise="csp", api_url="https://{{ product_accronym }}:8443")
                 >>> session.start()
 
         """
 
         if certificate is None and password is None:
-            raise InternalConsitencyError('{{ sdk_class_prefix }}{{ product_accronym|lower }}Session needs either a password or a certificate')
+            raise InternalConsitencyError('{{ class_prefix }}{{ product_accronym|lower }}Session needs either a password or a certificate')
 
-        super({{ sdk_class_prefix }}{{ product_accronym }}Session, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, api_prefix="{{ sdk_api_prefix }}", version=str(self.version), certificate=certificate)
+        super({{ class_prefix }}{{ product_accronym }}Session, self).__init__(username=username, password=password, enterprise=enterprise, api_url=api_url, api_prefix="{{ api_prefix }}", version=str(self.version), certificate=certificate)
 
     @property
     def version(self):
@@ -40,7 +40,7 @@ class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
         return {{ version }}
 
     @property
-    def {{sdk_root_api}}(self):
+    def {{root_api}}(self):
         """ Returns the root object
 
         """
@@ -51,7 +51,7 @@ class {{ sdk_class_prefix }}{{ product_accronym }}Session(NURESTSession):
         """ Returns a new instance
 
         """
-        return {{ sdk_class_prefix }}{{ sdk_root_api|capitalize }}()
+        return {{ class_prefix }}{{ root_api|capitalize }}()
 
     {% if override_content %}
     ## Custom methods

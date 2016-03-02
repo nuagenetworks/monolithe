@@ -28,9 +28,9 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         session = inspector.get_user_session(args)
-        parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        parent = inspector.get_parent(args.parent_infos, session.root_object)
 
         classname = instance.__class__.__name__[2:]
         plural_classname = Utils.get_entity_name_plural(classname)
@@ -41,10 +41,10 @@ class CLICommand(object):
             fetcher = getattr(parent, fetcher_name)
         except:
 
-            if parent.rest_name == inspector._get_sdk_package().SDKInfo.root_object_class().rest_name:
+            if parent.rest_name == inspector._get_package().SDKInfo.root_object_class().rest_name:
                 error_message = "Failed to found root objects '%s'. Maybe you forgot to specify the parent using '--in [parent] [ID]' syntax ?" % (fetcher_name)
             else:
-                error_message = "'%s' failed to found children '%s'. You can use command '{{ sdk_cli_name }} objects -c %s' to list all possible parents" % (parent.rest_name, fetcher_name, fetcher_name)
+                error_message = "'%s' failed to found children '%s'. You can use command '{{ cli_name }} objects -c %s' to list all possible parents" % (parent.rest_name, fetcher_name, fetcher_name)
 
             Printer.raise_error(error_message)
 
@@ -63,9 +63,9 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         session = inspector.get_user_session(args)
-        parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        parent = inspector.get_parent(args.parent_infos, session.root_object)
 
         classname = instance.__class__.__name__[2:]
         plural_classname = Utils.get_entity_name_plural(classname)
@@ -76,10 +76,10 @@ class CLICommand(object):
             fetcher = getattr(parent, fetcher_name)
         except:
 
-            if parent.rest_name == inspector._get_sdk_package().SDKInfo.root_object_class().rest_name:
+            if parent.rest_name == inspector._get_package().SDKInfo.root_object_class().rest_name:
                 error_message = "Failed to found root object '%s'. Maybe you forgot to specify the parent using '--in [parent] [ID]' syntax ?" % (fetcher_name)
             else:
-                error_message = "'%s' failed to found children '%s'. You can use command '{{ sdk_cli_name}} objects -c %s' to list all possible parents" % (parent.rest_name, fetcher_name, fetcher_name)
+                error_message = "'%s' failed to found children '%s'. You can use command '{{ cli_name}} objects -c %s' to list all possible parents" % (parent.rest_name, fetcher_name, fetcher_name)
 
             Printer.raise_error(error_message)
 
@@ -97,7 +97,7 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         instance.id = args.id
         inspector.get_user_session(args)
 
@@ -116,9 +116,9 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         session = inspector.get_user_session(args)
-        parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        parent = inspector.get_parent(args.parent_infos, session.root_object)
         attributes = cls._get_attributes(args.params)
 
         cls._fill_instance_with_attributes(instance, attributes)
@@ -139,7 +139,7 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         instance.id = args.id
         attributes = cls._get_attributes(args.params)
 
@@ -231,7 +231,7 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         instance.id = args.id
 
         inspector.get_user_session(args)
@@ -253,7 +253,7 @@ class CLICommand(object):
 
         if args.parent:
             name = Utils.get_singular_name(args.parent)
-            instance = inspector.get_sdk_instance(name)
+            instance = inspector.get_instance(name)
 
             objects = [Utils.get_entity_name_plural(name) for name in instance.children_rest_names]
         else:
@@ -264,7 +264,7 @@ class CLICommand(object):
             parents = []
             for name in objects:
                 singular_name = Utils.get_singular_name(name)
-                instance = inspector.get_sdk_instance(singular_name)
+                instance = inspector.get_instance(singular_name)
 
                 if child in instance.children_rest_names:
                     parents.append(name)
@@ -346,11 +346,11 @@ class CLICommand(object):
         inspector = SDKInspector(args.version)
 
         name = Utils.get_singular_name(args.name)
-        object_class = inspector.get_sdk_class(name)
+        object_class = inspector.get_class(name)
         object_type = object_class()
 
         session = inspector.get_user_session(args)
-        resource = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        resource = inspector.get_parent(args.parent_infos, session.root_object)
 
         classname = object_class.__name__[2:]
         plural_classname = Utils.get_entity_name_plural(classname)

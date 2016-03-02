@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {{ header }}
 
-from {{ sdk_class_prefix|lower }}{{ product_accronym|lower }}session import {{ sdk_class_prefix }}{{ product_accronym }}Session
-from .{{ sdk_class_prefix|lower }}{{ sdk_root_api|lower }} import {{ sdk_class_prefix }}{{ sdk_root_api|capitalize }}
+from {{ class_prefix|lower }}{{ product_accronym|lower }}session import {{ class_prefix }}{{ product_accronym }}Session
+from .{{ class_prefix|lower }}{{ root_api|lower }} import {{ class_prefix }}{{ root_api|capitalize }}
 
 class SDKInfo (object):
 
@@ -18,7 +18,7 @@ class SDKInfo (object):
         """
             Returns the api prefix
         """
-        return "{{ sdk_api_prefix }}"
+        return "{{ api_prefix }}"
 
     @classmethod
     def product_accronym(cls):
@@ -35,29 +35,29 @@ class SDKInfo (object):
         return "{{ product_name }}"
 
     @classmethod
-    def sdk_class_prefix(cls):
+    def class_prefix(cls):
         """
             Returns the api prefix
         """
-        return "{{ sdk_class_prefix }}"
+        return "{{ class_prefix }}"
 
     @classmethod
-    def sdk_name(cls):
+    def name(cls):
         """
             Returns the sdk name
         """
-        return "{{ sdk_name }}"
+        return "{{ name }}"
 
     @classmethod
     def root_object_class(cls):
         """
             Returns the root object class
         """
-        return {{ sdk_class_prefix }}{{ sdk_root_api|capitalize }}
+        return {{ class_prefix }}{{ root_api|capitalize }}
 
     @classmethod
     def session_class(cls):
         """
             Returns the session object class
         """
-        return {{ sdk_class_prefix }}{{ product_accronym }}Session
+        return {{ class_prefix }}{{ product_accronym }}Session

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 {{ header }}
 
-{% set classnames = filenames.values() + [sdk_class_prefix + product_accronym + "Session"] %}
+{% set classnames = filenames.values() + [class_prefix + product_accronym + "Session"] %}
 __all__ = {{ classnames }}
 {% for filename, classname in filenames.iteritems() %}
 from .{{ filename }} import {{ classname }}{% endfor %}
-from .{{ sdk_class_prefix|lower }}{{ product_accronym|lower }}session import {{ sdk_class_prefix }}{{ product_accronym }}Session
+from .{{ class_prefix|lower }}{{ product_accronym|lower }}session import {{ class_prefix }}{{ product_accronym }}Session
 from .sdkinfo import SDKInfo
 
 def __setup_bambou():

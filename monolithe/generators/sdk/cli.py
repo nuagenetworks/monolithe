@@ -107,8 +107,8 @@ def main(argv=sys.argv):
                         required=False,
                         type=str)
 
-    parser.add_argument("--sdk-version",
-                        dest="sdk_version",
+    parser.add_argument("--generation-version",
+                        dest="generation_version",
                         help="Overwrite the sdk version given in monolithe.conf",
                         required=False,
                         type=str)
@@ -128,8 +128,8 @@ def main(argv=sys.argv):
     if monolithe_config and args.vanilla_prefix:
         monolithe_config.set_option("user_vanilla", "%s/%s" % (args.vanilla_prefix, monolithe_config.get_option("user_vanilla", "transformer")), "transformer")
 
-    if monolithe_config and args.sdk_version:
-        monolithe_config.set_option("version", args.sdk_version, "transformer")
+    if monolithe_config and args.generation_version:
+        monolithe_config.set_option("version", args.generation_version, "transformer")
 
     if monolithe_config:
         monolithe_config.language = args.language

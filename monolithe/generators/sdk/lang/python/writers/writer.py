@@ -39,18 +39,18 @@ class GeneralWriter(TemplateFileWriter):
         super(GeneralWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
 
         self.monolithe_config = monolithe_config
-        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
-        self._sdk_version = self.monolithe_config.get_option("version", "transformer")
-        self._sdk_revision_number = self.monolithe_config.get_option("revision_number", "transformer")
-        self._sdk_url = self.monolithe_config.get_option("url", "transformer")
-        self._sdk_author = self.monolithe_config.get_option("author", "transformer")
-        self._sdk_email = self.monolithe_config.get_option("email", "transformer")
-        self._sdk_description = self.monolithe_config.get_option("description", "transformer")
-        self._sdk_license_name = self.monolithe_config.get_option("license_name", "transformer")
-        self._sdk_cli_name = self.monolithe_config.get_option("cli_name", "transformer")
-        self._sdk_bambou_version = self.monolithe_config.get_option("bambou_version", "transformer")
+        self._transformation_name = self.monolithe_config.get_option("name", "transformer")
+        self._transformation_version = self.monolithe_config.get_option("version", "transformer")
+        self._revision_number = self.monolithe_config.get_option("revision_number", "transformer")
+        self._url = self.monolithe_config.get_option("url", "transformer")
+        self._author = self.monolithe_config.get_option("author", "transformer")
+        self._email = self.monolithe_config.get_option("email", "transformer")
+        self._description = self.monolithe_config.get_option("description", "transformer")
+        self._license = self.monolithe_config.get_option("license_name", "transformer")
+        self._cli_name = self.monolithe_config.get_option("cli_name", "transformer")
+        self._bambou_version = self.monolithe_config.get_option("bambou_version", "transformer")
         self._copyright = self.monolithe_config.get_option("copyright")
-        self.output_directory = "%s/python" % self.monolithe_config.get_option("sdk_output", "transformer")
+        self.output_directory = "%s/python" % self.monolithe_config.get_option("output", "transformer")
 
         with open("%s/__code_header" % self.output_directory, "r") as f:
             self.header_content = f.read()
@@ -68,15 +68,15 @@ class GeneralWriter(TemplateFileWriter):
         """
         """
         self.write(destination=self.output_directory, filename="setup.py", template_name="setup.py.tpl",
-                   sdk_name=self._sdk_name,
-                   sdk_version=self._sdk_version,
-                   sdk_revision_number=self._sdk_revision_number,
-                   sdk_url=self._sdk_url,
-                   sdk_author=self._sdk_author,
-                   sdk_email=self._sdk_email,
-                   sdk_description=self._sdk_description,
-                   sdk_license_name=self._sdk_license_name,
-                   sdk_cli_name=self._sdk_cli_name,
+                   name=self._transformation_name,
+                   version=self._transformation_version,
+                   revision_number=self._revision_number,
+                   url=self._url,
+                   author=self._author,
+                   email=self._email,
+                   description=self._description,
+                   license_name=self._license,
+                   cli_name=self._cli_name,
                    copyright=self._copyright,
                    header=self.header_content)
 
@@ -84,26 +84,26 @@ class GeneralWriter(TemplateFileWriter):
         """
         """
         self.write(destination=self.output_directory, filename="MANIFEST.in", template_name="MANIFEST.in.tpl",
-                   sdk_name=self._sdk_name,
+                   name=self._transformation_name,
                    apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
 
     def _write_requirements(self):
         """
         """
         self.write(destination=self.output_directory, filename="requirements.txt", template_name="requirements.txt.tpl",
-                   sdk_bambou_version=self._sdk_bambou_version)
+                   bambou_version=self._bambou_version)
 
     def _write_root_init(self):
         """
         """
-        destination = "%s/%s" % (self.output_directory, self._sdk_name)
+        destination = "%s/%s" % (self.output_directory, self._transformation_name)
         self.write(destination=destination, filename="__init__.py", template_name="__init__.py.tpl",
                    header=self.header_content)
 
     def _write_utils(self):
         """
         """
-        destination = "%s/%s" % (self.output_directory, self._sdk_name)
+        destination = "%s/%s" % (self.output_directory, self._transformation_name)
         self.write(destination=destination, filename="utils.py", template_name="utils.py.tpl",
-                   sdk_name=self._sdk_name,
+                   name=self._transformation_name,
                    header=self.header_content)

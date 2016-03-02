@@ -46,31 +46,31 @@ For example:
 	copyright=Copyright (c) 2042, Nuage Networks
 
 
-### The [sdk] Section
+### The [transformer] Section
 
-This section contains informations related to the sdk generation.
+This section contains informations related to the generation.
 
-#### sdk_name
+#### name
 
-The name of your sdk. This will be used to generate the Python package, and in a lot of places.
+The name of your transformation.
 
 it **must not** contain any space
 
 For example:
 
-	sdk_name=vspk
+	name=vspk
 
-#### sdk_version
-The version of your sdk. This will be used when generating the `setup.py`
+#### version
+The version of your transformation.
 
 For example:
 
-	sdk_version=1.0
+	version=1.0
 
 
-#### sdk_output
+#### output
 
-The path where the generation of the sdk will be created.
+The path where the generated files will be created.
 
 If you don’t provide an initial `/`, it will be created relatively to the current folder.
 
@@ -78,15 +78,15 @@ If you provide an initial `/` then it will be created using the absolute path.
 
 For example:
 
-	sdk_output=codegen
+	output=codegen
 
-#### sdk_class_prefix
+#### class_prefix
 
-Prefix used by all classes. This is a general good practice, that helps identify the origin of an object in your code. All classes will be prefixed with it.
+Prefix used by all classes. All classes will be prefixed with it.
 
 For example:
 
-	sdk_class_prefix=NU
+	class_prefix=NU
 
 So if you have a Specification File describing an object with an `entity_name` set to `Unicorn`, the equivalent SDK object will be:
 
@@ -98,29 +98,29 @@ And the fetchers of that objects from the parents will be:
 
 > For more information about these objects fetchers, please read the Bambou documentation.
 
-#### sdk_bambou_version
+#### bambou_version
 
-The bambou version to use. This will be used to generate the `requirements.txt`.
+The bambou version to use.
 
 For example:
 
-	sdk_bambou_version=1.0.1
+	bambou_version=1.0.1
 
 Note that this will be used a strict version and will be translated to `bambou==1.0.1`
 
-#### sdk_url, sdk_author, sdk_email, sdk_description, sdk_license_name
+#### url, author, email, description, license_name
 
-Informatino related to your sdk. All of these will be used to generate the `setup.py`
+Information related to your transformation.
 
 For example:
 
-	sdk_url=http://nuagenetworks.github.io/vspk
-	sdk_author=Antoine Mercadal, Christophe Serafin
-	sdk_email=opensource@nuagenetworks.net
-	sdk_description=awesome sdk for vsd
-	sdk_license_name=BSD-3
+	url=http://nuagenetworks.github.io/vspk
+	author=Antoine Mercadal, Christophe Serafin
+	email=opensource@nuagenetworks.net
+	description=awesome sdk for vsd
+	license_name=BSD-3
 
-#### sdk_user_vanilla
+#### user_vanilla
 
 The path the sdk vanilla folder (see next chapter).
 
@@ -130,9 +130,9 @@ If you provide an initial `/` then it will be found using the absolute path.
 
 For example:
 
-	sdk_user_vanilla=vsdk/vanilla/sdk
+	user_vanilla=vsdk/vanilla/sdk
 
-#### sdk_cli_name
+#### cli_name
 
 The name of the command line interface of the sdk
 
@@ -140,11 +140,11 @@ It **must not** contain any space
 
 For example:
 
-	sdk_cli_name=todolist
+	cli_name=todolist
 
-#### sdkdoc_output
+#### doc_output
 
-The path where the generation of the sdk documentation will be created.
+The path where the generation of the transformation documentation will be created.
 
 If you don’t provide an initial `/`, it will be created relatively to the current folder.
 
@@ -152,7 +152,7 @@ If you provide an initial `/` then it will be created using the absolute path.
 
 For example:
 
-	sdkdoc_output=sdkdoc
+	doc_output=sdkdoc
 
 
 ## The vanilla folder
@@ -163,10 +163,10 @@ Vanilla folder allows you to add some data to the generated sdk and documentatio
 
 The structure of the sdk vanilla is the following:
 
-	<sdk_user_vanilla>/LICENSE
-	<sdk_user_vanilla>/README.md
-	<sdk_user_vanilla>/__attributes_defaults/attrs_defaults.ini
-	<sdk_user_vanilla>/__overrides/<object-rest-name>.override.py
+	<user_vanilla>/LICENSE
+	<user_vanilla>/README.md
+	<user_vanilla>/__attributes_defaults/attrs_defaults.ini
+	<user_vanilla>/__overrides/<object-rest-name>.override.py
 
 
 #### License & Readme

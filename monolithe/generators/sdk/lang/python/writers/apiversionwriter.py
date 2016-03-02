@@ -48,17 +48,17 @@ class APIVersionWriter(TemplateFileWriter):
         self.api_prefix = api_info["prefix"]
 
         self.monolithe_config = monolithe_config
-        self._sdk_output = self.monolithe_config.get_option("output", "transformer")
-        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
-        self._sdk_class_prefix = self.monolithe_config.get_option("class_prefix", "transformer")
+        self._output = self.monolithe_config.get_option("output", "transformer")
+        self._transformation_name = self.monolithe_config.get_option("name", "transformer")
+        self._class_prefix = self.monolithe_config.get_option("class_prefix", "transformer")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/python/%s/%s" % (self._sdk_output, self._sdk_name, SDKUtils.get_string_version(self.api_version))
+        self.output_directory = "%s/python/%s/%s" % (self._output, self._transformation_name, SDKUtils.get_string_version(self.api_version))
         self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
         self.fetchers_path = "/fetchers/"
 
-        with open("%s/python/__code_header" % self._sdk_output, "r") as f:
+        with open("%s/python/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
     def perform(self, specifications):
@@ -74,7 +74,7 @@ class APIVersionWriter(TemplateFileWriter):
         task_manager.wait_until_exit()
 
         self._write_session()
-        self._write_sdk_info()
+        self._write_info()
         self._write_init_models(filenames=self.model_filenames)
         self._write_init_fetchers(filenames=self.fetcher_filenames)
         self._write_attrs_defaults()
@@ -87,29 +87,29 @@ class APIVersionWriter(TemplateFileWriter):
 
         """
         base_name = "%ssession" % self._product_accronym.lower()
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), base_name)
+        filename = "%s%s.py" % (self._class_prefix.lower(), base_name)
         override_content = self._extract_override_content(base_name)
 
         self.write(destination=self.output_directory, filename=filename, template_name="session.py.tpl",
                    version=self.api_version,
                    product_accronym=self._product_accronym,
-                   sdk_class_prefix=self._sdk_class_prefix,
-                   sdk_root_api=self.api_root,
-                   sdk_api_prefix=self.api_prefix,
+                   class_prefix=self._class_prefix,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
                    override_content=override_content,
                    header=self.header_content)
 
-    def _write_sdk_info(self):
+    def _write_info(self):
         """ Write API Info file
         """
         self.write(destination=self.output_directory, filename="sdkinfo.py", template_name="sdkinfo.py.tpl",
                    version=self.api_version,
                    product_accronym=self._product_accronym,
-                   sdk_class_prefix=self._sdk_class_prefix,
-                   sdk_root_api=self.api_root,
-                   sdk_api_prefix=self.api_prefix,
+                   class_prefix=self._class_prefix,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
                    product_name=self._product_name,
-                   sdk_name=self._sdk_name,
+                   name=self._transformation_name,
                    header=self.header_content)
 
     def _write_init_models(self, filenames):
@@ -122,7 +122,7 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.write(destination=self.output_directory, filename="__init__.py", template_name="__init_model__.py.tpl",
                    filenames=self._prepare_filenames(filenames),
-                   sdk_class_prefix=self._sdk_class_prefix,
+                   class_prefix=self._class_prefix,
                    product_accronym=self._product_accronym,
                    header=self.header_content)
 
@@ -132,7 +132,7 @@ class APIVersionWriter(TemplateFileWriter):
         formatted_filenames = {}
 
         for filename, classname in filenames.iteritems():
-            formatted_filenames[filename[:-3]] = str("%s%s%s" % (self._sdk_class_prefix, classname, suffix))
+            formatted_filenames[filename[:-3]] = str("%s%s%s" % (self._class_prefix, classname, suffix))
 
         return OrderedDict(sorted(formatted_filenames.items()))
 
@@ -140,7 +140,7 @@ class APIVersionWriter(TemplateFileWriter):
         """ Write autogenerate specification file
 
         """
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), specification.entity_name.lower())
+        filename = "%s%s.py" % (self._class_prefix.lower(), specification.entity_name.lower())
 
         override_content = self._extract_override_content(specification.entity_name)
         constants = self._extract_constants(specification)
@@ -150,7 +150,7 @@ class APIVersionWriter(TemplateFileWriter):
                    specification=specification,
                    specification_set=specification_set,
                    version=self.api_version,
-                   sdk_class_prefix=self._sdk_class_prefix,
+                   class_prefix=self._class_prefix,
                    product_accronym=self._product_accronym,
                    override_content=override_content,
                    superclass_name=superclass_name,
@@ -169,7 +169,7 @@ class APIVersionWriter(TemplateFileWriter):
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
         self.write(destination=destination, filename="__init__.py", template_name="__init_fetcher__.py.tpl",
                    filenames=self._prepare_filenames(filenames, suffix='Fetcher'),
-                   sdk_class_prefix=self._sdk_class_prefix,
+                   class_prefix=self._class_prefix,
                    product_accronym=self._product_accronym,
                    header=self.header_content)
 
@@ -179,13 +179,13 @@ class APIVersionWriter(TemplateFileWriter):
         """
         destination = "%s%s" % (self.output_directory, self.fetchers_path)
         base_name = "%s_fetcher" % specification.entity_name_plural.lower()
-        filename = "%s%s.py" % (self._sdk_class_prefix.lower(), base_name)
+        filename = "%s%s.py" % (self._class_prefix.lower(), base_name)
         override_content = self._extract_override_content(base_name)
 
         self.write(destination=destination, filename=filename, template_name="fetcher.py.tpl",
                    specification=specification,
                    specification_set=specification_set,
-                   sdk_class_prefix=self._sdk_class_prefix,
+                   class_prefix=self._class_prefix,
                    product_accronym=self._product_accronym,
                    override_content=override_content,
                    header=self.header_content)
@@ -228,8 +228,8 @@ class APIVersionWriter(TemplateFileWriter):
         """
         """
         # find override file
-        specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.api_version, self._sdk_class_prefix.lower(), name.lower())
-        generic_override_path = "%s/%s%s.override.py" % (self.override_folder, self._sdk_class_prefix.lower(), name.lower())
+        specific_override_path = "%s/%s_%s%s.override.py" % (self.override_folder, self.api_version, self._class_prefix.lower(), name.lower())
+        generic_override_path = "%s/%s%s.override.py" % (self.override_folder, self._class_prefix.lower(), name.lower())
         final_path = specific_override_path if os.path.exists(specific_override_path) else generic_override_path
 
         # Read override from file

@@ -1,6 +1,6 @@
 {{ header }}
 
-package {{ sdk_name }}
+package {{ name }}
 
 import "github.com/nuagenetworks/go-bambou/bambou"
 

@@ -3,12 +3,12 @@
 
 {% for api in specification.child_apis %}
 {% set child_spec = specification_set[api.rest_name] %}
-from .fetchers import {{ sdk_class_prefix }}{{ child_spec.entity_name_plural }}Fetcher
+from .fetchers import {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher
 {% endfor %}
 from bambou import {{ superclass_name }}
 
 
-class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }}):
+class {{ class_prefix }}{{ specification.entity_name }}({{ superclass_name }}):
     """ Represents a {{ specification.entity_name }} in the {{ product_accronym }}
 
         Notes:
@@ -34,11 +34,11 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
                 object from a Python dictionary
 
             Examples:
-                >>> {{ specification.entity_name.lower() }} = {{ sdk_class_prefix }}{{ specification.entity_name }}(id=u'xxxx-xxx-xxx-xxx', name=u'{{ specification.entity_name }}')
-                >>> {{ specification.entity_name.lower() }} = {{ sdk_class_prefix }}{{ specification.entity_name }}(data=my_dict)
+                >>> {{ specification.entity_name.lower() }} = {{ class_prefix }}{{ specification.entity_name }}(id=u'xxxx-xxx-xxx-xxx', name=u'{{ specification.entity_name }}')
+                >>> {{ specification.entity_name.lower() }} = {{ class_prefix }}{{ specification.entity_name }}(data=my_dict)
         """
 
-        super({{ sdk_class_prefix }}{{ specification.entity_name }}, self).__init__()
+        super({{ class_prefix }}{{ specification.entity_name }}, self).__init__()
 
         # Read/Write Attributes
         {% for attribute in specification.attributes %}
@@ -50,7 +50,7 @@ class {{ sdk_class_prefix }}{{ specification.entity_name }}({{ superclass_name }
         # Fetchers
         {% for api in specification.child_apis %}
         {% set child_spec = specification_set[api.rest_name] %}
-        self.{{ child_spec.instance_name_plural }} = {{ sdk_class_prefix }}{{ child_spec.entity_name_plural }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
+        self.{{ child_spec.instance_name_plural }} = {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher.fetcher_with_object(parent_object=self, relationship="{{api.relationship}}")
         {% endfor %}{% endif %}
 
         self._compute_args(**kwargs)

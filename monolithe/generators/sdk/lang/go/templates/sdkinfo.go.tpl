@@ -1,12 +1,12 @@
 {{header}}
 
-package {{ sdk_name }}
+package {{ name }}
 
 const (
-    SDKAPIPrefix       = "{{ sdk_api_prefix }}"
+    SDKAPIPrefix       = "{{ api_prefix }}"
     SDKAPIVersion      = {{ version }}
-    SDKName            = "{{ sdk_name }}"
+    SDKName            = "{{ name }}"
     SDKProductAccronym = "{{ product_accronym }}"
     SDKProductName     = "{{ product_name }}"
-    SDKRootAPI         = "{{sdk_root_api}}"
+    SDKRootAPI         = "{{root_api}}"
 )

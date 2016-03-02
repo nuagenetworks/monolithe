@@ -41,11 +41,10 @@ class APIVersionWriter(TemplateFileWriter):
         self.monolithe_config = monolithe_config
 
         self._api_version = api_info["version"]
-        self._sdk_output = self.monolithe_config.get_option("output", "transformer")
-        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
+        self._output = self.monolithe_config.get_option("output", "transformer")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/html/%s" % (self._sdk_output, SDKUtils.get_string_version(self._api_version))
+        self.output_directory = "%s/html/%s" % (self._output, SDKUtils.get_string_version(self._api_version))
 
     def _get_actions(self, obj):
         """

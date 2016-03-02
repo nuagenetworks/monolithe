@@ -48,25 +48,25 @@ class APIVersionWriter(TemplateFileWriter):
         self.api_root = api_info["root"]
         self.api_prefix = api_info["prefix"]
 
-        self._sdk_output = self.monolithe_config.get_option("output", "transformer")
-        self._sdk_name = self.monolithe_config.get_option("name", "transformer")
+        self._output = self.monolithe_config.get_option("output", "transformer")
+        self._transformation_name = self.monolithe_config.get_option("name", "transformer")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/go/%s" % (self._sdk_output, self._sdk_name)
+        self.output_directory = "%s/go/%s" % (self._output, self._transformation_name)
 
         self.attrs_defaults = RawConfigParser()
-        path = "%s/go/__attributes_defaults/attrs_defaults.ini" % self._sdk_output
+        path = "%s/go/__attributes_defaults/attrs_defaults.ini" % self._output
         self.attrs_defaults.optionxform = str
         self.attrs_defaults.read(path)
 
-        with open("%s/go/__code_header" % self._sdk_output, "r") as f:
+        with open("%s/go/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
     def perform(self, specifications):
         """
         """
-        self._write_sdk_info()
+        self._write_info()
         self._write_session()
 
         task_manager = TaskManager()
@@ -76,16 +76,16 @@ class APIVersionWriter(TemplateFileWriter):
 
         self._format()
 
-    def _write_sdk_info(self):
+    def _write_info(self):
         """
         """
         self.write(destination=self.output_directory, filename="sdkinfo.go", template_name="sdkinfo.go.tpl",
                    version=self.api_version,
                    product_accronym=self._product_accronym,
-                   sdk_root_api=self.api_root,
-                   sdk_api_prefix=self.api_prefix,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
                    product_name=self._product_name,
-                   sdk_name=self._sdk_name,
+                   name=self._transformation_name,
                    header=self.header_content)
 
     def _write_session(self):
@@ -93,9 +93,9 @@ class APIVersionWriter(TemplateFileWriter):
         """
         self.write(destination=self.output_directory, filename="session.go", template_name="session.go.tpl",
                    version=self.api_version,
-                   sdk_root_api=self.api_root,
-                   sdk_api_prefix=self.api_prefix,
-                   sdk_name=self._sdk_name,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
+                   name=self._transformation_name,
                    header=self.header_content)
 
     def _write_model(self, specification, specification_set):
@@ -112,7 +112,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.write(destination=self.output_directory, filename=filename, template_name="model.go.tpl",
                    specification=specification,
                    specification_set=specification_set,
-                   sdk_name=self._sdk_name,
+                   name=self._transformation_name,
                    header=self.header_content,
                    attribute_defaults=defaults)
 

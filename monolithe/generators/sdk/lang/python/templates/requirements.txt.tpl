@@ -1,3 +1,3 @@
-bambou=={{ sdk_bambou_version }}
+bambou=={{ bambou_version }}
 tabulate
 colorama

@@ -2,10 +2,10 @@
 {{ header }}
 
 import logging
-sdk_logger = logging.getLogger("{{ sdk_name }}")
+logger = logging.getLogger("{{ name }}")
 
 def set_log_level(level, handler=None):
-    """ Set both {{ sdk_name }} and Bambou log level to the given level
+    """ Set both {{ name }} and Bambou log level to the given level
 
         Args:
             level (logging.level): a logging level
@@ -32,5 +32,5 @@ def set_log_level(level, handler=None):
     pushcenter_logger.setLevel(level)
     pushcenter_logger.addHandler(handler)
 
-    sdk_logger.setLevel(level)
-    sdk_logger.addHandler(handler)
+    logger.setLevel(level)
+    logger.addHandler(handler)
