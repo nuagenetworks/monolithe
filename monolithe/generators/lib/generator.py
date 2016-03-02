@@ -32,13 +32,13 @@ from monolithe import MonolitheConfig
 from monolithe.lib import Printer
 from monolithe.specifications import RepositoryManager, FolderManager, SpecificationAPI
 
+
 class Generator(object):
 
     def __init__(self, monolithe_config):
         """
         """
         self.monolithe_config = monolithe_config
-
 
     def initialize_folder_manager(self, folder):
         """
