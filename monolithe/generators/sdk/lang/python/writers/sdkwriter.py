@@ -36,7 +36,7 @@ class SDKWriter(TemplateFileWriter):
     def __init__(self, monolithe_config):
         """
         """
-        super(SDKWriter, self).__init__(package="monolithe.generators.sdk.python")
+        super(SDKWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
 
         self.monolithe_config = monolithe_config
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")

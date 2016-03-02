@@ -41,7 +41,7 @@ class SDKAPIVersionWriter(TemplateFileWriter):
         """ Initializes a _PythonSDKAPIVersionFileWriter
 
         """
-        super(SDKAPIVersionWriter, self).__init__(package="monolithe.generators.sdk.python")
+        super(SDKAPIVersionWriter, self).__init__(package="monolithe.generators.sdk.lang.python")
 
         self.api_version = api_info["version"]
         self.api_root = api_info["root"]

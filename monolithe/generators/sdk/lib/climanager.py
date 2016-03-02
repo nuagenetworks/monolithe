@@ -43,7 +43,7 @@ class CLIManager(object):
         language = self.monolithe_config.language
 
         try:
-            module = importlib.import_module('.%s.writers.cliwriter' % language, package="monolithe.generators.sdk")
+            module = importlib.import_module('.lang.%s.writers.cliwriter' % language, package="monolithe.generators.sdk")
             klass = module.CLIWriter
         except:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
