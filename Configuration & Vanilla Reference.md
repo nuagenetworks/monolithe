@@ -142,33 +142,6 @@ For example:
 
 	sdk_cli_name=todolist
 
-### The [apidoc] Section
-
-This section contains information needed to generate the ReST API Documentation.
-
-#### apidoc_output
-
-The path where the generation of the api documentation will be created.
-
-If you don’t provide an initial `/`, it will be created relatively to the current folder.
-
-If you provide an initial `/` then it will be created using the absolute path.
-
-For example:
-
-	apidoc_output=docgen
-
-#### apidoc_user_vanilla
-
-The path the api documentation vanilla folder (see next chapter).
-
-If you don’t provide an initial `/`, it will be found relatively to the current folder.
-
-If you provide an initial `/` then it will be found using the absolute path.
-
-For example:
-
-	apidoc_user_vanilla=vsdk/vanilla/apidoc
 
 ### The [sdkdoc] Section
 
