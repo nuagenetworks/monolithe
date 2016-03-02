@@ -27,22 +27,18 @@
 
 import importlib
 
-from monolithe.lib import TaskManager
-
 
 class SDKAPIVersionWriter(object):
-    """ Writer of the Python SDK SDK
+    """ Writer of the SDK
 
     """
 
     def __init__(self, monolithe_config):
         """
         """
-        self.writer = None
-
         self.monolithe_config = monolithe_config
 
-    def write(self, specifications, api_info):
+    def perform(self, specifications, api_info):
         """ Write all files according to data
 
             Args:
@@ -53,36 +49,6 @@ class SDKAPIVersionWriter(object):
                 Writes specifications and fetchers files
 
         """
-        model_filenames = dict()
-        fetcher_filenames = dict()
-
-        self.api_info = api_info
-
-        self.writer = self._get_writer()
-
-        task_manager = TaskManager()
-
-        for rest_name, specification in specifications.iteritems():
-            task_manager.start_task(method=self._write_models, specification=specification, filenames=model_filenames, specification_set=specifications)
-            task_manager.start_task(method=self._write_fetcher_file, specification=specification, filenames=fetcher_filenames, specification_set=specifications)
-
-        task_manager.wait_until_exit()
-
-        self.writer.write_sdkapiversion(model_filenames=model_filenames, fetcher_filenames=fetcher_filenames)
-        self.postprocess()
-
-    def postprocess(self):
-        """
-        Allows the sub writer to do some post generation operations
-        """
-        if not hasattr(self.writer, "postprocess"):
-            return
-
-        self.writer.postprocess()
-
-    def _get_writer(self):
-        """ Get the appropriate writer
-        """
         language = self.monolithe_config.language
 
         try:
@@ -91,29 +57,5 @@ class SDKAPIVersionWriter(object):
         except:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
-        return klass(monolithe_config=self.monolithe_config, api_info=self.api_info)
-
-    def _write_models(self, specification, filenames, specification_set):
-        """
-        """
-
-        if not hasattr(self.writer, "write_model"):
-            return
-
-        (filename, classname) = self.writer.write_model(specification=specification, specification_set=specification_set)
-        filenames[filename] = classname
-
-    def _write_fetcher_file(self, specification, filenames, specification_set):
-        """ Write the fetcher file for the specification
-
-            Args:
-                specification: the specification to write
-                filenames: list of generates filenames
-
-        """
-        if not hasattr(self.writer, "write_fetcher"):
-            return
-
-        if specification.rest_name != self.api_info["root"]:
-            (filename, classname) = self.writer.write_fetcher(specification=specification, specification_set=specification_set)
-            filenames[filename] = classname
+        writer = klass(monolithe_config=self.monolithe_config, api_info=api_info)
+        writer.perform(specifications=specifications)

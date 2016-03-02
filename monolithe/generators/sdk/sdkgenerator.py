@@ -79,7 +79,7 @@ class SDKGenerator(Generator):
         sdk_writer.write(apiversions=apiversions)
 
         cli_writer = CLIWriter(monolithe_config=self.monolithe_config)
-        cli_writer.write()
+        cli_writer.perform()
 
         self.cleanup()
         Printer.success("%s generation complete and available in \"%s/%s\"" % (sdk_name, sdk_output, self.monolithe_config.language))

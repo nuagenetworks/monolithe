@@ -35,22 +35,10 @@ class SDKWriter(object):
     def __init__(self, monolithe_config):
         """
         """
-        self.writer = None
-
         self.monolithe_config = monolithe_config
 
     def write(self, apiversions):
         """
-        """
-        self.writer = self._get_writer()
-
-        if not hasattr(self.writer, "write_sdk"):
-            return
-
-        self.writer.write_sdk(apiversions=apiversions)
-
-    def _get_writer(self):
-        """ Get the appropriate writer
         """
         language = self.monolithe_config.language
 
@@ -60,4 +48,5 @@ class SDKWriter(object):
         except:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
-        return klass(monolithe_config=self.monolithe_config)
+        writer = klass(monolithe_config=self.monolithe_config)
+        writer.perform(apiversions=apiversions)

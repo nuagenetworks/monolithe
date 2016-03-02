@@ -36,3 +36,8 @@ class CLIWriter(TemplateFileWriter):
         """
         """
         super(CLIWriter, self).__init__(package="monolithe.generators.sdk.go")
+
+    def perform(self):
+        """
+        """
+        pass

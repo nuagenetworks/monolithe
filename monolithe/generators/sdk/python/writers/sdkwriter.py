@@ -55,7 +55,7 @@ class SDKWriter(TemplateFileWriter):
         with open("%s/__code_header" % self.output_directory, "r") as f:
             self.header_content = f.read()
 
-    def write_sdk(self, apiversions):
+    def perform(self, apiversions):
         """
         """
         self._write_setup()

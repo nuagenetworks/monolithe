@@ -29,7 +29,7 @@ import os
 import shutil
 from collections import OrderedDict
 
-from monolithe.lib import SDKUtils
+from monolithe.lib import SDKUtils, TaskManager
 from monolithe.generators.lib import TemplateFileWriter
 
 
@@ -61,13 +61,22 @@ class SDKAPIVersionWriter(TemplateFileWriter):
         with open("%s/python/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
-    def write_sdkapiversion(self, model_filenames, fetcher_filenames):
+    def perform(self, specifications):
         """
         """
+        self.model_filenames = dict()
+        self.fetcher_filenames = dict()
+
+        task_manager = TaskManager()
+        for rest_name, specification in specifications.iteritems():
+            task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications)
+            task_manager.start_task(method=self._write_fetcher, specification=specification, specification_set=specifications)
+        task_manager.wait_until_exit()
+
         self._write_session()
         self._write_sdk_info()
-        self._write_init_models(filenames=model_filenames)
-        self._write_init_fetchers(filenames=fetcher_filenames)
+        self._write_init_models(filenames=self.model_filenames)
+        self._write_init_fetchers(filenames=self.fetcher_filenames)
         self._write_attrs_defaults()
 
     def _write_session(self):
@@ -127,7 +136,7 @@ class SDKAPIVersionWriter(TemplateFileWriter):
 
         return OrderedDict(sorted(formatted_filenames.items()))
 
-    def write_model(self, specification, specification_set):
+    def _write_model(self, specification, specification_set):
         """ Write autogenerate specification file
 
         """
@@ -148,7 +157,7 @@ class SDKAPIVersionWriter(TemplateFileWriter):
                    constants=constants,
                    header=self.header_content)
 
-        return (filename, specification.entity_name)
+        self.model_filenames[filename] = specification.entity_name
 
     def _write_init_fetchers(self, filenames):
         """ Write fetcher init file
@@ -164,7 +173,7 @@ class SDKAPIVersionWriter(TemplateFileWriter):
                    product_accronym=self._product_accronym,
                    header=self.header_content)
 
-    def write_fetcher(self, specification, specification_set):
+    def _write_fetcher(self, specification, specification_set):
         """ Write fetcher
 
         """
@@ -181,7 +190,7 @@ class SDKAPIVersionWriter(TemplateFileWriter):
                    override_content=override_content,
                    header=self.header_content)
 
-        return (filename, specification.entity_name_plural)
+        self.fetcher_filenames[filename] = specification.entity_name_plural
 
     def _write_attrs_defaults(self):
         """

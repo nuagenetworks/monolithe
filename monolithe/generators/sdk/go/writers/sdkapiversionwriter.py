@@ -28,6 +28,7 @@
 import os
 from ConfigParser import RawConfigParser
 
+from monolithe.lib import TaskManager
 from monolithe.generators.lib import TemplateFileWriter
 
 
@@ -41,11 +42,12 @@ class SDKAPIVersionWriter(TemplateFileWriter):
         """
         super(SDKAPIVersionWriter, self).__init__(package="monolithe.generators.sdk.go")
 
+        self.monolithe_config = monolithe_config
+
         self.api_version = api_info["version"]
         self.api_root = api_info["root"]
         self.api_prefix = api_info["prefix"]
 
-        self.monolithe_config = monolithe_config
         self._sdk_output = self.monolithe_config.get_option("sdk_output", "sdk")
         self._sdk_name = self.monolithe_config.get_option("sdk_name", "sdk")
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
@@ -61,10 +63,22 @@ class SDKAPIVersionWriter(TemplateFileWriter):
         with open("%s/go/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
-    def write_sdkapiversion(self, model_filenames, fetcher_filenames):
+    def perform(self, specifications):
         """
         """
+        self._write_sdk_info()
+        self._write_session()
 
+        task_manager = TaskManager()
+        for rest_name, specification in specifications.iteritems():
+            task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications)
+        task_manager.wait_until_exit()
+
+        self._format()
+
+    def _write_sdk_info(self):
+        """
+        """
         self.write(destination=self.output_directory, filename="sdkinfo.go", template_name="sdkinfo.go.tpl",
                    version=self.api_version,
                    product_accronym=self._product_accronym,
@@ -74,6 +88,9 @@ class SDKAPIVersionWriter(TemplateFileWriter):
                    sdk_name=self._sdk_name,
                    header=self.header_content)
 
+    def _write_session(self):
+        """
+        """
         self.write(destination=self.output_directory, filename="session.go", template_name="session.go.tpl",
                    version=self.api_version,
                    sdk_root_api=self.api_root,
@@ -81,9 +98,8 @@ class SDKAPIVersionWriter(TemplateFileWriter):
                    sdk_name=self._sdk_name,
                    header=self.header_content)
 
-    def write_model(self, specification, specification_set):
-        """ Write autogenerate specification file
-
+    def _write_model(self, specification, specification_set):
+        """
         """
         filename = "%s.go" % (specification.entity_name.lower())
 
@@ -102,8 +118,7 @@ class SDKAPIVersionWriter(TemplateFileWriter):
 
         return (filename, specification.entity_name)
 
-    def postprocess(self):
-        """ Perform some linting operations
-
+    def _format(self):
+        """
         """
         os.system("gofmt -w '%s' >/dev/null 2>&1" % self.output_directory)

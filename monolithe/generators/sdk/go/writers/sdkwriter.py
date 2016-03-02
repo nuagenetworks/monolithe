@@ -36,3 +36,8 @@ class SDKWriter(TemplateFileWriter):
         """
         """
         super(SDKWriter, self).__init__(package="monolithe.generators.sdk.go")
+
+    def perform(self, apiversions):
+        """
+        """
+        pass

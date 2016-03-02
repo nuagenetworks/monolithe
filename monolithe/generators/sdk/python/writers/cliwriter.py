@@ -49,7 +49,7 @@ class CLIWriter(TemplateFileWriter):
         with open("%s/python/__code_header" % self._sdk_output, "r") as f:
             self.header_content = f.read()
 
-    def write_cli(self):
+    def perform(self):
         """
         """
         self._write_init()

@@ -35,21 +35,10 @@ class CLIWriter(object):
     def __init__(self, monolithe_config):
         """
         """
-        self.writer = None
         self.monolithe_config = monolithe_config
 
-    def write(self):
+    def perform(self):
         """
-        """
-        self.writer = self._get_writer()
-
-        if not hasattr(self.writer, "write_cli"):
-            return
-
-        self.writer.write_cli()
-
-    def _get_writer(self):
-        """ Get the appropriate writer
         """
         language = self.monolithe_config.language
 
@@ -59,4 +48,5 @@ class CLIWriter(object):
         except:
             raise Exception('Unsupported language %s. Please create the appropriate class in sdkwriter.py' % language)
 
-        return klass(monolithe_config=self.monolithe_config)
+        writer = klass(monolithe_config=self.monolithe_config)
+        writer.perform()
