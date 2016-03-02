@@ -1,7 +1,7 @@
 {
     "attributes": {},
-    "children": {
-        "metadata": {
+    "children": [
+        {
             "bulk_create": false,
             "bulk_delete": false,
             "bulk_update": false,
@@ -10,9 +10,10 @@
             "deprecated": null,
             "get": true,
             "relationship": "child",
+            "rest_name": "metadata",
             "update": false
         }
-    },
+    ],
     "model": {
         "create": false,
         "delete": true,

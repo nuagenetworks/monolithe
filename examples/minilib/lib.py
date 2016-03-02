@@ -3,7 +3,9 @@ import data
 import json
 import uuid
 
-### auth
+
+# auth
+
 def check_auth(request):
     encoded_auth = request.headers['Authorization'][6:]  # XREST stuff
     decoded_auth = base64.urlsafe_b64decode(str(encoded_auth))
@@ -13,17 +15,13 @@ def check_auth(request):
     return True
 
 
-
-
-
-
-
-### Lists
+# Lists
 
 def perform_get_all_lists():
     """
     """
     return json.dumps(data.lists), 200
+
 
 def perform_get_list(lid):
     """
@@ -35,6 +33,7 @@ def perform_get_list(lid):
 
     return json.dumps([lst]), 200
 
+
 def perform_create_list(d):
     """
     """
@@ -44,10 +43,10 @@ def perform_create_list(d):
     if error:
         return json.dumps(error), 409
 
-
     data.insert_list(d)
 
     return json.dumps([d]), 201
+
 
 def perform_delete_list(lid):
     """
@@ -60,6 +59,7 @@ def perform_delete_list(lid):
     data.delete_list(lst)
 
     return "", 204
+
 
 def perform_update_list(lid, d):
     """
@@ -80,20 +80,20 @@ def perform_update_list(lid, d):
 
     return json.dumps([lst]), 200
 
+
 def _validate_list(lst):
     if not lst["title"]: return _create_error("title", "Invalid input", "This value is mandatory.")
     if not lst["description"]: return _create_error("description", "Invalid input", "This value is mandatory.")
     return None
 
 
+# Tasks
 
-
-
-### Tasks
 def perform_get_all_tasks(lid):
     """
     """
     return json.dumps(data.get_tasks_of_lists(lid)), 200
+
 
 def perform_get_task(tid):
     """
@@ -104,6 +104,7 @@ def perform_get_task(tid):
         return json.dumps(_create_error("", "task not found", "Cannot find task with ID %s" % tid)), 404
 
     return json.dumps([task]), 200
+
 
 def perform_create_task(lid, d):
     """
@@ -119,6 +120,7 @@ def perform_create_task(lid, d):
 
     return json.dumps([d]), 200
 
+
 def perform_delete_task(tid):
     """
     """
@@ -130,6 +132,7 @@ def perform_delete_task(tid):
     data.delete_task(task)
 
     return "", 204
+
 
 def perform_update_task(tid, d):
     """
@@ -152,31 +155,36 @@ def perform_update_task(tid, d):
 
 
 def _validate_task(task):
-    if not task["title"]: return _create_error("title", "Invalid input", "This value is mandatory.")
-    if not task["description"]: return _create_error("description", "Invalid input", "This value is mandatory.")
-    if not task["status"]: return _create_error("status", "Invalid input", "This value is mandatory.")
-    if not task["status"] in ("TODO", "DONE"): return _create_error("status", "Invalid input", "Invalid input")
+    """
+    """
+    if not task["title"]:
+        return _create_error("title", "Invalid input", "This value is mandatory.")
+    if not task["description"]:
+        return _create_error("description", "Invalid input", "This value is mandatory.")
+    if not task["status"]:
+        return _create_error("status", "Invalid input", "This value is mandatory.")
+    if not task["status"] in ("TODO", "DONE"):
+        return _create_error("status", "Invalid input", "Invalid input")
     return None
 
 
+# Utils
 
-
-
-### Utils
 def _create_error(property_name, title, description):
-    return {
-        "errors" : [
-            {
-                "property": property_name,
-                "descriptions": [
-                    {
-                        "title": title,
-                        "description": description
-                    }
-                ]
+    """
+    """
+    return {"errors":
+            [
+                {
+                    "property": property_name,
+                    "descriptions":
+                        [
+                            {
+                                "title": title,
+                                "description": description
+                            }
+                        ]
+                }
+            ],
+            "internalErrorCode": "xxx"
             }
-        ],
-        "internalErrorCode": "xxx"
-    }
-
-

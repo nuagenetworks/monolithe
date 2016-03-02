@@ -51,7 +51,6 @@ More informations can be found in each files of the examples.
 The example is composed of:
 
 - Some specifications in `examples/specifications/`
-- A Monolithe configuration in `examples/conf/conf.ini`
 - Some vanilla data in `examples/vanilla`
 - A `demo-server.py` command that starts a really stupid server that implements a ReST API for the ToDoList
 - A `demo-client.py` command that interacts with the server using the generated sdk named `tdldk`.
@@ -65,13 +64,13 @@ The example is composed of:
 
 ### Step 2: generate the tdldk
 
-    $ ./commands/monogen-sdk --config examples/conf/conf.ini --folder examples/specifications
+    $ ./commands/monogen-sdk -f examples/specifications -L python
 
-> Customizable using the configuration and the content of the `vanilla/sdk` folder.
+> Customizable using the configuration and the content of the `vanilla/python` folder.
 
 > You can also generate the sdk documentation by adding the `--doc` argument. But it's slow.
 
-You'll see a `codegen` directory created under `examples`.
+You'll see a `codegen/python` directory created under `examples`.
 
 It contains all the auto-generated sdk source code according to the specifications files.
 
@@ -87,11 +86,11 @@ You can install it by doing:
 
 ### Step 3: generate the ReST api documentation
 
-    $ ./commands/monogen-apidoc --config examples/conf/conf.ini --folder examples/specifications
+    $ ./commands/monogen-sdk -f examples/specifications -L html
 
-> Customizable using the configuration and the content of the `vanilla/apidoc` folder.
+> Customizable using the configuration and the content of the `vanilla/html` folder.
 
-You'll see a `apidocgen` directory created under `examples`.
+You'll see a `codegen/html` directory created under `examples`.
 
 You can open the `index.html` to navigate the api documentation.
 
@@ -99,12 +98,12 @@ You can open the `index.html` to navigate the api documentation.
 ### Step 4: start the demo server
 
     $ ./examples/demo-server.py
-    > * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+    > * Running on http://127.0.0.1:2000/ (Press CTRL+C to quit)
     > * Restarting with stat
 
 check that it's working by doing
 
-    $ curl http://127.0.0.1:5000/api/v1_0/lists
+    $ curl http://127.0.0.1:2000/api/v1_0/lists
     > [{"description": "Things to buy", "ID": "1", "title": "Shopping List"}, {"description": "You should not see this", "ID": "2", "title": "Secret List"}]
 
 

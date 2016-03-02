@@ -31,6 +31,5 @@ import sys
 sys.path.append("../monolithe")
 
 if __name__ == '__main__':
-    # from monolithe.cli import main
-    # sys.exit(main(sys.argv))
-    pass
+    from monolithe.cli import main
+    sys.exit(main(sys.argv))

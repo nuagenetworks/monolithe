@@ -2,16 +2,13 @@
 import sys
 import os
 import importlib
-import pprint
-import logging
 
 
-## Ho, Hi There!
-## I guess you are coming from my good friend, the README file
-## He's a nice guy, and I'm glad you have listen to him :)
-## Please go through this example, and you'll uncover a bit of
-## of the awesomeness of Monolithe!
-
+# Ho, Hi There!
+# I guess you are coming from my good friend, the README file
+# He's a nice guy, and I'm glad you have listen to him :)
+# Please go through this example, and you'll uncover a bit of
+# of the awesomeness of Monolithe!
 
 
 # manually import the tlddk
@@ -21,9 +18,8 @@ import logging
 # you would normally write somehing like
 #
 #   from tlddk import v1_0 as tlddk
-sys.path.append("%s/codegen" % os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, "%s/codegen/python" % os.path.abspath(os.path.dirname(__file__)))
 tdldk = importlib.import_module("tdldk.v1_0")
-
 
 
 # uncomment the two following lines to log the ReST communication.
@@ -34,10 +30,9 @@ tdldk = importlib.import_module("tdldk.v1_0")
 # tdldk_utils.set_log_level(logging.DEBUG)
 
 
-
 # create a session. The demo server doesn't care about your credentials,
 # we put junk. The only important thing is of course the api_url
-session = tdldk.GATDLSession(username="root", enterprise="nuagenetworks", password="password", api_url="http://127.0.0.1:2000")
+session = tdldk.GATDLSession(username="root", enterprise="nuagenetworks", password="password", api_url="http://127.0.0.1:5555")
 
 # now we start the session. This would normally authenticate your credentials and return your root api object with an
 # api key. But again, here we don't validate anything.
@@ -94,5 +89,4 @@ print "Done! restart this script to see your changes :)\n"
 
 
 # did you notice that you never saw a ReST call, or a json structure?
-# but you can do it, by uncommenting the logging, near the top of the this file :)
-
+# but you can, by uncommenting the logging, near the top of the this file :)
