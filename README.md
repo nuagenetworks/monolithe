@@ -2,7 +2,7 @@
 
 Monolithe is a Python toolset that can transform a set a specification to something else, like a sdk or a documentation.
 
-It provides the `monogen-sdk` command that will transform the specification into the specified language.
+It provides the `monogen` command that will transform the specification into the specified language.
 
 The specifications are a set of files containing json data describing one object per file, its properties and their characteristics, and its position in the api hierarchy.
 
@@ -31,14 +31,14 @@ Install Monolithe by running the following command:
 
 ## Command Line Interfaces Quick Reference
 
-`monogen-sdk` command will generate a sdk using specifications either from a local folder, or from a Github repository.
+`monogen` command will generate a sdk using specifications either from a local folder, or from a Github repository.
 
 ```
-usage: monogen-sdk [-h] [-g github_api_url] [-l login_login] [-t github_token]
-                   [-o github_organization] [-r github_repository]
-                   [-b [branches [branches ...]]] [-p path] [-f folder]
-                   [-c config_path] [-d] [--vanilla-prefix VANILLA_PREFIX]
-                   [--generation-version GENERATION_VERSION] [-L LANGUAGE]
+usage: monogen [-h] [-g github_api_url] [-l login_login] [-t github_token]
+               [-o github_organization] [-r github_repository]
+               [-b [branches [branches ...]]] [-p path] [-f folder]
+               [-c config_path] [-d] [--vanilla-prefix VANILLA_PREFIX]
+               [--generation-version GENERATION_VERSION] [-L LANGUAGE]
 
 Generates a SDK according from a specification set
 

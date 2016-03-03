@@ -129,7 +129,7 @@ Voilà!
 
 ## Try your package
 
-> This assumes you have Monolithe installed and monogen-sdk command in your path.
+> This assumes you have Monolithe installed and `monogen` command in your path.
 
 Simply install your package by doing in the `monolithe-markdown` directory:
 
@@ -137,10 +137,10 @@ Simply install your package by doing in the `monolithe-markdown` directory:
 python setup.py install
 ```
 
-Now you can run `monogen-sdk` on a Specifications Set:
+Now you can run `monogen` on a Specifications Set:
 
 ```
-monogen-sdk -f monolithe/examples/specifications -L markdown
+monogen -f monolithe/examples/specifications -L markdown
 > [log] retrieving specifications from folder "/monolithe/examples/specifications"
 > [log] 5 specifications retrieved from folder "monolithe/examples/specifications" (api version: 1.0)
 > [log] transforming specifications into markdown for version 1.0...

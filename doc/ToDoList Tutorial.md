@@ -21,7 +21,7 @@ The example is composed of:
 
 ## Step 2: generate the tdldk
 
-    ./commands/monogen-sdk -f examples/specifications -L python
+    ./commands/monogen -f examples/specifications -L python
 
 > Customizable using the configuration and the content of the `vanilla/python` folder.
 
@@ -43,7 +43,7 @@ You can install it by doing:
 
 ## Step 3: generate the ReST api documentation
 
-    ./commands/monogen-sdk -f examples/specifications -L html
+    ./commands/monogen -f examples/specifications -L html
 
 > Customizable using the configuration and the content of the `vanilla/html` folder.
 

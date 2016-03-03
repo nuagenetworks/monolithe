@@ -40,7 +40,7 @@ setup(
     install_requires=[line for line in open("requirements.txt")],
     entry_points={
         "console_scripts": [
-            "monogen-sdk = monolithe.cli:main"
+            "monogen = monolithe.cli:main"
         ]
     }
 )
