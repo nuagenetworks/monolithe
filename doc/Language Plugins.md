@@ -1,6 +1,6 @@
 # Monolithe Language Plugins
 
-Monolithe is not monolitic. It is actually the oposite. While it comes with three default languages (Python, Go and HTML), it is possible to develop support for new languages or transformations in separate python packages. Using the Python entry points system, by simply naming correctly some values and by providing a few writers and templates, you can create your own plugin.
+Monolithe is not monolithic. It is actually the oposite. While it comes with three default languages (Python, Go and HTML), it is possible to develop support for new languages or transformations in separate python packages. Using the Python entry points system, by simply naming correctly some values and by providing a few writers and templates, you can create your own plugin.
 
 In this document, we will go through the creation of a very simple plugin, that will translate a Specifications Set to a very simple markdown documentation.
 
