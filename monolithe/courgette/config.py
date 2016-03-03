@@ -25,13 +25,13 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 class CourgetteConfiguration(object):
 
     def __init__(self, specification, parent_resource_name, parent_id, default_values):
         """
 
         """
-
         self.specification = specification
         self.parent_resource_name = parent_resource_name
         self.parent_id = parent_id

@@ -25,6 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 class CourgetteResult(object):
 
     def __init__(self):
@@ -37,8 +38,7 @@ class CourgetteResult(object):
         self._total = 0
         self._reports = {}
 
-
-    ## properties
+    # properties
 
     @property
     def reports(self):
@@ -60,8 +60,7 @@ class CourgetteResult(object):
     def total(self):
         return self._total
 
-
-    ## report management
+    # report management
 
     def add_report(self, specification_name, report):
         """
@@ -75,7 +74,7 @@ class CourgetteResult(object):
         """
         self._reports[specification_name] = report
 
-        self._total    = self._total + report.testsRun
+        self._total = self._total + report.testsRun
         self._failures = self._failures + len(report.failures)
-        self._errors   = self._errors + len(report.errors)
-        self._success  = self._total - self._failures - self._errors
+        self._errors = self._errors + len(report.errors)
+        self._success = self._total - self._failures - self._errors

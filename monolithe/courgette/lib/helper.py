@@ -25,7 +25,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import logging
 import requests
 
 from monolithe.lib import Printer
@@ -74,19 +73,16 @@ class TestHelper(object):
 
     def current_push_center(self):
         """ Get current push center
-
         """
         return self._sdk_session.push_center
 
     def set_api_key(self, api_key, sdk_object=None):
         """ Change api key
-
         """
         self._sdk_session.login_controller.api_key = api_key
 
     def session_headers(self):
         """ Get headers
-
         """
         return {
             "Content-Type": "application/json",
@@ -96,7 +92,6 @@ class TestHelper(object):
 
     def send_request(self, method, url, data=None, remove_header=None):
         """ Send request with removed header
-
         """
         headers = self.session_headers()
 
@@ -107,24 +102,20 @@ class TestHelper(object):
 
     def send_post(self, url, data, remove_header=None):
         """ Send a POST request
-
         """
         return self.send_request(method="post", url=url, data=data, remove_header=remove_header)
 
     def send_put(self, url, data, remove_header=None):
         """ Send a PUT request
-
         """
         return self.send_request(method="put", url=url, data=data, remove_header=remove_header)
 
     def send_delete(self, url, data, remove_header=None):
         """ Send a DELETE request
-
         """
         return self.send_request(method="delete", url=url, data=data, remove_header=remove_header)
 
     def send_get(self, url, remove_header=None):
         """ Send a GET request
-
         """
         return self.send_request(method="get", url=url, remove_header=remove_header)

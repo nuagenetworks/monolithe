@@ -37,7 +37,6 @@ from .testcase import CourgetteTestRunner
 
 class CourgetteTestsRunner(object):
     """ Runner for SDK Objects tests
-
     """
 
     def __init__(self, url, username, password, enterprise, version, specification, sdk_identifier, monolithe_config, default_values, parent_resource=None, parent_id=None):
@@ -60,16 +59,15 @@ class CourgetteTestsRunner(object):
         sdk_loader = SDKLoader(version=version, sdk_identifier=sdk_identifier)
         sdk_loader.sdk_utils.set_log_level(logging.DEBUG)
 
-        self._helper = TestHelper(  sdk_module=sdk_loader.sdk,
-                                    sdk_session_class_name=session_class_name,
-                                    api_url=url, api_username=username,
-                                    api_password=password,
-                                    api_enterprise=enterprise)
+        self._helper = TestHelper(sdk_module=sdk_loader.sdk,
+                                  sdk_session_class_name=session_class_name,
+                                  api_url=url, api_username=username,
+                                  api_password=password,
+                                  api_enterprise=enterprise)
 
         self._sdk_object = sdk_loader.get_instance_from_rest_name(specification.rest_name)
         self._sdk_object.from_dict(default_values)
         self._sdk_parent_object = None
-
 
         if parent_resource and parent_id:
             try:
@@ -101,9 +99,7 @@ class CourgetteTestsRunner(object):
 
     def suite(self):
         """ Returns a TestSuite that can be run
-
             TestSuite is computed according to what is defined in the specification
-
         """
         all_suites = TestSuite()
 
@@ -136,7 +132,6 @@ class CourgetteTestsRunner(object):
 
     def run(self):
         """ Runs all tests on the specified SDK
-
         """
         suite = self.suite()
         results = CourgetteTestRunner().run(suite)

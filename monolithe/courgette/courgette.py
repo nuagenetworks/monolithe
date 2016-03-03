@@ -44,7 +44,6 @@ class Courgette(object):
                 apiversion (float): the version of the API to connect
                 sdk (string): the full name of the SDK to use
         """
-
         self.url = url
         self.username = username
         self.password = password
@@ -60,7 +59,6 @@ class Courgette(object):
                 A dictionnary containing tests results.
 
         """
-
         result = CourgetteResult()
 
         for configuration in configurations:

@@ -27,14 +27,13 @@
 
 import importlib
 
-from .sdkutils import SDKUtils
+from monolithe.lib.sdkutils import SDKUtils
 from bambou import NURESTModelController
 
 
 class SDKLoader(object):
     """
     """
-
     def __init__(self, version, sdk_identifier):
         """
         """

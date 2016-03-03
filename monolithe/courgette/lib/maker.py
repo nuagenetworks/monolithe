@@ -26,17 +26,12 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import re
-
 from unittest2 import TestSuite
-
-from .helper import TestHelper
 from .testcase import CourgetteTestCase
-
 
 
 class _TestMaker(object):
     """ Make tests
-
     """
 
     IGNORED_ATTRIBUTES = ["id", "parent_id", "parent_type", "creation_date", "owner", "last_updated_date", "last_updated_by", "external_id"]
@@ -158,8 +153,8 @@ class _TestMaker(object):
         return (test_name, test_func)
 
 
+# CREATE TESTS
 
-##### CREATE TESTS
 class CreateTestMaker(_TestMaker):
     """ TestCase for create objects
 
@@ -250,7 +245,7 @@ class CreateTestCase(CourgetteTestCase):
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 409)
-        #self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", rest_name=attribute.rest_name)
+        # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", rest_name=attribute.rest_name)
 
     def _test_create_object_with_attribute_as_none_should_succeed(self, attribute):
         """ Create an objet with an attribute as none """
@@ -273,15 +268,14 @@ class CreateTestCase(CourgetteTestCase):
         # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", rest_name=attribute.rest_name)
 
 
+# UPDATE TESTS
 
-##### UPDATE TESTS
 class UpdateTestMaker(_TestMaker):
     """ TestCase for updating objects
-
     """
+
     def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for updating objects
-
         """
         super(UpdateTestMaker, self).__init__(helper=helper)
         self.parent = parent
@@ -299,7 +293,6 @@ class UpdateTestMaker(_TestMaker):
 
     def suite(self):
         """ Inject generated tests
-
         """
         UpdateTestCase.parent = self.parent
         UpdateTestCase.sdkobject = self.sdkobject
@@ -316,14 +309,12 @@ class UpdateTestCase(CourgetteTestCase):
 
     def __init__(self, methodName="runTest"):
         """ Initialize
-
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up create test
-
         """
         self.last_connection = None
         self.sdkobject = self.pristine_sdkobject.copy()
@@ -331,14 +322,13 @@ class UpdateTestCase(CourgetteTestCase):
 
     def tearDown(self):
         """ Clean up environment
-
         """
         self.sdkobject.delete()
 
     # Objects tests
     def _test_update_object_without_authentication_should_fail(self):
-        """ Update an object without authentication """
-
+        """ Update an object without authentication
+        """
         self.helper.set_api_key(None)
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
@@ -348,7 +338,6 @@ class UpdateTestCase(CourgetteTestCase):
 
     def _test_update_object_with_same_attributes_should_fail(self):
         """ Update an object with same attributes should always fail with 409 error
-
         """
         (obj, connection) = self.sdkobject.save()
         (obj, connection) = self.sdkobject.save()
@@ -359,7 +348,8 @@ class UpdateTestCase(CourgetteTestCase):
 
     # Attributes tests
     def _test_update_object_with_required_attribute_as_none_should_fail(self, attribute):
-        """ Update an object with a required attribute as None """
+        """ Update an object with a required attribute as None
+        """
         setattr(self.sdkobject, attribute.local_name, None)
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
@@ -368,8 +358,8 @@ class UpdateTestCase(CourgetteTestCase):
         # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="This value is mandatory.", rest_name=attribute.rest_name)
 
     def _test_update_object_with_attribute_with_choices_as_none_should_fail(self, attribute):
-        """ Update an objet with an attribute with choices as none should fail """
-
+        """ Update an objet with an attribute with choices as none should fail
+        """
         setattr(self.sdkobject, attribute.local_name, None)
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
@@ -378,8 +368,8 @@ class UpdateTestCase(CourgetteTestCase):
         # self.assertIsNone(getattr(obj, attribute.local_name), "%s should be none but was %s instead" % (attribute.local_name, getattr(obj, attribute.local_name)))
 
     def _test_update_object_with_attribute_not_in_allowed_choices_list_should_fail(self, attribute):
-        """ Update an object with a wrong choice attribute """
-
+        """ Update an object with a wrong choice attribute
+        """
         setattr(self.sdkobject, attribute.local_name, "A random value")
         (obj, connection) = self.sdkobject.save()
         self.last_connection = connection
@@ -388,7 +378,8 @@ class UpdateTestCase(CourgetteTestCase):
         # self.assertErrorEqual(connection.response.errors, title="Invalid input", description="Invalid input", rest_name=attribute.rest_name)
 
     def _test_update_object_with_attribute_as_none_should_succeed(self, attribute):
-        """ Update an objet with an attribute as none """
+        """ Update an objet with an attribute as none
+        """
 
         setattr(self.sdkobject, attribute.local_name, None)
         (obj, connection) = self.sdkobject.save()
@@ -398,16 +389,14 @@ class UpdateTestCase(CourgetteTestCase):
         self.assertIsNone(getattr(obj, attribute.local_name), "%s should be none but was %s instead" % (attribute.local_name, getattr(obj, attribute.local_name)))
 
 
+# DELETE TESTS
 
-
-##### DELETE TESTS
 class DeleteTestMaker(_TestMaker):
     """ TestCase for create objects
-
     """
+
     def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for creating objects
-
         """
         super(DeleteTestMaker, self).__init__(helper=helper)
         self.parent = parent
@@ -422,7 +411,6 @@ class DeleteTestMaker(_TestMaker):
 
     def suite(self):
         """ Inject generated tests
-
         """
         DeleteTestCase.parent = self.parent
         DeleteTestCase.sdkobject = self.sdkobject
@@ -439,14 +427,12 @@ class DeleteTestCase(CourgetteTestCase):
 
     def __init__(self, methodName="runTest"):
         """ Initialize
-
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up create test
-
         """
         self.last_connection = None
         self.sdkobject = self.pristine_sdkobject.copy()
@@ -455,15 +441,15 @@ class DeleteTestCase(CourgetteTestCase):
 
     def tearDown(self):
         """ Clean up environment
-
         """
         if self.sdkobject.id is not None:
             self.sdkobject.delete()
 
     # Objects tests
-    def _test_delete_object_without_authentication_should_fail(self):
-        """ Delete an object without authentication """
 
+    def _test_delete_object_without_authentication_should_fail(self):
+        """ Delete an object without authentication
+        """
         self.helper.set_api_key(None)
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
@@ -474,18 +460,16 @@ class DeleteTestCase(CourgetteTestCase):
 
     def _test_delete_object_with_valid_id_should_succeed(self):
         """ Delete an object with its id should always succeed with 204 response
-
         """
         (obj, connection) = self.sdkobject.delete()
         self.last_connection = connection
 
         self.assertConnectionStatus(connection, 200)
         self.assertEquals(obj.to_dict(), self.sdkobject.to_dict())
-        self.sdkobject.id = None # so it won't be deleted again in tearDown
+        self.sdkobject.id = None  # so it won't be deleted again in tearDown
 
     def _test_delete_object_with_wrong_id_should_fail(self):
         """ Delete an object with a wrong id should fail with 404 error
-
         """
         default_id = self.sdkobject.id
         invalid_id = "000-000-000-000-00-000"
@@ -498,18 +482,15 @@ class DeleteTestCase(CourgetteTestCase):
         self.assertConnectionStatus(connection, 404)
         # self.assertErrorEqual(connection.response.errors, title="%s not found" % self.sdkobject.rest_name, description="Cannot find %s with ID %s" % (self.sdkobject.rest_name, invalid_id))
 
-    # No Attributes tests
 
+# GET TESTS
 
-
-##### GET TESTS
 class GetTestMaker(_TestMaker):
     """ TestCase for create objects
-
     """
+
     def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for creating objects
-
         """
         super(GetTestMaker, self).__init__(helper=helper)
         self.parent = parent
@@ -524,7 +505,6 @@ class GetTestMaker(_TestMaker):
 
     def suite(self):
         """ Inject generated tests
-
         """
         GetTestCase.parent = self.parent
         GetTestCase.sdkobject = self.sdkobject
@@ -541,14 +521,12 @@ class GetTestCase(CourgetteTestCase):
 
     def __init__(self, methodName="runTest"):
         """ Initialize
-
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up get test
-
         """
         self.last_connection = None
         self.sdkobject = self.pristine_sdkobject.copy()
@@ -557,14 +535,13 @@ class GetTestCase(CourgetteTestCase):
 
     def tearDown(self):
         """ Clean up environment
-
         """
         self.sdkobject.delete()
 
     # Objects tests
     def _test_get_object_without_authentication_should_fail(self):
-        """ Get an object without authentication """
-
+        """ Get an object without authentication
+        """
         self.helper.set_api_key(None)
         (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
@@ -575,7 +552,6 @@ class GetTestCase(CourgetteTestCase):
 
     def _test_get_object_with_valid_id_should_succeed(self):
         """ Get an object with its id should always succeed with 204 response
-
         """
         (obj, connection) = self.sdkobject.fetch()
         self.last_connection = connection
@@ -585,7 +561,6 @@ class GetTestCase(CourgetteTestCase):
 
     def _test_get_object_with_wrong_id_should_fail(self):
         """ Get an object with a wrong id should fail with 404 error
-
         """
         default_id = self.sdkobject.id
         invalid_id = "000-000-000-000-00-000"
@@ -598,20 +573,15 @@ class GetTestCase(CourgetteTestCase):
         self.assertConnectionStatus(connection, 404)
         # self.assertErrorEqual(connection.response.errors, title="%s not found" % self.sdkobject.rest_name, description="Cannot find %s with ID %s" % (self.sdkobject.rest_name, invalid_id))
 
-    # No Attributes tests
 
+# GETALL TESTS
 
-
-
-
-##### GETALL TESTS
 class GetAllTestMaker(_TestMaker):
     """ TestCase for create objects
 
     """
     def __init__(self, parent, sdkobject, helper):
         """ Initializes a test case for creating objects
-
         """
         super(GetAllTestMaker, self).__init__(helper=helper)
         self.parent = parent
@@ -626,7 +596,6 @@ class GetAllTestMaker(_TestMaker):
 
     def suite(self):
         """ Inject generated tests
-
         """
         GetAllTestCase.parent = self.parent
         GetAllTestCase.sdkobject = self.sdkobject
@@ -643,28 +612,25 @@ class GetAllTestCase(CourgetteTestCase):
 
     def __init__(self, methodName="runTest"):
         """ Initialize
-
         """
         CourgetteTestCase.__init__(self, methodName=methodName)
         self.pristine_sdkobject = self.sdkobject.copy()
 
     def setUp(self):
         """ Setting up get test
-
         """
         self.last_connection = None
         self.sdkobject = self.pristine_sdkobject.copy()
 
     def tearDown(self):
         """ Clean up environment
-
         """
         pass
 
     # Objects tests
     def _test_get_all_objects_without_authentication_should_fail(self):
-        """ Get all object without authentication """
-
+        """ Get all object without authentication
+        """
         self.helper.set_api_key(None)
 
         fetcher = self.parent.fetcher_for_rest_name(self.sdkobject.rest_name)
@@ -679,7 +645,6 @@ class GetAllTestCase(CourgetteTestCase):
 
     def _test_get_all_objects_without_content_should_success(self):
         """ Get all object without content should succeed with 200 response
-
         """
         fetcher = self.parent.fetcher_for_rest_name(self.sdkobject.rest_name)
         (fetcher, parent, children) = fetcher.fetch()
@@ -690,7 +655,6 @@ class GetAllTestCase(CourgetteTestCase):
 
     def _test_get_all_objects_with_content_should_success(self):
         """ Get all object with content should succeed with 200 response
-
         """
         self.parent.create_child(self.sdkobject)
 

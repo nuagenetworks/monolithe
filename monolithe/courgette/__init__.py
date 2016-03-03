@@ -25,7 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["Courgette", "CourgetteConfig", "CourgetteResult"]
+__all__ = ["Courgette", "CourgetteConfiguration", "CourgetteResult"]
 
 from .courgette import Courgette
 from .config import CourgetteConfiguration

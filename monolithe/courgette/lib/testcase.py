@@ -40,27 +40,23 @@ from monolithe.lib import Printer
 from .helper import TestHelper
 
 
-
 class CourgetteTestResult(TestResult):
     """ A TestResult
-
     """
+
     def __init__(self):
         """ Initialized a new result
-
         """
         TestResult.__init__(self)
         self.tests = OrderedDict()
 
     def getDescription(self, test):
         """ Get test description
-
         """
         return str(test).split(" ")[0]  # Removing (package.name)
 
     def addSuccess(self, test):
         """ Add success to the result
-
         """
         TestResult.addSuccess(self, test)
         self.tests[self.getDescription(test)] = {"status": "SUCCESS"}
@@ -69,7 +65,6 @@ class CourgetteTestResult(TestResult):
 
     def addError(self, test, err, connection=None):
         """ Add error to the result
-
         """
         TestResult.addError(self, test, err)
         self.tests[self.getDescription(test)] = {"status": "ERROR", "stacktrace": err, "connection": connection}
@@ -78,10 +73,8 @@ class CourgetteTestResult(TestResult):
         Printer.warn(err[1])
         TestHelper.trace(connection)
 
-
     def addFailure(self, test, err, connection):
         """ Add failure to the result
-
         """
         TestResult.addFailure(self, test, err)
         self.tests[self.getDescription(test)] = {"status": "FAILURE", "stacktrace": err, "connection": connection}
@@ -92,7 +85,6 @@ class CourgetteTestResult(TestResult):
 
     def __repr__(self):
         """ Representation
-
         """
         return "<%s testsRun=%i errors=%i failures=%i>" % \
                (str(self.__class__), self.testsRun, len(self.errors), len(self.failures))
@@ -100,21 +92,20 @@ class CourgetteTestResult(TestResult):
 
 class CourgetteTestRunner(object):
     """
-
     """
+
     def __init__(self):
-        """ Initialized """
+        """ Initialized
+        """
         pass
 
     def _makeResult(self):
         """ Return a TestResult implementation
-
         """
         return CourgetteTestResult()
 
     def run(self, test):
         """ Run the given test case or test suite.
-
         """
         result = self._makeResult()
         startTime = time.time()
@@ -123,14 +114,14 @@ class CourgetteTestRunner(object):
         timeTaken = stopTime - startTime
 
         run = result.testsRun
-        Printer.log("Ran %d test%s in %.3fs" %
-                            (run, run != 1 and "s" or "", timeTaken))
+        Printer.log("Ran %d test%s in %.3fs" % (run, run != 1 and "s" or "", timeTaken))
 
         if not result.wasSuccessful():
             Printer.warn("FAILED (failures=%i, errors=%i)" % (len(result.failures), len(result.errors)))
         else:
             Printer.success("OK")
         return result
+
 
 class CourgetteTestCase(TestCase):
 
@@ -154,7 +145,11 @@ class CourgetteTestCase(TestCase):
     # Will see that later !
     # CS 05-13-2015
     def run(self, result=None):
-        if result is None: result = self.defaultTestResult()
+        """
+        """
+        if result is None:
+            result = self.defaultTestResult()
+
         result.startTest(self)
         testMethod = getattr(self, self._testMethodName)
 
@@ -193,13 +188,13 @@ class CourgetteTestCase(TestCase):
             except:
                 result.addError(self, sys.exc_info())
                 ok = False
-            if ok: result.addSuccess(self)
+            if ok:
+                result.addSuccess(self)
         finally:
             result.stopTest(self)
 
     def assertErrorEqual(self, errors, title, description, rest_name="", index=0):
         """ Check if errors received matches
-
         """
         self.assertEquals(errors[index]["descriptions"][0]["title"], title, "Expected error title \"%s\" != \"%s\"" % (title, errors[index]["descriptions"][0]["title"]))
         self.assertEquals(errors[index]["descriptions"][0]["description"], description, "Expected error description \"%s\" != \"%s\"" % (description, errors[index]["descriptions"][0]["description"]))
@@ -207,7 +202,6 @@ class CourgetteTestCase(TestCase):
 
     def assertConnectionStatus(self, connection, expected_status):
         """ Check if the connection has expected status
-
         """
         message = self._connection_failure_message(connection, expected_status)
         self.assertEquals(connection.response.status_code, expected_status, message)
@@ -215,6 +209,7 @@ class CourgetteTestCase(TestCase):
     # Messages
 
     def _connection_failure_message(cls, connection, expected_status):
-        """ Returns a message that explains the connection status failure """
+        """ Returns a message that explains the connection status failure
+        """
 
         return "Expected status code %s != to Received status code %s\n" % (expected_status, connection.response.status_code)
