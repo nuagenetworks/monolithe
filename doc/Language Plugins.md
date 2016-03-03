@@ -124,13 +124,13 @@ def plugin_info():
         # 'CLIWriter' is reponsible to write a CLI if needed
         'CLIWriter': None,
         
-        # 'get_idiomatic_name' is a function that will be call to when a word from the specification
-        # might need to get adjusted to respect the idioms of your language. for instance HelloWorld in Python
-        # should be translated to hello_world
+        # 'get_idiomatic_name' is a function that will be called when a word from the specification
+        # might need to get adjusted to respect the idioms of your language. for instance 'HelloWorld' in Python
+        # should be translated to 'hello_world'
         'get_idiomatic_name': None,
         
         # 'get_type_name' is needed to translate a type from a specification to the name of the type used
-        # by your language. For instance, a spec type "list" needs to be translated to "[]<subtype>" in Go.
+        # by your language. For instance, a spec type 'list' needs to be translated to '[]<subtype>' in Go.
         'get_type_name': None
     }
 ```
