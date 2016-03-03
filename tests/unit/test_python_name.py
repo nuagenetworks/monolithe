@@ -13,7 +13,7 @@ class GetPythonNameTest(TestCase):
             the python name
 
         """
-        self.assertEqual(SDKUtils.get_python_name(rest_name), python_name)
+        self.assertEqual(SDKUtils.get_idiomatic_name_in_language(rest_name, 'python'), python_name)
 
     def test_get_python_name(self):
         """ Convert REST names to Python

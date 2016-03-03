@@ -13,7 +13,7 @@ class GetPluralNameTest(TestCase):
             the python name
 
         """
-        self.assertEqual(SDKUtils.get_entity_name_plural(singular_name), entity_name_plural)
+        self.assertEqual(SDKUtils.get_plural(singular_name), entity_name_plural)
 
     def test_get_entity_name_plural(self):
         """ Compute plural names properly
