@@ -150,5 +150,5 @@ monogen-sdk -f monolithe/examples/specifications -L markdown
 
 As the guy just said, the generated data is now available in `codegen/markdown`.
 
-Of course, this is a very simple example, and you can of course do way more. For a more extensive example, you can have a look to the source code of Monolithe.
+Again, this is a very simple example. You can of course do a lot more. For an extensive example, you can have a look at the source code of Monolithe, in the `generators/lang` package.
 
