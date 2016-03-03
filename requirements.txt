@@ -1,3 +1,4 @@
+future
 jinja2
 colorama
 bambou>=2.0
