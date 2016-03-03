@@ -12,11 +12,11 @@ In addition to the specifications, Monolithe uses a configuration that describes
 
 > For more info, please read the [Monolithe Configuration & Vanilla Reference](doc/Configuration & Vanilla Reference.md).
 
-Monolithe is before all a framework that you can integrate with other tools.
+Monolithe is not monolithic! While it provides three default transformers (Python, Go and HTML), you can create your own compatible language plugins. 
 
-> For more info, please read the Monolithe API Documentation (TODO).
+> For more info, please read the [Language Plugins Documentation](doc/Language Plugins.md).
 
-This repostory contains a full small example on how to use Monolithe, located in the `examples` folder.
+This repository contains a full small example on how to use Monolithe, located in the `examples` folder.
 
 > For more info, please read the [ToDoList Tutorial](doc/ToDoList Tutorial.md). 
 
