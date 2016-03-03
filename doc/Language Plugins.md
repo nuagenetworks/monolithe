@@ -118,7 +118,7 @@ def plugin_info():
         # 'APIVersionWriter' is reponsible to write files for a particular api version.
         'APIVersionWriter': APIVersionWriter, 
         
-        # 'PackageWriter' is reponsible to assemble all the file created by APIVersionWriter if needed
+        # 'PackageWriter' is reponsible to assemble all the api version sets created by APIVersionWriter, if needed
         'PackageWriter': None,
         
         # 'CLIWriter' is reponsible to write a CLI if needed
