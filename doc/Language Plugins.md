@@ -131,7 +131,7 @@ Voilà!
 
 > This assumes you have Monolithe installed and monogen-sdk command in your path.
 
-Simply install your package by doing in the `monolithe-markdown` directory:
+From the `monolithe-markdown` folder, simply install your package by running:
 
 ```
 python setup.py install
