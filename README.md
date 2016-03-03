@@ -6,11 +6,11 @@ It provides the `monogen-sdk` command that will transform the specification into
 
 The specifications are a set of files containing json data describing one object per file, its properties and their characteristics, and its position in the api hierarchy.
 
-> For more info, please read the [Monolithe Specifications Reference](Specifications Reference.md).
+> For more info, please read the [Monolithe Specifications Reference](doc/Specifications Reference.md).
 
 In addition to the specifications, Monolithe uses a configuration that describes all the information relative to your sdk. For instance, you can set its name, the class prefix, some vanilla files, the license, and so on.
 
-> For more info, please read the [Monolithe Configuration & Vanilla Reference](Configuration & Vanilla Reference.md).
+> For more info, please read the [Monolithe Configuration & Vanilla Reference](doc/Configuration & Vanilla Reference.md).
 
 Monolithe is before all a framework that you can integrate with other tools.
 
@@ -18,8 +18,7 @@ Monolithe is before all a framework that you can integrate with other tools.
 
 This repostory contains a full small example on how to use Monolithe, located in the `examples` folder.
 
-> For more info, please read the [ToDoList Tutorial](ToDoList Tutorial.md). 
-
+> For more info, please read the [ToDoList Tutorial](doc/ToDoList Tutorial.md). 
 
 ## Installation
 
