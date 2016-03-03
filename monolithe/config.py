@@ -25,9 +25,13 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from ConfigParser import ConfigParser
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
+from configparser import ConfigParser
 import os
-import StringIO
+import io
 
 
 class MonolitheConfig(object):
@@ -58,7 +62,7 @@ class MonolitheConfig(object):
         """
         """
         # duplicate the config parser
-        conf_data = StringIO.StringIO()
+        conf_data = io.StringIO()
         self.config.write(conf_data)
         conf_data.seek(0)
         new_config_parser = ConfigParser()

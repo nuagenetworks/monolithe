@@ -1,3 +1,4 @@
+from builtins import filter
 lists = [{
     "ID": "1",
     "title": "Shopping List",
@@ -71,7 +72,7 @@ tasks = [{
 
 def get_tasks_of_lists(lid):
     try:
-        return filter((lambda t: t["parentID"] == lid), tasks)
+        return list(filter((lambda t: t["parentID"] == lid), tasks))
     except:
         return None
 

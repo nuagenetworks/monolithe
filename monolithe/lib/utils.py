@@ -58,7 +58,7 @@ def apply_extension(extension, specification):
         if "model" not in specification:
             specification["model"] = {}
 
-        for key, value in extension["model"].iteritems():
+        for key, value in extension["model"].items():
             if value is not None:
                 if key not in specification["model"] or specification["model"][key] is None:
                     specification["model"][key] = value

@@ -5,6 +5,8 @@
 # it will be added to all the generated files
 #
 
+from builtins import object
+
 import logging
 import importlib
 import re
@@ -38,8 +40,8 @@ class Utils(object):
             "IPID": "IpID"
         }
 
-        rep = dict((re.escape(k), v) for k, v in rep.iteritems())
-        pattern = re.compile("|".join(rep.keys()))
+        rep = dict((re.escape(k), v) for k, v in rep.items())
+        pattern = re.compile("|".join(list(rep.keys())))
         return pattern.sub(lambda m: rep[re.escape(m.group(0))], string)
 
     @classmethod
@@ -153,7 +155,7 @@ class SDKInspector(object):
         """ Returns all objects available
 
         """
-        resources = self._objects_mapping.keys()
+        resources = list(self._objects_mapping.keys())
         resources = [Utils.get_entity_name_plural(name) for name in resources if name not in self._ignored_resources]
 
         return resources
@@ -211,7 +213,7 @@ class SDKInspector(object):
 
             try:
                 (parent, connection) = parent.fetch()
-            except Exception, ex:
+            except Exception as ex:
                 Printer.raise_error("Failed fetching parent %s with uuid %s\n%s" % (name, uuid, ex))
 
             return parent

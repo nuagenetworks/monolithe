@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import os
 import subprocess
 import argparse
@@ -16,7 +17,7 @@ def copy_files(origin, destination):
 def update_sdk():
     """
     """
-    print "Updating SDK"
+    print("Updating SDK")
     origin_path = "%s/../examples/codegen" % os.path.dirname(__file__)
     destination_path = "%s/../tests/base/sdk" % os.path.dirname(__file__)
 
@@ -26,7 +27,7 @@ def update_sdk():
 def update_apidoc():
     """
     """
-    print "Updating API Doc"
+    print("Updating API Doc")
     origin_path = "%s/../examples/apidocgen/" % os.path.dirname(__file__)
     destination_path = "%s/../tests/base/apidoc" % os.path.dirname(__file__)
 

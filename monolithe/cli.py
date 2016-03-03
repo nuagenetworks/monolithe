@@ -26,6 +26,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import print_function
 import argparse
 import getpass
 import os
@@ -144,7 +145,7 @@ def main(argv=sys.argv):
 
     else:
         if not args.branches:
-            print "You must provide the --branches options. Use --help for help."
+            print("You must provide the --branches options. Use --help for help.")
             sys.exit(1)
 
         # Use environment variable if necessary

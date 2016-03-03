@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import sys
 import os
 import importlib
@@ -42,28 +43,28 @@ session.start()
 lists = session.root.lists.get()
 
 # we print them
-print
-print "Lists"
-print "====="
-print
+print()
+print("Lists")
+print("=====")
+print()
 
 # we loop on GATLDLists
 for l in lists:
 
     # we use the SDK to access the properties
-    print "\033[93m%s\033[0m: %s" % (l.title, l.description)
-    print
+    print("\033[93m%s\033[0m: %s" % (l.title, l.description))
+    print()
 
     tasks = l.tasks.get()
     if tasks:
         for t in tasks:
-            print "   [%s] \033[94m%s\033[0m: %s" % ("\033[92mx\033[0m" if t.is_complete() else " ", t.title, t.description)
+            print("   [%s] \033[94m%s\033[0m: %s" % ("\033[92mx\033[0m" if t.is_complete() else " ", t.title, t.description))
 
-    print
-    print
+    print()
+    print()
 
 # we ask for the user to press enter to continue this demo
-print "> Press enter to mark switch some task status"
+print("> Press enter to mark switch some task status")
 sys.stdin.readline()
 
 
@@ -85,7 +86,7 @@ for t in session.root.lists[1].tasks:
 
 # and we are done. You can restart the script and you'll see that
 # some tasks have been marked as DONE.
-print "Done! restart this script to see your changes :)\n"
+print("Done! restart this script to see your changes :)\n")
 
 
 # did you notice that you never saw a ReST call, or a json structure?

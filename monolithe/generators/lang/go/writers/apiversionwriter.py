@@ -25,8 +25,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from future import standard_library
+standard_library.install_aliases()
+
 import os
-from ConfigParser import RawConfigParser
+from configparser import RawConfigParser
 
 from monolithe.lib import TaskManager
 from monolithe.generators.lib import TemplateFileWriter
@@ -70,7 +73,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_session()
 
         task_manager = TaskManager()
-        for rest_name, specification in specifications.iteritems():
+        for rest_name, specification in specifications.items():
             task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications)
         task_manager.wait_until_exit()
 

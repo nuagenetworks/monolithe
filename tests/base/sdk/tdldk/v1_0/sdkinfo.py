@@ -5,8 +5,11 @@
 # it will be added to all the generated files
 #
 
-from gatdlsession import GATDLSession
+from __future__ import absolute_import
+from builtins import object
+from .gatdlsession import GATDLSession
 from .garoot import GARoot
+
 
 class SDKInfo (object):
 

@@ -25,13 +25,17 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
 import base64
 import json
 import os
 import tempfile
 import requests
-import ConfigParser
-import StringIO
+import configparser
+import io
 import zipfile
 
 from github import Github, InputGitTreeElement
@@ -144,8 +148,8 @@ class RepositoryManager (object):
         path = os.path.normpath("%s/%s" % (self._repository_path, "monolithe.ini"))
         try:
             data = base64.b64decode(self._repo.get_file_contents(path, ref=branch).content)
-            string_buffer = StringIO.StringIO(data)
-            monolithe_config_parser = ConfigParser.ConfigParser()
+            string_buffer = io.StringIO(data)
+            monolithe_config_parser = configparser.ConfigParser()
             monolithe_config_parser.readfp(string_buffer)
             return monolithe_config_parser
 
@@ -302,7 +306,7 @@ class RepositoryManager (object):
     def save_monolithe_config(self, monolithe_config_parser, message, branch="master"):
         """
         """
-        string_buffer = StringIO.StringIO()
+        string_buffer = io.StringIO()
         monolithe_config_parser.write(string_buffer)
         data = string_buffer.getvalue()
 

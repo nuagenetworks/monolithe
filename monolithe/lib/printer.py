@@ -25,6 +25,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import print_function
+from builtins import object
 import sys
 
 from collections import OrderedDict
@@ -44,7 +46,8 @@ class Printer(object):
 
     @classmethod
     def should_raise_exception(cls, should_raise=True):
-        """"""
+        """
+        """
         cls.__raise_exception__ = should_raise
 
     @classmethod
@@ -55,7 +58,6 @@ class Printer(object):
                 color: the color of the message
                 message: the message to print
         """
-
         print(color + message + Style.RESET_ALL)
 
     @classmethod

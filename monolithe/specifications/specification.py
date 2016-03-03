@@ -25,6 +25,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from past.builtins import cmp
+from builtins import object
+
 from monolithe.lib import SDKUtils
 from .specification_api import SpecificationAPI
 from .specification_attribute import SpecificationAttribute

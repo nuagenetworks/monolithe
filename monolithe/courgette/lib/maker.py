@@ -25,6 +25,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from builtins import str
+from builtins import map
+from builtins import object
+
 import re
 from unittest2 import TestSuite
 from .testcase import CourgetteTestCase
@@ -71,7 +75,7 @@ class _TestMaker(object):
         if conditions is None or len(conditions) == 0:
             return True
 
-        for attribute_name, attribute_value in conditions.iteritems():
+        for attribute_name, attribute_value in conditions.items():
             value = getattr(attribute, attribute_name, False)
             if value != attribute_value and bool(value) != attribute_value:
                 return False
@@ -97,12 +101,12 @@ class _TestMaker(object):
             if attribute.local_name in self.IGNORED_ATTRIBUTES:
                 continue
 
-            for function_name, conditions in self._attributes_registry.iteritems():
+            for function_name, conditions in self._attributes_registry.items():
                 if self.does_attribute_meet_condition(attribute, conditions):
                     (test_name, test_func) = self._create_test(testcase=testcase, sdkobject=sdkobject, function_name=function_name, attribute=attribute)
                     tests[test_name] = test_func
 
-        for function_name, infos in self._object_registry.iteritems():
+        for function_name, infos in self._object_registry.items():
             (test_name, test_func) = self._create_test(testcase=testcase, sdkobject=sdkobject, function_name=function_name)
             tests[test_name] = test_func
 
@@ -132,8 +136,8 @@ class _TestMaker(object):
         if attribute:
             rep["attribute"] = attribute.local_name
 
-        rep = dict((re.escape(k), v) for k, v in rep.iteritems())
-        pattern = re.compile("|".join(rep.keys()))
+        rep = dict((re.escape(k), v) for k, v in rep.items())
+        pattern = re.compile("|".join(list(rep.keys())))
 
         if function_name.startswith("_"):
             function_name = function_name[1:]
@@ -185,10 +189,10 @@ class CreateTestMaker(_TestMaker):
         CreateTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=CreateTestCase)
-        for test_name, test_func in tests.iteritems():
+        for test_name, test_func in tests.items():
             setattr(CreateTestCase, test_name, test_func)
 
-        return TestSuite(map(CreateTestCase, tests))
+        return TestSuite(list(map(CreateTestCase, tests)))
 
 
 class CreateTestCase(CourgetteTestCase):
@@ -299,10 +303,10 @@ class UpdateTestMaker(_TestMaker):
         UpdateTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=UpdateTestCase)
-        for test_name, test_func in tests.iteritems():
+        for test_name, test_func in tests.items():
             setattr(UpdateTestCase, test_name, test_func)
 
-        return TestSuite(map(UpdateTestCase, tests))
+        return TestSuite(list(map(UpdateTestCase, tests)))
 
 
 class UpdateTestCase(CourgetteTestCase):
@@ -417,10 +421,10 @@ class DeleteTestMaker(_TestMaker):
         DeleteTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=DeleteTestCase)
-        for test_name, test_func in tests.iteritems():
+        for test_name, test_func in tests.items():
             setattr(DeleteTestCase, test_name, test_func)
 
-        return TestSuite(map(DeleteTestCase, tests))
+        return TestSuite(list(map(DeleteTestCase, tests)))
 
 
 class DeleteTestCase(CourgetteTestCase):
@@ -511,10 +515,10 @@ class GetTestMaker(_TestMaker):
         GetTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetTestCase)
-        for test_name, test_func in tests.iteritems():
+        for test_name, test_func in tests.items():
             setattr(GetTestCase, test_name, test_func)
 
-        return TestSuite(map(GetTestCase, tests))
+        return TestSuite(list(map(GetTestCase, tests)))
 
 
 class GetTestCase(CourgetteTestCase):
@@ -602,10 +606,10 @@ class GetAllTestMaker(_TestMaker):
         GetAllTestCase.helper = self.helper
 
         tests = self.make_tests(sdkobject=self.sdkobject, testcase=GetAllTestCase)
-        for test_name, test_func in tests.iteritems():
+        for test_name, test_func in tests.items():
             setattr(GetAllTestCase, test_name, test_func)
 
-        return TestSuite(map(GetAllTestCase, tests))
+        return TestSuite(list(map(GetAllTestCase, tests)))
 
 
 class GetAllTestCase(CourgetteTestCase):

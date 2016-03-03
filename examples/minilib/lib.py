@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+from builtins import str
 import base64
-import data
+from . import data
 import json
 import uuid
 

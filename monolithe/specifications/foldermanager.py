@@ -25,9 +25,13 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
 import json
 import os
-import ConfigParser
+import configparser
 
 from .specification import Specification
 from monolithe.lib import apply_extension
@@ -77,7 +81,7 @@ class FolderManager (object):
         """
         with open("%s/monolithe.ini" % self._folder, "r") as f:
             try:
-                monolithe_config_parser = ConfigParser.ConfigParser()
+                monolithe_config_parser = configparser.ConfigParser()
                 monolithe_config_parser.readfp(f)
                 return monolithe_config_parser
 
