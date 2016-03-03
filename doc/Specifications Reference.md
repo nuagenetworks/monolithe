@@ -22,8 +22,6 @@ For instance:
     }
 ```
 
-The file **must** only contain the version. Carriage return and blank space will be stripped.
-
 
 ## Specification File
 
