@@ -2,7 +2,7 @@ include README.md
 include requirements.txt
 recursive-include monolithe/generators/lang/python/templates *
 recursive-include monolithe/generators/lang/python/vanilla *
-recursive-include monolithe/generators/lang/ruby/templates *
-recursive-include monolithe/generators/lang/ruby/vanilla *
+recursive-include monolithe/generators/lang/html/templates *
+recursive-include monolithe/generators/lang/html/vanilla *
 recursive-include monolithe/generators/lang/go/templates *
 recursive-include monolithe/generators/lang/go/vanilla *
