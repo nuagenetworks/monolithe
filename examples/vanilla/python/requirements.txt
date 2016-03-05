@@ -1,0 +1,3 @@
+git+https://github.com/nuagenetworks/bambou.git
+tabulate
+colorama

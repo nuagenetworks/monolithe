@@ -48,7 +48,6 @@ class PackageWriter(TemplateFileWriter):
         self._description = self.monolithe_config.get_option("description", "transformer")
         self._license = self.monolithe_config.get_option("license_name", "transformer")
         self._cli_name = self.monolithe_config.get_option("cli_name", "transformer")
-        self._bambou_version = self.monolithe_config.get_option("bambou_version", "transformer")
         self._copyright = self.monolithe_config.get_option("copyright")
         self.output_directory = "%s/python" % self.monolithe_config.get_option("output", "transformer")
 
@@ -62,7 +61,6 @@ class PackageWriter(TemplateFileWriter):
         self._write_root_init()
         self._write_utils()
         self._write_manifest(apiversions)
-        self._write_requirements()
 
     def _write_setup(self):
         """
@@ -86,12 +84,6 @@ class PackageWriter(TemplateFileWriter):
         self.write(destination=self.output_directory, filename="MANIFEST.in", template_name="MANIFEST.in.tpl",
                    name=self._transformation_name,
                    apiversions=[SDKUtils.get_string_version(version) for version in apiversions])
-
-    def _write_requirements(self):
-        """
-        """
-        self.write(destination=self.output_directory, filename="requirements.txt", template_name="requirements.txt.tpl",
-                   bambou_version=self._bambou_version)
 
     def _write_root_init(self):
         """

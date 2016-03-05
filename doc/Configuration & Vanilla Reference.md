@@ -98,14 +98,6 @@ And the fetchers of that objects from the parents will be:
 
 > For more information about these objects fetchers, please read the Bambou documentation.
 
-#### bambou_version
-
-The bambou version to use.
-
-For example:
-
-	bambou_version=1.0.1
-
 Note that this will be used a strict version and will be translated to `bambou==1.0.1`
 
 #### url, author, email, description, license_name
