@@ -1,5 +1,7 @@
 # Monolithe
 
+[![Join the chat at https://gitter.im/nuagenetworks/monolithe](https://badges.gitter.im/nuagenetworks/monolithe.svg)](https://gitter.im/nuagenetworks/monolithe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Monolithe is a Python toolset that can transform a set a specification to something else, like a sdk or a documentation.
 
 It provides the `monogen` command that will transform the specification into the specified language.
