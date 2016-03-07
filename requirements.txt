@@ -1,3 +1,4 @@
+requests>=2.4.3
 future
 jinja2
 colorama
