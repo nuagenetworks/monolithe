@@ -31,7 +31,6 @@ setup(
     packages=packages,
     description='{{ description }}',
     long_description=open('README.md').read(),
-    install_requires=[line for line in open('requirements.txt')],
     license='{{ license_name }}',
     include_package_data=True,
     data_files=resources,
