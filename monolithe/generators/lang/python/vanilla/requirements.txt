@@ -1,0 +1,3 @@
+bambou
+tabulate
+colorama
