@@ -7,17 +7,29 @@
 {% for api in specification.child_apis -%}
 {% set child_spec = specification_set[api.rest_name] -%}
 @import "Fetchers/{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher.j"
-{% endfor %}
+{% endfor -%}
+{% if constants|length %}
+{% for name, constant_value in constants.iteritems()|sort -%}
+{{ name }} = @"{{ constant_value }}";
+{% endfor -%}
+{% endif %}
 
+/*!
+    {{ specification.description }}
+*/
 @implementation {{ class_prefix }}{{ specification.entity_name }} : NURESTObject
 {
     {% for attribute in specification.attributes -%}
+    /*!
+        {{ attribute.description }}
+    */
     {{ attribute.local_type }} _{{attribute.local_name }} @accessors(property={{attribute.local_name }});
+
     {% endfor %}
     {% for api in specification.child_apis -%}
     {% set child_spec = specification_set[api.rest_name] -%}
-    {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher _{{ child_spec.entity_name_plural }} @accessors(property={{ child_spec.entity_name_plural }});
-    {% endfor %}
+    {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher _children{{ child_spec.entity_name_plural }} @accessors(property=children{{ child_spec.entity_name_plural }});
+    {% endfor%}
 }
 
 
@@ -42,7 +54,7 @@
         {% endfor %}
         {% for api in specification.child_apis -%}
         {% set child_spec = specification_set[api.rest_name] -%}
-        _{{ child_spec.entity_name_plural }} = [{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher fetcherWithParentObject:self];
+        _children{{ child_spec.entity_name_plural }} = [{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher fetcherWithParentObject:self];
         {% endfor %}
     }
 

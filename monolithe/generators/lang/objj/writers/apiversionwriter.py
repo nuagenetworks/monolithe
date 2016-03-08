@@ -157,7 +157,8 @@ class APIVersionWriter(TemplateFileWriter):
 
         for attribute in specification.attributes:
             if attribute.allowed_choices and len(attribute.allowed_choices) > 0:
-                name = attribute.local_name.upper()
+                name = attribute.local_name
+                name = name[:1].upper() + name[1:]
                 for choice in attribute.allowed_choices:
-                    constants["CONST_%s_%s" % (name, choice.upper())] = choice
+                    constants["%s%s%s_%s" % (self._class_prefix, specification.entity_name, name, choice.upper())] = choice
         return constants
