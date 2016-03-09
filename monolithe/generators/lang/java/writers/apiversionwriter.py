@@ -157,11 +157,6 @@ class APIVersionWriter(TemplateFileWriter):
 
         return (filename, specification.entity_name_plural)
 
-    def postprocess(self):
-        """ Perform some linting operations
-
-        """
-
     def _extract_override_content(self, name):
         """
         """
