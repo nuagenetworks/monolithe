@@ -27,6 +27,7 @@
 
 import os
 from collections import OrderedDict
+from configparser import RawConfigParser
 
 from monolithe.lib import TaskManager
 from monolithe.generators.lib import TemplateFileWriter
@@ -56,6 +57,11 @@ class APIVersionWriter(TemplateFileWriter):
         self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
         self.fetchers_path = "/Fetchers/"
 
+        self.attrs_defaults = RawConfigParser()
+        path = "%s/objj/__attributes_defaults/attrs_defaults.ini" % self._output
+        self.attrs_defaults.optionxform = str
+        self.attrs_defaults.read(path)
+
         with open("%s/objj/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
@@ -81,7 +87,13 @@ class APIVersionWriter(TemplateFileWriter):
 
         override_content = self._extract_override_content(specification.entity_name)
         constants = self._extract_constants(specification)
-        superclass_name = "NURESTRootObject" if specification.rest_name == self.api_root else "NURESTObject"
+        superclass_name = "NURESTAbstractUser" if specification.rest_name == self.api_root else "NURESTObject"
+
+        defaults = {}
+        section = "%s%s" % (self._class_prefix,  specification.entity_name)
+        if self.attrs_defaults.has_section(section):
+            for attribute in self.attrs_defaults.options(section):
+                defaults[attribute] = self.attrs_defaults.get(section, attribute)
 
         self.write(destination=self.output_directory, filename=filename, template_name="ObjectModel.j.tpl",
                    specification=specification,
@@ -92,7 +104,8 @@ class APIVersionWriter(TemplateFileWriter):
                    override_content=override_content,
                    superclass_name=superclass_name,
                    constants=constants,
-                   header=self.header_content)
+                   header=self.header_content,
+                   attribute_defaults=defaults)
 
         self.model_filenames[filename] = specification.entity_name
 

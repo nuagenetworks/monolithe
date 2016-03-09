@@ -2,7 +2,7 @@
 
 @import <Foundation/Foundation.j>
 @import <AppKit/CPArrayController.j>
-@import <Bambou/NURESTObject.j>
+@import <Bambou/{{ superclass_name }}.j>
 
 {% for api in specification.child_apis -%}
 {% set child_spec = specification_set[api.rest_name] -%}
@@ -17,14 +17,15 @@
 /*!
     {{ specification.description }}
 */
-@implementation {{ class_prefix }}{{ specification.entity_name }} : NURESTObject
+@implementation {{ class_prefix }}{{ specification.entity_name }} : {{ superclass_name }}
 {
     {% for attribute in specification.attributes -%}
+    {% if not specification.is_root or attribute.name not in ["role", "userName", "password"] -%}
     /*!
         {{ attribute.description }}
     */
     {{ attribute.local_type }} _{{attribute.local_name }} @accessors(property={{attribute.local_name }});
-
+    {% endif -%}
     {% endfor %}
     {% for api in specification.child_apis -%}
     {% set child_spec = specification_set[api.rest_name] -%}
@@ -55,6 +56,9 @@
         {% for api in specification.child_apis -%}
         {% set child_spec = specification_set[api.rest_name] -%}
         _children{{ child_spec.entity_name_plural }} = [{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher fetcherWithParentObject:self];
+        {% endfor %}
+        {% for attribute, value in attribute_defaults.iteritems() -%}
+        _{{attribute}} = {{value}};
         {% endfor %}
     }
 
