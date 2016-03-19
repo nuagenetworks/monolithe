@@ -1,7 +1,7 @@
 {{ header }}
 
 @import <Bambou/NURESTModelController.j>
-@import "Fetchers/NUFetchers.j"
+@import "Fetchers/Fetchers.j"
 
 {% for filename, classname in filenames.iteritems() -%}
 @import "{{ filename }}"
