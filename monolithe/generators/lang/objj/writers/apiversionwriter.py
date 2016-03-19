@@ -90,7 +90,7 @@ class APIVersionWriter(TemplateFileWriter):
         superclass_name = "NURESTAbstractUser" if specification.rest_name == self.api_root else "NURESTObject"
 
         defaults = {}
-        section = "%s%s" % (self._class_prefix,  specification.entity_name)
+        section = "%s%s" % (self._class_prefix, specification.entity_name)
         if self.attrs_defaults.has_section(section):
             for attribute in self.attrs_defaults.options(section):
                 defaults[attribute] = self.attrs_defaults.get(section, attribute)
@@ -112,7 +112,7 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_init_models(self, filenames):
         """
         """
-        filename = "%sModels.j" % self._class_prefix
+        filename = "Models.j"
         ordered = OrderedDict(sorted(filenames.items()))
 
         self.write(destination=self.output_directory, filename=filename, template_name="Models.j.tpl",
@@ -139,7 +139,7 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_init_fetchers(self, filenames):
         """
         """
-        filename = "Fetchers/%sFetchers.j" % self._class_prefix
+        filename = "Fetchers/Fetchers.j"
         ordered = OrderedDict(sorted(filenames.items()))
 
         self.write(destination=self.output_directory, filename=filename, template_name="Fetchers.j.tpl",
