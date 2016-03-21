@@ -6,3 +6,5 @@ recursive-include monolithe/generators/lang/html/templates *
 recursive-include monolithe/generators/lang/html/vanilla *
 recursive-include monolithe/generators/lang/go/templates *
 recursive-include monolithe/generators/lang/go/vanilla *
+recursive-include monolithe/generators/lang/objj/templates *
+recursive-include monolithe/generators/lang/objj/vanilla *

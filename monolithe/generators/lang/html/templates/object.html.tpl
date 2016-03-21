@@ -30,7 +30,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Attributes <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             {% for attribute in specification.attributes|sort(attribute='local_name') %}
-                            <li><a data-id="attr_{{ attribute.rest_name }}" href="#attr_{{ attribute.rest_name }}" class="fixed-text">{{ attribute.rest_name }}</a></li>
+                            <li><a data-id="attr_{{ attribute.name }}" href="#attr_{{ attribute.name }}" class="fixed-text">{{ attribute.name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -166,7 +166,7 @@
                     {% for attribute in specification.attributes|sort(attribute='local_name') %}
                     <tr>
                         <td class="fixed-text">
-                            <a href="#attr_{{ attribute.rest_name }}" title="{{ attribute.description }}">{{ attribute.rest_name }}</a>
+                            <a href="#attr_{{ attribute.name }}" title="{{ attribute.description }}">{{ attribute.name }}</a>
                         </td>
                         <td style="padding-left: 10px;" class="fixed-text hide-xs">
                             <span class="type_{{ attribute.type }}">{{ attribute.type }}{{ string_for_allowed_choices(attribute)}}</span>
@@ -197,10 +197,10 @@
         <section id="attributes">
             <h3>Attributes documentation</h3>
             {% for attribute in specification.attributes|sort(attribute='local_name') %}
-            <section id="attr_{{ attribute.rest_name }}" class="filterable" data-filter-keyword="{{ attribute.rest_name }}" style="padding-top: 60px; margin-top: -60px;">
+            <section id="attr_{{ attribute.name }}" class="filterable" data-filter-keyword="{{ attribute.name }}" style="padding-top: 60px; margin-top: -60px;">
                 <div class="panel panel-default">
                     <div class="panel-heading fixed-text">
-                        <b>{{ attribute.rest_name }}</b>
+                        <b>{{ attribute.name }}</b>
                         <span class="type_{{ attribute.type }} fixed-text">{{ attribute.type }}</span>
                         {{ tokens_for_attribute(attribute) }}
                     </div>
