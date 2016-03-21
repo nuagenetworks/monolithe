@@ -33,7 +33,7 @@ def get_type_name(type_name, sub_type=None):
     if type_name == "string":
         return "String"
     elif type_name == "enum":
-         return type_name
+        return type_name
     elif type_name == "boolean":
         return "boolean"
     elif type_name == "integer":
@@ -43,18 +43,19 @@ def get_type_name(type_name, sub_type=None):
     elif type_name ==  "object":
         return "Object"
     elif type_name == "list":
-        return "java.util.List<String>"
+        return "java.util.List<%s>" % get_type_name(sub_type)
     elif type_name == "float":
         return "float"
     else:
-        return type_name
+        return "String"
+
 
 def get_idiomatic_name(name):
     """
     """
     if name == "private":
-       return "private_"
+        return "private_"
     elif name == "public":
-       return "public_"       
+        return "public_"       
     else:
-       return name;
+        return name

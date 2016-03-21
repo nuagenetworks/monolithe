@@ -24,7 +24,7 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       return new {{ class_prefix }}{{ root_api|capitalize }}();
    }
    
-   {% if override_content %}
+   {% if override_content -%}
    {{ override_content.replace('\n', '\n    ') }}
-   {% endif %}
+   {% endif -%}
 }

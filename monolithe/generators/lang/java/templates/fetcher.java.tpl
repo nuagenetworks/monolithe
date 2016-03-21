@@ -18,7 +18,7 @@ public class {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher ext
       return {{ class_prefix }}{{ specification.entity_name }}.class;
    }
 
-   {% if override_content %}
-   {{ override_content.replace('\n', '\n    ') }}
-   {% endif %}
+   {% if override_content -%}
+   {{ override_content.replace('\n', '\n   ') }}
+   {%- endif %}
 }

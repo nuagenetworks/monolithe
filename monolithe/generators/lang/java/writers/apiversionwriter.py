@@ -29,7 +29,6 @@ from future import standard_library
 standard_library.install_aliases()
 
 import os
-from configparser import RawConfigParser
 
 from monolithe.lib import SDKUtils, TaskManager
 from monolithe.generators.lib import TemplateFileWriter
@@ -53,7 +52,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.monolithe_config = monolithe_config
         self._output = self.monolithe_config.get_option("output", "transformer")
         self._name = self.monolithe_config.get_option("name", "transformer")
-        self._class_prefix = "" # self.monolithe_config.get_option("class_prefix", "transformer")
+        self._class_prefix = ""
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 
@@ -61,7 +60,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
         self.fetchers_path = "/fetchers/"
         self.enums_path = "/enums"
-        
+
         with open("%s/java/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
@@ -88,53 +87,59 @@ class APIVersionWriter(TemplateFileWriter):
         filename = "%s%s.java" % (self._class_prefix, base_name)
         override_content = self._extract_override_content(base_name)
 
-        self.write(destination=self.output_directory, filename=filename, template_name="session.java.tpl",
-                    version=self.api_version,
-                    product_accronym=self._product_accronym,
-                    class_prefix=self._class_prefix,
-                    root_api=self.api_root,
-                    name=self._name,
-                    api_prefix=self.api_prefix,
-                    override_content=override_content,
-                    header=self.header_content,
-                    version_string=self._api_version_string)
+        self.write(destination=self.output_directory,
+                   filename=filename,
+                   template_name="session.java.tpl",
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   class_prefix=self._class_prefix,
+                   root_api=self.api_root,
+                   name=self._name,
+                   api_prefix=self.api_prefix,
+                   override_content=override_content,
+                   header=self.header_content,
+                   version_string=self._api_version_string)
 
     def _write_info(self):
         """ Write API Info file
         """
-        self.write(destination=self.output_directory, filename="SdkInfo.java", template_name="sdkinfo.java.tpl",
-                    version=self.api_version,
-                    product_accronym=self._product_accronym,
-                    class_prefix=self._class_prefix,
-                    root_api=self.api_root,
-                    api_prefix=self.api_prefix,
-                    product_name=self._product_name,
-                    name=self._name,
-                    header=self.header_content,
-                    version_string=self._api_version_string)
+        self.write(destination=self.output_directory,
+                   filename="SdkInfo.java",
+                   template_name="sdkinfo.java.tpl",
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   class_prefix=self._class_prefix,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   name=self._name,
+                   header=self.header_content,
+                   version_string=self._api_version_string)
 
     def _write_model(self, specification, specification_set):
-	""" Write autogenerate specification file
+        """ Write autogenerate specification file
 
-	"""
-	filename = "%s%s.java" % (self._class_prefix, specification.entity_name)
+        """
+        filename = "%s%s.java" % (self._class_prefix, specification.entity_name)
 
-	override_content = self._extract_override_content(specification.entity_name)
-	superclass_name = "RestRootObject" if specification.rest_name == self.api_root else "RestObject"
+        override_content = self._extract_override_content(specification.entity_name)
+        superclass_name = "RestRootObject" if specification.rest_name == self.api_root else "RestObject"
 
-	self.write(destination=self.output_directory, filename=filename, template_name="model.java.tpl",
-		    specification=specification,
-		    specification_set=specification_set,
-		    version=self.api_version,
-		    name=self._name,
-		    class_prefix=self._class_prefix,
-		    product_accronym=self._product_accronym,
-		    override_content=override_content,
-		    superclass_name=superclass_name,
-		    header=self.header_content,
-		    version_string=self._api_version_string)
+        self.write(destination=self.output_directory,
+                   filename=filename, 
+                   template_name="model.java.tpl",
+                   specification=specification,
+                   specification_set=specification_set,
+                   version=self.api_version,
+                   name=self._name,
+                   class_prefix=self._class_prefix,
+                   product_accronym=self._product_accronym,
+                   override_content=override_content,
+                   superclass_name=superclass_name,
+                   header=self.header_content,
+                   version_string=self._api_version_string)
 
-	return (filename, specification.entity_name)
+        return (filename, specification.entity_name)
 
     def _write_fetcher(self, specification, specification_set):
         """ Write fetcher
@@ -145,15 +150,17 @@ class APIVersionWriter(TemplateFileWriter):
         filename = "%s%s.java" % (self._class_prefix, base_name)
         override_content = self._extract_override_content(base_name)
 
-        self.write(destination=destination, filename=filename, template_name="fetcher.java.tpl",
-                    specification=specification,
-                    specification_set=specification_set,
-                    class_prefix=self._class_prefix,
-                    product_accronym=self._product_accronym,
-                    override_content=override_content,
-                    header=self.header_content,
-                    name=self._name,
-                    version_string=self._api_version_string)
+        self.write(destination=destination,
+                   filename=filename,
+                   template_name="fetcher.java.tpl",
+                   specification=specification,
+                   specification_set=specification_set,
+                   class_prefix=self._class_prefix,
+                   product_accronym=self._product_accronym,
+                   override_content=override_content,
+                   header=self.header_content,
+                   name=self._name,
+                   version_string=self._api_version_string)
 
         return (filename, specification.entity_name_plural)
 
@@ -169,5 +176,5 @@ class APIVersionWriter(TemplateFileWriter):
         override_content = None
         if os.path.isfile(final_path):
             override_content = open(final_path).read()
-        
+
         return override_content
