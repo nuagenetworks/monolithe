@@ -30,9 +30,7 @@ def get_type_name(type_name, sub_type=None):
     """ Returns a Java type according to a spec type
 
     """
-    if type_name == "string":
-        return "String"
-    elif type_name == "enum":
+    if type_name == "enum":
         return type_name
     elif type_name == "boolean":
         return "boolean"
