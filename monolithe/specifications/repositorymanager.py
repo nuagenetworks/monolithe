@@ -148,7 +148,7 @@ class RepositoryManager (object):
         path = os.path.normpath("%s/%s" % (self._repository_path, "monolithe.ini"))
         try:
             data = base64.b64decode(self._repo.get_file_contents(path, ref=branch).content)
-            string_buffer = io.StringIO(data)
+            string_buffer = StringIO.StringIO(data)
             monolithe_config_parser = configparser.ConfigParser()
             monolithe_config_parser.readfp(string_buffer)
             return monolithe_config_parser
