@@ -35,7 +35,7 @@ import os
 import tempfile
 import requests
 import configparser
-import io
+import StringIO
 import zipfile
 
 from github import Github, InputGitTreeElement
@@ -306,7 +306,7 @@ class RepositoryManager (object):
     def save_monolithe_config(self, monolithe_config_parser, message, branch="master"):
         """
         """
-        string_buffer = io.StringIO()
+        string_buffer = StringIO.StringIO()
         monolithe_config_parser.write(string_buffer)
         data = string_buffer.getvalue()
 
