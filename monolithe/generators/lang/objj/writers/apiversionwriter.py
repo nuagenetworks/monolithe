@@ -87,7 +87,7 @@ class APIVersionWriter(TemplateFileWriter):
 
         override_content = self._extract_override_content(specification.entity_name)
         constants = self._extract_constants(specification)
-        superclass_name = "NURESTAbstractUser" if specification.rest_name == self.api_root else "NURESTObject"
+        superclass_name = "NURESTAbstractRoot" if specification.rest_name == self.api_root else "NURESTObject"
 
         defaults = {}
         section = "%s%s" % (self._class_prefix, specification.entity_name)
