@@ -2,7 +2,8 @@
 
 package {{ name }}.{{ version_string }};
 
-import bambou.{{ superclass_name }};
+import com.github.nuagenetworks.bambou.{{ superclass_name }};
+import com.github.nuagenetworks.bambou.annotation.RestEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 {% if specification.attributes|length > 0 -%} 
@@ -20,10 +21,8 @@ import {{ name }}.{{ version_string }}.fetchers.{{ class_prefix }}{{ child_spec.
 {%- endif %}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@RestEntity(restName = "{{ specification.rest_name }}", resourceName = "{{ specification.resource_name }}")
 public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superclass_name }} {
-
-   public final static String REST_NAME = "{{ specification.rest_name }}";
-   public final static String RESOURCE_NAME = "{{ specification.resource_name }}";
 
    {% for attribute in specification.attributes -%}
    {% if attribute.local_type == "enum" %}
@@ -77,10 +76,10 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
 
    public String toString() {
       return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
-		        + lastUpdatedDate + ", owner=" + owner {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
+              + lastUpdatedDate + ", owner=" + owner {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
    }
    
    {% if override_content -%}
-   {{ override_content.replace('\n', '\n    ') }}
+   {{ override_content.replace('\n', '\n   ') }}
    {%- endif %}
 }
