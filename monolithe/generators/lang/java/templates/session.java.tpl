@@ -1,6 +1,6 @@
 {{ header }}
 
-package {{ name }}.{{ version_string }};
+package {{ name }};
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

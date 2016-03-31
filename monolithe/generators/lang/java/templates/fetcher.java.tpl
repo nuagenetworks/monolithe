@@ -1,10 +1,10 @@
 {{ header }}
 
-package {{ name }}.{{ version_string }}.fetchers;
+package {{ name }}.fetchers;
 
 import com.github.nuagenetworks.bambou.RestObject;
 import com.github.nuagenetworks.bambou.RestFetcher;
-import {{ name }}.{{ version_string }}.{{ class_prefix }}{{ specification.entity_name }};
+import {{ name }}.{{ class_prefix }}{{ specification.entity_name }};
 
 public class {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher extends RestFetcher<{{ class_prefix }}{{ specification.entity_name }}> {
 

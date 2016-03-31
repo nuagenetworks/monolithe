@@ -56,8 +56,9 @@ class APIVersionWriter(TemplateFileWriter):
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
 
-        self.output_directory = "%s/java/%s/%s" % (self._output, self._name, self._api_version_string)
-        self.override_folder = os.path.normpath("%s/../../__overrides" % self.output_directory)
+        self.base_output_directory = "%s/java" % (self._output)
+        self.output_directory = "%s/src/main/java/%s" % (self.base_output_directory, self._name)
+        self.override_folder = os.path.normpath("%s/../../../../__overrides" % self.output_directory)
         self.fetchers_path = "/fetchers/"
         self.enums_path = "/enums"
 
@@ -69,6 +70,7 @@ class APIVersionWriter(TemplateFileWriter):
         """
         self._write_info()
         self._write_session()
+        self._write_build_file()
 
         task_manager = TaskManager()
         for rest_name, specification in specifications.items():
@@ -163,6 +165,23 @@ class APIVersionWriter(TemplateFileWriter):
                    version_string=self._api_version_string)
 
         return (filename, specification.entity_name_plural)
+
+    def _write_build_file(self):
+        """ Write Maven build file (pom.xml)
+        
+        """
+        self.write(destination=self.base_output_directory,
+                   filename="pom.xml",
+                   template_name="pom.xml.tpl",
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   class_prefix=self._class_prefix,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   name=self._name,
+                   header=self.header_content,
+                   version_string=self._api_version_string)
 
     def _extract_override_content(self, name):
         """
