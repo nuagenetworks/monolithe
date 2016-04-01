@@ -2,8 +2,8 @@
 
 package {{ package_name }}.fetchers;
 
-import com.github.nuagenetworks.bambou.RestObject;
-import com.github.nuagenetworks.bambou.RestFetcher;
+import net.nuagenetworks.bambou.RestObject;
+import net.nuagenetworks.bambou.RestFetcher;
 import {{ package_name }}.{{ class_prefix }}{{ specification.entity_name }};
 
 public class {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher extends RestFetcher<{{ class_prefix }}{{ specification.entity_name }}> {

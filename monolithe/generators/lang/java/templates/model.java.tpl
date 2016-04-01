@@ -2,8 +2,8 @@
 
 package {{ package_name }};
 
-import com.github.nuagenetworks.bambou.{{ superclass_name }};
-import com.github.nuagenetworks.bambou.annotation.RestEntity;
+import net.nuagenetworks.bambou.{{ superclass_name }};
+import net.nuagenetworks.bambou.annotation.RestEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 {% if specification.attributes|length > 0 -%} 

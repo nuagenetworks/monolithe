@@ -5,9 +5,9 @@ package {{ package_name }};
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.github.nuagenetworks.bambou.RestSession;
-import com.github.nuagenetworks.bambou.service.RestClientTemplate;
-import com.github.nuagenetworks.bambou.spring.SpringConfig;
+import net.nuagenetworks.bambou.RestSession;
+import net.nuagenetworks.bambou.service.RestClientTemplate;
+import net.nuagenetworks.bambou.spring.SpringConfig;
 
 public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession<{{ class_prefix }}{{ root_api|capitalize }}> {
     
