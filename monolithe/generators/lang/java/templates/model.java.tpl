@@ -1,6 +1,6 @@
 {{ header }}
 
-package {{ name }};
+package {{ package_name }};
 
 import com.github.nuagenetworks.bambou.{{ superclass_name }};
 import com.github.nuagenetworks.bambou.annotation.RestEntity;
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 {% if specification.child_apis|length > 0 -%}   
 {% for api in specification.child_apis -%}
 {% set child_spec = specification_set[api.rest_name] %}
-import {{ name }}.fetchers.{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher;
+import {{ package_name }}.fetchers.{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher;
 {%- endfor %}
 {%- endif %}
 

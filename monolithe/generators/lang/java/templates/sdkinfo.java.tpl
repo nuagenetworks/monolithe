@@ -1,6 +1,6 @@
 {{ header }}
 
-package {{ name }};
+package {{ package_name }};
 
 public interface SdkInfo {
 

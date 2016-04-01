@@ -26,6 +26,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from future import standard_library
+from urlparse import urlparse
 standard_library.install_aliases()
 
 import os
@@ -55,12 +56,16 @@ class APIVersionWriter(TemplateFileWriter):
         self._class_prefix = ""
         self._product_accronym = self.monolithe_config.get_option("product_accronym")
         self._product_name = self.monolithe_config.get_option("product_name")
+        self._url = self.monolithe_config.get_option("url", "transformer")
 
-        self.base_output_directory = "%s/java" % (self._output)
-        self.output_directory = "%s/src/main/java/%s" % (self.base_output_directory, self._name)
-        self.override_folder = os.path.normpath("%s/../../../../__overrides" % self.output_directory)
+        self._package_prefix = self._get_package_prefix(self._url)
+        self._package_name = self._package_prefix + '.' + self._name
+        self._package_subdir = self._package_name.replace('.', '/')
+
+        self._base_output_directory = "%s/java" % (self._output)
+        self.output_directory = "%s/src/main/java/%s" % (self._base_output_directory, self._package_subdir)
+        self.override_folder = os.path.normpath("%s/__overrides" % self._base_output_directory)
         self.fetchers_path = "/fetchers/"
-        self.enums_path = "/enums"
 
         with open("%s/java/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
@@ -100,7 +105,8 @@ class APIVersionWriter(TemplateFileWriter):
                    api_prefix=self.api_prefix,
                    override_content=override_content,
                    header=self.header_content,
-                   version_string=self._api_version_string)
+                   version_string=self._api_version_string,
+                   package_name=self._package_name)
 
     def _write_info(self):
         """ Write API Info file
@@ -116,7 +122,8 @@ class APIVersionWriter(TemplateFileWriter):
                    product_name=self._product_name,
                    name=self._name,
                    header=self.header_content,
-                   version_string=self._api_version_string)
+                   version_string=self._api_version_string,
+                   package_name=self._package_name)
 
     def _write_model(self, specification, specification_set):
         """ Write autogenerate specification file
@@ -139,7 +146,8 @@ class APIVersionWriter(TemplateFileWriter):
                    override_content=override_content,
                    superclass_name=superclass_name,
                    header=self.header_content,
-                   version_string=self._api_version_string)
+                   version_string=self._api_version_string,
+                   package_name=self._package_name)
 
         return (filename, specification.entity_name)
 
@@ -162,7 +170,8 @@ class APIVersionWriter(TemplateFileWriter):
                    override_content=override_content,
                    header=self.header_content,
                    name=self._name,
-                   version_string=self._api_version_string)
+                   version_string=self._api_version_string,
+                   package_name=self._package_name)
 
         return (filename, specification.entity_name_plural)
 
@@ -170,7 +179,7 @@ class APIVersionWriter(TemplateFileWriter):
         """ Write Maven build file (pom.xml)
         
         """
-        self.write(destination=self.base_output_directory,
+        self.write(destination=self._base_output_directory,
                    filename="pom.xml",
                    template_name="pom.xml.tpl",
                    version=self.api_version,
@@ -181,7 +190,8 @@ class APIVersionWriter(TemplateFileWriter):
                    product_name=self._product_name,
                    name=self._name,
                    header=self.header_content,
-                   version_string=self._api_version_string)
+                   version_string=self._api_version_string,
+                   package_prefix=self._package_prefix)
 
     def _extract_override_content(self, name):
         """
@@ -197,3 +207,32 @@ class APIVersionWriter(TemplateFileWriter):
             override_content = open(final_path).read()
 
         return override_content
+
+    def _get_package_prefix(self, url):
+        ""
+        ""
+        hostname_parts = self._get_hostname_parts(url)
+
+        package_name = ""
+        for index, hostname_part in enumerate(reversed(hostname_parts)):
+            package_name = package_name + hostname_part
+            if index < len(hostname_parts) - 1:
+                package_name = package_name + '.'
+
+        return package_name
+
+    def _get_hostname_parts(self, url):
+        ""
+        ""
+        if url.find("http://") != 0:
+            url = "http://" + url
+
+        hostname = urlparse(url).hostname
+        hostname_parts = hostname.split('.')
+
+        valid_hostname_parts = []
+        for hostname_part in hostname_parts:
+            if hostname_part != "www":
+                valid_hostname_parts.append(hostname_part)
+
+        return valid_hostname_parts
