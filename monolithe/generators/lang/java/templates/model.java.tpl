@@ -46,6 +46,10 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {%- endif %}
 
    public {{ class_prefix }}{{ specification.entity_name }}() {
+      {% for attribute, value in attribute_defaults.iteritems() -%}
+      {{attribute}} = {{value}};
+      {% endfor -%}
+
       {% if specification.child_apis|length > 0 -%}   
       {% for api in specification.child_apis %}
       {%- set child_spec = specification_set[api.rest_name] %}

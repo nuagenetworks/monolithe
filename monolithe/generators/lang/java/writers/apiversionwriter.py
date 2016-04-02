@@ -30,6 +30,7 @@ from urlparse import urlparse
 standard_library.install_aliases()
 
 import os
+from configparser import RawConfigParser
 
 from monolithe.lib import SDKUtils, TaskManager
 from monolithe.generators.lib import TemplateFileWriter
@@ -67,6 +68,12 @@ class APIVersionWriter(TemplateFileWriter):
         self.override_folder = os.path.normpath("%s/__overrides" % self._base_output_directory)
         self.fetchers_path = "/fetchers/"
 
+        self.attrs_defaults = RawConfigParser()
+        path = "%s/java/__attributes_defaults/attrs_defaults.ini" % self._output
+        self.attrs_defaults.optionxform = str
+        print path
+        self.attrs_defaults.read(path)
+	
         with open("%s/java/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
@@ -134,6 +141,12 @@ class APIVersionWriter(TemplateFileWriter):
         override_content = self._extract_override_content(specification.entity_name)
         superclass_name = "RestRootObject" if specification.rest_name == self.api_root else "RestObject"
 
+        defaults = {}
+        section = specification.entity_name
+        if self.attrs_defaults.has_section(section):
+            for attribute in self.attrs_defaults.options(section):
+                defaults[attribute] = self.attrs_defaults.get(section, attribute)
+
         self.write(destination=self.output_directory,
                    filename=filename, 
                    template_name="model.java.tpl",
@@ -147,7 +160,8 @@ class APIVersionWriter(TemplateFileWriter):
                    superclass_name=superclass_name,
                    header=self.header_content,
                    version_string=self._api_version_string,
-                   package_name=self._package_name)
+                   package_name=self._package_name,
+                   attribute_defaults=defaults)
 
         return (filename, specification.entity_name)
 
