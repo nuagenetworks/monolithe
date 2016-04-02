@@ -71,7 +71,6 @@ class APIVersionWriter(TemplateFileWriter):
         self.attrs_defaults = RawConfigParser()
         path = "%s/java/__attributes_defaults/attrs_defaults.ini" % self._output
         self.attrs_defaults.optionxform = str
-        print path
         self.attrs_defaults.read(path)
 	
         with open("%s/java/__code_header" % self._output, "r") as f:
