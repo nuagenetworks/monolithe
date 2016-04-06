@@ -45,6 +45,9 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {% endfor %}
    {%- endif %}
 
+{%- set add_warning = {} %}
+{%- for attribute, value in attribute_defaults.iteritems() %}{% if value.startswith(attribute + '.') %}{% set _ = add_warning.update({'enabled' : True}) %}{% endif %}{% endfor %}
+{% if add_warning %}   @SuppressWarnings("static-access"){% endif %}
    public {{ class_prefix }}{{ specification.entity_name }}() {
       {% for attribute, value in attribute_defaults.iteritems() -%}
       {{attribute}} = {{value}};
