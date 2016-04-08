@@ -33,17 +33,17 @@ def get_type_name(type_name, sub_type=None):
     if type_name == "enum":
         return type_name
     elif type_name == "boolean":
-        return "boolean"
+        return "Boolean"
     elif type_name == "integer":
-        return "int"
+        return "Integer"
     elif type_name ==  "time":
-        return "float"
+        return "Float"
     elif type_name ==  "object":
         return "Object"
     elif type_name == "list":
         return "java.util.List<%s>" % get_type_name(sub_type)
     elif type_name == "float":
-        return "float"
+        return "Float"
     else:
         return "String"
 
