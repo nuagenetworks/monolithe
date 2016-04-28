@@ -60,7 +60,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._url = self.monolithe_config.get_option("url", "transformer")
 
         self._package_prefix = self._get_package_prefix(self._url)
-        self._package_name = self._package_prefix + '.' + self._name
+        self._package_name = self._package_prefix + '.' + self._name + '.' + SDKUtils.get_string_version(self.api_version)
         self._package_subdir = self._package_name.replace('.', '/')
 
         self._base_output_directory = "%s/java" % (self._output)
@@ -73,12 +73,18 @@ class APIVersionWriter(TemplateFileWriter):
         self.attrs_defaults.optionxform = str
         self.attrs_defaults.read(path)
 	
+        self.attrs_types = RawConfigParser()
+        path = "%s/java/__attributes_defaults/attrs_types.ini" % self._output
+        self.attrs_types.optionxform = str
+        self.attrs_types.read(path)
+
         with open("%s/java/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
     def perform(self, specifications):
         """
         """
+        self._set_enum_list_local_type(specifications) # Temporary until get_type_name is enhanced to include specificiation subtype and local_name
         self._write_info()
         self._write_session()
         self._write_build_file()
@@ -249,3 +255,36 @@ class APIVersionWriter(TemplateFileWriter):
                 valid_hostname_parts.append(hostname_part)
 
         return valid_hostname_parts
+
+    def _set_enum_list_local_type(self, specifications):
+        ""
+        ""
+        for rest_name, specification in specifications.items():
+            for attribute in specification.attributes:
+                if attribute.type == "enum":
+                    enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]
+                    attribute.local_type = enum_type
+                elif attribute.type == "object":
+                    attr_type = "Object"
+                    if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
+                        type = self.attrs_types.get(specification.entity_name, attribute.local_name)
+                        if type:
+                            attr_type = type
+                        else:
+                            print specification.entity_name + "." + attribute.local_name
+                        attribute.local_type = attr_type
+                elif attribute.type == "list":
+                    if attribute.subtype == "enum":
+                        enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
+                        attribute.local_type = "java.util.List<" + enum_subtype + ">"
+                    elif attribute.subtype == "object":
+                        attr_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
+                        if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
+                            type = self.attrs_types.get(specification.entity_name, attribute.local_name)
+                            if type:
+                                attr_type = type
+                        attribute.local_type = attr_type
+                    elif attribute.subtype == "entity":
+                        attribute.local_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
+                    else:
+                        attribute.local_type = "java.util.List<String>"
