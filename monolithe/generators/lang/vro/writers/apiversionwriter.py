@@ -153,7 +153,7 @@ class APIVersionWriter(TemplateFileWriter):
         resources_output_directory = "%s/src/main/resources" % (output_directory)
         workflows_output_directory = "%s/Workflow" % (resources_output_directory)
         resources_source_directory = "%s/__resources" % (self.output_directory)
-        workflows_source_directory = "%s/Workflow" % (self.resources_source_directory)
+        workflows_source_directory = "%s/Workflow" % (resources_source_directory)
         copytree(workflows_source_directory, workflows_output_directory)
         rmtree("%s" % (resources_source_directory))
 
