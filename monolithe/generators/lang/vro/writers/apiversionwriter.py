@@ -74,10 +74,10 @@ class APIVersionWriter(TemplateFileWriter):
         self.attrs_defaults.optionxform = str
         self.attrs_defaults.read(path)
 
-        self.entity_name_attrs = RawConfigParser()
-        path = "%s/vro/__attributes_defaults/entity_name_attrs.ini" % self._output
-        self.entity_name_attrs.optionxform = str
-        self.entity_name_attrs.read(path)
+        self.inventory_entities = RawConfigParser()
+        path = "%s/vro/__attributes_defaults/inventory_entities.ini" % self._output
+        self.inventory_entities.optionxform = str
+        self.inventory_entities.read(path)
 
         self.attrs_types = RawConfigParser()
         path = "%s/vro/__attributes_defaults/attrs_types.ini" % self._output
@@ -150,9 +150,11 @@ class APIVersionWriter(TemplateFileWriter):
         copyfile("%s/archetype.keystore" % (self.output_directory), "%s/archetype.keystore" % (output_directory));
         remove("%s/archetype.keystore" % (self.output_directory))
 
-        resources_output_directory = "%s/src/main/resources/Workflow" % (output_directory)
-        resources_source_directory = "%s/__resources/Workflow" % (self.output_directory)
-        copytree(resources_source_directory, resources_output_directory)
+        resources_output_directory = "%s/src/main/resources" % (output_directory)
+        workflows_output_directory = "%s/Workflow" % (resources_output_directory)
+        resources_source_directory = "%s/__resources" % (self.output_directory)
+        workflows_source_directory = "%s/Workflow" % (self.resources_source_directory)
+        copytree(workflows_source_directory, workflows_output_directory)
         rmtree("%s" % (resources_source_directory))
 
     def _write_session(self, specifications, output_directory, package_name):
@@ -199,9 +201,12 @@ class APIVersionWriter(TemplateFileWriter):
             for attribute in self.attrs_defaults.options(section):
                 defaults[attribute] = self.attrs_defaults.get(section, attribute)
 
+        entity_includes = self._get_entity_list_filter(section, "includes")
+        entity_excludes = self._get_entity_list_filter(section, "excludes")
         entity_name_attr = "id"
-        if self.entity_name_attrs.has_section(section):
-            entity_name_attr = self.entity_name_attrs.get(section, "name")
+        if self.inventory_entities.has_section(section):
+            if self.inventory_entities.has_option(section, "name"):
+                entity_name_attr = self.inventory_entities.get(section, "name")
 
         self.write(destination=output_directory,
                    filename=filename, 
@@ -219,7 +224,9 @@ class APIVersionWriter(TemplateFileWriter):
                    package_name=package_name,
                    attribute_defaults=defaults,
                    entity_name_attr=entity_name_attr,
-                   root_api=self.api_root)
+                   root_api=self.api_root,
+                   entity_includes=entity_includes,
+                   entity_excludes=entity_excludes)
 
         return (filename, specification.entity_name)
 
@@ -508,8 +515,22 @@ class APIVersionWriter(TemplateFileWriter):
     def _copyfile(self, filename, input_directory, output_directory):
          ""
          ""
-
          input_file = "%s/%s" % (input_directory, filename)
          if os.path.isfile(input_file):
              output_file = "%s/%s" % (output_directory, filename)
              copyfile(input_file, output_file)
+
+    def _get_entity_list_filter(self, section, tag):
+        ""
+        ""
+        entities = []
+
+        if self.inventory_entities.has_option("all", tag):
+            entity_list_str = self.inventory_entities.get("all", tag)
+            entities = entities + entity_list_str.split(", ")
+
+        if self.inventory_entities.has_option(section, tag):
+            entity_list_str = self.inventory_entities.get(section, tag)
+            entities = entities + entity_list_str.split(", ")
+
+        return entities
