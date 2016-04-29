@@ -193,6 +193,16 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     }
 
     {%- for child_api in specification.child_apis %}
+    {%- if child_api.allows_update %}
+    {%- set child_spec = specification_set[child_api.rest_name] %}
+    @VsoMethod
+    public void assign{{ child_spec.entity_name_plural }}(Session session, {{ child_spec.entity_name }}[] childRestObjs) throws RestException {
+        super.assign(session, java.util.Arrays.asList(childRestObjs));
+    }
+    {% endif -%}
+    {% endfor -%}
+
+    {%- for child_api in specification.child_apis %}
     {%- if child_api.allows_create %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     @VsoMethod
