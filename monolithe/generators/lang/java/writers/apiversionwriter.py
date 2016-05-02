@@ -261,7 +261,13 @@ class APIVersionWriter(TemplateFileWriter):
         ""
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
-                if attribute.type == "enum":
+                if attribute.type == "string":
+                    attribute.local_type = "String"
+                elif attribute.type == "integer":
+                    attribute.local_type = "Long"
+                elif attribute.type == "boolean":
+                    attribute.local_type = "Boolean"
+                elif attribute.type == "enum":
                     enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                     attribute.local_type = enum_type
                 elif attribute.type == "object":
@@ -270,21 +276,20 @@ class APIVersionWriter(TemplateFileWriter):
                         type = self.attrs_types.get(specification.entity_name, attribute.local_name)
                         if type:
                             attr_type = type
-                        else:
-                            print specification.entity_name + "." + attribute.local_name
-                        attribute.local_type = attr_type
+                    attribute.local_type = attr_type
                 elif attribute.type == "list":
                     if attribute.subtype == "enum":
                         enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                         attribute.local_type = "java.util.List<" + enum_subtype + ">"
                     elif attribute.subtype == "object":
-                        attr_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
+                        attr_subtype = "com.fasterxml.jackson.databind.JsonNode"
                         if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
-                            type = self.attrs_types.get(specification.entity_name, attribute.local_name)
-                            if type:
-                                attr_type = type
-                        attribute.local_type = attr_type
+                            subtype = self.attrs_types.get(specification.entity_name, attribute.local_name)
+                            if subtype:
+                                attr_subtype = subtype
+                        attribute.local_type = "java.util.List<" + attr_subtype + ">"
                     elif attribute.subtype == "entity":
                         attribute.local_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
                     else:
                         attribute.local_type = "java.util.List<String>"
+
