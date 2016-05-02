@@ -209,6 +209,16 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     public void create{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj) throws RestException {
         super.createChild(session, childRestObj);
     }
+
+    {%- for attribute in child_spec.attributes %}
+    {%- if attribute.local_name == "templateID" %}
+    @VsoMethod
+    public void instantiate{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj, {{ child_spec.entity_name }}Template fromTemplate) throws RestException {
+        super.instantiateChild(session, childRestObj, fromTemplate);
+    }
+    {% endif -%}
+    {% endfor -%}
+
     {% endif -%}
     {% endfor -%}
 
