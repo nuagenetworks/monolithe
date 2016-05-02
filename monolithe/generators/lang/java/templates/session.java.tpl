@@ -24,7 +24,7 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       }
    }
 
-   public VSDSession(String username, String password, String enterprise, String apiUrl) {
+   public {{ class_prefix }}{{ product_accronym }}Session(String username, String password, String enterprise, String apiUrl) {
       this(username, password, enterprise, apiUrl, null);
    }
 
