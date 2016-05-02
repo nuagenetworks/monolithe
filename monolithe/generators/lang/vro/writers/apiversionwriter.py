@@ -29,10 +29,10 @@ from future import standard_library
 from urlparse import urlparse
 standard_library.install_aliases()
 
-import os
+import os, uuid
 from configparser import RawConfigParser
 from shutil import copyfile, rmtree, copytree
-from os import remove
+from os import remove, makedirs
 
 from monolithe.lib import SDKUtils, TaskManager
 from monolithe.generators.lib import TemplateFileWriter
@@ -96,7 +96,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_file(self.output_directory, "pom.xml.tpl", "pom.xml")
         self._write_o11plugin(specifications)
         self._write_o11plugin_core(specifications)
-        self._write_o11plugin_package()
+        self._write_o11plugin_package(specifications)
 
     def _write_o11plugin(self, specifications):
         """
@@ -141,7 +141,7 @@ class APIVersionWriter(TemplateFileWriter):
             task_manager.start_task(method=self._write_fetcher, specification=specification, specification_set=specifications, output_directory=model_source_output_directory, package_name=model_package_name)
         task_manager.wait_until_exit()
 
-    def _write_o11plugin_package(self):
+    def _write_o11plugin_package(self, specifications):
         """
         """
         output_directory = "%s/o11nplugin-%s-package" % (self.output_directory, self._name.lower())
@@ -156,6 +156,11 @@ class APIVersionWriter(TemplateFileWriter):
         workflows_source_directory = "%s/Workflow" % (resources_source_directory)
         copytree(workflows_source_directory, workflows_output_directory)
         rmtree("%s" % (resources_source_directory))
+
+        for rest_name, specification in specifications.items():
+            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add")
+            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit")
+            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove")
 
     def _write_session(self, specifications, output_directory, package_name):
         """ Write SDK session file
@@ -395,6 +400,40 @@ class APIVersionWriter(TemplateFileWriter):
                    specification_set=specifications,
                    specifications=list(specifications.values()))
 
+    def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type):
+        """
+        """
+        workflow_id = uuid.uuid4()
+
+        workflow_directory = "%s/Library/VSPK/Basic/%s" % (output_directory, specification.package.capitalize())
+        if not os.path.exists(workflow_directory):
+            makedirs(workflow_directory)
+
+        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.element_info.xml.tpl" % (workflow_type), filename="%s %s.element_info.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id)
+        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.xml.tpl" % (workflow_type), filename="%s %s.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id)
+
+    def _write_workflow_file(self, specification, specification_set, workflow_directory, template_file, filename, workflow_type, workflow_id):
+        """
+        """
+        self.write(destination=workflow_directory,
+                   filename=filename,
+                   template_name=template_file,
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   class_prefix=self._class_prefix,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   name=self._name,
+                   header=self.header_content,
+                   version_string=self._api_version_string,
+                   package_prefix=self._package_prefix,
+                   package_name=self._package_name,
+                   specification=specification,
+                   specification_set=specification_set,
+                   workflow_type=workflow_type,
+                   workflow_id=workflow_id)
+
     def _write_file(self, output_directory, template_file, filename):
         """ 
         """
@@ -468,13 +507,13 @@ class APIVersionWriter(TemplateFileWriter):
                     if related_child_api.rest_name == specification.rest_name:
                         parent_api = SpecificationAPI(specification=remote_spec)
                         parent_api.rest_name = remote_spec.rest_name
-                        if specification.allows_get:
+                        if related_child_api.allows_get:
                             parent_api.allows_get = True
-                        if specification.allows_create:
+                        if related_child_api.allows_create:
                             parent_api.allows_create = True
-                        if specification.allows_update:
+                        if related_child_api.allows_update:
                             parent_api.allows_update = True
-                        if specification.allows_delete:
+                        if related_child_api.allows_delete:
                             parent_api.allows_Delete = True
 
                         specification.parent_apis.append(parent_api)
@@ -484,33 +523,46 @@ class APIVersionWriter(TemplateFileWriter):
         ""
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
-                if attribute.type == "enum":
+                if attribute.type == "string":
+                    attribute.local_type = "String"
+                    attribute.workflow_type = "string"
+                elif attribute.type == "integer":
+                    attribute.local_type = "Long"
+                    attribute.workflow_type = "number"
+                elif attribute.type == "boolean":
+                    attribute.local_type = "Boolean"
+                    attribute.workflow_type = "boolean"
+                elif attribute.type == "enum":
                     enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                     attribute.local_type = enum_type
+                    attribute.workflow_type = self._name.upper() + ':' + enum_type
                 elif attribute.type == "object":
                     attr_type = "Object"
                     if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
                         type = self.attrs_types.get(specification.entity_name, attribute.local_name)
                         if type:
                             attr_type = type
-                        else:
-                            print specification.entity_name + "." + attribute.local_name
-                        attribute.local_type = attr_type
+                    attribute.local_type = attr_type
+                    attribute.workflow_type = self._name.upper() + ':' + attr_type
                 elif attribute.type == "list":
                     if attribute.subtype == "enum":
                         enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                         attribute.local_type = "java.util.List<" + enum_subtype + ">"
+                        attribute.workflow_type = "Array/" + self._name.upper() + ':' + enum_subtype
                     elif attribute.subtype == "object":
-                        attr_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
+                        attr_subtype = "com.fasterxml.jackson.databind.JsonNode"
                         if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
-                            type = self.attrs_types.get(specification.entity_name, attribute.local_name)
-                            if type:
-                                attr_type = type
-                        attribute.local_type = attr_type
+                            subtype = self.attrs_types.get(specification.entity_name, attribute.local_name)
+                            if subtype:
+                                attr_subtype = subtype
+                        attribute.local_type = "java.util.List<" + attr_subtype + ">"
+                        attribute.workflow_type = "Array/" + self._name.upper() + ':' + attr_subtype
                     elif attribute.subtype == "entity":
                         attribute.local_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
+                        attribute.workflow_type = "Array/string"
                     else:
                         attribute.local_type = "java.util.List<String>"
+                        attribute.workflow_type = "Array/string"
 
     def _copyfile(self, filename, input_directory, output_directory):
          ""
