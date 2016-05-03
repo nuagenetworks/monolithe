@@ -84,7 +84,7 @@ class APIVersionWriter(TemplateFileWriter):
     def perform(self, specifications):
         """
         """
-        self._set_enum_list_local_type(specifications) # Temporary until get_type_name is enhanced to include specificiation subtype and local_name
+        self._set_enum_list_local_type(specifications)
         self._write_info()
         self._write_session()
         self._write_build_file()
@@ -228,8 +228,8 @@ class APIVersionWriter(TemplateFileWriter):
         return override_content
 
     def _get_package_prefix(self, url):
-        ""
-        ""
+        """
+        """
         hostname_parts = self._get_hostname_parts(url)
 
         package_name = ""
@@ -241,8 +241,8 @@ class APIVersionWriter(TemplateFileWriter):
         return package_name
 
     def _get_hostname_parts(self, url):
-        ""
-        ""
+        """
+        """
         if url.find("http://") != 0:
             url = "http://" + url
 
@@ -257,17 +257,11 @@ class APIVersionWriter(TemplateFileWriter):
         return valid_hostname_parts
 
     def _set_enum_list_local_type(self, specifications):
-        ""
-        ""
+        """ This method is needed until get_type_name() is enhanced to include specification subtype and local_name
+        """
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
-                if attribute.type == "string":
-                    attribute.local_type = "String"
-                elif attribute.type == "integer":
-                    attribute.local_type = "Long"
-                elif attribute.type == "boolean":
-                    attribute.local_type = "Boolean"
-                elif attribute.type == "enum":
+                if attribute.type == "enum":
                     enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                     attribute.local_type = enum_type
                 elif attribute.type == "object":
