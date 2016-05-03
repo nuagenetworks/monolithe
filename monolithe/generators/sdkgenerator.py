@@ -64,7 +64,7 @@ class SDKGenerator(Generator):
         name = self.monolithe_config.get_option("name", "transformer")
         lang = self.monolithe_config.language
 
-        if not os.path.exists(file.path.join(output, lang)):
+        if not os.path.exists(os.path.join(output, lang)):
             os.makedirs(file.path.join(output, lang))
 
         vanilla_manager = VanillaManager(monolithe_config=self.monolithe_config)
