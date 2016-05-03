@@ -403,7 +403,8 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type):
         """
         """
-        workflow_id = uuid.uuid4()
+        workflow_unique_name = specification.entity_name.encode('ascii') + '-' + workflow_type
+        workflow_id = uuid.uuid5(uuid.NAMESPACE_OID, workflow_unique_name)
 
         workflow_directory = "%s/Library/VSPK/Basic/%s" % (output_directory, specification.package.capitalize())
         if not os.path.exists(workflow_directory):

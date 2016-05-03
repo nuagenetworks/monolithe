@@ -22,7 +22,7 @@
 <display-name><![CDATA[Scriptable task]]></display-name>
 <script encoded='false'><![CDATA[var session = {{ fetcher_param_name }}.session;
 
-{{ entity_param_name }}  = new {{ name | upper }}{{ specification. entity_name}}();
+{{ entity_param_name }} = new {{ name | upper }}{{ specification. entity_name}}();
 {% for attribute in specification.attributes -%}
 {%- if attribute.type == "string" %}
 if ({{ attribute.local_name }}.trim()) {
@@ -31,7 +31,7 @@ if ({{ attribute.local_name }}.trim()) {
 {% else %}
 {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
 {% endif -%}
-{% endfor -%}
+{% endfor %}
 
 {% for parent_api in specification.parent_apis -%}
 {%- set parent_spec = specification_set[parent_api.rest_name] %}

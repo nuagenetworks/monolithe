@@ -19,7 +19,13 @@
 <script encoded='false'><![CDATA[var session = {{ entity_param_name }}.session;
 
 {% for attribute in specification.attributes -%}
-{{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }}; 
+{%- if attribute.type == "string" %}
+if ({{ attribute.local_name }}.trim()) {
+    {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
+}
+{% else %}
+{{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
+{% endif -%}
 {% endfor %}
 
 {{ entity_param_name }}.save(session);]]></script>
