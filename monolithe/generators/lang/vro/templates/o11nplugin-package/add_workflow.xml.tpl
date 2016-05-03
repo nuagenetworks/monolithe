@@ -1,7 +1,7 @@
-{%- set entity_param_name = specification.instance_name[0:1].lower() + specification.instance_name[1:] %}
-{%- set entity_type_name = name.upper() + ':' + specification.entity_name %}
-{%- set fetcher_param_name = specification.instance_name_plural[0:1].lower() + specification.instance_name_plural[1:] + "Fetcher" %}
-{%- set fetcher_type_name = name.upper() + ':' + specification.entity_name_plural + "Fetcher" %}
+{%- set entity_param_name = specification.instance_name[0:1].lower() + specification.instance_name[1:] -%}
+{%- set entity_type_name = name.upper() + ':' + specification.entity_name -%}
+{%- set fetcher_param_name = specification.instance_name_plural[0:1].lower() + specification.instance_name_plural[1:] + "Fetcher" -%}
+{%- set fetcher_type_name = name.upper() + ':' + specification.entity_name_plural + "Fetcher" -%}
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="{{ workflow_id }}"  version="0.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0" >
 <display-name><![CDATA[{{ workflow_type | capitalize }} {{ specification.entity_name }}]]></display-name>
@@ -24,7 +24,13 @@
 
 {{ entity_param_name }}  = new {{ name | upper }}{{ specification. entity_name}}();
 {% for attribute in specification.attributes -%}
-{{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }}; 
+{%- if attribute.type == "string" %}
+if ({{ attribute.local_name }}.trim()) {
+    {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
+}
+{% else %}
+{{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
+{% endif -%}
 {% endfor -%}
 
 {% for parent_api in specification.parent_apis -%}

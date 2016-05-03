@@ -535,7 +535,7 @@ class APIVersionWriter(TemplateFileWriter):
                 elif attribute.type == "enum":
                     enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                     attribute.local_type = enum_type
-                    attribute.workflow_type = self._name.upper() + ':' + enum_type
+                    attribute.workflow_type = self._name.upper() + ':' + specification.entity_name + enum_type
                 elif attribute.type == "object":
                     attr_type = "Object"
                     if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
@@ -548,7 +548,7 @@ class APIVersionWriter(TemplateFileWriter):
                     if attribute.subtype == "enum":
                         enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                         attribute.local_type = "java.util.List<" + enum_subtype + ">"
-                        attribute.workflow_type = "Array/" + self._name.upper() + ':' + enum_subtype
+                        attribute.workflow_type = "Array/" + self._name.upper() + ':' + specification.entity_name + enum_subtype
                     elif attribute.subtype == "object":
                         attr_subtype = "com.fasterxml.jackson.databind.JsonNode"
                         if self.attrs_types.has_option(specification.entity_name, attribute.local_name):

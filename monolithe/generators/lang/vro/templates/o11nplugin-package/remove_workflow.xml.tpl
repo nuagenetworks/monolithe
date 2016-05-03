@@ -1,5 +1,5 @@
-{%- set entity_param_name = specification.instance_name[0:1].lower() + specification.instance_name[1:] %}
-{%- set entity_type_name = name.upper() + ':' + specification.entity_name %}
+{%- set entity_param_name = specification.instance_name[0:1].lower() + specification.instance_name[1:] -%}
+{%- set entity_type_name = name.upper() + ':' + specification.entity_name -%}
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="{{ workflow_id }}"  version="0.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0" >
 <display-name><![CDATA[{{ workflow_type | capitalize }} {{ specification.entity_name }}]]></display-name>
