@@ -154,7 +154,7 @@ class APIVersionWriter(TemplateFileWriter):
         actions_output_directory = "%s/ScriptModule" % (resources_output_directory)
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
-                if attribute.type == "enum":
+                if attribute.type == "enum" or attribute.type == "list":
                     self._write_action_files(specification=specification, attribute=attribute, package_name=self._package_name, output_directory=actions_output_directory)
 
         workflows_output_directory = "%s/Workflow" % (resources_output_directory)
@@ -416,7 +416,7 @@ class APIVersionWriter(TemplateFileWriter):
         if not os.path.exists(action_directory):
             makedirs(action_directory)
 
-        action_name = "get%s%s" %(specification.entity_name, attribute.local_type)
+        action_name = "get%s%s" %(specification.entity_name, attribute.local_name[0:1].upper() + attribute.local_name[1:])
         self._write_action_file(specification=specification, attribute=attribute, action_directory=action_directory, template_file="o11nplugin-package/get_entity_attribute_action.element_info.xml.tpl", filename="%s.element_info.xml" % (action_name), action_name=action_name, action_id=action_id)
         self._write_action_file(specification=specification, attribute=attribute, action_directory=action_directory, template_file="o11nplugin-package/get_entity_attribute_action.xml.tpl", filename="%s.xml" % (action_name), action_name=action_name, action_id=action_id)
 
