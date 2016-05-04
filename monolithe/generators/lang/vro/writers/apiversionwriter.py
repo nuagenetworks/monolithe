@@ -567,14 +567,15 @@ class APIVersionWriter(TemplateFileWriter):
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
                 if attribute.type == "string":
-                    attribute.local_type = "String"
                     attribute.workflow_type = "string"
                 elif attribute.type == "integer":
-                    attribute.local_type = "Long"
                     attribute.workflow_type = "number"
                 elif attribute.type == "boolean":
-                    attribute.local_type = "Boolean"
                     attribute.workflow_type = "boolean"
+                elif attribute.type == "time":
+                    attribute.workflow_type = "number"
+                elif attribute.type == "float":
+                    attribute.workflow_type = "number"
                 elif attribute.type == "enum":
                     enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]
                     attribute.local_type = enum_type
