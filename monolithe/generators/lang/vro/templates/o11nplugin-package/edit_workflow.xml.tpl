@@ -40,6 +40,12 @@ if ({{ attribute.local_name }}.trim()) {
 <p-qual name="contextualParameter" type="void" ><![CDATA[__NULL__]]></p-qual></p-param>
 {% for attribute in specification.attributes -%}
 <p-param name="{{ attribute.local_name }}"><desc><![CDATA[{{ attribute.local_name }}]]></desc>
-<p-qual kind="ognl" name="defaultValue" type="{{ attribute.workflow_type }}" ><![CDATA[#{{ entity_param_name }}.{{ attribute.local_name }}]]></p-qual></p-param>
+<p-qual kind="ognl" name="defaultValue" type="{{ attribute.workflow_type }}" ><![CDATA[
+{%- if attribute.type == "enum" -%}
+GetAction("{{ package_name }}","get{{ specification.entity_name }}{{ attribute.local_type }}").call( #{{ entity_param_name }} )
+{%- else -%}
+#{{ entity_param_name }}.{{ attribute.local_name }}
+{%- endif -%}
+]]></p-qual></p-param>
 {% endfor %}
 </presentation></workflow>

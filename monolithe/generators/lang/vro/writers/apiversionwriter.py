@@ -151,6 +151,12 @@ class APIVersionWriter(TemplateFileWriter):
         remove("%s/archetype.keystore" % (self.output_directory))
 
         resources_output_directory = "%s/src/main/resources" % (output_directory)
+        actions_output_directory = "%s/ScriptModule" % (resources_output_directory)
+        for rest_name, specification in specifications.items():
+            for attribute in specification.attributes:
+                if attribute.type == "enum":
+                    self._write_action_files(specification=specification, attribute=attribute, package_name=self._package_name, output_directory=actions_output_directory)
+
         workflows_output_directory = "%s/Workflow" % (resources_output_directory)
         resources_source_directory = "%s/__resources" % (self.output_directory)
         workflows_source_directory = "%s/Workflow" % (resources_source_directory)
@@ -399,6 +405,42 @@ class APIVersionWriter(TemplateFileWriter):
                    package_name=package_name,
                    specification_set=specifications,
                    specifications=list(specifications.values()))
+
+    def _write_action_files(self, specification, attribute, package_name, output_directory):
+        """
+        """
+        action_unique_name = "action-" + specification.entity_name.encode('ascii') + '-get-' + attribute.local_name.encode('ascii')
+        action_id = uuid.uuid5(uuid.NAMESPACE_OID, action_unique_name)
+
+        action_directory = "%s/%s" % (output_directory, self._package_subdir)
+        if not os.path.exists(action_directory):
+            makedirs(action_directory)
+
+        action_name = "get%s%s" %(specification.entity_name, attribute.local_type)
+        self._write_action_file(specification=specification, attribute=attribute, action_directory=action_directory, template_file="o11nplugin-package/get_entity_attribute_action.element_info.xml.tpl", filename="%s.element_info.xml" % (action_name), action_name=action_name, action_id=action_id)
+        self._write_action_file(specification=specification, attribute=attribute, action_directory=action_directory, template_file="o11nplugin-package/get_entity_attribute_action.xml.tpl", filename="%s.xml" % (action_name), action_name=action_name, action_id=action_id)
+
+    def _write_action_file(self, specification, attribute, action_directory, template_file, filename, action_name, action_id):
+        """
+        """
+        self.write(destination=action_directory,
+                   filename=filename,
+                   template_name=template_file,
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   class_prefix=self._class_prefix,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   name=self._name,
+                   header=self.header_content,
+                   version_string=self._api_version_string,
+                   package_prefix=self._package_prefix,
+                   package_name=self._package_name,
+                   specification=specification,
+                   attribute=attribute,
+                   action_name = action_name,
+                   action_id=action_id)
 
     def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type):
         """
