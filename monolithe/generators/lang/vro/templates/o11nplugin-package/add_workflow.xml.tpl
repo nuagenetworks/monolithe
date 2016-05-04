@@ -1,4 +1,4 @@
-{%- set entity_param_name = specification.instance_name[0:1].lower() + specification.instance_name[1:] -%}
+{%- set entity_param_name = specification.instance_name[0:1].lower() + specification.instance_name[1:] + "Obj" -%}
 {%- set entity_type_name = name.upper() + ':' + specification.entity_name -%}
 {%- set fetcher_param_name = specification.instance_name_plural[0:1].lower() + specification.instance_name_plural[1:] + "Fetcher" -%}
 {%- set fetcher_type_name = name.upper() + ':' + specification.entity_name_plural + "Fetcher" -%}
