@@ -26,10 +26,8 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoRelation;
 @VsoFinder(name = Constants.{{ specification.entity_name | upper }}, datasource = Constants.DATASOURCE, image = Constants.{{ specification.entity_name | upper }}_IMAGE_FILENAME, idAccessor = Constants.ID_ACCESSOR, relations = {
 {%- for child_api in specification.child_apis %}
 {%- set child_spec = specification_set[child_api.rest_name] %}
-{%- if (child_api.allows_get and child_api.allows_create) or child_spec.entity_name in entity_includes %}
-{%- if not child_spec.entity_name in entity_excludes %}
+{%- if ((child_api.allows_get and child_api.allows_create) or child_spec.entity_name in entity_includes) and (not child_spec.entity_name in entity_excludes) %}
         @VsoRelation(inventoryChildren = true, name = Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, type = Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER){% if not loop.last %}, {% endif %}
-{% endif -%}
 {% endif -%}
 {% endfor -%}
 })

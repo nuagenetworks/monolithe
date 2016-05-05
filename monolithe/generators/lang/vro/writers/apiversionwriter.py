@@ -79,6 +79,11 @@ class APIVersionWriter(TemplateFileWriter):
         self.inventory_entities.optionxform = str
         self.inventory_entities.read(path)
 
+        self.workflow_attrs = RawConfigParser()
+        path = "%s/vro/__attributes_defaults/workflow_attrs.ini" % self._output
+        self.workflow_attrs.optionxform = str
+        self.workflow_attrs.read(path)
+
         self.attrs_types = RawConfigParser()
         path = "%s/vro/__attributes_defaults/attrs_types.ini" % self._output
         self.attrs_types.optionxform = str
@@ -154,8 +159,11 @@ class APIVersionWriter(TemplateFileWriter):
         actions_output_directory = "%s/ScriptModule" % (resources_output_directory)
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
-                if attribute.type == "enum" or attribute.type == "list":
-                    self._write_action_files(specification=specification, attribute=attribute, package_name=self._package_name, output_directory=actions_output_directory)
+                attrs_includes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "includes")
+                attrs_excludes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "excludes")
+                if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes):
+                    if attribute.type == "enum" or attribute.type == "list":
+                        self._write_action_files(specification=specification, attribute=attribute, package_name=self._package_name, output_directory=actions_output_directory)
 
         workflows_output_directory = "%s/Workflow" % (resources_output_directory)
         resources_source_directory = "%s/__resources" % (self.output_directory)
@@ -165,9 +173,12 @@ class APIVersionWriter(TemplateFileWriter):
 
         for rest_name, specification in specifications.items():
             if not specification.is_root:
-                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add")
-                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit")
-                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove")
+                attrs_includes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "includes")
+                attrs_excludes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "excludes")
+
+                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
+                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
+                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
 
     def _write_session(self, specifications, output_directory, package_name):
         """ Write SDK session file
@@ -213,8 +224,8 @@ class APIVersionWriter(TemplateFileWriter):
             for attribute in self.attrs_defaults.options(section):
                 defaults[attribute] = self.attrs_defaults.get(section, attribute)
 
-        entity_includes = self._get_entity_list_filter(section, "includes")
-        entity_excludes = self._get_entity_list_filter(section, "excludes")
+        entity_includes = self._get_entity_list_filter(self.inventory_entities, section, "includes")
+        entity_excludes = self._get_entity_list_filter(self.inventory_entities, section, "excludes")
         entity_name_attr = "id"
         if self.inventory_entities.has_section(section):
             if self.inventory_entities.has_option(section, "name"):
@@ -443,7 +454,7 @@ class APIVersionWriter(TemplateFileWriter):
                    action_name = action_name,
                    action_id=action_id)
 
-    def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type):
+    def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type, attrs_includes, attrs_excludes):
         """
         """
         workflow_unique_name = specification.entity_name.encode('ascii') + '-' + workflow_type
@@ -453,10 +464,10 @@ class APIVersionWriter(TemplateFileWriter):
         if not os.path.exists(workflow_directory):
             makedirs(workflow_directory)
 
-        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.element_info.xml.tpl" % (workflow_type), filename="%s %s.element_info.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id)
-        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.xml.tpl" % (workflow_type), filename="%s %s.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id)
+        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.element_info.xml.tpl" % (workflow_type), filename="%s %s.element_info.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id, attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
+        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.xml.tpl" % (workflow_type), filename="%s %s.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id, attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
 
-    def _write_workflow_file(self, specification, specification_set, workflow_directory, template_file, filename, workflow_type, workflow_id):
+    def _write_workflow_file(self, specification, specification_set, workflow_directory, template_file, filename, workflow_type, workflow_id, attrs_includes, attrs_excludes):
         """
         """
         self.write(destination=workflow_directory,
@@ -476,7 +487,9 @@ class APIVersionWriter(TemplateFileWriter):
                    specification=specification,
                    specification_set=specification_set,
                    workflow_type=workflow_type,
-                   workflow_id=workflow_id)
+                   workflow_id=workflow_id,
+                   attrs_includes=attrs_includes,
+                   attrs_excludes=attrs_excludes)
 
     def _write_file(self, output_directory, template_file, filename):
         """ 
@@ -617,17 +630,17 @@ class APIVersionWriter(TemplateFileWriter):
              output_file = "%s/%s" % (output_directory, filename)
              copyfile(input_file, output_file)
 
-    def _get_entity_list_filter(self, section, tag):
+    def _get_entity_list_filter(self, collection, section, tag):
         ""
         ""
         entities = []
 
-        if self.inventory_entities.has_option("all", tag):
-            entity_list_str = self.inventory_entities.get("all", tag)
+        if collection.has_option("all", tag):
+            entity_list_str = collection.get("all", tag)
             entities = entities + entity_list_str.split(", ")
 
-        if self.inventory_entities.has_option(section, tag):
-            entity_list_str = self.inventory_entities.get(section, tag)
+        if collection.has_option(section, tag):
+            entity_list_str = collection.get(section, tag)
             entities = entities + entity_list_str.split(", ")
 
         return entities
