@@ -10,9 +10,11 @@
 <input><param name='{{ fetcher_param_name }}' type='{{ fetcher_type_name }}' >
 </param>
 {% for attribute in specification.attributes -%}
+{% if attribute.required -%}
 <param name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' >
 </param>
-{% endfor %}
+{% endif -%}
+{% endfor -%}
 </input><output><param name='{{ entity_param_name }}' type='{{ entity_type_name }}' >
 </param>
 </output><workflow-item name='item0' type='end' end-mode='0' >
@@ -24,14 +26,10 @@
 
 {{ entity_param_name }} = new {{ name | upper }}{{ specification. entity_name}}();
 {% for attribute in specification.attributes -%}
-{%- if attribute.type == "string" %}
-if ({{ attribute.local_name }}.trim()) {
-    {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
-}
-{% else %}
+{% if attribute.required -%}
 {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
 {% endif -%}
-{% endfor %}
+{% endfor -%}
 
 {% for parent_api in specification.parent_apis -%}
 {%- set parent_spec = specification_set[parent_api.rest_name] %}
@@ -49,8 +47,10 @@ if ({{ fetcher_param_name }}.{{ parent_var_name }}) {
 ]]></script>
 <in-binding><bind name='{{ fetcher_param_name }}' type='{{ fetcher_type_name }}' export-name="{{ fetcher_param_name }}" ></bind>
 {% for attribute in specification.attributes -%}
+{% if attribute.required -%}
 <bind name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' export-name="{{ attribute.local_name }}" ></bind>
-{% endfor %}
+{% endif -%}
+{% endfor -%}
 </in-binding><out-binding><bind name='{{ entity_param_name }}' type='{{ entity_type_name }}' export-name="{{ entity_param_name }}" ></bind>
 </out-binding><position x='204.5' y='55.40909090909091'/>
 </workflow-item>
@@ -58,7 +58,9 @@ if ({{ fetcher_param_name }}.{{ parent_var_name }}) {
 <p-param name="{{ fetcher_param_name }}"><desc><![CDATA[{{ fetcher_param_name }}]]></desc>
 <p-qual name="contextualParameter" type="void" ><![CDATA[__NULL__]]></p-qual></p-param>
 {% for attribute in specification.attributes -%}
+{% if attribute.required -%}
 <p-param name="{{ attribute.local_name }}"><desc><![CDATA[{{ attribute.local_name }}]]></desc>
 </p-param>
-{% endfor %}
+{% endif -%}
+{% endfor -%}
 </presentation></workflow>

@@ -164,9 +164,10 @@ class APIVersionWriter(TemplateFileWriter):
         rmtree("%s" % (resources_source_directory))
 
         for rest_name, specification in specifications.items():
-            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add")
-            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit")
-            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove")
+            if not specification.is_root:
+                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add")
+                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit")
+                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove")
 
     def _write_session(self, specifications, output_directory, package_name):
         """ Write SDK session file

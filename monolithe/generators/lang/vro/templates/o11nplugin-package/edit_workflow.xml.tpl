@@ -8,8 +8,10 @@
 <input><param name='{{ entity_param_name }}' type='{{ entity_type_name }}' >
 </param>
 {% for attribute in specification.attributes -%}
+{%- if attribute.required %}
 <param name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' >
 </param>
+{% endif -%}
 {% endfor %}
 </input><workflow-item name='item0' type='end' end-mode='0' >
 <position x='384.5' y='45.40909090909091'/>
@@ -19,11 +21,7 @@
 <script encoded='false'><![CDATA[var session = {{ entity_param_name }}.session;
 
 {% for attribute in specification.attributes -%}
-{%- if attribute.type == "string" %}
-if ({{ attribute.local_name }}.trim()) {
-    {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
-}
-{% else %}
+{%- if attribute.required %}
 {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
 {% endif -%}
 {% endfor %}
@@ -31,7 +29,9 @@ if ({{ attribute.local_name }}.trim()) {
 {{ entity_param_name }}.save(session);]]></script>
 <in-binding><bind name='{{ entity_param_name }}' type='{{ entity_type_name }}' export-name="{{ entity_param_name }}" ></bind>
 {% for attribute in specification.attributes -%}
+{%- if attribute.required %}
 <bind name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' export-name="{{ attribute.local_name }}" ></bind>
+{% endif -%}
 {% endfor %}
 </in-binding><out-binding></out-binding><position x='204.5' y='55.40909090909091'/>
 </workflow-item>
@@ -39,6 +39,7 @@ if ({{ attribute.local_name }}.trim()) {
 <p-param name="{{ entity_param_name }}"><desc><![CDATA[{{ entity_param_name }}]]></desc>
 <p-qual name="contextualParameter" type="void" ><![CDATA[__NULL__]]></p-qual></p-param>
 {% for attribute in specification.attributes -%}
+{%- if attribute.required %}
 <p-param name="{{ attribute.local_name }}"><desc><![CDATA[{{ attribute.local_name }}]]></desc>
 <p-qual kind="ognl" name="defaultValue" type="{{ attribute.workflow_type }}" ><![CDATA[
 {%- if attribute.type == "enum" or attribute.type == "list" -%}
@@ -47,5 +48,6 @@ GetAction("{{ package_name }}","get{{ specification.entity_name }}{{ attribute.l
 #{{ entity_param_name }}.{{ attribute.local_name }}
 {%- endif -%}
 ]]></p-qual></p-param>
+{% endif -%}
 {% endfor %}
 </presentation></workflow>
