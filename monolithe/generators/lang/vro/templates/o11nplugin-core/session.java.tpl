@@ -107,8 +107,8 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     }
 
     @VsoMethod
-    public void reset() {
-        super.reset();
+    public void stop() {
+        super.stop();
     }
 
     @Override
