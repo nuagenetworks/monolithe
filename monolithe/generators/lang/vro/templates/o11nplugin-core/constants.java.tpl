@@ -34,4 +34,8 @@ public interface Constants extends BaseConstants {
     String {{ specification.entity_name | upper }}_IMAGE_FILENAME = "images/icon-{{ specification.entity_name | lower }}.png";
     {%- endfor %}
     String FOLDER_IMAGE_FILENAME = "images/icon-folder.png";
+
+    {% for specification in specifications %}
+    String {{ specification.entity_name | upper }}_ENTITY_TYPE = "{{ specification.rest_name }}";
+    {%- endfor -%}
 }
