@@ -181,21 +181,23 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     }
 
     @VsoMethod
-    public void save(Session session) throws RestException {
-        super.save(session);
+    public void save(Session session, Integer responseChoice) throws RestException {
+        super.save(session, responseChoice);
     }
 
     @VsoMethod
-    public void delete(Session session) throws RestException {
-        super.delete(session);
+    public void delete(Session session, Integer responseChoiceObj) throws RestException {
+        int responseChoice = (responseChoiceObj != null) ? responseChoiceObj.intValue() : 1;
+        super.delete(session, responseChoice);
     }
 
     {%- for child_api in specification.child_apis %}
     {%- if child_api.allows_update %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     @VsoMethod
-    public void assign{{ child_spec.entity_name_plural }}(Session session, {{ child_spec.entity_name }}[] childRestObjs) throws RestException {
-        super.assign(session, java.util.Arrays.asList(childRestObjs));
+    public void assign{{ child_spec.entity_name_plural }}(Session session, {{ child_spec.entity_name }}[] childRestObjs, Boolean commitObj) throws RestException {
+        boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
+        super.assign(session, java.util.Arrays.asList(childRestObjs), commit);
     }
     {% endif -%}
     {% endfor -%}
@@ -204,15 +206,17 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     {%- if child_api.allows_create %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     @VsoMethod
-    public void create{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj) throws RestException {
-        super.createChild(session, childRestObj);
+    public void create{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj, Integer responseChoice, Boolean commitObj) throws RestException {
+        boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
+        super.createChild(session, childRestObj, responseChoice, commit);
     }
 
     {%- for attribute in child_spec.attributes %}
     {%- if attribute.local_name == "templateID" %}
     @VsoMethod
-    public void instantiate{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj, {{ child_spec.entity_name }}Template fromTemplate) throws RestException {
-        super.instantiateChild(session, childRestObj, fromTemplate);
+    public void instantiate{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj, {{ child_spec.entity_name }}Template fromTemplate, Integer responseChoice, Boolean commitObj) throws RestException {
+        boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
+        super.instantiateChild(session, childRestObj, fromTemplate, responseChoice, commit);
     }
     {% endif -%}
     {% endfor -%}

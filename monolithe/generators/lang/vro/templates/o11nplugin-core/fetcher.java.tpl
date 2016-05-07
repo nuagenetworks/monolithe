@@ -61,22 +61,26 @@ public class {{ specification.entity_name_plural }}Fetcher extends BaseFetcher<{
     {% endfor -%}
 
     @VsoMethod
-    public java.util.List<{{ specification.entity_name }}> fetch(Session session) throws RestException {
-        return super.fetch(session);
+    public java.util.List<{{ specification.entity_name }}> fetch(Session session, String filter, String orderBy, String[] groupBy, Integer page, Integer pageSize, String queryParameters, Boolean commitObj) throws RestException {
+        boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
+        return super.fetch(session, filter, orderBy, groupBy, page, pageSize, queryParameters, commit);
     }
 
     @VsoMethod
-    public java.util.List<{{ specification.entity_name }}> get(Session session) throws RestException {
-        return super.get(session);
+    public java.util.List<{{ specification.entity_name }}> get(Session session, String filter, String orderBy, String[] groupBy, Integer page, Integer pageSize, String queryParameters, Boolean commitObj) throws RestException {
+        boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
+        return super.get(session, filter, orderBy, groupBy, page, pageSize, queryParameters, commit);
     }
 
     @VsoMethod
-    public {{ specification.entity_name }} getFirst() throws RestException {
-        return super.getFirst();
+    public {{ specification.entity_name }} getFirst(Session session, String filter, String orderBy, String[] groupBy, Integer page, Integer pageSize, String queryParameters, Boolean commitObj) throws RestException {
+        boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
+        return super.getFirst(session, filter, orderBy, groupBy, page, pageSize, queryParameters, commit);
     }
 
     @VsoMethod
-    public int count() throws RestException {
-        return super.count();
+    public int count(Session session, String filter, String orderBy, String[] groupBy, Integer page, Integer pageSize, String queryParameters, Boolean commitObj) throws RestException {
+        boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
+        return super.count(session, filter, orderBy, groupBy, page, pageSize, queryParameters, commit);
     }
 }
