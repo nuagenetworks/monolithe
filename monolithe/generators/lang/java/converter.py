@@ -36,9 +36,9 @@ def get_type_name(type_name, sub_type=None):
         return "Boolean"
     elif type_name == "integer":
         return "Long"
-    elif type_name ==  "time":
+    elif type_name == "time":
         return "Float"
-    elif type_name ==  "object":
+    elif type_name == "object":
         return "Object"
     elif type_name == "list":
         return type_name
@@ -54,6 +54,6 @@ def get_idiomatic_name(name):
     if name == "private":
         return "private_"
     elif name == "public":
-        return "public_"       
+        return "public_"
     else:
         return name

@@ -25,15 +25,14 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import os
+from configparser import RawConfigParser
+from monolithe.lib import SDKUtils, TaskManager
+from monolithe.generators.lib import TemplateFileWriter
+
 from future import standard_library
 from urlparse import urlparse
 standard_library.install_aliases()
-
-import os
-from configparser import RawConfigParser
-
-from monolithe.lib import SDKUtils, TaskManager
-from monolithe.generators.lib import TemplateFileWriter
 
 
 class APIVersionWriter(TemplateFileWriter):
@@ -72,7 +71,7 @@ class APIVersionWriter(TemplateFileWriter):
         path = "%s/java/__attributes_defaults/attrs_defaults.ini" % self._output
         self.attrs_defaults.optionxform = str
         self.attrs_defaults.read(path)
-	
+
         self.attrs_types = RawConfigParser()
         path = "%s/java/__attributes_defaults/attrs_types.ini" % self._output
         self.attrs_types.optionxform = str
@@ -153,7 +152,7 @@ class APIVersionWriter(TemplateFileWriter):
                 defaults[attribute] = self.attrs_defaults.get(section, attribute)
 
         self.write(destination=self.output_directory,
-                   filename=filename, 
+                   filename=filename,
                    template_name="model.java.tpl",
                    specification=specification,
                    specification_set=specification_set,
@@ -196,7 +195,7 @@ class APIVersionWriter(TemplateFileWriter):
 
     def _write_build_file(self):
         """ Write Maven build file (pom.xml)
-        
+
         """
         self.write(destination=self._base_output_directory,
                    filename="pom.xml",
@@ -286,4 +285,3 @@ class APIVersionWriter(TemplateFileWriter):
                         attribute.local_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
                     else:
                         attribute.local_type = "java.util.List<String>"
-
