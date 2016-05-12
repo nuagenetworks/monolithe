@@ -169,6 +169,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
 
     {%- for child_api in specification.child_apis %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
+    @JsonIgnore
     @VsoProperty(displayName = "{{ child_spec.instance_name_plural }}", readOnly = true)   
     public {{ child_spec.instance_name_plural }}Fetcher get{{ child_spec.entity_name_plural }}() {
         return {{ child_spec.entity_name_plural[0:1].lower() + child_spec.entity_name_plural[1:] }};
