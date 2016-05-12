@@ -74,6 +74,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {% if specification.child_apis|length > 0 -%}
    {% for api in specification.child_apis %}
    {%- set child_spec = specification_set[api.rest_name] %}
+   @JsonIgnore
    public {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher get{{ child_spec.entity_name_plural }}() {
       return {{ child_spec.entity_name_plural[0:1].lower() + child_spec.entity_name_plural[1:] }};
    }
