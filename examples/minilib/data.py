@@ -67,7 +67,7 @@ def get_tasks_of_lists(lid):
 
 def get_task(tid):
     try:
-        return filter((lambda t: t["ID"] == tid), tasks)[0]
+        return list(filter((lambda t: t["ID"] == tid), tasks))[0]
     except:
         return None
 
