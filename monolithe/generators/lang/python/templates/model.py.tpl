@@ -20,7 +20,7 @@ class {{ class_prefix }}{{ specification.entity_name }}({{ superclass_name }}):
 
     {% if constants|length %}
     ## Constants
-    {% for name, constant_value in constants.iteritems() %}
+    {% for name, constant_value in constants.items() %}
     {{ name }} = "{{ constant_value }}"
     {% endfor %}
     {% endif %}

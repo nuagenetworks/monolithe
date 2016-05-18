@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 {{ header }}
-
-{% set classnames = filenames.values() + [class_prefix + product_accronym + "Session"] %}
+{% set classnames = [class_prefix + product_accronym + "Session"] %}{% for filename, classname in filenames.items() %}{%do classnames.append(classname) %}{% endfor %}
 __all__ = {{ classnames }}
-{% for filename, classname in filenames.iteritems() %}
+{% for filename, classname in filenames.items() %}
 from .{{ filename }} import {{ classname }}{% endfor %}
 from .{{ class_prefix|lower }}{{ product_accronym|lower }}session import {{ class_prefix }}{{ product_accronym }}Session
 from .sdkinfo import SDKInfo
