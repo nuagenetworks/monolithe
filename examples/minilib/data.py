@@ -9,7 +9,7 @@ lists = [{"ID": "1",
 
 def get_list(lid):
     try:
-        return filter((lambda l: l["ID"] == lid), lists)[0]
+        return list(filter((lambda l: l["ID"] == lid), lists))[0]
     except:
         return None
 
