@@ -36,7 +36,9 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoRelation;
 @RestEntity(restName = "{{ specification.rest_name }}", resourceName = "{{ specification.resource_name }}")
 public class {{ specification.entity_name }} extends {{ superclass_name }} {
 
-    {%- for attribute in specification.attributes %}
+    private static final long serialVersionUID = 1L;
+
+    {% for attribute in specification.attributes %}
     {%- if attribute.type == "enum" or attribute.subtype == "enum" %}
     {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
     @VsoFinder(name = Constants.{{ specification.entity_name | upper }}_{{ attribute.local_name | upper }}_ENUM, datasource = Constants.DATASOURCE, idAccessor = Constants.ID_ACCESSOR)
