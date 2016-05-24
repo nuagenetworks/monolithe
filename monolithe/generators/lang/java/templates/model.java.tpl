@@ -24,6 +24,8 @@ import {{ package_name }}.fetchers.{{ class_prefix }}{{ child_spec.entity_name_p
 @RestEntity(restName = "{{ specification.rest_name }}", resourceName = "{{ specification.resource_name }}")
 public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superclass_name }} {
 
+   private static final long serialVersionUID = 1L;
+
    {% for attribute in specification.attributes -%}
    {% if attribute.type == "enum" or attribute.subtype == "enum" %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
