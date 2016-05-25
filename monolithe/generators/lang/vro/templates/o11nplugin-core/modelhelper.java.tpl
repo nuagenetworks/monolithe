@@ -98,6 +98,18 @@ public class ModelHelper extends BaseModelHelper {
 
     public static java.util.List<{{ specification.entity_name }}> getAll{{ specification.entity_name_plural }}() throws RestException {
         java.util.List<{{ specification.entity_name }}> allObjs = new ArrayList<{{ specification.entity_name }}>();
+
+        {%- for parent_api in specification.parent_apis %}
+        {%- set parent_spec = specification_set[parent_api.rest_name] %}
+        {%- if parent_spec is defined and parent_spec.is_root %}
+        for (Session session : SessionManager.getInstance().getSessions()) {
+            {{ specification.entity_name_plural }}Fetcher fetcher = get{{ specification.entity_name_plural }}FetcherFor{{ parent_spec.entity_name }}Id(session.getId());
+            java.util.List<{{ specification.entity_name }}> objs = session.fetch(fetcher);
+            allObjs.addAll(objs);
+        }
+        {% endif -%}
+        {% endfor %}
+
         return allObjs;
     }
 
