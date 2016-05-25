@@ -57,7 +57,7 @@ public class ModelHelper extends BaseModelHelper {
 
         if (obj != null) {
             {{ child_spec.entity_name_plural }}Fetcher fetcher = obj.get{{ child_spec.entity_name_plural }}();
-            return addFetcher(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, id, fetcher);
+            return addFetcher(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, fetcher);
         }
 
         return null;
@@ -89,7 +89,7 @@ public class ModelHelper extends BaseModelHelper {
         {%- set parent_spec = specification_set[parent_api.rest_name] %}
         {%- if parent_spec is defined %}
         if ((fetcher = get{{ specification.entity_name_plural }}FetcherFor{{ parent_spec.entity_name }}Id(id)) != null) {
-            return ({{ specification.entity_name_plural }}Fetcher) addFetcher(Constants.{{ specification.entity_name_plural | upper }}_FETCHER, id, fetcher);
+            return ({{ specification.entity_name_plural }}Fetcher) addFetcher(Constants.{{ specification.entity_name_plural | upper }}_FETCHER, fetcher);
         }
         {% endif -%}
         {% endfor -%}
