@@ -26,4 +26,13 @@
          <version>2.0.0</version>
       </dependency>
    </dependencies>
+
+   <distributionManagement>
+      <repository>
+         <id>ArtifactoryServer</id>
+         <name>ArtifactoryServer-releases</name>
+         <url>http://135.121.41.87:8081/artifactory/libs-release-local</url>
+      </repository>
+   </distributionManagement>
+
 </project>
