@@ -19,6 +19,15 @@
       </license>
    </licenses>
 
+   <developers>
+      <developer>
+         <name>Nuage Networks</name>
+         <email>nuage-oss-support@alcatel-lucent.com</email>
+         <organization>Nuage Networks</organization>
+         <organizationUrl>http://www.nuagenetworks.net</organizationUrl>
+      </developer>
+   </developers>
+
    <scm>
       <connection>scm:git:git@github.com:nuagenetworks/vspk-java.git</connection>
       <developerConnection>scm:git:git@github.com:nuagenetworks/vspk-java.git</developerConnection>
