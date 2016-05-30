@@ -10,6 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vco.version>6.0.3</vco.version>
+        <build.number>1</build.number>
     </properties>
 
     <repositories>
@@ -36,37 +37,38 @@
                 <version>${project.version}</version>
             </dependency>
 
-           <dependency>
-               <groupId>{{package_prefix}}</groupId>
-               <artifactId>o11nplugin-{{name}}-package</artifactId>
-               <version>${project.version}</version>
-               <type>package</type>
-           </dependency>
+            <dependency>
+                <groupId>{{package_prefix}}</groupId>
+                <artifactId>o11nplugin-{{name}}-package</artifactId>
+                <version>${project.version}</version>
+                <type>package</type>
+            </dependency>
 
-      <dependency>
-        <groupId>com.vmware.o11n</groupId>
-        <artifactId>o11n-provided-deps</artifactId>
-        <version>${vco.version}</version>
-        <scope>provided</scope>
-        <type>pom</type>
-      </dependency>
-      
-      <dependency>
-        <groupId>com.vmware.o11n</groupId>
-        <artifactId>o11n-spring-tools</artifactId>
-        <version>${vco.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>com.vmware.o11n</groupId>
-        <artifactId>o11n-sdkapi</artifactId>
-        <version>${vco.version}</version>
-        <scope>provided</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+            <dependency>
+                <groupId>com.vmware.o11n</groupId>
+                <artifactId>o11n-provided-deps</artifactId>
+                <version>${vco.version}</version>
+                <scope>provided</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.vmware.o11n</groupId>
+                <artifactId>o11n-spring-tools</artifactId>
+                <version>${vco.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.vmware.o11n</groupId>
+                <artifactId>o11n-sdkapi</artifactId>
+                <version>${vco.version}</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
+        <finalName>${artifactId}-${version}-${build.number}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
