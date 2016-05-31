@@ -5,8 +5,36 @@
    <groupId>{{ package_prefix }}</groupId>
    <artifactId>{{ name }}</artifactId>
    <version>{{ version }}</version>
+   <packaging>jar</packaging>
 
-   <build> 
+   <name>${project.groupId}:${project.artifactId}</name>
+   <description>Java SDK for Nuage VSP Platform</description>
+   <url>http://github.com/nuagenetworks/vspk-java</url>
+
+   <licenses>
+      <license>
+         <name>Alcatel-Lucent Inc. License</name>
+         <url>http://github.com/nuagenetworks/vspk-java/blob/{{ version }}/LICENSE</url>
+         <distribution>repo</distribution>
+      </license>
+   </licenses>
+
+   <developers>
+      <developer>
+         <name>Nuage Networks</name>
+         <email>nuage-oss-support@alcatel-lucent.com</email>
+         <organization>Nuage Networks</organization>
+         <organizationUrl>http://www.nuagenetworks.net</organizationUrl>
+      </developer>
+   </developers>
+
+   <scm>
+      <connection>scm:git:git@github.com:nuagenetworks/vspk-java.git</connection>
+      <developerConnection>scm:git:git@github.com:nuagenetworks/vspk-java.git</developerConnection>
+      <url>git@github.com:nuagenetworks/vspk-java.git</url>
+   </scm>
+
+   <build>
       <plugins>
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -26,13 +54,4 @@
          <version>2.0.0</version>
       </dependency>
    </dependencies>
-
-   <distributionManagement>
-      <repository>
-         <id>ArtifactoryServer</id>
-         <name>ArtifactoryServer-releases</name>
-         <url>http://135.121.41.87:8081/artifactory/libs-release-local</url>
-      </repository>
-   </distributionManagement>
-
 </project>
