@@ -47,7 +47,7 @@ public class ModelHelper extends BaseModelHelper {
         return null;
     }
 
-    {%- for child_api in specification.child_apis %}
+    {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     public static {{ child_spec.entity_name_plural }}Fetcher get{{ child_spec.entity_name_plural }}FetcherFor{{ specification.entity_name }}Id(String id) throws RestException {
         {{ specification.entity_name }} obj = getObject(Constants.{{ specification.entity_name | upper }}, id);
@@ -99,7 +99,7 @@ public class ModelHelper extends BaseModelHelper {
     public static java.util.List<{{ specification.entity_name }}> getAll{{ specification.entity_name_plural }}() throws RestException {
         java.util.List<{{ specification.entity_name }}> allObjs = new ArrayList<{{ specification.entity_name }}>();
 
-        {%- for parent_api in specification.parent_apis %}
+        {%- for parent_api in specification.parent_apis | sort(attribute='rest_name', case_sensitive=True) %}
         {%- set parent_spec = specification_set[parent_api.rest_name] %}
         {%- if parent_spec is defined and parent_spec.is_root %}
         for (Session session : SessionManager.getInstance().getSessions()) {

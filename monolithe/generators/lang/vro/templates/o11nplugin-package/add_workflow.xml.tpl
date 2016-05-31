@@ -9,7 +9,7 @@
 <position x='100.0' y='50.0'/>
 <input><param name='{{ fetcher_param_name }}' type='{{ fetcher_type_name }}' >
 </param>
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {% if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) -%}
 <param name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' >
 </param>
@@ -25,7 +25,7 @@
 <script encoded='false'><![CDATA[var session = {{ fetcher_param_name }}.session;
 
 {{ entity_param_name }} = new {{ name | upper }}{{ specification. entity_name}}();
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {% if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) -%}
 {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
 {% endif -%}
@@ -46,7 +46,7 @@ if ({{ fetcher_param_name }}.{{ parent_var_name }}) {
 }
 ]]></script>
 <in-binding><bind name='{{ fetcher_param_name }}' type='{{ fetcher_type_name }}' export-name="{{ fetcher_param_name }}" ></bind>
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {% if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) -%}
 <bind name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' export-name="{{ attribute.local_name }}" ></bind>
 {% endif -%}
@@ -57,7 +57,7 @@ if ({{ fetcher_param_name }}.{{ parent_var_name }}) {
 <presentation>
 <p-param name="{{ fetcher_param_name }}"><desc><![CDATA[{{ fetcher_param_name }}]]></desc>
 <p-qual name="contextualParameter" type="void" ><![CDATA[__NULL__]]></p-qual></p-param>
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {% if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) -%}
 <p-param name="{{ attribute.local_name }}"><desc><![CDATA[{{ attribute.local_name }}]]></desc>
 </p-param>

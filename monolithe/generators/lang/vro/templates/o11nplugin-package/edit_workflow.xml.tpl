@@ -7,7 +7,7 @@
 <position x='100.0' y='50.0'/>
 <input><param name='{{ entity_param_name }}' type='{{ entity_type_name }}' >
 </param>
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {%- if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) %}
 <param name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' >
 </param>
@@ -20,7 +20,7 @@
 <display-name><![CDATA[Scriptable task]]></display-name>
 <script encoded='false'><![CDATA[var session = {{ entity_param_name }}.session;
 
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {% if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) -%}
 {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
 {% endif -%}
@@ -28,7 +28,7 @@
 
 {{ entity_param_name }}.save(session);]]></script>
 <in-binding><bind name='{{ entity_param_name }}' type='{{ entity_type_name }}' export-name="{{ entity_param_name }}" ></bind>
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {%- if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) %}
 <bind name='{{ attribute.local_name }}' type='{{ attribute.workflow_type }}' export-name="{{ attribute.local_name }}" ></bind>
 {% endif -%}
@@ -38,7 +38,7 @@
 <presentation>
 <p-param name="{{ entity_param_name }}"><desc><![CDATA[{{ entity_param_name }}]]></desc>
 <p-qual name="contextualParameter" type="void" ><![CDATA[__NULL__]]></p-qual></p-param>
-{% for attribute in specification.attributes -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {%- if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) %}
 <p-param name="{{ attribute.local_name }}"><desc><![CDATA[{{ attribute.local_name }}]]></desc>
 <p-qual kind="ognl" name="defaultValue" type="{{ attribute.workflow_type }}" ><![CDATA[

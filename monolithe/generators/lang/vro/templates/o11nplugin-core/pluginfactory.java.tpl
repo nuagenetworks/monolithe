@@ -27,7 +27,7 @@ public final class PluginFactory extends BasePluginFactory {
         if (type.equals(Constants.{{ specification.entity_name_plural | upper }}_FETCHER)) {
             return ModelHelper.get{{ specification.entity_name_plural }}FetcherById(id);
         }
-        {%- for attribute in specification.attributes %}
+        {%- for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
         {%- if attribute.type == "enum" or attribute.subtype == "enum" %}
         {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
         if (type.equals(Constants.{{ specification.entity_name | upper }}_{{ field_name | upper }}_ENUM)) {
@@ -50,7 +50,7 @@ public final class PluginFactory extends BasePluginFactory {
             return toList(ModelHelper.get{{ specification.entity_name }}ById(id));
         }
         {%- endif %}
-        {%- for child_api in specification.child_apis %}
+        {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
         {%- set child_spec = specification_set[child_api.rest_name] %}
         if (type.equals(Constants.{{ specification.entity_name | upper }}) && relationName.equals(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER)) {
             return toList(ModelHelper.get{{ child_spec.entity_name_plural }}FetcherFor{{ specification.entity_name }}Id(id));
@@ -78,7 +78,7 @@ public final class PluginFactory extends BasePluginFactory {
             java.util.List<{{ specification.entity_name_plural }}Fetcher> allObjs = ModelHelper.getAll{{ specification.entity_name_plural }}Fetchers();
             return new QueryResult(allObjs);
         }
-        {%- for attribute in specification.attributes %}
+        {%- for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
         {%- if attribute.type == "enum" or attribute.subtype == "enum" %}
         {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
         if (type.equals(Constants.{{ specification.entity_name | upper }}_{{ field_name | upper }}_ENUM)) {

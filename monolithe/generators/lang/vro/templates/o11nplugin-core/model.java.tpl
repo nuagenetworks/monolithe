@@ -2,7 +2,7 @@
 
 package {{ package_name }};
 
-{%- for child_api in specification.child_apis %}
+{%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
 {%- set child_spec = specification_set[child_api.rest_name] %}
 import {{ package_name }}.fetchers.{{ child_spec.entity_name_plural }}Fetcher;
 {% endfor -%}
@@ -24,7 +24,7 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoProperty;
 import com.vmware.o11n.plugin.sdk.annotation.VsoRelation;
 
 @VsoFinder(name = Constants.{{ specification.entity_name | upper }}, datasource = Constants.DATASOURCE, image = Constants.{{ specification.entity_name | upper }}_IMAGE_FILENAME, idAccessor = Constants.ID_ACCESSOR, relations = {
-{%- for child_api in specification.child_apis %}
+{%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
 {%- set child_spec = specification_set[child_api.rest_name] %}
 {%- if ((child_api.allows_get and child_api.allows_create) or child_spec.entity_name in entity_includes) and (not child_spec.entity_name in entity_excludes) %}
         @VsoRelation(inventoryChildren = true, name = Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, type = Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER){% if not loop.last %}, {% endif %}
@@ -38,7 +38,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
 
     private static final long serialVersionUID = 1L;
 
-    {% for attribute in specification.attributes %}
+    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
     {%- if attribute.type == "enum" or attribute.subtype == "enum" %}
     {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
     @VsoFinder(name = Constants.{{ specification.entity_name | upper }}_{{ attribute.local_name | upper }}_ENUM, datasource = Constants.DATASOURCE, idAccessor = Constants.ID_ACCESSOR)
@@ -77,12 +77,12 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     {% endif -%}
     {% endfor -%}
 
-    {% for attribute in specification.attributes %}
+    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
     @JsonProperty(value = "{{ attribute.local_name }}")
     protected {{ attribute.local_type }} {{ attribute.local_name }};
     {% endfor %}
 
-    {%- for child_api in specification.child_apis %}
+    {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True)%}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     @JsonIgnore
     private {{ child_spec.instance_name_plural }}Fetcher {{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }};
@@ -97,7 +97,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         {{attribute}} = {{value}};
         {% endfor -%}
 
-        {%- for child_api in specification.child_apis %}
+        {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
         {%- set child_spec = specification_set[child_api.rest_name] %}
         {{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }} = new {{ child_spec.entity_name_plural }}Fetcher(this);
         {% endfor -%}
@@ -157,7 +157,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         return super.getApiKey();
     }
     {% endif -%}
-    {%- for attribute in specification.attributes %}
+    {%- for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
     {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
     @VsoProperty(displayName = "{{ field_name }}", readOnly = false)   
     public {{ attribute.local_type }} get{{ field_name }}() {
@@ -169,7 +169,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     }
     {% endfor -%}
 
-    {%- for child_api in specification.child_apis %}
+    {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     @JsonIgnore
     @VsoProperty(displayName = "{{ child_spec.instance_name_plural }}", readOnly = true)   
@@ -194,7 +194,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         super.delete(session, responseChoice);
     }
 
-    {%- for child_api in specification.child_apis %}
+    {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
     {%- if child_api.allows_update %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     @VsoMethod
@@ -205,7 +205,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     {% endif -%}
     {% endfor -%}
 
-    {%- for child_api in specification.child_apis %}
+    {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
     {%- if child_api.allows_create %}
     {%- set child_spec = specification_set[child_api.rest_name] %}
     @VsoMethod
@@ -228,7 +228,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     {% endfor -%}
 
     public String toString() {
-        return "{{ specification.entity_name }} ["{% for attribute in specification.attributes %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
+        return "{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
                  + lastUpdatedDate + ", owner=" + owner {% if specification.is_root %} + ", apiKey=" + apiKey {% endif %} + "]";
     }
 }

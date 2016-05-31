@@ -22,7 +22,7 @@ public interface Constants extends BaseConstants {
     {%- endfor %}
 
     {% for specification in specifications %}
-    {% for attribute in specification.attributes -%}
+    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
     {% if attribute.type == "enum" or attribute.subtype == "enum" -%}
     {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
     String {{ specification.entity_name | upper }}_{{ attribute.local_name | upper }}_ENUM = "{{ specification.entity_name }}{{ field_name }}";
