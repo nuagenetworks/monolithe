@@ -24,17 +24,18 @@ import {{ package_name }}.fetchers.{{ class_prefix }}{{ child_spec.entity_name_p
 @RestEntity(restName = "{{ specification.rest_name }}", resourceName = "{{ specification.resource_name }}")
 public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superclass_name }} {
 
+   private static final long serialVersionUID = 1L;
+
    {% for attribute in specification.attributes -%}
-   {% if attribute.local_type == "enum" %}
+   {% if attribute.type == "enum" or attribute.subtype == "enum" %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
-   public enum {{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice|upper }}{% if not loop.last %}, {% endif %}{% endfor %} };
+   public enum {{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice }}{% if not loop.last %}, {% endif %}{% endfor %} };
    {%- endif %}
    {%- endfor %}
 
    {% for attribute in specification.attributes %}
    @JsonProperty(value = "{{ attribute.local_name }}")
-   {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
-   protected {% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} {{ attribute.local_name }};
+   protected {{ attribute.local_type }} {{ attribute.local_name }};
    {% endfor %}
 
    {% if specification.child_apis|length > 0 -%}
@@ -75,6 +76,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {% if specification.child_apis|length > 0 -%}
    {% for api in specification.child_apis %}
    {%- set child_spec = specification_set[api.rest_name] %}
+   @JsonIgnore
    public {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher get{{ child_spec.entity_name_plural }}() {
       return {{ child_spec.entity_name_plural[0:1].lower() + child_spec.entity_name_plural[1:] }};
    }

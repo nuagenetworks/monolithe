@@ -35,13 +35,13 @@ def get_type_name(type_name, sub_type=None):
     elif type_name == "boolean":
         return "Boolean"
     elif type_name == "integer":
-        return "Integer"
+        return "Long"
     elif type_name == "time":
         return "Float"
     elif type_name == "object":
         return "Object"
     elif type_name == "list":
-        return "java.util.List<%s>" % get_type_name(sub_type)
+        return type_name
     elif type_name == "float":
         return "Float"
     else:

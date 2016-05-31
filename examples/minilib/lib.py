@@ -10,8 +10,8 @@ import uuid
 
 def check_auth(request):
     encoded_auth = request.headers['Authorization'][6:]  # XREST stuff
-    decoded_auth = base64.urlsafe_b64decode(str(encoded_auth))
-    auth = decoded_auth.split(':')
+    decoded_auth = base64.urlsafe_b64decode(encoded_auth.encode("utf-8"))
+    auth = decoded_auth.decode("utf-8").split(':')
     if auth[1] != "secret-api-key":
         return False
     return True

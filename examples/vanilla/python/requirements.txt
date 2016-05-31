@@ -1,3 +1,4 @@
-git+https://github.com/nuagenetworks/bambou.git
+bambou
+Flask
 tabulate
 colorama

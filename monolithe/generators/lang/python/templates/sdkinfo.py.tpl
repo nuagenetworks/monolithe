@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {{ header }}
 
-from {{ class_prefix|lower }}{{ product_accronym|lower }}session import {{ class_prefix }}{{ product_accronym }}Session
+from .{{ class_prefix|lower }}{{ product_accronym|lower }}session import {{ class_prefix }}{{ product_accronym }}Session
 from .{{ class_prefix|lower }}{{ root_api|lower }} import {{ class_prefix }}{{ root_api|capitalize }}
 
 class SDKInfo (object):
