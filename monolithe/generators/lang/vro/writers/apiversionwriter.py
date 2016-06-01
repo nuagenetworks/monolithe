@@ -155,8 +155,16 @@ class APIVersionWriter(TemplateFileWriter):
         copyfile("%s/archetype.keystore" % (self.output_directory), "%s/archetype.keystore" % (output_directory));
         remove("%s/archetype.keystore" % (self.output_directory))
 
+        resources_source_directory = "%s/__resources" % (self.output_directory)
         resources_output_directory = "%s/src/main/resources" % (output_directory)
+        workflows_output_directory = "%s/Workflow" % (resources_output_directory)
+        workflows_source_directory = "%s/Workflow" % (resources_source_directory)
+        copytree(workflows_source_directory, workflows_output_directory)
         actions_output_directory = "%s/ScriptModule" % (resources_output_directory)
+        actions_source_directory = "%s/ScriptModule" % (resources_source_directory)
+        copytree(actions_source_directory, actions_output_directory)
+        rmtree("%s" % (resources_source_directory))
+
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
                 attrs_includes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "includes")
@@ -164,12 +172,6 @@ class APIVersionWriter(TemplateFileWriter):
                 if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes):
                     if attribute.type == "enum" or attribute.type == "list":
                         self._write_action_files(specification=specification, attribute=attribute, package_name=self._package_name, output_directory=actions_output_directory)
-
-        workflows_output_directory = "%s/Workflow" % (resources_output_directory)
-        resources_source_directory = "%s/__resources" % (self.output_directory)
-        workflows_source_directory = "%s/Workflow" % (resources_source_directory)
-        copytree(workflows_source_directory, workflows_output_directory)
-        rmtree("%s" % (resources_source_directory))
 
         for rest_name, specification in specifications.items():
             if not specification.is_root:
