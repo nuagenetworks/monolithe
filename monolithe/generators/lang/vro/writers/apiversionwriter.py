@@ -88,7 +88,14 @@ class APIVersionWriter(TemplateFileWriter):
         path = "%s/vro/__attributes_defaults/attrs_types.ini" % self._output
         self.attrs_types.optionxform = str
         self.attrs_types.read(path)
-	
+
+        plugin_info = RawConfigParser()
+        path = "%s/vro/__attributes_defaults/plugin.ini" % self._output
+        plugin_info.optionxform = str
+        plugin_info.read(path)
+        version_increment = plugin_info.get(self.api_version, "versionIncrement")
+        self.plugin_version = self.api_version + '.' + version_increment
+
         with open("%s/vro/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
@@ -183,11 +190,7 @@ class APIVersionWriter(TemplateFileWriter):
                 self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
 
     def _write_session(self, specifications, output_directory, package_name):
-        """ Write SDK session file
-
-            Args:
-                version (str): the version of the server
-
+        """
         """
         template_file = "o11nplugin-core/session.java.tpl"
         base_name = "Session"
@@ -509,7 +512,8 @@ class APIVersionWriter(TemplateFileWriter):
                    header=self.header_content,
                    version_string=self._api_version_string,
                    package_prefix=self._package_prefix,
-                   package_name=self._package_name)
+                   package_name=self._package_name,
+                   plugin_version=self.plugin_version)
 
     def _extract_override_content(self, name):
         """

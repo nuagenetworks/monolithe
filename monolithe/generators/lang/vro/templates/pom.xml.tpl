@@ -3,9 +3,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>{{package_prefix}}</groupId>
-    <artifactId>{{name}}-vro-plugin</artifactId>
+    <artifactId>{{name}}-vro</artifactId>
     <packaging>pom</packaging>
-    <version>{{version}}</version>
+    <version>{{plugin_version}}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

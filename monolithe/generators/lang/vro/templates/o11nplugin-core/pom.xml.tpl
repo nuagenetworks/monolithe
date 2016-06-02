@@ -7,9 +7,9 @@
     <packaging>jar</packaging>
 
     <parent>
-        <artifactId>{{name}}-vro-plugin</artifactId>
+        <artifactId>{{name}}-vro</artifactId>
         <groupId>{{package_prefix}}</groupId>
-        <version>{{version}}</version>
+        <version>{{plugin_version}}</version>
     </parent>
 
     <dependencies>
