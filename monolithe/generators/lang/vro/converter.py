@@ -54,6 +54,8 @@ def get_idiomatic_name(name):
     if name == "private":
         return "private_"
     elif name == "public":
-        return "public_"       
+        return "public_"
+    elif name == "session":
+        return "session_"
     else:
         return name
