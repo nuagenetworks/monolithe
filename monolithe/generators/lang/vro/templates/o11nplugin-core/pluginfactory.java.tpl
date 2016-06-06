@@ -4,6 +4,7 @@ package {{ package_name }};
 
 import {{ package_name }}.model.*;
 import {{ package_name }}.model.fetchers.*;
+import {{ package_name }}.model.enums.*;
 import net.nuagenetworks.bambou.RestException;
 import net.nuagenetworks.vro.BasePluginFactory;
 import ch.dunes.vso.sdk.api.IPluginNotificationHandler;
@@ -30,8 +31,9 @@ public final class PluginFactory extends BasePluginFactory {
         {%- for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
         {%- if attribute.type == "enum" or attribute.subtype == "enum" %}
         {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
+        {%- set enum_name = specification.entity_name + attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
         if (type.equals(Constants.{{ specification.entity_name | upper }}_{{ field_name | upper }}_ENUM)) {
-            return {{ specification.entity_name }}.{{ field_name }}.getEnumById(id);
+            return {{ enum_name }}.getEnumById(id);
         }
         {% endif -%}
         {% endfor -%}
@@ -81,8 +83,9 @@ public final class PluginFactory extends BasePluginFactory {
         {%- for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
         {%- if attribute.type == "enum" or attribute.subtype == "enum" %}
         {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
+        {%- set enum_name = specification.entity_name + attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
         if (type.equals(Constants.{{ specification.entity_name | upper }}_{{ field_name | upper }}_ENUM)) {
-            return new QueryResult(Arrays.asList({{ specification.entity_name }}.{{ field_name }}.values()));
+            return new QueryResult(Arrays.asList({{ enum_name }}.values()));
         }
         {% endif -%}
         {% endfor -%}

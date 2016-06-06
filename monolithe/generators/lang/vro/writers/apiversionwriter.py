@@ -68,6 +68,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.output_directory = "%s/vro" % (self._output)
         self.override_folder = os.path.normpath("%s/__overrides" % self.output_directory)
         self.fetchers_path = "/fetchers/"
+        self.enums_path = "/enums/"
 
         self.attrs_defaults = RawConfigParser()
         path = "%s/vro/__attributes_defaults/attrs_defaults.ini" % self._output
@@ -103,7 +104,7 @@ class APIVersionWriter(TemplateFileWriter):
         """
         """
         self._resolve_parent_apis(specifications) # Temporary fix, see method's comment for more info
-        self._set_enum_list_local_type(specifications) # Temporary until get_type_name is enhanced to include specificiation subtype and local_name
+        self._set_local_and_workflow_type(specifications) # Temporary until get_type_name is enhanced to include specificiation subtype and local_name
 
         self._write_file(self.output_directory, "pom.xml.tpl", "pom.xml")
         self._write_o11plugin(specifications)
@@ -146,11 +147,15 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_sessionmanager(model_source_output_directory, package_name=model_package_name)
         self._write_session(specifications, model_source_output_directory, package_name=model_package_name)
         self._write_modelhelper(specifications, model_source_output_directory, package_name=model_package_name)
-        
+
         task_manager = TaskManager()
         for rest_name, specification in specifications.items():
             task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications, output_directory=model_source_output_directory, package_name=model_package_name)
             task_manager.start_task(method=self._write_fetcher, specification=specification, specification_set=specifications, output_directory=model_source_output_directory, package_name=model_package_name)
+            for attribute in specification.attributes:
+                if attribute.type == "enum" or attribute.subtype == "enum":
+                    task_manager.start_task(method=self._write_enum, specification=specification, attribute=attribute, output_directory=model_source_output_directory, package_name=model_package_name)
+
         task_manager.wait_until_exit()
 
     def _write_o11plugin_package(self, specifications):
@@ -496,6 +501,26 @@ class APIVersionWriter(TemplateFileWriter):
                    attrs_includes=attrs_includes,
                    attrs_excludes=attrs_excludes)
 
+    def _write_enum(self, specification, attribute, output_directory, package_name):
+        """ Write autogenerate specification file
+
+        """
+        enum_name = specification.entity_name + attribute.local_name[0:1].upper() + attribute.local_name[1:]
+        template_file = "o11nplugin-core/enum.java.tpl"
+        destination = "%s%s" % (output_directory, self.enums_path)
+        filename = "%s%s.java" % (self._class_prefix, enum_name)
+
+        self.write(destination=destination,
+                   filename=filename, 
+                   template_name=template_file,
+                   header=self.header_content,
+                   specification=specification,
+                   package_name=package_name,
+                   enum_name=enum_name,
+                   attribute=attribute)
+
+        return (filename, specification.entity_name)
+
     def _write_file(self, output_directory, template_file, filename):
         """ 
         """
@@ -581,7 +606,7 @@ class APIVersionWriter(TemplateFileWriter):
 
                         specification.parent_apis.append(parent_api)
 
-    def _set_enum_list_local_type(self, specifications):
+    def _set_local_and_workflow_type(self, specifications):
         ""
         ""
         for rest_name, specification in specifications.items():
@@ -597,9 +622,9 @@ class APIVersionWriter(TemplateFileWriter):
                 elif attribute.type == "float":
                     attribute.workflow_type = "number"
                 elif attribute.type == "enum":
-                    enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]
+                    enum_type = specification.entity_name + attribute.local_name[0:1].upper() + attribute.local_name[1:]
                     attribute.local_type = enum_type
-                    attribute.workflow_type = self._name.upper() + ':' + specification.entity_name + enum_type
+                    attribute.workflow_type = self._name.upper() + ':' + enum_type
                 elif attribute.type == "object":
                     attr_type = "Object"
                     if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
@@ -610,9 +635,9 @@ class APIVersionWriter(TemplateFileWriter):
                     attribute.workflow_type = self._name.upper() + ':' + attr_type
                 elif attribute.type == "list":
                     if attribute.subtype == "enum":
-                        enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
+                        enum_subtype = specification.entity_name + attribute.local_name[0:1].upper() + attribute.local_name[1:]
                         attribute.local_type = "java.util.List<" + enum_subtype + ">"
-                        attribute.workflow_type = "Array/" + self._name.upper() + ':' + specification.entity_name + enum_subtype
+                        attribute.workflow_type = "Array/" + self._name.upper() + ':' + enum_subtype
                     elif attribute.subtype == "object":
                         attr_subtype = "com.fasterxml.jackson.databind.JsonNode"
                         if self.attrs_types.has_option(specification.entity_name, attribute.local_name):

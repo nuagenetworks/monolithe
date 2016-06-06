@@ -6,6 +6,12 @@ package {{ package_name }};
 {%- set child_spec = specification_set[child_api.rest_name] %}
 import {{ package_name }}.fetchers.{{ child_spec.entity_name_plural }}Fetcher;
 {% endfor -%}
+{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
+{%- if attribute.type == "enum" or attribute.subtype == "enum" %}
+{%- set enum_name = specification.entity_name + attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
+import {{ package_name }}.enums.{{ enum_name }};
+{% endif -%}
+{% endfor -%}
 import net.nuagenetworks.bambou.RestException;
 import net.nuagenetworks.bambou.annotation.RestEntity;
 import net.nuagenetworks.vro.model.{{ superclass_name }};
@@ -37,45 +43,6 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoRelation;
 public class {{ specification.entity_name }} extends {{ superclass_name }} {
 
     private static final long serialVersionUID = 1L;
-
-    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
-    {%- if attribute.type == "enum" or attribute.subtype == "enum" %}
-    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
-    @VsoFinder(name = Constants.{{ specification.entity_name | upper }}_{{ attribute.local_name | upper }}_ENUM, datasource = Constants.DATASOURCE, idAccessor = Constants.ID_ACCESSOR)
-    @VsoObject(strict = true)
-    public enum {{ field_name }} {
-
-        {% for choice in attribute.allowed_choices %}{{ choice }}("{{ loop.index }}", "{{ choice }}"){% if not loop.last %}, {% endif %}{% endfor %};
-
-        private final String id;
-        private final String name;
-   
-        {{ field_name }}(String id, String name) {
-            this.id = id;
-            this.name = name;
-         }
-   
-        @VsoProperty(displayName = "Id", readOnly = true)
-        public String getId() {
-            return id;
-        }
-   
-        @VsoProperty(displayName = "Name", readOnly = true)
-        public String getName() {
-            return name;
-        }
-   
-        public static {{ field_name }} getEnumById(String id) {
-            for ({{ field_name }} item : values()) {
-                if (item.getId().equals(id)) {
-                    return item;
-                }
-            }
-            return null;
-        }
-    };
-    {% endif -%}
-    {% endfor -%}
 
     {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
     @JsonProperty(value = "{{ attribute.local_name }}")
