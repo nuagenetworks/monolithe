@@ -19,9 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 {%- if specification.attributes|length > 0 %} 
 import com.fasterxml.jackson.annotation.JsonProperty;
 {% endif -%}
-{%- if specification.child_apis|length > 0 %}
 import com.fasterxml.jackson.annotation.JsonIgnore;
-{%- endif %}
 import com.vmware.o11n.plugin.sdk.annotation.VsoConstructor;
 import com.vmware.o11n.plugin.sdk.annotation.VsoFinder;
 import com.vmware.o11n.plugin.sdk.annotation.VsoMethod;
@@ -126,11 +124,13 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     {% endif -%}
     {%- for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
     {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
+    @JsonIgnore
     @VsoProperty(displayName = "{{ field_name }}", readOnly = false)   
     public {{ attribute.local_type }} get{{ field_name }}() {
        return {{ attribute.local_name }};
     }
 
+    @JsonIgnore
     public void set{{ field_name }}({{ attribute.local_type }} value) { 
         this.{{ attribute.local_name }} = value;
     }
