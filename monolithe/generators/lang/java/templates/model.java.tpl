@@ -9,9 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 {% if specification.attributes|length > 0 -%} 
 import com.fasterxml.jackson.annotation.JsonProperty;
 {% endif -%}
-{% if specification.child_apis|length > 0 -%}
 import com.fasterxml.jackson.annotation.JsonIgnore;
-{% endif -%}
 
 {% if specification.child_apis|length > 0 -%}   
 {% for api in specification.child_apis -%}
@@ -64,10 +62,12 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
 
    {% for attribute in specification.attributes %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
+   @JsonIgnore
    public {% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} get{{ field_name }}() {
       return {{ attribute.local_name }};
    }
 
+   @JsonIgnore
    public void set{{ field_name }}({% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} value) { 
       this.{{ attribute.local_name }} = value;
    }
