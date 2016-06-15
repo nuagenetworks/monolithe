@@ -52,7 +52,7 @@
         {% for specification in specifications|sort(attribute='package') %}
 
             {% if package_name != specification.package %}
-                {% if not package_name %}
+                {% if package_name %}
                     </section>
                 {% endif %}
                 {% set package_name = specification.package %}
