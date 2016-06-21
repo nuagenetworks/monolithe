@@ -190,9 +190,15 @@ class APIVersionWriter(TemplateFileWriter):
                 attrs_includes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "includes")
                 attrs_excludes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "excludes")
 
-                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
-                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
-                self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
+                for parent_api in specification.parent_apis:
+                   parent_spec = specifications[parent_api.rest_name]
+                   if parent_api.allows_create and parent_spec:
+                      entity_excludes = self._get_entity_list_filter(self.inventory_entities, parent_spec.entity_name, "excludes")
+                      if specification.entity_name not in entity_excludes:
+                         self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Add %s to %s" % (specification.entity_name, parent_spec.entity_name), parent_spec=parent_spec)
+
+                   self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Edit %s" % (specification.entity_name))
+                   self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Remove %s" % (specification.entity_name))
 
     def _write_session(self, specifications, output_directory, package_name):
         """
@@ -464,20 +470,20 @@ class APIVersionWriter(TemplateFileWriter):
                    action_name = action_name,
                    action_id=action_id)
 
-    def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type, attrs_includes, attrs_excludes):
+    def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type, attrs_includes, attrs_excludes, workflow_name, parent_spec = None):
         """
         """
-        workflow_unique_name = specification.entity_name.encode('ascii') + '-' + workflow_type
+        workflow_unique_name = specification.entity_name.encode('ascii') + '-' + workflow_type + ('-' + parent_spec.entity_name.encode('ascii') if parent_spec else "")
         workflow_id = uuid.uuid5(uuid.NAMESPACE_OID, workflow_unique_name)
 
         workflow_directory = "%s/Library/VSPK/Basic/%s" % (output_directory, specification.package.capitalize())
         if not os.path.exists(workflow_directory):
             makedirs(workflow_directory)
 
-        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.element_info.xml.tpl" % (workflow_type), filename="%s %s.element_info.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id, attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
-        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.xml.tpl" % (workflow_type), filename="%s %s.xml" % (workflow_type.capitalize(), specification.entity_name), workflow_type=workflow_type, workflow_id=workflow_id, attrs_includes=attrs_includes, attrs_excludes=attrs_excludes)
+        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.element_info.xml.tpl" % (workflow_type), filename="%s.element_info.xml" % (workflow_name), workflow_type=workflow_type, workflow_id=workflow_id, attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name=workflow_name, parent_spec=parent_spec)
+        self._write_workflow_file(specification=specification, specification_set=specification_set, workflow_directory=workflow_directory, template_file="o11nplugin-package/%s_workflow.xml.tpl" % (workflow_type), filename="%s.xml" % (workflow_name), workflow_type=workflow_type, workflow_id=workflow_id, attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name=workflow_name, parent_spec=parent_spec)
 
-    def _write_workflow_file(self, specification, specification_set, workflow_directory, template_file, filename, workflow_type, workflow_id, attrs_includes, attrs_excludes):
+    def _write_workflow_file(self, specification, specification_set, workflow_directory, template_file, filename, workflow_type, workflow_id, attrs_includes, attrs_excludes, workflow_name, parent_spec):
         """
         """
         self.write(destination=workflow_directory,
@@ -499,7 +505,9 @@ class APIVersionWriter(TemplateFileWriter):
                    workflow_type=workflow_type,
                    workflow_id=workflow_id,
                    attrs_includes=attrs_includes,
-                   attrs_excludes=attrs_excludes)
+                   attrs_excludes=attrs_excludes,
+                   workflow_name=workflow_name,
+                   parent_spec=parent_spec)
 
     def _write_enum(self, specification, attribute, output_directory, package_name):
         """ Write autogenerate specification file

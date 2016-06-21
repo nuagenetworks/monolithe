@@ -3,7 +3,7 @@
 <properties>
 <comment>Exported from [server]</comment>
 <entry key="categoryPath">Library.VSPK.Basic.{{ specification.package | capitalize }}</entry>
-<entry key="name">Add {{ specification.entity_name }}</entry>
+<entry key="name">{{ workflow_name }}</entry>
 <entry key="type">Workflow</entry>
 <entry key="id">{{ workflow_id }}</entry>
 </properties>
