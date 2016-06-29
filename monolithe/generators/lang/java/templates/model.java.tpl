@@ -32,7 +32,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {%- endfor %}
 
    {% for attribute in specification.attributes %}
-   @JsonProperty(value = "{{ attribute.local_name }}")
+   @JsonProperty(value = "{{ attribute.name }}")
    protected {{ attribute.local_type }} {{ attribute.local_name }};
    {% endfor %}
 
