@@ -43,7 +43,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     private static final long serialVersionUID = 1L;
 
     {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
-    @JsonProperty(value = "{{ attribute.local_name }}")
+    @JsonProperty(value = "{{ attribute.name }}")
     protected {{ attribute.local_type }} {{ attribute.local_name }};
     {% endfor %}
 
