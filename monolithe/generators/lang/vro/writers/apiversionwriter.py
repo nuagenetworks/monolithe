@@ -191,12 +191,13 @@ class APIVersionWriter(TemplateFileWriter):
                 attrs_excludes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "excludes")
 
                 for parent_api in specification.parent_apis:
-                   parent_spec = specifications[parent_api.rest_name]
-                   if parent_api.allows_create and parent_spec:
-                      entity_excludes = self._get_entity_list_filter(self.inventory_entities, parent_spec.entity_name, "excludes")
-                      if specification.entity_name not in entity_excludes:
-                         self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Add %s to %s" % (specification.entity_name, parent_spec.entity_name), parent_spec=parent_spec)
-                         self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="find", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Find %s from %s" % (specification.entity_name, parent_spec.entity_name), parent_spec=parent_spec)
+                   if parent_api.rest_name in specifications:
+                      parent_spec = specifications[parent_api.rest_name]
+                      if parent_api.allows_create and parent_spec:
+                         entity_excludes = self._get_entity_list_filter(self.inventory_entities, parent_spec.entity_name, "excludes")
+                         if specification.entity_name not in entity_excludes:
+                            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Add %s to %s" % (specification.entity_name, parent_spec.entity_name), parent_spec=parent_spec)
+                            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="find", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Find %s from %s" % (specification.entity_name, parent_spec.entity_name), parent_spec=parent_spec)
 
                    self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Edit %s" % (specification.entity_name))
                    self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="remove", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Remove %s" % (specification.entity_name))
