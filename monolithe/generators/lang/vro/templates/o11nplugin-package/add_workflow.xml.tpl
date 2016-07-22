@@ -27,7 +27,13 @@
 {{ entity_param_name }} = new {{ name | upper }}{{ specification. entity_name}}();
 {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {% if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) -%}
+{% if (attribute.workflow_type == "string") -%}
+if ({{ attribute.local_name }}) {
+   {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
+}
+{% else -%}
 {{ entity_param_name }}.{{ attribute.local_name }} = {{ attribute.local_name }};
+{% endif -%}
 {% endif -%}
 {% endfor %}
 {{ parent_param_name }}.create{{ specification.entity_name }}(session, {{ entity_param_name }});

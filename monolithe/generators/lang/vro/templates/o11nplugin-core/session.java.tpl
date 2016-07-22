@@ -51,6 +51,14 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setCertificate(certificate);
     }
 
+    @VsoProperty(displayName = "notificationsEnabled")
+    public boolean getNotificationsEnabled() {
+        return super.getNotificationsEnabled();
+    }
+    public void setNotificationsEnabled(boolean notificationsEnabled) {
+        super.setNotificationsEnabled(notificationsEnabled);
+    }
+
     @VsoProperty(displayName = "Id", readOnly = true)
     public String getId() {
         return super.getId();
