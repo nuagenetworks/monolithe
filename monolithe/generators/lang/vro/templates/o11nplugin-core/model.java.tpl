@@ -153,14 +153,18 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     @VsoMethod
     public void save(Session session, Integer responseChoice) throws RestException {
         super.save(session, responseChoice);
-        SessionManager.getInstance().notifyElementUpdated(Constants.{{ specification.entity_name | upper }}, getId());
+        if (!session.getNotificationsEnabled()) {
+           SessionManager.getInstance().notifyElementUpdated(Constants.{{ specification.entity_name | upper }}, getId());
+        }
     }
 
     @VsoMethod
     public void delete(Session session, Integer responseChoiceObj) throws RestException {
         int responseChoice = (responseChoiceObj != null) ? responseChoiceObj.intValue() : 1;
         super.delete(session, responseChoice);
-        SessionManager.getInstance().notifyElementDeleted(Constants.{{ specification.entity_name | upper }}, getId());
+        if (!session.getNotificationsEnabled()) {
+           SessionManager.getInstance().notifyElementDeleted(Constants.{{ specification.entity_name | upper }}, getId());
+        }
     }
 
     {%- for child_api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
@@ -170,7 +174,9 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     public void assign{{ child_spec.entity_name_plural }}(Session session, {{ child_spec.entity_name }}[] childRestObjs, Boolean commitObj) throws RestException {
         boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
         super.assign(session, java.util.Arrays.asList(childRestObjs), commit);
-        SessionManager.getInstance().notifyElementUpdated(Constants.{{ specification.entity_name | upper }}, getId());
+        if (!session.getNotificationsEnabled()) { 
+           SessionManager.getInstance().notifyElementUpdated(Constants.{{ specification.entity_name | upper }}, getId());
+        }
     }
     {% endif -%}
     {% endfor -%}
@@ -182,7 +188,9 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     public void create{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj, Integer responseChoice, Boolean commitObj) throws RestException {
         boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
         super.createChild(session, childRestObj, responseChoice, commit);
-        SessionManager.getInstance().notifyElementInvalidate(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, getId());
+        if (!session.getNotificationsEnabled()) {
+           SessionManager.getInstance().notifyElementInvalidate(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, getId());
+        }
     }
 
     {%- for attribute in child_spec.attributes %}
@@ -191,7 +199,9 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     public void instantiate{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj, {{ child_spec.entity_name }}Template fromTemplate, Integer responseChoice, Boolean commitObj) throws RestException {
         boolean commit = (commitObj != null) ? commitObj.booleanValue() : true;
         super.instantiateChild(session, childRestObj, fromTemplate, responseChoice, commit);
-        SessionManager.getInstance().notifyElementInvalidate(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, getId());
+        if (!session.getNotificationsEnabled()) {
+           SessionManager.getInstance().notifyElementInvalidate(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER, getId());
+        }
     }
     {% endif -%}
     {% endfor -%}
