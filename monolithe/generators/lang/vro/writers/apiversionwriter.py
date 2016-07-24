@@ -97,6 +97,12 @@ class APIVersionWriter(TemplateFileWriter):
         version_increment = plugin_info.get(self.api_version, "versionIncrement")
         self.plugin_version = self.api_version + '.' + version_increment
 
+        workflow_info = RawConfigParser()
+        path = "%s/vro/__attributes_defaults/workflow.ini" % self._output
+        workflow_info.optionxform = str
+        workflow_info.read(path)
+        self.workflow_version = workflow_info.get("all", "workflowVersion")
+
         with open("%s/vro/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
@@ -470,7 +476,8 @@ class APIVersionWriter(TemplateFileWriter):
                    specification=specification,
                    attribute=attribute,
                    action_name = action_name,
-                   action_id=action_id)
+                   action_id=action_id,
+                   workflow_version=self.workflow_version)
 
     def _write_workflow_files(self, specification, specification_set, output_directory, workflow_type, attrs_includes, attrs_excludes, workflow_name, parent_spec = None):
         """
@@ -509,7 +516,8 @@ class APIVersionWriter(TemplateFileWriter):
                    attrs_includes=attrs_includes,
                    attrs_excludes=attrs_excludes,
                    workflow_name=workflow_name,
-                   parent_spec=parent_spec)
+                   parent_spec=parent_spec,
+                   workflow_version=self.workflow_version)
 
     def _write_enum(self, specification, attribute, output_directory, package_name):
         """ Write autogenerate specification file
