@@ -1,7 +1,7 @@
-requests>=2.4.3
-future
-jinja2
-colorama
+requests==2.5.1
+future==0.15.2
+jinja2==2.8
+colorama==0.3.7
 unittest2
 PyGithub
 pdoc
