@@ -203,9 +203,16 @@ class RepositoryManager (object):
                 f.write(chunk)
                 f.flush()
 
+        stripped_repository_path = self.repository_path.strip("/")
+
         # reads the content of the archive and generate Specification objects
         with zipfile.ZipFile(archive_path, "r") as archive_content:
             for file_name in archive_content.namelist():
+
+                spec_dir = os.path.split(file_name)[0]
+
+                if not spec_dir.startswith(stripped_repository_path):
+                    continue
 
                 spec_name = os.path.split(file_name)[1]
 
