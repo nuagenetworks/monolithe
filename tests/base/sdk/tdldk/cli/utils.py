@@ -37,7 +37,8 @@ class Utils(object):
         """
         rep = {
             "VPort": "Vport",
-            "IPID": "IpID"
+            "IPID": "IpID",
+            "IPv6": "Ipv6"
         }
 
         rep = dict((re.escape(k), v) for k, v in rep.items())

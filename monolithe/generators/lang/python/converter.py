@@ -36,6 +36,8 @@ def _string_clean(string):
         "VCenter": "Vcenter",
         "vCenter": "Vcenter",
         "VPort": "Vport",
+        "IPv6": "Ipv6",
+        "IPv4": "Ipv4"
     }
 
     rep = dict((re.escape(k), v) for k, v in rep.items())

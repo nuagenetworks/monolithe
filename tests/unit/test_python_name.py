@@ -42,3 +42,6 @@ class GetPythonNameTest(TestCase):
         self.assertPythonNameEquals('VCenterHypervisor', 'vcenter_hypervisor')
         self.assertPythonNameEquals('VCenterEAMConfig', 'vcenter_eam_config')
         self.assertPythonNameEquals('vCenterIP', 'vcenter_ip')
+        self.assertPythonNameEquals('associatedIPv6', 'associated_ipv6')
+        self.assertPythonNameEquals('IPv6Address', 'ipv6_address')
+        self.assertPythonNameEquals('IPv4Address', 'ipv4_address')
