@@ -5,8 +5,6 @@
 # it will be added to all the generated files
 #
 
-from builtins import object
-
 import os
 
 from .printer import Printer
@@ -34,12 +32,12 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         session = inspector.get_user_session(args)
-        parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        parent = inspector.get_parent(args.parent_infos, session.root_object)
 
         classname = instance.__class__.__name__[2:]
-        plural_classname = Utils.get_plural(classname)
+        plural_classname = Utils.get_entity_name_plural(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
         query_parameters = cls._get_attributes(args.query_parameters)
 
@@ -47,7 +45,7 @@ class CLICommand(object):
             fetcher = getattr(parent, fetcher_name)
         except:
 
-            if parent.rest_name == inspector._get_sdk_package().SDKInfo.root_object_class().rest_name:
+            if parent.rest_name == inspector._get_package().SDKInfo.root_object_class().rest_name:
                 error_message = "Failed to found root objects '%s'. Maybe you forgot to specify the parent using '--in [parent] [ID]' syntax ?" % (fetcher_name)
             else:
                 error_message = "'%s' failed to found children '%s'. You can use command 'tdl objects -c %s' to list all possible parents" % (parent.rest_name, fetcher_name, fetcher_name)
@@ -69,12 +67,12 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         session = inspector.get_user_session(args)
-        parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        parent = inspector.get_parent(args.parent_infos, session.root_object)
 
         classname = instance.__class__.__name__[2:]
-        plural_classname = Utils.get_plural(classname)
+        plural_classname = Utils.get_entity_name_plural(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
         query_parameters = cls._get_attributes(args.query_parameters)
 
@@ -82,7 +80,7 @@ class CLICommand(object):
             fetcher = getattr(parent, fetcher_name)
         except:
 
-            if parent.rest_name == inspector._get_sdk_package().SDKInfo.root_object_class().rest_name:
+            if parent.rest_name == inspector._get_package().SDKInfo.root_object_class().rest_name:
                 error_message = "Failed to found root object '%s'. Maybe you forgot to specify the parent using '--in [parent] [ID]' syntax ?" % (fetcher_name)
             else:
                 error_message = "'%s' failed to found children '%s'. You can use command 'tdl objects -c %s' to list all possible parents" % (parent.rest_name, fetcher_name, fetcher_name)
@@ -103,13 +101,13 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         instance.id = args.id
         inspector.get_user_session(args)
 
         try:
             (instance, connection) = instance.fetch()
-        except Exception as e:
+        except Exception, e:
             Printer.raise_error("Could not find '%s' with id '%s'. Activate verbose mode for more information:\n%s" % (name, args.id, e))
 
         Printer.success("%s with id %s has been retrieved" % (name, args.id))
@@ -122,16 +120,16 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         session = inspector.get_user_session(args)
-        parent = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        parent = inspector.get_parent(args.parent_infos, session.root_object)
         attributes = cls._get_attributes(args.params)
 
         cls._fill_instance_with_attributes(instance, attributes)
 
         try:
             (instance, connection) = parent.create_child(instance)
-        except Exception as e:
+        except Exception, e:
             Printer.raise_error("Cannot create %s:\n%s" % (name, e))
 
         Printer.success("%s has been created with ID=%s" % (name, instance.id))
@@ -145,7 +143,7 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         instance.id = args.id
         attributes = cls._get_attributes(args.params)
 
@@ -153,14 +151,14 @@ class CLICommand(object):
 
         try:
             (instance, connection) = instance.fetch()
-        except Exception as e:
+        except Exception, e:
             Printer.raise_error("Could not find '%s' with id '%s'. Activate verbose mode for more information:\n%s" % (name, args.id, e))
 
         cls._fill_instance_with_attributes(instance, attributes)
 
         try:
             (instance, connection) = instance.save()
-        except Exception as e:
+        except Exception, e:
             Printer.raise_error("Cannot update %s:\n%s" % (name, e))
 
         Printer.success("%s with ID=%s has been updated" % (name, instance.id))
@@ -237,14 +235,14 @@ class CLICommand(object):
         """
         inspector = SDKInspector(args.version)
         name = Utils.get_singular_name(args.name)
-        instance = inspector.get_sdk_instance(name)
+        instance = inspector.get_instance(name)
         instance.id = args.id
 
         inspector.get_user_session(args)
 
         try:
             (instance, connection) = instance.delete()
-        except Exception as e:
+        except Exception, e:
             Printer.raise_error("Could not delete '%s' with id '%s'. Activate verbose mode for more information:\n%s" % (name, args.id, e))
 
         Printer.success("%s with ID=%s has been deleted" % (name, instance.id))
@@ -259,9 +257,9 @@ class CLICommand(object):
 
         if args.parent:
             name = Utils.get_singular_name(args.parent)
-            instance = inspector.get_sdk_instance(name)
+            instance = inspector.get_instance(name)
 
-            objects = [Utils.get_plural(name) for name in instance.children_rest_names]
+            objects = [Utils.get_entity_name_plural(name) for name in instance.children_rest_names]
         else:
             objects = inspector.get_all_objects()
 
@@ -270,7 +268,7 @@ class CLICommand(object):
             parents = []
             for name in objects:
                 singular_name = Utils.get_singular_name(name)
-                instance = inspector.get_sdk_instance(singular_name)
+                instance = inspector.get_instance(singular_name)
 
                 if child in instance.children_rest_names:
                     parents.append(name)
@@ -352,13 +350,14 @@ class CLICommand(object):
         inspector = SDKInspector(args.version)
 
         name = Utils.get_singular_name(args.name)
-        object_class = inspector.get_sdk_class(name)
+        object_class = inspector.get_class(name)
+        object_type = object_class()
 
         session = inspector.get_user_session(args)
-        resource = inspector.get_sdk_parent(args.parent_infos, session.root_object)
+        resource = inspector.get_parent(args.parent_infos, session.root_object)
 
         classname = object_class.__name__[2:]
-        plural_classname = Utils.get_plural(classname)
+        plural_classname = Utils.get_entity_name_plural(classname)
         fetcher_name = Utils.get_python_name(plural_classname)
 
         try:
@@ -380,7 +379,7 @@ class CLICommand(object):
 
         try:
             (references, connection) = resource.assign(final_objects, object_class)
-        except Exception as e:
+        except Exception, e:
             Printer.raise_error('Cannot assign %s:\n%s' % (name, e))
 
         if args.ids is None:
@@ -400,7 +399,7 @@ class CLICommand(object):
                 The instance filled or throw an exception
 
         """
-        for attribute_name, attribute_value in attributes.items():
+        for attribute_name, attribute_value in attributes.iteritems():
 
             attribute = instance.get_attribute_infos(attribute_name)
             if attribute is None:
@@ -412,7 +411,7 @@ class CLICommand(object):
                 else:
                     value = attribute.attribute_type(attribute_value)
                 setattr(instance, attribute_name, value)
-            except Exception as e:
+            except Exception, e:
                 Printer.raise_error("Attribute %s could not be set with value %s\n%s" % (attribute_name, attribute_value, e))
 
         # TODO-CS: Remove validation when we will have all attribute information from Swagger...

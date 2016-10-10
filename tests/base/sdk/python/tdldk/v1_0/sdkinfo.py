@@ -5,11 +5,8 @@
 # it will be added to all the generated files
 #
 
-from __future__ import absolute_import
-from builtins import object
 from .gatdlsession import GATDLSession
 from .garoot import GARoot
-
 
 class SDKInfo (object):
 
@@ -42,14 +39,14 @@ class SDKInfo (object):
         return "ToDoList"
 
     @classmethod
-    def sdk_class_prefix(cls):
+    def class_prefix(cls):
         """
             Returns the api prefix
         """
         return "GA"
 
     @classmethod
-    def sdk_name(cls):
+    def name(cls):
         """
             Returns the sdk name
         """

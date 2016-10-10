@@ -9,6 +9,9 @@
 
 from .fetchers import GATasksFetcher
 
+
+from .fetchers import GAMetadatasFetcher
+
 from bambou import NURESTObject
 
 
@@ -16,7 +19,7 @@ class GAList(NURESTObject):
     """ Represents a List in the TDL
 
         Notes:
-            Represent a a list of task to do
+            Represent a a list of task to do.
     """
 
     __rest_name__ = "list"
@@ -45,13 +48,16 @@ class GAList(NURESTObject):
         self._title = None
         
         self.expose_attribute(local_name="description", remote_name="description", attribute_type=str, is_required=False, is_unique=False)
-        self.expose_attribute(local_name="title", remote_name="title", attribute_type=str, is_required=True, is_unique=True)
+        self.expose_attribute(local_name="title", remote_name="title", attribute_type=str, is_required=True, is_unique=False)
         
 
         # Fetchers
         
         
         self.tasks = GATasksFetcher.fetcher_with_object(parent_object=self, relationship="child")
+        
+        
+        self.metadatas = GAMetadatasFetcher.fetcher_with_object(parent_object=self, relationship="child")
         
 
         self._compute_args(**kwargs)

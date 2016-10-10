@@ -10,11 +10,11 @@ import os
 
 packages = ['tdldk', 'tdldk.cli']
 resources = []
-sdk_api_version_path = "./tdldk"
+api_version_path = "./tdldk"
 
-for version_folder in os.listdir(sdk_api_version_path):
+for version_folder in os.listdir(api_version_path):
 
-    if os.path.isfile("%s/%s" % (sdk_api_version_path, version_folder)):
+    if os.path.isfile("%s/%s" % (api_version_path, version_folder)):
         continue
 
     if version_folder == "cli":
@@ -35,9 +35,9 @@ setup(
     packages=packages,
     description='SDK for the My Product',
     long_description=open('README.md').read(),
-    install_requires=[line for line in open('requirements.txt')],
     license='BSD',
     include_package_data=True,
+    install_requires=[line for line in open('requirements.txt')],
     data_files=resources,
     entry_points={
         'console_scripts': [

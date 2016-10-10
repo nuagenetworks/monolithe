@@ -1,0 +1,4 @@
+bambou
+Flask
+tabulate
+colorama

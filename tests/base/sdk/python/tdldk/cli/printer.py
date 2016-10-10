@@ -5,8 +5,6 @@
 # it will be added to all the generated files
 #
 
-from __future__ import print_function
-from builtins import object
 import sys
 import json
 from collections import OrderedDict
@@ -123,10 +121,10 @@ class Printer(object):
 
         """
         if isinstance(data, str):
-            print(tabulate([[data]], tablefmt=Printer.TABULATE_FORMAT))
+            print tabulate([[data]], tablefmt=Printer.TABULATE_FORMAT)
 
         elif isinstance(data, dict):
-            print(tabulate([data], headers=headers, tablefmt=Printer.TABULATE_FORMAT))
+            print tabulate([data], headers=headers, tablefmt=Printer.TABULATE_FORMAT)
 
         elif isinstance(data, list):
             results = []
@@ -137,12 +135,12 @@ class Printer(object):
                 else:
                     results.append([obj])
 
-            print(tabulate(results, headers=headers, tablefmt=Printer.TABULATE_FORMAT))
+            print tabulate(results, headers=headers, tablefmt=Printer.TABULATE_FORMAT)
 
         else:
             dictionary = cls._object_to_dict(data, fields)
-            result = [(key, value) for key, value in dictionary.items()]
-            print(tabulate(result, headers=headers, tablefmt=Printer.TABULATE_FORMAT))
+            result = [(key, value) for key, value in dictionary.iteritems()]
+            print tabulate(result, headers=headers, tablefmt=Printer.TABULATE_FORMAT)
 
     @classmethod
     def _object_to_dict(cls, obj, fields=None):
@@ -154,7 +152,7 @@ class Printer(object):
         if fields is None or "ALL" in fields:
             return default_dict
 
-        known_fields = list(default_dict.keys())
+        known_fields = default_dict.keys()
         ordered_dict = OrderedDict()
 
         for field in fields:
