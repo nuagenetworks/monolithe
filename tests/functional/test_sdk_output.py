@@ -17,7 +17,7 @@ class SDKOutputTest(FunctionalTestCase):
         """
         base_path = self.get_base_path()
 
-        monolithe_config = MonolitheConfig.config_with_path("%s/conf/conf.ini" % base_path)
+        monolithe_config = MonolitheConfig.config_with_path("%s/specifications/monolithe.ini" % base_path)
         generator = SDKGenerator(monolithe_config=monolithe_config)
         generator.initialize_folder_manager(folder="%s/specifications" % base_path)
         generator.generate_from_folder()
