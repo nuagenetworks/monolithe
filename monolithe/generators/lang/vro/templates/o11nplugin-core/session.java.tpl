@@ -84,7 +84,6 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         return super.getUsername();
     }
 
-    @VsoProperty(displayName = "Password", readOnly = false)
     public String getPassword() {
         return super.getPassword();
     }
