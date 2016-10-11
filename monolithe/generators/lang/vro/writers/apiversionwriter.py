@@ -101,7 +101,7 @@ class APIVersionWriter(TemplateFileWriter):
         path = "%s/vro/__attributes_defaults/workflow.ini" % self._output
         workflow_info.optionxform = str
         workflow_info.read(path)
-        self.workflow_version = workflow_info.get("all", "workflowVersion")
+        self.workflow_version = workflow_info.get(self.api_version, "workflowVersion")
 
         with open("%s/vro/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
@@ -485,7 +485,9 @@ class APIVersionWriter(TemplateFileWriter):
         workflow_unique_name = specification.entity_name.encode('ascii') + '-' + workflow_type + ('-' + parent_spec.entity_name.encode('ascii') if parent_spec else "")
         workflow_id = uuid.uuid5(uuid.NAMESPACE_OID, workflow_unique_name)
 
-        workflow_directory = "%s/Library/VSPK/Basic/%s" % (output_directory, specification.package.capitalize())
+        workflow_package = "Other" if specification.package is None else specification.package.capitalize()
+
+        workflow_directory = "%s/Library/VSPK/Basic/%s" % (output_directory, workflow_package)
         if not os.path.exists(workflow_directory):
             makedirs(workflow_directory)
 
