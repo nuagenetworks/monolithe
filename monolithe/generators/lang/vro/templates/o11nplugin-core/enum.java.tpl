@@ -12,7 +12,7 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoProperty;
 @VsoObject(strict = true)
 public enum {{ enum_name }} {
 
-    {% for choice in attribute.allowed_choices %}{{ choice }}("{{ loop.index }}", "{{ choice }}"){% if not loop.last %}, {% endif %}{% endfor %};
+    {% for choice in attribute.allowed_choices %}{{ choice }}("{{ choice }}", "{{ choice }}"){% if not loop.last %}, {% endif %}{% endfor %};
 
     private final String id;
     private final String name;
