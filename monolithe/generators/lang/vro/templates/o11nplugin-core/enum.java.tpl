@@ -32,6 +32,13 @@ public enum {{ enum_name }} {
         return name;
     }
 
+    {% for choice in attribute.allowed_choices %}
+    @VsoProperty(displayName = "{{ choice }}", readOnly = true)
+    public {{ enum_name }} get{{ choice }}() {
+        return {{ choice }};
+    }
+    {% endfor %}
+
     public static {{ enum_name }} getEnumById(String id) {
         for ({{ enum_name }} item : values()) {
             if (item.getId().equals(id)) {
