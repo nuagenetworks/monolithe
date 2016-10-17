@@ -10,6 +10,7 @@ deploy:
   password:
     secure: 1oYJhl4/kVkPtXbYnDAcJOCuCsUe0LVCcSQqvwC3rnvJ6nBhMzbysLWRf7pUMSW6RlwY24iKsbzD0CYP33+ErTzxB0XVAHdtYOcrLSuKZgkX6UAcvKvOgpVeAxIVGYHaUHrh2w/qZCa9zcMUPWmisncJJhv0u8cXvd51NLSDn9D+e7K+XcLnyjBGTAD+zWF7XzJQ2d0ooM7z/y4YIBMv/TAM4+F5svPxU9rC1QSNmNSfI3RNu7vhM5ARkUMpdTb7gK6peedIuanyEsgqoGNAFyYL0Q4oVIEMFTGUGCvdrKzimln2tB/+u+GFmJhvdEWkcQvwGeAljN8/g8fVSXLG5K4iy2VnW8oBrTMIbF6LGfpto2IYn9YidLZvIMcFjtLo5+5yktozHdYRse63lKM03Q6Ccog6fOuEn3Vcyxag8uetisFi4jx6qF7202YJFM0cxaofXrS0DK2qwExtyjsmk2ZOB0o7IKoIAijJK3DUvssIFKecbFvZNbxkEDRg46Sv9TpGc4JZbtcTQP8jTvFgzJQfJArA5DnEjhq5/tQtdJp9Uoca391kqT5JL/IHr4LHGKXfQTkamxH1A2MuMppsIhZb6up+15GxHDIP6yaNd/nNd+UdjhURS/g5VqnFBoSZxRQufhc3452wZyLFpteKUKCSt694B/2L0ymvMmrscLk=
   on:
+    all_branches: true
     tags: true
     distributions: sdist bdist_wheel
     repo: nuagenetworks/monolithe
