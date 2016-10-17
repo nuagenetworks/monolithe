@@ -31,7 +31,7 @@ setup(
     name="monolithe",
     packages=find_packages(exclude=["*tests*"]),
     include_package_data=True,
-    version="1.1.0",
+    version="1.1.1",
     description="Monolithe is a sdk generator",
     author="Christophe Serafin, Antoine Mercadal",
     author_email="christophe.serafin@nuagenetworks.net, antoine@nuagenetworks.net",
