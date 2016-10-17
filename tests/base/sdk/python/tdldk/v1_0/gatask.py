@@ -7,6 +7,9 @@
 
 
 
+from .fetchers import GAMetadatasFetcher
+
+
 from .fetchers import GAUsersFetcher
 
 from bambou import NURESTObject
@@ -16,7 +19,7 @@ class GATask(NURESTObject):
     """ Represents a Task in the TDL
 
         Notes:
-            Represent a task to do in a list
+            Represent a task to do in a listd
     """
 
     __rest_name__ = "task"
@@ -49,15 +52,18 @@ class GATask(NURESTObject):
         # Read/Write Attributes
         
         self._description = None
-        self._status = None
         self._title = None
+        self._status = None
         
         self.expose_attribute(local_name="description", remote_name="description", attribute_type=str, is_required=False, is_unique=False)
+        self.expose_attribute(local_name="title", remote_name="title", attribute_type=str, is_required=True, is_unique=False)
         self.expose_attribute(local_name="status", remote_name="status", attribute_type=str, is_required=False, is_unique=False, choices=[u'DONE', u'TODO'])
-        self.expose_attribute(local_name="title", remote_name="title", attribute_type=str, is_required=True, is_unique=True)
         
 
         # Fetchers
+        
+        
+        self.metadatas = GAMetadatasFetcher.fetcher_with_object(parent_object=self, relationship="child")
         
         
         self.users = GAUsersFetcher.fetcher_with_object(parent_object=self, relationship="member")
@@ -72,7 +78,7 @@ class GATask(NURESTObject):
         """ Get description value.
 
             Notes:
-                The description
+                The desdcriptiond
 
                 
         """
@@ -83,34 +89,11 @@ class GATask(NURESTObject):
         """ Set description value.
 
             Notes:
-                The description
+                The desdcriptiond
 
                 
         """
         self._description = value
-
-    
-    @property
-    def status(self):
-        """ Get status value.
-
-            Notes:
-                The status of the task
-
-                
-        """
-        return self._status
-
-    @status.setter
-    def status(self, value):
-        """ Set status value.
-
-            Notes:
-                The status of the task
-
-                
-        """
-        self._status = value
 
     
     @property
@@ -134,6 +117,29 @@ class GATask(NURESTObject):
                 
         """
         self._title = value
+
+    
+    @property
+    def status(self):
+        """ Get status value.
+
+            Notes:
+                The status of the task
+
+                
+        """
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        """ Set status value.
+
+            Notes:
+                The status of the task
+
+                
+        """
+        self._status = value
 
     
 

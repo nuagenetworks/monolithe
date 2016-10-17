@@ -5,10 +5,10 @@
 # it will be added to all the generated files
 #
 
-
-__all__ = ['GAList', 'GARoot', 'GATask', 'GAUser', 'GATDLSession']
+__all__ = ['GATDLSession', 'GAList', 'GAMetadata', 'GARoot', 'GATask', 'GAUser']
 
 from .galist import GAList
+from .gametadata import GAMetadata
 from .garoot import GARoot
 from .gatask import GATask
 from .gauser import GAUser
@@ -25,6 +25,7 @@ def __setup_bambou():
     BambouConfig.set_default_values_config_file(default_attrs)
 
     NURESTModelController.register_model(GAList)
+    NURESTModelController.register_model(GAMetadata)
     NURESTModelController.register_model(GARoot)
     NURESTModelController.register_model(GATask)
     NURESTModelController.register_model(GAUser)

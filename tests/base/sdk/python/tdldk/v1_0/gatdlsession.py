@@ -5,7 +5,6 @@
 # it will be added to all the generated files
 #
 
-from builtins import str
 from bambou import NURESTSession
 from bambou.exceptions import InternalConsitencyError
 from .garoot import GARoot
@@ -58,7 +57,7 @@ class GATDLSession(NURESTSession):
         """
         return GARoot()
 
-
+    
     ## Custom methods
     @property
     def supercalifragilisticexpialidocious(self):
@@ -67,4 +66,4 @@ class GATDLSession(NURESTSession):
             the root object
         """
         return self.root_object()
-
+    

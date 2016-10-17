@@ -19,7 +19,7 @@ class GARoot(NURESTRootObject):
     """ Represents a Root in the TDL
 
         Notes:
-            Root object of the API
+            Root object of the APIh
     """
 
     __rest_name__ = "root"

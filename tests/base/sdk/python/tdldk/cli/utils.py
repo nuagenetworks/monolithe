@@ -5,8 +5,6 @@
 # it will be added to all the generated files
 #
 
-from builtins import object
-
 import logging
 import importlib
 import re
@@ -37,12 +35,11 @@ class Utils(object):
         """
         rep = {
             "VPort": "Vport",
-            "IPID": "IpID",
-            "IPv6": "Ipv6"
+            "IPID": "IpID"
         }
 
-        rep = dict((re.escape(k), v) for k, v in rep.items())
-        pattern = re.compile("|".join(list(rep.keys())))
+        rep = dict((re.escape(k), v) for k, v in rep.iteritems())
+        pattern = re.compile("|".join(rep.keys()))
         return pattern.sub(lambda m: rep[re.escape(m.group(0))], string)
 
     @classmethod
@@ -126,7 +123,7 @@ class SDKInspector(object):
         """ Load objects in a temporary database
 
         """
-        self._get_sdk_package()
+        self._get_package()
 
         object_names = [name for name in dir(self._sdk) if name != "GATDLSession" and name != "SDKInfo" and name.startswith("GA") and not name.endswith("Fetcher")]
 
@@ -134,7 +131,7 @@ class SDKInspector(object):
             obj = getattr(self._sdk, object_name)
             self._objects_mapping[obj.rest_name] = object_name
 
-    def _get_sdk_package(self):
+    def _get_package(self):
         """ Returns sdk package
 
         """
@@ -156,12 +153,12 @@ class SDKInspector(object):
         """ Returns all objects available
 
         """
-        resources = list(self._objects_mapping.keys())
+        resources = self._objects_mapping.keys()
         resources = [Utils.get_entity_name_plural(name) for name in resources if name not in self._ignored_resources]
 
         return resources
 
-    def get_sdk_class(self, name):
+    def get_class(self, name):
         """ Get a SDK class object
             Args:
                 name: the name of the object
@@ -181,7 +178,7 @@ class SDKInspector(object):
 
         Printer.raise_error('Unknown object named %s' % name)
 
-    def get_sdk_instance(self, name):
+    def get_instance(self, name):
         """ Get SDK object instance according to a given name
 
             Args:
@@ -190,10 +187,10 @@ class SDKInspector(object):
             Returns:
                 A SDK object or raise an exception
         """
-        klass = self.get_sdk_class(name)
+        klass = self.get_class(name)
         return klass()
 
-    def get_sdk_parent(self, parent_infos, root_object):
+    def get_parent(self, parent_infos, root_object):
         """ Get SDK parent object if possible
             Otherwise it will take the user
 
@@ -209,12 +206,12 @@ class SDKInspector(object):
             uuid = parent_infos[1]
 
             singular_name = Utils.get_singular_name(name)
-            parent = self.get_sdk_instance(singular_name)
+            parent = self.get_instance(singular_name)
             parent.id = uuid
 
             try:
                 (parent, connection) = parent.fetch()
-            except Exception as ex:
+            except Exception, ex:
                 Printer.raise_error("Failed fetching parent %s with uuid %s\n%s" % (name, uuid, ex))
 
             return parent
