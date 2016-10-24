@@ -10,3 +10,5 @@ recursive-include monolithe/generators/lang/objj/templates *
 recursive-include monolithe/generators/lang/objj/vanilla *
 recursive-include monolithe/generators/lang/java/templates *
 recursive-include monolithe/generators/lang/java/vanilla *
+recursive-include monolithe/generators/lang/vro/templates *
+recursive-include monolithe/generators/lang/vro/vanilla *
