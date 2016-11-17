@@ -200,10 +200,11 @@ class APIVersionWriter(TemplateFileWriter):
                    workflow_package = "Other" if specification.package is None else specification.package.capitalize()
                    if parent_api.rest_name in specifications:
                       parent_spec = specifications[parent_api.rest_name]
-                      if parent_api.allows_create and parent_spec:
+                      if parent_spec:
                          entity_excludes = self._get_entity_list_filter(self.inventory_entities, parent_spec.entity_name, "excludes")
                          if specification.entity_name not in entity_excludes:
-                            self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Add %s to %s" % (specification.entity_name, parent_spec.entity_name), workflow_package=workflow_package, parent_spec=parent_spec)
+                            if parent_api.allows_create:
+                               self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="add", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Add %s to %s" % (specification.entity_name, parent_spec.entity_name), workflow_package=workflow_package, parent_spec=parent_spec)
                             self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="find", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Find %s in %s" % (specification.entity_name, parent_spec.entity_name), workflow_package=workflow_package, parent_spec=parent_spec)
 
                    self._write_workflow_files(specification=specification, specification_set=specifications, output_directory=workflows_output_directory, workflow_type="edit", attrs_includes=attrs_includes, attrs_excludes=attrs_excludes, workflow_name="Edit %s" % (specification.entity_name), workflow_package=workflow_package)
