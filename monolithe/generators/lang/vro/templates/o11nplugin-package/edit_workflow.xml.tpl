@@ -34,7 +34,7 @@ if ({{ attribute.local_name }}) {
 {% endif -%}
 {% endfor -%}
 
-{{ entity_param_name }}.save(session);]]></script>
+{{ entity_param_name }}.save(session, 1);]]></script>
 <in-binding><bind name='{{ entity_param_name }}' type='{{ entity_type_name }}' export-name="{{ entity_param_name }}" ></bind>
 {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
 {%- if (attribute.required or attribute.local_name in attrs_includes) and (not attribute.local_name in attrs_excludes) %}
