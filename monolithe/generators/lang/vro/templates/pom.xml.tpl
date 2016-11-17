@@ -68,7 +68,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>${artifactId}-${version}-${build.number}</finalName>
+        <finalName>${artifactId}-${version}.${build.number}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
