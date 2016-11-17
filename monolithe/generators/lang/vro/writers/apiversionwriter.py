@@ -94,8 +94,7 @@ class APIVersionWriter(TemplateFileWriter):
         path = "%s/vro/__attributes_defaults/plugin.ini" % self._output
         plugin_info.optionxform = str
         plugin_info.read(path)
-        version_increment = plugin_info.get(self.api_version, "versionIncrement")
-        self.plugin_version = self.api_version + '.' + version_increment
+        self.plugin_version = plugin_info.get(self.api_version, "pluginVersion")
 
         workflow_info = RawConfigParser()
         path = "%s/vro/__attributes_defaults/workflow.ini" % self._output
