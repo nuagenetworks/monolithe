@@ -173,15 +173,16 @@ class APIVersionWriter(TemplateFileWriter):
         copyfile("%s/archetype.keystore" % (self.output_directory), "%s/archetype.keystore" % (output_directory));
         remove("%s/archetype.keystore" % (self.output_directory))
 
-        resources_source_directory = "%s/__resources" % (self.output_directory)
         resources_output_directory = "%s/src/main/resources" % (output_directory)
-        workflows_output_directory = "%s/Workflow" % (resources_output_directory)
-        workflows_source_directory = "%s/Workflow" % (resources_source_directory)
-        copytree(workflows_source_directory, workflows_output_directory)
+        workflows_output_directory = "%s/Workflow" % (resources_output_directory)        
         actions_output_directory = "%s/ScriptModule" % (resources_output_directory)
-        actions_source_directory = "%s/ScriptModule" % (resources_source_directory)
-        copytree(actions_source_directory, actions_output_directory)
-        rmtree("%s" % (resources_source_directory))
+
+        workflow_package = "Session"
+        workflow_directory = "%s/Library/VSPK/Basic/%s" % (workflows_output_directory, workflow_package)
+        self._write_workflow_file(specification=None, specification_set=None, workflow_directory=workflow_directory, template_file="o11nplugin-package/Add Session.element_info.xml.tpl", filename="Add Session.element_info.xml", workflow_type="add", workflow_id=None, attrs_includes=None, attrs_excludes=None, workflow_name="Add Session", workflow_package=workflow_package, parent_spec=None)
+        self._write_workflow_file(specification=None, specification_set=None, workflow_directory=workflow_directory, template_file="o11nplugin-package/Add Session.xml.tpl", filename="Add Session.xml", workflow_type="add", workflow_id=None, attrs_includes=None, attrs_excludes=None, workflow_name = "Add Session", workflow_package=workflow_package, parent_spec=None)
+        self._write_workflow_file(specification=None, specification_set=None, workflow_directory=workflow_directory, template_file="o11nplugin-package/Remove Session.element_info.xml.tpl", filename="Remove Session.element_info.xml", workflow_type="remove", workflow_id=None, attrs_includes=None, attrs_excludes=None, workflow_name = "Remove Session", workflow_package=workflow_package, parent_spec=None)
+        self._write_workflow_file(specification=None, specification_set=None, workflow_directory=workflow_directory, template_file="o11nplugin-package/Remove Session.xml.tpl", filename="Remove Session.xml", workflow_type="remove", workflow_id=None, attrs_includes=None, attrs_excludes=None, workflow_name = "Remove Session", workflow_package=workflow_package, parent_spec=None)
 
         for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
