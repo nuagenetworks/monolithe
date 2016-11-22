@@ -14,7 +14,7 @@
 <display-name><![CDATA[Scriptable task]]></display-name>
 <script encoded='false'><![CDATA[var session = {{ entity_param_name }}.session;
 
-{{ entity_param_name }}.delete(session);]]></script>
+{{ entity_param_name }}.delete(session, 1);]]></script>
 <in-binding><bind name='{{ entity_param_name }}' type='{{ entity_type_name }}' export-name="{{ entity_param_name }}" ></bind>
 </in-binding><out-binding></out-binding><position x='204.5' y='55.40909090909091'/>
 </workflow-item>
