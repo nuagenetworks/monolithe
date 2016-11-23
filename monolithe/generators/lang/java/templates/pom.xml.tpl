@@ -4,7 +4,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>{{ package_prefix }}</groupId>
    <artifactId>{{ name }}</artifactId>
-   <version>{{ version }}</version>
+   <version>{{library_version}}</version>
    <packaging>jar</packaging>
 
    <name>${project.groupId}:${project.artifactId}</name>

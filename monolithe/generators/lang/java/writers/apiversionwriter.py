@@ -77,6 +77,12 @@ class APIVersionWriter(TemplateFileWriter):
         self.attrs_types.optionxform = str
         self.attrs_types.read(path)
 
+        library_info = RawConfigParser()
+        path = "%s/java/__attributes_defaults/library.ini" % self._output
+        library_info.optionxform = str
+        library_info.read(path)
+        self.library_version = library_info.get(self.api_version, "libraryVersion")
+
         with open("%s/java/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
 
@@ -209,7 +215,8 @@ class APIVersionWriter(TemplateFileWriter):
                    name=self._name,
                    header=self.header_content,
                    version_string=self._api_version_string,
-                   package_prefix=self._package_prefix)
+                   package_prefix=self._package_prefix,
+                   library_version=self.library_version)
 
     def _extract_override_content(self, name):
         """
