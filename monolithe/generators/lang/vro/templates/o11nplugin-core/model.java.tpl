@@ -86,10 +86,13 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         return super.getRestName();
     }
 
+    {%- set id_attribute_already_defined = {} %}{% for attribute in specification.attributes %}{% if attribute.local_name == "id" %}{% set _ = id_attribute_already_defined.update({'enabled' : True}) %}{% endif %}{% endfor %}
+    {%- if not id_attribute_already_defined %}
     @VsoProperty(displayName = "Id", readOnly = false)
     public String getId() {
         return super.getId();
     }
+    {% endif -%}
 
     @VsoProperty(displayName = "ParentId", readOnly = false)
     public String getParentId() {
