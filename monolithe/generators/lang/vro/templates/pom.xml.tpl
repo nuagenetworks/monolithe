@@ -10,7 +10,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vco.version>6.0.3</vco.version>
-        <build.number>1</build.number>
     </properties>
 
     <repositories>
