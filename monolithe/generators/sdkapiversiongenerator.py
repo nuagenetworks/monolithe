@@ -27,7 +27,7 @@
 
 from builtins import object
 
-from monolithe.generators.managers import APIVersionManager
+from monolithe.generators.managers import APIVersionManager, DocumentationManager
 
 
 class SDKAPIVersionGenerator(object):
@@ -46,3 +46,5 @@ class SDKAPIVersionGenerator(object):
         for info in specification_info:
             manager = APIVersionManager(monolithe_config=self.monolithe_config)
             manager.execute(specifications=info["specifications"], api_info=info["api"])
+            doc_manager = DocumentationManager(monolithe_config=self.monolithe_config)
+            doc_manager.execute(info["specifications"], info["api"])

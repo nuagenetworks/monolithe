@@ -135,11 +135,6 @@ class Generator(object):
             else:
                 shutil.copy2(s, d)
 
-    def generate_documentation(self):
-        """
-        """
-        pass
-
     # Utilities
     def _resolve_parent_apis(self, specifications):
         """
