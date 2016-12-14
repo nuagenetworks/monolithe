@@ -25,9 +25,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ['MainManager', 'VanillaManager', 'APIVersionManager', 'CLIManager']
+__all__ = ['MainManager', 'VanillaManager', 'APIVersionManager', 'DocumentationManager', 'CLIManager']
 
 from .mainmanager import MainManager
 from .vanillamanager import VanillaManager
 from .apiversionmanager import APIVersionManager
+from .documentationmanager import DocumentationManager
 from .climanager import CLIManager
