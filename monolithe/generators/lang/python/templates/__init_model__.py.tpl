@@ -16,7 +16,7 @@ def __setup_bambou():
     default_attrs = pkg_resources.resource_filename(__name__, '/resources/attrs_defaults.ini')
     BambouConfig.set_default_values_config_file(default_attrs)
 
-    {% for filename, classname in filenames.iteritems()|sort %}NURESTModelController.register_model({{ classname }})
+    {% for filename, classname in filenames.items()|sort %}NURESTModelController.register_model({{ classname }})
     {% endfor %}
 
 __setup_bambou()

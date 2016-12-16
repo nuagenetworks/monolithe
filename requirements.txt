@@ -1,5 +1,5 @@
 requests
-future==0.15.2
+future
 jinja2
 colorama
 unittest2
