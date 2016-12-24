@@ -42,8 +42,15 @@ type {{specification.entity_name}} struct {
 func New{{specification.entity_name}}() *{{specification.entity_name}} {
 
     return &{{specification.entity_name}}{
-        {% for attribute, value in attribute_defaults.iteritems() -%}
-        {{attribute}}: {{value}},
+        {% for attribute in specification.attributes -%}
+        {% set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
+        {% if attribute.default_value and attribute.local_type != "list" -%}
+        {% if attribute.local_type == "string" -%}
+        {{ field_name }}: "{{attribute.default_value}}",
+        {% else -%}
+        {{ field_name }}: {{attribute.default_value}},
+        {% endif -%}
+        {% endif -%}
         {% endfor -%}
     }
 }
