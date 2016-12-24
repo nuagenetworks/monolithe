@@ -15,8 +15,18 @@ var {{specification.entity_name}}Identity = bambou.Identity {
 type {{specification.entity_name_plural}}List []*{{specification.entity_name}}
 
 // {{specification.entity_name_plural}}Ancestor is the interface of an ancestor of a {{specification.entity_name}} must implement.
+// An Ancestor is defined as an entity that has {{specification.entity_name}} as a descendant.
+// An Ancestor can get a list of its child {{specification.entity_name_plural}}, but not necessarily create one.
 type {{specification.entity_name_plural}}Ancestor interface {
     {{specification.entity_name_plural}}(*bambou.FetchingInfo) ({{specification.entity_name_plural}}List, *bambou.Error)
+}
+
+// {{specification.entity_name_plural}}Parent is the interface of a parent of a {{specification.entity_name}} must implement.
+// A Parent is defined as an entity that has {{specification.entity_name}} as a child.
+// A Parent is an Ancestor which can create a {{specification.entity_name}}.
+type {{specification.entity_name_plural}}Parent interface {
+    {{specification.entity_name_plural}}Ancestor
+    Create{{specification.entity_name}}(*{{ specification.entity_name }}) (*bambou.Error)
 }
 {%- endif %}
 
