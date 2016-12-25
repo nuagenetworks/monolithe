@@ -60,6 +60,12 @@ func New{{specification.entity_name}}() *{{specification.entity_name}} {
         {% else -%}
         {{ field_name }}: {{attribute.default_value}},
         {% endif -%}
+        {% elif attribute.local_type != "list" -%}
+        {% for def_attribute, def_value in attribute_defaults.iteritems() -%}
+        {% if def_attribute == field_name -%}
+        {{ def_attribute }}: {{ def_value }}, 
+        {% endif -%}
+        {% endfor -%}
         {% endif -%}
         {% endfor -%}
     }
