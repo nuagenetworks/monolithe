@@ -12,6 +12,8 @@
 </param>
 <param name="notificationsEnabled" type="boolean">
 </param>
+<param name="useJmsForNotifications" type="boolean">
+</param>
 </input><output><param name='session' type='VSPK:Session' >
 </param>
 </output><workflow-item name='item0' type='end' end-mode='0' >
@@ -21,6 +23,7 @@
 <display-name><![CDATA[Scriptable task]]></display-name>
 <script encoded='false'><![CDATA[session = new VSPKSession(username, password, enterprise, apiUrl);
 session.notificationsEnabled = notificationsEnabled;
+session.useJmsForNotifications = useJmsForNotifications;
 session.start();
 
 VSPKSessionManager.addSession(session);]]></script>
@@ -29,6 +32,7 @@ VSPKSessionManager.addSession(session);]]></script>
 <bind name='password' type='SecureString' export-name="password" ></bind>
 <bind name='enterprise' type='string' export-name="enterprise" ></bind>
 <bind name="notificationsEnabled" type="boolean" export-name="notificationsEnabled"></bind>
+<bind name="useJmsForNotifications" type="boolean" export-name="useJmsForNotifications"></bind>
 </in-binding><out-binding><bind name='session' type='VSPK:Session' export-name="session" ></bind>
 </out-binding><position x='204.5' y='55.40909090909091'/>
 </workflow-item>
@@ -42,6 +46,9 @@ VSPKSessionManager.addSession(session);]]></script>
 <p-param name="enterprise"><desc><![CDATA[enterprise]]></desc>
 </p-param>
 <p-param name="notificationsEnabled"><desc><![CDATA[notificationsEnabled]]></desc>
+<p-qual kind="static" name="defaultValue" type="boolean"><![CDATA[true]]></p-qual>
+</p-param>
+<p-param name="useJmsForNotifications"><desc><![CDATA[useJmsForNotifications]]></desc>
 <p-qual kind="static" name="defaultValue" type="boolean"><![CDATA[true]]></p-qual>
 </p-param>
 </presentation></workflow>
