@@ -59,6 +59,14 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         super.setNotificationsEnabled(notificationsEnabled);
     }
 
+    @VsoProperty(displayName = "useJmsForNotifications")
+    public boolean getUseJmsForNotifications() {
+        return super.getUseJmsForNotifications();
+    }
+    public void setUseJmsForNotifications(boolean useJmsForNotifications) {
+        super.setUseJmsForNotifications(useJmsForNotifications);
+    }
+
     @VsoProperty(displayName = "Id", readOnly = true)
     public String getId() {
         return super.getId();
