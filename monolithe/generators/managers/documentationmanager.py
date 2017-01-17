@@ -25,28 +25,22 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import unicode_literals
-
-from builtins import object
-
-from monolithe.generators.managers import APIVersionManager, DocumentationManager
+from .manager import Manager
 
 
-class SDKAPIVersionGenerator(object):
-    """ Generate SDK
-
+class DocumentationManager(Manager):
     """
+    """
+
     def __init__(self, monolithe_config):
         """
         """
-        self.monolithe_config = monolithe_config
-        self.repository_manager = None
+        super(DocumentationManager, self).__init__(monolithe_config=monolithe_config, target_name='DocumentationWriter')
 
-    def generate(self, specification_info):
+    def execute(self, specifications, api_info):
         """
         """
-        for info in specification_info:
-            manager = APIVersionManager(monolithe_config=self.monolithe_config)
-            manager.execute(specifications=info["specifications"], api_info=info["api"])
-            doc_manager = DocumentationManager(monolithe_config=self.monolithe_config)
-            doc_manager.execute(info["specifications"], info["api"])
+        klass = self.get_managed_class()
+        if klass:
+            writer = klass(monolithe_config=self.monolithe_config, api_info=api_info)
+            writer.perform(specifications=specifications)

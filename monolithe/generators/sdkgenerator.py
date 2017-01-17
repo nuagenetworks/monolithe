@@ -25,6 +25,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import unicode_literals
+
 import os
 import shutil
 
@@ -90,20 +92,3 @@ class SDKGenerator(Generator):
 
         self.cleanup()
         Printer.success("%s generation complete and available in \"%s/%s\"" % (name, output, self.monolithe_config.language))
-
-    def generate_documentation(self):
-        """
-        """
-        name = self.monolithe_config.get_option("name", "transformer")
-        output = self.monolithe_config.get_option("output", "transformer")
-        doc_output = self.monolithe_config.get_option("doc_output", "transformer")
-
-        input_path = os.path.join(output, self.monolithe_config.language, name)
-        output_path = os.path.join(doc_output, self.monolithe_config.language)
-
-        if self.monolithe_config.language == 'python':
-            Printer.log("generating documentation...")
-            os.system("pdoc --overwrite --html --html-dir '%s' '%s' >/dev/null 2>&1" % (output_path, input_path))
-            Printer.success("%s documentation generation complete and available in \"%s\"" % (name, output_path))
-        else:
-            Printer.warn("no documentation generator for this language. ignoring")

@@ -25,6 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import unicode_literals
 from monolithe.lib import SDKUtils
 from monolithe.generators.lib import TemplateFileWriter
 
@@ -61,6 +62,7 @@ class PackageWriter(TemplateFileWriter):
         self._write_root_init()
         self._write_utils()
         self._write_manifest(apiversions)
+        self._write_documentation(apiversions)
 
     def _write_setup(self):
         """
@@ -77,6 +79,16 @@ class PackageWriter(TemplateFileWriter):
                    cli_name=self._cli_name,
                    copyright=self._copyright,
                    header=self.header_content)
+
+    def _write_documentation(self, apiversions):
+        destination = "%s/doc" % self.output_directory
+        self.write(
+            destination=destination,
+            filename="index.rst",
+            template_name="index.rst.tpl",
+            apiversions=[SDKUtils.get_string_version(version) for version in apiversions]
+        )
+
 
     def _write_manifest(self, apiversions):
         """
