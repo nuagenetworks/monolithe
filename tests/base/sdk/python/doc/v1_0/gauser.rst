@@ -38,7 +38,7 @@ Parents
 --------
 
 
-- :ref:`garoot.GARoot<garoot>`
-
 - :ref:`gatask.GATask<gatask>`
+
+- :ref:`garoot.GARoot<garoot>`
 
