@@ -23,9 +23,9 @@ Parents
 --------
 
 
-- :ref:`gatask.GATask<gatask>`
-
 - :ref:`galist.GAList<galist>`
+
+- :ref:`gatask.GATask<gatask>`
 
 - :ref:`gauser.GAUser<gauser>`
 
