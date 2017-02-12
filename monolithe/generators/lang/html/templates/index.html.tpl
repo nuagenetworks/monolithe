@@ -26,14 +26,15 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Components <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            {% set package_name = None %}
-                            {% for specification in specifications|sort(attribute='package') %}
-                                {% if package_name != specification.package %}
-                                    {% set package_name = specification.package %}
+                            {%- set package_name = [None] %}
+                            {%- for specification in specifications|sort(attribute='package') %}
+                                {%- if package_name[0] != specification.package %}
+                                    {%- set _ = package_name.pop() %}
+                                    {%- set _ = package_name.append(specification.package) %}
                                     <li class="divider"></li>
-                                    <li><a data-id="section-{{ package_name| replace(" ", "_")}}" href="#section-{{ package_name | replace(" ", "_")}}">{{ package_name }}</a></li>
-                                {% endif %}
-                            {% endfor %}
+                                    <li><a data-id="section-{{ package_name[0]| replace(" ", "_")}}" href="#section-{{ package_name[0] | replace(" ", "_")}}">{{ package_name[0] }}</a></li>
+                                {%- endif %}
+                            {%- endfor %}
                         </ul>
                     </li>
                 </ul>
@@ -48,27 +49,29 @@
     </nav>
 
     <div class="container" id="content">
-        {% set package_name = None %}
-        {% for specification in specifications|sort(attribute='package') %}
-
-            {% if package_name != specification.package %}
-                {% if package_name %}
+        {%- set package_name = [None] %}
+        {%- for specification in specifications|sort(attribute='package') %}
+            {%- if package_name[0] != specification.package %}
+                {%- if package_name[0] %}
                     </section>
                 {% endif %}
-                {% set package_name = specification.package %}
-                <section id="section-{{ package_name | replace(" ", "_")}}">
-                <h3>{{ package_name }}</h3>
-            {% endif %}
-
+                {%- set _ = package_name.pop() %}
+                {%- set _ = package_name.append(specification.package) %}
+                <section id="section-{{ package_name[0] | replace(" ", "_")}}">
+                <h3>{{ package_name[0] }}</h3>
+            {%- endif %}
             <div class="row bordered-row">
                 <div class="col-xs-12">
                     <a class="filterable" data-filter-keyword="{{ specification.resource_name }}" id="{{ specification.resource_name }}" href="{{ specification.rest_name }}.html" title="API reference for {{ specification.rest_name }}">{{ specification.resource_name }} </a>
                     <br>
-                    <small>{{ specification.description }}</small>
+                    {%- if specification.description %}
+                        <small>{{ specification.description }}</small>
+                    {%- else %}
+                        <small>No description available</small>
+                    {%- endif %}
                 </div>
             </div>
-        {% endfor %}
-
+        {%- endfor %}
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
