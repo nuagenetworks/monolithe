@@ -33,75 +33,48 @@ from builtins import object
 import json
 import os
 import configparser
+import git
 
 from .specification import Specification
 from monolithe.lib import apply_extension
+from monolithe import MonolitheConfig
 
 
 class FolderManager (object):
-    """ RepositoryManager is an object that allows to manipulate the API specification repository
-    """
 
-    def __init__(self, folder, monolithe_config):
-        """
-        """
-        self.monolithe_config = monolithe_config
-        self._folder = folder
-
-    @property
-    def folder(self):
-        return self._folder
+    def __init__(self, folder, config_path=None):
+        self.folder = folder
+        self.monolithe_config = self.get_monolithe_config(config_path)
 
     def get_available_specifications(self):
-        """ Returns the list of available specification files
-
-            Args:
-                branch: the branch where to find files (default: "master")
-
-            Returns:
-                list of all available specification files in the given branch
-        """
         ret = []
-        for filename in os.listdir(self._folder):
+        for filename in os.listdir(self.folder):
             if os.path.splitext(filename)[1] != ".spec" or filename.startswith("@"):
                 continue
             ret.append(filename)
         return ret
 
     def get_api_info(self):
-        """
-        """
-        with open("%s/api.info" % self._folder, "r") as f:
+        with open("%s/api.info" % self.folder, "r") as f:
             try:
                 return json.loads(f.read())
             except Exception as e:
                 raise Exception("could not parse api.info", e)
 
-    def get_monolithe_config(self, branch="master"):
-        """
-        """
-        with open("%s/monolithe.ini" % self._folder, "r") as f:
-            try:
-                monolithe_config_parser = configparser.ConfigParser()
-                monolithe_config_parser.readfp(f)
-                return monolithe_config_parser
-
-            except Exception as e:
-                raise Exception("could not parse monolithe.ini", e)
+    def get_monolithe_config(self, config_path):
+        if config_path is None:
+            config_path = "%s/monolithe.ini" % self.folder
+        return MonolitheConfig(config_path)
 
     def get_all_specifications(self):
-        """
-        """
         specifications = {}
         for name in self.get_available_specifications():
             specifications[name.replace(".spec", "")] = self.get_specification(name)
         return specifications
 
     def get_specification_data(self, name):
-        """
-        """
         data = {}
-        with open("%s/%s" % (self._folder, name), "r") as f:
+        with open("%s/%s" % (self.folder, name), "r") as f:
             try:
                 data = json.loads(f.read())
                 if "model" in data and "extends" in data["model"]:
@@ -112,14 +85,28 @@ class FolderManager (object):
         return data
 
     def get_specification(self, name):
-        """
-        """
         return Specification(filename=name, data=self.get_specification_data(name), monolithe_config=self.monolithe_config)
 
     def get_specifications(self, names, callback=None):
-        """
-        """
         specifications = []
         for name in names:
             specifications.append(Specification(filename=name, data=self.get_specification_data(name=name)))
         return specifications
+
+
+class RepositoryManager(FolderManager):
+
+    def __init__(self, folder, config_path=None):
+        try:
+            self.repo = git.repo.Repo(folder)
+        except git.InvalidGitRepositoryError:
+            raise Exception(
+                "%s is not a git repository. Cannot handle branches" % folder)
+        super(RepositoryManager, self).__init__(folder, config_path=config_path)
+
+    def switch_branch(self, name):
+        for branch in self.repo.branches:
+            if branch.name == name:
+                branch.checkout()
+                return
+        raise Exception('No branch %s found' % name)

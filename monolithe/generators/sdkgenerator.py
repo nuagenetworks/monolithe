@@ -37,14 +37,10 @@ from .sdkapiversiongenerator import SDKAPIVersionGenerator
 
 
 class SDKGenerator(Generator):
-    """
-    """
 
     def cleanup(self):
-        """
-        """
-        output = self.monolithe_config.get_option("output", "transformer")
-        language = self.monolithe_config.language
+        output = self.config.get_option("output", "transformer")
+        language = self.config.language
 
         overrides_path = "%s/%s/__overrides" % (output, language)
         if os.path.exists(overrides_path):
@@ -59,22 +55,20 @@ class SDKGenerator(Generator):
             os.remove(code_header_path)
 
     def generate(self, specification_info):
-        """
-        """
-        user_vanilla = self.monolithe_config.get_option("user_vanilla", "transformer")
-        output = self.monolithe_config.get_option("output", "transformer")
-        name = self.monolithe_config.get_option("name", "transformer")
-        lang = self.monolithe_config.language
+        user_vanilla = self.config.get_option("user_vanilla", "transformer")
+        output = self.config.get_option("output", "transformer")
+        name = self.config.get_option("name", "transformer")
+        lang = self.config.language
 
         if not os.path.exists(os.path.join(output, lang)):
             os.makedirs(os.path.join(output, lang))
 
-        vanilla_manager = VanillaManager(monolithe_config=self.monolithe_config)
+        vanilla_manager = VanillaManager(monolithe_config=self.config)
         vanilla_manager.execute(output_path="%s/%s" % (output, lang))
 
         self.install_user_vanilla(user_vanilla_path=user_vanilla, output_path="%s/%s" % (output, lang))
 
-        version_generator = SDKAPIVersionGenerator(monolithe_config=self.monolithe_config)
+        version_generator = SDKAPIVersionGenerator(self.config)
         apiversions = []
 
         for info in specification_info:
@@ -84,11 +78,11 @@ class SDKGenerator(Generator):
         version_generator.generate(specification_info=specification_info)
 
         Printer.log("assembling...")
-        manager = MainManager(monolithe_config=self.monolithe_config)
+        manager = MainManager(monolithe_config=self.config)
         manager.execute(apiversions=apiversions)
 
-        cli_manager = CLIManager(monolithe_config=self.monolithe_config)
+        cli_manager = CLIManager(monolithe_config=self.config)
         cli_manager.execute()
 
         self.cleanup()
-        Printer.success("%s generation complete and available in \"%s/%s\"" % (name, output, self.monolithe_config.language))
+        Printer.success("%s generation complete and available in \"%s/%s\"" % (name, output, self.config.language))
