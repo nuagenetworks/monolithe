@@ -41,14 +41,14 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
    }
 
    public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, String[] certificateFilePairPaths) {
-       this();
+      this();
  
-       setUsername(username);
-       setEnterprise(enterprise);
-       setApiUrl(apiUrl);
-       setApiPrefix("nuage/api");
-       setVersion(VERSION);
-       getClientTemplate().prepareSSLAuthentication(certificateFilePairPaths);
+      setUsername(username);
+      setEnterprise(enterprise);
+      setApiUrl(apiUrl);
+      setApiPrefix("nuage/api");
+      setVersion(VERSION);
+      getClientTemplate().prepareSSLAuthentication(certificateFilePairPaths);
    }
  
    public double getVersion() {
