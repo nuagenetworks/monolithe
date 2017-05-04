@@ -37,9 +37,20 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       setApiUrl(apiUrl);
       setApiPrefix("{{ api_prefix }}");
       setVersion(VERSION);
-      setCertificate(certificate);
+      getClientTemplate().prepareSSLAuthentication(new String[] {});
    }
 
+   public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, String[] certificateFilePairPaths) {
+       this();
+ 
+       setUsername(username);
+       setEnterprise(enterprise);
+       setApiUrl(apiUrl);
+       setApiPrefix("nuage/api");
+       setVersion(VERSION);
+       getClientTemplate().prepareSSLAuthentication(certificateFilePairPaths);
+   }
+ 
    public double getVersion() {
       return VERSION;
    }
