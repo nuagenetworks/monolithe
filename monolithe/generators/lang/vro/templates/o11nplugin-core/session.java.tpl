@@ -52,7 +52,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     }
 
     @VsoConstructor
-    public Session(String username, String enterprise, String apiUrl, String[] certificateFilePairPaths) {
+    public Session(String username, String enterprise, String apiUrl, String[] certificateContentPair) {
         this();
  
         setUsername(username);
@@ -60,7 +60,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setApiUrl(apiUrl);
         setApiPrefix("nuage/api");
         setVersion(VERSION);
-        getClientTemplate().prepareSSLAuthentication(certificateFilePairPaths);
+        getClientTemplate().prepareSSLAuthentication(certificateContentPair);
     }
 
     @VsoProperty(displayName = "notificationsEnabled")
