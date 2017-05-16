@@ -30,8 +30,13 @@ public class SessionManager extends BaseSessionManager<Session> {
     }
 
     @Override
-    protected Session createSession(String username, String password, String enterprise, String apiUrl, String certificate) {
-        return new Session(username, password, enterprise, apiUrl, certificate);
+    protected Session createSession(String username, String password, String enterprise, String apiUrl) {
+        return new Session(username, password, enterprise, apiUrl);
+    }
+
+    @Override
+    protected Session createSession(String username, String enterprise, String apiUrl, String[] certificateFilePairPaths) {
+        return new Session(username, enterprise, apiUrl, certificateFilePairPaths);
     }
 
     @VsoMethod
