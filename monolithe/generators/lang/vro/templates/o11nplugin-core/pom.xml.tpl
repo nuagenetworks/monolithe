@@ -28,7 +28,7 @@
         <dependency>
             <groupId>net.nuagenetworks</groupId>
             <artifactId>vro-plugin-base</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
