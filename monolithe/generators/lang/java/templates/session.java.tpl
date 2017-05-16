@@ -25,12 +25,8 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
    }
 
    public {{ class_prefix }}{{ product_accronym }}Session(String username, String password, String enterprise, String apiUrl) {
-      this(username, password, enterprise, apiUrl, null);
-   }
-
-   public {{ class_prefix }}{{ product_accronym }}Session(String username, String password, String enterprise, String apiUrl, String certificate) {
       this();
-
+ 
       setUsername(username);
       setPassword(password);
       setEnterprise(enterprise);
