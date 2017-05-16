@@ -35,20 +35,27 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
 
     @VsoConstructor
     public Session(String username, String password, String enterprise, String apiUrl) {
-        this(username, password, enterprise, apiUrl, null);
+        this();
+ 
+        setUsername(username);
+        setPassword(password);
+        setEnterprise(enterprise);
+        setApiUrl(apiUrl);
+        setApiPrefix("nuage/api");
+        setVersion(VERSION);
+        getClientTemplate().prepareSSLAuthentication(new String[] {});
     }
 
     @VsoConstructor
     public Session(String username, String password, String enterprise, String apiUrl, String certificate) {
         this();
-
+ 
         setUsername(username);
-        setPassword(password);
         setEnterprise(enterprise);
         setApiUrl(apiUrl);
-        setApiPrefix("{{ api_prefix }}");
+        setApiPrefix("nuage/api");
         setVersion(VERSION);
-        setCertificate(certificate);
+        getClientTemplate().prepareSSLAuthentication(certificateFilePairPaths);
     }
 
     @VsoProperty(displayName = "notificationsEnabled")
