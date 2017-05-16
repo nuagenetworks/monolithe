@@ -50,7 +50,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     }
 
     @VsoConstructor
-    public Session(String username, String password, String enterprise, String apiUrl, String certificate) {
+    public Session(String username, String enterprise, String apiUrl, String[] certificateFilePairPaths) {
         this();
  
         setUsername(username);
