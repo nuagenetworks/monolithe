@@ -17,7 +17,10 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoRelation;
                @VsoRelation(inventoryChildren = true, name = Constants.{{ root_entity.entity_name_plural | upper }}, type = Constants.{{ root_entity.entity_name | upper }}) })
 @VsoObject(create = false, strict = true)
 public class Session extends BaseSession<{{ root_entity.entity_name }}> {
-   public final static double VERSION = {{ version }};
+    public final static double VERSION = {{ version }};
+
+    @Autowired
+    private RestClientTemplate restClientTemplate;
 
     @VsoConstructor
     public Session() {
@@ -89,6 +92,10 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         return VERSION;
     }
 
+    public RestClientTemplate getClientTemplate() {
+        return restClientTemplate;
+    }
+   
     @VsoMethod
     public {{ root_api|capitalize }} get{{ root_api|capitalize }}() {
         return super.getRootObject();
