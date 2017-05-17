@@ -20,11 +20,8 @@
   </workflow-item>
   <workflow-item name="item1" out-name="item0" type="task">
     <display-name><![CDATA[Scriptable task]]></display-name>
-    <script encoded="false"><![CDATA[if (certificate.length > 0 && privateKey) {
-   var certificatePair = new Array();
-   certificatePair.push(certificate);
-   certificatePair.push(privateKey);
-   session = new VSPKSession(username, enterprise, apiUrl, certificatePair);
+    <script encoded="false"><![CDATA[if (certificate && privateKey) {
+   session = new VSPKSession(username, enterprise, apiUrl, certificate, privateKey);
 } else if (password) {
    session = new VSPKSession(username, password, enterprise, apiUrl);
 } else {
