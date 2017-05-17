@@ -35,7 +35,7 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       setApiUrl(apiUrl);
       setApiPrefix("{{ api_prefix }}");
       setVersion(VERSION);
-      prepareSSLAuthentication(null, null);
+      prepareSSLAuthentication();
    }
 
    public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, String certificateContent, String privateKeyContent) {

@@ -44,7 +44,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setApiUrl(apiUrl);
         setApiPrefix("nuage/api");
         setVersion(VERSION);
-        prepareSSLAuthentication(null, null);
+        prepareSSLAuthentication();
     }
 
     @VsoConstructor
