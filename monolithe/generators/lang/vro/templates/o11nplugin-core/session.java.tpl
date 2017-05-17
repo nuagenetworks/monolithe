@@ -44,7 +44,8 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setApiUrl(apiUrl);
         setApiPrefix("nuage/api");
         setVersion(VERSION);
-        prepareSSLAuthentication();
+        setCertificate(null);
+        setPrivateKey(null);
     }
 
     @VsoConstructor
@@ -56,7 +57,8 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setApiUrl(apiUrl);
         setApiPrefix("nuage/api");
         setVersion(VERSION);
-        prepareSSLAuthentication(certificateContent, privateKeyContent);
+        setCertificate(certificateContent);
+        setPrivateKey(privateKey);
     }
 
     @VsoProperty(displayName = "notificationsEnabled")

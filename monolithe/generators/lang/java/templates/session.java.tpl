@@ -35,7 +35,8 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       setApiUrl(apiUrl);
       setApiPrefix("{{ api_prefix }}");
       setVersion(VERSION);
-      prepareSSLAuthentication();
+      setCertificate(null);
+      setPrivateKey(null);
    }
 
    public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, String certificateContent, String privateKeyContent) {
@@ -46,20 +47,10 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       setApiUrl(apiUrl);
       setApiPrefix("nuage/api");
       setVersion(VERSION);
-      prepareSSLAuthentication(certificateContent, privateKeyContent);
+      setCertificate(certificateContent);
+      setPrivateKey(privateKeyContent);
    }
 
-   public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, File pathToCertificatePEMFile, File pathToPrivateKeyPEMFile) {
-      this();
- 
-      setUsername(username);
-      setEnterprise(enterprise);
-      setApiUrl(apiUrl);
-      setApiPrefix("nuage/api");
-      setVersion(VERSION);
-      prepareSSLAuthentication(pathToCertificatePEMFile, pathToPrivateKeyPEMFile);
-   }
- 
    public double getVersion() {
       return VERSION;
    }
