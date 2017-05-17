@@ -35,32 +35,21 @@ import io
 
 
 class MonolitheConfig(object):
-    """
-    """
-
-    @classmethod
-    def config_with_path(cls, path):
-        """
-        """
-        return MonolitheConfig(path)
 
     def __init__(self, path=None):
-        """
-        """
         self.path = path
         self.config = None
         self.mapping = None
         self.language = 'python'
 
         if self.path:
-            self._check_path_exists(path)
+            if not os.path.exists(path):
+                raise Exception("Could not find path %s" % path)
             config = ConfigParser()
             config.read(path)
             self.set_config(config)
 
     def copy(self):
-        """
-        """
         # duplicate the config parser
         conf_data = io.StringIO()
         self.config.write(conf_data)
@@ -74,15 +63,7 @@ class MonolitheConfig(object):
 
         return monolithe_config_copy
 
-    def _check_path_exists(self, path):
-        """
-        """
-        if not os.path.exists(path):
-            raise Exception("Could not find path %s" % path)
-
     def set_config(self, config):
-        """
-        """
         self.config = config
 
         # vanilla
@@ -101,19 +82,15 @@ class MonolitheConfig(object):
         self.mapping.read(mapping_path)
 
     def get_option(self, option, section="monolithe"):
-        """
-        """
         return self.config.get(section, option)
 
     def set_option(self, option, value, section="monolithe"):
-        """
-        """
         return self.config.set(section, option, value)
 
     def map_attribute(self, rest_name, attribute_name):
-        """
-        """
-        if self.mapping is None or not self.mapping.has_section(rest_name) or not self.mapping.has_option(rest_name, attribute_name):
+        if self.mapping is None \
+                or not self.mapping.has_section(rest_name) \
+                or not self.mapping.has_option(rest_name, attribute_name):
             return attribute_name
 
         return self.mapping.get(rest_name, attribute_name)

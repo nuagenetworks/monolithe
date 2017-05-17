@@ -40,7 +40,6 @@ class SDKAPIVersionGenerator(object):
         """
         """
         self.monolithe_config = monolithe_config
-        self.repository_manager = None
 
     def generate(self, specification_info):
         """

@@ -29,8 +29,7 @@ from __future__ import unicode_literals
 
 __all__ = ["RepositoryManager", "FolderManager", "Specification", "SpecificationAttribute", "SpecificationAPI"]
 
-from .repositorymanager import RepositoryManager
 from .specification import Specification
 from .specification_attribute import SpecificationAttribute
 from .specification_api import SpecificationAPI
-from .foldermanager import FolderManager
+from .directory_manager import FolderManager, RepositoryManager

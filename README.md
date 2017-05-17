@@ -33,51 +33,25 @@ Install Monolithe by running the following command:
 
 ## Command Line Interfaces Quick Reference
 
-`monogen` command will generate a sdk using specifications either from a local folder, or from a Github repository.
+`monogen` command will generate a sdk using specifications from a local folder. It also handles git repositories in case you want to generate an SDK from multiple branches of the same repository.
 
 ```
-usage: monogen [-h] [-g github_api_url] [-l login_login] [-t github_token]
-               [-o github_organization] [-r github_repository]
-               [-b [branches [branches ...]]] [-p path] [-f folder]
-               [-c config_path] [-d] [--vanilla-prefix VANILLA_PREFIX]
+usage: monogen [-h] [-b [branches [branches ...]]] -f folder [-c config_path]
+               [--vanilla-prefix VANILLA_PREFIX]
                [--generation-version GENERATION_VERSION] [-L LANGUAGE]
 
 Generates a SDK according from a specification set
 
 optional arguments:
-
   -h, --help            show this help message and exit
-  -g github_api_url, --github github_api_url
-                        The GitHub API URL. Can be given by setting the
-                        environment variable "MONOLITHE_GITHUB_API_URL"
-  -l login_login, --login login_login
-                        The GitHub Login (if set, you will be prompted for
-                        your password). Can be given by setting the
-                        environment variable "MONOLITHE_GITHUB_LOGIN"
-  -t github_token, --token github_token
-                        The GitHub Token (if set, --login will be ignored). To
-                        generate a token, go here
-                        https://github.com/settings/tokens. Can be given by
-                        setting the environment variable
-                        "$MONOLITHE_GITHUB_TOKEN"
-  -o github_organization, --organization github_organization
-                        The GitHub Organization. Can be given by setting the
-                        environment variable "MONOLITHE_GITHUB_ORGANIZATION"
-  -r github_repository, --repository github_repository
-                        The GitHub Repository. Can be given by setting the
-                        environment variable "MONOLITHE_GITHUB_REPOSITORY"
   -b [branches [branches ...]], --branches [branches [branches ...]]
                         The branches of the specifications to use to generate
                         the documentation (examples: "master 3.2")
-  -p path, --path path  The relative repository path of the specification
-                        folder. Can be given by setting the environment
-                        variable "MONOLITHE_GITHUB_REPOSITORY_PATH"
   -f folder, --folder folder
                         Path of the specifications folder. If set, all other
                         attributes will be ignored
   -c config_path, --config config_path
                         Path the monolithe configuration file
-  -d, --doc             generate documentation of the SDK
   --vanilla-prefix VANILLA_PREFIX
                         Prefix added to all vanilla path declared in the
                         monolithe configuration file

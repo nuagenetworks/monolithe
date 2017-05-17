@@ -5,6 +5,7 @@ import os
 from tests.functional import FunctionalTestCase
 from monolithe import MonolitheConfig
 from monolithe.generators import SDKGenerator
+from monolithe.specifications import FolderManager
 
 
 class SDKOutputTest(FunctionalTestCase):
@@ -17,10 +18,11 @@ class SDKOutputTest(FunctionalTestCase):
         """
         base_path = self.get_base_path()
 
-        monolithe_config = MonolitheConfig.config_with_path("%s/specifications/monolithe.ini" % base_path)
-        generator = SDKGenerator(monolithe_config=monolithe_config)
-        generator.initialize_folder_manager(folder="%s/specifications" % base_path)
-        generator.generate_from_folder()
+        directory_manager = FolderManager(
+            "%s/specifications" % base_path,
+            config_path="%s/specifications/monolithe.ini" % base_path)
+        generator = SDKGenerator(directory_manager, None)
+        generator.run()
 
     def tearDown(self):
         """
