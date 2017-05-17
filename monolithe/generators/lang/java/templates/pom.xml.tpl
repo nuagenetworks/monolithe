@@ -51,7 +51,7 @@
       <dependency>
          <groupId>net.nuagenetworks</groupId>
          <artifactId>bambou</artifactId>
-         <version>2.0.3-SNAPSHOT</version>
+         <version>2.0.3</version>
       </dependency>
    </dependencies>
 </project>
