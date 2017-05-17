@@ -5,7 +5,6 @@ package {{ package_name }};
 import net.nuagenetworks.bambou.RestException;
 import net.nuagenetworks.bambou.spring.SpringConfig;
 import net.nuagenetworks.vro.model.BaseSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import com.vmware.o11n.plugin.sdk.annotation.VsoConstructor;
 import com.vmware.o11n.plugin.sdk.annotation.VsoFinder;
@@ -58,7 +57,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setApiPrefix("nuage/api");
         setVersion(VERSION);
         setCertificate(certificateContent);
-        setPrivateKey(privateKey);
+        setPrivateKey(privateKeyContent);
     }
 
     @VsoProperty(displayName = "notificationsEnabled")
@@ -119,6 +118,16 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     @VsoProperty(displayName = "ApiPrefix", readOnly = false)
     public String getApiPrefix() {
         return super.getApiPrefix();
+    }
+
+    @VsoProperty(displayName = "Certificate", readOnly = false)
+    public String getCertificate() {
+        return super.getCertificate();
+    }
+
+    @VsoProperty(displayName = "PrivateKey", readOnly = false)
+    public String getPrivateKey() {
+        return super.getPrivateKey();
     }
 
     @VsoMethod
