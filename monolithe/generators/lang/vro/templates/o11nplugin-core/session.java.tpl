@@ -4,7 +4,6 @@ package {{ package_name }};
 
 import net.nuagenetworks.bambou.RestException;
 import net.nuagenetworks.bambou.spring.SpringConfig;
-import net.nuagenetworks.bambou.service.RestClientTemplate;
 import net.nuagenetworks.vro.model.BaseSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -20,9 +19,6 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoRelation;
 @VsoObject(create = false, strict = true)
 public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     public final static double VERSION = {{ version }};
-
-    @Autowired
-    private RestClientTemplate restClientTemplate;
 
     @VsoConstructor
     public Session() {
@@ -48,11 +44,11 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setApiUrl(apiUrl);
         setApiPrefix("nuage/api");
         setVersion(VERSION);
-        getClientTemplate().prepareSSLAuthentication(new String[] {});
+        prepareSSLAuthentication(null, null);
     }
 
     @VsoConstructor
-    public Session(String username, String enterprise, String apiUrl, String[] certificateContentPair) {
+    public Session(String username, String enterprise, String apiUrl, String certificateContent, String privateKeyContent) {
         this();
  
         setUsername(username);
@@ -60,7 +56,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         setApiUrl(apiUrl);
         setApiPrefix("nuage/api");
         setVersion(VERSION);
-        getClientTemplate().prepareSSLAuthentication(certificateContentPair);
+        prepareSSLAuthentication(certificateContent, privateKeyContent);
     }
 
     @VsoProperty(displayName = "notificationsEnabled")
@@ -94,10 +90,6 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
         return VERSION;
     }
 
-    public RestClientTemplate getClientTemplate() {
-        return restClientTemplate;
-    }
-   
     @VsoMethod
     public {{ root_api|capitalize }} get{{ root_api|capitalize }}() {
         return super.getRootObject();

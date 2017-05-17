@@ -35,10 +35,10 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       setApiUrl(apiUrl);
       setApiPrefix("{{ api_prefix }}");
       setVersion(VERSION);
-      getClientTemplate().prepareSSLAuthentication(new String[] {});
+      prepareSSLAuthentication(null, null);
    }
 
-   public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, String[] certificateContentPair) {
+   public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, String certificateContent, String privateKeyContent) {
       this();
  
       setUsername(username);
@@ -46,10 +46,10 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       setApiUrl(apiUrl);
       setApiPrefix("nuage/api");
       setVersion(VERSION);
-      getClientTemplate().prepareSSLAuthentication(certificateContentPair);
+      prepareSSLAuthentication(certificateContent, privateKeyContent);
    }
 
-   public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, File[] certificateFilePairPaths) {
+   public {{ class_prefix }}{{ product_accronym }}Session(String username, String enterprise, String apiUrl, File pathToCertificatePEMFile, File pathToPrivateKeyPEMFile) {
       this();
  
       setUsername(username);
@@ -57,7 +57,7 @@ public class {{ class_prefix }}{{ product_accronym }}Session extends RestSession
       setApiUrl(apiUrl);
       setApiPrefix("nuage/api");
       setVersion(VERSION);
-      getClientTemplate().prepareSSLAuthentication(certificateFilePairPaths);
+      prepareSSLAuthentication(pathToCertificatePEMFile, pathToPrivateKeyPEMFile);
    }
  
    public double getVersion() {
