@@ -17,7 +17,7 @@ import com.vmware.o11n.plugin.sdk.annotation.VsoRelation;
                @VsoRelation(inventoryChildren = true, name = Constants.{{ root_entity.entity_name_plural | upper }}, type = Constants.{{ root_entity.entity_name | upper }}) })
 @VsoObject(create = false, strict = true)
 public class Session extends BaseSession<{{ root_entity.entity_name }}> {
-   public final static double VERSION = {{ version }};
+    public final static double VERSION = {{ version }};
 
     @VsoConstructor
     public Session() {
@@ -35,20 +35,29 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
 
     @VsoConstructor
     public Session(String username, String password, String enterprise, String apiUrl) {
-        this(username, password, enterprise, apiUrl, null);
-    }
-
-    @VsoConstructor
-    public Session(String username, String password, String enterprise, String apiUrl, String certificate) {
         this();
-
+ 
         setUsername(username);
         setPassword(password);
         setEnterprise(enterprise);
         setApiUrl(apiUrl);
-        setApiPrefix("{{ api_prefix }}");
+        setApiPrefix("nuage/api");
         setVersion(VERSION);
-        setCertificate(certificate);
+        setCertificate(null);
+        setPrivateKey(null);
+    }
+
+    @VsoConstructor
+    public Session(String username, String enterprise, String apiUrl, String certificateContent, String privateKeyContent) {
+        this();
+ 
+        setUsername(username);
+        setEnterprise(enterprise);
+        setApiUrl(apiUrl);
+        setApiPrefix("nuage/api");
+        setVersion(VERSION);
+        setCertificate(certificateContent);
+        setPrivateKey(privateKeyContent);
     }
 
     @VsoProperty(displayName = "notificationsEnabled")
@@ -114,6 +123,11 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     @VsoProperty(displayName = "Certificate", readOnly = false)
     public String getCertificate() {
         return super.getCertificate();
+    }
+
+    @VsoProperty(displayName = "PrivateKey", readOnly = false)
+    public String getPrivateKey() {
+        return super.getPrivateKey();
     }
 
     @VsoMethod
