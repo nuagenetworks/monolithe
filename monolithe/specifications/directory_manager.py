@@ -109,4 +109,11 @@ class RepositoryManager(FolderManager):
             if branch.name == name:
                 branch.checkout()
                 return
-        raise Exception('No branch %s found' % name)
+        # At this point, no branch was found. We assume the ref is actually a
+        # tag or a commit. This is an undocumented feature, we expect users to
+        # use actual branches.
+        try:
+            self.repo.head.reference = self.repo.commit(name)
+            self.repo.head.reset(index=True, working_tree=True)
+        except:
+            raise Exception('No branch or reference %s found' % name)
