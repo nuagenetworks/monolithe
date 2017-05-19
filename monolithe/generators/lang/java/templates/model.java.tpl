@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 {% if specification.child_apis|length > 0 -%}   
-{% for api in specification.child_apis -%}
+{% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) -%}
 {% set child_spec = specification_set[api.rest_name] %}
 import {{ package_name }}.fetchers.{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher;
 {%- endfor %}
@@ -24,20 +24,20 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
 
    private static final long serialVersionUID = 1L;
 
-   {% for attribute in specification.attributes -%}
+   {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
    {% if attribute.type == "enum" or attribute.subtype == "enum" %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
    public enum {{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice }}{% if not loop.last %}, {% endif %}{% endfor %} };
    {%- endif %}
    {%- endfor %}
 
-   {% for attribute in specification.attributes %}
+   {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    @JsonProperty(value = "{{ attribute.name }}")
    protected {{ attribute.local_type }} {{ attribute.local_name }};
    {% endfor %}
 
    {% if specification.child_apis|length > 0 -%}
-   {% for api in specification.child_apis %}
+   {% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
    {%- set child_spec = specification_set[api.rest_name] %}
    @JsonIgnore
    private {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher {{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }};
@@ -53,14 +53,14 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
       {% endfor -%}
 
       {% if specification.child_apis|length > 0 -%}   
-      {% for api in specification.child_apis %}
+      {% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
       {%- set child_spec = specification_set[api.rest_name] %}
       {{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }} = new {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher(this);
       {% endfor %}
       {%- endif %}
    }
 
-   {% for attribute in specification.attributes %}
+   {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
    @JsonIgnore
    public {% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} get{{ field_name }}() {
@@ -74,7 +74,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {% endfor %}
 
    {% if specification.child_apis|length > 0 -%}
-   {% for api in specification.child_apis %}
+   {% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
    {%- set child_spec = specification_set[api.rest_name] %}
    @JsonIgnore
    public {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher get{{ child_spec.entity_name_plural }}() {
@@ -84,7 +84,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {%- endif %}
 
    public String toString() {
-      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
+      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
               + lastUpdatedDate + ", owner=" + owner {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
    }
    
