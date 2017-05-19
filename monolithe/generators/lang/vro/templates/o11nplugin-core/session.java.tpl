@@ -144,7 +144,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     protected void onEntityCreated(String entityType, String entityId, String entityParentType, String entityParentId) {
         SessionManager sessionManager = SessionManager.getInstance();
 
-        {%- for specification in specifications %}
+        {%- for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
         if (entityType.equals(Constants.{{ specification.entity_name | upper }}_ENTITY_TYPE)) {
             notifyElementInvalidate(sessionManager, Constants.{{ specification.entity_name_plural | upper }}_FETCHER, entityParentId);
             return;
@@ -156,7 +156,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     protected void onEntityUpdated(String entityType, String entityId, String entityParentType, String entityParentId) {
         SessionManager sessionManager = SessionManager.getInstance();
 
-        {%- for specification in specifications %}
+        {%- for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
         if (entityType.equals(Constants.{{ specification.entity_name | upper }}_ENTITY_TYPE)) {
             sessionManager.notifyElementUpdated(Constants.{{ specification.entity_name | upper }}, entityId);
             return;
@@ -168,7 +168,7 @@ public class Session extends BaseSession<{{ root_entity.entity_name }}> {
     protected void onEntityDeleted(String entityType, String entityId, String entityParentType, String entityParentId) {
         SessionManager sessionManager = SessionManager.getInstance();
 
-        {%- for specification in specifications %}
+        {%- for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
         if (entityType.equals(Constants.{{ specification.entity_name | upper }}_ENTITY_TYPE)) {
             sessionManager.notifyElementDeleted(Constants.{{ specification.entity_name | upper }}, entityId);
             return;

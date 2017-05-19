@@ -73,7 +73,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         return (Session) super.getSession();
     }
 
-    {%- set name_attribute_already_defined = {} %}{% for attribute in specification.attributes %}{% if attribute.local_name == "name" %}{% set _ = name_attribute_already_defined.update({'enabled' : True}) %}{% endif %}{% endfor %}
+    {%- set name_attribute_already_defined = {} %}{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}{% if attribute.local_name == "name" %}{% set _ = name_attribute_already_defined.update({'enabled' : True}) %}{% endif %}{% endfor %}
     {%- if not name_attribute_already_defined %}
     @VsoProperty(displayName = "Name", readOnly = false)
     public String getName() {
@@ -86,7 +86,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         return super.getRestName();
     }
 
-    {%- set id_attribute_already_defined = {} %}{% for attribute in specification.attributes %}{% if attribute.local_name == "id" %}{% set _ = id_attribute_already_defined.update({'enabled' : True}) %}{% endif %}{% endfor %}
+    {%- set id_attribute_already_defined = {} %}{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}{% if attribute.local_name == "id" %}{% set _ = id_attribute_already_defined.update({'enabled' : True}) %}{% endif %}{% endfor %}
     {%- if not id_attribute_already_defined %}
     @VsoProperty(displayName = "Id", readOnly = false)
     public String getId() {
@@ -196,7 +196,7 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         }
     }
 
-    {%- for attribute in child_spec.attributes %}
+    {%- for attribute in child_spec.attributes | sort(attribute='local_name', case_sensitive=True) %}
     {%- if attribute.local_name == "templateID" %}
     @VsoMethod
     public void instantiate{{ child_spec.entity_name }}(Session session, {{ child_spec.entity_name }} childRestObj, {{ child_spec.entity_name }}Template fromTemplate, Integer responseChoice, Boolean commitObj) throws RestException {

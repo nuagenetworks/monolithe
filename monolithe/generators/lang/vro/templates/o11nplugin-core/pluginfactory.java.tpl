@@ -21,7 +21,7 @@ public final class PluginFactory extends BasePluginFactory {
         if (type.equals(Constants.SESSION)) {
             return ModelHelper.getSessionById(id);
         }
-        {%- for specification in specifications %}
+        {%- for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
         if (type.equals(Constants.{{ specification.entity_name | upper }})) {
             return ModelHelper.get{{ specification.entity_name }}ById(id);
         }
@@ -46,7 +46,7 @@ public final class PluginFactory extends BasePluginFactory {
         if (type.equals(Constants.PLUGIN_ROOT) && relationName.equals(Constants.SESSIONS)) {
             return ModelHelper.getAllSessions();
         }
-        {%- for specification in specifications %}
+        {%- for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
         {%- if specification.is_root %}
         if (type.equals(Constants.SESSION) && relationName.equals(Constants.{{ specification.entity_name_plural | upper }})) {
             return toList(ModelHelper.get{{ specification.entity_name }}ById(id));
@@ -71,7 +71,7 @@ public final class PluginFactory extends BasePluginFactory {
             java.util.List<Session> allSessions = ModelHelper.getAllSessions();
             return new QueryResult(allSessions);
         }
-        {%- for specification in specifications %}
+        {%- for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
         if (type.equals(Constants.{{ specification.entity_name | upper }})) {
             java.util.List<{{ specification.entity_name }}> allObjs = ModelHelper.getAll{{ specification.entity_name_plural }}();
             return new QueryResult(allObjs);

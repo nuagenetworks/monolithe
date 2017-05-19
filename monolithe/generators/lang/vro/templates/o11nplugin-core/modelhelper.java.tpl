@@ -21,7 +21,7 @@ public class ModelHelper extends BaseModelHelper {
         return SessionManager.getInstance().getSessionById(id);
     }
     
-    {% for specification in specifications %}
+    {% for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
     public static {{ specification.entity_name }} get{{ specification.entity_name }}ById(String id) {
         for (Session session : SessionManager.getInstance().getSessions()) {
             {{ specification.entity_name }} obj = null;
@@ -85,7 +85,7 @@ public class ModelHelper extends BaseModelHelper {
             return ({{ specification.entity_name_plural }}Fetcher) fetcher;
         }
 
-        {%- for parent_api in specification.parent_apis %}
+        {%- for parent_api in specification.parent_apis | sort(attribute='rest_name', case_sensitive=True) %}
         {%- set parent_spec = specification_set[parent_api.rest_name] %}
         {%- if parent_spec is defined %}
         if ((fetcher = get{{ specification.entity_name_plural }}FetcherFor{{ parent_spec.entity_name }}Id(id)) != null) {
