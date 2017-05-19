@@ -5,7 +5,7 @@ package {{ package_name }}.fetchers;
 import {{ package_name }}.{{ specification.entity_name }};
 import {{ package_name }}.Session;
 import {{ package_name }}.Constants;
-{%- for parent_api in specification.parent_apis %}
+{%- for parent_api in specification.parent_apis | sort(attribute='rest_name', case_sensitive=True) %}
 {%- set parent_spec = specification_set[parent_api.rest_name] %}
 {%- if parent_spec is defined %}
 import {{ package_name }}.{{ parent_spec.entity_name }};
@@ -45,7 +45,7 @@ public class {{ specification.entity_name_plural }}Fetcher extends BaseFetcher<{
         return (Session) super.getSession();
     }
 
-    {%- for parent_api in specification.parent_apis %}
+    {%- for parent_api in specification.parent_apis | sort(attribute='rest_name', case_sensitive=True) %}
     {%- set parent_spec = specification_set[parent_api.rest_name] %}
     {%- if parent_spec is defined %}
     @VsoProperty(displayName = "{{ parent_spec.entity_name }}", readOnly = true)
