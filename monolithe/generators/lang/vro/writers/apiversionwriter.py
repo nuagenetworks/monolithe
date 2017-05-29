@@ -90,17 +90,9 @@ class APIVersionWriter(TemplateFileWriter):
         self.attrs_types.optionxform = str
         self.attrs_types.read(path)
 
-        plugin_info = RawConfigParser()
-        path = "%s/vro/__attributes_defaults/plugin.ini" % self._output
-        plugin_info.optionxform = str
-        plugin_info.read(path)
-        self.plugin_version = plugin_info.get(self.api_version, "pluginVersion")
+        self.plugin_version = self.monolithe_config.get_option("version", "transformer")
 
-        workflow_info = RawConfigParser()
-        path = "%s/vro/__attributes_defaults/workflow.ini" % self._output
-        workflow_info.optionxform = str
-        workflow_info.read(path)
-        self.workflow_version = workflow_info.get(self.api_version, "workflowVersion")
+        self.workflow_version = self.monolithe_config.get_option("version", "transformer")
 
         with open("%s/vro/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
