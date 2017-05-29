@@ -51,7 +51,6 @@ class APIVersionWriter(TemplateFileWriter):
         self.api_prefix = api_info["prefix"]
 
         self.monolithe_config = monolithe_config
-        self.library_version = self.monolithe_config.get_option("version", "transformer")
         self._output = self.monolithe_config.get_option("output", "transformer")
         self._name = self.monolithe_config.get_option("name", "transformer")
         self._class_prefix = ""
@@ -77,6 +76,8 @@ class APIVersionWriter(TemplateFileWriter):
         path = "%s/java/__attributes_defaults/attrs_types.ini" % self._output
         self.attrs_types.optionxform = str
         self.attrs_types.read(path)
+
+        self.library_version = self.monolithe_config.get_option("version", "transformer")
 
         with open("%s/java/__code_header" % self._output, "r") as f:
             self.header_content = f.read()
