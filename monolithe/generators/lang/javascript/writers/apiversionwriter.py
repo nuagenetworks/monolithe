@@ -16,6 +16,8 @@ class APIVersionWriter(TemplateFileWriter):
             shutil.rmtree(self.output_directory)
 
         self.api_root = api_info["root"]
+        self._class_prefix = monolithe_config.get_option("class_prefix", "transformer")
+
 
     def perform(self, specifications):
         """ This method is the entry point of javascript code writer. Monolithe will call it when
@@ -33,6 +35,8 @@ class APIVersionWriter(TemplateFileWriter):
         # write will write a file using a template.
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
+
         self.write(destination=self.output_directory, filename=filename, template_name="entity.js.tpl",
+                   class_prefix=self._class_prefix,
                    specification=specification,
                    superclass_name = superclass_name)
