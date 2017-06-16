@@ -20,7 +20,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             isEditable: false{% endif %}{% if attribute.orderable %},
             canOrder: true{% endif %}{% if attribute.filterable %},
             canSearch: true{% endif %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %},
-            choices: [{% for choice in attribute.allowed_choices %}'{{choice}}', {% endfor %}]{% endif %},
+            choices: [{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}'{{choice}}'{% endfor %}]{% endif %},
         }),
         {%- endfor %}
     }
