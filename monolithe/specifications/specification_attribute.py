@@ -74,6 +74,7 @@ class SpecificationAttribute(object):
         self.exposed = False
         self.transient = False
         self.subtype = None
+        self.userlabel = None
 
         self.specification = specification
         # Load information from data
@@ -149,6 +150,7 @@ class SpecificationAttribute(object):
             self.transient = data["transient"] if "transient" in data else False
             self.unique = data["unique"] if "unique" in data else False
             self.unique_scope = data["unique_scope"] if "unique_scope" in data else None
+            self.userlabel = data["userlabel"] if "userlabel" in data else None
 
         except Exception as ex:
             raise Exception("Unable to parse attribute %s for specification %s: %s" % (self.name, self.specification.rest_name, ex))
@@ -184,5 +186,6 @@ class SpecificationAttribute(object):
         data["unique"] = self.unique
         data["uniqueScope"] = self.unique_scope if self.unique_scope and len(self.unique_scope) else None
         data["subtype"] = self.subtype if self.subtype and len(self.subtype) else None
+        data["userlabel"] = self.userlabel if self.userlabel and len(self.userlabel) else None
 
         return data
