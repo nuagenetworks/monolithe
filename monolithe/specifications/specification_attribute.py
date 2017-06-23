@@ -135,7 +135,7 @@ class SpecificationAttribute(object):
             self.channel = data["channel"] if "channel" in data else None
             self.creation_only = data["creation_only"] if "creation_only" in data else False
             self.default_order = data["default_order"] if "default_order" in data else False
-            self.default_value = data["default_value"] if "default_value" in data else "false" if self.type = "boolean" else None
+            self.default_value = data["default_value"] if "default_value" in data else None
             self.deprecated = data["deprecated"] if "deprecated" in data else False
             self.exposed = data["exposed"] if "exposed" in data else False
             self.filterable = data["filterable"] if "filterable" in data else False
