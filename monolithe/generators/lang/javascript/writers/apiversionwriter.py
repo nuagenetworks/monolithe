@@ -2,6 +2,8 @@ from monolithe.generators.lib import TemplateFileWriter
 import os
 import shutil
 
+baseAttrs = ['entityScope', 'externalID', 'lastUpdatedBy'];
+
 class APIVersionWriter(TemplateFileWriter):
     """ This class is reponsible to write files for a particular api version. """
 
@@ -35,6 +37,8 @@ class APIVersionWriter(TemplateFileWriter):
         # write will write a file using a template.
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
+
+        specification.attributes = [attribute for attribute in specification.attributes if attribute.name not in baseAttrs]
 
         self.write(destination=self.output_directory, filename=filename, template_name="entity.js.tpl",
                    class_prefix=self._class_prefix,
