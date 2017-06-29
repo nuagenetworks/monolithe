@@ -21,7 +21,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         {%- for attribute in specification.attributes %}
         {{ attribute.name }}: new NUAttribute({
             localName: '{{ attribute.name }}',
-            attributeType: NUAttribute.ATTR_TYPE_{% if attribute.local_type == "str" %}STRING{% elif attribute.local_type == "bool" %}BOOLEAN{% else %}NUMBER{% endif %}{% if attribute.required %},
+            attributeType: NUAttribute.ATTR_TYPE_{% if attribute.local_type == "string" %}STRING{% elif attribute.local_type == "boolean" %}BOOLEAN{% else %}NUMBER{% endif %}{% if attribute.required %},
             isRequired: true{% endif %}{% if attribute.unique %},
             isUnique: true{% endif %}{% if attribute.creation_only %},
             isReadOnly: true{% endif %}{% if attribute.read_only %},
@@ -39,4 +39,3 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
 }
 
 ServiceClassRegistry.register({{ class_prefix }}{{ specification.entity_name }});
-
