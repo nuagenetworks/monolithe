@@ -2,7 +2,7 @@ from monolithe.generators.lib import TemplateFileWriter
 import os
 import shutil
 
-baseAttrs = ['entityScope', 'externalID', 'lastUpdatedBy'];
+base_attrs = ['entityScope', 'externalID', 'lastUpdatedBy'];
 
 class APIVersionWriter(TemplateFileWriter):
     """ This class is reponsible to write files for a particular api version. """
@@ -48,16 +48,21 @@ class APIVersionWriter(TemplateFileWriter):
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
 
-        specification.attributes = [attribute for attribute in specification.attributes if attribute.name not in baseAttrs]
+        specification.attributes = [attribute for attribute in specification.attributes if attribute.name not in base_attrs]
 
-        self._write_enums(entity_name=specification.entity_name, attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices])
+        enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
+        
+        self._write_enums(entity_name=specification.entity_name, attributes=enum_attributes)
 
+        enum_attributes_with_default = [attribute for attribute in enum_attributes if attribute.default_value]
+        
         self.write(destination = self.output_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
                     class_prefix = self._class_prefix,
                     specification = specification,
-                    superclass_name = superclass_name)
+                    superclass_name = superclass_name,
+                    enum_attrs_to_import = enum_attributes_with_default)
 
     def _write_enums(self, entity_name, attributes):
         """ This method writes the ouput for a particular specification.

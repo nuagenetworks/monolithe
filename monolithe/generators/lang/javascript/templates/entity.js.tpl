@@ -1,7 +1,9 @@
 import NUAttribute from '../service/NUAttribute';
 import NUEntity from '../service/NUEntity';
 import ServiceClassRegistry from '../service/ServiceClassRegistry';
-
+{%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
+import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum{% endfor %} } from './enums';
+{%- endif %}
 
 /* Represents {{ specification.entity_name }} entity
    {{ specification.description }}
@@ -11,7 +13,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         super(...args);
         this.defineProperties({
         {%- for attribute in specification.attributes %}
-            {{ attribute.name }}: {% if attribute.default_value %}{{ attribute.default_value }}{% else %}null{% endif %},
+            {{ attribute.name }}: {% if attribute.default_value %}{% if attribute.local_type == "string" %}'{{ attribute.default_value }}'{% else %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{% endif %}{{ attribute.default_value }}{% endif %}{% else %}null{% endif %},
         {%- endfor %}
         });
     }
@@ -39,3 +41,4 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
 }
 
 ServiceClassRegistry.register({{ class_prefix }}{{ specification.entity_name }});
+
