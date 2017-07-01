@@ -1,5 +1,5 @@
 import NUAttribute from '../service/NUAttribute';
-import NUEntity from '../service/NUEntity';
+import {{ superclass_name}} from '../service/{{ superclass_name}}';
 import ServiceClassRegistry from '../service/ServiceClassRegistry';
 {%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
 import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum{% endfor %} } from './enums';
@@ -19,7 +19,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
 
     static attributeDescriptors = {
-        ...NUEntity.attributeDescriptors,
+        ...{{ superclass_name}}.attributeDescriptors,
         {%- for attribute in specification.attributes %}
         {{ attribute.name }}: new NUAttribute({
             localName: '{{ attribute.name }}',

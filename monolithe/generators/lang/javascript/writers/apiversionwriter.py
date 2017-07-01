@@ -43,7 +43,7 @@ class APIVersionWriter(TemplateFileWriter):
         """
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
-        superclass_name = "NURootEntity" if specification.rest_name == self.api_root else "NUEntity"
+        superclass_name = "NURootEntity" if specification.rest_name == self.api_root else "NUAbstractNamedEntity" if self._isNamedEntity(attributes=specification.attributes)  else "NUEntity"
         # write will write a file using a template.
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
@@ -64,6 +64,16 @@ class APIVersionWriter(TemplateFileWriter):
                     superclass_name = superclass_name,
                     enum_attrs_to_import = enum_attributes_with_default)
 
+    def _isNamedEntity(self, attributes):
+        hasName = False
+        hasDescription = False
+        for attribute in attributes:
+            if attribute.name == "name":
+                hasName = True
+            elif attribute.name == "description":
+                hasDescription = True        
+        return hasName and hasDescription
+    
     def _write_enums(self, entity_name, attributes):
         """ This method writes the ouput for a particular specification.
         """
