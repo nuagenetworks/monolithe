@@ -23,14 +23,14 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         {%- for attribute in specification.attributes %}
         {{ attribute.name }}: new {{ class_prefix }}Attribute({
             localName: '{{ attribute.name }}',
-            attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "string" %}STRING{% elif attribute.local_type == "boolean" %}BOOLEAN{% else %}NUMBER{% endif %}{% if attribute.required %},
+            attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "string" %}STRING{% elif attribute.local_type == "boolean" %}BOOLEAN{% elif attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}NUMBER{% endif %}{% if attribute.required %},
             isRequired: true{% endif %}{% if attribute.unique %},
             isUnique: true{% endif %}{% if attribute.creation_only %},
             isReadOnly: true{% endif %}{% if attribute.read_only %},
             isEditable: false{% endif %}{% if attribute.orderable %},
             canOrder: true{% endif %}{% if attribute.filterable %},
             canSearch: true{% endif %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %},
-            choices: [{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}'{{choice}}'{% endfor %}]{% endif %},
+            choices: [{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{{choice}}{% endfor %}]{% endif %},
         }),
         {%- endfor %}
     }
