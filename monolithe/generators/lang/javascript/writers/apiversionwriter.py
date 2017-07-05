@@ -3,6 +3,8 @@ import os
 import shutil
 
 base_attrs = ['entityScope', 'externalID', 'lastUpdatedBy'];
+named_entity_attrs = ['name', 'description'];
+
 
 class APIVersionWriter(TemplateFileWriter):
     """ This class is reponsible to write files for a particular api version. """
@@ -43,12 +45,14 @@ class APIVersionWriter(TemplateFileWriter):
         """
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
-        superclass_name = "NURootEntity" if specification.rest_name == self.api_root else "NUAbstractNamedEntity" if self._isNamedEntity(attributes=specification.attributes)  else "NUEntity"
+        isNamedEntity = self._isNamedEntity(attributes=specification.attributes)
+                
+        superclass_name = "NURootEntity" if specification.rest_name == self.api_root else "NUAbstractNamedEntity" if isNamedEntity  else "NUEntity"
         # write will write a file using a template.
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
 
-        specification.attributes = [attribute for attribute in specification.attributes if attribute.name not in base_attrs]
+        specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in base_attrs and (not isNamedEntity or attribute.name not in named_entity_attrs))]
 
         enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
         
