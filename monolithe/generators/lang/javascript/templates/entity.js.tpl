@@ -1,5 +1,5 @@
-import NUAttribute from '../service/NUAttribute';
-import {{ superclass_name}} from '../service/{{ superclass_name}}';
+import {{ class_prefix }}Attribute from '../service/{{ class_prefix }}Attribute';
+import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "AbstractNamedEntity" %}./abstract/{% else %}../service/{% endif %}{{ class_prefix }}{{ superclass_name }}';
 import ServiceClassRegistry from '../service/ServiceClassRegistry';
 {%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
 import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum{% endfor %} } from './enums';
@@ -8,7 +8,7 @@ import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {%
 /* Represents {{ specification.entity_name }} entity
    {{ specification.description }}
 */
-export default class {{ class_prefix }}{{ specification.entity_name }} extends {{ superclass_name }} {
+export default class {{ class_prefix }}{{ specification.entity_name }} extends {{ class_prefix }}{{ superclass_name }} {
     constructor(...args) {
         super(...args);
         this.defineProperties({
@@ -19,11 +19,11 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
 
     static attributeDescriptors = {
-        ...{{ superclass_name}}.attributeDescriptors,
+        ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,
         {%- for attribute in specification.attributes %}
-        {{ attribute.name }}: new NUAttribute({
+        {{ attribute.name }}: new {{ class_prefix }}Attribute({
             localName: '{{ attribute.name }}',
-            attributeType: NUAttribute.ATTR_TYPE_{% if attribute.local_type == "string" %}STRING{% elif attribute.local_type == "boolean" %}BOOLEAN{% else %}NUMBER{% endif %}{% if attribute.required %},
+            attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "string" %}STRING{% elif attribute.local_type == "boolean" %}BOOLEAN{% else %}NUMBER{% endif %}{% if attribute.required %},
             isRequired: true{% endif %}{% if attribute.unique %},
             isUnique: true{% endif %}{% if attribute.creation_only %},
             isReadOnly: true{% endif %}{% if attribute.read_only %},
