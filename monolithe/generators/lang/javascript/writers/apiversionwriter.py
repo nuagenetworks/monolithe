@@ -55,10 +55,8 @@ class APIVersionWriter(TemplateFileWriter):
         specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in base_attrs and (not isNamedEntity or attribute.name not in named_entity_attrs))]
 
         enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
-        
+            
         self._write_enums(entity_name=specification.entity_name, attributes=enum_attributes)
-
-        enum_attributes_with_default = [attribute for attribute in enum_attributes if attribute.default_value]
         
         self.write(destination = self.output_directory,
                     filename = filename,
@@ -66,7 +64,7 @@ class APIVersionWriter(TemplateFileWriter):
                     class_prefix = self._class_prefix,
                     specification = specification,
                     superclass_name = superclass_name,
-                    enum_attrs_to_import = enum_attributes_with_default)
+                    enum_attrs_to_import = enum_attributes)
 
     def _isNamedEntity(self, attributes):
         hasName = False
