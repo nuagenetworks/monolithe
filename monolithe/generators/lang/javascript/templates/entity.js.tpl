@@ -2,11 +2,12 @@ import {{ class_prefix }}Attribute from 'service/{{ class_prefix }}Attribute';
 import ServiceClassRegistry from 'service/ServiceClassRegistry';
 import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "AbstractNamedEntity" %}./abstract/{% else %}service/{% endif %}{{ class_prefix }}{{ superclass_name }}';
 {%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
-import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum{% endfor %} } from './enums';
+{%- set import_str %}import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum{% endfor %} } from './enums';{%- endset %}
+{{ import_str|wordwrap(96,false,'\n    ')}}
 {%- endif %}
 
 /* Represents {{ specification.entity_name }} entity
-   {{ specification.description }}
+   {% if specification.description %}{{ specification.description|wordwrap(97,false,'\n   ')}}{%- endif %}
 */
 export default class {{ class_prefix }}{{ specification.entity_name }} extends {{ class_prefix }}{{ superclass_name }} {
     constructor(...args) {
@@ -30,7 +31,8 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             isEditable: false{% endif %}{% if attribute.orderable %},
             canOrder: true{% endif %}{% if attribute.filterable %},
             canSearch: true{% endif %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %},
-            choices: [{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{{choice}}{% endfor %}]{% endif %},
+            {%- set choices_str %}[{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{{choice}}{% endfor %}]{%- endset %}
+            choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},
         }),
         {%- endfor %}
     }
