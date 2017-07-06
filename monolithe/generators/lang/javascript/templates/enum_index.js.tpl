@@ -1,4 +1,5 @@
 {%- for enum in enum_list %}
-export { default as {{ class_prefix }}{{ enum }} } from './{{ class_prefix }}{{ enum }}';
+{%- set export_str %}export { default as {{ class_prefix }}{{ enum }} } from './{{ class_prefix }}{{ enum }}';{%- endset %}
+{{ export_str|wordwrap(96,false,'\n    ')}}
 {%- endfor %}
 
