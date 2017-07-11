@@ -16,6 +16,7 @@ class APIVersionWriter(TemplateFileWriter):
         output = monolithe_config.get_option("output", "transformer")
 
         self.output_directory = "%s/javascript/%s" % (output, api_info["version"])
+        self.abstract_directory =  "%s/abstract" % self.output_directory
         self.enum_directory =  "%s/enums" % self.output_directory
 
         if os.path.exists(self.output_directory):
@@ -31,6 +32,8 @@ class APIVersionWriter(TemplateFileWriter):
         """
         self.enum_list = [];
 
+        self._write_abstract_named_entity()
+        
         for rest_name, specification in specifications.iteritems():
             self._write_model(specification=specification)
 
@@ -40,6 +43,23 @@ class APIVersionWriter(TemplateFileWriter):
                     class_prefix = self._class_prefix,
                     enum_list = self.enum_list)
 
+    def _write_abstract_named_entity(self):
+        """ This method generated AbstractNamedEntity class js file.
+        """
+        filename = "%sAbstractNamedEntity.js" % (self._class_prefix)
+                
+        superclass_name = "%sEntity" % (self._class_prefix)
+        
+        # write will write a file using a template.
+        # mandatory params: destination directory, destination file name, template file name
+        # optional params: whatever that is needed from inside the Jinja template
+
+        self.write(destination = self.abstract_directory,
+                    filename = filename,
+                    template_name = "abstract_named_entity.js.tpl",
+                    class_prefix = self._class_prefix,
+                    superclass_name = superclass_name)
+                    
     def _write_model(self, specification):
         """ This method writes the ouput for a particular specification.
         """
