@@ -15,12 +15,12 @@ class APIVersionWriter(TemplateFileWriter):
 
         output = monolithe_config.get_option("output", "transformer")
 
-        self.output_directory = "%s/javascript/%s" % (output, api_info["version"])
-        self.abstract_directory =  "%s/abstract" % self.output_directory
-        self.enum_directory =  "%s/enums" % self.output_directory
+        self.model_directory = "%s/javascript/%s/models" % (output, api_info["version"])
+        self.abstract_directory =  "%s/abstract" % self.model_directory
+        self.enum_directory =  "%s/enums" % self.model_directory
 
-        if os.path.exists(self.output_directory):
-            shutil.rmtree(self.output_directory)
+        if os.path.exists(self.model_directory):
+            shutil.rmtree(self.model_directory)
 
         self.api_root = api_info["root"]
         self._class_prefix = monolithe_config.get_option("class_prefix", "transformer")
@@ -31,12 +31,19 @@ class APIVersionWriter(TemplateFileWriter):
         the javascript plugin is to generate code.
         """
         self.enum_list = [];
+        self.model_list = [];
 
         self._write_abstract_named_entity()
         
         for rest_name, specification in specifications.iteritems():
             self._write_model(specification=specification)
 
+        self.write(destination = self.model_directory,
+            filename="index.js",
+            template_name="model_index.js.tpl",
+            class_prefix = self._class_prefix,
+            model_list = self.model_list)
+            
         self.write(destination = self.enum_directory,
                     filename="index.js",
                     template_name="enum_index.js.tpl",
@@ -65,6 +72,8 @@ class APIVersionWriter(TemplateFileWriter):
         """
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
+        self.model_list.append("%s%s" %(self._class_prefix, specification.entity_name))
+        
         isNamedEntity = self._isNamedEntity(attributes=specification.attributes)
                 
         superclass_name = "RootEntity" if specification.rest_name == self.api_root else "AbstractNamedEntity" if isNamedEntity  else "Entity"
@@ -78,7 +87,7 @@ class APIVersionWriter(TemplateFileWriter):
             
         self._write_enums(entity_name=specification.entity_name, attributes=enum_attributes)
         
-        self.write(destination = self.output_directory,
+        self.write(destination = self.model_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
                     class_prefix = self._class_prefix,
