@@ -7,7 +7,7 @@ import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "Ab
 {%- endif %}
 
 /* Represents {{ specification.entity_name }} entity
-   {% if specification.description %}{{ specification.description|wordwrap(97,false,'\n   ')}}{%- endif %}
+{% if specification.description %}   {{ specification.description|wordwrap(97,false,'\n   ')}}{{'\n'}}{% endif -%}
 */
 export default class {{ class_prefix }}{{ specification.entity_name }} extends {{ class_prefix }}{{ superclass_name }} {
     constructor(...args) {
