@@ -118,4 +118,4 @@ class APIVersionWriter(TemplateFileWriter):
                         template_name="enum.js.tpl",
                         class_prefix = self._class_prefix,
                         enum_name = enum_name,
-                        allowed_choices = attribute.allowed_choices)
+                        allowed_choices = set(attribute.allowed_choices))
