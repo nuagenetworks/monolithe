@@ -90,6 +90,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_csproj(specifications=specifications)
         self._write_session()
         self._write_info()
+        self._write_packages()
 
         task_manager = TaskManager()
         for rest_name, specification in specifications.items():
@@ -196,6 +197,18 @@ class APIVersionWriter(TemplateFileWriter):
 
         return (filename, specification.entity_name_plural)
 
+    def _write_packages(self):
+        """
+        """
+        self.write(destination=self.output_directory+"/vspk", filename="packages.config", template_name="packages.config.tpl",
+                   version=self.api_version,
+                   product_accronym=self._product_accronym,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   name=self._name,
+                   header=self.header_content)
+
     def _write_csproj(self, specifications):
         """
         """
@@ -284,15 +297,15 @@ class APIVersionWriter(TemplateFileWriter):
                 elif attribute.type == "list":
                     if attribute.subtype == "enum":
                         enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
-                        attribute.local_type = "java.util.List<" + enum_subtype + ">"
+                        attribute.local_type = "System.Collections.Generic.List<" + enum_subtype + ">"
                     elif attribute.subtype == "object":
-                        attr_subtype = "com.fasterxml.jackson.databind.JsonNode"
+                        attr_subtype = "Newtonsoft.Json.Linq.JsonObject"
                         if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
                             subtype = self.attrs_types.get(specification.entity_name, attribute.local_name)
                             if subtype:
                                 attr_subtype = subtype
-                        attribute.local_type = "java.util.List<" + attr_subtype + ">"
+                        attribute.local_type = "System.Collections.Generic.List<" + attr_subtype + ">"
                     elif attribute.subtype == "entity":
-                        attribute.local_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
+                        attribute.local_type = "System.Collections.Generic.List<Newtonsoft.Json.Linq.JsonObject>"
                     else:
-                        attribute.local_type = "java.util.List<String>"
+                        attribute.local_type = "System.Collections.Generic.List<String>"
