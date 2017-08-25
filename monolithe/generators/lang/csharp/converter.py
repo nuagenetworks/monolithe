@@ -27,26 +27,33 @@
 
 
 def get_type_name(type_name, sub_type=None):
-    """ Returns a go type according to a spec type
+    """ Returns a c# type according to a spec type
 
     """
-    if type_name in ("string", "enum"):
-        return "string"
-
-    if type_name == "float":
-        return "float64"
-
-    if type_name == "boolean":
+    if type_name == "enum":
+        return type_name
+    elif type_name == "boolean":
         return "bool"
+    elif type_name == "integer":
+        return "long"
+    elif type_name == "time":
+        return "float"
+    elif type_name == "object":
+        return "Object"
+    elif type_name == "list":
+        return "List"
+    elif type_name == "float":
+        return "float"
+    else:
+        return "String"
 
-    if type_name == "list":
-        st = get_type_name(type_name=sub_type, sub_type=None) if sub_type else "interface{}"
-        return "[]%s" % st
 
-    if type_name == "integer":
-        return "int"
-
-    if type_name == "time":
-        return "float64"
-
-    return "interface{}"
+def get_idiomatic_name(name):
+    """
+    """
+    if name == "private":
+        return "private_"
+    elif name == "public":
+        return "public_"
+    else:
+        return name

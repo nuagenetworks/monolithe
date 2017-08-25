@@ -1,6 +1,7 @@
 {{ header }}
 
-
+using System;
+using Newtonsoft.Json;
 using net.nuagenetworks.bambou.{{ superclass_name }};
 using net.nuagenetworks.bambou.annotation.RestEntity;
 
@@ -26,12 +27,14 @@ public class {{ class_prefix }}{{ specification.entity_name }}: {{ superclass_na
    {%- endfor %}
 
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
+   [JsonProperty("{{ attribute.name }}")]   
    protected {{ attribute.local_type }} {{ attribute.local_name }};
    {% endfor %}
 
    {% if specification.child_apis|length > 0 -%}
    {% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
    {%- set child_spec = specification_set[api.rest_name] %}
+   [JsonIgnore]
    private {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher {{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }};
    {% endfor %}
    {%- endif %}
