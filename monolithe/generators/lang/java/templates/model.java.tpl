@@ -27,13 +27,16 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
    {% if attribute.type == "enum" or attribute.subtype == "enum" %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
+   {% if attribute.local_name == specification.rest_name %}{%- set field_name="E"+field_name %}{%- endif %}
    public enum {{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice }}{% if not loop.last %}, {% endif %}{% endfor %} };
    {%- endif %}
    {%- endfor %}
 
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    @JsonProperty(value = "{{ attribute.name }}")
-   protected {{ attribute.local_type }} {{ attribute.local_name }};
+   {%- set field_name = attribute.local_type %}
+   {%- if attribute.local_type == specification.entity_name %}{%- set field_name="E"+field_name %}{%- endif %}
+   protected {{ field_name }} {{ attribute.local_name }};
    {% endfor %}
 
    {% if specification.child_apis|length > 0 -%}
@@ -62,13 +65,18 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
 
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
+   {%- set type_name = field_name %}
+   {%- if attribute.local_type != "enum" %}
+   {%- set type_name = attribute.local_type %}
+   {%- if attribute.local_type == specification.entity_name %}{%- set type_name="E"+type_name %}{%- endif %}
+   {%- endif %}
    @JsonIgnore
-   public {% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} get{{ field_name }}() {
+   public {{type_name}} get{{ field_name }}() {
       return {{ attribute.local_name }};
    }
 
    @JsonIgnore
-   public void set{{ field_name }}({% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} value) { 
+   public void set{{ field_name }}({{ type_name }} value) { 
       this.{{ attribute.local_name }} = value;
    }
    {% endfor %}
