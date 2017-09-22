@@ -33,6 +33,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             canSearch: true{% endif %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %},
             {%- set choices_str %}[{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{{choice}}{% endfor %}]{%- endset %}
             choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},
+            userlabel: '{{ attribute.userlabel }}',
         }),
         {%- endfor %}
     }
