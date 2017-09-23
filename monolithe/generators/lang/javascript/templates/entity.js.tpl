@@ -14,7 +14,8 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         super(...args);
         this.defineProperties({
         {%- for attribute in specification.attributes %}
-            {{ attribute.name }}: {% if attribute.default_value %}{% if attribute.local_type == "string" %}'{{ attribute.default_value }}'{% else %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{% endif %}{{ attribute.default_value }}{% endif %}{% else %}null{% endif %},
+            {% set is_enum = attribute.allowed_choices and attribute.allowed_choices|length > 0  -%}
+            {{ attribute.name }}: {% if attribute.default_value %}{% if attribute.local_type == "string" %}'{{ attribute.default_value }}'{% else %}{% if is_enum  %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{% endif %}{{ attribute.default_value }}{% if is_enum  %}.name{% endif %}{% endif %}{% else %}null{% endif %},
         {%- endfor %}
         });
     }
