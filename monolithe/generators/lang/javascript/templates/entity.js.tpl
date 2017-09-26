@@ -25,7 +25,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         {%- for attribute in specification.attributes %}
         {{ attribute.name }}: new {{ class_prefix }}Attribute({
             localName: '{{ attribute.name }}',
-            attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "string" %}STRING{% elif attribute.local_type == "boolean" %}BOOLEAN{% elif attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}NUMBER{% endif %}{% if attribute.required %},
+            attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "integer" %}INTEGER{% elif attribute.local_type == "float" %}FLOAT{% elif attribute.local_type == "list" %}LIST{% elif attribute.local_type == "boolean" %}BOOLEAN{% elif attribute.local_type == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %}{% if attribute.required %},
             isRequired: true{% endif %}{% if attribute.unique %},
             isUnique: true{% endif %}{% if attribute.creation_only %},
             isReadOnly: true{% endif %}{% if attribute.read_only %},
@@ -33,7 +33,8 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             canOrder: true{% endif %}{% if attribute.filterable %},
             canSearch: true{% endif %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %},
             {%- set choices_str %}[{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum.{{choice}}{% endfor %}]{%- endset %}
-            choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},
+            choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},{% if attribute.local_type == "list" %}
+            subType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.subtype == "integer" %}INTEGER{% elif attribute.subtype == "float" %}FLOAT{% elif attribute.subtype == "boolean" %}BOOLEAN{% elif attribute.subtype == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %},{% endif %}
             userlabel: '{{ attribute.userlabel }}',
         }),
         {%- endfor %}
