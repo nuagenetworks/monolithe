@@ -1,9 +1,16 @@
 from monolithe.generators.lib import TemplateFileWriter
+from monolithe.specifications import SpecificationAttribute
 import os
 import shutil
 
-base_attrs = ['entityScope', 'externalID', 'lastUpdatedBy'];
-named_entity_attrs = ['name', 'description'];
+base_attrs = ['entityScope', 'externalID', 'lastUpdatedBy']
+named_entity_attrs = ['name', 'description']
+iptype_enum_attr = SpecificationAttribute()
+iptype_enum_attr.name = 'IPType'
+iptype_enum_attr.allowed_choices = ['IPv4', 'IPv6', 'DUALSTACK', 'IPv4Network', 'IPv6Network']
+enabled_enum_attr = SpecificationAttribute()
+enabled_enum_attr.name = 'enabled'
+enabled_enum_attr.allowed_choices = ['DISABLED', 'ENABLED', 'INHERITED']
 
 
 class APIVersionWriter(TemplateFileWriter):
@@ -38,6 +45,8 @@ class APIVersionWriter(TemplateFileWriter):
         for rest_name, specification in specifications.iteritems():
             self._write_model(specification=specification)
 
+        self._write_generic_enums()
+        
         self.write(destination = self.model_directory,
             filename="index.js",
             template_name="model_index.js.tpl",
@@ -84,8 +93,24 @@ class APIVersionWriter(TemplateFileWriter):
         specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in base_attrs and (not isNamedEntity or attribute.name not in named_entity_attrs))]
 
         enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
-            
+        
         self._write_enums(entity_name=specification.entity_name, attributes=enum_attributes)
+        
+        enum_attrs_to_import = enum_attributes[:]
+        generic_enum_attributes = {}
+        generic_enum_attributes_to_import = []
+
+        for attr in enum_attributes:
+            if set(attr.allowed_choices) & set(iptype_enum_attr.allowed_choices):
+                generic_enum_attributes[attr.name] = iptype_enum_attr
+                enum_attrs_to_import.remove(attr)
+                generic_enum_attributes_to_import.append(iptype_enum_attr.name)
+                
+            if set(attr.allowed_choices) & set(enabled_enum_attr.allowed_choices):
+                generic_enum_attributes[attr.name] = enabled_enum_attr
+                enum_attrs_to_import.remove(attr)
+                generic_enum_attributes_to_import.append(enabled_enum_attr.name)
+
         
         self.write(destination = self.model_directory,
                     filename = filename,
@@ -93,7 +118,9 @@ class APIVersionWriter(TemplateFileWriter):
                     class_prefix = self._class_prefix,
                     specification = specification,
                     superclass_name = superclass_name,
-                    enum_attrs_to_import = enum_attributes)
+                    enum_attrs_to_import = enum_attrs_to_import,
+                    generic_enum_attributes = generic_enum_attributes,
+                    generic_enum_attributes_to_import = set(generic_enum_attributes_to_import))
 
     def _isNamedEntity(self, attributes):
         hasName = False
@@ -119,3 +146,10 @@ class APIVersionWriter(TemplateFileWriter):
                         class_prefix = self._class_prefix,
                         enum_name = enum_name,
                         allowed_choices = set(attribute.allowed_choices))
+
+    def _write_generic_enums(self):
+        """ This method generates generic enum classes.
+        """
+
+        generic_enums = [iptype_enum_attr, enabled_enum_attr]
+        self._write_enums(entity_name='', attributes=generic_enums)
