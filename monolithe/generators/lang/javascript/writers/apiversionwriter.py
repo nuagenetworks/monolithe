@@ -8,7 +8,7 @@ named_entity_attrs = ['name', 'description']
 
 iptype_enum_attr = SpecificationAttribute()
 iptype_enum_attr.name = 'IPType'
-iptype_enum_attr.allowed_choices = ['IPv4', 'IPv6', 'DUALSTACK', 'IPv4Network', 'IPv6Network']
+iptype_enum_attr.allowed_choices = ['IPv4', 'IPv6', 'IPV4', 'IPV6', 'DUALSTACK', 'IPv4Network', 'IPv6Network']
 
 enabled_enum_attr = SpecificationAttribute()
 enabled_enum_attr.name = 'enabled'
