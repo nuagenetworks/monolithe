@@ -100,9 +100,7 @@ class APIVersionWriter(TemplateFileWriter):
         specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in base_attrs and (not isNamedEntity or attribute.name not in named_entity_attrs))]
 
         enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
-        
-        self._write_enums(entity_name=specification.entity_name, attributes=enum_attributes)
-        
+                
         enum_attrs_to_import = enum_attributes[:]
         generic_enum_attrs_in_entity = {}
         generic_enum_attributes_to_import = []
@@ -114,6 +112,8 @@ class APIVersionWriter(TemplateFileWriter):
                     enum_attrs_to_import.remove(attr)
                     generic_enum_attributes_to_import.append(generic_enum_attr.name)
         
+        self._write_enums(entity_name=specification.entity_name, attributes=enum_attrs_to_import)
+
         self.write(destination = self.model_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
