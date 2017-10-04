@@ -12,7 +12,7 @@ iptype_enum_attr.allowed_choices = ['IPv4', 'IPv6', 'DUALSTACK', 'IPv4Network', 
 
 enabled_enum_attr = SpecificationAttribute()
 enabled_enum_attr.name = 'enabled'
-enabled_enum_attr.allowed_choices = ['DISABLED', 'ENABLED', 'INHERITED']
+enabled_enum_attr.allowed_choices = ['DISABLED', 'ENABLED', 'INHERITED', 'ENABLED_INHERITED']
 
 permittedaction_enum_attr = SpecificationAttribute()
 permittedaction_enum_attr.name = 'permittedAction'
