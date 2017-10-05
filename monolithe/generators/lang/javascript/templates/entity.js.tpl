@@ -50,7 +50,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         }),
         {%- endfor %}
     }
-    
+
     get RESTName() {
         return '{{ specification.resource_name }}';
     }
