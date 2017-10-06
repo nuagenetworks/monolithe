@@ -54,6 +54,10 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     get RESTName() {
         return '{{ specification.resource_name }}';
     }
+    
+    get MOName() {
+        return '{{ specification.rest_name }}';
+    }
 }
 
 ServiceClassRegistry.register({{ class_prefix }}{{ specification.entity_name }});
