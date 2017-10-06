@@ -114,7 +114,7 @@ class Specification(object):
         data["model"]["create"] = self.allows_create
         data["model"]["delete"] = self.allows_delete
         data["model"]["root"] = self.is_root
-        data["model"]["userlabel"] = self.userlabel if self.userlabel and len(self.userlabel) else None
+        data["model"]["userlabel"] = self.userlabel
 
         data["attributes"] = []
         for attribute in self.attributes:
@@ -144,7 +144,6 @@ class Specification(object):
             self.allows_delete = model["delete"] if "delete" in model else False
             self.is_root = model["root"] if "root" in model else False
             self.userlabel = model["userlabel"] if "userlabel" in model else None
-
 
         if "attributes" in data:
             self.attributes = self._get_attributes(data["attributes"])
