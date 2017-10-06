@@ -52,11 +52,11 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
 
     get RESTName() {
-        return '{{ specification.resource_name }}';
+        return '{{ specification.rest_name }}';
     }
     
-    get MOName() {
-        return '{{ specification.rest_name }}';
+    get resourceName() {
+        return '{{ specification.resource_name }}';
     }
 }
 
