@@ -2,33 +2,18 @@ from monolithe.generators.lib import TemplateFileWriter
 from monolithe.specifications import SpecificationAttribute
 import os
 import shutil
+import json
 
-base_attrs = ['entityScope', 'externalID', 'lastUpdatedBy']
-named_entity_attrs = ['name', 'description']
-
-iptype_enum_attr = SpecificationAttribute()
-iptype_enum_attr.name = 'IPType'
-iptype_enum_attr.allowed_choices = ['IPv4', 'IPv6', 'IPV4', 'IPV6', 'DUALSTACK', 'IPv4Network', 'IPv6Network']
-
-enabled_enum_attr = SpecificationAttribute()
-enabled_enum_attr.name = 'enabled'
-enabled_enum_attr.allowed_choices = ['DISABLED', 'ENABLED', 'INHERITED', 'ENABLED_INHERITED']
-
-permittedaction_enum_attr = SpecificationAttribute()
-permittedaction_enum_attr.name = 'permittedAction'
-permittedaction_enum_attr.allowed_choices = ['ALL', 'EXTEND', 'DEPLOY', 'READ', 'INSTANTIATE', 'USE']
-
-generic_enum_attrs = [iptype_enum_attr, enabled_enum_attr, permittedaction_enum_attr]
 
 class APIVersionWriter(TemplateFileWriter):
     """ This class is reponsible to write files for a particular api version. """
 
     def __init__(self, monolithe_config, api_info):
-
+        
         super(APIVersionWriter, self).__init__(package="monolithe.generators.lang.javascript")
-
+        
         output = monolithe_config.get_option("output", "transformer")
-
+        
         self.model_directory = "%s/javascript/%s/models" % (output, api_info["version"])
         self.abstract_directory =  "%s/abstract" % self.model_directory
         self.enum_directory =  "%s/enums" % self.model_directory
@@ -38,8 +23,38 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.api_root = api_info["root"]
         self._class_prefix = monolithe_config.get_option("class_prefix", "transformer")
+        
+        config_dir = monolithe_config.get_option("config", "transformer")
+        self._read_config(config_dir)
 
 
+    def _read_config(self, config_dir):
+        """ This method reads provided json config file.
+        """
+        config_file = '%s/config.json' % config_dir
+        
+        self.generic_enum_attrs = []
+        self.base_attrs = []
+        self.generic_enums = []
+        self.named_entity_attrs = []
+        self.overide_generic_enums = []
+        
+        if (os.path.isfile(config_file)):
+            with open(config_file, 'r') as input_json:
+                json_config_data = json.load(input_json) 
+                
+            self.base_attrs = json_config_data['base_attrs']
+            self.generic_enums =  json_config_data['generic_enums']
+            self.named_entity_attrs = json_config_data['named_entity_attrs']
+            self.overide_generic_enums = json_config_data['overide_generic_enums']
+
+            for enum_name, values in self.generic_enums.iteritems():
+                enum_attr =  SpecificationAttribute()
+                enum_attr.name = enum_name
+                enum_attr.allowed_choices = values
+                self.generic_enum_attrs.append(enum_attr)
+        
+        
     def perform(self, specifications):
         """ This method is the entry point of javascript code writer. Monolithe will call it when
         the javascript plugin is to generate code.
@@ -97,7 +112,7 @@ class APIVersionWriter(TemplateFileWriter):
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
 
-        specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in base_attrs and (not isNamedEntity or attribute.name not in named_entity_attrs))]
+        specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs and (not isNamedEntity or attribute.name not in self.named_entity_attrs))]
 
         enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
                 
@@ -106,7 +121,9 @@ class APIVersionWriter(TemplateFileWriter):
         generic_enum_attributes_to_import = []
 
         for attr in enum_attributes:
-            for generic_enum_attr in generic_enum_attrs:
+            if specification.rest_name in self.overide_generic_enums and  attr.name in self.overide_generic_enums[specification.rest_name]:
+                continue
+            for generic_enum_attr in self.generic_enum_attrs:
                 if set(attr.allowed_choices) & set(generic_enum_attr.allowed_choices):
                     generic_enum_attrs_in_entity[attr.name] = generic_enum_attr
                     enum_attrs_to_import.remove(attr)
@@ -125,14 +142,8 @@ class APIVersionWriter(TemplateFileWriter):
                     generic_enum_attributes_to_import = set(generic_enum_attributes_to_import))
 
     def _isNamedEntity(self, attributes):
-        hasName = False
-        hasDescription = False
-        for attribute in attributes:
-            if attribute.name == "name":
-                hasName = True
-            elif attribute.name == "description":
-                hasDescription = True        
-        return hasName and hasDescription
+        attr_names = [attr.name for attr in attributes]
+        return (len(self.named_entity_attrs) > 0 and set(self.named_entity_attrs).issubset(attr_names))
     
     def _write_enums(self, entity_name, attributes):
         """ This method writes the ouput for a particular specification.
@@ -153,4 +164,4 @@ class APIVersionWriter(TemplateFileWriter):
         """ This method generates generic enum classes.
         """
 
-        self._write_enums(entity_name='', attributes=generic_enum_attrs)
+        self._write_enums(entity_name='', attributes=self.generic_enum_attrs)
