@@ -25,14 +25,12 @@ class APIVersionWriter(TemplateFileWriter):
         self.api_root = api_info["root"]
         self._class_prefix = monolithe_config.get_option("class_prefix", "transformer")
         
-        config_dir = monolithe_config.get_option("config", "transformer")
-        self._read_config(config_dir)
+        self._read_config()
 
 
-    def _read_config(self, config_dir):
+    def _read_config(self):
         """ This method reads provided json config file.
         """
-        config_file = '%s/config.json' % config_dir
         
         this_dir = os.path.dirname(__file__)        
         config_file = os.path.abspath(os.path.join(this_dir, "..", "..", "..", "..", "..", "config", "config.json"))
