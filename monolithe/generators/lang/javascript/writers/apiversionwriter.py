@@ -33,7 +33,7 @@ class APIVersionWriter(TemplateFileWriter):
         """
         
         this_dir = os.path.dirname(__file__)        
-        config_file = os.path.abspath(os.path.join(this_dir, "..", "..", "..", "..", "..", "vspkgenerator", "config", "config.json"))
+        config_file = os.path.abspath(os.path.join(this_dir, "..", "config", "config.json"))
 
         self.generic_enum_attrs = []
         self.base_attrs = []
