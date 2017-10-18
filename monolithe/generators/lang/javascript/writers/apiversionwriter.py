@@ -1,5 +1,6 @@
 from monolithe.generators.lib import TemplateFileWriter
 from monolithe.specifications import SpecificationAttribute
+from monolithe.lib import Printer
 import os
 import shutil
 import json
@@ -39,6 +40,8 @@ class APIVersionWriter(TemplateFileWriter):
         self.named_entity_attrs = []
         self.overide_generic_enums = []
         
+        Printer.log("Configuration file: %s" % (config_file))
+
         if (os.path.isfile(config_file)):
             with open(config_file, 'r') as input_json:
                 json_config_data = json.load(input_json) 
@@ -53,6 +56,8 @@ class APIVersionWriter(TemplateFileWriter):
                 enum_attr.name = enum_name
                 enum_attr.allowed_choices = values
                 self.generic_enum_attrs.append(enum_attr)
+        else:
+            Printer.log("Configuration file missing: %s" % (config_file))
         
         
     def perform(self, specifications):
@@ -128,6 +133,7 @@ class APIVersionWriter(TemplateFileWriter):
                     generic_enum_attrs_in_entity[attr.name] = generic_enum_attr
                     enum_attrs_to_import.remove(attr)
                     generic_enum_attributes_to_import.append(generic_enum_attr.name)
+
         
         self._write_enums(entity_name=specification.entity_name, attributes=enum_attrs_to_import)
 
