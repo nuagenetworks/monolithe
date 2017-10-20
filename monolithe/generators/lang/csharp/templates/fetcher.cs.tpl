@@ -1,9 +1,8 @@
 {{ header }}
 
 
-import net.nuagenetworks.bambou.RestObject;
-import net.nuagenetworks.bambou.RestFetcher;
-import {{ package_name }}.{{ class_prefix }}{{ specification.entity_name }};
+using net.nuagenetworks.bambou;
+using {{ package_name }}; 
 
 namespace {{ package_name }}.fetchers
 {
@@ -12,8 +11,9 @@ namespace {{ package_name }}.fetchers
 
        private const long serialVersionUID = 1L;
        
-       public {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher(RestObject parentRestObj) {
-          base(parentRestObj, {{ class_prefix }}{{ specification.entity_name }}.class);
+       public {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher(RestObject parentRestObj) 
+          : base(parentRestObj, typeof({{ class_prefix }}{{ specification.entity_name }}))
+       {
        }
    
        {% if override_content -%}

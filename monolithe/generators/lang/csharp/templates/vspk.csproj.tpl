@@ -47,7 +47,6 @@
     <Compile Include="{{ specification.entity_name| replace(" ", "_")}}.cs" />
     <Compile Include="{{ specification.entity_name_plural| replace(" ", "_")}}Fetcher.cs" />
     {%- endfor %}
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SdkInfo.cs" />
     <Compile Include="VSDSession.cs" />
   </ItemGroup>

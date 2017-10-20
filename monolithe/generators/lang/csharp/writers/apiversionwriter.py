@@ -147,7 +147,7 @@ class APIVersionWriter(TemplateFileWriter):
         filename = "vspk/%s%s.cs" % (self._class_prefix, specification.entity_name)
 
         override_content = self._extract_override_content(specification.entity_name)
-        superclass_name = "RestRootObject" if specification.rest_name == self.api_root else "RestObject"
+        superclass_name = "RestObject"
 
         defaults = {}
         section = specification.entity_name
@@ -297,15 +297,15 @@ class APIVersionWriter(TemplateFileWriter):
                 elif attribute.type == "list":
                     if attribute.subtype == "enum":
                         enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
-                        attribute.local_type = "System.Collections.Generic.List<" + enum_subtype + ">"
+                        attribute.local_type = "System.Collections.Generic.List<E" + enum_subtype + ">"
                     elif attribute.subtype == "object":
-                        attr_subtype = "Newtonsoft.Json.Linq.JsonObject"
+                        attr_subtype = "JObject"
                         if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
                             subtype = self.attrs_types.get(specification.entity_name, attribute.local_name)
                             if subtype:
                                 attr_subtype = subtype
                         attribute.local_type = "System.Collections.Generic.List<" + attr_subtype + ">"
                     elif attribute.subtype == "entity":
-                        attribute.local_type = "System.Collections.Generic.List<Newtonsoft.Json.Linq.JsonObject>"
+                        attribute.local_type = "System.Collections.Generic.List<JObject>"
                     else:
                         attribute.local_type = "System.Collections.Generic.List<String>"
