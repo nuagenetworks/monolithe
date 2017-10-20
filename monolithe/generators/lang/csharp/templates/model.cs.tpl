@@ -2,15 +2,10 @@
 
 using System;
 using Newtonsoft.Json;
-using net.nuagenetworks.bambou.{{ superclass_name }};
-using net.nuagenetworks.bambou.annotation.RestEntity;
+using Newtonsoft.Json.Linq;
+using net.nuagenetworks.bambou;
 
-{% if specification.child_apis|length > 0 -%}   
-{% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) -%}
-{% set child_spec = specification_set[api.rest_name] %}
-using {{ package_name }}.fetchers.{{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher;
-{%- endfor %}
-{%- endif %}
+using {{ package_name }}.fetchers;
 
 namespace {{ package_name }}
 {
@@ -22,20 +17,22 @@ public class {{ class_prefix }}{{ specification.entity_name }}: {{ superclass_na
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
    {% if attribute.type == "enum" or attribute.subtype == "enum" %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
-   public enum {{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice }}{% if not loop.last %}, {% endif %}{% endfor %} };
+   public enum E{{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice }}{% if not loop.last %}, {% endif %}{% endfor %} };
    {%- endif %}
    {%- endfor %}
 
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    [JsonProperty("{{ attribute.name }}")]   
-   protected {{ attribute.local_type }} {{ attribute.local_name }};
+   {%- set field_name = attribute.local_type %}
+   {%- if attribute.type == "enum" %}{%- set field_name="E"+attribute.local_type %}{%- endif %}
+   protected {{ field_name }} _{{ attribute.local_name }};
    {% endfor %}
 
    {% if specification.child_apis|length > 0 -%}
    {% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
    {%- set child_spec = specification_set[api.rest_name] %}
    [JsonIgnore]
-   private {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher {{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }};
+   private {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher _{{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }};
    {% endfor %}
    {%- endif %}
 
@@ -44,25 +41,25 @@ public class {{ class_prefix }}{{ specification.entity_name }}: {{ superclass_na
 {% if add_warning %}   @SuppressWarnings("static-access"){% endif %}
    public {{ class_prefix }}{{ specification.entity_name }}() {
       {% for attribute, value in attribute_defaults.iteritems() -%}
-      {{attribute}} = {{value}};
+      _{{attribute}} = {{value}};
       {% endfor -%}
 
       {% if specification.child_apis|length > 0 -%}   
       {% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
       {%- set child_spec = specification_set[api.rest_name] %}
-      {{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }} = new {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher(this);
+      _{{ child_spec.instance_name_plural[0:1].lower() + child_spec.instance_name_plural[1:] }} = new {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher(this);
       {% endfor %}
       {%- endif %}
    }
 
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] -%}
-   public {% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} get{{ field_name }}() {
-      return {{ attribute.local_name }};
+   public {% if attribute.type == "enum" %}E{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} get{{ field_name }}() {
+      return _{{ attribute.local_name }};
    }
 
-   public void set{{ field_name }}({% if attribute.local_type == "enum" %}{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} value) { 
-      this.{{ attribute.local_name }} = value;
+   public void set{{ field_name }}({% if attribute.type == "enum" %}E{{ field_name }}{% else %}{{ attribute.local_type }}{% endif %} value) { 
+      this._{{ attribute.local_name }} = value;
    }
    {% endfor %}
 
@@ -70,13 +67,13 @@ public class {{ class_prefix }}{{ specification.entity_name }}: {{ superclass_na
    {% for api in specification.child_apis | sort(attribute='rest_name', case_sensitive=True) %}
    {%- set child_spec = specification_set[api.rest_name] %}
    public {{ class_prefix }}{{ child_spec.instance_name_plural }}Fetcher get{{ child_spec.entity_name_plural }}() {
-      return {{ child_spec.entity_name_plural[0:1].lower() + child_spec.entity_name_plural[1:] }};
+      return _{{ child_spec.entity_name_plural[0:1].lower() + child_spec.entity_name_plural[1:] }};
    }
    {% endfor %}
    {%- endif %}
 
    public String toString() {
-      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
+      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + _{{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
               + lastUpdatedDate + ", owner=" + owner {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
    }
    
