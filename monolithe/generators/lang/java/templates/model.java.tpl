@@ -35,7 +35,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    @JsonProperty(value = "{{ attribute.name }}")
    {%- set field_name = attribute.local_type %}
-   {%- if attribute.local_type == specification.entity_name %}{%- set field_name="E"+field_name %}{%- endif %}
+   {%- if attribute.l_type == specification.entity_name %}{%- set field_name="E"+field_name %}{%- endif %}
    protected {{ field_name }} {{ attribute.local_name }};
    {% endfor %}
 
