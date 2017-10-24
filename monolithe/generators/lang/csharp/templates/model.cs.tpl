@@ -79,5 +79,15 @@ public class {{ class_prefix }}{{ specification.entity_name }}: {{ superclass_na
    {% if override_content -%}
    {{ override_content.replace('\n', '\n   ') }}
    {%- endif %}
+
+   public static String getResourceName()
+   {
+	return "{{ specification.resource_name }}";
+   }
+
+   public static String getRestName()
+   {
+	return "{{ specification.rest_name }}";
+   }
 }
 }
