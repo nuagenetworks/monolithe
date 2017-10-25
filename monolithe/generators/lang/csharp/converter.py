@@ -37,7 +37,7 @@ def get_type_name(type_name, sub_type=None):
     elif type_name == "integer":
         return "long"
     elif type_name == "time":
-        return "float"
+        return "long"
     elif type_name == "object":
         return "Object"
     elif type_name == "list":
