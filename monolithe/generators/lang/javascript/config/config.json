@@ -10,6 +10,7 @@
         "enterprise": ["encryptionManagementMode"],
         "infrastructuregatewayprofile": ["remoteLogMode", "controllerLessForwardingMode"],
         "nsginfo": ["TPMStatus"],
-        "nsgateway": ["TPMStatus"]
+        "nsgateway": ["TPMStatus"],
+        "ingressadvfwdentrytemplate": ["appType"]
     }
 }
