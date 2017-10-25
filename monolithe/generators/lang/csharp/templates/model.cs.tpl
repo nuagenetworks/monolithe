@@ -59,6 +59,7 @@ public class {{ class_prefix }}{{ specification.entity_name }}: {{ superclass_na
    {%- set field_type = attribute.local_type %}
    {%- if attribute.type == "enum" %}{%- set field_type="E"+field_name+"?" %}{%- endif %}
    {%- if field_type == "long" %}{%- set field_type=field_type+"?" %}{%- endif %}
+   [JsonIgnore]
    public {{ field_type }} NU{{ field_name }} {
       get {
          return _{{ attribute.local_name }};
