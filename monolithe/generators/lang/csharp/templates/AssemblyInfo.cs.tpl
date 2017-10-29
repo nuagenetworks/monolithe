@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Nokia")]
-[assembly: AssemblyProduct("bambou")]
+[assembly: AssemblyProduct("vspk")]
 [assembly: AssemblyCopyright("Copyright Nokia 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
