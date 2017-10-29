@@ -90,7 +90,6 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_csproj(specifications=specifications)
         self._write_session()
         self._write_info()
-        self._write_packages()
 
         task_manager = TaskManager()
         for rest_name, specification in specifications.items():
@@ -197,11 +196,12 @@ class APIVersionWriter(TemplateFileWriter):
 
         return (filename, specification.entity_name_plural)
 
-    def _write_packages(self):
+    def _write_csproj(self, specifications):
         """
         """
-        self.write(destination=self.output_directory+"/vspk", filename="packages.config", template_name="packages.config.tpl",
+        self.write(destination=self.output_directory+"/vspk", filename="vspk.csproj", template_name="vspk.csproj.tpl",
                    version=self.api_version,
+                   specifications=specifications,
                    product_accronym=self._product_accronym,
                    root_api=self.api_root,
                    api_prefix=self.api_prefix,
@@ -209,11 +209,20 @@ class APIVersionWriter(TemplateFileWriter):
                    name=self._name,
                    header=self.header_content)
 
-    def _write_csproj(self, specifications):
-        """
-        """
-        self.write(destination=self.output_directory+"/vspk", filename="vspk.csproj", template_name="vspk.csproj.tpl",
+        self.write(destination=self.output_directory+"/", filename="package.nuspec", template_name="package.nuspec.tpl",
                    version=self.api_version,
+		   library_version=self.library_version,
+                   specifications=specifications,
+                   product_accronym=self._product_accronym,
+                   root_api=self.api_root,
+                   api_prefix=self.api_prefix,
+                   product_name=self._product_name,
+                   name=self._name,
+                   header=self.header_content)
+
+        self.write(destination=self.output_directory+"/vspk/Properties", filename="AssemblyInfo.cs", template_name="AssemblyInfo.cs.tpl",
+                   version=self.api_version,
+                   library_version=self.library_version,
                    specifications=specifications,
                    product_accronym=self._product_accronym,
                    root_api=self.api_root,

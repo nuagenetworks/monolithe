@@ -30,12 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)\csharp-bambou\csharp-bambou.csproj">
-      <Project>{4a9cf828-fcab-41e6-a42b-8dd87c37c69f}</Project>
-      <Name>csharp-bambou</Name>
-    </ProjectReference>
+    <Reference Include="net.nuagenetworks.bambou, Version=1.0.6510.36979, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\net.nuagenetworks.bambou.dll.1.1.0\lib\net452\net.nuagenetworks.bambou.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-	<HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System"/>
     <Reference Include="System.Core"/>
@@ -53,6 +52,7 @@
     {%- endfor %}
     <Compile Include="SdkInfo.cs" />
     <Compile Include="VSDSession.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
