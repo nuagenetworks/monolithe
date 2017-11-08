@@ -11,6 +11,10 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>nuage</tags>
+    <dependencies>
+      <dependency id="net.nuagenetworks.bambou.dll" version="1.1.1" />
+      <dependency id="Newtonsoft.Json" version="10.0.3" />
+    </dependencies>
   </metadata>
   <files>
     <file src="vspk/bin/Release/net.nuagenetworks.vspk.dll" target="lib/net452"/>
