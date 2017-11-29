@@ -62,3 +62,4 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
 }
 
 ServiceClassRegistry.register({{ class_prefix }}{{ specification.entity_name }});
+
