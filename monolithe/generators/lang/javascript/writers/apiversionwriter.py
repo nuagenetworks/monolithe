@@ -19,7 +19,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.model_directory = "%s/javascript/%s/models" % (output, api_info["version"])
         self.abstract_directory =  "%s/abstract" % self.model_directory
         self.enum_directory =  "%s/enums" % self.model_directory
-        self.locale_directory = "%s/javascript/%s/locale" % (output, api_info["version"])
+        self.locale_directory = "%s/javascript/%s/locale/en" % (output, api_info["version"])
 
         if os.path.exists(self.model_directory):
             shutil.rmtree(self.model_directory)
@@ -46,6 +46,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.named_entity_attrs = []
         self.overide_generic_enums = []
         self.enum_attrs_for_locale = {}
+        self.generic_enum_attrs_for_locale = {}
         
         Printer.log("Configuration file: %s" % (config_file))
 
@@ -100,15 +101,20 @@ class APIVersionWriter(TemplateFileWriter):
             for rest_name, specification in specifications.items():
                 enum_attrs_for_locale_template = {}
                 enum_attrs = self.enum_attrs_for_locale[specification.entity_name]
+                
+                generic_enum_attrs = self.generic_enum_attrs_for_locale[specification.entity_name];
+                if (generic_enum_attrs):
+                    enum_attrs.extend(generic_enum_attrs)
+                    
                 if (enum_attrs):
                     for attribute in enum_attrs:
                         enum_name = "%s%s%sEnum" % (self._class_prefix, specification.entity_name, attribute.name[0].upper() + attribute.name[1:])
                         enum_attrs_for_locale_template[enum_name] = attribute.allowed_choices
-                        
-                filename = "locale_en_%s.json" % (rest_name)
+                
+                filename = "%s.json" % (rest_name)
                 self.write(destination = self.locale_directory,
                     filename=filename,
-                    template_name="locale_en.json.tpl",
+                    template_name="locale_entity.json.tpl",
                     specification = specification,
                     enum_attrs = enum_attrs_for_locale_template)
                         
@@ -164,6 +170,8 @@ class APIVersionWriter(TemplateFileWriter):
         
         self._write_enums(entity_name=specification.entity_name, attributes=enum_attrs_to_import)
 
+        self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
+        
         self.write(destination = self.model_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
