@@ -73,13 +73,7 @@ class APIVersionWriter(TemplateFileWriter):
         """
         self.enum_list = []
         self.model_list = []
-                
-        if self.locale_on:
-            self.write(destination = self.locale_directory,
-                filename="locale_en.json",
-                template_name="locale_en.json.tpl",
-                specifications = specifications)
-                            
+            
         self._write_abstract_named_entity()
         
         for rest_name, specification in specifications.iteritems():
@@ -99,22 +93,24 @@ class APIVersionWriter(TemplateFileWriter):
                     class_prefix = self._class_prefix,
                     enum_list = self.enum_list)
                     
-        self._write_locale_enums()
+        self._write_locales(specifications)            
 
-    
-    def _write_locale_enums(self):
-        """ This method generates locales for enum allowed_choices
-        """
-        enum_attrs_for_locale_template = {}
-        
-        for entity_name, enum_attrs in self.enum_attrs_for_locale.iteritems():
-            for attribute in enum_attrs:
-                enum_name = "%s%s%sEnum" % (self._class_prefix, entity_name, attribute.name[0].upper() + attribute.name[1:])
-                enum_attrs_for_locale_template[enum_name] = attribute.allowed_choices
+    def _write_locales(self, specifications):
+        if self.locale_on:
+            for rest_name, specification in specifications.items():
+                enum_attrs_for_locale_template = {}
+                enum_attrs = self.enum_attrs_for_locale[specification.entity_name]
+                if (enum_attrs):
+                    for attribute in enum_attrs:
+                        enum_name = "%s%s%sEnum" % (self._class_prefix, specification.entity_name, attribute.name[0].upper() + attribute.name[1:])
+                        enum_attrs_for_locale_template[enum_name] = attribute.allowed_choices
+                        
+                filename = "locale_en_%s.json" % (rest_name)
                 self.write(destination = self.locale_directory,
-                            filename="locale_enum_en.json",
-                            template_name="locale_enum_en.json.tpl",
-                            enum_attrs_for_locale_template = enum_attrs_for_locale_template)
+                    filename=filename,
+                    template_name="locale_en.json.tpl",
+                    specification = specification,
+                    enum_attrs = enum_attrs_for_locale_template)
                         
 
     def _write_abstract_named_entity(self):
@@ -148,9 +144,9 @@ class APIVersionWriter(TemplateFileWriter):
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
 
-        specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs and (not isNamedEntity or attribute.name not in self.named_entity_attrs))]
+        specification.attributes_modified = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs and (not isNamedEntity or attribute.name not in self.named_entity_attrs))]
 
-        enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
+        enum_attributes=[attribute for attribute in specification.attributes_modified if attribute.allowed_choices]
                 
         enum_attrs_to_import = enum_attributes[:]
         generic_enum_attrs_in_entity = {}
