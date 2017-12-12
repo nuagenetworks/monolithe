@@ -19,7 +19,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.model_directory = "%s/javascript/%s/models" % (output, api_info["version"])
         self.abstract_directory =  "%s/abstract" % self.model_directory
         self.enum_directory =  "%s/enums" % self.model_directory
-        self.locale_directory = "%s/javascript/%s/locale/en" % (output, api_info["version"])
+        self.locale_directory = "%s/javascript/%s/locales/en" % (output, api_info["version"])
 
         if os.path.exists(self.model_directory):
             shutil.rmtree(self.model_directory)
@@ -116,7 +116,7 @@ class APIVersionWriter(TemplateFileWriter):
                     filename=filename,
                     template_name="locale_entity.json.tpl",
                     specification = specification,
-                    enum_attrs = enum_attrs_for_locale_template)
+                    enum_attrs = {})
                         
 
     def _write_abstract_named_entity(self):
