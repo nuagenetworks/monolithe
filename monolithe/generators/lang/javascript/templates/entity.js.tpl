@@ -18,7 +18,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     constructor(...args) {
         super(...args);
         this.defineProperties({
-        {%- for attribute in specification.attributes %}
+        {%- for attribute in specification.attributes_modified %}
             {% set is_enum = attribute.allowed_choices and attribute.allowed_choices|length > 0  -%}
             {{ attribute.name }}: {% if attribute.default_value %}{% if attribute.local_type == "string" %}'{{ attribute.default_value }}'{% else %}{% if is_enum  %}{{ class_prefix }}{% set attr_name %}{% if attribute.name not in  generic_enum_attributes%}{{ attribute.name }}{% else %}{{ generic_enum_attributes[attribute.name].name }}{% endif %}{% endset %}{% if attribute.name not in  generic_enum_attributes%}{{ specification.entity_name }}{% endif %}{{ attr_name[0].upper() + attr_name[1:] }}Enum.{% endif %}{{ attribute.default_value }}{% if is_enum  %}.name{% endif %}{% endif %}{% else %}null{% endif %},
         {%- endfor %}
@@ -32,7 +32,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         
     static attributeDescriptors = {
         ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,
-        {%- for attribute in specification.attributes %}
+        {%- for attribute in specification.attributes_modified %}
         {{ attribute.name }}: new {{ class_prefix }}Attribute({
             localName: '{{ attribute.name }}',
             attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "integer" %}INTEGER{% elif attribute.local_type == "float" %}FLOAT{% elif attribute.local_type == "list" %}LIST{% elif attribute.local_type == "boolean" %}BOOLEAN{% elif attribute.local_type == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %}{% if attribute.description %},

@@ -12,15 +12,20 @@ class APIVersionWriter(TemplateFileWriter):
     def __init__(self, monolithe_config, api_info):
         
         super(APIVersionWriter, self).__init__(package="monolithe.generators.lang.javascript")
-        
+
         output = monolithe_config.get_option("output", "transformer")
         
+        self.locale_on = monolithe_config.get_option("locale", "transformer", fallback=False)
         self.model_directory = "%s/javascript/%s/models" % (output, api_info["version"])
         self.abstract_directory =  "%s/abstract" % self.model_directory
         self.enum_directory =  "%s/enums" % self.model_directory
+        self.locale_directory = "%s/javascript/%s/locales/en" % (output, api_info["version"])
 
         if os.path.exists(self.model_directory):
             shutil.rmtree(self.model_directory)
+
+        if os.path.exists(self.locale_directory):
+            shutil.rmtree(self.locale_directory)
 
         self.api_root = api_info["root"]
         self._class_prefix = monolithe_config.get_option("class_prefix", "transformer")
@@ -40,6 +45,8 @@ class APIVersionWriter(TemplateFileWriter):
         self.generic_enums = []
         self.named_entity_attrs = []
         self.overide_generic_enums = []
+        self.enum_attrs_for_locale = {}
+        self.generic_enum_attrs_for_locale = {}
         
         Printer.log("Configuration file: %s" % (config_file))
 
@@ -65,9 +72,9 @@ class APIVersionWriter(TemplateFileWriter):
         """ This method is the entry point of javascript code writer. Monolithe will call it when
         the javascript plugin is to generate code.
         """
-        self.enum_list = [];
-        self.model_list = [];
-
+        self.enum_list = []
+        self.model_list = []
+            
         self._write_abstract_named_entity()
         
         for rest_name, specification in specifications.iteritems():
@@ -86,9 +93,34 @@ class APIVersionWriter(TemplateFileWriter):
                     template_name="enum_index.js.tpl",
                     class_prefix = self._class_prefix,
                     enum_list = self.enum_list)
+                    
+        self._write_locales(specifications)            
+
+    def _write_locales(self, specifications):
+        if self.locale_on:
+            for rest_name, specification in specifications.items():
+                enum_attrs_for_locale_template = {}
+                enum_attrs = self.enum_attrs_for_locale[specification.entity_name]
+                
+                generic_enum_attrs = self.generic_enum_attrs_for_locale[specification.entity_name];
+                if (generic_enum_attrs):
+                    enum_attrs.extend(generic_enum_attrs)
+                    
+                if (enum_attrs):
+                    for attribute in enum_attrs:
+                        enum_name = "%s%s%sEnum" % (self._class_prefix, specification.entity_name, attribute.name[0].upper() + attribute.name[1:])
+                        enum_attrs_for_locale_template[enum_name] = attribute.allowed_choices
+                
+                filename = "%s.json" % (rest_name)
+                self.write(destination = self.locale_directory,
+                    filename=filename,
+                    template_name="locale_entity.json.tpl",
+                    specification = specification,
+                    enum_attrs = {})
+                        
 
     def _write_abstract_named_entity(self):
-        """ This method generated AbstractNamedEntity class js file.
+        """ This method generates AbstractNamedEntity class js file.
         """
         filename = "%sAbstractNamedEntity.js" % (self._class_prefix)
                 
@@ -118,9 +150,9 @@ class APIVersionWriter(TemplateFileWriter):
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
 
-        specification.attributes = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs and (not isNamedEntity or attribute.name not in self.named_entity_attrs))]
+        specification.attributes_modified = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs and (not isNamedEntity or attribute.name not in self.named_entity_attrs))]
 
-        enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
+        enum_attributes=[attribute for attribute in specification.attributes_modified if attribute.allowed_choices]
                 
         enum_attrs_to_import = enum_attributes[:]
         generic_enum_attrs_in_entity = {}
@@ -138,6 +170,8 @@ class APIVersionWriter(TemplateFileWriter):
         
         self._write_enums(entity_name=specification.entity_name, attributes=enum_attrs_to_import)
 
+        self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
+        
         self.write(destination = self.model_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
@@ -155,6 +189,8 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_enums(self, entity_name, attributes):
         """ This method writes the ouput for a particular specification.
         """
+        
+        self.enum_attrs_for_locale[entity_name] = attributes;
 
         for attribute in attributes:
             enum_name = "%s%sEnum" % (entity_name, attribute.name[0].upper() + attribute.name[1:])

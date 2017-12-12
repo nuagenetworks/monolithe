@@ -81,8 +81,8 @@ class MonolitheConfig(object):
         self.mapping = ConfigParser()
         self.mapping.read(mapping_path)
 
-    def get_option(self, option, section="monolithe"):
-        return self.config.get(section, option)
+    def get_option(self, option, section="monolithe", **kwargs):
+        return self.config.get(section, option, **kwargs)
 
     def set_option(self, option, value, section="monolithe"):
         return self.config.set(section, option, value)
