@@ -25,22 +25,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from setuptools import setup, find_packages
+__all__ = ["APIVersionWriter", "VanillaWriter", "get_type_name"]
 
-setup(
-    name="monolithe",
-    packages=find_packages(exclude=["*tests*"]),
-    include_package_data=True,
-    version="1.4.1",
-    description="Monolithe is a sdk generator",
-    author="Nuage Networks",
-    author_email="opensource@nuagnetworks.net",
-    url="https://github.com/nuagenetworks/monolithe",
-    classifiers=[],
-    install_requires=[line for line in open("requirements.txt")],
-    entry_points={
-        "console_scripts": [
-            "monogen = monolithe.cli:main"
-        ]
-    }
-)
+from .writers.apiversionwriter import APIVersionWriter
+from .writers.vanillawriter import VanillaWriter
+from .converter import get_type_name

@@ -14,3 +14,5 @@ recursive-include monolithe/generators/lang/vro/templates *
 recursive-include monolithe/generators/lang/vro/vanilla *
 recursive-include monolithe/generators/lang/javascript/config/ *
 recursive-include monolithe/generators/lang/javascript/templates *
+recursive-include monolithe/generators/lang/csharp/templates *
+recursive-include monolithe/generators/lang/csharp/vanilla *

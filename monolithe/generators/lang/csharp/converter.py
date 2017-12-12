@@ -25,22 +25,35 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from setuptools import setup, find_packages
 
-setup(
-    name="monolithe",
-    packages=find_packages(exclude=["*tests*"]),
-    include_package_data=True,
-    version="1.4.1",
-    description="Monolithe is a sdk generator",
-    author="Nuage Networks",
-    author_email="opensource@nuagnetworks.net",
-    url="https://github.com/nuagenetworks/monolithe",
-    classifiers=[],
-    install_requires=[line for line in open("requirements.txt")],
-    entry_points={
-        "console_scripts": [
-            "monogen = monolithe.cli:main"
-        ]
-    }
-)
+def get_type_name(type_name, sub_type=None):
+    """ Returns a c# type according to a spec type
+
+    """
+    if type_name == "enum":
+        return type_name
+    elif type_name == "boolean":
+        return "bool"
+    elif type_name == "integer":
+        return "long"
+    elif type_name == "time":
+        return "long"
+    elif type_name == "object":
+        return "Object"
+    elif type_name == "list":
+        return "List"
+    elif type_name == "float":
+        return "float"
+    else:
+        return "String"
+
+
+def get_idiomatic_name(name):
+    """
+    """
+    if name == "private":
+        return "private_"
+    elif name == "public":
+        return "public_"
+    else:
+        return name
