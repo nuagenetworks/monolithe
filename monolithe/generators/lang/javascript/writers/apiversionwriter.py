@@ -80,7 +80,7 @@ class APIVersionWriter(TemplateFileWriter):
         for rest_name, specification in specifications.iteritems():
             self._write_model(specification=specification)
 
-        self._write_generic_enums()
+        #self._write_generic_enums()
         
         self.write(destination = self.model_directory,
             filename="index.js",
