@@ -6,7 +6,7 @@ import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "Ab
 {{ import_str|wordwrap(96,false,'\n    ')}}
 {%- endif %}
 {%- if generic_enum_attributes_to_import and generic_enum_attributes_to_import|length > 0 %}
-{%- set import_str %}import { {% for attr in generic_enum_attributes_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ attr[0].upper() + attr[1:] }}Enum{% endfor %} } from './enums';{%- endset %}
+{%- set import_str %}import { {% for attr in generic_enum_attributes_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ attr[0].upper() + attr[1:] }}Enum{% endfor %} } from '@/enums';{%- endset %}
 {{ import_str|wordwrap(96,false,'\n    ')}}
 {%- endif %}
 
