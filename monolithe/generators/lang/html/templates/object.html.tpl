@@ -131,7 +131,7 @@
             {% elif mode == "children" %}
 
             {% if api.relationship == "root" %}
-            <span class="fixed-text">/{{ specification.resource_name }}</a>
+            <span class="fixed-text">/<a href="{{ api.remote_spec.rest_name }}.html">{{ api.remote_spec.resource_name }}</a></span>
             {% else%}
             <span class="fixed-text">/{{ specification.resource_name }}/<span class="text-muted">id</span>/<a href="{{ api.remote_spec.rest_name }}.html">{{ api.remote_spec.resource_name }}</a></span>
             {% endif %}
