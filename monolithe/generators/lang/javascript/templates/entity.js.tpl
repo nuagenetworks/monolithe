@@ -27,7 +27,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     
     static entityDescriptor = {
         description: `{{ specification.description }}`,
-        userlabel: '{{ specification.userlabel}}',
+        userlabel: `{{ specification.userlabel}}`,
     }
         
     static attributeDescriptors = {
@@ -47,7 +47,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             {%- set choices_str %}[{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{% set attr_name %}{% if attribute.name not in  generic_enum_attributes%}{{ attribute.name }}{% else %}{{ generic_enum_attributes[attribute.name].name }}{% endif %}{% endset %}{% if attribute.name not in  generic_enum_attributes%}{{ specification.entity_name }}{% endif %}{{ attr_name[0].upper() + attr_name[1:] }}Enum.{{choice}}{% endfor %}]{%- endset %}
             choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},{% if attribute.local_type == "list" %}
             subType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.subtype == "integer" %}INTEGER{% elif attribute.subtype == "float" %}FLOAT{% elif attribute.subtype == "boolean" %}BOOLEAN{% elif attribute.subtype == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %},{% endif %}
-            userlabel: '{{ attribute.userlabel }}',
+            userlabel: `{{ attribute.userlabel }}`,
         }),
         {%- endfor %}
     }
