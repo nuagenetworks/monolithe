@@ -15,7 +15,7 @@ class APIVersionWriter(TemplateFileWriter):
 
         output = monolithe_config.get_option("output", "transformer")
         
-        self.locale_on = monolithe_config.get_option("locale", "transformer", fallback=False)
+        self.locale_on = monolithe_config.get_option("locale", "transformer", fallback=True)
         self.model_directory = "%s/javascript/%s/models" % (output, api_info["version"])
         self.abstract_directory =  "%s/abstract" % self.model_directory
         self.enum_directory =  "%s/enums" % self.model_directory
