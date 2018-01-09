@@ -99,25 +99,33 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_locales(self, specifications):
         if self.locale_on:
             for rest_name, specification in specifications.items():
-                enum_attrs_for_locale_template = {}
-                enum_attrs = self.enum_attrs_for_locale[specification.entity_name]
+                #enum_attrs_for_locale_template = {}
+                #enum_attrs = self.enum_attrs_for_locale[specification.entity_name]
+                #
+                #generic_enum_attrs = self.generic_enum_attrs_for_locale[specification.entity_name];
+                #if (generic_enum_attrs):
+                #    enum_attrs.extend(generic_enum_attrs)
+                #    
+                #if (enum_attrs):
+                #    for attribute in enum_attrs:
+                #        enum_name = "%s%s%sEnum" % (self._class_prefix, specification.entity_name, attribute.name[0].upper() + attribute.name[1:])
+                #        enum_attrs_for_locale_template[enum_name] = attribute.allowed_choices
                 
-                generic_enum_attrs = self.generic_enum_attrs_for_locale[specification.entity_name];
-                if (generic_enum_attrs):
-                    enum_attrs.extend(generic_enum_attrs)
-                    
-                if (enum_attrs):
-                    for attribute in enum_attrs:
-                        enum_name = "%s%s%sEnum" % (self._class_prefix, specification.entity_name, attribute.name[0].upper() + attribute.name[1:])
-                        enum_attrs_for_locale_template[enum_name] = attribute.allowed_choices
-                
+                self._format_description_text(specification)            
                 filename = "%s.json" % (rest_name)
                 self.write(destination = self.locale_directory,
                     filename=filename,
                     template_name="locale_entity.json.tpl",
                     specification = specification,
                     enum_attrs = {})
-                        
+            
+    def _format_description_text(self, specification):
+        if specification.description:
+            specification.description = specification.description.replace('"', "'")  
+            
+        for attribute in specification.attributes:
+            if attribute.description:
+                attribute.description = attribute.description.replace('"', "'")
 
     def _write_abstract_named_entity(self):
         """ This method generates AbstractNamedEntity class js file.
