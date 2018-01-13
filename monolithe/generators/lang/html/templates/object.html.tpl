@@ -26,6 +26,7 @@
                     <li><a data-id="apiresources" href="#apiresources">API Resource</a></li>
                     <li><a data-id="parents" href="#parents">Parents</a></li>
                     <li><a data-id="children" href="#children">Children</a></li>
+                    <li><a data-id="members" href="#members">Members</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Attributes <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -110,6 +111,8 @@
     {% macro make_api_list(mode, nothing_string) %}
     {% if mode == "children" %}
     {% set apis = child_apis %}
+    {% elif mode == "members" %}
+    {% set apis = member_apis %}
     {% elif mode == "parents" %}
     {% set apis = parent_apis %}
     {% else %}
@@ -128,7 +131,7 @@
             <span class="fixed-text">/<a href="{{ api.remote_spec.rest_name }}.html">{{ api.remote_spec.resource_name }}</a>/<span class="text-muted">id</span>/{{ specification.resource_name }}</span>
             {% endif %}
 
-            {% elif mode == "children" %}
+            {% elif mode == "children" or mode == "members" %}
 
             {% if api.relationship == "root" %}
             <span class="fixed-text">/<a href="{{ api.remote_spec.rest_name }}.html">{{ api.remote_spec.resource_name }}</a></span>
@@ -191,7 +194,12 @@
 
         <section id="children">
             <h3>Children</h3>
-            {{ make_api_list("children", "This object has no child.")}}
+            {{ make_api_list("children", "This object has no children.")}}
+        </section>
+
+        <section id="members">
+            <h3>Members</h3>
+            {{ make_api_list("members", "This object has no members.")}}
         </section>
 
         <section id="attributes">
