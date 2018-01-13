@@ -87,8 +87,12 @@ class APIVersionWriter(TemplateFileWriter):
                     parent_apis.append({"remote_spec": remote_spec, "actions": self._get_actions(related_child_api), "relationship": related_child_api.relationship})
 
         child_apis = []
+        member_apis = []
         for child_api in specification.child_apis:
-            child_apis.append({"remote_spec": specification_set[child_api.rest_name], "actions": self._get_actions(child_api), "relationship": child_api.relationship})
+            if child_api.relationship == "member":
+                member_apis.append({"remote_spec": specification_set[child_api.rest_name], "actions": self._get_actions(child_api), "relationship": child_api.relationship})
+            else:
+                child_apis.append({"remote_spec": specification_set[child_api.rest_name], "actions": self._get_actions(child_api), "relationship": child_api.relationship})
 
         self_apis = [{"actions": self._get_actions(specification)}]
 
@@ -97,6 +101,7 @@ class APIVersionWriter(TemplateFileWriter):
                    specification=specification,
                    parent_apis=parent_apis,
                    child_apis=child_apis,
+                   member_apis=member_apis,
                    self_apis=self_apis,
                    product_name=self._product_name)
 
