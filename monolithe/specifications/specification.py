@@ -69,6 +69,7 @@ class Specification(object):
         self.rest_name = None  # The remote name of the object
         self._entity_name = None  # The original name of the object
         self.userlabel = None
+        self.template = False
 
         self.attributes = []
         self.child_apis = []
@@ -115,6 +116,7 @@ class Specification(object):
         data["model"]["delete"] = self.allows_delete
         data["model"]["root"] = self.is_root
         data["model"]["userlabel"] = self.userlabel
+        data["model"]["template"] = self.template
 
         data["attributes"] = []
         for attribute in self.attributes:
@@ -144,6 +146,7 @@ class Specification(object):
             self.allows_delete = model["delete"] if "delete" in model else False
             self.is_root = model["root"] if "root" in model else False
             self.userlabel = model["userlabel"] if "userlabel" in model else None
+            self.template = model["template"] if "template" in model else False
 
         if "attributes" in data:
             self.attributes = self._get_attributes(data["attributes"])
