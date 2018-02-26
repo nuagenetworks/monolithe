@@ -11,6 +11,7 @@
         "infrastructuregatewayprofile": ["remoteLogMode", "controllerLessForwardingMode"],
         "nsginfo": ["TPMStatus"],
         "nsgateway": ["TPMStatus"],
-        "ingressadvfwdentrytemplate": ["appType"]
+        "ingressadvfwdentrytemplate": ["appType"],
+        "vnf": ["allowedActions"]
     }
 }
