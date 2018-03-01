@@ -9,6 +9,7 @@
     "overide_generic_enums": {
         "enterprise": ["encryptionManagementMode"],
         "infrastructuregatewayprofile": ["remoteLogMode", "controllerLessForwardingMode"],
+        "job": ["command"],
         "nsginfo": ["TPMStatus"],
         "nsgateway": ["TPMStatus"],
         "ingressadvfwdentrytemplate": ["appType"],
