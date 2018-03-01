@@ -12,6 +12,7 @@
         "nsginfo": ["TPMStatus"],
         "nsgateway": ["TPMStatus"],
         "ingressadvfwdentrytemplate": ["appType"],
+        "link": ["acceptanceCriteria"],
         "vnf": ["allowedActions"]
     }
 }
