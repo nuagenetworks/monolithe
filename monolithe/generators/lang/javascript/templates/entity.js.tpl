@@ -31,7 +31,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         description: `{{ specification.description }}`,
         userlabel: `{{ specification.userlabel}}`,
     }
-        
+
     static attributeDescriptors = {
         ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,
         {%- for attribute in specification.attributes_modified %}
