@@ -26,7 +26,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         {%- endfor %}
         });
     }
-    
+
     static entityDescriptor = {
         description: `{{ specification.description }}`,
         userlabel: `{{ specification.userlabel}}`,
@@ -54,12 +54,20 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         {%- endfor %}
     }
 
+    static getClassName() {
+        return '{{ class_prefix }}{{ specification.entity_name }}';
+    }
+    
     get RESTName() {
         return '{{ specification.rest_name }}';
     }
     
     get resourceName() {
         return '{{ specification.resource_name }}';
+    }
+    
+    getClassName() {
+        return {{ class_prefix }}{{ specification.entity_name }}.getClassName();
     }
 }
 
