@@ -147,6 +147,8 @@ def convert_token(token):
         return "max_value"
     if token == "maxLength":
         return "max_length"
+    if token == "allowedJobs":
+        return "allowed_jobs"    
     return token
 
 if __name__ == "__main__":
