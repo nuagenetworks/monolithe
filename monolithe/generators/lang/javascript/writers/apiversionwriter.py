@@ -74,6 +74,8 @@ class APIVersionWriter(TemplateFileWriter):
         """
         self.enum_list = []
         self.model_list = []
+        self.job_commands = filter(lambda attr: attr.name == 'command', specifications.get("job").attributes)[0].allowed_choices
+        #Printer.log("job_commands: %s" % (self.job_commands))
             
         self._write_abstract_named_entity()
         
@@ -147,6 +149,11 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_model(self, specification):
         """ This method writes the ouput for a particular specification.
         """
+        
+        if specification.allowed_job_commands and not (set(specification.allowed_job_commands).issubset(self.job_commands)):
+            raise Exception("Invalid allowed_job_commands %s specified in entity %s" % (specification.allowed_job_commands, specification.entity_name))
+            
+        
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
         self.model_list.append("%s%s" %(self._class_prefix, specification.entity_name))
