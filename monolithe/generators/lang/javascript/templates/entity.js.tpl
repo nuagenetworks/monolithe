@@ -61,6 +61,11 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return '{{ class_prefix }}{{ specification.entity_name }}';
     }
     
+    static getAllowedJobCommands() {
+        {%- set commands_str %}{% if specification.allowed_job_commands %}[{% for command in specification.allowed_job_commands %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}JobCommandEnum.{{command}}{% endfor %}]{% else %}[]{% endif %};{%- endset %}
+        return {{commands_str|wordwrap(80,false,'\n                ')}}
+    }
+    
     get RESTName() {
         return '{{ specification.rest_name }}';
     }
@@ -72,14 +77,10 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     getClassName() {
         return {{ class_prefix }}{{ specification.entity_name }}.getClassName();
     }
-    
-    {%- if specification.allowed_job_commands %}
 
     getAllowedJobCommands() {
-        {%- set commands_str %}[{% for command in specification.allowed_job_commands %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}JobCommandEnum.{{command}}{% endfor %}];{%- endset %}
-        return {{commands_str|wordwrap(80,false,'\n                ')}}
+        return {{ class_prefix }}{{ specification.entity_name }}.getAllowedJobCommands();
     }
-    {%- endif %}
 }
 
 ServiceClassRegistry.register({{ class_prefix }}{{ specification.entity_name }});
