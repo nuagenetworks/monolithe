@@ -9,6 +9,9 @@ import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "Ab
 {%- set import_str %}import { {% for attr in generic_enum_attributes_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ attr[0].upper() + attr[1:] }}Enum{% endfor %} } from '@/enums';{%- endset %}
 {{ import_str|wordwrap(96,false,'\n    ')}}
 {%- endif %}
+{%- if specification.allowed_job_commands %}
+import {{ class_prefix }}JobCommandEnum from './enums';
+{%- endif %}
 
 
 /* Represents {{ specification.entity_name }} entity
@@ -58,6 +61,11 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return '{{ class_prefix }}{{ specification.entity_name }}';
     }
     
+    static getAllowedJobCommands() {
+        {%- set commands_str %}{% if specification.allowed_job_commands %}[{% for command in specification.allowed_job_commands %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}JobCommandEnum.{{command}}{% endfor %}]{% else %}[]{% endif %};{%- endset %}
+        return {{commands_str|wordwrap(80,false,'\n                ')}}
+    }
+    
     get RESTName() {
         return '{{ specification.rest_name }}';
     }
@@ -68,6 +76,10 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     
     getClassName() {
         return {{ class_prefix }}{{ specification.entity_name }}.getClassName();
+    }
+
+    getAllowedJobCommands() {
+        return {{ class_prefix }}{{ specification.entity_name }}.getAllowedJobCommands();
     }
 }
 
