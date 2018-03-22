@@ -10,7 +10,7 @@ import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "Ab
 {{ import_str|wordwrap(96,false,'\n    ')}}
 {%- endif %}
 {%- if specification.allowed_job_commands %}
-import { {{ class_prefix }}JobCommandEnum } from 'models/enums';
+import { {{ class_prefix }}JobCommandEnum } from './enums';
 {%- endif %}
 
 
