@@ -153,6 +153,7 @@ class APIVersionWriter(TemplateFileWriter):
         if specification.allowed_job_commands and not (set(specification.allowed_job_commands).issubset(self.job_commands)):
             raise Exception("Invalid allowed_job_commands %s specified in entity %s" % (specification.allowed_job_commands, specification.entity_name))
             
+        specification.supportsAlarms = len(filter(lambda child_api : child_api.rest_name == "alarm", specification.child_apis)) == 1
         
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
