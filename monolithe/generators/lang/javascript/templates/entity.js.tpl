@@ -66,6 +66,10 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return {{commands_str|wordwrap(80,false,'\n                ')}}
     }
     
+    static supportsAlarms() {
+        return {% if specification.supportsAlarms %}true{% else %}false{% endif %};
+    }
+    
     get RESTName() {
         return '{{ specification.rest_name }}';
     }
