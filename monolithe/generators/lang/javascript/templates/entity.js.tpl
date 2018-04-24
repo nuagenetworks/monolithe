@@ -70,6 +70,12 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return {% if specification.supportsAlarms %}true{% else %}false{% endif %};
     }
     
+    static getInstanceFromID(ID) {
+        const instance = new {{ class_prefix }}{{ specification.entity_name }}();
+        instance.ID = ID;
+        return instance;
+    }
+    
     get RESTName() {
         return '{{ specification.rest_name }}';
     }
