@@ -66,7 +66,7 @@ def get_type_name(type_name, sub_type=None):
     if type_name == "boolean":
         return "bool"
 
-    if type_name == "integer":
+    if type_name in ("integer", "long"):
         return "int"
 
     if type_name == "time":
