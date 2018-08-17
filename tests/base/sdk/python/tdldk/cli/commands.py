@@ -52,7 +52,19 @@ class CLICommand(object):
 
             Printer.raise_error(error_message)
 
-        (fetcher, parent, objects) = fetcher.fetch(filter=args.filter, query_parameters=query_parameters)
+        if hasattr(args, 'page_size') and args.page_size > 0:
+            (fetcher, parent, objects) = fetcher.fetch(filter=args.filter, query_parameters=query_parameters, page=args.page, page_size=args.page_size)
+        else: 
+            (fetcher, parent, count) = fetcher.count(filter=args.filter, query_parameters=query_parameters)
+            (fetcher, parent, objects) = fetcher.fetch(filter=args.filter, query_parameters=query_parameters, page=0)
+            if objects is not None:
+                page = 1
+                count -= len(objects)
+                while count > 0:
+                    (fetcher, parent, tmp_objects) = fetcher.fetch(filter=args.filter, query_parameters=query_parameters, page=page)
+                    page += 1
+                    count -= len(tmp_objects)
+                    objects += tmp_objects
 
         if objects is None:
             Printer.raise_error("Could not retrieve. Activate verbose mode for more information")
