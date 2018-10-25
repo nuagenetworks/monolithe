@@ -155,6 +155,8 @@ class APIVersionWriter(TemplateFileWriter):
             
         specification.supportsAlarms = len(filter(lambda child_api : child_api.rest_name == "alarm", specification.child_apis)) == 1
         
+        specification.supportsPermissions = len(filter(lambda child_api : child_api.rest_name == "enterprisepermission" or child_api.rest_name == "permission", specification.child_apis)) > 0
+
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
         self.model_list.append("%s%s" %(self._class_prefix, specification.entity_name))
