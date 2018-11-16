@@ -14,6 +14,6 @@
         "nsgateway": ["TPMStatus"],
         "ingressadvfwdentrytemplate": ["appType"],
         "link": ["acceptanceCriteria"],
-        "vnf": ["allowedActions"]
+        "vnf": ["allowedActions", "lastUserAction"]
     }
 }
