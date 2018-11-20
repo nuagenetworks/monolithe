@@ -12,8 +12,8 @@
         "job": ["command"],
         "nsginfo": ["TPMStatus"],
         "nsgateway": ["TPMStatus"],
-        "ingressadvfwdentrytemplate": ["appType"],
+        "ingressadvfwdentrytemplate": ["appType", "addressOverrideType"],
         "link": ["acceptanceCriteria"],
-        "vnf": ["allowedActions", "lastUserAction"]
+        "vnf": ["allowedActions", "lastUserAction"],
     }
 }
