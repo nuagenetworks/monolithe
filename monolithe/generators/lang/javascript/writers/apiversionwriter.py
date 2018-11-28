@@ -177,6 +177,11 @@ class APIVersionWriter(TemplateFileWriter):
         generic_enum_attributes_to_import = []
 
         for attr in enum_attributes:
+            if attr.local_type == "list" and attr.subtype == "enum" and attr.default_value:
+                attr.default_value = attr.default_value.translate({ord(i): None for i in ' []"'}).split(",")
+                if not all(defval in attr.allowed_choices for defval in attr.default_value):
+                    raise Exception("Invalid default value specified for attribute %s in entity %s" % (attr.name, specification.entity_name))
+                                        
             if specification.rest_name in self.overide_generic_enums and  attr.name in self.overide_generic_enums[specification.rest_name]:
                 continue
             for generic_enum_attr in self.generic_enum_attrs:
