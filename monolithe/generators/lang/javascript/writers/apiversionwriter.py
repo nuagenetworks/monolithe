@@ -88,13 +88,13 @@ class APIVersionWriter(TemplateFileWriter):
             filename="index.js",
             template_name="model_index.js.tpl",
             class_prefix = self._class_prefix,
-            model_list = self.model_list)
+            model_list = sorted(self.model_list))
             
         self.write(destination = self.enum_directory,
                     filename="index.js",
                     template_name="enum_index.js.tpl",
                     class_prefix = self._class_prefix,
-                    enum_list = self.enum_list)
+                    enum_list = sorted(self.enum_list))
                     
         self._write_locales(specifications)            
 
