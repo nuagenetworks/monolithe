@@ -1,4 +1,4 @@
-import {{ class_prefix }}Attribute from 'service/{{ class_prefix }}Attribute';
+{%- if specification.attributes_modified %}import {{ class_prefix }}Attribute from 'service/{{ class_prefix }}Attribute';{% endif %}
 import ServiceClassRegistry from 'service/ServiceClassRegistry';
 import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "AbstractNamedEntity" %}./abstract/{% else %}service/{% endif %}{{ class_prefix }}{{ superclass_name }}';
 {%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
