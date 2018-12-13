@@ -88,38 +88,33 @@ class APIVersionWriter(TemplateFileWriter):
             filename="index.js",
             template_name="model_index.js.tpl",
             class_prefix = self._class_prefix,
-            model_list = self.model_list)
+            model_list = sorted(self.model_list))
             
         self.write(destination = self.enum_directory,
                     filename="index.js",
                     template_name="enum_index.js.tpl",
                     class_prefix = self._class_prefix,
-                    enum_list = self.enum_list)
+                    enum_list = sorted(self.enum_list))
                     
         self._write_locales(specifications)            
 
     def _write_locales(self, specifications):
         if self.locale_on:
+            self.locales_list = []
             for rest_name, specification in specifications.items():
-                #enum_attrs_for_locale_template = {}
-                #enum_attrs = self.enum_attrs_for_locale[specification.entity_name]
-                #
-                #generic_enum_attrs = self.generic_enum_attrs_for_locale[specification.entity_name];
-                #if (generic_enum_attrs):
-                #    enum_attrs.extend(generic_enum_attrs)
-                #    
-                #if (enum_attrs):
-                #    for attribute in enum_attrs:
-                #        enum_name = "%s%s%sEnum" % (self._class_prefix, specification.entity_name, attribute.name[0].upper() + attribute.name[1:])
-                #        enum_attrs_for_locale_template[enum_name] = attribute.allowed_choices
-                
                 self._format_description_text(specification)            
                 filename = "%s.json" % (rest_name)
+                self.locales_list.append(rest_name)
                 self.write(destination = self.locale_directory,
                     filename=filename,
                     template_name="locale_entity.json.tpl",
                     specification = specification,
                     enum_attrs = {})
+                    
+            self.write(destination = self.locale_directory,
+                filename="index.js",
+                template_name="locales_index.js.tpl",
+                locales_list = sorted(self.locales_list))
             
     def _format_description_text(self, specification):
         if specification.description:
