@@ -91,7 +91,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
     
     get RESTName() {
-        return '{{ specification.rest_name }}';
+        return {% if specification.rest_name %}'{{ specification.rest_name }}'{% else %}undefined{% endif %};
     }
     
     get resourceName() {
