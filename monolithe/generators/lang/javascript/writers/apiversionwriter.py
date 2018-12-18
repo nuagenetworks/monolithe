@@ -79,6 +79,8 @@ class APIVersionWriter(TemplateFileWriter):
             
         self._write_abstract_named_entity()
         
+        self.entity_names = [specification.entity_name for rest_name, specification in specifications.iteritems()]
+
         for rest_name, specification in specifications.iteritems():
             self._write_model(specification=specification)
 
@@ -190,8 +192,14 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
         
-        specification.object_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype)]
+        object_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype)]
+        
+        invalid_object_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "object" and not attribute.subtype in self.entity_names)]
 
+        if invalid_object_attributes:
+            Printer.log("Spec: %s: Atrributes %s use invalid subtypes %s" % (filename, invalid_object_attributes, object_subtypes))
+        
+            
         self.write(destination = self.model_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
@@ -201,7 +209,7 @@ class APIVersionWriter(TemplateFileWriter):
                     enum_attrs_to_import = enum_attrs_to_import,
                     generic_enum_attributes = generic_enum_attrs_in_entity,
                     generic_enum_attributes_to_import = set(generic_enum_attributes_to_import),
-                    object_subtypes = set(specification.object_subtypes))
+                    object_subtypes = set(object_subtypes))
 
     def _isNamedEntity(self, attributes):
         attr_names = [attr.name for attr in attributes]
