@@ -13,6 +13,10 @@ import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "Ab
 {%- if specification.allowed_job_commands %}
 import { {{ class_prefix }}JobCommandEnum } from './enums';
 {%- endif %}
+{%- if object_subtypes and object_subtypes|length > 0  %}
+{%- set import_subtypes_str %}import { {% for subtype in object_subtypes %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ subtype }}{% endfor %} } from '.';{%- endset %}
+{{ import_subtypes_str|wordwrap(96,false,'\n    ')}}
+{%- endif %}
 
 
 /* Represents {{ specification.entity_name }} entity

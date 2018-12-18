@@ -190,6 +190,8 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
         
+        specification.object_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype)]
+
         self.write(destination = self.model_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
@@ -198,7 +200,8 @@ class APIVersionWriter(TemplateFileWriter):
                     superclass_name = superclass_name,
                     enum_attrs_to_import = enum_attrs_to_import,
                     generic_enum_attributes = generic_enum_attrs_in_entity,
-                    generic_enum_attributes_to_import = set(generic_enum_attributes_to_import))
+                    generic_enum_attributes_to_import = set(generic_enum_attributes_to_import),
+                    object_subtypes = set(specification.object_subtypes))
 
     def _isNamedEntity(self, attributes):
         attr_names = [attr.name for attr in attributes]
