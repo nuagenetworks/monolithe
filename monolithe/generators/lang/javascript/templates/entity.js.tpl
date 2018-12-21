@@ -94,7 +94,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
     
     get resourceName() {
-        return '{{ specification.resource_name }}';
+        return {% if specification.resource_name %}'{{ specification.resource_name }}'{% else %}undefined{% endif %};
     }
     
     getClassName() {
