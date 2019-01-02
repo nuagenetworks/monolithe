@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <title>{{ specification.entity_name }} API Reference {{ apiversion }}</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{% if branch %}../{% endif %}../css/bootstrap.css">
+    <link rel="stylesheet" href="{% if branch %}../{% endif %}../css/style.css">
 </head>
 
 <body data-spy="scroll" data-target="#navbarmain">
@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">{{ product_name }} API Documentation {{ apiversion }}</a>
+                <a class="navbar-brand" href="{% if branch %}../{% endif %}../index.html">{{ product_name }} API Documentation</a><span class="navbar-brand"> &gt; </span><a class="navbar-brand" href="index.html">{{ apiversion }}</a>{% if branch %}<span class="navbar-brand"> &gt; </span><a class="navbar-brand" href="index.html">{{ branch }}</a>{% endif %}
             </div>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
@@ -36,12 +36,14 @@
                         </ul>
                     </li>
                 </ul>
+                <!--
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group dropdown">
                         <input type="text" class="form-control" placeholder="Search" id="searchfield">
                         <ul class="dropdown-menu dropdown-menu-left" role="menu" id="searchresult" style="display: none"></ul>
                     </div>
                 </form>
+                -->
             </div>
         </div>
     </nav>
@@ -264,8 +266,8 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/search.js"></script>
+    <script src="{% if branch %}../{% endif %}../js/bootstrap.min.js"></script>
+    <script src="{% if branch %}../{% endif %}../js/search.js"></script>
     <script>
         $(document).ready(function()
         {

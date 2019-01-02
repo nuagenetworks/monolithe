@@ -44,8 +44,14 @@ class SDKAPIVersionGenerator(object):
     def generate(self, specification_info):
         """
         """
-        for info in specification_info:
+        specification_info = sorted(specification_info, key=lambda k: k["branch"])
+        specification_info = sorted(specification_info, key=lambda k: k["api"]["version"])
+        spec_max_index = len(specification_info) - 1
+        for index, info in enumerate(specification_info):
+            latest = False
+            if index == spec_max_index or (index < spec_max_index and info["api"]["version"] != specification_info[index+1]["api"]["version"]):
+                latest = True
             manager = APIVersionManager(monolithe_config=self.monolithe_config)
-            manager.execute(specifications=info["specifications"], api_info=info["api"])
+            manager.execute(specifications=info["specifications"], api_info=info["api"], branch=info["branch"], latest=latest)
             doc_manager = DocumentationManager(monolithe_config=self.monolithe_config)
             doc_manager.execute(info["specifications"], info["api"])

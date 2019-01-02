@@ -45,19 +45,26 @@ class PackageWriter(TemplateFileWriter):
 
         self.output_directory = "%s/html/" % (self._output)
 
-    def perform(self, apiversions):
+    def perform(self, apiversions, branches):
         """
         """
-        self._write_main_index(apiversions=apiversions)
+        self._write_main_index(apiversions=apiversions, branches=branches)
 
-    def _write_main_index(self, apiversions):
+    def _write_main_index(self, apiversions, branches):
         """
         """
         versions = {}
+        version_releases = {}
 
         for v in apiversions:
             versions[v] = SDKUtils.get_string_version(v)
+            tmp_releases = []
+            if v in branches.keys():
+                for b in branches[v]:
+                    tmp_releases.append(SDKUtils.get_dot_notation(b))
+                version_releases[v] = sorted(tmp_releases, reverse=True)
 
         self.write(destination=self.output_directory, filename="index.html", template_name="main_index.html.tpl",
                    apiversion=versions,
-                   product_name=self._product_name)
+                   product_name=self._product_name,
+                   version_releases=version_releases)
