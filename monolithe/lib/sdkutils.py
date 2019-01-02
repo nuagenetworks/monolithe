@@ -120,7 +120,7 @@ class SDKUtils(object):
         """ Get the sdk version as float according to the given string version
 
             Args:
-                string_version (stirng): the version
+                string_version (string): the version
 
             Returns:
                 version as float
@@ -134,6 +134,26 @@ class SDKUtils(object):
             return string_version
 
         return float(string_version.replace("v", "").replace("_", "."))
+
+    @classmethod
+    def get_dot_notation(cls, version):
+        """ Get the version as a dot-notation according to the given string version
+
+            Args:
+                version (string): the version
+
+            Returns:
+                version as dot notation
+
+            Example:
+                get_dot_notation("r5.2.1")
+                >>> 5.2.1
+
+        """
+        if version == "master":
+            return version
+
+        return version.replace("v", "").replace("r", "").replace("_", ".")
 
     # Commons language conversion
 
