@@ -197,7 +197,7 @@ class APIVersionWriter(TemplateFileWriter):
         invalid_object_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "object" and not attribute.subtype in self.entity_names)]
 
         if invalid_object_attributes:
-            Printer.log("Spec: %s: Atrributes %s use invalid subtypes %s" % (filename, invalid_object_attributes, object_subtypes))
+            Printer.log("Spec: %s: Attributes %s use invalid subtypes %s" % (filename, invalid_object_attributes, object_subtypes))
         
             
         self.write(destination = self.model_directory,
