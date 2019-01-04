@@ -67,6 +67,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return '{{ class_prefix }}{{ specification.entity_name }}';
     }
     
+    {% if specification.rest_name -%}
     static getAllowedJobCommands() {
         {%- set commands_str %}{% if specification.allowed_job_commands %}[{% for command in specification.allowed_job_commands %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}JobCommandEnum.{{command}}{% endfor %}]{% else %}[]{% endif %};{%- endset %}
         return {{commands_str|wordwrap(80,false,'\n                ')}}
@@ -89,7 +90,6 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return instance;
     }
     
-    {% if specification.rest_name -%}
     get RESTName() {
         return '{{ specification.rest_name }}';
     }
@@ -105,11 +105,11 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     
     getClassName() {
         return {{ class_prefix }}{{ specification.entity_name }}.getClassName();
-    }
-
+    }{{ new_line }}
+    {%- if specification.rest_name %}
     getAllowedJobCommands() {
         return {{ class_prefix }}{{ specification.entity_name }}.getAllowedJobCommands();
-    }
+    }{{ new_line }}{% endif -%}
 }
 
 {% if specification.rest_name -%}
