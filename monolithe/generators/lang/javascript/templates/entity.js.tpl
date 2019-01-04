@@ -42,7 +42,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
 
     static attributeDescriptors = {
-        ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,
+        {%- if specification.rest_name -%}{{ new_line }}        ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,{% endif -%}
         {%- for attribute in specification.attributes_modified %}
         {% set type_object_with_subtype = attribute.local_type == "object" and attribute.subtype  -%}
         {{ attribute.name }}: new {{ class_prefix }}Attribute({
@@ -89,13 +89,19 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return instance;
     }
     
+    {% if specification.rest_name -%}
     get RESTName() {
-        return {% if specification.rest_name %}'{{ specification.rest_name }}'{% else %}undefined{% endif %};
+        return '{{ specification.rest_name }}';
     }
     
+    {% endif -%}
+    
+    {% if specification.resource_name -%}
     get resourceName() {
-        return {% if specification.resource_name %}'{{ specification.resource_name }}'{% else %}undefined{% endif %};
+        return '{{ specification.resource_name }}';
     }
+    
+    {% endif -%}
     
     getClassName() {
         return {{ class_prefix }}{{ specification.entity_name }}.getClassName();
@@ -106,5 +112,6 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
 }
 
+{% if specification.rest_name -%}
 ServiceClassRegistry.register({{ class_prefix }}{{ specification.entity_name }});
-
+{% endif -%}

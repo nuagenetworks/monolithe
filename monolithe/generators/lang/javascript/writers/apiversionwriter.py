@@ -158,9 +158,9 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.model_list.append("%s%s" %(self._class_prefix, specification.entity_name))
         
-        isNamedEntity = self._isNamedEntity(attributes=specification.attributes)
+        isNamedEntity = self._isNamedEntity(attributes=specification.attributes) if specification.rest_name else False
                 
-        superclass_name = "RootEntity" if specification.rest_name == self.api_root else "AbstractNamedEntity" if isNamedEntity  else "Entity"
+        superclass_name = "RootEntity" if specification.rest_name == self.api_root else "AbstractNamedEntity" if isNamedEntity  else "AbstractModel" if not specification.rest_name else "Entity"
         # write will write a file using a template.
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
