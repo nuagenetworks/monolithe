@@ -1,6 +1,6 @@
 {% set new_line = "\n"  -%}
 {% if specification.attributes_modified -%}import {{ class_prefix }}Attribute from 'service/{{ class_prefix }}Attribute';{{ new_line }}{%- endif -%}
-import ServiceClassRegistry from 'service/ServiceClassRegistry';
+{% if specification.rest_name -%}import ServiceClassRegistry from 'service/ServiceClassRegistry';{{ new_line }}{% endif -%}
 import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "AbstractNamedEntity" %}./abstract/{% else %}service/{% endif %}{{ class_prefix }}{{ superclass_name }}';
 {%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
 {%- set import_str %}import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum{% endfor %} } from './enums';{%- endset %}
