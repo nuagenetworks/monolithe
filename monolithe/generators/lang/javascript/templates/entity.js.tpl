@@ -1,6 +1,6 @@
 {% set new_line = "\n"  -%}
 {% if specification.attributes_modified -%}import {{ class_prefix }}Attribute from 'service/{{ class_prefix }}Attribute';{{ new_line }}{%- endif -%}
-import ServiceClassRegistry from 'service/ServiceClassRegistry';
+{% if specification.rest_name -%}import ServiceClassRegistry from 'service/ServiceClassRegistry';{{ new_line }}{% endif -%}
 import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "AbstractNamedEntity" %}./abstract/{% else %}service/{% endif %}{{ class_prefix }}{{ superclass_name }}';
 {%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
 {%- set import_str %}import { {% for attribute in enum_attrs_to_import %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{{ specification.entity_name }}{{ attribute.name[0].upper() + attribute.name[1:] }}Enum{% endfor %} } from './enums';{%- endset %}
@@ -13,6 +13,9 @@ import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "Ab
 {%- if specification.allowed_job_commands %}
 import { {{ class_prefix }}JobCommandEnum } from './enums';
 {%- endif %}
+{%- for object_subtype in object_subtypes %}
+import {{ class_prefix }}{{ object_subtype }} from './{{ class_prefix }}{{ object_subtype }}';
+{%- endfor %}
 
 
 /* Represents {{ specification.entity_name }} entity
@@ -39,11 +42,12 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
 
     static attributeDescriptors = {
-        ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,
+        {%- if specification.rest_name -%}{{ new_line }}        ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,{% endif -%}
         {%- for attribute in specification.attributes_modified %}
+        {% set type_object_with_subtype = attribute.local_type == "object" and attribute.subtype  -%}
         {{ attribute.name }}: new {{ class_prefix }}Attribute({
             localName: '{{ attribute.name }}',
-            attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "integer" %}INTEGER{% elif attribute.local_type == "float" %}FLOAT{% elif attribute.local_type == "list" %}LIST{% elif attribute.local_type == "boolean" %}BOOLEAN{% elif attribute.local_type == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %}{% if attribute.description %},
+            attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "integer" %}INTEGER{% elif type_object_with_subtype %}OBJECT{% elif attribute.local_type == "float" %}FLOAT{% elif attribute.local_type == "list" %}LIST{% elif attribute.local_type == "boolean" %}BOOLEAN{% elif attribute.local_type == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %}{% if attribute.description %},
             description: `{{ attribute.description }}`{% endif %}{% if attribute.required %},
             isRequired: true{% endif %}{% if attribute.unique %},
             isUnique: true{% endif %}{% if attribute.creation_only %},
@@ -53,7 +57,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             canSearch: true{% endif %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %},
             {%- set choices_str %}[{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{% set attr_name %}{% if attribute.name not in  generic_enum_attributes%}{{ attribute.name }}{% else %}{{ generic_enum_attributes[attribute.name].name }}{% endif %}{% endset %}{% if attribute.name not in  generic_enum_attributes%}{{ specification.entity_name }}{% endif %}{{ attr_name[0].upper() + attr_name[1:] }}Enum.{{choice}}{% endfor %}]{%- endset %}
             choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},{% if attribute.subtype != None %}
-            subType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.subtype == "integer" %}INTEGER{% elif attribute.subtype == "long" %}LONG{% elif attribute.subtype == "float" %}FLOAT{% elif attribute.subtype == "boolean" %}BOOLEAN{% elif attribute.subtype == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %},{% endif %}
+            subType: {{ class_prefix }}{% if type_object_with_subtype %}{{ attribute.subtype }},{% else %}Attribute.ATTR_TYPE_{% if attribute.subtype == "integer" %}INTEGER{% elif attribute.subtype == "long" %}LONG{% elif attribute.subtype == "float" %}FLOAT{% elif attribute.subtype == "boolean" %}BOOLEAN{% elif attribute.subtype == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %},{% endif %}{% endif %}
             userlabel: `{{ attribute.userlabel }}`,
         }),
         {%- endfor %}
@@ -63,6 +67,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return '{{ class_prefix }}{{ specification.entity_name }}';
     }
     
+    {% if specification.rest_name -%}
     static getAllowedJobCommands() {
         {%- set commands_str %}{% if specification.allowed_job_commands %}[{% for command in specification.allowed_job_commands %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}JobCommandEnum.{{command}}{% endfor %}]{% else %}[]{% endif %};{%- endset %}
         return {{commands_str|wordwrap(80,false,'\n                ')}}
@@ -89,18 +94,24 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         return '{{ specification.rest_name }}';
     }
     
+    {% endif -%}
+    
+    {% if specification.resource_name -%}
     get resourceName() {
         return '{{ specification.resource_name }}';
     }
     
+    {% endif -%}
+    
     getClassName() {
         return {{ class_prefix }}{{ specification.entity_name }}.getClassName();
-    }
-
+    }{{ new_line }}
+    {%- if specification.rest_name %}
     getAllowedJobCommands() {
         return {{ class_prefix }}{{ specification.entity_name }}.getAllowedJobCommands();
-    }
+    }{{ new_line }}{% endif -%}
 }
 
+{% if specification.rest_name -%}
 ServiceClassRegistry.register({{ class_prefix }}{{ specification.entity_name }});
-
+{% endif -%}
