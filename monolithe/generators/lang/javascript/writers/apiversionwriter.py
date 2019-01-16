@@ -194,14 +194,14 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
         
-        object_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype)]
+        object_subtypes = set([attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype)])
 
         invalid_object_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "object" and not attribute.subtype in self.entity_names)]
 
         if invalid_object_attributes:
             Printer.log("Spec: %s: Attributes %s use invalid subtypes %s" % (filename, invalid_object_attributes, object_subtypes))
 
-        list_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "list" and attribute.subtype not in self.list_subtypes_generic)]
+        list_subtypes = set([attribute.subtype for attribute in specification.attributes if (attribute.local_type == "list" and attribute.subtype not in self.list_subtypes_generic)])
 
         invalid_list_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "list" and not attribute.subtype in self.entity_names and not attribute.subtype in self.list_subtypes_generic)]
 
@@ -222,7 +222,7 @@ class APIVersionWriter(TemplateFileWriter):
                     enum_attrs_to_import = enum_attrs_to_import,
                     generic_enum_attributes = generic_enum_attrs_in_entity,
                     generic_enum_attributes_to_import = set(generic_enum_attributes_to_import),
-                    subtypes_for_import = set(object_subtypes + list_subtypes))
+                    subtypes_for_import = object_subtypes.union(list_subtypes))
 
     def _isNamedEntity(self, attributes):
         attr_names = [attr.name for attr in attributes]
