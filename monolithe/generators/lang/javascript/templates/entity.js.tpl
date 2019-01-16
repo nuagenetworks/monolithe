@@ -13,8 +13,8 @@ import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "Ab
 {%- if specification.allowed_job_commands %}
 import { {{ class_prefix }}JobCommandEnum } from './enums';
 {%- endif %}
-{%- for object_subtype in object_subtypes %}
-import {{ class_prefix }}{{ object_subtype }} from './{{ class_prefix }}{{ object_subtype }}';
+{%- for subtype in subtypes_for_import %}
+import {{ class_prefix }}{{ subtype }} from './{{ class_prefix }}{{ subtype }}';
 {%- endfor %}
 
 
@@ -45,6 +45,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         {%- if specification.rest_name -%}{{ new_line }}        ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,{% endif -%}
         {%- for attribute in specification.attributes_modified %}
         {% set type_object_with_subtype = attribute.local_type == "object" and attribute.subtype  -%}
+        {% set type_list_with_subtype = attribute.local_type == "list" and attribute.subtype and attribute.subtype in subtypes_for_import -%}
         {{ attribute.name }}: new {{ class_prefix }}Attribute({
             localName: '{{ attribute.name }}',
             attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_{% if attribute.local_type == "integer" %}INTEGER{% elif type_object_with_subtype %}OBJECT{% elif attribute.local_type == "float" %}FLOAT{% elif attribute.local_type == "list" %}LIST{% elif attribute.local_type == "boolean" %}BOOLEAN{% elif attribute.local_type == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %}{% if attribute.description %},
@@ -57,7 +58,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             canSearch: true{% endif %}{% if attribute.allowed_choices and attribute.allowed_choices|length > 0  %},
             {%- set choices_str %}[{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{% set attr_name %}{% if attribute.name not in  generic_enum_attributes%}{{ attribute.name }}{% else %}{{ generic_enum_attributes[attribute.name].name }}{% endif %}{% endset %}{% if attribute.name not in  generic_enum_attributes%}{{ specification.entity_name }}{% endif %}{{ attr_name[0].upper() + attr_name[1:] }}Enum.{{choice}}{% endfor %}]{%- endset %}
             choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},{% if attribute.subtype != None %}
-            subType: {{ class_prefix }}{% if type_object_with_subtype %}{{ attribute.subtype }},{% else %}Attribute.ATTR_TYPE_{% if attribute.subtype == "integer" %}INTEGER{% elif attribute.subtype == "long" %}LONG{% elif attribute.subtype == "float" %}FLOAT{% elif attribute.subtype == "boolean" %}BOOLEAN{% elif attribute.subtype == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %},{% endif %}{% endif %}
+            subType: {{ class_prefix }}{% if type_object_with_subtype or type_list_with_subtype %}{{ attribute.subtype }},{% else %}Attribute.ATTR_TYPE_{% if attribute.subtype == "integer" %}INTEGER{% elif attribute.subtype == "long" %}LONG{% elif attribute.subtype == "float" %}FLOAT{% elif attribute.subtype == "boolean" %}BOOLEAN{% elif attribute.subtype == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %},{% endif %}{% endif %}
             userlabel: `{{ attribute.userlabel }}`,
         }),
         {%- endfor %}
