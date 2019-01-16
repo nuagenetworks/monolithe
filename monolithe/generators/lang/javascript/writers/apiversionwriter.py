@@ -201,7 +201,7 @@ class APIVersionWriter(TemplateFileWriter):
         if invalid_object_attributes:
             Printer.log("Spec: %s: Attributes %s use invalid subtypes %s" % (filename, invalid_object_attributes, object_subtypes))
 
-        list_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "list"  and attribute.subtype not in self.list_subtypes_generic)]
+        list_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "list" and attribute.subtype not in self.list_subtypes_generic)]
 
         invalid_list_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "list" and not attribute.subtype in self.entity_names and not attribute.subtype in self.list_subtypes_generic)]
 
