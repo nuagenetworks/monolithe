@@ -47,6 +47,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.overide_generic_enums = []
         self.enum_attrs_for_locale = {}
         self.generic_enum_attrs_for_locale = {}
+        self.list_subtypes_generic = []
         
         Printer.log("Configuration file: %s" % (config_file))
 
@@ -58,6 +59,7 @@ class APIVersionWriter(TemplateFileWriter):
             self.generic_enums =  json_config_data['generic_enums']
             self.named_entity_attrs = json_config_data['named_entity_attrs']
             self.overide_generic_enums = json_config_data['overide_generic_enums']
+            self.list_subtypes_generic = json_config_data['list_subtypes_generic']
 
             for enum_name, values in self.generic_enums.iteritems():
                 enum_attr =  SpecificationAttribute()
@@ -193,13 +195,24 @@ class APIVersionWriter(TemplateFileWriter):
         self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
         
         object_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype)]
-        
+
         invalid_object_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "object" and not attribute.subtype in self.entity_names)]
 
         if invalid_object_attributes:
             Printer.log("Spec: %s: Attributes %s use invalid subtypes %s" % (filename, invalid_object_attributes, object_subtypes))
-        
-            
+
+        list_subtypes = [attribute.subtype for attribute in specification.attributes if (attribute.local_type == "list"  and attribute.subtype not in self.list_subtypes_generic)]
+
+        invalid_list_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "list" and not attribute.subtype in self.entity_names and not attribute.subtype in self.list_subtypes_generic)]
+
+        if invalid_list_attributes:
+            Printer.log("Spec: %s: Attributes %s use invalid list subtypes %s" % (filename, invalid_list_attributes, list_subtypes))
+
+        if 'object' in list_subtypes:
+            list_subtypes.remove('object')
+        if 'entity' in list_subtypes:
+            list_subtypes.remove('entity')
+
         self.write(destination = self.model_directory,
                     filename = filename,
                     template_name = "entity.js.tpl",
@@ -209,7 +222,7 @@ class APIVersionWriter(TemplateFileWriter):
                     enum_attrs_to_import = enum_attrs_to_import,
                     generic_enum_attributes = generic_enum_attrs_in_entity,
                     generic_enum_attributes_to_import = set(generic_enum_attributes_to_import),
-                    object_subtypes = set(object_subtypes))
+                    subtypes_for_import = set(object_subtypes + list_subtypes))
 
     def _isNamedEntity(self, attributes):
         attr_names = [attr.name for attr in attributes]
