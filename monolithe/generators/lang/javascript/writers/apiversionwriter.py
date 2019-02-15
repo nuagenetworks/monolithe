@@ -20,7 +20,6 @@ class APIVersionWriter(TemplateFileWriter):
         self.abstract_directory =  "%s/abstract" % self.model_directory
         self.enum_directory =  "%s/enums" % self.model_directory
         self.locale_directory = "%s/javascript/%s/locales/en" % (output, api_info["version"])
-        self.enum_locale_directory = "%s/enums" % self.locale_directory
 
         if os.path.exists(self.model_directory):
             shutil.rmtree(self.model_directory)
@@ -245,13 +244,6 @@ class APIVersionWriter(TemplateFileWriter):
                         class_prefix = self._class_prefix,
                         enum_name = enum_name,
                         allowed_choices = set(attribute.allowed_choices))
-            enum_locale_filename = "%s%s.json" % (self._class_prefix, enum_name)
-            self.write(destination = self.enum_locale_directory,
-                       filename=enum_locale_filename,
-                       template_name="locale_enum.json.tpl",
-                       class_prefix = self._class_prefix,
-                       enum_name = enum_name,
-                       allowed_choices = sorted(attribute.allowed_choices))
 
     def _write_generic_enums(self):
         """ This method generates generic enum classes.
