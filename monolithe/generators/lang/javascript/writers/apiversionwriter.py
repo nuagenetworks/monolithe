@@ -227,7 +227,16 @@ class APIVersionWriter(TemplateFileWriter):
 
     def _isNamedEntity(self, attributes):
         attr_names = [attr.name for attr in attributes]
-        return (len(self.named_entity_attrs) > 0 and set(self.named_entity_attrs).issubset(attr_names))
+        named_attrs_applicable = len(self.named_entity_attrs) > 0 and set(self.named_entity_attrs).issubset(attr_names)
+        if (named_attrs_applicable):
+            name_attr = filter(lambda attr: attr.name == 'name', attributes)[0]
+            if ((not name_attr.required) or (not name_attr.filterable)):
+                return False
+            desc_attr = filter(lambda attr: attr.name == 'description', attributes)[0]
+            if (desc_attr.required or (not desc_attr.filterable)):
+                return False
+            return True
+        return False
     
     def _write_enums(self, entity_name, attributes):
         """ This method writes the ouput for a particular specification.
