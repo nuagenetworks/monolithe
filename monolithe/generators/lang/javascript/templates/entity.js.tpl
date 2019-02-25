@@ -26,7 +26,9 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         super(...args);
         this.defineProperties({
         {%- if specification.template %}
-            isTemplate: true,{% endif -%}    
+            isTemplate: true,{% endif -%}
+        {%- if specification.supportsDeploymentFailures %}
+            hasDeploymentFailures: false,{% endif -%}
         {%- for attribute in specification.attributes_modified %}
             {% set is_enum = attribute.allowed_choices and attribute.allowed_choices|length > 0  -%}
             {% set is_enum_list = is_enum and attribute.local_type == "list" and attribute.default_value -%}
@@ -84,7 +86,14 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
     
     {% endif -%}
-    
+
+    {% if specification.supportsDeploymentFailures -%}
+    static supportsDeploymentFailures() {
+        return true;
+    }
+
+    {% endif -%}
+
     static getInstanceFromID(ID) {
         const instance = new {{ class_prefix }}{{ specification.entity_name }}();
         instance.ID = ID;
