@@ -84,7 +84,14 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     }
     
     {% endif -%}
-    
+
+    {% if specification.supportsDeploymentFailures -%}
+    static supportsDeploymentFailures() {
+        return true;
+    }
+
+    {% endif -%}
+
     static getInstanceFromID(ID) {
         const instance = new {{ class_prefix }}{{ specification.entity_name }}();
         instance.ID = ID;
