@@ -28,7 +28,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
         {%- if specification.template %}
             isTemplate: true,{% endif -%}
         {%- if specification.supportsDeploymentFailures %}
-            hasDeploymentFailures: false,{% endif -%}
+            hasDeploymentFailures: undefined,{% endif -%}
         {%- for attribute in specification.attributes_modified %}
             {% set is_enum = attribute.allowed_choices and attribute.allowed_choices|length > 0  -%}
             {% set is_enum_list = is_enum and attribute.local_type == "list" and attribute.default_value -%}
