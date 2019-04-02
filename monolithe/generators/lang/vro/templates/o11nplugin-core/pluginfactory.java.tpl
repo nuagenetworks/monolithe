@@ -46,6 +46,7 @@ public final class PluginFactory extends BasePluginFactory {
         if (type.equals(Constants.PLUGIN_ROOT) && relationName.equals(Constants.SESSIONS)) {
             return ModelHelper.getAllSessions();
         }
+        {%- set child_api_dict = {} %}
         {%- for specification in specifications | sort(attribute='rest_name', case_sensitive=True) %}
         {%- if specification.is_root %}
         if (type.equals(Constants.SESSION) && relationName.equals(Constants.{{ specification.entity_name_plural | upper }})) {
@@ -57,9 +58,12 @@ public final class PluginFactory extends BasePluginFactory {
         if (type.equals(Constants.{{ specification.entity_name | upper }}) && relationName.equals(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER)) {
             return toList(ModelHelper.get{{ child_spec.entity_name_plural }}FetcherFor{{ specification.entity_name }}Id(id));
         }
+        {%- if child_api.rest_name not in child_api_dict.keys() %}
         if (type.equals(Constants.{{ child_spec.entity_name_plural | upper }}_FETCHER) && relationName.equals(Constants.{{ child_spec.entity_name_plural | upper }})) {
             return ModelHelper.get{{ child_spec.entity_name_plural }}ForFetcherId(id);
         }
+        {%- do child_api_dict.update({child_api.rest_name: child_api.rest_name}) %}
+        {%- endif %}
         {% endfor -%}
         {% endfor -%}
         throw new UnsupportedOperationException("implement findRelationImpl(String type, String id, String relationName) - type: " + type + ", id: " + id + ", relationName: " + relationName);
