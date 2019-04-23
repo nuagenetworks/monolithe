@@ -60,9 +60,19 @@
                 <section id="section-{{ package_name[0] | replace(" ", "_")}}">
                 <h3>{{ package_name[0] }}</h3>
             {%- endif %}
+            {%- if specification.rest_name != None %}
+                {%- set link_name = specification.rest_name|lower %}
+            {%- else %}
+                {%- set link_name = specification.entity_name|lower %}
+            {%- endif %}
+            {%- if specification.resource_name != None %}
+                {%- set resource_name = specification.resource_name|lower %}
+            {%- else %}
+                {%- set resource_name = specification.entity_name|lower %}
+            {%- endif %}
             <div class="row bordered-row">
                 <div class="col-xs-12">
-                    <a class="filterable" data-filter-keyword="{{ specification.resource_name }}" id="{{ specification.resource_name }}" href="{{ specification.rest_name }}.html" title="API reference for {{ specification.rest_name }}">{{ specification.resource_name }} </a>
+                    <a class="filterable" data-filter-keyword="{{ resource_name }}" id="{{ resource_name }}" href="{{ link_name }}.html" title="API reference for {{ link_name }}">{{ resource_name }}</a>
                     <br>
                     {%- if specification.description %}
                         <small>{{ specification.description }}</small>
