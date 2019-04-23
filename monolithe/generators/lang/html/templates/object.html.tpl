@@ -119,7 +119,7 @@
     {% set apis = self_apis %}
     {% endif %}
 
-    {% if apis|count %}
+    {% if apis|count and specification.resource_name != None %}
     {% for api in apis %}
     <div class="row bordered-row">
         <div class="col-xs-7">
@@ -184,7 +184,7 @@
 
         <section id="apiresources">
             <h3>API Resource</h3>
-            {{ make_api_list("self", "This cannot be accessed. Which is weird...")}}
+            {{ make_api_list("self", "This is an embedded object that can not be directly accessed.")}}
         </section>
 
         <section id="parents">

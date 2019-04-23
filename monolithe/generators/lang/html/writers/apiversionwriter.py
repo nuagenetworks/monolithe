@@ -77,7 +77,11 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_specification(self, specification, specification_set):
         """
         """
-        filename = "%s.html" % specification.rest_name.lower()
+        if specification.rest_name:
+            spec_rest_name = specification.rest_name
+        elif specification.entity_name:
+            spec_rest_name = specification.entity_name
+        filename = "%s.html" % spec_rest_name.lower()
 
         # remove this when template can use the things resolved by _resolve_parent_apis
         parent_apis = []
