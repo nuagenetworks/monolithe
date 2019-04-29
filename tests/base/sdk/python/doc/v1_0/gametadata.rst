@@ -3,7 +3,7 @@
 gametadata
 ===========================================
 
-.. class:: gametadata.GAMetadata(bambou.nurest_object.NUMetaRESTObject,):
+.. class:: gametadata.GAMetadata(bambou2.nurest_object.NUMetaRESTObject,):
 
 None
 

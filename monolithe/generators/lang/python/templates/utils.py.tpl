@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger("{{ name }}")
 
 def set_log_level(level, handler=None):
-    """ Set both {{ name }} and Bambou log level to the given level
+    """ Set both {{ name }} and Bambou2 log level to the given level
 
         Args:
             level (logging.level): a logging level
@@ -21,7 +21,7 @@ def set_log_level(level, handler=None):
 
     """
 
-    from bambou import bambou_logger, pushcenter_logger
+    from bambou2 import bambou_logger, pushcenter_logger
 
     if handler is None:
         handler = logging.StreamHandler()

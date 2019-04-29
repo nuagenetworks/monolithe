@@ -3,7 +3,7 @@
 gauser
 ===========================================
 
-.. class:: gauser.GAUser(bambou.nurest_object.NUMetaRESTObject,):
+.. class:: gauser.GAUser(bambou2.nurest_object.NUMetaRESTObject,):
 
 Represent a user.
 

@@ -5,7 +5,7 @@
 # it will be added to all the generated files
 #
 
-from bambou import NURESTFetcher
+from bambou2 import NURESTFetcher
 
 
 class GATasksFetcher(NURESTFetcher):
@@ -15,7 +15,7 @@ class GATasksFetcher(NURESTFetcher):
             This fetcher enables to fetch GATask objects.
 
         See:
-            bambou.NURESTFetcher
+            bambou2.NURESTFetcher
     """
 
     @classmethod

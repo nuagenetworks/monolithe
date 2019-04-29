@@ -12,7 +12,7 @@ from .fetchers import GAMetadatasFetcher
 
 from .fetchers import GAUsersFetcher
 
-from bambou import NURESTObject
+from bambou2 import NURESTObject
 
 
 class GATask(NURESTObject):

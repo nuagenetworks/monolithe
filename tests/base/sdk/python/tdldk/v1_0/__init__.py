@@ -19,7 +19,7 @@ def __setup_bambou():
     """ Avoid having bad behavior when using importlib.import_module method
     """
     import pkg_resources
-    from bambou import BambouConfig, NURESTModelController
+    from bambou2 import BambouConfig, NURESTModelController
 
     default_attrs = pkg_resources.resource_filename(__name__, '/resources/attrs_defaults.ini')
     BambouConfig.set_default_values_config_file(default_attrs)

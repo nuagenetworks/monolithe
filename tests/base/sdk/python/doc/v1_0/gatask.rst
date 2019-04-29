@@ -3,7 +3,7 @@
 gatask
 ===========================================
 
-.. class:: gatask.GATask(bambou.nurest_object.NUMetaRESTObject,):
+.. class:: gatask.GATask(bambou2.nurest_object.NUMetaRESTObject,):
 
 Represent a task to do in a listd
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {{ header }}
 
-from bambou import NURESTFetcher
+from bambou2 import NURESTFetcher
 
 
 class {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher(NURESTFetcher):
@@ -11,7 +11,7 @@ class {{ class_prefix }}{{ specification.entity_name_plural }}Fetcher(NURESTFetc
             This fetcher enables to fetch {{ class_prefix }}{{ specification.entity_name }} objects.
 
         See:
-            bambou.NURESTFetcher
+            bambou2.NURESTFetcher
     """
 
     @classmethod

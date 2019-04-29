@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {{ header }}
 
-from bambou import NURESTSession
-from bambou.exceptions import InternalConsitencyError
+from bambou2 import NURESTSession
+from bambou2.exceptions import InternalConsitencyError
 from .{{ class_prefix|lower }}{{ root_api|lower }} import {{ class_prefix }}{{ root_api|capitalize }}
 
 

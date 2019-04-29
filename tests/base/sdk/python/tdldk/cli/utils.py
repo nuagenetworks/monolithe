@@ -10,7 +10,7 @@ import importlib
 import re
 import pkg_resources
 
-from bambou.exceptions import BambouHTTPError
+from bambou2.exceptions import BambouHTTPError
 from .printer import Printer
 
 

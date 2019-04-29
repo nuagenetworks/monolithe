@@ -12,7 +12,7 @@ from .fetchers import GATasksFetcher
 
 from .fetchers import GAMetadatasFetcher
 
-from bambou import NURESTObject
+from bambou2 import NURESTObject
 
 
 class GAList(NURESTObject):

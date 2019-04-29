@@ -3,7 +3,7 @@
 {{ class_prefix|lower }}{{ specification.entity_name|lower }}
 ===========================================
 
-.. class:: {{ class_prefix|lower }}{{ specification.entity_name|lower }}.{{ class_prefix }}{{ specification.entity_name }}(bambou.nurest_object.NUMetaRESTObject,):
+.. class:: {{ class_prefix|lower }}{{ specification.entity_name|lower }}.{{ class_prefix }}{{ specification.entity_name }}(bambou2.nurest_object.NUMetaRESTObject,):
 
 {{ specification.description }}
 

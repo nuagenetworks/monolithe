@@ -5,7 +5,7 @@
 {% set child_spec = specification_set[api.rest_name] %}
 from .fetchers import {{ class_prefix }}{{ child_spec.entity_name_plural }}Fetcher
 {% endfor %}
-from bambou import {{ superclass_name }}
+from bambou2 import {{ superclass_name }}
 
 
 class {{ class_prefix }}{{ specification.entity_name }}({{ superclass_name }}):

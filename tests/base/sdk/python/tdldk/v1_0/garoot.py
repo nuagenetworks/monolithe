@@ -12,7 +12,7 @@ from .fetchers import GAListsFetcher
 
 from .fetchers import GAUsersFetcher
 
-from bambou import NURESTRootObject
+from bambou2 import NURESTRootObject
 
 
 class GARoot(NURESTRootObject):

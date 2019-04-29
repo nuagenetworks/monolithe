@@ -12,7 +12,7 @@ from colorama import init
 init()
 from colorama import Fore, Style
 from tabulate import tabulate
-from bambou import NURESTObject
+from bambou2 import NURESTObject
 
 
 class Printer(object):

@@ -5,7 +5,7 @@
 # it will be added to all the generated files
 #
 
-from bambou import NURESTFetcher
+from bambou2 import NURESTFetcher
 
 
 class GAListsFetcher(NURESTFetcher):
@@ -15,7 +15,7 @@ class GAListsFetcher(NURESTFetcher):
             This fetcher enables to fetch GAList objects.
 
         See:
-            bambou.NURESTFetcher
+            bambou2.NURESTFetcher
     """
 
     @classmethod

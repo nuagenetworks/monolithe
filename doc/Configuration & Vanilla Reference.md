@@ -96,9 +96,9 @@ And the fetchers of that objects from the parents will be:
 
 	NUUnicornsFetcher
 
-> For more information about these objects fetchers, please read the Bambou documentation.
+> For more information about these objects fetchers, please read the Bambou2 documentation.
 
-Note that this will be used a strict version and will be translated to `bambou==1.0.1`
+Note that this will be used a strict version and will be translated to `bambou2==1.0.1`
 
 #### url, author, email, description, license_name
 
@@ -168,7 +168,7 @@ The structure of the sdk vanilla is the following:
 
 #### Default Attributes Configuration
 
-Bambou can use a file in order to populate default values for the attributes of an object. You can provide your own default attribute by adding a folder named `__attributes_defaults` that contains an `attrs_defaults.ini` file.
+Bambou2 can use a file in order to populate default values for the attributes of an object. You can provide your own default attribute by adding a folder named `__attributes_defaults` that contains an `attrs_defaults.ini` file.
 
 For example:
 
@@ -177,7 +177,7 @@ For example:
 	name=“New Enterprise“
 	description=“A cool enterprise“
 
-For more information, please read the bambou documentation.
+For more information, please read the bambou2 documentation.
 
 As Monolithe handles multiple version of the api a same sdk, it is possible that some objects doesn’t exist accross all the version. So it is possible to create a specific `attrs_defaults.ini` for specific api version. To do so, simply prefix the file name with `<major.minor>_`
 

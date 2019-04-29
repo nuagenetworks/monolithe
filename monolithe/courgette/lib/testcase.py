@@ -36,8 +36,8 @@ from copy import deepcopy
 from collections import OrderedDict
 from unittest2 import TestCase, TestResult
 
-from bambou.config import BambouConfig
-from bambou.exceptions import BambouHTTPError
+from bambou2.config import BambouConfig
+from bambou2.exceptions import BambouHTTPError
 
 from monolithe.lib import Printer
 from .helper import TestHelper

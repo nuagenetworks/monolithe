@@ -29,7 +29,7 @@ from builtins import object
 import importlib
 
 from monolithe.lib.sdkutils import SDKUtils
-from bambou import NURESTModelController
+from bambou2 import NURESTModelController
 
 
 class SDKLoader(object):

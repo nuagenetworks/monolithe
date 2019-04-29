@@ -5,8 +5,8 @@
 # it will be added to all the generated files
 #
 
-from bambou import NURESTSession
-from bambou.exceptions import InternalConsitencyError
+from bambou2 import NURESTSession
+from bambou2.exceptions import InternalConsitencyError
 from .garoot import GARoot
 
 

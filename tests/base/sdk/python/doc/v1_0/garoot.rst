@@ -3,7 +3,7 @@
 garoot
 ===========================================
 
-.. class:: garoot.GARoot(bambou.nurest_object.NUMetaRESTObject,):
+.. class:: garoot.GARoot(bambou2.nurest_object.NUMetaRESTObject,):
 
 Root object of the APIh
 
