@@ -38,8 +38,8 @@ def _string_clean(string):
         "VPort": "Vport",
         "IPv6": "Ipv6",
         "IPv4": "Ipv4",
-        "DHCPv4": "DhcpV4",
-        "DHCPv6": "DhcpV6"
+        "DHCPv4": "Dhcpv4",
+        "DHCPv6": "Dhcpv6"
     }
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
