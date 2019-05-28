@@ -1,4 +1,4 @@
-bambou
+bambou>=3.0,<4.0
 Flask
 tabulate
 colorama
