@@ -39,7 +39,8 @@ def _string_clean(string):
         "IPv6": "Ipv6",
         "IPv4": "Ipv4",
         "DHCPv4": "Dhcpv4",
-        "DHCPv6": "Dhcpv6"
+        "DHCPv6": "Dhcpv6",
+        "SaaS": "Saas"
     }
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
