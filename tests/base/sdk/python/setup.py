@@ -35,6 +35,7 @@ setup(
     packages=packages,
     description='SDK for the My Product',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     license='BSD',
     include_package_data=True,
     install_requires=[line for line in open('requirements.txt')],
