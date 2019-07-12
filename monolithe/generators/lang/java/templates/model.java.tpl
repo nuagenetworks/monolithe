@@ -27,15 +27,14 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) -%}
    {% if attribute.type == "enum" or attribute.subtype == "enum" %}
    {%- set field_name = attribute.local_name[0:1].upper() + attribute.local_name[1:] %}
-   {% if attribute.local_name == specification.rest_name %}{%- set field_name="E"+field_name %}{%- endif %}
-   public enum {{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice }}{% if not loop.last %}, {% endif %}{% endfor %} };
+   public enum E{{ field_name }} { {% for choice in attribute.allowed_choices %}{{ choice }}{% if not loop.last %}, {% endif %}{% endfor %} };
    {%- endif %}
    {%- endfor %}
 
    {% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %}
    @JsonProperty(value = "{{ attribute.name }}")
    {%- set field_name = attribute.local_type %}
-   {%- if attribute.local_type == specification.entity_name %}{%- set field_name="E"+field_name %}{%- endif %}
+   {% if attribute.type == "enum" %}{%- set field_name="E"+field_name %}{%- endif %}
    protected {{ field_name }} {{ attribute.local_name }};
    {% endfor %}
 
@@ -68,7 +67,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {%- set type_name = field_name %}
    {%- if attribute.local_type != "enum" %}
    {%- set type_name = attribute.local_type %}
-   {%- if attribute.local_type == specification.entity_name %}{%- set type_name="E"+type_name %}{%- endif %}
+   {% if attribute.type == "enum" %}{%- set type_name="E"+type_name %}{%- endif %}
    {%- endif %}
    @JsonIgnore
    public {{type_name}} get{{ field_name }}() {

@@ -276,7 +276,7 @@ class APIVersionWriter(TemplateFileWriter):
                 elif attribute.type == "list":
                     if attribute.subtype == "enum":
                         enum_subtype = attribute.local_name[0:1].upper() + attribute.local_name[1:]
-                        attribute.local_type = "java.util.List<" + enum_subtype + ">"
+                        attribute.local_type = "java.util.List<E" + enum_subtype + ">"
                     elif attribute.subtype == "object":
                         attr_subtype = "com.fasterxml.jackson.databind.JsonNode"
                         if self.attrs_types.has_option(specification.entity_name, attribute.local_name):
