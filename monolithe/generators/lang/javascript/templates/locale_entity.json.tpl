@@ -1,9 +1,5 @@
 {
-  {% if specification.rest_name %}
-    "{{ specification.rest_name }}": {
-  {% else %}
-    "{{ specification.entity_name|lower }}": {
-  {% endif %}
+  {% if specification.rest_name %}"{{ specification.rest_name }}": {% else %}"{{ specification.entity_name|lower }}": {% endif %}
         "entity": {
             "title": "{{ specification.userlabel }}",
             "description": "{{ specification.description}}"
