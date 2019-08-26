@@ -196,7 +196,7 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
         
-        object_subtypes = set([attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype)])
+        object_subtypes = set([attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype and attribute.subtype not in self.list_subtypes_generic)])
 
         invalid_object_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "object" and not attribute.subtype in self.entity_names)]
 

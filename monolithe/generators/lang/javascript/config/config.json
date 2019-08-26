@@ -16,5 +16,5 @@
         "link": ["acceptanceCriteria"],
         "vnf": ["allowedActions", "lastUserAction"]
     },
-    "list_subtypes_generic": ["double", "enum", "long", "string"]
+    "list_subtypes_generic": ["double", "enum", "long", "string", "JSON"]
 }
