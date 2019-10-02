@@ -100,7 +100,30 @@ class APIVersionWriter(TemplateFileWriter):
                     class_prefix = self._class_prefix,
                     enum_list = sorted(self.enum_list))
                     
-        self._write_locales(specifications)            
+        self._write_locales(specifications)
+
+        self._write_model_hierarchy(specifications)
+
+    def _write_model_hierarchy(self, specifications):
+        root_spec = specifications.get('me');
+        tree = {root_spec.rest_name: self._get_children(root_spec, specifications, {})}
+        model_hierarchy_file = os.path.join(self.model_directory, "modelHierarchy.json")
+        with open(model_hierarchy_file, 'w') as outfile:
+            json.dump(tree, outfile, indent=4, sort_keys=True, separators=(',', ': '))
+
+    def _get_children(self, spec, specifications, parents_dict):
+        if(spec.rest_name in parents_dict):
+            parents_dict[spec.rest_name] = parents_dict[spec.rest_name] + 1
+        else:
+            parents_dict[spec.rest_name] = 1
+
+        createable_children = filter(lambda child_api: child_api.allows_create == True and (child_api.rest_name not in parents_dict or parents_dict[child_api.rest_name] < 2), spec.child_apis)
+        children_dict = {}
+        for child in createable_children:
+            children_dict[child.rest_name] = self._get_children(specifications.get(child.rest_name), specifications, parents_dict)
+
+        parents_dict[spec.rest_name] = parents_dict[spec.rest_name] - 1
+        return children_dict
 
     def _write_locales(self, specifications):
         if self.locale_on:
