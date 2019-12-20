@@ -37,5 +37,5 @@ func NewX509Session(cert *tls.Certificate, url string) (*bambou.Session, *{{root
 
 func init() {
 
-    urlpostfix = "/" + SDKAPIPrefix + "/v" + strings.Replace(fmt.Sprintf("%.1f", SDKAPIVersion), ".", "_", 100)
+    urlpostfix = "/" + SDKAPIPrefix + "/v" + strings.Replace(fmt.Sprintf("%.1v", SDKAPIVersion), ".", "_", 100)
 }
