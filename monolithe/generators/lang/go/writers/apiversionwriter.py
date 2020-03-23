@@ -107,6 +107,8 @@ class APIVersionWriter(TemplateFileWriter):
         filename = "%s.go" % (specification.entity_name.lower())
 
         defaults = {}
+        # Making sure the entity name starts with a capital letter as it might otherwise break private vs public variable and method names in Golang
+        specification.entity_name = "{0:s}{1:s}".format(specification.entity_name[0].upper(), specification.entity_name[1:])
         section = specification.entity_name
         if self.attrs_defaults.has_section(section):
             for attribute in self.attrs_defaults.options(section):
