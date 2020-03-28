@@ -60,7 +60,11 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             {%- set choices_str %}[{% for choice in attribute.allowed_choices %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{% set attr_name %}{% if attribute.name not in  generic_enum_attributes%}{{ attribute.name }}{% else %}{{ generic_enum_attributes[attribute.name].name }}{% endif %}{% endset %}{% if attribute.name not in  generic_enum_attributes%}{{ specification.entity_name }}{% endif %}{{ attr_name[0].upper() + attr_name[1:] }}Enum.{{choice}}{% endfor %}]{%- endset %}
             choices: {{choices_str|wordwrap(80,false,'\n                ')}}{% endif %},{% if attribute.subtype != None %}
             subType: {{ class_prefix }}{% if type_object_or_list_with_subtype %}{{ attribute.subtype }},{% else %}Attribute.ATTR_TYPE_{% if attribute.subtype == "integer" %}INTEGER{% elif attribute.subtype == "JSON" %}OBJECT{% elif attribute.subtype == "long" %}LONG{% elif attribute.subtype == "float" %}FLOAT{% elif attribute.subtype == "boolean" %}BOOLEAN{% elif attribute.subtype == "enum" and attribute.allowed_choices and attribute.allowed_choices|length > 0 %}ENUM{% else %}STRING{% endif %},{% endif %}{% endif %}
-            userlabel: `{{ attribute.userlabel }}`,
+            userlabel: `{{ attribute.userlabel }}`,{% if attribute.min_value or attribute.min_value == 0 %}
+            minValue: {{ attribute.min_value }},{% endif %}{% if attribute.max_value or attribute.max_value == 0 %}
+            maxValue: {{ attribute.max_value }},{% endif %}{% if attribute.min_length or attribute.min_length == 0 %}
+            minLength: {{ attribute.min_length }},{% endif %}{% if attribute.max_length or attribute.max_length == 0 %}
+            maxLength: {{ attribute.max_length }},{% endif %}
         }),
         {%- endfor %}
     }
