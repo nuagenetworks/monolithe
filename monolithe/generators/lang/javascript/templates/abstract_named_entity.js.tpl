@@ -9,8 +9,8 @@ export default class {{ class_prefix }}AbstractNamedEntity extends {{ superclass
     constructor(...args) {
         super(...args);
         this.defineProperties({
-            name: null,
-            description: null,
+            name: undefined,
+            description: undefined,
         });
     }
 
