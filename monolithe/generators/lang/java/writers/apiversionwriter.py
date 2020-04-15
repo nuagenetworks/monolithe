@@ -288,5 +288,7 @@ class APIVersionWriter(TemplateFileWriter):
                         attribute.local_type = "java.util.List<com.fasterxml.jackson.databind.JsonNode>"
                     elif attribute.subtype == "string":
                         attribute.local_type = "java.util.List<String>"
+                    elif attribute.subtype == "JSON":
+                        attribute.local_type = "java.util.List<String>"
                     else:
                         attribute.local_type = "java.util.List<"+attribute.subtype+">"
