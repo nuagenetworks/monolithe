@@ -25,6 +25,8 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
     constructor(...args) {
         super(...args);
         this.defineProperties({
+        {%- if not specification.rest_name %}
+            entityName: '{{ specification.entity_name|lower }}',{% endif -%}
         {%- if specification.template %}
             isTemplate: true,{% endif -%}
         {%- if specification.supportsDeploymentFailures %}
