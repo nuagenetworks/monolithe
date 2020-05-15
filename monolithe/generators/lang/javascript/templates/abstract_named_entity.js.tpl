@@ -22,15 +22,11 @@ export default class {{ class_prefix }}AbstractNamedEntity extends {{ superclass
             isRequired: true,
             canOrder: true,
             canSearch: true,
-            minLength: 1,
-            maxLength: 255
         }),
         description: new {{ class_prefix }}Attribute({
             localName: 'description',
             attributeType: {{ class_prefix }}Attribute.ATTR_TYPE_STRING,
             canSearch: true,
-            minLength: 0,
-            maxLength: 255
         }),
     }
 
