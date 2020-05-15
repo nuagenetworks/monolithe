@@ -231,10 +231,10 @@ class APIVersionWriter(TemplateFileWriter):
         named_attrs_applicable = len(self.named_entity_attrs) > 0 and set(self.named_entity_attrs).issubset(attr_names)
         if (named_attrs_applicable):
             name_attr = filter(lambda attr: attr.name == 'name', attributes)[0]
-            if ((not name_attr.required) or (not name_attr.filterable)):
+            if ((not name_attr.required) or (not name_attr.filterable) or (name_attr.min_length != 1) or (name_attr.max_length != 255)):
                 return False
             desc_attr = filter(lambda attr: attr.name == 'description', attributes)[0]
-            if (desc_attr.required or (not desc_attr.filterable)):
+            if (desc_attr.required or (not desc_attr.filterable) or (desc_attr.min_length != 0) or (desc_attr.max_length != 255)):
                 return False
             return True
         return False
