@@ -43,7 +43,6 @@ class APIVersionWriter(TemplateFileWriter):
         self.generic_enum_attrs = []
         self.base_attrs = []
         self.generic_enums = []
-        self.named_entity_attrs = []
         self.overide_generic_enums = []
         self.enum_attrs_for_locale = {}
         self.generic_enum_attrs_for_locale = {}
@@ -57,7 +56,6 @@ class APIVersionWriter(TemplateFileWriter):
                 
             self.base_attrs = json_config_data['base_attrs']
             self.generic_enums =  json_config_data['generic_enums']
-            self.named_entity_attrs = json_config_data['named_entity_attrs']
             self.overide_generic_enums = json_config_data['overide_generic_enums']
             self.list_subtypes_generic = json_config_data['list_subtypes_generic']
 
@@ -78,9 +76,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.model_list = []
         self.job_commands = filter(lambda attr: attr.name == 'command', specifications.get("job").attributes)[0].allowed_choices
         #Printer.log("job_commands: %s" % (self.job_commands))
-            
-        self._write_abstract_named_entity()
-        
+                    
         self.entity_names = [specification.entity_name for rest_name, specification in specifications.iteritems()]
 
         for rest_name, specification in specifications.iteritems():
@@ -127,23 +123,6 @@ class APIVersionWriter(TemplateFileWriter):
         for attribute in specification.attributes:
             if attribute.description:
                 attribute.description = attribute.description.replace('"', "'")
-
-    def _write_abstract_named_entity(self):
-        """ This method generates AbstractNamedEntity class js file.
-        """
-        filename = "%sAbstractNamedEntity.js" % (self._class_prefix)
-                
-        superclass_name = "%sEntity" % (self._class_prefix)
-        
-        # write will write a file using a template.
-        # mandatory params: destination directory, destination file name, template file name
-        # optional params: whatever that is needed from inside the Jinja template
-
-        self.write(destination = self.abstract_directory,
-                    filename = filename,
-                    template_name = "abstract_named_entity.js.tpl",
-                    class_prefix = self._class_prefix,
-                    superclass_name = superclass_name)
                     
     def _write_model(self, specification):
         """ This method writes the ouput for a particular specification.
@@ -161,15 +140,13 @@ class APIVersionWriter(TemplateFileWriter):
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
         self.model_list.append("%s%s" %(self._class_prefix, specification.entity_name))
-        
-        isNamedEntity = self._isNamedEntity(attributes=specification.attributes) if specification.rest_name else False
-                
-        superclass_name = "RootEntity" if specification.rest_name == self.api_root else "AbstractNamedEntity" if isNamedEntity  else "AbstractModel" if not specification.rest_name else "Entity"
+
+        superclass_name = "RootEntity" if specification.rest_name == self.api_root  else "AbstractModel" if not specification.rest_name else "Entity"
         # write will write a file using a template.
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
 
-        specification.attributes_modified = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs and (not isNamedEntity or attribute.name not in self.named_entity_attrs))]
+        specification.attributes_modified = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs)]
 
         enum_attributes=[attribute for attribute in specification.attributes_modified if attribute.allowed_choices]
                 
@@ -225,19 +202,6 @@ class APIVersionWriter(TemplateFileWriter):
                     generic_enum_attributes = generic_enum_attrs_in_entity,
                     generic_enum_attributes_to_import = set(generic_enum_attributes_to_import),
                     subtypes_for_import = object_subtypes.union(list_subtypes))
-
-    def _isNamedEntity(self, attributes):
-        attr_names = [attr.name for attr in attributes]
-        named_attrs_applicable = len(self.named_entity_attrs) > 0 and set(self.named_entity_attrs).issubset(attr_names)
-        if (named_attrs_applicable):
-            name_attr = filter(lambda attr: attr.name == 'name', attributes)[0]
-            if ((not name_attr.required) or (not name_attr.filterable)):
-                return False
-            desc_attr = filter(lambda attr: attr.name == 'description', attributes)[0]
-            if (desc_attr.required or (not desc_attr.filterable)):
-                return False
-            return True
-        return False
     
     def _write_enums(self, entity_name, attributes):
         """ This method writes the ouput for a particular specification.
