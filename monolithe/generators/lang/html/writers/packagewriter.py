@@ -27,6 +27,7 @@
 
 from monolithe.generators.lib import TemplateFileWriter
 from monolithe.lib import SDKUtils
+from natsort import natsorted
 
 
 class PackageWriter(TemplateFileWriter):
@@ -62,7 +63,7 @@ class PackageWriter(TemplateFileWriter):
             if v in branches.keys():
                 for b in branches[v]:
                     tmp_releases.append(SDKUtils.get_dot_notation(b))
-                version_releases[v] = sorted(tmp_releases, reverse=True)
+                version_releases[v] = natsorted(tmp_releases, reverse=True)
 
         self.write(destination=self.output_directory, filename="index.html", template_name="main_index.html.tpl",
                    apiversion=versions,

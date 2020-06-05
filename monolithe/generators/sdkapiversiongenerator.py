@@ -30,6 +30,7 @@ from __future__ import unicode_literals
 from builtins import object
 
 from monolithe.generators.managers import APIVersionManager, DocumentationManager
+from natsort import natsorted
 
 
 class SDKAPIVersionGenerator(object):
@@ -44,8 +45,8 @@ class SDKAPIVersionGenerator(object):
     def generate(self, specification_info):
         """
         """
-        specification_info = sorted(specification_info, key=lambda k: k["branch"])
-        specification_info = sorted(specification_info, key=lambda k: k["api"]["version"])
+        specification_info = natsorted(specification_info, key=lambda k: k["branch"])
+        specification_info = natsorted(specification_info, key=lambda k: k["api"]["version"])
         spec_max_index = len(specification_info) - 1
         for index, info in enumerate(specification_info):
             latest = False
