@@ -133,7 +133,7 @@ class APIVersionWriter(TemplateFileWriter):
             
         specification.supportsAlarms = len(filter(lambda child_api : child_api.rest_name == "alarm", specification.child_apis)) == 1
         
-        specification.supportsPermissions = len(filter(lambda child_api : child_api.rest_name == "enterprisepermission" or child_api.rest_name == "permission", specification.child_apis)) > 0
+        specification.supportsPermissions = (not specification.template) and len(filter(lambda child_api : child_api.rest_name == "enterprisepermission" or child_api.rest_name == "permission", specification.child_apis)) > 0
 
         specification.supportsDeploymentFailures = len(filter(lambda child_api : child_api.rest_name == "deploymentfailure", specification.child_apis)) == 1
 
