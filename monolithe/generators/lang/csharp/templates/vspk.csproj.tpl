@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="net.nuagenetworks.bambou, Version=1.0.6521.25133, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\net.nuagenetworks.bambou.dll.1.1.1\lib\net452\net.nuagenetworks.bambou.dll</HintPath>
+    <Reference Include="net.nuagenetworks.bambou, Version=1.0.7566.30399, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\net.nuagenetworks.bambou.dll.1.1.2\lib\net452\net.nuagenetworks.bambou.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
