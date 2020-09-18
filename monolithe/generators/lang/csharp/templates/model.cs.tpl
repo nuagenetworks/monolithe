@@ -81,7 +81,7 @@ public class {{ class_prefix }}{{ specification.entity_name }}: {{ superclass_na
    {%- endif %}
 
    public String toString() {
-      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + _{{ attribute.local_name }}{% endfor %} + ", id=" + NUId + ", parentId=" + NUParentId + ", parentType=" + NUParentType + {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
+      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + _{{ attribute.local_name }}{% endfor %} + ", id=" + NUId + ", parentId=" + NUParentId + ", parentType=" + NUParentType {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
    }
    
    {% if override_content -%}
