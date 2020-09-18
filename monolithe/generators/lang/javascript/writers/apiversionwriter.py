@@ -53,8 +53,10 @@ class APIVersionWriter(TemplateFileWriter):
         if (os.path.isfile(config_file)):
             with open(config_file, 'r') as input_json:
                 json_config_data = json.load(input_json) 
-                
-            self.base_attrs = json_config_data['base_attrs']
+
+            # inherited_attrs is a pre-configured list of inherited attributes that will not be modeled in individual model classes
+            # inherited_attrs will be defined in one of the base classes, NUAuditableEntity or NUEntity
+            self.base_attrs = json_config_data['inherited_attrs']
             self.generic_enums =  json_config_data['generic_enums']
             self.overide_generic_enums = json_config_data['overide_generic_enums']
             self.list_subtypes_generic = json_config_data['list_subtypes_generic']
