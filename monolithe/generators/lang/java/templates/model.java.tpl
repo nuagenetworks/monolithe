@@ -91,8 +91,7 @@ public class {{ class_prefix }}{{ specification.entity_name }} extends {{ superc
    {%- endif %}
 
    public String toString() {
-      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
-              + lastUpdatedDate + ", owner=" + owner {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
+      return "{{ class_prefix }}{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType {% if superclass_name == "RestRootObject" %} + ", apiKey=" + apiKey {% endif %} + "]";
    }
    
    {% if override_content -%}
