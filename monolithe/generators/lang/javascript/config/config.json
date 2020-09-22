@@ -1,9 +1,9 @@
 {    
-    "inherited_attrs": ["entityScope", "externalID", "lastUpdatedBy", "creationDate", "lastUpdatedDate", "owner"],
     "generic_enums": {
         "IPType": ["IPv4", "IPv6", "IPV4", "IPV6", "DUALSTACK", "IPv4Network", "IPv6Network"],
         "enabled": ["DISABLED", "ENABLED", "INHERITED", "ENABLED_INHERITED"],
-        "permittedAction": ["ALL", "EXTEND", "DEPLOY", "READ", "INSTANTIATE", "USE"]
+        "permittedAction": ["ALL", "EXTEND", "DEPLOY", "READ", "INSTANTIATE", "USE"],
+        "entityScope": ["ENTERPRISE", "GLOBAL"]
     },
     "overide_generic_enums": {
         "enterprise": ["encryptionManagementMode"],

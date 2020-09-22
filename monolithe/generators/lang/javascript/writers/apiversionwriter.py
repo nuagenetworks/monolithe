@@ -41,7 +41,6 @@ class APIVersionWriter(TemplateFileWriter):
         config_file = os.path.abspath(os.path.join(this_dir, "..", "config", "config.json"))
 
         self.generic_enum_attrs = []
-        self.base_attrs = []
         self.generic_enums = []
         self.overide_generic_enums = []
         self.enum_attrs_for_locale = {}
@@ -54,9 +53,6 @@ class APIVersionWriter(TemplateFileWriter):
             with open(config_file, 'r') as input_json:
                 json_config_data = json.load(input_json) 
 
-            # inherited_attrs is a pre-configured list of inherited attributes that will not be modeled in individual model classes
-            # inherited_attrs will be defined in one of the base classes, NUAuditableEntity or NUEntity
-            self.base_attrs = json_config_data['inherited_attrs']
             self.generic_enums =  json_config_data['generic_enums']
             self.overide_generic_enums = json_config_data['overide_generic_enums']
             self.list_subtypes_generic = json_config_data['list_subtypes_generic']
@@ -143,14 +139,12 @@ class APIVersionWriter(TemplateFileWriter):
 
         self.model_list.append("%s%s" %(self._class_prefix, specification.entity_name))
 
-        superclass_name = "RootEntity" if specification.rest_name == self.api_root  else "AbstractModel" if not specification.rest_name else "AuditableEntity" if '@audited' in specification.extends else "Entity"
+        superclass_name = "RootEntity" if specification.rest_name == self.api_root  else "AbstractModel" if not specification.rest_name else "Entity"
         # write will write a file using a template.
         # mandatory params: destination directory, destination file name, template file name
         # optional params: whatever that is needed from inside the Jinja template
 
-        specification.attributes_modified = [attribute for attribute in specification.attributes if (attribute.name not in self.base_attrs)]
-
-        enum_attributes=[attribute for attribute in specification.attributes_modified if attribute.allowed_choices]
+        enum_attributes=[attribute for attribute in specification.attributes if attribute.allowed_choices]
                 
         enum_attrs_to_import = enum_attributes[:]
         generic_enum_attrs_in_entity = {}
@@ -177,14 +171,14 @@ class APIVersionWriter(TemplateFileWriter):
         
         object_subtypes = set([attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype and attribute.subtype not in self.list_subtypes_generic)])
 
-        invalid_object_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "object" and not attribute.subtype in self.entity_names)]
+        invalid_object_attributes=[attribute.name for attribute in specification.attributes if (attribute.local_type == "object" and not attribute.subtype in self.entity_names)]
 
         if invalid_object_attributes:
             Printer.log("Spec: %s: Attributes %s use invalid subtypes %s" % (filename, invalid_object_attributes, object_subtypes))
 
         list_subtypes = set([attribute.subtype for attribute in specification.attributes if (attribute.local_type == "list" and attribute.subtype not in self.list_subtypes_generic)])
 
-        invalid_list_attributes=[attribute.name for attribute in specification.attributes_modified if (attribute.local_type == "list" and not attribute.subtype in self.entity_names and not attribute.subtype in self.list_subtypes_generic)]
+        invalid_list_attributes=[attribute.name for attribute in specification.attributes if (attribute.local_type == "list" and not attribute.subtype in self.entity_names and not attribute.subtype in self.list_subtypes_generic)]
 
         if invalid_list_attributes:
             Printer.log("Spec: %s: Attributes %s use invalid list subtypes %s" % (filename, invalid_list_attributes, list_subtypes))

@@ -1,5 +1,5 @@
 {% set new_line = "\n"  -%}
-{% if specification.attributes_modified -%}import {{ class_prefix }}Attribute from 'service/{{ class_prefix }}Attribute';{{ new_line }}{%- endif -%}
+{% if specification.attributes -%}import {{ class_prefix }}Attribute from 'service/{{ class_prefix }}Attribute';{{ new_line }}{%- endif -%}
 {% if specification.rest_name -%}import ServiceClassRegistry from 'service/ServiceClassRegistry';{{ new_line }}{% endif -%}
 import {{ class_prefix }}{{ superclass_name}} from '{% if superclass_name == "AbstractNamedEntity" %}./abstract/{% else %}service/{% endif %}{{ class_prefix }}{{ superclass_name }}';
 {%- if enum_attrs_to_import and enum_attrs_to_import|length > 0  %}
@@ -31,7 +31,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
             isTemplate: true,{% endif -%}
         {%- if specification.supportsDeploymentFailures %}
             hasDeploymentFailures: undefined,{% endif -%}
-        {%- for attribute in specification.attributes_modified %}
+        {%- for attribute in specification.attributes %}
             {% set is_enum = attribute.allowed_choices and attribute.allowed_choices|length > 0  -%}
             {% set is_enum_list = is_enum and attribute.local_type == "list" and attribute.default_value -%}
             {% set default_choices_str %}{% if is_enum_list %}[{% for defval in attribute.default_value %}{% if loop.index0 > 0 %}, {% endif %}{{ class_prefix }}{% set attr_name %}{% if attribute.name not in  generic_enum_attributes%}{{ attribute.name }}{% else %}{{ generic_enum_attributes[attribute.name].name }}{% endif %}{% endset %}{% if attribute.name not in  generic_enum_attributes%}{{ specification.entity_name }}{% endif %}{{ attr_name[0].upper() + attr_name[1:] }}Enum.{{defval}}.name{% endfor %}]{% else %}undefined{% endif %}{% endset -%}
@@ -47,7 +47,7 @@ export default class {{ class_prefix }}{{ specification.entity_name }} extends {
 
     static attributeDescriptors = {
         {%- if specification.rest_name -%}{{ new_line }}        ...{{ class_prefix }}{{ superclass_name}}.attributeDescriptors,{% endif -%}
-        {%- for attribute in specification.attributes_modified %}
+        {%- for attribute in specification.attributes %}
         {% set type_object_or_list_with_subtype = ((attribute.local_type == "object" and attribute.subtype  and attribute.subtype != "JSON") or (attribute.local_type == "list" and attribute.subtype and attribute.subtype in subtypes_for_import)) -%}
         {{ attribute.name }}: new {{ class_prefix }}Attribute({
             localName: '{{ attribute.name }}',
