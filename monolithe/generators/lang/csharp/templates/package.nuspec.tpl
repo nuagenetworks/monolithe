@@ -12,7 +12,7 @@
     <copyright>Copyright 2017</copyright>
     <tags>nuage</tags>
     <dependencies>
-      <dependency id="net.nuagenetworks.bambou.dll" version="1.1.2" />
+      <dependency id="net.nuagenetworks.bambou.dll" version="1.1.3" />
       <dependency id="Newtonsoft.Json" version="10.0.3" />
     </dependencies>
   </metadata>

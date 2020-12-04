@@ -316,5 +316,9 @@ class APIVersionWriter(TemplateFileWriter):
                         attribute.local_type = "System.Collections.Generic.List<" + attr_subtype + ">"
                     elif attribute.subtype == "entity":
                         attribute.local_type = "System.Collections.Generic.List<JObject>"
-                    else:
+                    elif attribute.subtype == "string":
                         attribute.local_type = "System.Collections.Generic.List<String>"
+                    elif attribute.subtype == "JSON":
+                        attribute.local_type = "System.Collections.Generic.List<String>"
+                    else:
+                        attribute.local_type = "System.Collections.Generic.List<"+ attribute.subtype +">"
