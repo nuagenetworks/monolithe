@@ -13,7 +13,12 @@
         "nsgateway": ["TPMStatus"],
         "ingressadvfwdentrytemplate": ["appType", "addressOverrideType"],
         "link": ["acceptanceCriteria"],
-        "vnf": ["allowedActions", "lastUserAction"]
-    },
+        "vnf": ["allowedActions", "lastUserAction"],
+        "egressaclentrytemplate": ["addressOverrideType"],
+        "egressadvfwdentrytemplate": ["addressOverrideType"],
+        "egressauditaclentrytemplate": ["addressOverrideType"],
+        "egressdomainfloatingipaclentrytemplate": ["addressOverrideType"],
+        "ingressaclentrytemplate": ["addressOverrideType"],
+        "ingressauditaclentrytemplate": ["addressOverrideType"]    },
     "list_subtypes_generic": ["double", "enum", "long", "string", "JSON"]
 }
