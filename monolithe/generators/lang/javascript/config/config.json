@@ -19,6 +19,7 @@
         "egressauditaclentrytemplate": ["addressOverrideType"],
         "egressdomainfloatingipaclentrytemplate": ["addressOverrideType"],
         "ingressaclentrytemplate": ["addressOverrideType"],
-        "ingressauditaclentrytemplate": ["addressOverrideType"]    },
+        "ingressauditaclentrytemplate": ["addressOverrideType"]
+    },
     "list_subtypes_generic": ["double", "enum", "long", "string", "JSON"]
 }
