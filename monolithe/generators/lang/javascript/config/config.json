@@ -1,7 +1,7 @@
 {    
     "generic_enums": {
         "IPType": ["IPv4", "IPv6", "IPV4", "IPV6", "DUALSTACK", "IPv4Network", "IPv6Network"],
-        "enabled": ["DISABLED", "ENABLED", "INHERITED", "ENABLED_INHERITED"],
+        "enabled": ["DISABLED", "ENABLED", "INHERITED", "ENABLED_INHERITED", "ACTIVE", "PASSIVE"],
         "permittedAction": ["ALL", "EXTEND", "DEPLOY", "READ", "INSTANTIATE", "USE"],
         "entityScope": ["ENTERPRISE", "GLOBAL"]
     },
@@ -21,7 +21,8 @@
         "ingressaclentrytemplate": ["addressOverrideType"],
         "ingressauditaclentrytemplate": ["addressOverrideType"],
         "firewallrule": ["addressOverrideType"],
-        "virtualfirewallrule": ["addressOverrideType"]
+        "virtualfirewallrule": ["addressOverrideType"],
+        "uplinkconnection": ["fecEnabled"]
     },
     "list_subtypes_generic": ["double", "enum", "long", "string", "JSON"]
 }
