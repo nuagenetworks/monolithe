@@ -70,7 +70,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.fetcher_filenames = dict()
 
         task_manager = TaskManager()
-        for rest_name, specification in specifications.items():
+        for rest_name, specification in list(specifications.items()):
             task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications)
             task_manager.start_task(method=self._write_fetcher, specification=specification, specification_set=specifications)
         task_manager.wait_until_exit()
@@ -133,7 +133,7 @@ class APIVersionWriter(TemplateFileWriter):
         """
         formatted_filenames = {}
 
-        for filename, classname in filenames.items():
+        for filename, classname in list(filenames.items()):
             formatted_filenames[filename[:-3]] = str("%s%s%s" % (self._class_prefix, classname, suffix))
 
         return OrderedDict(sorted(formatted_filenames.items()))

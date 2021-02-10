@@ -1,3 +1,4 @@
+from builtins import filter
 from monolithe.generators.lib import TemplateFileWriter
 from monolithe.specifications import SpecificationAttribute
 from monolithe.lib import Printer
@@ -57,7 +58,7 @@ class APIVersionWriter(TemplateFileWriter):
             self.overide_generic_enums = json_config_data['overide_generic_enums']
             self.list_subtypes_generic = json_config_data['list_subtypes_generic']
 
-            for enum_name, values in self.generic_enums.iteritems():
+            for enum_name, values in self.generic_enums.items():
                 enum_attr =  SpecificationAttribute()
                 enum_attr.name = enum_name
                 enum_attr.allowed_choices = values
@@ -75,9 +76,9 @@ class APIVersionWriter(TemplateFileWriter):
         self.job_commands = filter(lambda attr: attr.name == 'command', specifications.get("job").attributes)[0].allowed_choices
         #Printer.log("job_commands: %s" % (self.job_commands))
                     
-        self.entity_names = [specification.entity_name for rest_name, specification in specifications.iteritems()]
+        self.entity_names = [specification.entity_name for rest_name, specification in specifications.items()]
 
-        for rest_name, specification in specifications.iteritems():
+        for rest_name, specification in specifications.items():
             self._write_model(specification=specification)
 
         #self._write_generic_enums()
@@ -99,7 +100,7 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_locales(self, specifications):
         if self.locale_on:
             self.locales_list = []
-            for rest_name, specification in specifications.items():
+            for rest_name, specification in list(specifications.items()):
                 self._format_description_text(specification)            
                 filename = "%s.json" % (rest_name)
                 self.locales_list.append(rest_name)
@@ -129,11 +130,11 @@ class APIVersionWriter(TemplateFileWriter):
         if specification.allowed_job_commands and not (set(specification.allowed_job_commands).issubset(self.job_commands)):
             raise Exception("Invalid allowed_job_commands %s specified in entity %s" % (specification.allowed_job_commands, specification.entity_name))
             
-        specification.supportsAlarms = len(filter(lambda child_api : child_api.rest_name == "alarm", specification.child_apis)) == 1
+        specification.supportsAlarms = len([child_api for child_api in specification.child_apis if child_api.rest_name == "alarm"]) == 1
         
-        specification.supportsPermissions = len(filter(lambda child_api : child_api.rest_name == "enterprisepermission" or child_api.rest_name == "permission", specification.child_apis)) > 0
+        specification.supportsPermissions = len([child_api for child_api in specification.child_apis if child_api.rest_name == "enterprisepermission" or child_api.rest_name == "permission"]) > 0
 
-        specification.supportsDeploymentFailures = len(filter(lambda child_api : child_api.rest_name == "deploymentfailure", specification.child_apis)) == 1
+        specification.supportsDeploymentFailures = len([child_api for child_api in specification.child_apis if child_api.rest_name == "deploymentfailure"]) == 1
 
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 
@@ -167,7 +168,7 @@ class APIVersionWriter(TemplateFileWriter):
         
         self._write_enums(entity_name=specification.entity_name, attributes=enum_attrs_to_import)
 
-        self.generic_enum_attrs_for_locale[specification.entity_name] = generic_enum_attrs_in_entity.values()
+        self.generic_enum_attrs_for_locale[specification.entity_name] = list(generic_enum_attrs_in_entity.values())
         
         object_subtypes = set([attribute.subtype for attribute in specification.attributes if (attribute.local_type == "object"  and attribute.subtype and attribute.subtype not in self.list_subtypes_generic)])
 

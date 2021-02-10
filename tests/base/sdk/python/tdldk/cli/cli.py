@@ -5,6 +5,9 @@
 # it will be added to all the generated files
 #
 
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 import argparse
 import sys
 
@@ -21,7 +24,7 @@ class _HelpAction(argparse._HelpAction):
 
         for subparsers_action in subparsers_actions:
 
-            for choice, subparser in subparsers_action.choices.items():
+            for choice, subparser in list(subparsers_action.choices.items()):
                 print("\n{}:\n{}".format(choice.upper(), "-" * (len(choice) + 1)))
                 print(subparser.format_help())
 
@@ -112,7 +115,7 @@ def main(argv=sys.argv):
 
     args = parser.parse_args()
 
-    from commands import CLICommand
+    from subprocess import CLICommand
     CLICommand.execute(args)
 
 

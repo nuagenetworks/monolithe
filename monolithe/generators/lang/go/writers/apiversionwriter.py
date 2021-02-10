@@ -73,7 +73,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_session()
 
         task_manager = TaskManager()
-        for rest_name, specification in specifications.items():
+        for rest_name, specification in list(specifications.items()):
             task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications)
         task_manager.wait_until_exit()
 
