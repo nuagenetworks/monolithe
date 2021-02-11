@@ -100,7 +100,7 @@ class APIVersionWriter(TemplateFileWriter):
     def _write_locales(self, specifications):
         if self.locale_on:
             self.locales_list = []
-            for rest_name, specification in list(specifications.items()):
+            for rest_name, specification in specifications.items():
                 self._format_description_text(specification)            
                 filename = "%s.json" % (rest_name)
                 self.locales_list.append(rest_name)
@@ -130,11 +130,11 @@ class APIVersionWriter(TemplateFileWriter):
         if specification.allowed_job_commands and not (set(specification.allowed_job_commands).issubset(self.job_commands)):
             raise Exception("Invalid allowed_job_commands %s specified in entity %s" % (specification.allowed_job_commands, specification.entity_name))
             
-        specification.supportsAlarms = len([child_api for child_api in specification.child_apis if child_api.rest_name == "alarm"]) == 1
+        specification.supportsAlarms = len(list(filter(lambda child_api : child_api.rest_name == "alarm", specification.child_apis))) == 1
         
-        specification.supportsPermissions = len([child_api for child_api in specification.child_apis if child_api.rest_name == "enterprisepermission" or child_api.rest_name == "permission"]) > 0
+        specification.supportsPermissions = len(list(filter(lambda child_api : child_api.rest_name == "enterprisepermission" or child_api.rest_name == "permission", specification.child_apis))) > 0
 
-        specification.supportsDeploymentFailures = len([child_api for child_api in specification.child_apis if child_api.rest_name == "deploymentfailure"]) == 1
+        specification.supportsDeploymentFailures = len(list(filter(lambda child_api : child_api.rest_name == "deploymentfailure", specification.child_apis))) == 1
 
         filename = "%s%s.js" % (self._class_prefix, specification.entity_name)
 

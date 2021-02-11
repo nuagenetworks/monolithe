@@ -91,7 +91,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_build_file()
 
         task_manager = TaskManager()
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications)
             task_manager.start_task(method=self._write_fetcher, specification=specification, specification_set=specifications)
         task_manager.wait_until_exit()
@@ -261,7 +261,7 @@ class APIVersionWriter(TemplateFileWriter):
     def _set_enum_list_local_type(self, specifications):
         """ This method is needed until get_type_name() is enhanced to include specification subtype and local_name
         """
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
                 if attribute.type == "enum":
                     enum_type = attribute.local_name[0:1].upper() + attribute.local_name[1:]

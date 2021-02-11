@@ -54,7 +54,7 @@ class DocumentationWriter(TemplateFileWriter):
         self.model_filenames = dict()
         self.fetcher_filenames = dict()
         task_manager = TaskManager()
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             task_manager.start_task(
                 method=self._write_model,
                 specification=specification,
@@ -73,7 +73,7 @@ class DocumentationWriter(TemplateFileWriter):
     def _write_model(self, specification, specification_set):
         filename = "%s%s.rst" % (self._class_prefix.lower(), specification.entity_name.lower())
         parent_apis = []
-        for rest_name, remote_spec in list(specification_set.items()):
+        for rest_name, remote_spec in specification_set.items():
             for related_child_api in remote_spec.child_apis:
                 if related_child_api.rest_name == specification.rest_name:
                     parent_apis.append(remote_spec)
@@ -88,6 +88,6 @@ class DocumentationWriter(TemplateFileWriter):
 
     def _prepare_filenames(self, filenames, suffix=''):
         formatted_filenames = {}
-        for filename, classname in list(filenames.items()):
+        for filename, classname in filenames.items():
             formatted_filenames[filename[:-4]] = str("%s%s%s" % (self._class_prefix, classname, suffix))
         return OrderedDict(sorted(formatted_filenames.items()))

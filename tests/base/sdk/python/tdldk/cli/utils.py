@@ -40,7 +40,7 @@ class Utils(object):
         }
 
         rep = dict((re.escape(k), v) for k, v in rep.items())
-        pattern = re.compile("|".join(list(rep.keys())))
+        pattern = re.compile("|".join(rep.keys()))
         return pattern.sub(lambda m: rep[re.escape(m.group(0))], string)
 
     @classmethod
@@ -154,7 +154,7 @@ class SDKInspector(object):
         """ Returns all objects available
 
         """
-        resources = list(self._objects_mapping.keys())
+        resources = self._objects_mapping.keys()
         resources = [Utils.get_entity_name_plural(name) for name in resources if name not in self._ignored_resources]
 
         return resources
