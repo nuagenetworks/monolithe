@@ -98,9 +98,9 @@ class Generator(object):
         """
 
         # certainly not the best algo ever... but I need to get somthing done :)
-        for specification_rest_name, specification in list(specifications.items()):
+        for specification_rest_name, specification in specifications.items():
 
-            for rest_name, remote_spec in list(specifications.items()):
+            for rest_name, remote_spec in specifications.items():
 
                 for related_child_api in remote_spec.child_apis:
 

@@ -68,7 +68,7 @@ class APIVersionWriter(TemplateFileWriter):
         """
 
         task_manager = TaskManager()
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             task_manager.start_task(method=self._write_specification, specification=specification, specification_set=specifications)
         task_manager.wait_until_exit()
 
@@ -85,7 +85,7 @@ class APIVersionWriter(TemplateFileWriter):
 
         # remove this when template can use the things resolved by _resolve_parent_apis
         parent_apis = []
-        for rest_name, remote_spec in list(specification_set.items()):
+        for rest_name, remote_spec in specification_set.items():
             for related_child_api in remote_spec.child_apis:
                 if related_child_api.rest_name == specification.rest_name:
                     parent_apis.append({"remote_spec": remote_spec, "actions": self._get_actions(related_child_api), "relationship": related_child_api.relationship})

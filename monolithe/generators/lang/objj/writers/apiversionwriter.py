@@ -72,7 +72,7 @@ class APIVersionWriter(TemplateFileWriter):
         self.fetcher_filenames = dict()
 
         task_manager = TaskManager()
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications)
             task_manager.start_task(method=self._write_fetcher, specification=specification, specification_set=specifications)
         task_manager.wait_until_exit()

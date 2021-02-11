@@ -123,7 +123,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._copyfile("icon-plugin.png", icons_source_directory, icons_output_directory)
         self._copyfile("icon-session.png", icons_source_directory, icons_output_directory)
         self._copyfile("icon-folder.png", icons_source_directory, icons_output_directory)
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             self._copyfile("icon-%s.png" % (specification.entity_name.lower()), icons_source_directory, icons_output_directory)
         rmtree("%s" % (icons_source_directory))
 
@@ -146,7 +146,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_modelhelper(specifications, model_source_output_directory, package_name=model_package_name)
 
         task_manager = TaskManager()
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             task_manager.start_task(method=self._write_model, specification=specification, specification_set=specifications, output_directory=model_source_output_directory, package_name=model_package_name)
             task_manager.start_task(method=self._write_fetcher, specification=specification, specification_set=specifications, output_directory=model_source_output_directory, package_name=model_package_name)
             for attribute in specification.attributes:
@@ -175,7 +175,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._write_workflow_file(specification=None, specification_set=None, workflow_directory=workflow_directory, template_file="o11nplugin-package/Remove Session.element_info.xml.tpl", filename="Remove Session.element_info.xml", workflow_type="remove", workflow_id=None, attrs_includes=None, attrs_excludes=None, workflow_name = "Remove Session", workflow_package=workflow_package, parent_spec=None)
         self._write_workflow_file(specification=None, specification_set=None, workflow_directory=workflow_directory, template_file="o11nplugin-package/Remove Session.xml.tpl", filename="Remove Session.xml", workflow_type="remove", workflow_id=None, attrs_includes=None, attrs_excludes=None, workflow_name = "Remove Session", workflow_package=workflow_package, parent_spec=None)
 
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
                 attrs_includes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "includes")
                 attrs_excludes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "excludes")
@@ -183,7 +183,7 @@ class APIVersionWriter(TemplateFileWriter):
                     if attribute.type == "enum" or attribute.type == "list":
                         self._write_action_files(specification=specification, attribute=attribute, package_name=self._package_name, output_directory=actions_output_directory)
 
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             if not specification.is_root:
                 attrs_includes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "includes")
                 attrs_excludes = self._get_entity_list_filter(self.workflow_attrs, specification.entity_name, "excludes")
@@ -602,9 +602,9 @@ class APIVersionWriter(TemplateFileWriter):
     def _resolve_parent_apis(self, specifications):
         """
         """
-        for specification_rest_name, specification in list(specifications.items()):
+        for specification_rest_name, specification in specifications.items():
             specification.parent_apis[:] = []
-            for rest_name, remote_spec in list(specifications.items()):
+            for rest_name, remote_spec in specifications.items():
                 for related_child_api in remote_spec.child_apis:
                     if related_child_api.rest_name == specification.rest_name:
                         parent_api = SpecificationAPI(specification=remote_spec)
@@ -623,7 +623,7 @@ class APIVersionWriter(TemplateFileWriter):
     def _set_local_and_workflow_type(self, specifications):
         ""
         ""
-        for rest_name, specification in list(specifications.items()):
+        for rest_name, specification in specifications.items():
             for attribute in specification.attributes:
                 if attribute.type == "string":
                     attribute.workflow_type = "string"
