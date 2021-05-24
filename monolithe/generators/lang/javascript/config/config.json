@@ -22,7 +22,8 @@
         "ingressauditaclentrytemplate": ["addressOverrideType"],
         "firewallrule": ["addressOverrideType"],
         "virtualfirewallrule": ["addressOverrideType"],
-        "uplinkconnection": ["fecEnabled"]
+        "uplinkconnection": ["fecEnabled"],
+        "virtualuplink": ["fecEnabled"]
     },
     "list_subtypes_generic": ["double", "enum", "long", "string", "JSON"]
 }
