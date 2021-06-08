@@ -238,11 +238,11 @@
                             {% endif %}
 
                             {% if attribute.min_length %}
-                            <span class="small"><b>Min lenght: </b></span><span class="fixed-text">{{ attribute.min_length }}</span><br/>
+                            <span class="small"><b>Min length: </b></span><span class="fixed-text">{{ attribute.min_length }}</span><br/>
                             {% endif %}
 
                             {% if attribute.max_length %}
-                            <span class="small"><b>Max lenght: </b></span><span class="fixed-text">{{ attribute.max_length }}</span><br/>
+                            <span class="small"><b>Max length: </b></span><span class="fixed-text">{{ attribute.max_length }}</span><br/>
                             {% endif %}
 
                             {% if attribute.min_value %}
