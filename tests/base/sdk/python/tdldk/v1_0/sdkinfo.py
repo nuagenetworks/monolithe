@@ -5,6 +5,7 @@
 # it will be added to all the generated files
 #
 
+from builtins import object
 from .gatdlsession import GATDLSession
 from .garoot import GARoot
 

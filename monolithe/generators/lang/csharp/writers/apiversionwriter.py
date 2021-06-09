@@ -31,7 +31,7 @@ from monolithe.lib import SDKUtils, TaskManager
 from monolithe.generators.lib import TemplateFileWriter
 
 from future import standard_library
-from urlparse import urlparse
+from urllib.parse import urlparse
 standard_library.install_aliases()
 
 

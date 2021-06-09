@@ -5,6 +5,7 @@
 # it will be added to all the generated files
 #
 
+from builtins import object
 import os
 
 from .printer import Printer
@@ -121,7 +122,7 @@ class CLICommand(object):
 
         try:
             (instance, connection) = instance.fetch()
-        except Exception, e:
+        except Exception as e:
             Printer.raise_error("Could not find '%s' with id '%s'. Activate verbose mode for more information:\n%s" % (name, args.id, e))
 
         if not args.json:
@@ -144,7 +145,7 @@ class CLICommand(object):
 
         try:
             (instance, connection) = parent.create_child(instance)
-        except Exception, e:
+        except Exception as e:
             Printer.raise_error("Cannot create %s:\n%s" % (name, e))
 
         if not args.json:
@@ -167,14 +168,14 @@ class CLICommand(object):
 
         try:
             (instance, connection) = instance.fetch()
-        except Exception, e:
+        except Exception as e:
             Printer.raise_error("Could not find '%s' with id '%s'. Activate verbose mode for more information:\n%s" % (name, args.id, e))
 
         cls._fill_instance_with_attributes(instance, attributes)
 
         try:
             (instance, connection) = instance.save()
-        except Exception, e:
+        except Exception as e:
             Printer.raise_error("Cannot update %s:\n%s" % (name, e))
 
         if not args.json:
@@ -259,7 +260,7 @@ class CLICommand(object):
 
         try:
             (instance, connection) = instance.delete()
-        except Exception, e:
+        except Exception as e:
             Printer.raise_error("Could not delete '%s' with id '%s'. Activate verbose mode for more information:\n%s" % (name, args.id, e))
 
         Printer.success("%s with ID=%s has been deleted" % (name, instance.id))
@@ -397,7 +398,7 @@ class CLICommand(object):
 
         try:
             (references, connection) = resource.assign(final_objects, object_class)
-        except Exception, e:
+        except Exception as e:
             Printer.raise_error('Cannot assign %s:\n%s' % (name, e))
 
         if args.ids is None:
@@ -417,7 +418,7 @@ class CLICommand(object):
                 The instance filled or throw an exception
 
         """
-        for attribute_name, attribute_value in attributes.iteritems():
+        for attribute_name, attribute_value in attributes.items():
 
             attribute = instance.get_attribute_infos(attribute_name)
             if attribute is None:
@@ -429,7 +430,7 @@ class CLICommand(object):
                 else:
                     value = attribute.attribute_type(attribute_value)
                 setattr(instance, attribute_name, value)
-            except Exception, e:
+            except Exception as e:
                 Printer.raise_error("Attribute %s could not be set with value %s\n%s" % (attribute_name, attribute_value, e))
 
         # TODO-CS: Remove validation when we will have all attribute information from Swagger...
