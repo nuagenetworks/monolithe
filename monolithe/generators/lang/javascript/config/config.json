@@ -21,7 +21,7 @@
         "ingressaclentrytemplate": ["addressOverrideType"],
         "ingressauditaclentrytemplate": ["addressOverrideType"],
         "firewallrule": ["addressOverrideType"],
-        "virtualfirewallrule": ["addressOverrideType"],
+        "virtualfirewallrule": ["appType", "addressOverrideType"],
         "uplinkconnection": ["fecEnabled"],
         "virtualuplink": ["fecEnabled"]
     },
