@@ -104,21 +104,6 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
         return super.getParentType();
     }
 
-    @VsoProperty(displayName = "CreationDate", readOnly = false)
-    public String getCreationDate() {
-        return super.getCreationDate();
-    }
-
-    @VsoProperty(displayName = "UpdatedDate", readOnly = false)
-    public String getLastUpdatedDate() {
-        return super.getLastUpdatedDate();
-    }
-
-    @VsoProperty(displayName = "Owner", readOnly = false)
-    public String getOwner() {
-        return super.getOwner();
-    }
-
     {%- if specification.is_root %}
     @VsoProperty(displayName = "ApiKey", readOnly = false)
     public String getApiKey() {
@@ -213,7 +198,6 @@ public class {{ specification.entity_name }} extends {{ superclass_name }} {
     {% endfor -%}
 
     public String toString() {
-        return "{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType + ", creationDate=" + creationDate + ", lastUpdatedDate="
-                 + lastUpdatedDate + ", owner=" + owner {% if specification.is_root %} + ", apiKey=" + apiKey {% endif %} + "]";
+        return "{{ specification.entity_name }} ["{% for attribute in specification.attributes | sort(attribute='local_name', case_sensitive=True) %} + "{% if not loop.first %}, {% endif %}{{ attribute.local_name }}=" + {{ attribute.local_name }}{% endfor %} + ", id=" + id + ", parentId=" + parentId + ", parentType=" + parentType {% if specification.is_root %} + ", apiKey=" + apiKey {% endif %} + "]";
     }
 }
