@@ -9,7 +9,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vco.version>6.0.3</vco.version>
+        <vco.version>7.4.0</vco.version>
     </properties>
 
     <repositories>
