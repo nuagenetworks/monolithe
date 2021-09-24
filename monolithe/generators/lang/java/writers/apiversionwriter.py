@@ -59,7 +59,7 @@ class APIVersionWriter(TemplateFileWriter):
         self._url = self.monolithe_config.get_option("url", "transformer")
 
         self._package_prefix = self._get_package_prefix(self._url)
-        self._package_name = self._package_prefix + '.' + self._name + '.' + SDKUtils.get_string_version(self.api_version)
+        self._package_name = self._package_prefix + '.' + self._name
         self._package_subdir = self._package_name.replace('.', '/')
 
         self._base_output_directory = "%s/java" % (self._output)
