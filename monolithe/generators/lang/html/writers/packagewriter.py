@@ -66,6 +66,7 @@ class PackageWriter(TemplateFileWriter):
                 version_releases[v] = natsorted(tmp_releases, reverse=True)
 
         self.write(destination=self.output_directory, filename="index.html", template_name="main_index.html.tpl",
-                   apiversion=versions,
+                   version_keys=natsorted(versions.keys(), reverse=True),
+                   apiversions=versions,
                    product_name=self._product_name,
                    version_releases=version_releases)

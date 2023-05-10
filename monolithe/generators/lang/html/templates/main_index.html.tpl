@@ -25,7 +25,8 @@
 
     <div class="container" id="content">
         <h1>Available Versions</h1>
-        {% for version, path in apiversion.iteritems() %}
+        {% for version in version_keys %}
+            {% set path = apiversions[version] %} 
             <div class="row bordered-row">
                 <div class="col-xs-12">
                     <a href="{{ path }}/index.html" title="{{ product_name}} API version {{ version }}">{{ product_name}} API version {{ version }}</a>
