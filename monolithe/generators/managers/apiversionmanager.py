@@ -25,6 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import inspect
 from .manager import Manager
 
 
@@ -37,10 +38,14 @@ class APIVersionManager(Manager):
         """
         super(APIVersionManager, self).__init__(monolithe_config=monolithe_config, target_name='APIVersionWriter')
 
-    def execute(self, specifications, api_info):
+    def execute(self, specifications, api_info, branch, latest):
         """
         """
         klass = self.get_managed_class()
         if klass:
             writer = klass(monolithe_config=self.monolithe_config, api_info=api_info)
-            writer.perform(specifications=specifications)
+            writer_perform_spec = inspect.getargspec(writer.perform)
+            if 'branch' in writer_perform_spec.args and 'latest' in writer_perform_spec.args:
+                writer.perform(specifications=specifications, branch=branch, latest=latest)
+            else:
+                writer.perform(specifications=specifications)

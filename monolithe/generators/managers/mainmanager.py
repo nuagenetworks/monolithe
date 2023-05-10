@@ -25,6 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import inspect
 from .manager import Manager
 
 
@@ -37,10 +38,14 @@ class MainManager(Manager):
         """
         super(MainManager, self).__init__(monolithe_config=monolithe_config, target_name='PackageWriter')
 
-    def execute(self, apiversions):
+    def execute(self, apiversions, branches=None):
         """
         """
         klass = self.get_managed_class()
         if klass:
             writer = klass(monolithe_config=self.monolithe_config)
-            writer.perform(apiversions=apiversions)
+            writer_perform_spec = inspect.getargspec(writer.perform)
+            if 'branches' in writer_perform_spec.args:
+                writer.perform(apiversions=apiversions, branches=branches)
+            else:
+                writer.perform(apiversions=apiversions)

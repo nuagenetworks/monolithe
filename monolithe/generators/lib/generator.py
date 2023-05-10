@@ -52,19 +52,19 @@ class Generator(object):
             for branch in branches:
                 Printer.log("Switching to branch %s" % branch)
                 self.directory_manager.switch_branch(branch)
-                specification_info.append(self.get_specifications_infos_from_folder())
+                specification_info.append(self.get_specifications_infos_from_folder(branch=branch))
         else:
             specification_info.append(self.get_specifications_infos_from_folder())
 
         self.generate(specification_info=specification_info)
 
-    def get_specifications_infos_from_folder(self):
+    def get_specifications_infos_from_folder(self, branch=None):
         Printer.log("retrieving specifications from folder \"%s\"" % (self.directory_manager.folder))
         api_info = self.directory_manager.get_api_info()
         specifications = self.directory_manager.get_all_specifications()
         self._resolve_parent_apis(specifications)
         Printer.log("%d specifications retrieved from folder \"%s\" (api version: %s)" % (len(specifications), self.directory_manager.folder, api_info["version"]))
-        return {"specifications": specifications, "api": api_info}
+        return {"specifications": specifications, "api": api_info, "branch": branch}
 
     def generate(self, specification_info):
         raise NotImplementedError()

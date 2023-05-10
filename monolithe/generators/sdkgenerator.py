@@ -70,16 +70,24 @@ class SDKGenerator(Generator):
 
         version_generator = SDKAPIVersionGenerator(self.config)
         apiversions = []
+        branches = {}
 
         for info in specification_info:
-            Printer.log("transforming specifications into %s for version %s..." % (lang, info["api"]["version"]))
+            if "branch" in info.keys() and info["branch"]:
+                Printer.log("transforming specifications into %s for version %s, branch %s..." % (lang, info["api"]["version"], info["branch"]))
+            else:
+                Printer.log("transforming specifications into %s for version %s..." % (lang, info["api"]["version"]))
             apiversions.append(info["api"]["version"])
+            if "branch" in info.keys() and info["branch"]:
+                if info["api"]["version"] not in branches.keys():
+                    branches[info["api"]["version"]] = []
+                branches[info["api"]["version"]].append(info["branch"])
 
         version_generator.generate(specification_info=specification_info)
 
         Printer.log("assembling...")
         manager = MainManager(monolithe_config=self.config)
-        manager.execute(apiversions=apiversions)
+        manager.execute(apiversions=apiversions, branches=branches)
 
         cli_manager = CLIManager(monolithe_config=self.config)
         cli_manager.execute()

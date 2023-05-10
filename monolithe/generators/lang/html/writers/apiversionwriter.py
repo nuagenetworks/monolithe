@@ -26,7 +26,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from monolithe.generators.lib import TemplateFileWriter
-from monolithe.lib import SDKUtils, TaskManager
+from monolithe.lib import SDKUtils, TaskManager, Printer
 
 
 class APIVersionWriter(TemplateFileWriter):
@@ -63,18 +63,20 @@ class APIVersionWriter(TemplateFileWriter):
             actions.append("DELETE")
         return actions
 
-    def perform(self, specifications):
+    def perform(self, specifications, branch, latest):
         """
         """
-
+        if branch:
+            branch = SDKUtils.get_dot_notation(branch)
+            Printer.log("Writing HTML docs for version %s, release %s. Generating latest: %s" % (self._api_version, branch, latest))
         task_manager = TaskManager()
         for rest_name, specification in specifications.items():
-            task_manager.start_task(method=self._write_specification, specification=specification, specification_set=specifications)
+            task_manager.start_task(method=self._write_specification, specification=specification, specification_set=specifications, branch=branch, latest=latest)
         task_manager.wait_until_exit()
 
-        self._write_index(specifications)
+        self._write_index(specifications=specifications, branch=branch, latest=latest)
 
-    def _write_specification(self, specification, specification_set):
+    def _write_specification(self, specification, specification_set, branch=None, latest=True):
         """
         """
         if specification.rest_name:
@@ -100,21 +102,44 @@ class APIVersionWriter(TemplateFileWriter):
 
         self_apis = [{"actions": self._get_actions(specification)}]
 
-        self.write(destination=self.output_directory, filename=filename, template_name="object.html.tpl",
-                   apiversion=self._api_version,
-                   specification=specification,
-                   parent_apis=parent_apis,
-                   child_apis=child_apis,
-                   member_apis=member_apis,
-                   self_apis=self_apis,
-                   product_name=self._product_name)
+        if branch:
+            self.write(destination="%s/%s" % (self.output_directory, branch), filename=filename, template_name="object.html.tpl",
+                       apiversion=self._api_version,
+                       specification=specification,
+                       parent_apis=parent_apis,
+                       child_apis=child_apis,
+                       member_apis=member_apis,
+                       self_apis=self_apis,
+                       product_name=self._product_name,
+                       branch=branch)
+        if latest:
+            # Also write to the main folder
+            self.write(destination=self.output_directory, filename=filename, template_name="object.html.tpl",
+                       apiversion=self._api_version,
+                       specification=specification,
+                       parent_apis=parent_apis,
+                       child_apis=child_apis,
+                       member_apis=member_apis,
+                       self_apis=self_apis,
+                       product_name=self._product_name,
+                       branch=None)
 
         return (filename, specification.entity_name)
 
-    def _write_index(self, specifications):
+    def _write_index(self, specifications, branch=None, latest=True):
         """
         """
-        self.write(destination=self.output_directory, filename="index.html", template_name="index.html.tpl",
-                   apiversion=self._api_version,
-                   specifications=list(specifications.values()),
-                   product_name=self._product_name)
+        specifications = sorted(specifications.values(), key=lambda k: k.resource_name)
+        if branch:
+            self.write(destination="%s/%s" % (self.output_directory, branch), filename="index.html", template_name="index.html.tpl",
+                       apiversion=self._api_version,
+                       specifications=specifications,
+                       product_name=self._product_name,
+                       branch=branch)
+        if latest:
+            # Also write to the main folder
+            self.write(destination=self.output_directory, filename="index.html", template_name="index.html.tpl",
+                       apiversion=self._api_version,
+                       specifications=specifications,
+                       product_name=self._product_name,
+                       branch=None)
