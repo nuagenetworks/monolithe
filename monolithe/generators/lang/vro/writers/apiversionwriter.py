@@ -26,7 +26,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from future import standard_library
-from urlparse import urlparse
+from urllib.parse import urlparse
 standard_library.install_aliases()
 
 import os, uuid
